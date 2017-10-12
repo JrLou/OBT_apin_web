@@ -111,7 +111,9 @@ class page extends Component {
             history_day : s_day,
             select_day : s_day
         }, () => {
-            this.props.onSelectDate(select_year, select_month + 1, s_day);
+            if (this.props.onSelectDate){
+                this.props.onSelectDate(select_year, select_month + 1, s_day);
+            }
         });
     }
 
@@ -186,7 +188,7 @@ class page extends Component {
      * @returns {XML}
      */
     render() {
-        let { row_number, col_number } = this.props;
+        let { row_number, col_number, tags} = this.props;
         let { current_year, current_month, current_day,
             select_year, select_month, select_day,
             history_year, history_month, history_day,
@@ -220,28 +222,55 @@ class page extends Component {
         //在本月当中的
         let currentClassName = '',
             currentText = '';
-        for (let i = 0; i < month_day; i++) {
+        let current_link = null;
 
+        for (let i = 0; i < month_day; i++) {
             // 今天样式
             if (current_year == select_year && current_month == select_month && current_day == (i + 1)) {
                 currentClassName = css.itemRed;
                 currentText = '今天';
+
+                current_link = (<div className={currentClassName} key={'current'+i}>
+                    <div className={css.dayActive} onClick={this.selectDate.bind(this, i + 1)}>
+                        {currentText}
+                    </div>
+                </div>)
             } else {
                 currentText = i + 1;
-
                 // 判断选择样式与历史样式是否相等，相等激活
                 if (select_year == history_year && select_month == history_month && history_day == (i + 1)) {
                     currentClassName = css.itemSelect;
+                    current_link = (<div className={currentClassName} key={'current'+i}>
+                        <div className={css.dayActive} onClick={this.selectDate.bind(this, i + 1)}>
+                            {currentText}
+                        </div>
+                    </div>)
                 } else {
                     currentClassName = css.itemActive;
+                    current_link = (<div className={currentClassName} key={'current'+i}>
+                        <div className={css.dayActive} onClick={this.selectDate.bind(this, i + 1)}>
+                            {currentText}
+                        </div>
+                    </div>)
                 }
             }
 
-            let current_link = (<div className={currentClassName} key={'current'+i}>
-                <div className={css.dayActive} onClick={this.selectDate.bind(this, i + 1)}>
-                    {currentText}
-                </div>
-            </div>);
+
+            // 添加tag样式
+            if (tags&&tags.length > 0) {
+                for (let j = 0; j < tags.length; j++) {
+                    if ((i + 1) === tags[j]) {
+                        currentClassName = css.itemTags;
+                        current_link = (<div className={currentClassName} key={'current'+i}>
+                            <div className={css.dayActive} onClick={this.selectDate.bind(this, i + 1)}>
+                                {currentText}
+                            </div>
+                        </div>)
+                        break;
+                    }
+                }
+            }
+
             current_days.push(current_link);
         }
 
@@ -271,14 +300,17 @@ class page extends Component {
         return (
             <div className={css.calendar}>
                 <div className={css.calendarHeader}>
-                    <Icon type="left" onClick={()=>{
+                    <div className={css.calendarHeaderIcon} onClick={()=>{
                         this.previousMonth();
-                    }}/>
+                    }}>{"<"}</div>
 
-                    <span className={css.calendarTitle}>{select_year} 年 {select_month + 1} 月</span>
-                    <Icon type="right" onClick={()=>{
+                    <div className={css.calendarHeaderItem}>
+                        {select_year} 年 {select_month + 1} 月
+                    </div>
+
+                    <div className={css.refCalendarHeaderIcon} onClick={()=>{
                         this.nextMonth();
-                    }}/>
+                    }}>{">"}</div>
                 </div>
                 <div className={css.calendarBody}>
                     <div className={css.cBodyHead}>
