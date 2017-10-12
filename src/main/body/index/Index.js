@@ -15,8 +15,8 @@ class page extends Component {
     startPlace(e) {
         this.setState({startPlace: e.target.value});
     }
-    endPlce(e){
-        this.setState({endPlce: e.target.value});
+    endPlace(e){
+        this.setState({endPlace: e.target.value});
     }
     render(){
         this.recommendData=[1,2,3,4,5,6,7,8];
@@ -33,34 +33,17 @@ class page extends Component {
         });
 
         return(
-            <div>
-                {/*顶部*/}
-                <div style={{width:1250,height:"100",marginTop:40}}>
-                    <div style={{float:"left"}}>
-                        <div style={{
-                            marginRight:20,
-                            width:70,height:70,float:"left",border:1,borderColor:"#fff",borderRadius:35}}>
-                            <img src={require("../../../images/login_check.png")}/>
-                        </div>
-
-                        <div style={{paddingTop:10,float:"left"}}>
-                            <h3 style={{color:"#fff",}}>爱拼机</h3>
-                            <h4 style={{color:"#fff"}}>www.apin.com</h4>
-                        </div>
-                    </div>
-                    <div style={{textAlign:"right",paddingTop:5,fontSize:17}}>客服电话：12334344567</div>
-                </div>
-
+            <div style={{margin:"auto",width:1250}}>
                 <div style={{marginTop:20,}}>
                     {/*搜索部分*/}
                     <div style={{width:400,height:150,float:"left"}}>
                         <div style={{marginLeft:25,fontSize:13}}>
                             出发地：
-                            <Input onChange={this.startPlace.bind(this)} style={{width:200}} type="text" placeholder="中文／拼音／三字码"/>
+                            <Input ref="start" onChange={this.startPlace.bind(this)} style={{width:200}} type="text" placeholder="中文／拼音／三字码"/>
                         </div>
                         <div style={{marginLeft:25,fontSize:13,marginTop:20}}>
                             目的地：
-                            <Input onChange={this.endPlce.bind(this)} style={{width:200}} type="text" placeholder="中文／拼音／三字码"/>
+                            <Input ref="end" onChange={this.endPlace.bind(this)} style={{width:200}} type="text" placeholder="中文／拼音／三字码"/>
                         </div>
                         <div style={{marginTop:10}}>
                             <div style={{float:"left",margin:20,cursor: 'pointer'}}
@@ -92,6 +75,23 @@ class page extends Component {
                                 marginTop:15,
                                 marginLeft:10,
                                 height:30,
+                            }}
+                                    onClick={() => {
+                                        const start = this.refs.start.refs.input;
+                                        const end = this.refs.end.refs.input;
+                                        if(this.state.startPlace.length===0){
+                                            start.focus();
+                                            end.blur();
+                                            return
+                                        }else if(this.state.endPlace.length===0){
+                                            start.blur();
+                                            end.focus();
+                                            return
+                                        }
+
+                                window.app_open(this, "/Content", {title: "详情"
+
+                                });
                             }}>
                                 搜索
                             </Button>
@@ -135,6 +135,8 @@ class page extends Component {
                         marginTop:5,
                         marginLeft:20,
                         fontSize:16
+                    }} onClick={() => {
+                        window.app_open(this, "/Search", {title: "搜索"});
                     }}>查看更多
                     </div>
                 </div>
@@ -154,7 +156,6 @@ class page extends Component {
 
                 </div>
                 <div style={{width:1250,textAlign:"right",padding:30,marginBottom:30,fontSize:16}}>换一组</div>
-                <div style={{width:1250,textAlign:"center",marginTop:30,}}>Copyright©2015 杭州爱拼机网络科技有限公司版权所有 浙ICP备 15024358号-1</div>
 
             </div>
         )

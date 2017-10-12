@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {Carousel,Button,Input } from 'antd';
+import {Pagination,Button,Input,Select } from 'antd';
 
 import less from './Search.less';
 class page extends Component {
@@ -24,28 +24,21 @@ class page extends Component {
         });
 
         return(
-            <div>
-                {/*顶部*/}
-                <div style={{width:1250,height:"100",marginTop:40}}>
-                    <div style={{float:"left"}}>
-                        <div style={{
-                            marginRight:20,
-                            width:70,height:70,float:"left",border:1,borderColor:"#fff",borderRadius:35}}>
-                            <img src={require("../../../images/login_check.png")}/>
-                        </div>
-
-                        <div style={{paddingTop:10,float:"left"}}>
-                            <h3 style={{color:"#fff",}}>爱拼机</h3>
-                            <h4 style={{color:"#fff"}}>www.apin.com</h4>
-                        </div>
-                    </div>
-                    <div style={{textAlign:"right",paddingTop:5,fontSize:17}}>客服电话：12334344567</div>
-                </div>
-
+            <div style={{margin:"auto",width:1250}}>
                 {/*搜索输入框部分*/}
                 <div>
-                    <div style={{marginTop:20}}>
-                        <div style={{float:"left"}}>航程类型：<Input style={{width:200,marginRight:10}}  type="text" placeholder="全部"/></div>
+                    <div style={{marginTop:20,marginLeft:30}}>
+                        <div style={{float:"left"}}>航程类型：
+
+                            {/*<Input style={{width:200,marginRight:10}}  type="text" placeholder="全部"/>*/}
+                            <Select
+                                style={{ width:200,marginRight:10 }}
+                                placeholder="全部">
+                                <Option value="all">全部</Option>
+                                <Option value="one">单程</Option>
+                                <Option value="return">往返</Option>
+                            </Select>
+                        </div>
                     </div>
                     <div style={{marginTop:20}}>
                         <div style={{float:"left"}}>出发城市：<Input style={{width:200,marginRight:10}}  type="text" placeholder="全部"/></div>
@@ -65,14 +58,14 @@ class page extends Component {
 
                 </div>
                 {/*空部分*/}
-                <div style={{marginTop:20,width:1250}}>
-                    <div style={{ margin:"auto",height:"653px",width:"873px",background: "url('../../../images/icon.ico')",backgroundPosition:"center",backgroundRepeat:"no-repeat",position:'relative'}}>
-                        <div style={{ position:"absolute",top:"62%",left:"32%"}}>
-                            <h2 style={{fontFamily:"MicrosoftYaHei",fontSize:"14px",color: "#FFFFFF",letterSpacing: 0,lineHeight: "16px"}}>没有查询到航班信息，请重新搜索或联系客服询问航班 </h2>
-                            <Button type="primary" style={{ width: '140px',fontSize:"12px",position:"absolute",left:"120px",top:"80px"}} size="large" >联系客服</Button>
-                        </div>
-                    </div>
-                </div>
+                {/*<div style={{marginTop:20,width:1250}}>*/}
+                    {/*<div style={{ margin:"auto",height:"653px",width:"873px",background: "url('../../../images/icon.ico')",backgroundPosition:"center",backgroundRepeat:"no-repeat",position:'relative'}}>*/}
+                        {/*<div style={{ position:"absolute",top:"62%",left:"32%"}}>*/}
+                            {/*<h2 style={{fontFamily:"MicrosoftYaHei",fontSize:"14px",color: "#000",letterSpacing: 0,lineHeight: "16px"}}>没有查询到航班信息，请重新搜索或联系客服询问航班 </h2>*/}
+                            {/*<Button type="primary" style={{ width: '140px',fontSize:"12px",position:"absolute",left:"120px",top:"80px"}} size="large" >联系客服</Button>*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
+                {/*</div>*/}
 
                 {/*搜索列表部分*/}
                 <div style={{width:1250,height:700}}>
