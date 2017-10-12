@@ -19,12 +19,32 @@ window.app_open = function (obj,path,state,callBack) {
         }
         return;
     }
+    document.documentElement.scrollTop = document.body.scrollTop =0;
     obj.context.router.push(
         {
             pathname: path,
             state:state
         })
+
+
 }
+
+window.apin= {};
+function exe() {
+    apin.cache = new Map();
+    apin.setCache = function (key,obj) {
+        apin.cache.set(key,obj)
+    }
+    apin.delCache = function (key) {
+        apin.cache.delete(key);
+    }
+    apin.getCache = function (key) {
+        const v =  apin.cache.get(key)
+        apin.delCache(key);
+        return v ;
+    }
+}
+exe();
 
 const React = require('react');
 const ReactDOM = require('react-dom');
