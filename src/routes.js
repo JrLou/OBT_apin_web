@@ -8,7 +8,8 @@ import App from './main/App.js';
 import Index from './main/body/index/Index.js';
 
 //详情页面
-import Connect from './main/body/content/Connect.js';
+import OneWayDetail from './main/body/content/OneWayDetail.js';
+import RoundWayDetail from './main/body/content/RoundWayDetail.js';
 //搜索页面
 import Search from './main/body/search/Search.js';
 
@@ -17,8 +18,8 @@ let route = {
         return (
           <Route path="/" component={App}>
             <IndexRoute component={Index}/>
-            <Route path="Content" component={Connect}>
-            </Route>
+            <Route path="OneWayDetail" component={OneWayDetail}/>
+            <Route path="RoundWayDetail" component={RoundWayDetail}/>
             <Route path="Search" component={Search}/>
           </Route>
         );

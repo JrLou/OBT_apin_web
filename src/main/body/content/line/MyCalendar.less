@@ -1,0 +1,68 @@
+@import "../../../../theme.less";
+/**
+ * 设置日历的大小
+ */
+.calendar{
+  margin-top: @d_spadding_small;
+  padding-top: @d_spadding_small;
+  width: 100%;
+  background-color: #8bf1fc;
+}
+
+.calendarHeader{
+  text-align: center;
+  padding-bottom: @d_spadding_cell;
+}
+.calendarTitle{
+  margin-left:10px;
+  margin-right:10px;
+  font-size:16px;
+  text-align:center;
+}
+.calendarBody{
+  background-color: #20E66C;
+}
+.cBodyHead{
+  overflow: hidden;
+  background-color: #2db7f5;
+}
+.contentRow{
+  background-color: #777c85;
+  overflow: hidden;
+}
+.defaultItem{
+  float: left;
+  width: 14.28%;
+  padding-top: @d_spadding_small;
+  padding-bottom: @d_spadding_small;
+  text-align: center;
+  font-size: @font-size-base;
+}
+.cBodyItem{
+  composes: defaultItem;
+}
+
+.itemGray{
+  composes: defaultItem;
+  background-color: #ede;
+}
+.dayGray{
+  color: #8bf188;
+}
+
+.itemActive{
+  composes: defaultItem;
+  background-color: white;
+}
+.dayActive{
+  color: #333333;
+}
+
+.itemSelect {
+  composes: defaultItem;
+  background-color: lightblue;
+}
+.itemRed{
+  composes: defaultItem;
+  background-color: red;
+}

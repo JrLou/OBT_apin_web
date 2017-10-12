@@ -1,0 +1,68 @@
+@import "../../../../theme.less";
+.main{
+  align-content: center;
+  background-color: #00A3FF;
+}
+.title{
+  font-size: @font_size_title;
+  font-weight: 800;
+  text-align: center;
+}
+.con{
+  margin-top: @d_spadding_small;
+  overflow: hidden;
+}
+.left{
+  float: left;
+  width: 200px;
+  height: 130px;
+  background-color: #2db7f5;
+}
+.img{
+  width: 200px;
+  height: 130px;
+}
+.right{
+  margin-left: @d_spadding_small;
+  padding-top: @d_spadding_small;
+  float: left;
+  height: 130px;
+}
+
+.rightLine{
+  overflow: hidden;
+  margin-bottom: @d_spadding_cell;
+}
+.lineLeft{
+  display: inline-block;
+  width: 80px;
+  color: @normal-color;
+  font-size: @font-size-base;
+  vertical-align: middle;
+}
+.lineRight{
+  display: inline-block;
+  font-size: @font-size-base;
+  color: @border-color;
+  border-width: 1px;
+  border-style: solid;
+  border-color: @border-color;
+  padding:1px @d_spadding_small 1px 5px;
+}
+.refLineRight{
+  composes: lineRight;
+  width: 100px;
+}
+.center{
+  display: inline-block;
+  padding-left: @d_spadding_cell;
+  padding-right: @d_spadding_cell;
+}
+
+.thirdLineRight{
+  display: inline-block;
+  font-size: @font-size-base;
+  color: @border-color;
+  padding:1px @d_spadding_small 1px 5px;
+}
+
