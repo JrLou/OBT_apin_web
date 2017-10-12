@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./lib/bin/apin-cli debug server",
     "build": "NODE_ENV=production node ./lib/bin/apin-cli release server",
-    "lib": "git submodule update -f && git submodule foreach git pull origin master",
+    "lib": "git submodule init &&git submodule update -f && git submodule foreach git pull origin master",
     "test": "jest --watch --coverage"
   },
   "devDependencies": {
