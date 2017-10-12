@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {Carousel,Button,Input, Button } from 'antd';
+import {Carousel,Button,Input } from 'antd';
 
 import less from './Search.less';
 class page extends Component {
@@ -31,7 +31,7 @@ class page extends Component {
                         <div style={{
                             marginRight:20,
                             width:70,height:70,float:"left",border:1,borderColor:"#fff",borderRadius:35}}>
-                            <img src={require("../../images/login_check.png")}/>
+                            <img src={require("../../../images/login_check.png")}/>
                         </div>
 
                         <div style={{paddingTop:10,float:"left"}}>
@@ -66,7 +66,7 @@ class page extends Component {
                 </div>
                 {/*空部分*/}
                 <div style={{marginTop:20,width:1250}}>
-                    <div style={{ margin:"auto",height:"653px",width:"873px",background: "url('../../images/icon.ico')",backgroundPosition:"center",backgroundRepeat:"no-repeat",position:'relative'}}>
+                    <div style={{ margin:"auto",height:"653px",width:"873px",background: "url('../../../images/icon.ico')",backgroundPosition:"center",backgroundRepeat:"no-repeat",position:'relative'}}>
                         <div style={{ position:"absolute",top:"62%",left:"32%"}}>
                             <h2 style={{fontFamily:"MicrosoftYaHei",fontSize:"14px",color: "#FFFFFF",letterSpacing: 0,lineHeight: "16px"}}>没有查询到航班信息，请重新搜索或联系客服询问航班 </h2>
                             <Button type="primary" style={{ width: '140px',fontSize:"12px",position:"absolute",left:"120px",top:"80px"}} size="large" >联系客服</Button>
@@ -97,7 +97,7 @@ class SearchView extends React.Component {
         return (
             <div style={{marginTop:20,marginLeft:30, float:"left",}}>
                 <div style={{width:280,height:200,backgroundColor:"#0aa",paddingTop:10}}>
-                    <div style={{ margin:"auto",height:150,marginLeft:10,width:260,background: "url('../../images/icon.ico')",backgroundPosition:"center",backgroundRepeat:"no-repeat",position:'relative'}}>
+                    <div style={{ margin:"auto",height:150,marginLeft:10,width:260,background: "url('../../../images/icon.ico')",backgroundPosition:"center",backgroundRepeat:"no-repeat",position:'relative'}}>
                         <div style={{position:"absolute",top:"10",left:"10",fontSize:"14px",color: "#FFFFFF",}}>杭州-曼谷</div>
                         <div style={{position:"absolute",fontSize:"14px",color: "#FFFFFF",top:"10",right:"10"}}>往返</div>
                         <div style={{position:"absolute",fontSize:"14px",color: "#FFFFFF",bottom:"10",left:"10"}}>2017-9-1至2018-2-10</div>

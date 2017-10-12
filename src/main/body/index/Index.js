@@ -40,7 +40,7 @@ class page extends Component {
                         <div style={{
                             marginRight:20,
                             width:70,height:70,float:"left",border:1,borderColor:"#fff",borderRadius:35}}>
-                            <img src={require("../../images/login_check.png")}/>
+                            <img src={require("../../../images/login_check.png")}/>
                         </div>
 
                         <div style={{paddingTop:10,float:"left"}}>
@@ -71,7 +71,7 @@ class page extends Component {
                                  }}>
                                 <img style={{ width:16,
                                     marginRight:5,float:"left",
-                                    height:16,}} src={this.state.isSelectOneWay ? require('../../images/login_check.png') : require('../../images/login_uncheck.png')}
+                                    height:16,}} src={this.state.isSelectOneWay ? require('../../../images/login_check.png') : require('../../../images/login_uncheck.png')}
                                 /><div style={{float:"left"}}>单程</div>
                             </div>
                             <div style={{float:"left",margin:20,cursor: 'pointer'}}
@@ -82,7 +82,7 @@ class page extends Component {
                                  }}>
                                 <img style={{ width:16,
                                     marginRight:5,float:"left",
-                                    height:16,}}  src={this.state.isSelectReturn ? require('../../images/login_check.png') : require('../../images/login_uncheck.png')}
+                                    height:16,}}  src={this.state.isSelectReturn ? require('../../../images/login_check.png') : require('../../../images/login_uncheck.png')}
                                 /><div style={{float:"left"}}>往返</div>
                             </div>
                             <Button style={{
@@ -101,16 +101,16 @@ class page extends Component {
                     <div style={{width:800,marginLeft:400}}>
                         <Carousel autoplay>
                             <div style={{ margin:"auto",height:150,position:'relative',
-                                width:800,background: "url('../../images/icon.ico')"
+                                width:800,background: "url('../../../images/icon.ico')"
                                 ,backgroundPosition:"center",backgroundRepeat:"no-repeat"}}/>
                             <div style={{ margin:"auto",height:150,position:'relative',
-                                width:800,background: "url('../../images/icon.ico')"
+                                width:800,background: "url('../../../images/icon.ico')"
                                 ,backgroundPosition:"center",backgroundRepeat:"no-repeat"}}/>
                             <div style={{ margin:"auto",height:150,position:'relative',
-                                width:800,background: "url('../../images/icon.ico')"
+                                width:800,background: "url('../../../images/icon.ico')"
                                 ,backgroundPosition:"center",backgroundRepeat:"no-repeat"}}/>
                             <div style={{ margin:"auto",height:150,position:'relative',
-                                width:800,background: "url('../../images/icon.ico')"
+                                width:800,background: "url('../../../images/icon.ico')"
                                 ,backgroundPosition:"center",backgroundRepeat:"no-repeat"}}/>
                         </Carousel>
                     </div>
@@ -122,7 +122,7 @@ class page extends Component {
                 <div style={{width:1250,height:50,marginTop:40}}>
                     <img style={{ width:30,
                         float:"left",
-                        height:30,}}  src={require('../../images/login_check.png')}
+                        height:30,}}  src={require('../../../images/login_check.png')}
                     />
                     <div style={{
                         float:"left",
@@ -170,7 +170,7 @@ class RecommendView extends React.Component {
         return (
             <div style={{marginTop:20,marginLeft:30, float:"left",}}>
                 <div style={{width:280,height:200,backgroundColor:"#0aa",paddingTop:10}}>
-                    <div style={{ margin:"auto",height:150,marginLeft:10,width:260,background: "url('../../images/icon.ico')",backgroundPosition:"center",backgroundRepeat:"no-repeat",position:'relative'}}>
+                    <div style={{ margin:"auto",height:150,marginLeft:10,width:260,background: "url('../../../images/icon.ico')",backgroundPosition:"center",backgroundRepeat:"no-repeat",position:'relative'}}>
                         <div style={{position:"absolute",top:"10",left:"10",fontSize:"14px",color: "#FFFFFF",}}>杭州-曼谷</div>
                     </div>
                     <div style={{width:260,marginLeft:10,marginTop:10,float:"left"}}>
