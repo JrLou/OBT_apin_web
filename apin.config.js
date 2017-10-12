@@ -92,7 +92,7 @@ module.exports = {
 					path: path.resolve(__dirname, './public/project'),
 					filename:'spa.js'
 				},
-
+                module: configModule,
 			},
 
 		},
