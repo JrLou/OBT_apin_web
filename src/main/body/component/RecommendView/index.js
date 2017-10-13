@@ -23,30 +23,39 @@ class RecommendView extends Component {
         return (
             <div
                 {...this.props}
-                style={{marginTop: 20, marginLeft: 30, float: "left",}}>
+                style={{marginTop: 20, marginLeft: 11, float: "left",}}>
                 <div style={{
-                    width: 280, height: 200,
+                    width: 286, height: 287,
+                    border:1,borderColor:"#eee",
                     backgroundColor: "#fff",
-                    paddingTop: 10
                 }}>
                     <div style={{
                         margin: "auto",
-                        height: 150, marginLeft: 10, width: 260,
+                        height: 215,width: 286,
                         backgroundImage:'url('+data.image+')',
                         backgroundPosition: "center",
                         backgroundRepeat: "no-repeat", position: 'relative'
                     }}>
                         <div
-                            style={{position: "absolute", top: "10", left: "10", fontSize: "14px", color: "#FFFFFF",}}>{
-                            data.from + "-" + data.to
-                        }</div>
-                    </div>
-                    <div style={{width: 260, marginLeft: 10, marginTop: 10, float: "left"}}>
-                        <div style={{width: 100, float: "left"}}>
-                            <div style={{color: "#a00", float: "left"}}>${data.money}</div>
-                            <div style={{color: "#a00", float: "left"}}>(含税)</div>
+                            style={{position: "absolute",bottom:0, fontSize: "14px", color: "#FFFFFF",}}>
+
+                            <div style={{width:286,height:42,backgroundColor:"#000",opacity:0.8,paddingLeft:14
+                            ,paddingTop:11}}>
+                                {data.from + "   -   " + data.to}
+                            </div>
                         </div>
-                        <div style={{width: 160, float: "left", textAlign: "right"}}>{data.views}次浏览</div>
+                    </div>
+                    <div style={{width: 286, paddingLeft: 14, marginTop: 20, float: "left",position:"absolute"}}>
+                        <div style={{float: "left"}}>
+                            <div style={{marginTop:10,color: "#FF5841", float: "left",fontSize:14}}>¥</div>
+                            <div style={{color: "#FF5841", float: "left",fontSize:24}}>{data.money}</div>
+                            <div style={{marginTop:13,color: "#666", float: "left",fontSize:12,}}>起</div>
+                        </div>
+                        <div style={{float: "left",marginTop:10,right:10,position:"absolute"}}>
+                            <div style={{color: "#666", float: "left",fontSize:14,}}>已团</div>
+                            <div style={{color: "#FF5841", float: "left",fontSize:14}}>{data.money}张</div>
+                            <div style={{color: "#666", float: "left",fontSize:14,}}>|还剩42张</div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -15,30 +15,33 @@ class SpecialView extends Component {
         }
     }
 
-
-
     render() {
         let {data} = this.props;
         if (!data)return null;
         return (
             <div
-
                 style={{
-                marginTop: 15, marginLeft: 25, width: 250, float: "left", height: 120,
-                backgroundImage: 'url(' + data.image2 + ')',
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-
-                backgroundColor: "#fff",
-                paddingTop: 10
+                marginTop: 12, marginLeft: 11, width: 228, float: "left", height: 69,
+                backgroundColor: "#f6f6f6",
+                paddingTop: 12
             }}
                 {...this.props}
             >
-                <div style={{fontSize: 20, marginLeft: 20}}>{
+                <div style={{position:"absolute", width: 228}}>
+                <div style={{fontSize: 14, marginLeft: 12, position:"absolute"}}>{
                     data.from + "-" + data.to
                 }</div>
-                <div style={{marginLeft: 20, marginTop: 20, fontSize: 15}}>
-                    {data.time} ¥{data.money}起
+                <div style={{fontSize: 12, position:"absolute",right:5,color:"#888787"}}>
+                    已团612张
+                </div>
+                <div style={{paddingLeft: 14, width: 228,marginTop: 23, fontSize: 15, position:"absolute"}}>
+                    <div style={{float: "left",position:"absolute"}}>
+                        <div style={{marginTop:5,color: "#FF5841", float: "left",fontSize:10}}>¥</div>
+                        <div style={{color: "#FF5841", float: "left",fontSize:16}}>{data.money}</div>
+                        <div style={{marginTop:5,color: "#2A2A2A", float: "left",fontSize:10,}}>起</div>
+                    </div>
+                    <div style={{fontSize:12,marginTop:5,color:"#666",position:"absolute",right:11}}>10月13日</div>
+                </div>
                 </div>
             </div>
         )

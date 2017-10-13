@@ -39,15 +39,15 @@ class SearchLayout extends Component {
             <div style={{
                 width: "100%"
             }}>
-                <div className={less.left}>
-                    出发地：
+                <div className={less.left} >
+                    <div style={{fontSize:14,color:"#393939",marginBottom:4}}>出发城市：</div>
                     <InputAuto
                         ref="from"
                         defaultValue={this.state.from}
                         placeholder="中文／拼音／三字码"/>
                 </div>
                 <div className={less.left}>
-                    目的地：
+                    <div style={{fontSize:14,color:"#393939",marginBottom:4}}>到达城市：</div>
                     <InputAuto
                         ref="to"
                         defaultValue={this.state.to}
@@ -61,13 +61,13 @@ class SearchLayout extends Component {
                              })
                          }}>
                         <img style={{
-                            width: 16,
+                            width: 10,
                             marginRight: 5,
                             float: "left",
-                            height: 16,
+                            height: 10,
                         }} src={this.state.one ? this.img_login_check : this.img_login_uncheck}
                         />
-                        <div style={{float: "left"}}>单程</div>
+                        <div style={{float: "left",fontSize:14}}>单程</div>
                     </div>
                     <div className={less.left}
                          onClick={() => {
@@ -76,18 +76,21 @@ class SearchLayout extends Component {
                              })
                          }}>
                         <img style={{
-                            width: 16,
+                            width: 10,
                             marginRight: 5, float: "left",
-                            height: 16,
+                            height: 10,
                         }} src={this.state.two ? this.img_login_check : this.img_login_uncheck}
                         />
-                        <div style={{float: "left"}}>往返</div>
+                        <div style={{float: "left",fontSize:14}}>往返</div>
                     </div>
+
+                    <div style={{clear:"both"}}/>
                     <Button
                         loading={this.state.loading}
                         type="primary"
-                        className={less.left}
+                        style={{marginTop:16,marginLeft:104,width:169,height:38,backgroundColor:"#29A6FF",color:"#fff"}}
                         onClick={() => {
+
                             if (this.props.submit) {
                                 this.props.submit(this.getData())
                             }
