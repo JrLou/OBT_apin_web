@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 import {AutoComplete} from 'antd';
-
+import less from './InputAuto.less'
 class InputAuto extends Component {
 
     constructor(props) {
@@ -38,7 +38,7 @@ class InputAuto extends Component {
         return <AutoComplete
             ref="com"
             dataSource={this.state.dataSource}
-            style={{width: 200,height:35}}
+            className={less.input}
             onSelect={this.onSelect.bind(this)}
             onChange={(value)=>{
                 this.selectValue = value;
