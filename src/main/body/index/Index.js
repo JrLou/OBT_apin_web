@@ -63,11 +63,11 @@ class page extends Component {
 
 
         return (
-            <div style={{margin:"auto",width:1500,paddingLeft:100,paddingRight:100}}>
+            <div style={{margin:"auto",width:"100%",paddingLeft:100,paddingRight:100}}>
                 <Row style={{}}>
-                    <Col span={6}  style={{marginTop:10,width:380,height:328,backgroundColor:"#29A6FF",borderRadius:4,}}>
+                    <Col span={6}  style={{marginTop:10,width:"33%",height:328,backgroundColor:"#29A6FF",borderRadius:4,}}>
                         <div style={{color:"#fff",textAlign:"center",fontSize:18,marginTop:14}}>团飞机票搜索</div>
-                        <div style={{borderRadius:4,marginLeft:2,width:376,height:275,backgroundColor:"#fff",marginTop:10,position:"absolute"}}>
+                        <div style={{borderRadius:4,marginLeft:2,marginRight:2,width:"99%",height:275,backgroundColor:"#fff",marginTop:10,position:"absolute"}}>
                         <SearchLayout
                             data={window.apin.getCache("search")}
                             submit={(data)=>{
@@ -76,20 +76,20 @@ class page extends Component {
                         />
                         </div>
                     </Col>
-                    <Col span={18}  style={{width:810,backgroundColor:"#aaa",marginLeft:12,marginTop:10}} >
+                    <Col span={18}  style={{width:"65%",backgroundColor:"#aaa",marginLeft:12,marginTop:10}} >
                         {/*轮播部分*/}
                         {this.getSwitchLayout()}
                     </Col>
                 </Row>
 
                 {/*精品特价航线部分*/}
-                <div style={{width:1200,height:694,backgroundColor:"#fff"}}>
+                <div style={{width:"100%",height:694,}}>
                 <div style={{height: 60, marginTop: 12}}>
                     <img style={{
                         width: 20,
                         float: "left",
                         height: 20,
-                        marginLeft:525,
+                        marginLeft:"40%",
                         marginTop:30
                     }} src={require('../../../images/login_check.png')}
                     />
@@ -112,16 +112,16 @@ class page extends Component {
                     }}>更多路线推荐
                     </div>
                 </div>
-                <div style={{clear:"both"}}>
+                <div style={{clear:"both",width:"100%"}}>
                     {this.getRecommendList()}
                 </div>
                 </div>
                 {/*底部更多特价部分*/}
-                <div style={{clear:"both",width:1200,}}>
+                <div style={{clear:"both",width:"100%",}}>
                     {this.getSpecialList()}
                 </div>
                 <div style={{clear:"both"}}/>
-                <div style={{width: 1250, textAlign: "center", padding: 30, marginBottom: 30, fontSize: 16}}>加载中...</div>
+                <div style={{width: "100%", textAlign: "center", padding: 30, marginBottom: 30, fontSize: 16}}>加载中...</div>
 
             </div>
         )

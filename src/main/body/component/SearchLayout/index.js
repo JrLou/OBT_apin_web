@@ -39,14 +39,16 @@ class SearchLayout extends Component {
             <div style={{
                 width: "100%"
             }}>
-                <div className={less.left} >
+                <div className={less.left} style={{
+                    width: "100%"}}>
                     <div style={{fontSize:14,color:"#393939",marginBottom:4}}>出发城市：</div>
                     <InputAuto
                         ref="from"
                         defaultValue={this.state.from}
                         placeholder="中文／拼音／三字码"/>
                 </div>
-                <div className={less.left}>
+                <div className={less.left} style={{
+                    width: "100%"}}>
                     <div style={{fontSize:14,color:"#393939",marginBottom:4}}>到达城市：</div>
                     <InputAuto
                         ref="to"
@@ -88,7 +90,7 @@ class SearchLayout extends Component {
                     <Button
                         loading={this.state.loading}
                         type="primary"
-                        style={{marginTop:16,marginLeft:104,width:169,height:38,backgroundColor:"#29A6FF",color:"#fff"}}
+                        style={{marginTop:16,marginLeft:"50%",width:169,height:38,backgroundColor:"#29A6FF",color:"#fff"}}
                         onClick={() => {
 
                             if (this.props.submit) {
