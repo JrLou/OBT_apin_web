@@ -6,6 +6,7 @@ import less from './Index.less';
 import RecommendView from '../component/RecommendView'
 import SpecialView from '../component/SpecialView'
 import SearchLayout from '../component/SearchLayout'
+import SearchHelp from '../search/SearchHelp.js'
 
 import routes from '../../../vm/routes.js'
 class page extends Component {
@@ -13,14 +14,13 @@ class page extends Component {
         super(props)
     }
 
-
     getRecommendList() {
 
         return routes.getData(8).map((data, index) => {
             return (
                 <RecommendView
                     onClick={() => {
-                        window.app_open(this, "/OneWayDetail", data);
+                        SearchHelp.openSearch(this,data);
                     }}
                     data={data} key={index}/>
             )
@@ -32,7 +32,7 @@ class page extends Component {
             return (
             <SpecialView
                 onClick={() => {
-                    window.app_open(this, "/OneWayDetail", data);
+                    SearchHelp.openSearch(this,data);
                 }}
                 data={data} key={index}/>
             )
@@ -69,17 +69,7 @@ class page extends Component {
                         <SearchLayout
                             data={window.apin.getCache("search")}
                             submit={(data)=>{
-                                log(data)
-                                window.app_open(this, "/Search", {
-                                    data:data,
-                                    callBack:(data)=>{
-
-                                        alert(data)
-                                        this.setState({},()=>{
-
-                                        })
-                                    }
-                                });
+                                SearchHelp.openSearch(this,data);
                             }}
                         />
                     </Col>

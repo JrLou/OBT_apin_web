@@ -18,7 +18,7 @@ class SearchLayout extends Component {
             data = {}
         }
         this.state =  Object.assign({
-            dataSource: []
+            loading:false,
         },data)
         this.img_login_check = require('../../../../images/login_check.png')
         this.img_login_uncheck = require('../../../../images/login_uncheck.png')
@@ -29,8 +29,8 @@ class SearchLayout extends Component {
         return {
             from:this.refs.from.getValue(),
             to:this.refs.to.getValue(),
-            isSelectOneWay:this.state.isSelectOneWay,
-            isSelectReturn:this.state.isSelectReturn,
+            one:this.state.one,
+            two:this.state.two,
         }
     }
     render() {
@@ -57,7 +57,7 @@ class SearchLayout extends Component {
                     <div className={less.left}
                          onClick={() => {
                              this.setState({
-                                 isSelectOneWay: !this.state.isSelectOneWay,
+                                 one: !this.state.one,
                              })
                          }}>
                         <img style={{
@@ -65,38 +65,44 @@ class SearchLayout extends Component {
                             marginRight: 5,
                             float: "left",
                             height: 16,
-                        }} src={this.state.isSelectOneWay ? this.img_login_check : this.img_login_uncheck}
+                        }} src={this.state.one ? this.img_login_check : this.img_login_uncheck}
                         />
                         <div style={{float: "left"}}>单程</div>
                     </div>
                     <div className={less.left}
                          onClick={() => {
                              this.setState({
-                                 isSelectReturn: !this.state.isSelectReturn,
+                                 two: !this.state.two,
                              })
                          }}>
                         <img style={{
                             width: 16,
                             marginRight: 5, float: "left",
                             height: 16,
-                        }} src={this.state.isSelectReturn ? this.img_login_check : this.img_login_uncheck}
+                        }} src={this.state.two ? this.img_login_check : this.img_login_uncheck}
                         />
                         <div style={{float: "left"}}>往返</div>
                     </div>
                     <Button
+                        loading={this.state.loading}
                         type="primary"
                         className={less.left}
                         onClick={() => {
-
                             if (this.props.submit) {
                                 this.props.submit(this.getData())
                             }
                         }}>
-                        搜索
+                        {"搜索"+(this.state.loading?"中":"")}
                     </Button>
                 </div>
             </div>
         )
+    }
+
+    setLoading(loading){
+        this.setState({
+            loading:loading,
+        })
     }
 }
 module.exports = SearchLayout;
