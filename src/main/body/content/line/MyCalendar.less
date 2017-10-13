@@ -2,6 +2,7 @@
 /**
  * 设置日历的大小
  */
+@height_icon : 30px;
 .calendar{
   margin-top: @d_spadding_small;
   padding-top: @d_spadding_small;
@@ -10,14 +11,40 @@
 }
 
 .calendarHeader{
-  text-align: center;
   padding-bottom: @d_spadding_cell;
+  overflow: hidden;
+}
+.calendarHeaderIcon{
+  background: #00A3FF;
+  height: @height_icon;
+  width: @height_icon;
+  line-height: @height_icon;
+  text-align: center;
+  float: left;
+  font-size: 15px;
+}
+.refCalendarHeaderIcon{
+  composes: calendarHeaderIcon;
+  float: right;
+}
+.calendarHeaderItem{
+  background: #00A3FF;
+  height: @height_icon;
+  line-height: @height_icon;
+  text-align: center;
+  float: left;
+  font-size: 15px;
+  margin-left: @d_spadding_cell;
+}
+
+.aaa{
+  display: table-cell;
+  vertical-align: middle;
 }
 .calendarTitle{
   margin-left:10px;
   margin-right:10px;
   font-size:16px;
-  text-align:center;
 }
 .calendarBody{
   background-color: #20E66C;
@@ -33,8 +60,8 @@
 .defaultItem{
   float: left;
   width: 14.28%;
-  padding-top: @d_spadding_small;
-  padding-bottom: @d_spadding_small;
+  height: 60px;
+  line-height: 60px;
   text-align: center;
   font-size: @font-size-base;
 }
@@ -53,6 +80,10 @@
 .itemActive{
   composes: defaultItem;
   background-color: white;
+}
+.itemTags{
+  composes: defaultItem;
+  background-color: green;
 }
 .dayActive{
   color: #333333;

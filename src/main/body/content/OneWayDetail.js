@@ -96,6 +96,7 @@ class page extends Component {
                             day='11'
                             row_number = {6}
                             col_number = {7}
+                            tags = {[8,11,21,22,23]}
                         />
                     </div>
                     <div style={{width:"49%",float:"right"}}>
@@ -108,6 +109,7 @@ class page extends Component {
                             day='11'
                             row_number = {6}
                             col_number = {7}
+                            tags = {[5, 21]}
                         />
                     </div>
 
