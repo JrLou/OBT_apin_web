@@ -3,8 +3,10 @@ import React, {Component} from 'react';
 import {Pagination, Button, Input, Select} from 'antd';
 import RecommendView from '../component/RecommendView'
 import SearchLayout from '../component/SearchLayout'
+import OneWayDetail from '../content/OneWayDetail.js'
+import SearchHelp from '../search/SearchHelp.js'
 
-
+//获取模拟数据
 import routes from '../../../vm/routes.js'
 import less from './Search.less';
 class page extends Component {
@@ -14,87 +16,150 @@ class page extends Component {
             current: 1,
             loading: true,
         }
-
         this.par = window.app_getPar(this);
     }
 
+
     componentWillUnmount() {
-        //拿到搜索值,告诉上个页面
-        window.apin.setCache("search", this.refs.search.getData())
+        //页面返回,传递给上个页面的值 (非单页面不生效)
+        // if (this.searchLayout) {
+        //     window.apin.setCache("search", this.searchLayout.getData())
+        // }
+
     }
 
-    getRecommendList() {
-
-        let noData = (Math.random() * 10).toFixed(0) % 2 == 0;
-        return noData ? this.getNoneLayout() : routes.getData(8).map((data, index) => {
-            return (
-                <RecommendView
-                    onClick={() => {
-                        window.app_open(this, "/OneWayDetail", data);
-                    }}
-                    data={data} key={index}/>
-            )
-        });
-    }
-
+    /**
+     *页面打开之后,根据条件进行搜索
+     */
     componentDidMount() {
-        this.loadData()
+        this.loadData(this.par.data)
     }
 
-    loadData() {
+    /**
+     *
+     * @param loading 加载动画
+     * @param cb,顺序执行代码
+     */
+    setLoading(loading, cb) {
         this.setState(
             {
-                loading: true
-            }
-            , () => {
-                setTimeout(() => {
-                    this.setState(
-                        {
-                            loading: false
-                        }
-                    )
-                }, 2000)
-            })
+                loading: loading,
+            }, cb
+        )
+        this.searchLayout.setLoading(loading)
+    }
 
+    /**
+     * @param param 请求参数(根据搜索框与列表数据提取,不建议此外修改)
+     */
+    loadData(param) {
+        this.setLoading(true, () => {
+            //模拟请求网络
+            setTimeout(() => {
+                //请求结果
+                //假设结果
+                if (param.from == 0 && param.to == 0) {
+                    //无结果
+                    this.resut = null;
+                } else if (param.from && param.to) {
+                    //一定是结果的页面
+                    this.resut = {};
+                } else {
+                    //列表页面
+                    this.resut = routes.getData((Math.random() * 10).toFixed(0));
+                }
+                //更新页面,此代码,一定是在此位置
+                this.setLoading(false, () => {
+                })
+            }, 2000)
+        })
     }
 
     render() {
-
         return (
             <div style={{margin: "auto", width: 1250}}>
-                {/*搜索输入框部分*/}
-                <div>
-                    <SearchLayout
-                        ref="search"
-                        data={this.par.data}
+                <SearchLayout
+                    ref={(ref) => {
+                        this.searchLayout = ref;
+                    }}
+                    data={this.par.data}
 
-                        submit={(data) => {
-                            let a = this.refs.search.getData();
-                            {/*alert("执行搜索:"+JSON.stringify(a))*/
-                            }
-                            this.loadData()
-                            //  window.app_open(this, "/Search", data);
-                        }}
-                    />
-                </div>
-
-                {/*空部分*/}
-
-
-                {/*搜索列表部分*/}
-                <div style={{clear: "both"}}>
-                    {this.state.loading ? this.getLogingLayout() : this.getRecommendList()}
-                </div>
-
-                <div style={{width: 1250, textAlign: "right"}}>
-                    <Pagination showQuickJumper current={this.state.current} total={500} onChange={this.onChange}/>
-                </div>
-
+                    submit={(data) => {
+                        this.loadData(data)
+                    }}
+                />
+                {this.state.loading ? this.getLogingLayout() : this.getContentLayout(this.resut)}
             </div>
         )
     }
 
+    /**
+     *
+     * @param resut 中心区域应显示布局
+     * @returns {*} 返回显示布局
+     */
+    getContentLayout(resut) {
+        if (resut) {
+            if (resut instanceof Array) {
+                if (resut.length > 0) {
+                    return this.getListLayout(resut);
+                } else {
+                    return this.getNoneLayout();
+                }
+            } else {
+                return this.getResutLayout(resut);
+            }
+        } else {
+            return this.getNoneLayout();
+        }
+    }
 
+    /**
+     * 列表页面
+     * @param list 列表数据
+     * @returns {XML} 返回列表布局
+     */
+    getListLayout(list) {
+        return (
+            <div>
+                <div style={{clear: "both"}}>
+                    {list.map((data, index) => {
+                        return (
+                            <RecommendView
+                                onClick={() => {
+                                    SearchHelp.openSearch(this,data)
+                                }}
+                                data={data} key={index}/>
+                        )
+                    })}
+                </div>
+
+                <div style={{clear: "both"}}/>
+                <div style={{width: 1250, textAlign: "right"}}>
+                    <Pagination showQuickJumper current={this.state.current} total={500} onChange={this.onChange}/>
+                </div>
+            </div>
+        )
+    }
+
+    /**
+     *
+     * @param data 单结果页面
+     * @returns {XML} 结果布局
+     */
+    getResutLayout(data) {
+
+        return (
+            <div style={{clear: "both"}}>
+                <OneWayDetail data={data}/>
+            </div>
+        )
+    }
+
+    /**
+     * 加载中布局
+     * @returns {XML}
+     */
     getLogingLayout() {
         return (
             <div style={{marginTop: 20, width: 1250}}>
@@ -105,7 +170,6 @@ class page extends Component {
                     background: "url('../../../images/icon.ico')",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
-                    position: 'relative'
                 }}>
                     <div style={{position: "absolute", top: "62%", left: "32%"}}>
                         <h2 style={{
@@ -121,6 +185,10 @@ class page extends Component {
         )
     }
 
+    /**
+     * 无结果布局
+     * @returns {XML}
+     */
     getNoneLayout() {
         return (
             <div style={{marginTop: 20, width: 1250}}>
@@ -131,7 +199,6 @@ class page extends Component {
                     background: "url('../../../images/icon.ico')",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
-                    position: 'relative'
                 }}>
                     <div style={{position: "absolute", top: "62%", left: "32%"}}>
                         <h2 style={{
@@ -158,23 +225,4 @@ page.contextTypes = {
     router: React.PropTypes.object
 }
 module.exports = page;
-
-{/*<div className={less.content}>*/
-}
-
-{/*这是搜索结果页面*/
-}
-
-{/*<Button className={less.rightRow} icon={"back"}*/
-}
-{/*onClick={() => {*/
-}
-{/*window.app_open(this, "/", {title: "回首页"});*/
-}
-{/*}}*/
-}
-{/*>回首页</Button>*/
-}
-{/*</div>*/
-}
 
