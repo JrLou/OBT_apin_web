@@ -100,7 +100,7 @@ class page extends Component {
                         marginLeft: 20,
                         fontSize: 16
                     }} onClick={() => {
-                        window.app_open(this, "/Search", {title: "搜索"});
+                        SearchHelp.openSearch(this,{});
                     }}>查看更多
                     </div>
                 </div>
