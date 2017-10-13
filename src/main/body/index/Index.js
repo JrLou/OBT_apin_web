@@ -108,10 +108,8 @@ class page extends Component {
                         paddingRight:11,
                         paddingTop:25
                     }} onClick={() => {
-                        window.app_open(this, "/Search", {title: "搜索"});
-                    }}>更多路线推荐
                         SearchHelp.openSearch(this,{});
-                    }}>查看更多
+                    }}>更多路线推荐
                     </div>
                 </div>
                 <div style={{clear:"both"}}>
