@@ -1,149 +1,123 @@
 @import "../../../theme.less";
-.test1{
-  font-size:3em;
+
+@topHeight: 42px;
+
+.topRight{
+  width: 100%;
+  height: 0;
+  padding-bottom: 33.33%;
 }
-.test2{
-  margin-bottom:1em;
+.topRightContent{
+  background-color: #00A3FF;
+  position: absolute;
+  left: 15px;
+  right: 0;
+  bottom: 0;
+  top: 0;
 }
-//每个大块的背景，内边距，下外边距
-.row1{
-  background:@content-backcolor;
-  margin-bottom:10px;
+.topRightCarousel{
+  width: 100%;
+  height: 100%;
+  background-color: #e1abff;
+  color: #ffaa00;
+  text-align: center;
+  font-size: 55px;
 }
-.row2{
-  .row1;
-  padding:15px;
-}
-//每个小标题的样式：热点服务，我要办事
-.littleTitle{
-  margin-bottom: 10px;
-  .img{
-    vertical-align: middle;
-    margin-right:10px;
-  }
-  >span{
-    font-size: 16px;
-    font-weight: bold;
-  }
-}
-//1.个人办事、单位办事等
-.col{
-  padding: 27px 0;
-  margin-right:5px;
-  margin-top:5px;
-  margin-bottom:5px;
-  border: 1px @index-bordercolor solid;
+.topLeft {
+  width: 100%;
+  background-color: #29A6FF;
+  border-radius: 4px;
+  padding: 2px;
   box-sizing: border-box;
+}
+
+
+
+.topLeftBorder {
+
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%;
+  position: relative;
+  overflow: visible;
+}
+
+.topLeftTitle {
+  line-height: @topHeight;
+  position: absolute;
+  width: 100%;
+  vertical-align: middle;
+  color: #ffffff;
   text-align: center;
-  background: @content-backcolor;
+  font-size: 18px;
 }
-//搜索框的样式
-.bcimg{
-  border:1px solid @test-bordercolor;
-  padding:2em;
-  .searchbox{
-    border:1px solid @test-bordercolor;
-    width:60%;
-    margin:0 auto;
-    padding:1em;
-    .rightRow{
-      width:100%;
-      margin-bottom:10px;
-    }
-  }
+
+.topLeftContent {
+  border-radius: 4px;
+  background-color: #ffffff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: @topHeight;
+  padding: @d_spadding_cell*3;
+
 }
-//热点服务里的按钮
-//浮动引起父元素的高度变化解决
-.father{
-  overflow: hidden;
-  height:150px;
+
+.topLeftContentCenter {
+  width: 100%;
+  height: 100%;
+  background-color: #4ff92e;
 }
-.father:after{
-  display: block;
-  content:"";
-  clear:both;
+.center{
+  margin-top: @d_spadding_cell*2;
+  padding: @d_spadding_cell;
+  background-color: #ffffff;
+  border: 1px rgba(0,0,0,0.10) solid;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
 }
-//1.向左和向右的按钮
-.buttonLeft{
-  float:left;
-  padding:0;
-  width:40px;
-  height:150px;
-}
-.buttonRight{
-  .buttonLeft;
-  float:right;
-}
-//2.中间的列表样式
-.divhidden{
-  display: none;
-}
-.divitem{
-  float:left;
-  margin-left:2%;
-  margin-right:2%;
-  border:1px solid #ccc;
-  width:16%;
-  height:148px;
-  line-height:148px;
+.centerTitleLayout{
+  padding: @d_spadding_cell*5;
   text-align: center;
+  vertical-align: middle;
+  position: relative;
 }
-//我要办事的文字列表的上下间距
-.dolist{
-  margin-bottom:10px;
+.centerIcon{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url("../../../images/login_check.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
-//我要办事的文字列表
-.list2{
-  height:40px;
+.centerTitle{
+  display: inline-block;
+  font-size: 24px;
+  margin-left: @d_spadding_cell;
+  color: #000000;
+}
+.centerTitleMoreLayout{
+  position: absolute;
+  height: 40px;
+  right: @d_spadding_cell;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+}
+.centerTitleMore{
+  composes: centerTitle;
+  font-size: 16px;
+  margin-left: 0;
   line-height: 40px;
-  overflow: hidden;
-  >span,>i{
-    font-size: 16px;
-  }
 }
-//在线申报的按钮
-.button1{
-  float:right;
-  padding:0;
-  width:127px;
-  height:40px;
-  background: @buttonColor;
-  border-color:@buttonColor;
-  color:#fff;
+.centerIconMore{
+  composes: centerIcon;
+  width: 16px;
+  height: 16px;
+  margin-left: @d_spadding_cell;
+  background-image: url("../../../images/login_check.png");
 }
-.button1:hover{
-  background: @buttonColor;
-  border-color:@buttonColor;
-  color:#fff;
-}
-//信息查询的样式
-.inputword{
-  float:right;
-}
-.buttonCha{
-  float:right;
-  margin-top:5px;
-  background: @buttonColor;
-  border-color:@buttonColor;
-  color:#fff;
-}
-.buttonCha:hover{
-  background: @buttonColor;
-  border-color:@buttonColor;
-  color:#fff;
-}
-//信息查询的行
-.cha{
-  height:40px;
-  line-height: 40px;
-  margin-bottom:10px;
-}
-
-
-
-
-
-
 
 
 
