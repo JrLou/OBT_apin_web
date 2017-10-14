@@ -52,13 +52,13 @@ class page extends Component {
                 <div style={{
                     backgroundColor: "#bb4ba1",
                     margin: "auto", height: 328,
-                    width: 810,
+                    width: "100%",
                     backgroundPosition: "center", backgroundRepeat: "no-repeat"
                 }}/>
                 <div style={{
                     backgroundColor: "#bb5c86",
                     margin: "auto", height: 328,
-                    width: 810
+                    width: "100%"
                     , backgroundPosition: "center", backgroundRepeat: "no-repeat"
                 }}/>
             </Carousel>
