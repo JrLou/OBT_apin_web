@@ -131,6 +131,7 @@ class page extends Component {
                         return (
                             <Col  key={index} span={6}>
                             <RecommendView
+                                template={2}
                                 onClick={() => {
                                     SearchHelp.openSearch(this,data)
                                 }}
