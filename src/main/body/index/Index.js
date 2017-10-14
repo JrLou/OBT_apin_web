@@ -18,11 +18,13 @@ class page extends Component {
 
         return routes.getData(8).map((data, index) => {
             return (
+                <Col  key={index} span={6}>
                 <RecommendView
                     onClick={() => {
                         SearchHelp.openSearch(this,data);
                     }}
                     data={data} key={index}/>
+                </Col>
             )
         });
     }
@@ -30,12 +32,15 @@ class page extends Component {
     getSpecialList() {
         return routes.getData(12).map((data, index) => {
             return (
+            <Col  key={index} span={6}>
             <SpecialView
                 onClick={() => {
                     SearchHelp.openSearch(this,data);
                 }}
-                data={data} key={index}/>
+                data={data}/>
+            </Col>
             )
+
         });
     }
 
@@ -63,7 +68,9 @@ class page extends Component {
 
 
         return (
-            <div style={{margin:"auto",width:"100%",paddingLeft:100,paddingRight:100}}>
+            <div style={{margin:"auto",maxWidth:1200,
+
+            }}>
                 <Row style={{}}>
                     <Col span={6}  style={{marginTop:10,width:"33%",height:328,backgroundColor:"#29A6FF",borderRadius:4,}}>
                         <div style={{color:"#fff",textAlign:"center",fontSize:18,marginTop:14}}>团飞机票搜索</div>
@@ -112,14 +119,17 @@ class page extends Component {
                     }}>更多路线推荐
                     </div>
                 </div>
-                <div style={{clear:"both",width:"100%"}}>
+                <Row style={{
+                    backgroundColor:"#fff",
+                    padding:5,
+                    clear:"both",width:"100%"}}>
                     {this.getRecommendList()}
-                </div>
+                </Row>
                 </div>
                 {/*底部更多特价部分*/}
-                <div style={{clear:"both",width:"100%",}}>
+                <Row style={{clear:"both",width:"100%",}}>
                     {this.getSpecialList()}
-                </div>
+                </Row>
                 <div style={{clear:"both"}}/>
                 <div style={{width: "100%", textAlign: "center", padding: 30, marginBottom: 30, fontSize: 16}}>加载中...</div>
 

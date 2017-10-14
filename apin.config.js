@@ -93,10 +93,14 @@ module.exports = {
 		},
 		release: {
 			config: {
-				output: {
-					path: path.resolve(__dirname, './public/project'),
-					filename:'spa.js'
-				},
+                output: {
+                    path: path.resolve(__dirname,'./public/project'),
+                    filename: 'spa.js',
+                    sourceMapFilename: '[file].map',
+                    //加这个！
+                    chunkFilename: '[name].[chunkhash:5].chunk.js',
+                    publicPath: '/project/'
+                },
                 module: configModule,
 			},
 
