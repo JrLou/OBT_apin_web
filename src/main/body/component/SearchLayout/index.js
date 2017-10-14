@@ -2,8 +2,8 @@
  * Created by lixifeng on 17/10/12.
  */
 import React, {Component} from 'react';
-import {Button} from  'antd';
-import InputAuto from '../InputAuto'
+import {Button,Input} from  'antd';
+import AutoInput from '../AutoInput'
 import less from './index.less'
 /**
  * 搜索view
@@ -39,23 +39,23 @@ class SearchLayout extends Component {
         <div style={{
             width: "100%"
         }}>
-            <div className={less.left} style={{
+            <div className={less.left} style={{zIndex:5,position:"relative",
                 width: "100%"}}>
                 <div style={{fontSize:14,color:"#393939",marginBottom:4}}>出发城市：</div>
-                <InputAuto
+                <AutoInput
                     ref="from"
                     defaultValue={this.state.from}
                     placeholder="中文／拼音／三字码"/>
             </div>
-            <div className={less.left} style={{
+            <div className={less.left} style={{zIndex:2,position:"relative",
                 width: "100%"}}>
                 <div style={{fontSize:14,color:"#393939",marginBottom:4}}>到达城市：</div>
-                <InputAuto
+                <AutoInput
                     ref="to"
                     defaultValue={this.state.to}
                     placeholder="中文／拼音／三字码"/>
             </div>
-            <div style={{float:"left",marginTop:6}}>
+            <div style={{float:"left",marginTop:6,zIndex:1,position:"relative",}}>
                 <div className={less.left}
                      onClick={() => {
                          this.setState({
@@ -148,16 +148,18 @@ class SearchLayout extends Component {
             <div className={less.left} style={{width:1,marginLeft:20,height:52,backgroundColor:"#cbd3e5"}}/>
 
             <div className={less.left} style={{width:"30%",marginTop:20}}>
-                <div style={{marginTop:7,fontSize:14,float:"left",color:"#393939",}}>出发城市：</div>
-                <InputAuto
+                <div style={{marginTop:7,fontSize:14,color:"#393939",float:"left",zIndex:2}}>出发城市：</div>
+                <AutoInput
                     ref="from"
+                    style={{marginLeft:70,zIndex:1}}
                     defaultValue={this.state.from}
                     placeholder="中文／拼音／三字码"/>
             </div>
             <div className={less.left} style={{width:"30%",marginTop:20}}>
-                <div style={{marginTop:7,fontSize:14,float:"left",color:"#393939",}}>到达城市：</div>
-                <InputAuto
+                <div style={{marginTop:7,fontSize:14,float:"left",color:"#393939",zIndex:2}}>到达城市：</div>
+                <AutoInput
                     ref="to"
+                    style={{marginLeft:70,zIndex:1}}
                     defaultValue={this.state.to}
                     placeholder="中文／拼音／三字码"/>
             </div>

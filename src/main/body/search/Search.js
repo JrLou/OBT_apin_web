@@ -88,7 +88,9 @@ class page extends Component {
                         this.loadData(data)
                     }}
                 />
+                <div style={{paddingTop:42}}>
                 {this.state.loading ? this.getLogingLayout() : this.getContentLayout(this.resut)}
+                </div>
             </div>
         )
     }
@@ -121,7 +123,7 @@ class page extends Component {
      */
     getListLayout(list) {
         return (
-            <div style={{paddingTop:42}}>
+            <div>
                     <Row style={{
                         clear: "both",
                         backgroundColor:"#fff",
@@ -169,7 +171,7 @@ class page extends Component {
      */
     getLogingLayout() {
         return (
-            <div style={{marginTop: 42, width: "100%"}}>
+            <div style={{width: "100%"}}>
                 <div style={{
                     margin: "auto",
                     height: "653px",
@@ -198,7 +200,7 @@ class page extends Component {
      */
     getNoneLayout() {
         return (
-            <div style={{marginTop: 42}}>
+            <div>
                 <div style={{
                     margin: "auto",
                     height: "653px",
