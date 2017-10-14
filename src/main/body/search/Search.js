@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {Pagination, Button, Input, Select} from 'antd';
+import {Pagination, Button, Input, Select,Col} from 'antd';
 import RecommendView from '../component/RecommendView'
 import SearchLayout from '../component/SearchLayout'
 import OneWayDetail from '../content/OneWayDetail.js'
@@ -125,11 +125,14 @@ class page extends Component {
                 <div style={{clear: "both"}}>
                     {list.map((data, index) => {
                         return (
-                            <RecommendView
-                                onClick={() => {
-                                    SearchHelp.openSearch(this,data)
-                                }}
-                                data={data} key={index}/>
+                            <Col  key={index} span={6}>
+                                <RecommendView
+                                    template={2}
+                                    onClick={() => {
+                                        SearchHelp.openSearch(this,data);
+                                    }}
+                                    data={data} key={index}/>
+                            </Col>
                         )
                     })}
                 </div>

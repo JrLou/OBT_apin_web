@@ -1,9 +1,20 @@
 @import "../../../../theme.less";
+
 .cell{
   width: 100%;
   padding: @d_spadding_cell;
   background: #FFFFFF;
+  transition:transform 0.25s ease;
+  z-index: 1;
+
 }
+.cell:hover{
+  z-index: 2;
+  position: relative;
+  transform:scale(1.05,1.05);
+  transition:transform 0.25s ease;
+}
+
 .border{
 
   border: 1px rgba(0,0,0,0.10) solid;
@@ -24,6 +35,8 @@
   right: 0;
   opacity: 0.96;
   background: rgba(0,0,0,0.80);
+  padding: @d_spadding_cell*2  @d_spadding_cell*3;
+
 }
 .title{
 
@@ -33,7 +46,10 @@
   font-size: 16px;
   color: #FFFFFF;
   letter-spacing: 0;
-  padding: @d_spadding_cell;
+}
+.titleBlack{
+  composes: title;
+  color: #333333;
 }
 .tag{
   position: absolute;
@@ -56,28 +72,27 @@
 }
 .icon{
   composes: text;
-  width: 20px;
-  height: 10px;
-  background-image: url("../../../../images/wf.png");
+  width: 32px;
+  height: 32px;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 
 }
 .bottom{
-  padding: @d_spadding_cell;
+  width: 100%;
+  display: table;
+  padding: @d_spadding_cell*3 @d_spadding_cell*3;
 }
 .bottomLeft{
-  display: inline-block;
+  display: table-cell;
   text-align: left;
-  width: 40%;
-  overflow: hidden;
+  width: 50%;
+  vertical-align: middle;
 }
 .bottomRight{
-  width: 60%;
-  display: inline-block;
+  composes: bottomLeft;
   text-align: right;
-  overflow: hidden;
 }
 .money{
   display: inline-block;
@@ -85,12 +100,28 @@
   font-size: 14px;
   color: #FF5841;
   letter-spacing: 0;
+  vertical-align: bottom;
 }
 .moneyBig{
   composes: money;
   font-size: 24px;
+  line-height: 24px;
+}
+.moneyGray{
+  composes: money;
+  font-size: 12px;
+  color: #999;
+  letter-spacing: 0;
 }
 .moneyBlack{
   composes: money;
   color: #333333 ;
+}
+.moneyWhite{
+  composes: money;
+  color: #ffffff ;
+}
+.moneyWhiteV{
+  composes: moneyWhite;
+  margin: 0 @d_spadding_cell;
 }
