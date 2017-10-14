@@ -21,26 +21,27 @@ class SpecialView extends Component {
         return (
             <div
                 style={{
-                marginTop: 12, marginLeft: 11, width: 228, float: "left", height: 69,
+                marginTop: 7, marginLeft: "0.5%",marginRight:"0.5%", width: "19%",float:"left", height: 69,
                 backgroundColor: "#f6f6f6",
+                    display: "table",
                 paddingTop: 12
             }}
                 {...this.props}
             >
-                <div style={{position:"absolute", width: 228}}>
+                <div style={{position:"absolute", width: "19%"}}>
                 <div style={{fontSize: 14, marginLeft: 12, position:"absolute"}}>{
                     data.from + "-" + data.to
                 }</div>
                 <div style={{fontSize: 12, position:"absolute",right:5,color:"#888787"}}>
                     已团612张
                 </div>
-                <div style={{paddingLeft: 14, width: 228,marginTop: 23, fontSize: 15, position:"absolute"}}>
-                    <div style={{float: "left",position:"absolute"}}>
-                        <div style={{marginTop:5,color: "#FF5841", float: "left",fontSize:10}}>¥</div>
-                        <div style={{color: "#FF5841", float: "left",fontSize:16}}>{data.money}</div>
-                        <div style={{marginTop:5,color: "#2A2A2A", float: "left",fontSize:10,}}>起</div>
+                <div style={{paddingLeft: 14, width: "100%",marginTop: 25, fontSize: 15, position:"absolute"}}>
+                    <div style={{position:"absolute"}}>
+                        <font style={{marginTop:5,color: "#FF5841", fontSize:10}}>¥</font>
+                        <font style={{color: "#FF5841", fontSize:16}}>{data.money}</font>
+                        <font style={{marginTop:5,color: "#2A2A2A",fontSize:10,}}>起</font>
                     </div>
-                    <div style={{fontSize:12,marginTop:5,color:"#666",position:"absolute",right:11}}>10月13日</div>
+                    <font style={{fontSize:12,marginTop:5,color:"#666",position:"absolute",right:11}}>10月13日</font>
                 </div>
                 </div>
             </div>

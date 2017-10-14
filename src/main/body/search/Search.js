@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {Pagination, Button, Input, Select} from 'antd';
+import {Pagination, Button, Input, Select,Col,Row} from 'antd';
 import RecommendView from '../component/RecommendView'
 import SearchLayout from '../component/SearchLayout'
 import OneWayDetail from '../content/OneWayDetail.js'
@@ -77,13 +77,13 @@ class page extends Component {
 
     render() {
         return (
-            <div style={{margin: "auto", width: 1250}}>
+            <div style={{ margin:"auto",maxWidth:1200,backgroundColor:"#fff",marginTop:10}}>
                 <SearchLayout
                     ref={(ref) => {
                         this.searchLayout = ref;
                     }}
                     data={this.par.data}
-
+                    type={2}
                     submit={(data) => {
                         this.loadData(data)
                     }}
@@ -122,20 +122,26 @@ class page extends Component {
     getListLayout(list) {
         return (
             <div>
-                <div style={{clear: "both"}}>
+                    <Row style={{
+                        clear: "both",
+                        backgroundColor:"#fff",
+                        padding:5,
+                        clear:"both",width:"100%"}}>
                     {list.map((data, index) => {
                         return (
+                            <Col  key={index} span={6}>
                             <RecommendView
                                 onClick={() => {
                                     SearchHelp.openSearch(this,data)
                                 }}
                                 data={data} key={index}/>
+                            </Col>
                         )
                     })}
-                </div>
+                    </Row>
 
                 <div style={{clear: "both"}}/>
-                <div style={{width: 1250, textAlign: "right"}}>
+                <div style={{width: "100%", textAlign: "right",padding:10}}>
                     <Pagination showQuickJumper current={this.state.current} total={500} onChange={this.onChange}/>
                 </div>
             </div>
@@ -191,7 +197,7 @@ class page extends Component {
      */
     getNoneLayout() {
         return (
-            <div style={{marginTop: 20, width: 1250}}>
+            <div style={{marginTop: 20}}>
                 <div style={{
                     margin: "auto",
                     height: "653px",

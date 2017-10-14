@@ -32,7 +32,7 @@ class page extends Component {
     getSpecialList() {
         return routes.getData(12).map((data, index) => {
             return (
-            <Col  key={index} span={6}>
+            <Col  key={index} span={4.8}>
             <SpecialView
                 onClick={() => {
                     SearchHelp.openSearch(this,data);
@@ -77,6 +77,7 @@ class page extends Component {
                         <div style={{borderRadius:4,marginLeft:2,marginRight:2,width:"99%",height:275,backgroundColor:"#fff",marginTop:10,position:"absolute"}}>
                         <SearchLayout
                             data={window.apin.getCache("search")}
+                            type={1}
                             submit={(data)=>{
                                 SearchHelp.openSearch(this,data);
                             }}
@@ -127,7 +128,9 @@ class page extends Component {
                 </Row>
                 </div>
                 {/*底部更多特价部分*/}
-                <Row style={{clear:"both",width:"100%",}}>
+                <Row style={{clear:"both", padding:5,
+                    width:"100%", backgroundColor:"#fff",paddingBottom:7,
+                }}>
                     {this.getSpecialList()}
                 </Row>
                 <div style={{clear:"both"}}/>
