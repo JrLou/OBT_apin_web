@@ -121,7 +121,7 @@ class page extends Component {
      */
     getListLayout(list) {
         return (
-            <div>
+            <div style={{paddingTop:42}}>
                     <Row style={{
                         clear: "both",
                         backgroundColor:"#fff",
@@ -169,7 +169,7 @@ class page extends Component {
      */
     getLogingLayout() {
         return (
-            <div style={{marginTop: 20, width: 1250}}>
+            <div style={{marginTop: 42, width: "100%"}}>
                 <div style={{
                     margin: "auto",
                     height: "653px",
@@ -198,7 +198,7 @@ class page extends Component {
      */
     getNoneLayout() {
         return (
-            <div style={{marginTop: 20}}>
+            <div style={{marginTop: 42}}>
                 <div style={{
                     margin: "auto",
                     height: "653px",
