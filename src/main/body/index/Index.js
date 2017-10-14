@@ -48,88 +48,80 @@ class page extends Component {
     getSwitchLayout() {
 
         return (
-            <Carousel autoplay>
-                <div style={{
-                    backgroundColor: "#bb4ba1",
-                    margin: "auto", height: 328,
-                    width: "100%",
-                    backgroundPosition: "center", backgroundRepeat: "no-repeat"
-                }}/>
-                <div style={{
-                    backgroundColor: "#bb5c86",
-                    margin: "auto", height: 328,
-                    width: "100%"
-                    , backgroundPosition: "center", backgroundRepeat: "no-repeat"
-                }}/>
-            </Carousel>
+            <div className={less.topRight} >
+
+               <div className={less.topRightContent}>
+                   <Carousel autoplay >
+                       {
+                           [1,2,3].map((data,index)=>{
+                               return  (
+                                   <div
+                                       key={index}
+                                       className={less.topRightCarousel}>
+                                       {data}
+                                   </div>
+                               )
+                           })
+                       }
+                   </Carousel>
+               </div>
+            </div>
+
         )
     }
 
-    render() {
 
+    render() {
 
         return (
             <div style={{margin:"auto",maxWidth:1200,
 
             }}>
                 <Row style={{}}>
-                    <Col span={6}  style={{marginTop:10,width:"33%",height:328,backgroundColor:"#29A6FF",borderRadius:4,}}>
-                        <div style={{color:"#fff",textAlign:"center",fontSize:18,marginTop:14}}>团飞机票搜索</div>
-                        <div style={{borderRadius:4,marginLeft:2,marginRight:2,width:"99%",height:275,backgroundColor:"#fff",marginTop:10,position:"absolute"}}>
-                        <SearchLayout
-                            data={window.apin.getCache("search")}
-                            type={1}
-                            submit={(data)=>{
-                                SearchHelp.openSearch(this,data);
-                            }}
-                        />
+                    <Col span={6}
+                    >
+                        <div  className={less.topLeft}>
+                            <div className={less.topLeftBorder}>
+                                <div className={less.topLeftTitle}>团飞机票搜索</div>
+                                <div className={less.topLeftContent}>
+                                    <SearchLayout
+                                        data={window.apin.getCache("search")}
+                                        type={1}
+                                        submit={(data)=>{
+                                            SearchHelp.openSearch(this,data);
+                                        }}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </Col>
-                    <Col span={18}  style={{width:"65%",backgroundColor:"#aaa",marginLeft:12,marginTop:10}} >
+                    <Col span={18}
+                    >
                         {/*轮播部分*/}
                         {this.getSwitchLayout()}
                     </Col>
                 </Row>
 
-                {/*精品特价航线部分*/}
-                <div style={{width:"100%",height:694,}}>
-                <div style={{height: 60, marginTop: 12}}>
-                    <img style={{
-                        width: 20,
-                        float: "left",
-                        height: 20,
-                        marginLeft:"40%",
-                        marginTop:30
-                    }} src={require('../../../images/login_check.png')}
-                    />
-                    <div style={{
-                        float: "left",
-                        marginTop:25,
-                        marginLeft: 20,
-                        fontSize: 20,
-                    }}>精品特价航线
+
+                <div className={less.center}>
+                    <div className={less.centerTitleLayout}>
+                        <div className={less.centerIcon}/>
+                        <div className={less.centerTitle}>精品特价航线部分</div>
+
+                        <div className={less.centerTitleMoreLayout}>
+                            <div className={less.centerTitleMore}>更多</div>
+                            <div className={less.centerIconMore}/>
+                        </div>
                     </div>
-                    <div style={{
-                        textAlign: "right",
-                        marginTop: 5,
-                        marginLeft: 20,
-                        fontSize: 16,
-                        paddingRight:11,
-                        paddingTop:25
-                    }} onClick={() => {
-                        SearchHelp.openSearch(this,{});
-                    }}>更多路线推荐
-                    </div>
-                </div>
-                <Row style={{
-                    backgroundColor:"#fff",
-                    padding:5,
-                    clear:"both",width:"100%"}}>
+                    <Row >
                     {this.getRecommendList()}
-                </Row>
+                    </Row>
+                    <br/>
                 </div>
                 {/*底部更多特价部分*/}
-                <Row style={{clear:"both", padding:5,
+                <Row style={{
+                    marginTop:10,
+                    clear:"both", padding:5,
                     width:"100%", backgroundColor:"#fff",paddingBottom:7,
                 }}>
                     {this.getSpecialList()}
@@ -139,6 +131,7 @@ class page extends Component {
 
             </div>
         )
+
     }
 
 

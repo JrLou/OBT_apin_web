@@ -8,7 +8,7 @@ class AutoInput extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value:'',
+            value:props.defaultValue||"",
             inputFocused:false,
             upData:0,
         };
@@ -65,6 +65,9 @@ class AutoInput extends Component {
             //模糊匹配
             this.loadData(2,value)
         }
+    }
+    getValue(){
+        return this.state.value;
     }
 
     /**
@@ -369,7 +372,6 @@ class AutoInput extends Component {
                  {...this.props}
             >
                 <input
-                    ref={this.props.ref}
                     maxLength={20}
                     type="text"
                     placeholder={this.props.placeholder}
