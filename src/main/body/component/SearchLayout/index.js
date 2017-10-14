@@ -180,10 +180,10 @@ class SearchLayout extends Component {
     }
 
     render() {
-
+        let {type} = this.props;
         return (
             <div style={{width:"100%"}}>
-                {this.type===1?this.homeView():this.searchView()}
+                {type===1?this.homeView():this.searchView()}
             </div>
         )
     }
