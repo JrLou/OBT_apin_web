@@ -7,12 +7,17 @@ import RecommendView from '../component/RecommendView';
 import SpecialView from '../component/SpecialView';
 import SearchLayout from '../component/SearchLayout';
 import SearchHelp from '../search/SearchHelp.js';
-
+import {HttpTool}  from '../../../../lib/utils/index.js';
 import routes from '../../../vm/routes.js';
 class page extends Component {
     constructor(props) {
         super(props);
     }
+
+    componentDidMount(){
+        this.getCenterData();
+    }
+
 
     getRecommendList() {
 
@@ -70,6 +75,22 @@ class page extends Component {
         );
     }
 
+    getCenterData(){
+        var param = {
+
+        };
+        var success = (code, msg, json, option) => {
+            log(json);
+        };
+        var failure = (code, msg, option) => {
+            log(msg);
+        };
+        HttpTool.request(HttpTool.typeEnum.POST,"/airlineapi/v1.0/bestList",success, failure, param,
+            {
+                ipKey:'hlIP'
+            });
+        // http://192.168.0.46:8080
+    }
 
     render() {
 
