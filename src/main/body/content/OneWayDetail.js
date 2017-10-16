@@ -38,7 +38,6 @@ class page extends Component {
                 tableLoading: false,
                 dataSource: [],
             });
-            message.warning(msg);
         };
         //HttpTool.post(HttpTool.typeEnum.POST,APIGYW.dealer_stockList,success, failure, param)
         var myJson = [
