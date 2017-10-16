@@ -242,7 +242,6 @@ class page extends Component {
                         // 判断选择样式与历史样式是否相等，相等激活
                         if (select_year == history_year && select_month == history_month && history_day == (i + 1)) {
                             currentClassName = css.itemSelect;
-                            alert(tagDay.basePrice+"gyw");
                             let itemView = (<div className={currentClassName}
                                                  onClick={this.selectDate.bind(this, i + 1)}>
                                 <img className={css.itemSelect_sign}
@@ -263,7 +262,7 @@ class page extends Component {
                                     {currentText}
                                 </div>
                                 <div className={css.price}> {"¥"+tagDataItem.basePrice}</div>
-                                <div className={css.sit}>{"余位"+tagDataItem.remainCount}</div>
+                                <div className={css.sit}>{"余"+tagDataItem.remainCount}</div>
                             </div>);
 
                             current_link = (<CalendarItem  key={'current'+i} itemView={itemView}/>);
