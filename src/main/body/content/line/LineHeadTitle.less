@@ -32,12 +32,23 @@
   border-color: #CBD3E5;
   width: 100%;
   padding: @d_spadding_small 0;
-  overflow: hidden;
+
+}
+.titleHead{
+  display: inline;
+  vertical-align: middle;
+  font-size: @font_size_title;
+  color: #2db7f5;
+
+  padding-right: @d_spadding_small;
+}
+.refTitleHead{
+  composes: titleHead;
+  padding-left: @d_spadding_small;
 }
 .imgIcon{
-  float: left;
-  width: @font_size_title;
-  height: @font_size_title;
+  display: inline;
+  background-size: cover;
 }
 
 .rightLine{

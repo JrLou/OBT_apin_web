@@ -25,7 +25,7 @@ class page extends Component {
                         <div className={css.titleHead}>杭州</div>
                         <img className={css.imgIcon}
                              src={require("../../../../images/trip_single.png")}/>
-                        <div className={css.titleHead}>曼谷（往返）</div>
+                        <div className={css.refTitleHead}>曼谷（往返）</div>
                     </div>
 
                     <div className={css.rightLine} style={{marginTop:"50px"}}>

@@ -46,8 +46,8 @@ var configModule = {
         {
             test: /\.js$/,
             exclude: /node_modules/,
-            loader: jsLoader,
-            include: path.join(__dirname, "src")
+            loader: jsLoader
+            // include: path.join(__dirname, "src")
         },
         {
             test: /\.css/,
@@ -75,7 +75,8 @@ module.exports = {
         viewPath:"./view",
 		custom: {
             serverRoutes:router
-		}
+		},
+        hlIP:"http://192.168.0.237:8080"
 	},
 	webpack: {
 		dev: {
