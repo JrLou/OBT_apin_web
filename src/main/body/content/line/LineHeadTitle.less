@@ -31,9 +31,24 @@
   border-style: dashed;
   border-color: #CBD3E5;
   width: 100%;
-  font-size: @font_size_title;
-  color: #29A6FF;
   padding: @d_spadding_small 0;
+
+}
+.titleHead{
+  display: inline;
+  vertical-align: middle;
+  font-size: @font_size_title;
+  color: #2db7f5;
+
+  padding-right: @d_spadding_small;
+}
+.refTitleHead{
+  composes: titleHead;
+  padding-left: @d_spadding_small;
+}
+.imgIcon{
+  display: inline;
+  background-size: cover;
 }
 
 .rightLine{

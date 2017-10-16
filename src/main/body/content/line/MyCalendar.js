@@ -407,9 +407,12 @@ class MonthView extends Component{
                          }
                          var remove_width = this.state.remove_width;
                          var remove = remove_width+90;
-                         this.setState({
-                             remove_width:remove
-                         });
+
+                         setTimeout(()=>{
+                             this.setState({
+                                 remove_width:remove
+                             });
+                         },1000);
                      }}/>
             </div>
 
@@ -417,7 +420,9 @@ class MonthView extends Component{
             {/*<div className={css.blurEffect}></div>*/}
             <div ref={(a)=>this.monthView = a}
                  className={css.monthView}
-                 style={{"-webkit-mask-image": blurEffect}}
+                 style={{
+                     WebkitMaskImage: blurEffect
+                 }}
             >
                 <div className={css.monthView_super}
                      style={{

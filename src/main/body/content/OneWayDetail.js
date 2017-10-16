@@ -3,7 +3,8 @@
  */
 import React, {Component} from 'react';
 import css from './OneWayDetail.less';
-
+import { HttpTool } from '../../../../lib/utils/index.js';
+import APIGYW from "../../../api/APIGYW.js";
 import LineHeadTitle from "./line/LineHeadTitle.js";
 import MyCalendar from "./line/MyCalendar.js";
 import MyAlert from "./line/MyAlert.js";
@@ -19,65 +20,100 @@ class page extends Component {
     componentDidMount() {
         this.loadData();
     }
-    loadData(p,pc) {
-        var param = param || {};
-        param.pageNo = p||1;
-        param.pageSize = pc||10;
-        // param.date = "2017-9-19";
+    loadDaysData() {
+        var param = {
+            "depCity":"上海",
+            "arrCity":"北京",
+            "depDate":"2017-10-14",
+            "flightType":"1"
+        };
         var success = (code, msg, json, option) => {
-            if (option.option) {
-                this.state.total = option.option;
-            }
-            this.setState({
-                tableLoading: false,
-                dataSource: json
-            });
+            log(json);
+            log("gyw-------loadDaysData------");
         };
         var failure = (code, msg, option) => {
-            this.setState({
-                tableLoading: false,
-                dataSource: []
-            });
+            log(msg);
         };
-        //HttpTool.post(HttpTool.typeEnum.POST,APIGYW.dealer_stockList,success, failure, param)
-        var myJson = [
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param,
             {
-                flight:[
-                    {
-                        type:1,
-                        logo:require("../../../images/login_loading.gif"),
-                        company:"东方航空1杭州萧山机场",
-                        lineNum:"NX005",
-                        startDay:"10月11日",
-                        endDay:"10月16日",
-                        startTime:"06:30",
-                        endTime:"08:55",
-                        startPlace:"杭州萧山机场",
-                        endPlace:"素万那普机场",
-                        totalTime:"3小时50分钟"
-                    },
-                    {
-                        type:2,
-                        logo:require("../../../images/login_loading.gif"),
-                        company:"东方航空2",
-                        lineNum:"NX005",
-                        startDay:"10月11日",
-                        endDay:"10月16日",
-                        startTime:"06:30",
-                        endTime:"08:55",
-                        startPlace:"杭州萧山机场",
-                        endPlace:"素万那普机场素万那普机场",
-                        totalTime:"3小时50分钟"
-                    }
-                ],
-                days:"6天",
-                price:"2333",
-                isTax:true,
-                remain:23,
-                isType:1
-            }
-        ];
-        this.myLineInfor.refreshView(myJson);
+                ipKey:'hlIP'
+            });
+    }
+    loadTripData() {
+        var param = {
+            "depCity":"上海",
+            "arrCity":"北京",
+            "depDate":"2017-10-14",
+            "flightType":"1"
+        };
+        var success = (code, msg, json, option) => {
+            log(json);
+            log("gyw-------------");
+        };
+        var failure = (code, msg, option) => {
+            log(msg);
+        };
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_query,success, failure, param,
+            {
+                ipKey:'hlIP'
+            });
+    }
+    loadData() {
+        var param = {
+            "depCity":"上海",
+            "arrCity":"北京",
+            "depDate":"2017-10-14",
+            "flightType":"1"
+        };
+        var success = (code, msg, json, option) => {
+            log(json);
+            log("gyw-------------");
+        };
+        var failure = (code, msg, option) => {
+            log(msg);
+        };
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param,
+            {
+                ipKey:'hlIP'
+            });
+        // var myJson = [
+        //     {
+        //         flight:[
+        //             {
+        //                 type:1,
+        //                 logo:require("../../../images/login_loading.gif"),
+        //                 company:"东方航空1杭州萧山机场",
+        //                 lineNum:"NX005",
+        //                 startDay:"10月11日",
+        //                 endDay:"10月16日",
+        //                 startTime:"06:30",
+        //                 endTime:"08:55",
+        //                 startPlace:"杭州萧山机场",
+        //                 endPlace:"素万那普机场",
+        //                 totalTime:"3小时50分钟"
+        //             },
+        //             {
+        //                 type:2,
+        //                 logo:require("../../../images/login_loading.gif"),
+        //                 company:"东方航空2",
+        //                 lineNum:"NX005",
+        //                 startDay:"10月11日",
+        //                 endDay:"10月16日",
+        //                 startTime:"06:30",
+        //                 endTime:"08:55",
+        //                 startPlace:"杭州萧山机场",
+        //                 endPlace:"素万那普机场素万那普机场",
+        //                 totalTime:"3小时50分钟"
+        //             }
+        //         ],
+        //         days:"6天",
+        //         price:"2333",
+        //         isTax:true,
+        //         remain:23,
+        //         isType:1
+        //     }
+        // ];
+        // this.myLineInfor.refreshView(myJson);
     }
     render() {
         var div = (
@@ -86,7 +122,8 @@ class page extends Component {
                     <LineHeadTitle/>
                 </div>
                 <div className={css.content} style={{overflow:"hidden"}}>
-                    <div style={{width:"49%",float:"left"}}>
+                    <div className={css.myCalendar}
+                         style={{width:"49%",float:"left"}}>
                         <MyCalendar
                             onSelectDate={(select_year, select_month , select_day)=>{
                                 this.selectDate(select_year, select_month, select_day);
@@ -100,7 +137,8 @@ class page extends Component {
                             tags = {[8,11,14,21,22,23]}
                         />
                     </div>
-                    <div style={{width:"49%",float:"right"}}>
+                    <div className={css.myCalendar}
+                         style={{width:"49%",float:"right"}}>
                         <MyCalendar
                             onSelectDate={(select_year, select_month , select_day)=>{
                                 this.selectDate(select_year, select_month, select_day);
@@ -245,10 +283,8 @@ class LineInfor extends Component {
                                 <div className={css.totalTimeText}>
                                     {dataItem.totalTime}
                                 </div>
-                                <div style={{overflow:"hidden"}}>
-                                    <div className={css.lineRotate}></div>
-                                </div>
-                                <div className={css.line}></div>
+                                <img className={css.line} src={require('../../../images/trip_line.png')}/>
+
                             </div>
                             <div className={css.timeLineItem} style={{textAlign:"left"}}>{dataItem.endTime}</div>
                         </div>
