@@ -109,11 +109,10 @@ class SearchLayout extends Component {
 
     searchView() {
         return (
-            <div style={{
-                width: "100%",
-                paddingTop: 35
-            }}>
-<Row>
+<Row  style={{
+    width: "100%",
+    paddingTop: 35
+}}>
                 <Col span={2} style={{marginLeft: 42}}>
                     {this.getSwitchView(this.state.one, "单程",
                         () => {
@@ -160,13 +159,11 @@ class SearchLayout extends Component {
         </div>
     </Col>
 <Col>
-    <div>
         {this.getButton()}
-    </div>
 </Col>
 
 </Row>
-            </div>);
+        );
     }
 
     render() {

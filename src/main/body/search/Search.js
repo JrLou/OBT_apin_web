@@ -77,7 +77,7 @@ class page extends Component {
 
     render() {
         return (
-            <div style={{ margin:"auto",maxWidth:1200,backgroundColor:"#fff",marginTop:10}}>
+            <div className={less.content}>
                 <SearchLayout
                     ref={(ref) => {
                         this.searchLayout = ref;
@@ -124,11 +124,7 @@ class page extends Component {
     getListLayout(list) {
         return (
             <div>
-                    <Row style={{
-                        clear: "both",
-                        backgroundColor:"#fff",
-                        padding:5,
-                        width:"100%"}}>
+                    <Row className={less.listRow}>
                     {list.map((data, index) => {
                         return (
                             <Col  key={index} span={6}>
@@ -144,7 +140,7 @@ class page extends Component {
                     </Row>
 
                 <div style={{clear: "both"}}/>
-                <div style={{width: "100%", textAlign: "right",padding:10}}>
+                <div className={less.bottom}>
                     <Pagination showQuickJumper current={this.state.current} total={500} onChange={this.onChange}/>
                 </div>
             </div>
@@ -171,26 +167,14 @@ class page extends Component {
      */
     getLogingLayout() {
         return (
-            <div style={{width: "100%"}}>
-                <div style={{
-                    margin: "auto",
-                    height: "653px",
-                    width: "873px",
-                    background: "url('../../../images/icon.ico')",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat"
-                }}>
-                    <div style={{position: "absolute", top: "62%", left: "32%"}}>
-                        <h2 style={{
-                            fontFamily: "MicrosoftYaHei",
-                            fontSize: "14px",
-                            color: "#000",
-                            letterSpacing: 0,
-                            lineHeight: "16px"
-                        }}>加载中 </h2>
-                    </div>
-                </div>
+        <div className={less.load}>
+            <div>
+                正在为您搜索航班信息...
             </div>
+            <img src={require('../../../images/check.png')}
+            />
+        </div>
+
         );
     }
 
@@ -200,31 +184,10 @@ class page extends Component {
      */
     getNoneLayout() {
         return (
-            <div>
-                <div style={{
-                    margin: "auto",
-                    height: "653px",
-                    width: "873px",
-                    background: "url('../../../images/icon.ico')",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat"
-                }}>
-                    <div style={{position: "absolute", top: "62%", left: "32%"}}>
-                        <h2 style={{
-                            fontFamily: "MicrosoftYaHei",
-                            fontSize: "14px",
-                            color: "#000",
-                            letterSpacing: 0,
-                            lineHeight: "16px"
-                        }}>没有查询到航班信息，请重新搜索或联系客服询问航班 </h2>
-                        <Button type="primary" style={{
-                            width: '140px',
-                            fontSize: "12px",
-                            position: "absolute",
-                            left: "120px",
-                            top: "80px"
-                        }} size="large">联系客服</Button>
-                    </div>
+            <div className={less.empty}>
+                <div className={less.emptyText}>
+                    <div>没有查询到航班信息，请重新搜索或联系客服询问航班 </div>
+                    <Button type="primary">联系客服</Button>
                 </div>
             </div>
         );
