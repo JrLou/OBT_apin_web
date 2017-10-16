@@ -159,6 +159,7 @@ class page extends Component {
         return data.map((data, index) => {
             return (
             <SpecialView
+                key={index}
                 onClick={() => {
                     SearchHelp.openSearch(this,data);
                 }}
