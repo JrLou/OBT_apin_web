@@ -15,7 +15,7 @@ class page extends Component{
                 <Header style={{backgroundColor:"#fff"}}>
                     <AppTop root={this}/>
                 </Header>
-                <Content >
+                <Content style={{marginTop:10}}>
                     {this.props.children}
                 </Content>
                 <Footer>

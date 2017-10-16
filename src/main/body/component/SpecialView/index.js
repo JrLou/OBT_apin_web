@@ -49,15 +49,12 @@ class SpecialView extends Component {
                         <font className={css.moneyGray}>{"起"}</font>
                     </div>
                 </div>
-                <div>
                     <div className={css.bottomRight}>
                         <font className={css.date}>{"已团"}</font>
                         <font className={css.date}>{data.count+"张"}</font>
                         <br/>
                         <font className={css.date}>10月13日</font>
                     </div>
-                    <font style={{fontSize:12,marginTop:5,color:"#666",position:"absolute",right:11}}>10月13日</font>
-                </div>
                 </div>
             </div>
         );
