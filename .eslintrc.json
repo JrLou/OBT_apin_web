@@ -1,0 +1,33 @@
+{
+  //http://blog.csdn.net/helpzp2008/article/details/51507428 文件说明
+  "env": {
+    "browser": true,
+    "node":true,
+    "es6": true
+  },
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+      "jsx": true
+    },
+    "sourceType": "module"
+  },
+  "globals": {
+    "module":true,
+    "apin":true,
+    "log":true
+  },
+  "rules": {
+    "semi": 2,
+    "no-undef": 2,//不能有未定义的变量
+    "no-console":0,//0 可用使用//禁止使用console
+    "no-eq-null": 2,//禁止对null使用==或!=运算符
+    "no-constant-condition": 2,//禁止在条件中使用常量表达式 if(true) if(1)
+    "no-unused-vars": [0, {"vars": "all", "args": "after-used"}]//不能有声明后未被使用的变量或参数
+  }
+}

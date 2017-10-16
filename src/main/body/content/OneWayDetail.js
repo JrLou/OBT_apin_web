@@ -4,9 +4,9 @@
 import React, {Component} from 'react';
 import css from './OneWayDetail.less';
 
-import LineHeadTitle from "./line/LineHeadTitle.js"
-import MyCalendar from "./line/MyCalendar.js"
-import MyAlert from "./line/MyAlert.js"
+import LineHeadTitle from "./line/LineHeadTitle.js";
+import MyCalendar from "./line/MyCalendar.js";
+import MyAlert from "./line/MyAlert.js";
 class page extends Component {
     constructor(props) {
         super(props);
@@ -14,10 +14,10 @@ class page extends Component {
             tableLoading:false,
             dataSource:[],
             total:0,
-        }
+        };
     }
     componentDidMount() {
-        this.loadData()
+        this.loadData();
     }
     loadData(p,pc) {
         var param = param || {};
@@ -31,15 +31,15 @@ class page extends Component {
             this.setState({
                 tableLoading: false,
                 dataSource: json,
-            })
-        }
+            });
+        };
         var failure = (code, msg, option) => {
             this.setState({
                 tableLoading: false,
                 dataSource: [],
             });
             message.warning(msg);
-        }
+        };
         //HttpTool.post(HttpTool.typeEnum.POST,APIGYW.dealer_stockList,success, failure, param)
         var myJson = [
             {
@@ -77,8 +77,8 @@ class page extends Component {
                 remain:23,
                 isType:1,
             }
-        ]
-        this.myLineInfor.refreshView(myJson)
+        ];
+        this.myLineInfor.refreshView(myJson);
     }
     render() {
         var div = (
@@ -90,7 +90,7 @@ class page extends Component {
                     <div style={{width:"49%",float:"left"}}>
                         <MyCalendar
                             onSelectDate={(select_year, select_month , select_day)=>{
-                                this.selectDate(select_year, select_month, select_day)
+                                this.selectDate(select_year, select_month, select_day);
                             }}
                             year={"2017"}
                             month={"10"}
@@ -104,7 +104,7 @@ class page extends Component {
                     <div style={{width:"49%",float:"right"}}>
                         <MyCalendar
                             onSelectDate={(select_year, select_month , select_day)=>{
-                                this.selectDate(select_year, select_month, select_day)
+                                this.selectDate(select_year, select_month, select_day);
                             }}
                             year={"2017"}
                             month={"11"}
@@ -123,7 +123,7 @@ class page extends Component {
                         航班信息
                     </div>
                     <LineInfor ref={(a)=>this.myLineInfor = a} callBack={()=>{
-                        this.myAlert.refreshView()
+                        this.myAlert.refreshView();
                     }}/>
                 </div>
 
@@ -133,22 +133,22 @@ class page extends Component {
         return div;
     }
     selectDate(y,m,d){
-        alert(y+"年"+m+"月"+d+"日")
-        this.myLineInfor.refreshView([])
+        alert(y+"年"+m+"月"+d+"日");
+        this.myLineInfor.refreshView([]);
     }
 }
 
 class LineInfor extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             dataSource: [],
-        }
+        };
     }
     refreshView(dataSource) {
         this.setState({
             dataSource:dataSource
-        })
+        });
     }
     render() {
         let {dataSource} = this.state;
@@ -160,7 +160,7 @@ class LineInfor extends Component {
         if (!dataSource||dataSource.length<1){
             return null;
         }
-        var viewArr = []
+        var viewArr = [];
         for (let i=0;i<dataSource.length;i++){
             let dataItem = dataSource[i];
             var itemView = (<div key={i}>
@@ -194,7 +194,7 @@ class LineInfor extends Component {
                                     <div className={css.table}>
                                         <div className={css.btn} onClick={()=>{
                                             if (this.props.callBack){
-                                                this.props.callBack()
+                                                this.props.callBack();
                                             }
                                         }}>预定</div>
                                     </div>
@@ -204,8 +204,8 @@ class LineInfor extends Component {
                         </div>
                     </div>
                 </div>
-            </div>)
-            viewArr.push(itemView)
+            </div>);
+            viewArr.push(itemView);
         }
 
         return viewArr;
@@ -215,7 +215,7 @@ class LineInfor extends Component {
         if (!data||data.length<1){
             return null;
         }
-        var viewArr = []
+        var viewArr = [];
         for (let i=0;i<data.length;i++){
             let dataItem = data[i];
             var itemView = (<div key={i}>
@@ -261,8 +261,8 @@ class LineInfor extends Component {
                     </div>
 
                 </div>
-            </div>)
-            viewArr.push(itemView)
+            </div>);
+            viewArr.push(itemView);
         }
 
         return viewArr;
@@ -272,7 +272,7 @@ class LineInfor extends Component {
 
 page.contextTypes = {
     router: React.PropTypes.object
-}
+};
 module.exports = page;
 
 

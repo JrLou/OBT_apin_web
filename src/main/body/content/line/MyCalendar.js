@@ -19,7 +19,7 @@ class page extends Component {
             history_month : undefined,
             history_day : undefined,
             date_num_array : []
-        }
+        };
         //用于记录日期，显示的时候，根据dateObj中的日期的年月显示
 
     }
@@ -122,8 +122,8 @@ class page extends Component {
         let { current_year, current_month, current_day,
             select_year, select_month, select_day, date_num_array, first_day} = this.state;
 
-        select_year = selMonth.substring(0,4)
-        select_month = selMonth.substring(5,7)
+        select_year = selMonth.substring(0,4);
+        select_month = selMonth.substring(5,7);
 
         if (select_month === 12) {
             select_month = select_month-1;
@@ -146,7 +146,7 @@ class page extends Component {
             select_day : select_day,
             date_num_array : date_num_array,
             first_day : first_day
-        })
+        });
     }
 
     /**
@@ -178,7 +178,7 @@ class page extends Component {
         previous_month_days = date_num_array[previous_month];
         //在本月之前的
         for (let i = 0; i < first_day; i++) {
-            log(i)
+            log(i);
             let previous_link = (<div className={css.itemGray}
                                       key={'previous'+i}>
                 <div className={css.dayGray}>{previous_month_days - (first_day - i) + 1}</div>
@@ -200,7 +200,7 @@ class page extends Component {
                     <div className={css.dayActive}>
                         {currentText}
                     </div>
-                </div>)
+                </div>);
             } else {
                 currentText = i + 1;
                 currentClassName = css.itemActive;
@@ -209,7 +209,7 @@ class page extends Component {
                     <div className={css.dayActive}>
                         {currentText}
                     </div>
-                </div>)
+                </div>);
             }
 
 
@@ -230,7 +230,7 @@ class page extends Component {
                                 </div>
                                 <div className={css.price}> ¥2333</div>
                                 <div className={css.sit}>余位23</div>
-                            </div>)
+                            </div>);
                         } else {
                             currentClassName = css.itemTags;
                             current_link = (<div className={currentClassName}
@@ -241,7 +241,7 @@ class page extends Component {
                                 </div>
                                 <div className={css.price}> ¥2333</div>
                                 <div className={css.sit}>余位23</div>
-                            </div>)
+                            </div>);
                             break;
                         }
                     }
@@ -280,7 +280,7 @@ class page extends Component {
                     <div className={css.calendarHeader_con}>
                         <MonthView
                             selectMonth={(selMonth)=>{
-                                this.selectMonth(selMonth)
+                                this.selectMonth(selMonth);
                             }}
                             select_year = {select_year}
                             select_month = {select_month}
@@ -311,7 +311,7 @@ class page extends Component {
 }
 page.contextTypes = {
     router: React.PropTypes.object
-}
+};
 
 class MonthView extends Component{
     constructor(props) {
@@ -319,9 +319,9 @@ class MonthView extends Component{
         this.state = ({
             current_month:"2017-10",
             remove_width:"0",
-        })
+        });
         this.removeNum = 0;
-        this.removeTotal = 0
+        this.removeTotal = 0;
     }
 
     /**
@@ -338,9 +338,9 @@ class MonthView extends Component{
             month_width = monthArr.length*90;
         }
 
-        var translateX = "translateX("+this.state.remove_width +"px)"
+        var translateX = "translateX("+this.state.remove_width +"px)";
         var monthView_With = this.monthView?this.monthView.offsetWidth:0;
-        var blurEffect = "-webkit-gradient(linear, "+(monthView_With!=0?(monthView_With-10):0)+" 0,"+ monthView_With+" 0, from(rgba(0, 0, 0, 10)), to(rgba(5, 5, 0, 0)))"
+        var blurEffect = "-webkit-gradient(linear, "+(monthView_With!=0?(monthView_With-10):0)+" 0,"+ monthView_With+" 0, from(rgba(0, 0, 0, 10)), to(rgba(5, 5, 0, 0)))";
 
         return(<div className={css.monthView_bg}>
             <div className={css.calendarHeaderIcon}>
@@ -358,7 +358,7 @@ class MonthView extends Component{
                          var remove = remove_width+90;
                          this.setState({
                              remove_width:remove,
-                         })
+                         });
                      }}/>
             </div>
 
@@ -389,7 +389,7 @@ class MonthView extends Component{
 
                          var remove_width = this.state.remove_width;
                          //此处减90是因为 第一个从零开始 然后减去最后一个的宽度
-                         var isBeyond = month_width-(monthView_width+this.removeTotal-90)
+                         var isBeyond = month_width-(monthView_width+this.removeTotal-90);
                          if (!monthArr || isBeyond<0){
                              this.removeNum = this.removeNum-1;
                              this.removeTotal = this.removeTotal -90;
@@ -398,22 +398,22 @@ class MonthView extends Component{
                          var remove = remove_width-90;
                          this.setState({
                              remove_width:remove,
-                         })
+                         });
                      }}/>
             </div>
-        </div>)
+        </div>);
     }
     createMonthItem(monthArr,selectMonth){
         if (!monthArr){
             return null;
         }
-        var monthItemArr = []
+        var monthItemArr = [];
         for (let i = 0; i < monthArr.length; i++) {
             // 判断选择样式与历史样式是否相等，相等激活
-            let item_MonthView = null
+            let item_MonthView = null;
             let monthData_item = monthArr[i];
-            let isSelect = monthData_item == this.state.current_month
-            let myMonth = monthData_item.replace("-","年")
+            let isSelect = monthData_item == this.state.current_month;
+            let myMonth = monthData_item.replace("-","年");
             item_MonthView = (
                 <div key={"current_month"+i}
                      onClick={()=>{
@@ -421,16 +421,16 @@ class MonthView extends Component{
                              current_month:monthData_item
                          },()=>{
                              if (selectMonth){
-                                 selectMonth(monthData_item)
+                                 selectMonth(monthData_item);
                              }
-                         })
+                         });
                      }}
                      className={isSelect?css.select_monthItem:css.monthItem}>
                     {myMonth+"月"}
-                </div>)
-            monthItemArr.push(item_MonthView)
+                </div>);
+            monthItemArr.push(item_MonthView);
         }
-        return monthItemArr
+        return monthItemArr;
     }
 }
 module.exports = page;
