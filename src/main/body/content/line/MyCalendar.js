@@ -18,10 +18,20 @@ class page extends Component {
             history_year : undefined,
             history_month : undefined,
             history_day : undefined,
-            date_num_array : []
+            date_num_array : [],
+            tags :[],
+            monthArr:[],
+            isLeft:true
         };
         //用于记录日期，显示的时候，根据dateObj中的日期的年月显示
 
+    }
+    refreshCalendar(isLeft, dataSource,monthArr){
+        this.setState({
+            tags:dataSource,
+            monthArr:monthArr,
+            isLeft:isLeft
+        });
     }
     componentWillReceiveProps(nextProps) {
         // todo
@@ -154,11 +164,12 @@ class page extends Component {
      * @returns {XML}
      */
     render() {
-        let { row_number, col_number, tags ,monthArr} = this.props;
+        let { row_number, col_number} = this.props;
+
         let { current_year, current_month, current_day,
             select_year, select_month, select_day,
             history_year, history_month, history_day,
-            date_num_array, first_day} = this.state;
+            date_num_array, first_day,tags ,monthArr,isLeft} = this.state;
 
         let month_day = date_num_array[select_month],
             n_day = row_number * col_number - first_day - month_day,
@@ -223,11 +234,15 @@ class page extends Component {
             // 添加tag样式
             if (tags&&tags.length > 0) {
                 for (let j = 0; j < tags.length; j++) {
-                    if ((i + 1) === tags[j]) {
+                    let tagDataItem = tags[j];
+                    let tagDay = tagDataItem.retDate;
+                    tagDay = parseInt(tagDay.substring(8));
+                    log((i + 1) === tagDay);
+                    if ((i + 1) === tagDay) {
                         // 判断选择样式与历史样式是否相等，相等激活
                         if (select_year == history_year && select_month == history_month && history_day == (i + 1)) {
                             currentClassName = css.itemSelect;
-
+                            alert(tagDay.basePrice+"gyw");
                             let itemView = (<div className={currentClassName}
                                                  onClick={this.selectDate.bind(this, i + 1)}>
                                 <img className={css.itemSelect_sign}
@@ -235,21 +250,20 @@ class page extends Component {
                                 <div className={css.dayActive}>
                                     {currentText}
                                 </div>
-                                <div className={css.price}> ¥2333</div>
-                                <div className={css.sit}>余位23</div>
+                                <div className={css.price}> {"¥"+tagDataItem.basePrice}</div>
+                                <div className={css.sit}>{"余位"+tagDataItem.remainCount}</div>
                             </div>);
 
                             current_link = (<CalendarItem key={'current'+i} itemView = {itemView}/>);
                         } else {
                             currentClassName = css.itemTags;
-
                             let itemView = (<div className={currentClassName}
                                                  onClick={this.selectDate.bind(this, i + 1)}>
                                 <div className={css.dayActive}>
                                     {currentText}
                                 </div>
-                                <div className={css.price}> ¥2333</div>
-                                <div className={css.sit}>余位23</div>
+                                <div className={css.price}> {"¥"+tagDataItem.basePrice}</div>
+                                <div className={css.sit}>{"余位"+tagDataItem.remainCount}</div>
                             </div>);
 
                             current_link = (<CalendarItem  key={'current'+i} itemView={itemView}/>);

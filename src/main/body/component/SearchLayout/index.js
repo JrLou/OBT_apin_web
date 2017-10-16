@@ -21,10 +21,19 @@ class SearchLayout extends Component {
         this.state = Object.assign({
             loading: false
         }, data);
+        this.state = {
+            value:'',
+            searchSource: [],
+            defaultSource : []
+        };
         this.img_login_check = require("../../../../images/check.png");
         this.img_login_uncheck = require("../../../../images/uncheck.png");
-    }
 
+    }
+    componentDidMount() {
+        this.loadDefaultData();
+        this.loadSearchData();
+    }
 
     getData() {
         return {
@@ -42,13 +51,31 @@ class SearchLayout extends Component {
                 <div className={less.title}>出发城市：</div>
                 <AutoInput
                     ref="from"
+                    value={this.state.value}
                     defaultValue={this.state.from}
-                    placeholder="中文／拼音／三字码"/>
+                    placeholder={'中文／拼音／三字码'}
+                    max={'10'}
+                    defaultSource={this.state.defaultSource}
+                    searchSource={this.state.searchSource}
+                    onChange={(val)=>{this.valChange(val);}}
+                    onSelect={(val,index,opt)=>{this.userSelect(val,index,opt);}}
+                    onFocus={()=>{log(1);}}
+                    onBlur={()=>{log(2);}}
+                />
                 <div className={less.title}>到达城市：</div>
                 <AutoInput
                     ref="to"
+                    value={this.state.value}
                     defaultValue={this.state.to}
-                    placeholder="中文／拼音／三字码"/>
+                    placeholder={'中文／拼音／三字码'}
+                    max={'10'}
+                    defaultSource={this.state.defaultSource}
+                    searchSource={this.state.searchSource}
+                    onChange={(val)=>{this.valChange(val);}}
+                    onSelect={(val,index,opt)=>{this.userSelect(val,index,opt);}}
+                    onFocus={()=>{log(1);}}
+                    onBlur={()=>{log(2);}}
+                />
 
                 {this.getSwitchLayout()}
                 {this.getButton()}
@@ -135,7 +162,7 @@ class SearchLayout extends Component {
                     <div className={less.inputLayoutDiv}>
                         <AutoInput
                             ref="to"
-                            defaultValue={this.state.from}
+                            defaultValue={this.state.to}
                             placeholder="中文／拼音／三字码"/>
                     </div>
                 </div>
@@ -160,6 +187,75 @@ class SearchLayout extends Component {
     setLoading(loading) {
         this.setState({
             loading: loading
+        });
+    }
+
+    valChange(val){
+        this.setState({
+            value:val
+        });
+        this.loadSearchData(val);
+    }
+
+    userSelect(val,index,opt){
+        this.setState({
+            value:val
+        });
+        this.loadSearchData(val);
+    }
+
+
+    loadSearchData(value){
+        this.setState({
+            searchSource:[
+                {
+                    cityName:'天津',
+                    idata:'12312311',
+                    value:'天津（TJ）'
+                },
+                {
+                    cityName:'天津2',
+                    idata:'12312311',
+                    value:'天津234（TJ）'
+                },
+                {
+                    cityName:'天津23232',
+                    idata:'12312311',
+                    value:'天津2342（TJ）'
+                }
+            ]
+        });
+    }
+
+    loadDefaultData(){
+        this.setState({
+            defaultSource:[
+                {
+                    title: '热门城市',
+                    children: [{
+                        cityName: '北京',
+                        idata: '12112211121',
+                        value:'北京(BJ)'
+                    }, {
+                        cityName: '西安1',
+                        idata: '1211122121',
+                        value:'西安（XA）'
+                    }]
+                },
+                {
+                    title: 'Apin推荐',
+                    children: [{
+                        cityName: '杭州',
+                        idata: '1222211121',
+                        value:'杭州（HZ）'
+                    }, {
+                        cityName: '苏州',
+                        idata: '32112211121',
+                        value:'苏州（SZ）'
+                    }]
+                }
+            ]
+
         });
     }
 }

@@ -12,24 +12,22 @@ class page extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tableLoading:false,
-            dataSource:[],
-            total:0
+            dataSource:[]
         };
     }
     componentDidMount() {
-        this.loadData();
+        // this.loadTripData();
+        this.loadDaysData();
     }
     loadDaysData() {
         var param = {
             "depCity":"上海",
             "arrCity":"北京",
             "depDate":"2017-10-14",
-            "flightType":"1"
+            "flightType":"2"
         };
         var success = (code, msg, json, option) => {
-            log(json);
-            log("gyw-------loadDaysData------");
+            this.myCalendarRight.refreshCalendar(false,json,["2017-10"]);
         };
         var failure = (code, msg, option) => {
             log(msg);
@@ -42,37 +40,18 @@ class page extends Component {
     loadTripData() {
         var param = {
             "depCity":"上海",
+            "day":"2",
             "arrCity":"北京",
             "depDate":"2017-10-14",
-            "flightType":"1"
+            "flightType":"2"
         };
         var success = (code, msg, json, option) => {
-            log(json);
-            log("gyw-------------");
+            this.myLineInfor.refreshView(json);
         };
         var failure = (code, msg, option) => {
-            log(msg);
+
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_query,success, failure, param,
-            {
-                ipKey:'hlIP'
-            });
-    }
-    loadData() {
-        var param = {
-            "depCity":"上海",
-            "arrCity":"北京",
-            "depDate":"2017-10-14",
-            "flightType":"1"
-        };
-        var success = (code, msg, json, option) => {
-            log(json);
-            log("gyw-------------");
-        };
-        var failure = (code, msg, option) => {
-            log(msg);
-        };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param,
             {
                 ipKey:'hlIP'
             });
@@ -115,6 +94,25 @@ class page extends Component {
         // ];
         // this.myLineInfor.refreshView(myJson);
     }
+    loadData() {
+        var param = {
+            "depCity":"上海",
+            "arrCity":"北京",
+            "depDate":"2017-10-14",
+            "flightType":"1"
+        };
+        var success = (code, msg, json, option) => {
+            log(json);
+            log("gyw-------------");
+        };
+        var failure = (code, msg, option) => {
+            log(msg);
+        };
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param,
+            {
+                ipKey:'hlIP'
+            });
+    }
     render() {
         var div = (
             <div className={css.main}>
@@ -125,6 +123,7 @@ class page extends Component {
                     <div className={css.myCalendar}
                          style={{width:"49%",float:"left"}}>
                         <MyCalendar
+                            ref={(a)=>{this.myCalendarLeft = a;}}
                             onSelectDate={(select_year, select_month , select_day)=>{
                                 this.selectDate(select_year, select_month, select_day);
                             }}
@@ -140,11 +139,12 @@ class page extends Component {
                     <div className={css.myCalendar}
                          style={{width:"49%",float:"right"}}>
                         <MyCalendar
+                            ref={(a)=>{this.myCalendarRight = a;}}
                             onSelectDate={(select_year, select_month , select_day)=>{
                                 this.selectDate(select_year, select_month, select_day);
                             }}
                             year={"2017"}
-                            month={"11"}
+                            month={"10"}
                             day={"11"}
                             row_number = {6}
                             col_number = {7}
@@ -159,7 +159,7 @@ class page extends Component {
                     <div className={css.title}>
                         航班信息
                     </div>
-                    <LineInfor ref={(a)=>this.myLineInfor = a} callBack={()=>{
+                    <LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor} callBack={()=>{
                         this.myAlert.refreshView();
                     }}/>
                 </div>
@@ -204,25 +204,25 @@ class LineInfor extends Component {
                 <div className={css.cell}>
                     <div className={css.left}>
                         <div className={css.table}>
-                            {this.createItemCell(dataItem.flight)}
+                            {this.createItemCell(dataItem.airlineInfo)}
                         </div>
                     </div>
                     <div className={css.right}>
                         <div className={css.rightCenter}>
                             <div className={css.table}>
                                 <div className={css.daysText}>
-                                    <span>{dataItem.days}</span>
-                                    <span>{" | 已团 233 "}</span>
-                                    <span>{"余位 "}</span>
-                                    <span style={{color:"#2db7f5"}}>{dataItem.remain}</span>
+                                    <span>{dataItem.days+"天"}</span>
+                                    <span>{" | 已售"+dataItem.soldCount}</span>
+                                    <span>{" 余位"}</span>
+                                    <span style={{color:"#2db7f5"}}>{dataItem.remainCount}</span>
                                 </div>
                                 <div className={css.shuiText}>
                                     <div className={css.shuiTextTop}>
-                                        {(dataItem.isType==1?"往返":"")+(dataItem.isTax?" 含税":"")}
+                                        {dataItem.flightType==2?"往返含税":"单程含税"}
                                         </div>
                                     <div className={css.priceText}>
                                         <span className={css.priceTextColor}>{"¥ "}</span>
-                                        <span className={css.priceTextFont}>{dataItem.price}</span>
+                                        <span className={css.priceTextFont}>{dataItem.basePrice}</span>
                                         <span >{" 起"}</span>
                                     </div>
 
@@ -236,7 +236,6 @@ class LineInfor extends Component {
                                         }}>预定</div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -255,11 +254,28 @@ class LineInfor extends Component {
         var viewArr = [];
         for (let i=0;i<data.length;i++){
             let dataItem = data[i];
+            let startDate = dataItem.depDate?dataItem.depDate.substring(5):"";
+            startDate = startDate.replace("-","月")+"日";
+
+
+            let totalTime = dataItem.flightTime;
+            let timeArr = totalTime.split(":");
+            let totalText = "";
+            if (timeArr[0]&&timeArr[0]>0){
+                totalText = timeArr[0]+"小时";
+            }
+            if (timeArr[1]&&timeArr[1]>0){
+                totalText = totalText + timeArr[1]+"分钟";
+            }
+
+
+            let endDate = dataItem.arrDate?dataItem.arrDate.substring(5):"";
+            endDate = endDate.replace("-","月")+"日";
             var itemView = (<div key={i}>
                 <div className={css.cellLine}>
                     <div className={css.type}>
                         <div className={css.typeText}>
-                            {dataItem.type==1?"去":"返"}
+                            {dataItem.flightType==1?"去":"返"}
                         </div>
                     </div>
 
@@ -268,30 +284,32 @@ class LineInfor extends Component {
                     </div>
 
                     <div className={css.logoCompany_super}>
-                        <div className={css.logoCompany}>{dataItem.company}</div>
-                        <div className={css.lineNum}>{dataItem.lineNum}</div>
+                        <div className={css.logoCompany}>{dataItem.compName}</div>
+                        <div className={css.lineNum}>{dataItem.num}</div>
                     </div>
 
                     <div className={css.itemCenter}>
                         <div className={css.timeLine}>
                             <div className={css.timeLineItem}>
-                                <span className={css.fontBase}>{dataItem.startDay+" "}</span>
-                                <span style={{fontSize:"24px",textAlign:"right"}}>{dataItem.startTime}</span>
+                                <span className={css.fontBase}>{startDate+" "}</span>
+                                <span style={{fontSize:"24px",textAlign:"right"}}>{dataItem.depTime}</span>
                             </div>
 
                             <div className={css.totalTime}>
                                 <div className={css.totalTimeText}>
-                                    {dataItem.totalTime}
+                                    {totalText}
                                 </div>
                                 <img className={css.line} src={require('../../../images/trip_line.png')}/>
-
                             </div>
-                            <div className={css.timeLineItem} style={{textAlign:"left"}}>{dataItem.endTime}</div>
+                            <div className={css.timeLineItem} style={{textAlign:"left"}}>
+                                <span className={css.fontBase}>{endDate+" "}</span>
+                                <span style={{fontSize:"24px",textAlign:"right"}}>{dataItem.arrTime}</span>
+                            </div>
                         </div>
                         <div className={css.timeLine}>
-                            <div className={css.placeLineItem}>{dataItem.startPlace}</div>
+                            <div className={css.placeLineItem}>{dataItem.arrAirport}</div>
                             <div className={css.space}></div>
-                            <div className={css.refPlaceLineItem}>{dataItem.endPlace}</div>
+                            <div className={css.refPlaceLineItem}>{dataItem.depAirport}</div>
                         </div>
                     </div>
 
@@ -309,10 +327,3 @@ page.contextTypes = {
     router: React.PropTypes.object
 };
 module.exports = page;
-
-
-{/*<Button className={less.rightRow} icon={"back"}*/}
-{/*onClick={() => {*/}
-{/*window.app_open(this, "/", {title: "回首页"});*/}
-{/*}}*/}
-{/*>回首页</Button>*/}
