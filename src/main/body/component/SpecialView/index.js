@@ -12,7 +12,7 @@ class SpecialView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataSource: [],
+            dataSource: []
         };
     }
 
@@ -20,7 +20,7 @@ class SpecialView extends Component {
         let {data} = this.props;
         if (!data)return null;
         let img = null;
-        if(data.type==1){
+        if(data.type===1){
             img = require('../../../../images/wfw.png');
         }else{
             img = require('../../../../images/dcw.png');

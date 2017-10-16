@@ -26,7 +26,7 @@ import {Modal, Button,Icon,Menu,Dropdown} from 'antd';
                         position:"absolute",
                         marginTop:7,
                         width: 180,
-                        height: 50,
+                        height: 50
                 }} src={require('../images/index_logo.png')}
                 />
                 <div style={{position:"absolute",right:50,height:"100%"}}>

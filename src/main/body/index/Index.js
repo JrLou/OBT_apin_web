@@ -74,7 +74,7 @@ class page extends Component {
     render() {
 
         return (
-            <div style={{margin:"auto",maxWidth:1200,}}>
+            <div style={{margin:"auto",maxWidth:1200}}>
                 <Row>
                     <Col span={6}>
                         <div  className={less.topLeft}>
