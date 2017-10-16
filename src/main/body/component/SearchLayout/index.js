@@ -3,23 +3,23 @@
  */
 import React, {Component} from 'react';
 import {Button, Input,Row,Col} from  'antd';
-import AutoInput from '../AutoInput'
-import less from './index.less'
+import AutoInput from '../AutoInput';
+import less from './index.less';
 /**
  * 搜索view
  */
 class SearchLayout extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
 
         let {data} = this.props;
         if (!data) {
-            data = {}
+            data = {};
         }
         this.state = Object.assign({
-            loading: false,
-        }, data)
+            loading: false
+        }, data);
         this.img_login_check = require('../../../../images/check.png');
         this.img_login_uncheck = require('../../../../images/uncheck.png');
     }
@@ -29,8 +29,8 @@ class SearchLayout extends Component {
         return {
             from: this.refs.from.getValue(),
             to: this.refs.to.getValue(),
-            one: this.state.one,
-        }
+            one: this.state.one
+        };
     }
 
     homeView() {
@@ -55,20 +55,20 @@ class SearchLayout extends Component {
                         () => {
                             let s = !this.state.one;
                             this.setState({
-                                one: s,
-                            })
+                                one: s
+                            });
                         })}
                     {this.getSwitchView(!this.state.one, "往返",
                         () => {
                             let s = !this.state.one;
                             this.setState({
-                                one: s,
-                            })
+                                one: s
+                            });
                         })}
 
                 </div>
                 {this.getButton()}
-            </div>            )
+            </div>            );
 
     }
 
@@ -81,13 +81,13 @@ class SearchLayout extends Component {
                     className={less.button}
                     onClick={() => {
                         if (this.props.submit) {
-                            this.props.submit(this.getData())
+                            this.props.submit(this.getData());
                         }
                     }}>
                     {"搜索" + (this.state.loading ? "中" : "")}
                 </Button>
             </div>
-        )
+        );
     }
 
     getSwitchView(v, title, cb) {
@@ -104,14 +104,14 @@ class SearchLayout extends Component {
                 />
                 <div >{title}</div>
             </div>
-        )
+        );
     }
 
     searchView() {
         return (
             <div style={{
                 width: "100%",
-                paddingTop: 35,
+                paddingTop: 35
             }}>
 <Row>
                 <Col span={2} style={{marginLeft: 42}}>
@@ -119,15 +119,15 @@ class SearchLayout extends Component {
                         () => {
                             let s = !this.state.one;
                             this.setState({
-                                one: s,
-                            })
+                                one: s
+                            });
                         })}
                     {this.getSwitchView(!this.state.one, "往返",
                         () => {
                             let s = !this.state.one;
                             this.setState({
-                                one: s,
-                            })
+                                one: s
+                            });
                         })}
 
                 </Col>
@@ -140,7 +140,7 @@ class SearchLayout extends Component {
                     <div>
                         <AutoInput
                             ref="from"
-                            style={{width:"100%",}}
+                            style={{width:"100%"}}
                             defaultValue={this.state.from}
                             placeholder="中文／拼音／三字码"/>
                     </div>
@@ -166,7 +166,7 @@ class SearchLayout extends Component {
 </Col>
 
 </Row>
-            </div>)
+            </div>);
     }
 
     render() {
@@ -175,13 +175,13 @@ class SearchLayout extends Component {
             <div style={{width: "100%"}}>
                 {type === 1 ? this.homeView() : this.searchView()}
             </div>
-        )
+        );
     }
 
     setLoading(loading) {
         this.setState({
-            loading: loading,
-        })
+            loading: loading
+        });
     }
 }
 module.exports = SearchLayout;
