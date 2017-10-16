@@ -7,7 +7,7 @@ import RecommendView from '../component/RecommendView';
 import SpecialView from '../component/SpecialView';
 import SearchLayout from '../component/SearchLayout';
 import SearchHelp from '../search/SearchHelp.js';
-
+import HttpTool from '../../../../lib/utils/index';
 import routes from '../../../vm/routes.js';
 
 import Scroll from 'react-scroll'; // Imports all Mixins
