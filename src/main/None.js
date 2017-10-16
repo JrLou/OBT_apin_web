@@ -6,10 +6,10 @@ import { Layout} from 'antd';
 class page extends Component{
 
     constructor(props){
-        super(props)
+        super(props);
         this.state = {
             time:10,
-        }
+        };
     }
     componentDidMount() {
         let exe  = ()=>{
@@ -23,10 +23,10 @@ class page extends Component{
                 exe();
                 this.setState({
                     time,
-                })
+                });
 
-            },1000)
-        }
+            },1000);
+        };
         exe();
     }
 
@@ -38,8 +38,8 @@ class page extends Component{
             </Layout>
         );
     }
-};
+}
 page.contextTypes = {
     router: React.PropTypes.object
-}
+};
 module.exports = page;

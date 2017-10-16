@@ -24,8 +24,8 @@ class page extends Component{
             </Layout>
         );
     }
-};
+}
 page.contextTypes = {
     router: React.PropTypes.object
-}
+};
 module.exports = page;

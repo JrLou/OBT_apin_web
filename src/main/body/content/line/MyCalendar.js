@@ -19,7 +19,7 @@ class page extends Component {
             history_month : undefined,
             history_day : undefined,
             date_num_array : []
-        }
+        };
         //用于记录日期，显示的时候，根据dateObj中的日期的年月显示
 
     }
@@ -147,7 +147,7 @@ class page extends Component {
             select_day : select_day,
             date_num_array : date_num_array,
             first_day : first_day
-        })
+        });
     }
 
     /**
@@ -180,7 +180,7 @@ class page extends Component {
             select_day : select_day,
             date_num_array : date_num_array,
             first_day : first_day
-        })
+        });
     }
 
     /**
@@ -212,7 +212,7 @@ class page extends Component {
         previous_month_days = date_num_array[previous_month];
         //在本月之前的
         for (let i = 0; i < first_day; i++) {
-            log(i)
+            log(i);
             let previous_link = (<div className={css.itemGray} key={'previous'+i}>
                 <div className={css.dayGray}>{previous_month_days - (first_day - i) + 1}</div>
             </div>);
@@ -234,7 +234,7 @@ class page extends Component {
                     <div className={css.dayActive} onClick={this.selectDate.bind(this, i + 1)}>
                         {currentText}
                     </div>
-                </div>)
+                </div>);
             } else {
                 currentText = i + 1;
                 // 判断选择样式与历史样式是否相等，相等激活
@@ -244,14 +244,14 @@ class page extends Component {
                         <div className={css.dayActive} onClick={this.selectDate.bind(this, i + 1)}>
                             {currentText}
                         </div>
-                    </div>)
+                    </div>);
                 } else {
                     currentClassName = css.itemActive;
                     current_link = (<div className={currentClassName} key={'current'+i}>
                         <div className={css.dayActive} onClick={this.selectDate.bind(this, i + 1)}>
                             {currentText}
                         </div>
-                    </div>)
+                    </div>);
                 }
             }
 
@@ -265,7 +265,7 @@ class page extends Component {
                             <div className={css.dayActive} onClick={this.selectDate.bind(this, i + 1)}>
                                 {currentText}
                             </div>
-                        </div>)
+                        </div>);
                         break;
                     }
                 }
@@ -336,5 +336,5 @@ class page extends Component {
 }
 page.contextTypes = {
     router: React.PropTypes.object
-}
+};
 module.exports = page;

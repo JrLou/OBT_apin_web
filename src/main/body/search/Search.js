@@ -1,21 +1,21 @@
 import React, {Component} from 'react';
 
 import {Pagination, Button, Input, Select,Col,Row} from 'antd';
-import RecommendView from '../component/RecommendView'
-import SearchLayout from '../component/SearchLayout'
-import OneWayDetail from '../content/OneWayDetail.js'
-import SearchHelp from '../search/SearchHelp.js'
+import RecommendView from '../component/RecommendView';
+import SearchLayout from '../component/SearchLayout';
+import OneWayDetail from '../content/OneWayDetail.js';
+import SearchHelp from '../search/SearchHelp.js';
 
 //获取模拟数据
-import routes from '../../../vm/routes.js'
+import routes from '../../../vm/routes.js';
 import less from './Search.less';
 class page extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             current: 1,
             loading: true,
-        }
+        };
         this.par = window.app_getPar(this);
     }
 
@@ -32,7 +32,7 @@ class page extends Component {
      *页面打开之后,根据条件进行搜索
      */
     componentDidMount() {
-        this.loadData(this.par.data)
+        this.loadData(this.par.data);
     }
 
     /**
@@ -45,8 +45,8 @@ class page extends Component {
             {
                 loading: loading,
             }, cb
-        )
-        this.searchLayout.setLoading(loading)
+        );
+        this.searchLayout.setLoading(loading);
     }
 
     /**
@@ -70,9 +70,9 @@ class page extends Component {
                 }
                 //更新页面,此代码,一定是在此位置
                 this.setLoading(false, () => {
-                })
-            }, 2000)
-        })
+                });
+            }, 2000);
+        });
     }
 
     render() {
@@ -85,14 +85,14 @@ class page extends Component {
                     data={this.par.data}
                     type={2}
                     submit={(data) => {
-                        this.loadData(data)
+                        this.loadData(data);
                     }}
                 />
                 <div style={{paddingTop:42}}>
                 {this.state.loading ? this.getLogingLayout() : this.getContentLayout(this.resut)}
                 </div>
             </div>
-        )
+        );
     }
 
     /**
@@ -135,11 +135,11 @@ class page extends Component {
                             <RecommendView
                                 template={2}
                                 onClick={() => {
-                                    SearchHelp.openSearch(this,data)
+                                    SearchHelp.openSearch(this,data);
                                 }}
                                 data={data} key={index}/>
                             </Col>
-                        )
+                        );
                     })}
                     </Row>
 
@@ -148,7 +148,7 @@ class page extends Component {
                     <Pagination showQuickJumper current={this.state.current} total={500} onChange={this.onChange}/>
                 </div>
             </div>
-        )
+        );
     }
 
     /**
@@ -162,7 +162,7 @@ class page extends Component {
             <div style={{clear: "both"}}>
                 <OneWayDetail data={data}/>
             </div>
-        )
+        );
     }
 
     /**
@@ -191,7 +191,7 @@ class page extends Component {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 
     /**
@@ -227,11 +227,11 @@ class page extends Component {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 page.contextTypes = {
     router: React.PropTypes.object
-}
+};
 module.exports = page;
 

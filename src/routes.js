@@ -1,17 +1,17 @@
-import React from 'react'
+import React from 'react';
 const { Router,Route,IndexRoute,Redirect,browserHistory}  = require('react-router');
 
 let App =
         (nextState, cb) => {
             require.ensure([], require => {
-                cb(null, require('./main/App.js'))
-            }, 'App')
+                cb(null, require('./main/App.js'));
+            }, 'App');
         }
     ;
 let None =  (nextState, cb) => {
     require.ensure([], require => {
-        cb(null, require('./main/None.js'))
-    }, 'None')
+        cb(null, require('./main/None.js'));
+    }, 'None');
 };
 
 const root = (
@@ -21,15 +21,15 @@ const root = (
             <IndexRoute  getComponent={
                 (nextState, cb)=>{
                     require.ensure([], require => {
-                        cb(null,require('./main/body/index/Index'))
-                    }, 'Index')
+                        cb(null,require('./main/body/index/Index'));
+                    }, 'Index');
                 }
             }/>
             <Route path="/Search" getComponent={
                 (nextState, cb)=>{
                     require.ensure([], require => {
-                        cb(null,require('./main/body/search/Search.js'))
-                    }, 'Search')
+                        cb(null,require('./main/body/search/Search.js'));
+                    }, 'Search');
                 }
             }
             >

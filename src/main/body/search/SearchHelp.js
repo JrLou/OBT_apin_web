@@ -17,6 +17,6 @@ module.exports = {
             to:data.to,
             one:data.one,
             two:data.two,
-        }
+        };
     }
 };

@@ -9,10 +9,10 @@ import {AutoComplete} from 'antd';
 class SpecialView extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             dataSource: [],
-        }
+        };
     }
 
     render() {
@@ -45,7 +45,7 @@ class SpecialView extends Component {
                 </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 module.exports = SpecialView;

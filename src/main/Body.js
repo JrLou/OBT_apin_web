@@ -53,7 +53,7 @@ class page extends Component{
                         }}
                     >{d.title}</div>
                 </Menu.Item>
-            )
+            );
         }
         return (
             <Layout>
@@ -74,8 +74,8 @@ class page extends Component{
             </Layout>
         );
     }
-};
+}
 page.contextTypes = {
     router: React.PropTypes.object
-}
+};
 module.exports = page;
