@@ -25,7 +25,7 @@ class page extends Component {
                         杭州 ⇌ 曼谷（往返）
                     </div>
 
-                    <div className={css.rightLine} style={{marginTop:"60px"}}>
+                    <div className={css.rightLine} style={{marginTop:"50px"}}>
                         <div className={css.lineLeft}>时间</div>
                         <div className={css.lineRight}>2017-09-21</div>
                         <div className={css.center}> 至</div>
