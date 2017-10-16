@@ -1,0 +1,67 @@
+@import "../../../../theme.less";
+.cell{
+  width: 19%;
+  margin:0.5%;
+  background: #f6f6f6;
+  float: left;
+}
+.text{
+  display: table-cell;
+  vertical-align: middle;
+  color: #333;
+  font-size: 14px;
+}
+.text2{
+  composes: text;
+  padding: 0 @d_spadding_cell;
+}
+.icon{
+  composes: text;
+  width: 25px;
+  height: 25px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+}
+.bottom{
+  width: 100%;
+  display: table;
+  padding: @d_spadding_cell*2 @d_spadding_cell*2;
+}
+.bottomLeft{
+   display: table-cell;
+   text-align: left;
+   width: 60%;
+   vertical-align: middle;
+ }
+.bottomRight{
+  composes: bottomLeft;
+  text-align: right;
+}
+.money{
+  display: inline-block;
+  font-family: MicrosoftYaHei;
+  font-size: 10px;
+  color: #FF5841;
+  letter-spacing: 0;
+  vertical-align: bottom;
+}
+.moneyBig{
+  composes: money;
+  font-size: 16px;
+  line-height: 20px;
+}
+.moneyGray{
+  composes: money;
+  font-size: 10px;
+  color: #999;
+  letter-spacing: 0;
+}
+.date{
+  padding-top: 4px;
+  composes: money;
+  font-size: 12px;
+  color: #666;
+  letter-spacing: 0;
+}

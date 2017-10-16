@@ -17,20 +17,33 @@ import {Modal, Button,Icon,Menu,Dropdown} from 'antd';
     render() {
         return (
             <div>
-                <a
-                    style={{
-                        color: "#000",
-                        fontSize: "20px"
-                    }}
+                <img
                     onClick={() => {
                         log(this.props.root);
                         window.app_open(this.props.root, "/");
                     }}
-                >
-                    爱拼机(回首页)
-                    www.apin.com
-                </a>
-
+                    style={{
+                        position:"absolute",
+                        marginTop:7,
+                        width: 180,
+                        height: 50,
+                }} src={require('../images/index_logo.png')}
+                />
+                <div style={{position:"absolute",right:50,height:"100%"}}>
+                    <img
+                    style={{
+                        width: 40,
+                        height: 40,
+                        marginTop:12,
+                        marginRight:10,
+                        float:"left"
+                    }} src={require('../images/check.png')}
+                />
+                    <div style={{float:"left"}}>
+                        <font style={{fontSize:14,color:"#666"}}>客服电话</font>
+                        <font style={{fontSize:16,color:"#34b0ff"}}>0571-58122998</font>
+                </div>
+                </div>
             </div>
         );
     }

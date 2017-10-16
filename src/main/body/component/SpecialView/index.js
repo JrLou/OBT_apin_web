@@ -3,6 +3,7 @@
  */
 import React, {Component} from 'react';
 import {AutoComplete} from 'antd';
+import css from './index.less';
 /**
  * 底部每日特价view
  */
@@ -11,36 +12,49 @@ class SpecialView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataSource: []
+            dataSource: [],
         };
     }
-
 
     render() {
         let {data} = this.props;
         if (!data)return null;
+        let img = null;
+        if(data.type==1){
+            img = require('../../../../images/wfw.png');
+        }else{
+            img = require('../../../../images/dcw.png');
+        }
         return (
             <div
-                style={{
-                marginTop: 7, marginLeft: "0.5%",marginRight:"0.5%", width: "19%",float:"left", height: 69,
-                backgroundColor: "#f6f6f6",
-                    display: "table",
-                paddingTop: 12
-            }}
+                className={css.cell}
                 {...this.props}
             >
-                <div style={{position:"absolute", width: "19%"}}>
-                <div style={{fontSize: 14, marginLeft: 12, position:"absolute"}}>{
-                    data.from + "-" + data.to
-                }</div>
-                <div style={{fontSize: 12, position:"absolute",right:5,color:"#888787"}}>
-                    已团612张
+                <div className={css.bottom}>
+                <div className={css.bottomLeft}>
+                    <div className={css.text}> {data.from}</div>
+                    <div className={css.text2}>
+                        <div className={css.icon}
+                             style={{
+                                 backgroundImage: "url(" + img + ")"
+                             }}
+                        >
+
+                        </div>
+                    </div>
+                    <div className={css.text}> {data.to}</div>
+                    <div >
+                        <font className={css.money}>{"￥"}</font>
+                        <font className={css.moneyBig}>{data.money}</font>
+                        <font className={css.moneyGray}>{"起"}</font>
+                    </div>
                 </div>
-                <div style={{paddingLeft: 14, width: "100%",marginTop: 25, fontSize: 15, position:"absolute"}}>
-                    <div style={{position:"absolute"}}>
-                        <font style={{marginTop:5,color: "#FF5841", fontSize:10}}>¥</font>
-                        <font style={{color: "#FF5841", fontSize:16}}>{data.money}</font>
-                        <font style={{marginTop:5,color: "#2A2A2A",fontSize:10}}>起</font>
+                <div>
+                    <div className={css.bottomRight}>
+                        <font className={css.date}>{"已团"}</font>
+                        <font className={css.date}>{data.count+"张"}</font>
+                        <br/>
+                        <font className={css.date}>10月13日</font>
                     </div>
                     <font style={{fontSize:12,marginTop:5,color:"#666",position:"absolute",right:11}}>10月13日</font>
                 </div>

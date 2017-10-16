@@ -74,12 +74,9 @@ class page extends Component {
     render() {
 
         return (
-            <div style={{margin:"auto",maxWidth:1200
-
-            }}>
-                <Row style={{}}>
-                    <Col span={6}
-                    >
+            <div style={{margin:"auto",maxWidth:1200,}}>
+                <Row>
+                    <Col span={6}>
                         <div  className={less.topLeft}>
                             <div className={less.topLeftBorder}>
                                 <div className={less.topLeftTitle}>团飞机票搜索</div>
@@ -101,12 +98,11 @@ class page extends Component {
                         {this.getSwitchLayout()}
                     </Col>
                 </Row>
-
-
+                {/*精品特价航线*/}
                 <div className={less.center}>
                     <div className={less.centerTitleLayout}>
                         <div className={less.centerIcon}/>
-                        <div className={less.centerTitle}>精品特价航线部分</div>
+                        <div className={less.centerTitle}>精品特价航线</div>
 
                         <div className={less.centerTitleMoreLayout}>
                             <div className={less.centerTitleMore}>更多</div>
@@ -119,15 +115,19 @@ class page extends Component {
                     <br/>
                 </div>
                 {/*底部更多特价部分*/}
-                <Row style={{
-                    marginTop:10,
-                    clear:"both", padding:5,
-                    width:"100%", backgroundColor:"#fff",paddingBottom:7
-                }}>
+                <div  className={less.center}>
+                    <div className={less.centerTitleLayout}>
+                        <div className={less.centerIcon}/>
+                        <div className={less.centerTitle}>更多机票路线</div>
+                    </div>
+                <Row>
                     {this.getSpecialList()}
                 </Row>
+                    <br/>
+                </div>
                 <div style={{clear:"both"}}/>
-                <div style={{width: "100%", textAlign: "center", padding: 30, marginBottom: 30, fontSize: 16}}>加载中...</div>
+                <div className={less.more}>
+                    加载中...</div>
 
             </div>
         );
