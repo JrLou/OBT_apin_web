@@ -107,4 +107,4 @@ module.exports = {
 		},
 		useBundle: false
 	},
-}
+};

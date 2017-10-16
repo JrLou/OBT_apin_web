@@ -45,8 +45,8 @@ import {Modal, Button,Icon,Menu,Dropdown} from 'antd';
             </div>
         );
     }
-};
+}
 page.contextTypes = {
     router: React.PropTypes.object
-}
+};
 module.exports = page;

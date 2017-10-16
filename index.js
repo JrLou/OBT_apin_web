@@ -22,7 +22,7 @@ router.post('/api/common/getAPPHotPatch', function (req, res, next) {
             pdiffUrl: 'http://update-packages.reactnative.cn/hash', // un-defined
             diffUrl: 'http://update-packages.reactnative.cn/hash', // un-defined
         }
-    }
+    };
 
     res.send(JSON.stringify(a));
 });
@@ -73,7 +73,7 @@ router.get('/app/v2/index/App', function (req, res, next) {
     res.render('index');
 });
 router.get('/app/down/download.html', function (req, res, next) {
-    res.redirect("/app/v2/index")
+    res.redirect("/app/v2/index");
 });
 
 router.get('/app/v2/*', function (req, res, next) {
@@ -106,16 +106,16 @@ router.get('/app/v2/*', function (req, res, next) {
 
 });
 router.get('/app', function (req, res, next) {
-    res.redirect("/app/v2/index")
+    res.redirect("/app/v2/index");
 });
 router.get('/app/', function (req, res, next) {
-    res.redirect("/app/v2/index")
+    res.redirect("/app/v2/index");
 });
 router.get('/app/v2', function (req, res, next) {
-    res.redirect("/app/v2/index")
+    res.redirect("/app/v2/index");
 });
 router.get('/', function (req, res, next) {
-    res.redirect("/app/v2/index")
+    res.redirect("/app/v2/index");
 });
 
 

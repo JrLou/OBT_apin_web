@@ -36,7 +36,7 @@ class AutoInput extends Component {
     upView(){
         this.setState({
             upData:this.state.upData+1
-        })
+        });
     }
 
     /**
@@ -47,8 +47,8 @@ class AutoInput extends Component {
         setTimeout(()=>{
             this.setState({
                 inputFocused:boolen
-            })
-        },200)
+            });
+        },200);
 
     }
 
@@ -63,7 +63,7 @@ class AutoInput extends Component {
                 value: value,
             });
             //模糊匹配
-            this.loadData(2,value)
+            this.loadData(2,value);
         }
     }
     getValue(){
@@ -81,14 +81,14 @@ class AutoInput extends Component {
         if(data.length<1){
             return(
                 <div>数据加载中...</div>
-            )
+            );
         }
         return(
             data.map((group,key) => (
                     this.getCityBox(group,key)
                 )
             )
-        )
+        );
     }
 
     /**
@@ -112,7 +112,7 @@ class AutoInput extends Component {
                     }
                 </div>
             </div>
-        )
+        );
     }
 
     /**
@@ -127,13 +127,13 @@ class AutoInput extends Component {
                 <div
                     key={'city'+key}
                     className={css.cityItem}
-                    onClick={(e)=>{this.selectOption(e)}}
+                    onClick={(e)=>{this.selectOption(e);}}
                     value={obj.cityName+' ( '+obj.idata+' ) '}
                 >
                     {obj.cityName}
                 </div>
             )
-        )});
+        );});
         return list;
     }
 
@@ -148,21 +148,21 @@ class AutoInput extends Component {
         if(data.length<1){
             return(
                 <div>未匹配到相关城市</div>
-            )
+            );
         }
         return(
             data.map((item,key) => (
                     <div
                         key={'searchCity'+key}
                         className={css.searchItem}
-                        onClick={(e)=>{this.selectOption(e)}}
+                        onClick={(e)=>{this.selectOption(e);}}
                         value={item.cityName+' ( '+item.idata+' ) '}
                     >
                         {this.matchText(item.cityName)}
                     </div>
                 )
             )
-        )
+        );
     }
 
     /**
@@ -205,7 +205,7 @@ class AutoInput extends Component {
         if(selOpt){
             this.setState({
                 value:selOpt
-            })
+            });
             this.loadData(2,selOpt);
         }
     }
@@ -226,7 +226,7 @@ class AutoInput extends Component {
                 this.searchSource = json;
             };
             let failCB = (code, msg, option)=>{
-                console.warn(msg)
+                console.warn(msg);
             };
             // HttpTool.post(HttpTool.typeEnum.POST,this.searchDataApi,successCB,failCB,parames);
 
@@ -292,7 +292,7 @@ class AutoInput extends Component {
                 this.defaultSource = json;
             };
             let failCB = (code, msg, option)=>{
-                console.warn(msg)
+                console.warn(msg);
             };
             // HttpTool.post(HttpTool.typeEnum.POST,this.defaultDataApi,successCB,failCB,parames);
 
@@ -377,9 +377,9 @@ class AutoInput extends Component {
                     placeholder={this.props.placeholder}
                     className={css.inputStyle}
                     value={this.state.value}
-                    onChange={(e)=>{this.valueChange(e)}}
-                    onFocus={()=>{this.changeFocus(true)}}
-                    onBlur={()=>{this.changeFocus(false)}}
+                    onChange={(e)=>{this.valueChange(e);}}
+                    onFocus={()=>{this.changeFocus(true);}}
+                    onBlur={()=>{this.changeFocus(false);}}
 
                 />
 

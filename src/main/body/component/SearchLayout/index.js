@@ -20,8 +20,8 @@ class SearchLayout extends Component {
         this.state = Object.assign({
             loading: false,
         }, data)
-        this.img_login_check = require('../../../../images/check.png')
-        this.img_login_uncheck = require('../../../../images/uncheck.png')
+        this.img_login_check = require('../../../../images/check.png');
+        this.img_login_uncheck = require('../../../../images/uncheck.png');
     }
 
 

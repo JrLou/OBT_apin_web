@@ -3,7 +3,7 @@ var router = express.Router();
 var request = require('request');
 
 router.get('/aaa/*', function (req, res, next) {
-    console.log(req.headers.referer)
+    console.log(req.headers.referer);
     res.render('index');
     // res.redirect("/app/v2/index")
 });

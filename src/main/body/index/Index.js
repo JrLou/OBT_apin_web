@@ -3,15 +3,15 @@ import React, {Component} from 'react';
 import {Carousel, Input, Button,Row, Col} from 'antd';
 import less from './Index.less';
 
-import RecommendView from '../component/RecommendView'
-import SpecialView from '../component/SpecialView'
-import SearchLayout from '../component/SearchLayout'
-import SearchHelp from '../search/SearchHelp.js'
+import RecommendView from '../component/RecommendView';
+import SpecialView from '../component/SpecialView';
+import SearchLayout from '../component/SearchLayout';
+import SearchHelp from '../search/SearchHelp.js';
 
-import routes from '../../../vm/routes.js'
+import routes from '../../../vm/routes.js';
 class page extends Component {
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     getRecommendList() {
@@ -26,7 +26,7 @@ class page extends Component {
                     }}
                     data={data} key={index}/>
                 </Col>
-            )
+            );
         });
     }
 
@@ -40,7 +40,7 @@ class page extends Component {
                 }}
                 data={data}/>
             </Col>
-            )
+            );
 
         });
     }
@@ -60,14 +60,14 @@ class page extends Component {
                                        className={less.topRightCarousel}>
                                        {data}
                                    </div>
-                               )
+                               );
                            })
                        }
                    </Carousel>
                </div>
             </div>
 
-        )
+        );
     }
 
 
@@ -130,7 +130,7 @@ class page extends Component {
                 <div style={{width: "100%", textAlign: "center", padding: 30, marginBottom: 30, fontSize: 16}}>加载中...</div>
 
             </div>
-        )
+        );
 
     }
 
@@ -140,7 +140,7 @@ class page extends Component {
 
 page.contextTypes = {
     router: React.PropTypes.object
-}
+};
 module.exports = page;
 
 

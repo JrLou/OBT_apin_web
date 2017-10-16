@@ -10,10 +10,10 @@ import css from './index.less';
 class RecommendView extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             dataSource: [],
-        }
+        };
     }
 
     componentDidMount() {
@@ -51,7 +51,7 @@ class RecommendView extends Component {
                 </div>
 
             </div>
-        )
+        );
     }
 
 
@@ -65,7 +65,7 @@ class RecommendView extends Component {
                     <br/>
                     <font className={css.moneyGray}>{"还剩"+data.count+"张"}</font>
                 </div>
-            )
+            );
         }else {
             return (
                 <div >
@@ -74,7 +74,7 @@ class RecommendView extends Component {
                     <font className={css.moneyWhiteV}>{"|"}</font>
                     <font className={css.moneyWhite}>{"还剩"+data.count+"张"}</font>
                 </div>
-            )
+            );
         }
 
     }
@@ -110,7 +110,7 @@ class RecommendView extends Component {
                 </div>
                 <div className={css.text}> {data.to}</div>
             </div>
-        )
+        );
 
     }
     getImageBottom(data,template) {
@@ -119,7 +119,7 @@ class RecommendView extends Component {
             <div className={css.titleLayout}>
                 {template==1?this.getTitleLayout(data,template):this.getCountShow(data,template)}
             </div>
-        )
+        );
     }
 
     getBottom(data,template) {
@@ -135,7 +135,7 @@ class RecommendView extends Component {
                     </div>
                     {this.getCountShow(data,template)}
                 </div>
-            )
+            );
         }else{
             return (
                 <div className={css.bottom}>
@@ -152,7 +152,7 @@ class RecommendView extends Component {
                         <font className={css.moneyGray}>{"起"}</font>
                     </div>
                 </div>
-            )
+            );
         }
 
     }

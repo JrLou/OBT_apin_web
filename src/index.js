@@ -10,8 +10,8 @@ window.app_getPar = function (obj) {
     let state = obj.props.location.state;
     let query = obj.props.location.query;
     let data =query?query.data:null;
-    return Object.assign(state||{},data?JSON.parse(decodeURIComponent(data)):{})
-}
+    return Object.assign(state||{},data?JSON.parse(decodeURIComponent(data)):{});
+};
 window.app_open = function (obj, path, state, open, callBack) {
     log(obj);
     if (!obj || (!obj.context) || (!obj.context.router) || (!obj.context.router.push)) {
@@ -26,7 +26,7 @@ window.app_open = function (obj, path, state, open, callBack) {
 
     let get = state ? "?data=" + encodeURIComponent(JSON.stringify(state)) : "";
     if (open == "new") {
-        window.open(path + get)
+        window.open(path + get);
     } else if (open == "self") {
         window.location.pathname = path + get;
     } else {
@@ -34,24 +34,24 @@ window.app_open = function (obj, path, state, open, callBack) {
             {
                 pathname: path,
                 state: state
-            })
+            });
     }
-}
+};
 
 window.apin = {};
 function exe() {
     apin.cache = new Map();
     apin.setCache = function (key, obj) {
-        apin.cache.set(key, obj)
-    }
+        apin.cache.set(key, obj);
+    };
     apin.delCache = function (key) {
         apin.cache.delete(key);
-    }
+    };
     apin.getCache = function (key) {
-        const v = apin.cache.get(key)
+        const v = apin.cache.get(key);
         apin.delCache(key);
         return v;
-    }
+    };
 }
 exe();
 

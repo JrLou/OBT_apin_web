@@ -8,7 +8,7 @@ class MyAlert extends Component {
         super(props);
         this.state = {
             isShow: false,
-        }
+        };
     }
     componentDidMount() {
 
@@ -16,7 +16,7 @@ class MyAlert extends Component {
     refreshView(){
         this.setState({
             isShow:true,
-        })
+        });
     }
     render() {
         var div = (<div className={this.state.isShow?css.main:css.hidden}>
@@ -25,13 +25,15 @@ class MyAlert extends Component {
                     请联系客服预订下单
                 </div>
                 <div className={css.con}>
-                    客服电话 :0571-85071773
+                    <span style={{color:"#888D99",fontSize:"14px"}}>客服电话 :</span>
+                    <span>0571-85071773</span>
+
                 </div>
 
                 <div className={css.btn} onClick={()=>{
                     this.setState({
                         isShow:false,
-                    })
+                    });
                 }}>
                     关闭
                 </div>
@@ -42,5 +44,5 @@ class MyAlert extends Component {
 }
 MyAlert.contextTypes = {
     router: React.PropTypes.object
-}
+};
 module.exports = MyAlert;

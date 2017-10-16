@@ -20,5 +20,5 @@ class page  extends Component {
             </div>
         );
     }
-};
+}
 module.exports = page;
