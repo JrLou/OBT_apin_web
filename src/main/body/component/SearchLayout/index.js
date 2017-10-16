@@ -1,10 +1,11 @@
 /**
  * Created by lixifeng on 17/10/12.
  */
-import React, {Component} from 'react';
-import {Button, Input,Row,Col} from  'antd';
-import AutoInput from '../AutoInput';
-import less from './index.less';
+import React, {Component} from "react";
+import {Button, Input, Row, Col} from "antd";
+import AutoInput from "../AutoInput";
+import less from "./index.less";
+
 /**
  * 搜索view
  */
@@ -20,8 +21,8 @@ class SearchLayout extends Component {
         this.state = Object.assign({
             loading: false
         }, data);
-        this.img_login_check = require('../../../../images/check.png');
-        this.img_login_uncheck = require('../../../../images/uncheck.png');
+        this.img_login_check = require("../../../../images/check.png");
+        this.img_login_uncheck = require("../../../../images/uncheck.png");
     }
 
 
@@ -49,31 +50,14 @@ class SearchLayout extends Component {
                     defaultValue={this.state.to}
                     placeholder="中文／拼音／三字码"/>
 
-                <div>
-
-                    {this.getSwitchView(this.state.one, "单程",
-                        () => {
-                            let s = !this.state.one;
-                            this.setState({
-                                one: s
-                            });
-                        })}
-                    {this.getSwitchView(!this.state.one, "往返",
-                        () => {
-                            let s = !this.state.one;
-                            this.setState({
-                                one: s
-                            });
-                        })}
-
-                </div>
+                {this.getSwitchLayout()}
                 {this.getButton()}
             </div>            );
 
     }
 
-    getButton(){
-        return(
+    getButton() {
+        return (
             <div className={less.buttonLayout}>
                 <Button
                     loading={this.state.loading}
@@ -90,83 +74,78 @@ class SearchLayout extends Component {
         );
     }
 
-    getSwitchView(v, title, cb) {
-
-        let {type} = this.props;
+    getSwitchView(v, title, cb,type) {
         return (
             <div
                 onClick={() => {
                     cb();
                 }}
-                className={type===1?less.action:less.searchAction}
+                className={type === 1 ?less.searchAction:  less.action }
             >
-                <img  src={v ? this.img_login_check : this.img_login_uncheck}
+                <img src={v ? this.img_login_check : this.img_login_uncheck}
                 />
-                <div >{title}</div>
+                <div>{title}</div>
             </div>
         );
     }
 
+    getSwitchLayout(type){
+        return (
+            <div >
+
+                {this.getSwitchView(this.state.one, "单程",
+                    () => {
+                        let s = !this.state.one;
+                        this.setState({
+                            one: s
+                        });
+                    },type)}
+                {this.getSwitchView(!this.state.one, "往返",
+                    () => {
+                        let s = !this.state.one;
+                        this.setState({
+                            one: s
+                        });
+                    },type)}
+
+            </div>
+        );
+    }
     searchView() {
         return (
-            <div style={{
-                width: "100%",
-                paddingTop: 35
-            }}>
-<Row>
-                <Col span={2} style={{marginLeft: 42}}>
-                    {this.getSwitchView(this.state.one, "单程",
-                        () => {
-                            let s = !this.state.one;
-                            this.setState({
-                                one: s
-                            });
-                        })}
-                    {this.getSwitchView(!this.state.one, "往返",
-                        () => {
-                            let s = !this.state.one;
-                            this.setState({
-                                one: s
-                            });
-                        })}
-
-                </Col>
-    <Col span={1}>
-                <div className={less.line}/>
-    </Col>
-                <Col span={8} >
-                    <div className={less.inputLayout}>
-                    <span>出发城市：</span>
-                    <div>
+            <div className={less.bar}>
+                <div className={less.row}>
+                    {this.getSwitchLayout(1)}
+                </div>
+                <div className={less.lineLayout}>
+                    <div className={less.line}/>
+                </div>
+                <div className={less.inputLayout}>
+                    <span className={less.inputLayoutSpan}>出发城市：</span>
+                    <div className={less.inputLayoutDiv}>
                         <AutoInput
                             ref="from"
-                            style={{width:"100%"}}
                             defaultValue={this.state.from}
                             placeholder="中文／拼音／三字码"/>
                     </div>
+                </div>
+
+                <div className={less.inputLayout}>
+                    <span className={less.inputLayoutSpan}>到达城市：</span>
+                    <div className={less.inputLayoutDiv}>
+                        <AutoInput
+                            ref="to"
+                            defaultValue={this.state.from}
+                            placeholder="中文／拼音／三字码"/>
                     </div>
-                </Col>
+                </div>
+                <div className={less.row}>
+                    {this.getButton()}
+                </div>
 
-    <Col span={8} >
-        <div className={less.inputLayout}>
-            <span className={less.searchTitle}>到达城市：</span>
-            <div>
-                <AutoInput
-                    ref="from"
-                    style={{width:"100%"}}
-                    defaultValue={this.state.from}
-                    placeholder="中文／拼音／三字码"/>
+
             </div>
-        </div>
-    </Col>
-<Col>
-    <div>
-        {this.getButton()}
-    </div>
-</Col>
-
-</Row>
-            </div>);
+        );
     }
 
     render() {
@@ -184,4 +163,5 @@ class SearchLayout extends Component {
         });
     }
 }
+
 module.exports = SearchLayout;

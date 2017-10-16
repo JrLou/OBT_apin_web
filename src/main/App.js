@@ -12,10 +12,8 @@ class page extends Component{
     render(){
         return(
             <Layout>
-                <Header style={{backgroundColor:"#fff"}}>
-                    <AppTop root={this}/>
-                </Header>
-                <Content >
+                <AppTop root={this}/>
+                <Content style={{marginTop:10}}>
                     {this.props.children}
                 </Content>
                 <Footer>
