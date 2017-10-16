@@ -179,10 +179,13 @@ class page extends Component {
         //在本月之前的
         for (let i = 0; i < first_day; i++) {
             log(i)
-            let previous_link = (<div className={css.itemGray}
-                                      key={'previous'+i}>
-                <div className={css.dayGray}>{previous_month_days - (first_day - i) + 1}</div>
-            </div>);
+            let itemView = (<div className={css.itemGray}>
+                <div className={css.dayGray}>
+                    {previous_month_days - (first_day - i) + 1}
+                </div>
+            </div>)
+
+            let previous_link = (<CalendarItem key={'previous'+i} itemView = {itemView}/>);
             previous_days.push(previous_link);
         }
 
@@ -195,21 +198,25 @@ class page extends Component {
             if (current_year == select_year && current_month == select_month && current_day == (i + 1)) {
                 currentClassName = css.itemRed;
                 currentText = '今天';
-                current_link = (<div className={currentClassName}
-                                     key={'current'+i}>
+
+                let itemView = (<div className={currentClassName}>
+
                     <div className={css.dayActive}>
                         {currentText}
                     </div>
                 </div>)
+
+                current_link = (<CalendarItem key={'current'+i} itemView = {itemView}/>)
             } else {
                 currentText = i + 1;
                 currentClassName = css.itemActive;
-                current_link = (<div className={currentClassName}
-                                     key={'current'+i}>
+
+                let itemView = (<div className={currentClassName}>
                     <div className={css.dayActive}>
                         {currentText}
                     </div>
                 </div>)
+                current_link = (<CalendarItem key={'current'+i} itemView = {itemView}/>)
             }
 
 
@@ -220,8 +227,8 @@ class page extends Component {
                         // 判断选择样式与历史样式是否相等，相等激活
                         if (select_year == history_year && select_month == history_month && history_day == (i + 1)) {
                             currentClassName = css.itemSelect;
-                            current_link = (<div className={currentClassName}
-                                                 key={'current'+i}
+
+                            let itemView = (<div className={currentClassName}
                                                  onClick={this.selectDate.bind(this, i + 1)}>
                                 <img className={css.itemSelect_sign}
                                      src={require("../../../../images/select_sign.png")}/>
@@ -231,10 +238,12 @@ class page extends Component {
                                 <div className={css.price}> ¥2333</div>
                                 <div className={css.sit}>余位23</div>
                             </div>)
+
+                            current_link = (<CalendarItem key={'current'+i} itemView = {itemView}/>)
                         } else {
                             currentClassName = css.itemTags;
-                            current_link = (<div className={currentClassName}
-                                                 key={'current'+i}
+
+                            let itemView = (<div className={currentClassName}
                                                  onClick={this.selectDate.bind(this, i + 1)}>
                                 <div className={css.dayActive}>
                                     {currentText}
@@ -242,6 +251,8 @@ class page extends Component {
                                 <div className={css.price}> ¥2333</div>
                                 <div className={css.sit}>余位23</div>
                             </div>)
+
+                            current_link = (<CalendarItem  key={'current'+i} itemView={itemView}/>)
                             break;
                         }
                     }
@@ -252,9 +263,12 @@ class page extends Component {
 
         //紧随本月之后的
         for (let i = 0; i < n_day; i++) {
-            let next_link = (<div className={css.itemGray} key={'next'+i}>
+
+            let itemView = (<div className={css.itemGray} >
                 <div className={css.dayGray}>{i + 1}</div>
-            </div>);
+            </div>)
+
+            let next_link = (<CalendarItem key={'next'+i} itemView={itemView}/>);
             next_days.push(next_link);
         }
 
@@ -312,6 +326,43 @@ class page extends Component {
 page.contextTypes = {
     router: React.PropTypes.object
 }
+
+//日历小Item
+class CalendarItem extends Component{
+    constructor(props) {
+        super(props);
+        this.state = ({
+            isMounseSel:false,
+        })
+    }
+
+    /**
+     * 组件渲染完后执行
+     */
+    componentDidMount() {
+
+    }
+    render(){
+        let {itemView} = this.props;
+
+        return(<div className={this.state.isMounseSel?css.borderIsMounseSel:css.borderDefault}
+                    onMouseEnter={()=>{
+                        this.setState({
+                            isMounseSel:true,
+                        })
+                    }}
+                    onMouseLeave={()=>{
+                        this.setState({
+                            isMounseSel:false,
+                        })
+                    }}
+        >
+            {itemView}
+        </div>)
+    }
+
+}
+
 
 class MonthView extends Component{
     constructor(props) {

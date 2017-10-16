@@ -117,17 +117,31 @@
   background-color: white;
   overflow: hidden;
 }
-.defaultItem{
+.borderDefault{
   float: left;
   width: 14%;
-  height: @height_item;
-  padding: 2px 0px 2px 5px;
-  font-size: @font-size-base;
   margin: 0.14%;
-  border: 1px solid #CBD3E5;
+  border-style: solid;
+  border-color: white;
+  border-width: 1px;
+  box-sizing: border-box;
+}
+.borderIsMounseSel{
+  composes: borderDefault;
+  border-color: #29A6FF;
+}
+.defaultItem{
+  width: 100%;
+  height: @height_item;
+  font-size: @font-size-base;
+  border-style: solid;
+  border-color: #eeeeee;
+  border-width: 1px;
+  padding: 2px 0px 0px 5px;
 }
 .cBodyItem{
-  composes: defaultItem;
+  float: left;
+  width: 14.2%;
   background-color: white;
   border-width: 0px;
   height: 30px;
@@ -156,7 +170,7 @@
   font-size: @font_size_cell;
 }
 .price{
-  color: #333333;
+  color: #FF5841;
   font-size: @font_size_cell;
   padding-right: @d_spadding_small;
   text-align: right;
@@ -171,6 +185,7 @@
   composes: defaultItem;
   border: 2px solid #29A6FF;
   position: relative;
+  background-color: #8bf1fc;
 }
 .itemSelect_sign{
   position: absolute;
