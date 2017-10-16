@@ -1,13 +1,14 @@
-let path = require('path'),router = require('./router.js');
+var path = require("path");
+var router = require("./router.js");
 
 
 
 
 //修改ANTD主题
 var json = {};
-var fs = require('fs');
-var file = fs.readFileSync(__dirname+'/src/theme.less').toString();
-var fileS = file.split(';');
+var fs = require("fs");
+var file = fs.readFileSync(__dirname+"/src/theme.less").toString();
+var fileS = file.split(";");
 for(var i=0;i<fileS.length;i++){
     if(fileS[i].trim().indexOf("@")==0){
         var arr = fileS[i].split(":");
@@ -39,30 +40,30 @@ var babelrc = {
         }
     }
 };
-var jsLoader = 'babel-loader?'+JSON.stringify(babelrc).trim();
-let configModule = {
+var jsLoader = "babel-loader?"+JSON.stringify(babelrc).trim();
+var configModule = {
     loaders: [
         {
             test: /\.js$/,
             exclude: /node_modules/,
             loader: jsLoader,
-            include: path.join(__dirname, 'src')
+            include: path.join(__dirname, "src")
         },
         {
             test: /\.css/,
-            loader: 'style-loader!css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]!'
+            loader: "style-loader!css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]!"
         },
         {
             test: /^(?!.*?(\\|\/)src(\\|\/)).*less$/,
-            loader: 'style-loader!css-loader!less-loader?{"sourceMap":true,"modifyVars":'+themeV+'}'
+            loader: "style-loader!css-loader!less-loader?{\"sourceMap\":true,\"modifyVars\":"+themeV+"}"
         },
         {
             test: /(.*?(\\|\/)src(\\|\/)).*less$/,
-            loader: 'style-loader!css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]!less-loader'
+            loader: "style-loader!css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]!less-loader"
         },
         {
             test: /\.(png|jpg|gif)$/,
-            loader: 'url-loader?limit=5120&name=images/[hash:8].[name].[ext]'
+            loader: "url-loader?limit=5120&name=images/[hash:8].[name].[ext]"
         },
 
     ]
@@ -70,8 +71,8 @@ let configModule = {
 module.exports = {
 	server: {
 		port: 3000,
-		assetPath: './public',
-        viewPath:'./view',
+		assetPath: "./public",
+        viewPath:"./view",
 		custom: {
             serverRoutes:router
 		}
@@ -82,9 +83,9 @@ module.exports = {
 			config: {
                 devtool: "cheap-module-eval-source-map",
 				output: {
-					path: path.resolve(__dirname,'./public/project'),
-					filename: 'spa.js',
-					publicPath: '/project'
+					path: path.resolve(__dirname,"./public/project"),
+					filename: "spa.js",
+					publicPath: "/project"
 				},
                 module: configModule,
 			}
@@ -94,12 +95,12 @@ module.exports = {
 		release: {
 			config: {
                 output: {
-                    path: path.resolve(__dirname,'./public/project'),
-                    filename: 'spa.js',
-                    sourceMapFilename: '[file].map',
+                    path: path.resolve(__dirname,"./public/project"),
+                    filename: "spa.js",
+                    sourceMapFilename: "[file].map",
                     //加这个！
-                    chunkFilename: '[name].[chunkhash:5].chunk.js',
-                    publicPath: '/project/'
+                    chunkFilename: "[name].[chunkhash:5].chunk.js",
+                    publicPath: "/project/"
                 },
                 module: configModule,
 			},

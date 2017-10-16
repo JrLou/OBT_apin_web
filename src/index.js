@@ -1,6 +1,6 @@
 //重写日志系统
 window.log = function (obj) {
-    //
+    /* eslint-disable no-console */
     console.log(obj);
 };
 window.app_getPar = function (obj) {
@@ -19,15 +19,14 @@ window.app_open = function (obj, path, state, open, callBack) {
         if (callBack) {
             callBack("打开页面错误,请检查");
         }
-        return;
     }
 
     document.documentElement.scrollTop = document.body.scrollTop = 0;
 
     let get = state ? "?data=" + encodeURIComponent(JSON.stringify(state)) : "";
-    if (open == "new") {
+    if (open === "new") {
         window.open(path + get);
-    } else if (open == "self") {
+    } else if (open === "self") {
         window.location.pathname = path + get;
     } else {
         obj.context.router.push(
@@ -48,14 +47,14 @@ function exe() {
         apin.cache.delete(key);
     };
     apin.getCache = function (key) {
-        const v = apin.cache.get(key);
+        let v = apin.cache.get(key);
         apin.delCache(key);
         return v;
     };
 }
 exe();
 
-const React = require('react');
-const ReactDOM = require('react-dom');
+const React = require("react");
+const ReactDOM = require("react-dom");
 const routes = require("./routes.js");
 ReactDOM.render(routes, document.getElementById("root"));
