@@ -9,37 +9,161 @@ import SearchLayout from '../component/SearchLayout';
 import SearchHelp from '../search/SearchHelp.js';
 
 import routes from '../../../vm/routes.js';
+
+import Scroll from 'react-scroll'; // Imports all Mixins
+import {scroller} from 'react-scroll'; //Imports scroller mixin, can use as scroller.scrollTo()
+// Or Access Link,Element,etc as follows
+
+var Link       = Scroll.Link;
+var Events     = Scroll.Events;
+var scroll     = Scroll.animateScroll;
+var scrollSpy  = Scroll.scrollSpy;
+
 class page extends Component {
     constructor(props) {
         super(props);
+        this.scrollToTop = this.scrollToTop.bind(this);
+        this.handleScroll = this.handleScroll.bind(this);
+        this.page = 1;//页码
+        this.state = {
+
+            dataSource:[],
+            loading:false
+        };
     }
 
+
+
+
+
+    componentDidMount() {
+
+        Events.scrollEvent.register('begin', function() {
+            console.log("begin", arguments);
+        });
+
+        Events.scrollEvent.register('end', function() {
+            console.log("end", arguments);
+        });
+
+        scrollSpy.update();
+
+        window.addEventListener('scroll', this.handleScroll);
+        this.getNetData();
+    }
+    componentWillUnmount() {
+        Events.scrollEvent.remove('begin');
+        Events.scrollEvent.remove('end');
+        window.removeEventListener('scroll', this.handleScroll);
+    }
+    handleScroll(){
+        // var bodyRect = document.body.getBoundingClientRect();
+        let sy = this.getScrollTop() + this.getWindowHeight();
+        let sh = this.getScrollHeight();
+       // log(sh -sy);
+        if(sh -sy <100){
+          this.toBottom();
+        }
+    }
+
+
+    toBottom(){
+            this.getNetData();
+    }
+    getScrollTop(){
+        let scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
+        if(document.body){
+            bodyScrollTop = document.body.scrollTop;
+        }
+        if(document.documentElement){
+            documentScrollTop = document.documentElement.scrollTop;
+        }
+        scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
+        return scrollTop;
+    }
+    //文档的总高度
+
+    getScrollHeight(){
+        let scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
+        if(document.body){
+            bodyScrollHeight = document.body.scrollHeight;
+        }
+        if(document.documentElement){
+            documentScrollHeight = document.documentElement.scrollHeight;
+        }
+        scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
+        return scrollHeight;
+    }
+
+//浏览器视口的高度
+
+    getWindowHeight(){
+        let windowHeight = 0;
+        if(document.compatMode == "CSS1Compat"){
+            windowHeight = document.documentElement.clientHeight;
+        }else{
+            windowHeight = document.body.clientHeight;
+        }
+        return windowHeight;
+    }
+    scrollToTop() {
+        scroll.scrollToTop();
+    }
+    scrollToBottom() {
+        scroll.scrollToBottom();
+    }
     getRecommendList() {
 
         return routes.getData(8).map((data, index) => {
             return (
                 <Col  key={index} span={6}>
-                <RecommendView
-                    template={1}
-                    onClick={() => {
-                        SearchHelp.openSearch(this,data);
-                    }}
-                    data={data} key={index}/>
+                    <RecommendView
+                        template={1}
+                        onClick={() => {
+                            SearchHelp.openSearch(this,data);
+                        }}
+                        data={data} key={index}/>
                 </Col>
             );
         });
     }
+    setLoading(loading,cb){
+        this.setState({
+            loading:loading
+        },cb);
+    }
+    isLoading(){
+        return this.state.loading;
+    }
 
-    getSpecialList() {
-        return routes.getData(12).map((data, index) => {
+    getNetData(){
+        if(this.isLoading()){
+            return;
+        }
+
+        this.setLoading(true,()=>{
+            setTimeout(()=>{
+                this.setLoading(false,()=>{
+                    this.setState({
+                        dataSource:this.state.dataSource.concat(routes.getData(12))
+                    },()=>{
+                        // scroll.scrollToBottom();
+                        // this.scrollToTop();
+                    });
+                });
+            },200);
+        });
+
+    }
+    getSpecialList(data) {
+        if(!data)return;
+        return data.map((data, index) => {
             return (
-            <Col  key={index} span={4.8}>
             <SpecialView
                 onClick={() => {
                     SearchHelp.openSearch(this,data);
                 }}
                 data={data}/>
-            </Col>
             );
 
         });
@@ -71,10 +195,28 @@ class page extends Component {
     }
 
 
+
+    render22(){
+        let arr = [];
+        for(let i =0;i<100;i++){
+            arr.push(<div key={i}>{i}</div>);
+        }
+        return (
+            <div
+                style={{margin:"auto",maxWidth:1200}}
+                ref={(ref)=>{
+                    this.myScroll = ref;
+                }}>
+                {arr}
+                    </div>
+        );
+    }
     render() {
 
         return (
-            <div style={{margin:"auto",maxWidth:1200}}>
+            <div
+                style={{margin:"auto",maxWidth:1200}}>
+                <li> <a onClick={() => scroll.scrollToBottom()}>Scroll To 100!</a></li>
                 <Row>
                     <Col span={6}>
                         <div  className={less.topLeft}>
@@ -107,8 +249,7 @@ class page extends Component {
                         <div className={less.centerTitleMoreLayout}>
                             <div className={less.centerTitleMore}>更多路线推荐</div>
                             <div className={less.centerIconMore}/>
-                        </div>
-                    </div>
+                        </div>cro                  </div>
                     <Row >
                     {this.getRecommendList()}
                     </Row>
@@ -121,13 +262,19 @@ class page extends Component {
                         <div className={less.centerTitle}>更多机票路线</div>
                     </div>
                 <Row>
-                    {this.getSpecialList()}
+                    {this.getSpecialList(this.state.dataSource)}
                 </Row>
                     <br/>
                 </div>
-                <div style={{clear:"both"}}/>
-                <div className={less.more}>
-                    加载中...</div>
+                {this.state.loading?<div className={less.more}>
+                    加载中...</div>:
+                    <div className={less.more}
+                        onClick={()=>{
+                            this.getNetData();
+                        }}
+                    >
+                    下拉加载更多</div>}
+
 
             </div>
         );

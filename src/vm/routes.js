@@ -23,8 +23,8 @@ module.exports  = {
        let arr = [];
        for(let i =0;i<count;i++ ){
            arr.push({
-               from:"北京"+i,
-               to:"天津"+i,
+               from:"北京".repeat(i)+i,
+               to:"天津".repeat(i)+i,
                money:((i+1)*Math.random()*10+200).toFixed(0)*10,
                views:Math.random().toFixed(1)*100,
                image:'/images/vm/xiangg.png',

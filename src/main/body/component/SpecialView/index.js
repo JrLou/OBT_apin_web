@@ -32,22 +32,33 @@ class SpecialView extends Component {
             >
                 <div className={css.bottom}>
                 <div className={css.bottomLeft}>
-                    <div className={css.text}> {data.from}</div>
-                    <div className={css.text2}>
-                        <div className={css.icon}
-                             style={{
-                                 backgroundImage: "url(" + img + ")"
-                             }}
-                        >
 
-                        </div>
-                    </div>
-                    <div className={css.text}> {data.to}</div>
-                    <div >
+                   <div className={css.table}>
+                       <div className={css.text}> {data.from}</div>
+
+
+                       <div className={css.text2}>
+                           <div className={css.icon}
+                                style={{
+                                    backgroundImage: "url(" + img + ")"
+                                }}
+                           >
+                           </div>
+                       </div>
+
+
+                       <div className={css.text}> {data.to}</div>
+                   </div>
+
+
+                    <div style={{clear:"both"}}>
                         <font className={css.money}>{"￥"}</font>
                         <font className={css.moneyBig}>{data.money}</font>
                         <font className={css.moneyGray}>{"起"}</font>
                     </div>
+
+
+
                 </div>
                     <div className={css.bottomRight}>
                         <font className={css.date}>{"已团"}</font>
