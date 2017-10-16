@@ -22,7 +22,10 @@ class page extends Component {
                 </div>
                 <div className={css.right}>
                     <div className={css.title}>
-                        杭州 ⇌ 曼谷（往返）
+                        <div className={css.titleHead}>杭州</div>
+                        <img className={css.imgIcon}
+                             src={require("../../../../images/trip_single.png")}/>
+                        <div className={css.titleHead}>曼谷（往返）</div>
                     </div>
 
                     <div className={css.rightLine} style={{marginTop:"50px"}}>
