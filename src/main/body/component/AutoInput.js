@@ -10,7 +10,7 @@ class AutoInput extends Component {
         this.state = {
             value:props.defaultValue||"",
             inputFocused:false,
-            upData:0,
+            upData:0
         };
 
         //默认数据的查询接口地址
@@ -60,7 +60,7 @@ class AutoInput extends Component {
         if(e&&e.target) {
             let value = e.target.value.trim();
             this.setState({
-                value: value,
+                value: value
             });
             //模糊匹配
             this.loadData(2,value);
@@ -220,7 +220,7 @@ class AutoInput extends Component {
         let inputVal = searchValue?searchValue:'';
         if(type === 2 && inputVal && inputVal.length>0){
             let parames = {
-                value:inputVal,
+                value:inputVal
             };
             let successCB = (code, msg, json, option)=>{
                 this.searchSource = json;
@@ -234,55 +234,55 @@ class AutoInput extends Component {
             this.searchSource = [
                 {
                     cityName:'北京',
-                    idata:'BJ',
+                    idata:'BJ'
                 },
                 {
                     cityName:'杭州',
-                    idata:'HZ',
+                    idata:'HZ'
                 },
                 {
                     cityName:'杭州2',
-                    idata:'HZ',
+                    idata:'HZ'
                 },
                 {
                     cityName:'杭州3',
-                    idata:'HZ',
+                    idata:'HZ'
                 },
                 {
                     cityName:'杭州4',
-                    idata:'HZ',
+                    idata:'HZ'
                 },
                 {
                     cityName:'杭州5',
-                    idata:'HZ',
+                    idata:'HZ'
                 },
                 {
                     cityName:'杭州6',
-                    idata:'HZ',
+                    idata:'HZ'
                 },
                 {
                     cityName:'杭州7',
-                    idata:'HZ',
+                    idata:'HZ'
                 },
                 {
                     cityName:'杭州8',
-                    idata:'HZ',
+                    idata:'HZ'
                 },
                 {
                     cityName:'杭州866666',
-                    idata:'HZ',
+                    idata:'HZ'
                 },
                 {
                     cityName:'杭州84444',
-                    idata:'HZ',
+                    idata:'HZ'
                 },
                 {
                     cityName:'杭州33338',
-                    idata:'HZ',
+                    idata:'HZ'
                 },
                 {
                     cityName:'杭州228',
-                    idata:'HZ',
+                    idata:'HZ'
                 }
             ];
         }else if(type === 1){
@@ -302,64 +302,64 @@ class AutoInput extends Component {
                     title: '热门城市',
                     children: [{
                         cityName: '北京',
-                        idata: 'BJ',
+                        idata: 'BJ'
                     }, {
                         cityName: '西安1',
-                        idata: 'XA',
+                        idata: 'XA'
                     }, {
                         cityName: '西安2',
-                        idata: 'XA',
+                        idata: 'XA'
                     }, {
                         cityName: '西安3',
-                        idata: 'XA',
+                        idata: 'XA'
                     }, {
                         cityName: '西安4',
-                        idata: 'XA',
+                        idata: 'XA'
                     }, {
                         cityName: '西安5',
-                        idata: 'XA',
+                        idata: 'XA'
                     }, {
                         cityName: '西安6',
-                        idata: 'XA',
+                        idata: 'XA'
                     }, {
                         cityName: '西安7',
-                        idata: 'XA',
+                        idata: 'XA'
                     }, {
                         cityName: '西安8',
-                        idata: 'XA',
+                        idata: 'XA'
                     }, {
                         cityName: '西安9',
-                        idata: 'XA',
+                        idata: 'XA'
                     }, {
                         cityName: '西安10',
-                        idata: 'XA',
+                        idata: 'XA'
                     }, {
                         cityName: '西安11',
-                        idata: 'XA',
+                        idata: 'XA'
                     }, {
                         cityName: '西安12',
-                        idata: 'XA',
+                        idata: 'XA'
                     }, {
                         cityName: '西安13',
-                        idata: 'XA',
+                        idata: 'XA'
                     }, {
                         cityName: '西安14',
-                        idata: 'XA',
+                        idata: 'XA'
                     }, {
                         cityName: '广州',
-                        idata: 'GZ',
-                    }],
+                        idata: 'GZ'
+                    }]
                 },
                 {
                     title: 'Apin推荐',
                     children: [{
                         cityName: '杭州',
-                        idata: 'HZ',
+                        idata: 'HZ'
                     }, {
                         cityName: '苏州',
-                        idata: 'SZ',
-                    }],
-                },
+                        idata: 'SZ'
+                    }]
+                }
             ];
         }
 

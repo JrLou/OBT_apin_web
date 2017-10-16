@@ -7,7 +7,7 @@ class MyAlert extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isShow: false,
+            isShow: false
         };
     }
     componentDidMount() {
@@ -15,7 +15,7 @@ class MyAlert extends Component {
     }
     refreshView(){
         this.setState({
-            isShow:true,
+            isShow:true
         });
     }
     render() {
@@ -32,7 +32,7 @@ class MyAlert extends Component {
 
                 <div className={css.btn} onClick={()=>{
                     this.setState({
-                        isShow:false,
+                        isShow:false
                     });
                 }}>
                     关闭

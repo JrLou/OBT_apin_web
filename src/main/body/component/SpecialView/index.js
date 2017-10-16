@@ -11,9 +11,10 @@ class SpecialView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataSource: [],
+            dataSource: []
         };
     }
+
 
     render() {
         let {data} = this.props;
@@ -39,7 +40,7 @@ class SpecialView extends Component {
                     <div style={{position:"absolute"}}>
                         <font style={{marginTop:5,color: "#FF5841", fontSize:10}}>¥</font>
                         <font style={{color: "#FF5841", fontSize:16}}>{data.money}</font>
-                        <font style={{marginTop:5,color: "#2A2A2A",fontSize:10,}}>起</font>
+                        <font style={{marginTop:5,color: "#2A2A2A",fontSize:10}}>起</font>
                     </div>
                     <font style={{fontSize:12,marginTop:5,color:"#666",position:"absolute",right:11}}>10月13日</font>
                 </div>

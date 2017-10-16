@@ -13,7 +13,7 @@ class page extends Component {
         this.state = {
             tableLoading:false,
             dataSource:[],
-            total:0,
+            total:0
         };
     }
     componentDidMount() {
@@ -30,13 +30,13 @@ class page extends Component {
             }
             this.setState({
                 tableLoading: false,
-                dataSource: json,
+                dataSource: json
             });
         };
         var failure = (code, msg, option) => {
             this.setState({
                 tableLoading: false,
-                dataSource: [],
+                dataSource: []
             });
         };
         //HttpTool.post(HttpTool.typeEnum.POST,APIGYW.dealer_stockList,success, failure, param)
@@ -54,7 +54,7 @@ class page extends Component {
                         endTime:"08:55",
                         startPlace:"杭州萧山机场",
                         endPlace:"素万那普机场",
-                        totalTime:"3小时50分钟",
+                        totalTime:"3小时50分钟"
                     },
                     {
                         type:2,
@@ -67,14 +67,14 @@ class page extends Component {
                         endTime:"08:55",
                         startPlace:"杭州萧山机场",
                         endPlace:"素万那普机场素万那普机场",
-                        totalTime:"3小时50分钟",
-                    },
+                        totalTime:"3小时50分钟"
+                    }
                 ],
                 days:"6天",
                 price:"2333",
                 isTax:true,
                 remain:23,
-                isType:1,
+                isType:1
             }
         ];
         this.myLineInfor.refreshView(myJson);
@@ -141,7 +141,7 @@ class LineInfor extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataSource: [],
+            dataSource: []
         };
     }
     refreshView(dataSource) {
