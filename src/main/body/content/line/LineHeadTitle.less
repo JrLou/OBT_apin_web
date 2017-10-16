@@ -1,12 +1,10 @@
 @import "../../../../theme.less";
+@img_width:395px;
+@img_height:0.72*@img_width;
+
 .main{
   align-content: center;
-  background-color: #00A3FF;
-}
-.title{
-  font-size: @font_size_title;
-  font-weight: 800;
-  text-align: center;
+  background: #EFF7FD;
 }
 .con{
   margin-top: @d_spadding_small;
@@ -14,44 +12,46 @@
 }
 .left{
   float: left;
-  width: 200px;
-  height: 130px;
-  background-color: #2db7f5;
+  width: 34%;
+  height: @img_height;
 }
 .img{
-  width: 200px;
-  height: 130px;
+  width: @img_width;
+  height: @img_height;
 }
 .right{
-  margin-left: @d_spadding_small;
-  padding-top: @d_spadding_small;
   float: left;
   height: 130px;
+  width: 66%;
+}
+.title{
+  border-width: 1px 0 1px 0;
+  border-style: dashed;
+  border-color: #CBD3E5;
+  width: 100%;
+  font-family: MicrosoftYaHei-Bold;
+  font-size: @font_size_title;
+  color: #29A6FF;
+  padding: @d_spadding_center 0;
 }
 
 .rightLine{
   overflow: hidden;
+  margin-top: @d_spadding_center;
   margin-bottom: @d_spadding_cell;
 }
 .lineLeft{
   display: inline-block;
-  width: 80px;
-  color: @normal-color;
+  width: 70px;
+  font-family: MicrosoftYaHei;
   font-size: @font-size-base;
-  vertical-align: middle;
+  color: #888D99;
 }
 .lineRight{
   display: inline-block;
+  font-family: MicrosoftYaHei;
   font-size: @font-size-base;
-  color: @border-color;
-  border-width: 1px;
-  border-style: solid;
-  border-color: @border-color;
-  padding:1px @d_spadding_small 1px 5px;
-}
-.refLineRight{
-  composes: lineRight;
-  width: 100px;
+  color: #4F5762;
 }
 .center{
   display: inline-block;

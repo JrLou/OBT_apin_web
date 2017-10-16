@@ -25,7 +25,9 @@ class MyAlert extends Component {
                     请联系客服预订下单
                 </div>
                 <div className={css.con}>
-                    客服电话 :0571-85071773
+                    <span style={{color:"#888D99",fontSize:"14px"}}>客服电话 :</span>
+                    <span>0571-85071773</span>
+
                 </div>
 
                 <div className={css.btn} onClick={()=>{
