@@ -19,7 +19,7 @@ class help {
 		}
 
         if (obj && obj.props && obj.props.location && obj.props.location.state) {
-            this.stateP = obj.props.location.state
+            this.stateP = obj.props.location.state;
             return this.stateP;
         } else {
             return {};
@@ -50,7 +50,7 @@ class help {
 					{
 						pathname: path,
 						state: state
-					})
+					});
 
 		} else {
 			if (callBack) {
@@ -79,7 +79,7 @@ class help {
                     this.backPage(obj);
                 }
             }else{
-                log("说好的返回呢2")
+                log("说好的返回呢2");
                 this.backPage(obj);
             }
 
@@ -106,7 +106,7 @@ class help {
     getUrlSearch(str) {
         var query = {};
         var name, value;
-        var num = str.indexOf("?")
+        var num = str.indexOf("?");
         if (num < 0) {
             return query;
         }

@@ -1,0 +1,91 @@
+@container-width:100%;
+@container-height:36px;
+.container{
+  box-sizing: border-box;
+  position: relative;
+  width: @container-width;
+  height: @container-height;
+  background: #fff;
+  border-radius: 2px;
+}
+.hidden{
+  display: none;
+}
+.inputStyle{
+  box-sizing: border-box;
+  width: @container-width;
+  height: @container-height;
+  outline: none;
+  position: absolute;
+  top:0;
+  left:0;
+  color: #333;
+  padding: 0 10px;
+  font-size: @container-height/2.2;
+}
+.optionsBox{
+  z-index: 9999;
+  box-sizing: border-box;
+  position: absolute;
+  top: (@container-height)-1px;
+  left: -1px;
+  overflow: auto;
+  min-width: @container-width;
+  max-width: @container-width*1.2;
+  max-height: @container-height*10;
+  height: @container-height*7;
+  width: @container-width*1.2;
+  background-color: #fff;
+  border-radius: 2px;
+  border: 1px solid #cbd3e5;
+  transition: all 0.3s;
+  color: #333;
+  opacity: 1;
+}
+.close{
+  .optionsBox;
+  height: 0;
+  border: 0;
+  opacity: 0.1;
+}
+.groupBox{
+  box-sizing: border-box;
+  padding: 10px 20px;
+  overflow: hidden;
+}
+.groupTitle{
+  color: #2577e3;
+  font-weight: bold;
+  border-left: 2px solid #2577e3;
+  padding-left: 5px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.cityItem{
+  box-sizing: border-box;
+  width: 24%;
+  float: left;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #fff;
+
+  &:hover{
+    background-color: #28a5ff;
+    border: 1px solid #c5dbf4;
+  }
+}
+.searchItem{
+  box-sizing: border-box;
+  width: 100%;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover{
+    background-color: #28a5ff;
+  }
+}
+.matchColor{
+  color: #28a5ff;
+}

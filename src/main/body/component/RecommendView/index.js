@@ -3,54 +3,158 @@
  */
 import React, {Component} from 'react';
 import {AutoComplete} from 'antd';
+import css from './index.less';
 /**
  * //精品特价航线view
  */
 class RecommendView extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             dataSource: [],
-        }
+        };
     }
 
+    componentDidMount() {
+
+    }
 
     render() {
 
-        let {data} = this.props;
+        let {data,template} = this.props;
+
         if (!data)return null;
         return (
             <div
+                className={css.cell}
                 {...this.props}
-                style={{marginTop: 20, marginLeft: 30, float: "left",}}>
-                <div style={{
-                    width: 280, height: 200,
-                    backgroundColor: "#fff",
-                    paddingTop: 10
-                }}>
-                    <div style={{
-                        margin: "auto",
-                        height: 150, marginLeft: 10, width: 260,
-                        backgroundImage:'url('+data.image+')',
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat", position: 'relative'
-                    }}>
-                        <div
-                            style={{position: "absolute", top: "10", left: "10", fontSize: "14px", color: "#FFFFFF",}}>{
-                            data.from + "-" + data.to
-                        }</div>
-                    </div>
-                    <div style={{width: 260, marginLeft: 10, marginTop: 10, float: "left"}}>
-                        <div style={{width: 100, float: "left"}}>
-                            <div style={{color: "#a00", float: "left"}}>${data.money}</div>
-                            <div style={{color: "#a00", float: "left"}}>(含税)</div>
+            >
+                <div className={css.border}>
+                    <div
+                        className={css.content}
+                        style={{
+                            backgroundImage: "url(" + data.image + ")"
+                        }}
+                    >
+                        {
+                            this.getImageBottom(data,template)
+                        }
+                        <div className={css.tag}>
+                            {data.tag}
                         </div>
-                        <div style={{width: 160, float: "left", textAlign: "right"}}>{data.views}次浏览</div>
+                    </div>
+                    {
+                        this.getBottom(data,template)
+                    }
+
+                </div>
+
+            </div>
+        );
+    }
+
+
+    getCountShow(data,template)
+    {
+        if(template==1){
+            return (
+                <div className={css.bottomRight}>
+                    <font className={css.moneyBlack}>{"已团"}</font>
+                    <font className={css.money}>{data.count+"张"}</font>
+                    <br/>
+                    <font className={css.moneyGray}>{"还剩"+data.count+"张"}</font>
+                </div>
+            );
+        }else {
+            return (
+                <div >
+                    <font className={css.moneyWhite}>{"已团"}</font>
+                    <font className={css.money}>{data.count+"张"}</font>
+                    <font className={css.moneyWhiteV}>{"|"}</font>
+                    <font className={css.moneyWhite}>{"还剩"+data.count+"张"}</font>
+                </div>
+            );
+        }
+
+    }
+
+    getTitleLayout(data,template){
+
+        let img = null;
+        if(template==1){
+            if(data.type==1){
+                img = require('../../../../images/wfw.png');
+            }else{
+                img = require('../../../../images/dcw.png');
+            }
+        }else {
+            if(data.type==1){
+                img = require('../../../../images/wfw.png');
+            }else{
+                img = require('../../../../images/dcw.png');
+            }
+        }
+
+        return (
+            <div className={template==1?css.title:css.titleBlack} >
+                <div className={css.text}> {data.from}</div>
+                <div className={css.text2}>
+                    <div className={css.icon}
+                         style={{
+                             backgroundImage: "url(" + img + ")"
+                         }}
+                    >
+
                     </div>
                 </div>
+                <div className={css.text}> {data.to}</div>
             </div>
-        )
+        );
+
+    }
+    getImageBottom(data,template) {
+
+        return (
+            <div className={css.titleLayout}>
+                {template==1?this.getTitleLayout(data,template):this.getCountShow(data,template)}
+            </div>
+        );
+    }
+
+    getBottom(data,template) {
+        if(template==1){
+            return (
+                <div className={css.bottom}>
+                    <div className={css.bottomLeft}>
+                        <font className={css.money}>{"￥"}</font>
+                        <font className={css.moneyBig}>{data.money}</font>
+                        <font className={css.moneyGray}>{"起"}</font>
+                        <br/>
+                        <font className={css.moneyGray}>{"(含税)"}</font>
+                    </div>
+                    {this.getCountShow(data,template)}
+                </div>
+            );
+        }else{
+            return (
+                <div className={css.bottom}>
+                    <div className={css.bottomLeft}>
+                        {this.getTitleLayout(data,template)}
+                        <div
+                            className={css.moneyGray}
+                        >{data.time}</div>
+                    </div>
+
+                    <div className={css.bottomRight}>
+                        <font className={css.money}>{"￥"}</font>
+                        <font className={css.moneyBig}>{data.money}</font>
+                        <font className={css.moneyGray}>{"起"}</font>
+                    </div>
+                </div>
+            );
+        }
+
     }
 }
 module.exports = RecommendView;

@@ -1,37 +1,44 @@
-import React from 'react'
-const { Router,Route,IndexRoute,useRouterHistory }  = require('react-router');
-const { createHashHistory }  = require ('history');
-//组织结构
-import App from './main/App.js';
+import React from 'react';
+const { Router,Route,IndexRoute,Redirect,browserHistory}  = require('react-router');
 
-//主页面
-import Index from './main/body/index/Index.js';
+let App =
+        (nextState, cb) => {
+            require.ensure([], require => {
+                cb(null, require('./main/App.js'));
+            }, 'App');
+        }
+    ;
+let None =  (nextState, cb) => {
+    require.ensure([], require => {
+        cb(null, require('./main/None.js'));
+    }, 'None');
+};
 
-//详情页面
-import OneWayDetail from './main/body/content/OneWayDetail.js';
-import RoundWayDetail from './main/body/content/RoundWayDetail.js';
-//搜索页面
-import Search from './main/body/search/Search.js';
+const root = (
+    <Router history={browserHistory}>
+        <Route path="/" getComponent={App}
+        >
+            <IndexRoute  getComponent={
+                (nextState, cb)=>{
+                    require.ensure([], require => {
+                        cb(null,require('./main/body/index/Index'));
+                    }, 'Index');
+                }
+            }/>
+            <Route path="/Search" getComponent={
+                (nextState, cb)=>{
+                    require.ensure([], require => {
+                        cb(null,require('./main/body/search/Search.js'));
+                    }, 'Search');
+                }
+            }
+            >
+            </Route>
+                <Route key="1" path='*' getComponent={None} />,
+        </Route>
 
-let route = {
-    getRoute(){
-        return (
-          <Route path="/" component={App}>
-            <IndexRoute component={Index}/>
-            <Route path="OneWayDetail" component={OneWayDetail}/>
-            <Route path="RoundWayDetail" component={RoundWayDetail}/>
-            <Route path="Search" component={Search}/>
-          </Route>
-        );
-    }
-}
-const appHistory = useRouterHistory(createHashHistory)({
-    queryKey: '_key',
-})
-const root =
-    <Router history={appHistory}>
-        {route.getRoute()}
-    </Router>;
+    </Router>
+);
 module.exports = root;
 
 

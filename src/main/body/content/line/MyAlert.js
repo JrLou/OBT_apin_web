@@ -8,7 +8,7 @@ class MyAlert extends Component {
         super(props);
         this.state = {
             isShow: false,
-        }
+        };
     }
     componentDidMount() {
 
@@ -16,7 +16,7 @@ class MyAlert extends Component {
     refreshView(){
         this.setState({
             isShow:true,
-        })
+        });
     }
     render() {
         var div = (<div className={this.state.isShow?css.main:css.hidden}>
@@ -33,7 +33,7 @@ class MyAlert extends Component {
                 <div className={css.btn} onClick={()=>{
                     this.setState({
                         isShow:false,
-                    })
+                    });
                 }}>
                     关闭
                 </div>
@@ -44,5 +44,5 @@ class MyAlert extends Component {
 }
 MyAlert.contextTypes = {
     router: React.PropTypes.object
-}
+};
 module.exports = MyAlert;

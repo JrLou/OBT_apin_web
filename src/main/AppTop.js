@@ -17,7 +17,7 @@ import {Modal, Button,Icon,Menu,Dropdown} from 'antd';
     render() {
         return (
             <div>
-                <div
+                <a
                     style={{
                         color: "#000",
                         fontSize: "20px",
@@ -29,13 +29,13 @@ import {Modal, Button,Icon,Menu,Dropdown} from 'antd';
                 >
                     爱拼机(回首页)
                     www.apin.com
-                </div>
+                </a>
 
             </div>
         );
     }
-};
+}
 page.contextTypes = {
     router: React.PropTypes.object
-}
+};
 module.exports = page;

@@ -1,4 +1,7 @@
-let path = require('path'),express = require('express');
+let path = require('path'),router = require('./router.js');
+
+
+
 
 //修改ANTD主题
 var json = {};
@@ -68,7 +71,9 @@ module.exports = {
 	server: {
 		port: 3000,
 		assetPath: './public',
+        viewPath:'./view',
 		custom: {
+            serverRoutes:router
 		}
 	},
 	webpack: {
@@ -88,14 +93,18 @@ module.exports = {
 		},
 		release: {
 			config: {
-				output: {
-					path: path.resolve(__dirname, './public/project'),
-					filename:'spa.js'
-				},
+                output: {
+                    path: path.resolve(__dirname,'./public/project'),
+                    filename: 'spa.js',
+                    sourceMapFilename: '[file].map',
+                    //加这个！
+                    chunkFilename: '[name].[chunkhash:5].chunk.js',
+                    publicPath: '/project/'
+                },
                 module: configModule,
 			},
 
 		},
 		useBundle: false
 	},
-}
+};

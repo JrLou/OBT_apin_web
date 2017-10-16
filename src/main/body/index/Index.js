@@ -3,129 +3,135 @@ import React, {Component} from 'react';
 import {Carousel, Input, Button,Row, Col} from 'antd';
 import less from './Index.less';
 
-import RecommendView from '../component/RecommendView'
-import SpecialView from '../component/SpecialView'
-import SearchLayout from '../component/SearchLayout'
+import RecommendView from '../component/RecommendView';
+import SpecialView from '../component/SpecialView';
+import SearchLayout from '../component/SearchLayout';
+import SearchHelp from '../search/SearchHelp.js';
 
-import routes from '../../../vm/routes.js'
+import routes from '../../../vm/routes.js';
 class page extends Component {
     constructor(props) {
-        super(props)
+        super(props);
     }
-
 
     getRecommendList() {
 
         return routes.getData(8).map((data, index) => {
             return (
+                <Col  key={index} span={6}>
                 <RecommendView
+                    template={1}
                     onClick={() => {
-                        window.app_open(this, "/OneWayDetail", data);
+                        SearchHelp.openSearch(this,data);
                     }}
                     data={data} key={index}/>
-            )
+                </Col>
+            );
         });
     }
 
     getSpecialList() {
         return routes.getData(12).map((data, index) => {
             return (
+            <Col  key={index} span={4.8}>
             <SpecialView
                 onClick={() => {
-                    window.app_open(this, "/OneWayDetail", data);
+                    SearchHelp.openSearch(this,data);
                 }}
-                data={data} key={index}/>
-            )
+                data={data}/>
+            </Col>
+            );
+
         });
     }
 
     getSwitchLayout() {
 
         return (
-            <Carousel autoplay>
-                <div style={{
-                    backgroundColor: "#bb4ba1",
-                    margin: "auto", height: 150,
-                    width: "100%"
-                    , backgroundPosition: "center", backgroundRepeat: "no-repeat"
-                }}/>
-                <div style={{
-                    backgroundColor: "#bb5c86",
-                    margin: "auto", height: 150,
-                    width: "100%"
-                    , backgroundPosition: "center", backgroundRepeat: "no-repeat"
-                }}/>
-            </Carousel>
-        )
+            <div className={less.topRight} >
+
+               <div className={less.topRightContent}>
+                   <Carousel autoplay >
+                       {
+                           [1,2,3].map((data,index)=>{
+                               return  (
+                                   <div
+                                       key={index}
+                                       className={less.topRightCarousel}>
+                                       {data}
+                                   </div>
+                               );
+                           })
+                       }
+                   </Carousel>
+               </div>
+            </div>
+
+        );
     }
+
 
     render() {
 
-
         return (
-            <div style={{paddingLeft:100,paddingRight:100}}>
+            <div style={{margin:"auto",maxWidth:1200,
+
+            }}>
                 <Row style={{}}>
-                    <Col span={6}  style={{}}>
-                        <SearchLayout
-                            data={window.apin.getCache("search")}
-                            submit={(data)=>{
-                                log(data)
-                                window.app_open(this, "/Search", {
-                                    data:data,
-                                    callBack:(data)=>{
-
-                                        alert(data)
-                                        this.setState({},()=>{
-
-                                        })
-                                    }
-                                });
-                            }}
-                        />
+                    <Col span={6}
+                    >
+                        <div  className={less.topLeft}>
+                            <div className={less.topLeftBorder}>
+                                <div className={less.topLeftTitle}>团飞机票搜索</div>
+                                <div className={less.topLeftContent}>
+                                    <SearchLayout
+                                        data={window.apin.getCache("search")}
+                                        type={1}
+                                        submit={(data)=>{
+                                            SearchHelp.openSearch(this,data);
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </Col>
-                    <Col span={18}  style={{backgroundColor:"#aaa"}} >
+                    <Col span={18}
+                    >
                         {/*轮播部分*/}
                         {this.getSwitchLayout()}
                     </Col>
                 </Row>
 
-                {/*精品特价航线部分*/}
-                <div style={{height: 50, marginTop: 40}}>
-                    <img style={{
-                        width: 30,
-                        float: "left",
-                        height: 30,
-                    }} src={require('../../../images/login_check.png')}
-                    />
-                    <div style={{
-                        float: "left",
-                        marginTop: 5,
-                        marginLeft: 20,
-                        fontSize: 16
-                    }}>精品特价航线
+
+                <div className={less.center}>
+                    <div className={less.centerTitleLayout}>
+                        <div className={less.centerIcon}/>
+                        <div className={less.centerTitle}>精品特价航线部分</div>
+
+                        <div className={less.centerTitleMoreLayout}>
+                            <div className={less.centerTitleMore}>更多</div>
+                            <div className={less.centerIconMore}/>
+                        </div>
                     </div>
-                    <div style={{
-                        textAlign: "right",
-                        marginTop: 5,
-                        marginLeft: 20,
-                        fontSize: 16
-                    }} onClick={() => {
-                        window.app_open(this, "/Search", {title: "搜索"});
-                    }}>查看更多
-                    </div>
-                </div>
-                <div style={{clear:"both"}}>
+                    <Row >
                     {this.getRecommendList()}
+                    </Row>
+                    <br/>
                 </div>
                 {/*底部更多特价部分*/}
-                <div style={{clear:"both"}}>
+                <Row style={{
+                    marginTop:10,
+                    clear:"both", padding:5,
+                    width:"100%", backgroundColor:"#fff",paddingBottom:7,
+                }}>
                     {this.getSpecialList()}
-                </div>
+                </Row>
                 <div style={{clear:"both"}}/>
-                <div style={{width: 1250, textAlign: "right", padding: 30, marginBottom: 30, fontSize: 16}}>换一组</div>
+                <div style={{width: "100%", textAlign: "center", padding: 30, marginBottom: 30, fontSize: 16}}>加载中...</div>
 
             </div>
-        )
+        );
+
     }
 
 
@@ -134,7 +140,7 @@ class page extends Component {
 
 page.contextTypes = {
     router: React.PropTypes.object
-}
+};
 module.exports = page;
 
 

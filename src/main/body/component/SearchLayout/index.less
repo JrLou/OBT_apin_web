@@ -1,7 +1,7 @@
 @import "../../../../theme.less";
 .content{
 }
-
+@top : @d_spadding_cell;
 .left{
   float:left;
   margin-top: @d_spadding_small;
@@ -16,3 +16,47 @@
 .clear{
   clear: both;
 }
+
+.title{
+  margin-top: @top;
+  margin-bottom: @top;
+  font-size: 14px;
+  color: #393939;
+}
+.i_content{
+  width: 100%;
+  height: 100%;
+}
+
+.action {
+  margin-top: @top;
+  margin-bottom: @top;
+  margin-left: @d_spadding_cell;
+  display: inline-block;
+  img{
+    width: @d_spadding_cell*3;
+    height: @d_spadding_cell*3;
+    display: inline-block;
+  }
+  div{
+    font-size: 14px;
+    color: #4F5762;
+    display: inline-block;
+    margin-left: @d_spadding_cell;
+  }
+}
+.buttonLayout{
+  margin-top: @top;
+  margin-bottom: @top;
+  width: 100%;
+  text-align: center;
+}
+.button{
+  color: #ffffff;
+  background-color: #29A6FF;
+  padding:  0 40px;
+  height: 35px;
+  display: inline-block;
+  text-align: center;
+}
+

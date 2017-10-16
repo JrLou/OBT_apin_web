@@ -3,15 +3,15 @@
  */
 import React, {Component} from 'react';
 import {AutoComplete} from 'antd';
-
+import less from './InputAuto.less';
 class InputAuto extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             dataSource: [],
-        }
-        this.onSelect(this.props.defaultValue)
+        };
+        this.onSelect(this.props.defaultValue);
 
     }
 
@@ -31,21 +31,21 @@ class InputAuto extends Component {
         this.selectValue = value;
     }
     getValue(){
-        console.log(this.refs.com)
+        console.log(this.refs.com);
         return this.selectValue;
     }
     render() {
         return <AutoComplete
             ref="com"
             dataSource={this.state.dataSource}
-            style={{width: 200,height:35}}
+            className={less.input}
             onSelect={this.onSelect.bind(this)}
             onChange={(value)=>{
                 this.selectValue = value;
             }}
             onSearch={this.handleSearch.bind(this)}
             {...this.props}
-        />
+        />;
 
     }
 }

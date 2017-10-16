@@ -8,7 +8,7 @@ class page extends Component {
         super(props);
         this.state = {
             dataSource: [],
-        }
+        };
     }
     componentDidMount() {
 
@@ -59,5 +59,5 @@ class page extends Component {
 }
 page.contextTypes = {
     router: React.PropTypes.object
-}
+};
 module.exports = page;
