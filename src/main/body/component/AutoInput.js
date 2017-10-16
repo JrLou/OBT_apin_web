@@ -400,6 +400,10 @@ class AutoInput extends Component {
             // return false;
         }
     }
+
+    getValue(){
+        return this.state.value;
+    }
 }
 
 AutoInput.contextTypes = {

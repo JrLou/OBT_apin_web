@@ -22,7 +22,6 @@ class SearchLayout extends Component {
             loading: false
         }, data);
         this.state = {
-            value:'',
             searchSource: [],
             defaultSource : []
         };
@@ -51,28 +50,28 @@ class SearchLayout extends Component {
                 <div className={less.title}>出发城市：</div>
                 <AutoInput
                     ref="from"
-                    value={this.state.value}
+                    value={this.state.from}
                     defaultValue={this.state.from}
                     placeholder={'中文／拼音／三字码'}
                     max={'10'}
                     defaultSource={this.state.defaultSource}
                     searchSource={this.state.searchSource}
                     onChange={(val)=>{this.valChange(val);}}
-                    onSelect={(val,index,opt)=>{this.userSelect(val,index,opt);}}
+                    onSelect={(val,index,opt)=>{this.userSelect("from",val,index,opt);}}
                     onFocus={()=>{log(1);}}
                     onBlur={()=>{log(2);}}
                 />
                 <div className={less.title}>到达城市：</div>
                 <AutoInput
                     ref="to"
-                    value={this.state.value}
+                    value={this.state.to}
                     defaultValue={this.state.to}
                     placeholder={'中文／拼音／三字码'}
                     max={'10'}
                     defaultSource={this.state.defaultSource}
                     searchSource={this.state.searchSource}
                     onChange={(val)=>{this.valChange(val);}}
-                    onSelect={(val,index,opt)=>{this.userSelect(val,index,opt);}}
+                    onSelect={(val,index,opt)=>{this.userSelect("from",val,index,opt);}}
                     onFocus={()=>{log(1);}}
                     onBlur={()=>{log(2);}}
                 />
@@ -197,9 +196,9 @@ class SearchLayout extends Component {
         this.loadSearchData(val);
     }
 
-    userSelect(val,index,opt){
+    userSelect(m,val,index,opt){
         this.setState({
-            value:val
+            [m]:val
         });
         this.loadSearchData(val);
     }
