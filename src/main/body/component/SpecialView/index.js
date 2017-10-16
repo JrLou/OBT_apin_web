@@ -56,6 +56,7 @@ class SpecialView extends Component {
                         <br/>
                         <font className={css.date}>10月13日</font>
                     </div>
+                    <font style={{fontSize:12,marginTop:5,color:"#666",position:"absolute",right:11}}>10月13日</font>
                 </div>
                 </div>
             </div>

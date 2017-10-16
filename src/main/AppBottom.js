@@ -9,7 +9,7 @@ class page  extends Component {
             <div
                 style={{
                     lineHeight:"25px",
-                    textAlign:"center",
+                    textAlign:"center"
                 }}
             >
                 设为首页 | 收藏本站 | 隐私条款 | 免责声明 | 联系我们

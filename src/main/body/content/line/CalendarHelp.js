@@ -9,7 +9,8 @@
  */
 
 export const isLeapYear = function(year) {
-    if (!typeof +year === 'number') {
+    var isNumber = typeof +year === 'number';
+    if (!isNumber) {
         throw new Error("年份格式不正确");
     }
 

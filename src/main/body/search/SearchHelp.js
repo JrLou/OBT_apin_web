@@ -5,7 +5,7 @@ module.exports = {
 
     openSearch(obj,data){
         window.app_open(obj, "/Search", {
-            data:this.transformationParam(data),
+            data:this.transformationParam(data)
         },"new");
     },
     transformationParam(data){
@@ -16,7 +16,7 @@ module.exports = {
             from:data.from,
             to:data.to,
             one:data.one,
-            two:data.two,
+            two:data.two
         };
     }
 };
