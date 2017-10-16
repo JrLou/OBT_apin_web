@@ -89,7 +89,6 @@ class page extends Component {
             {
                 ipKey:'hlIP'
             });
-        // http://192.168.0.46:8080
     }
 
     render() {
