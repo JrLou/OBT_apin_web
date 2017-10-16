@@ -20,7 +20,7 @@ import {Modal, Button,Icon,Menu,Dropdown} from 'antd';
                 <a
                     style={{
                         color: "#000",
-                        fontSize: "20px",
+                        fontSize: "20px"
                     }}
                     onClick={() => {
                         log(this.props.root);
