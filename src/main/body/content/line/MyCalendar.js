@@ -19,7 +19,7 @@ class page extends Component {
             history_month : undefined,
             history_day : undefined,
             date_num_array : []
-        };
+        }
         //用于记录日期，显示的时候，根据dateObj中的日期的年月显示
 
     }
@@ -112,26 +112,25 @@ class page extends Component {
             select_day : s_day
         }, () => {
             if (this.props.onSelectDate){
-                this.props.onSelectDate(select_year, select_month + 1, s_day);
+                this.props.onSelectDate(select_year, select_month +1 , s_day);
             }
         });
     }
 
-    /**
-     * 前一个月
-     */
-    previousMonth() {
+    //选择的月份
+    selectMonth(selMonth) {
         let { current_year, current_month, current_day,
             select_year, select_month, select_day, date_num_array, first_day} = this.state;
 
-        if (select_month === 0) {
-            select_year = +select_year - 1;
-            select_month = 11;
+        select_year = selMonth.substring(0,4)
+        select_month = selMonth.substring(5,7)
+
+        if (select_month === 12) {
+            select_month = select_month-1;
             date_num_array = this._initMonthDayNumber(select_year);
         } else {
-            select_month = +select_month - 1;
+            select_month = select_month-1;
         }
-
         first_day = CalendarHelp.weekOfMonth(new Date(select_year, select_month));
 
         if (current_year === select_year &&
@@ -147,40 +146,7 @@ class page extends Component {
             select_day : select_day,
             date_num_array : date_num_array,
             first_day : first_day
-        });
-    }
-
-    /**
-     * 之后一个月
-     */
-    nextMonth() {
-        let { current_year, current_month, current_day,
-            select_year, select_month, select_day, date_num_array, first_day} = this.state;
-
-        if (select_month === 11) {
-            select_year = +select_year + 1;
-            select_month = 0;
-            date_num_array = this._initMonthDayNumber(select_year);
-        } else {
-            select_month = +select_month + 1;
-        }
-
-        first_day = CalendarHelp.weekOfMonth(new Date(select_year, select_month));
-
-        if (current_year === select_year &&
-            current_month === select_month) {
-            select_day = current_day;
-        } else {
-            select_day = undefined;
-        }
-
-        this.setState({
-            select_year : select_year,
-            select_month : select_month,
-            select_day : select_day,
-            date_num_array : date_num_array,
-            first_day : first_day
-        });
+        })
     }
 
     /**
@@ -188,7 +154,7 @@ class page extends Component {
      * @returns {XML}
      */
     render() {
-        let { row_number, col_number, tags} = this.props;
+        let { row_number, col_number, tags ,monthArr} = this.props;
         let { current_year, current_month, current_day,
             select_year, select_month, select_day,
             history_year, history_month, history_day,
@@ -212,8 +178,9 @@ class page extends Component {
         previous_month_days = date_num_array[previous_month];
         //在本月之前的
         for (let i = 0; i < first_day; i++) {
-            log(i);
-            let previous_link = (<div className={css.itemGray} key={'previous'+i}>
+            log(i)
+            let previous_link = (<div className={css.itemGray}
+                                      key={'previous'+i}>
                 <div className={css.dayGray}>{previous_month_days - (first_day - i) + 1}</div>
             </div>);
             previous_days.push(previous_link);
@@ -223,36 +190,26 @@ class page extends Component {
         let currentClassName = '',
             currentText = '';
         let current_link = null;
-
         for (let i = 0; i < month_day; i++) {
             // 今天样式
             if (current_year == select_year && current_month == select_month && current_day == (i + 1)) {
                 currentClassName = css.itemRed;
                 currentText = '今天';
-
-                current_link = (<div className={currentClassName} key={'current'+i}>
-                    <div className={css.dayActive} onClick={this.selectDate.bind(this, i + 1)}>
+                current_link = (<div className={currentClassName}
+                                     key={'current'+i}>
+                    <div className={css.dayActive}>
                         {currentText}
                     </div>
-                </div>);
+                </div>)
             } else {
                 currentText = i + 1;
-                // 判断选择样式与历史样式是否相等，相等激活
-                if (select_year == history_year && select_month == history_month && history_day == (i + 1)) {
-                    currentClassName = css.itemSelect;
-                    current_link = (<div className={currentClassName} key={'current'+i}>
-                        <div className={css.dayActive} onClick={this.selectDate.bind(this, i + 1)}>
-                            {currentText}
-                        </div>
-                    </div>);
-                } else {
-                    currentClassName = css.itemActive;
-                    current_link = (<div className={currentClassName} key={'current'+i}>
-                        <div className={css.dayActive} onClick={this.selectDate.bind(this, i + 1)}>
-                            {currentText}
-                        </div>
-                    </div>);
-                }
+                currentClassName = css.itemActive;
+                current_link = (<div className={currentClassName}
+                                     key={'current'+i}>
+                    <div className={css.dayActive}>
+                        {currentText}
+                    </div>
+                </div>)
             }
 
 
@@ -260,17 +217,36 @@ class page extends Component {
             if (tags&&tags.length > 0) {
                 for (let j = 0; j < tags.length; j++) {
                     if ((i + 1) === tags[j]) {
-                        currentClassName = css.itemTags;
-                        current_link = (<div className={currentClassName} key={'current'+i}>
-                            <div className={css.dayActive} onClick={this.selectDate.bind(this, i + 1)}>
-                                {currentText}
-                            </div>
-                        </div>);
-                        break;
+                        // 判断选择样式与历史样式是否相等，相等激活
+                        if (select_year == history_year && select_month == history_month && history_day == (i + 1)) {
+                            currentClassName = css.itemSelect;
+                            current_link = (<div className={currentClassName}
+                                                 key={'current'+i}
+                                                 onClick={this.selectDate.bind(this, i + 1)}>
+                                <img className={css.itemSelect_sign}
+                                     src={require("../../../../images/select_sign.png")}/>
+                                <div className={css.dayActive}>
+                                    {currentText}
+                                </div>
+                                <div className={css.price}> ¥2333</div>
+                                <div className={css.sit}>余位23</div>
+                            </div>)
+                        } else {
+                            currentClassName = css.itemTags;
+                            current_link = (<div className={currentClassName}
+                                                 key={'current'+i}
+                                                 onClick={this.selectDate.bind(this, i + 1)}>
+                                <div className={css.dayActive}>
+                                    {currentText}
+                                </div>
+                                <div className={css.price}> ¥2333</div>
+                                <div className={css.sit}>余位23</div>
+                            </div>)
+                            break;
+                        }
                     }
                 }
             }
-
             current_days.push(current_link);
         }
 
@@ -300,35 +276,34 @@ class page extends Component {
         return (
             <div className={css.calendar}>
                 <div className={css.calendarHeader}>
-                    <div className={css.calendarHeaderIcon} onClick={()=>{
-                        this.previousMonth();
-                    }}>{"<"}</div>
-
-                    <div className={css.calendarHeaderItem}>
-                        {select_year} 年 {select_month + 1} 月
+                    <div className={css.calendarHeader_title}>{"去程月份"}</div>
+                    <div className={css.calendarHeader_con}>
+                        <MonthView
+                            selectMonth={(selMonth)=>{
+                                this.selectMonth(selMonth)
+                            }}
+                            select_year = {select_year}
+                            select_month = {select_month}
+                            monthArr = {monthArr}
+                        />
                     </div>
 
-                    <div className={css.refCalendarHeaderIcon} onClick={()=>{
-                        this.nextMonth();
-                    }}>{">"}</div>
                 </div>
-                <div className={css.calendarBody}>
-                    <div className={css.cBodyHead}>
-                        <div className={css.cBodyItem}>日</div>
-                        <div className={css.cBodyItem}>一</div>
-                        <div className={css.cBodyItem}>二</div>
-                        <div className={css.cBodyItem}>三</div>
-                        <div className={css.cBodyItem}>四</div>
-                        <div className={css.cBodyItem}>五</div>
-                        <div className={css.cBodyItem}>六</div>
-                    </div>
-                    <div className={css.cBodyHead}>
-                        {
-                            ul_list.map((u, index) => {
-                                return (<div key={'ul'+index} className={css.contentRow}>{u}</div>);
-                            })
-                        }
-                    </div>
+                <div className={css.cBodyHead}>
+                    <div className={css.cBodyItem}>日</div>
+                    <div className={css.cBodyItem}>一</div>
+                    <div className={css.cBodyItem}>二</div>
+                    <div className={css.cBodyItem}>三</div>
+                    <div className={css.cBodyItem}>四</div>
+                    <div className={css.cBodyItem}>五</div>
+                    <div className={css.cBodyItem}>六</div>
+                </div>
+                <div className={css.cBodyHead}>
+                    {
+                        ul_list.map((u, index) => {
+                            return (<div key={'ul'+index} className={css.contentRow}>{u}</div>);
+                        })
+                    }
                 </div>
             </div>
         );
@@ -336,5 +311,126 @@ class page extends Component {
 }
 page.contextTypes = {
     router: React.PropTypes.object
-};
+}
+
+class MonthView extends Component{
+    constructor(props) {
+        super(props);
+        this.state = ({
+            current_month:"2017-10",
+            remove_width:"0",
+        })
+        this.removeNum = 0;
+        this.removeTotal = 0
+    }
+
+    /**
+     * 组件渲染完后执行
+     */
+    componentDidMount() {
+
+    }
+    render(){
+        let {select_year,selectMonth,select_month,monthArr} = this.props;
+
+        let month_width = 0;
+        if (monthArr&&monthArr.length>0){
+            month_width = monthArr.length*90;
+        }
+
+        var translateX = "translateX("+this.state.remove_width +"px)"
+        var monthView_With = this.monthView?this.monthView.offsetWidth:0;
+        var blurEffect = "-webkit-gradient(linear, "+(monthView_With!=0?(monthView_With-10):0)+" 0,"+ monthView_With+" 0, from(rgba(0, 0, 0, 10)), to(rgba(5, 5, 0, 0)))"
+
+        return(<div className={css.monthView_bg}>
+            <div className={css.calendarHeaderIcon}>
+                <img className={css.icon}
+                     src={require("../../../../images/select_left_icon.png")}
+                     onClick={()=>{
+                         this.removeNum = this.removeNum-1;
+                         this.removeTotal = this.removeTotal -90;
+                         if (this.removeNum<0){
+                             this.removeNum = this.removeNum+1;
+                             this.removeTotal = this.removeTotal +90;
+                             return;
+                         }
+                         var remove_width = this.state.remove_width;
+                         var remove = remove_width+90;
+                         this.setState({
+                             remove_width:remove,
+                         })
+                     }}/>
+            </div>
+
+
+            {/*<div className={css.blurEffect}></div>*/}
+            <div ref={(a)=>this.monthView = a}
+                 className={css.monthView}
+                 style={{"-webkit-mask-image": blurEffect}}
+            >
+                <div className={css.monthView_super}
+                     style={{
+                         width:month_width+"px",
+                         transform:translateX,
+                     }}>
+                    {this.createMonthItem(monthArr,selectMonth)}
+                </div>
+            </div>
+            {/*<div className={css.blurEffect}></div>*/}
+
+            <div className={css.refCalendarHeaderIcon}>
+                <img className={css.icon}
+                     src={require("../../../../images/select_right_icon.png")}
+                     onClick={()=>{
+                         //日期所占背景的宽度
+                         var monthView_width = this.monthView.offsetWidth;
+                         this.removeNum = this.removeNum+1;
+                         this.removeTotal = this.removeTotal +90;
+
+                         var remove_width = this.state.remove_width;
+                         //此处减90是因为 第一个从零开始 然后减去最后一个的宽度
+                         var isBeyond = month_width-(monthView_width+this.removeTotal-90)
+                         if (!monthArr || isBeyond<0){
+                             this.removeNum = this.removeNum-1;
+                             this.removeTotal = this.removeTotal -90;
+                             return;
+                         }
+                         var remove = remove_width-90;
+                         this.setState({
+                             remove_width:remove,
+                         })
+                     }}/>
+            </div>
+        </div>)
+    }
+    createMonthItem(monthArr,selectMonth){
+        if (!monthArr){
+            return null;
+        }
+        var monthItemArr = []
+        for (let i = 0; i < monthArr.length; i++) {
+            // 判断选择样式与历史样式是否相等，相等激活
+            let item_MonthView = null
+            let monthData_item = monthArr[i];
+            let isSelect = monthData_item == this.state.current_month
+            let myMonth = monthData_item.replace("-","年")
+            item_MonthView = (
+                <div key={"current_month"+i}
+                     onClick={()=>{
+                         this.setState({
+                             current_month:monthData_item
+                         },()=>{
+                             if (selectMonth){
+                                 selectMonth(monthData_item)
+                             }
+                         })
+                     }}
+                     className={isSelect?css.select_monthItem:css.monthItem}>
+                    {myMonth+"月"}
+                </div>)
+            monthItemArr.push(item_MonthView)
+        }
+        return monthItemArr
+    }
+}
 module.exports = page;

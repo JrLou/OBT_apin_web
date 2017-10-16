@@ -4,9 +4,9 @@
 import React, {Component} from 'react';
 import css from './OneWayDetail.less';
 
-import LineHeadTitle from "./line/LineHeadTitle.js";
-import MyCalendar from "./line/MyCalendar.js";
-import MyAlert from "./line/MyAlert.js";
+import LineHeadTitle from "./line/LineHeadTitle.js"
+import MyCalendar from "./line/MyCalendar.js"
+import MyAlert from "./line/MyAlert.js"
 class page extends Component {
     constructor(props) {
         super(props);
@@ -14,10 +14,10 @@ class page extends Component {
             tableLoading:false,
             dataSource:[],
             total:0,
-        };
+        }
     }
     componentDidMount() {
-        this.loadData();
+        this.loadData()
     }
     loadData(p,pc) {
         var param = param || {};
@@ -31,15 +31,15 @@ class page extends Component {
             this.setState({
                 tableLoading: false,
                 dataSource: json,
-            });
-        };
+            })
+        }
         var failure = (code, msg, option) => {
             this.setState({
                 tableLoading: false,
                 dataSource: [],
             });
             message.warning(msg);
-        };
+        }
         //HttpTool.post(HttpTool.typeEnum.POST,APIGYW.dealer_stockList,success, failure, param)
         var myJson = [
             {
@@ -75,9 +75,10 @@ class page extends Component {
                 price:"2333",
                 isTax:true,
                 remain:23,
+                isType:1,
             }
-        ];
-        this.myLineInfor.refreshView(myJson);
+        ]
+        this.myLineInfor.refreshView(myJson)
     }
     render() {
         var div = (
@@ -89,26 +90,28 @@ class page extends Component {
                     <div style={{width:"49%",float:"left"}}>
                         <MyCalendar
                             onSelectDate={(select_year, select_month , select_day)=>{
-                                this.selectDate(select_year, select_month, select_day);
+                                this.selectDate(select_year, select_month, select_day)
                             }}
-                            year='2017'
-                            month='10'
-                            day='11'
+                            year={"2017"}
+                            month={"10"}
+                            day={"11"}
                             row_number = {6}
                             col_number = {7}
-                            tags = {[8,11,21,22,23]}
+                            monthArr = {["2017-10","2017-11","2017-12","2018-01","2018-02","2018-03","2018-04","2018-05","2018-06"]}
+                            tags = {[8,11,14,21,22,23]}
                         />
                     </div>
                     <div style={{width:"49%",float:"right"}}>
                         <MyCalendar
                             onSelectDate={(select_year, select_month , select_day)=>{
-                                this.selectDate(select_year, select_month, select_day);
+                                this.selectDate(select_year, select_month, select_day)
                             }}
-                            year='2017'
-                            month='10'
-                            day='11'
+                            year={"2017"}
+                            month={"11"}
+                            day={"11"}
                             row_number = {6}
                             col_number = {7}
+                            monthArr = {["2017-11","2017-12","2018-01","2018-02"]}
                             tags = {[5, 21]}
                         />
                     </div>
@@ -120,7 +123,7 @@ class page extends Component {
                         航班信息
                     </div>
                     <LineInfor ref={(a)=>this.myLineInfor = a} callBack={()=>{
-                        this.myAlert.refreshView();
+                        this.myAlert.refreshView()
                     }}/>
                 </div>
 
@@ -130,22 +133,22 @@ class page extends Component {
         return div;
     }
     selectDate(y,m,d){
-        alert(y+"年"+m+"月"+d+"日");
-        this.myLineInfor.refreshView([]);
+        alert(y+"年"+m+"月"+d+"日")
+        this.myLineInfor.refreshView([])
     }
 }
 
 class LineInfor extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             dataSource: [],
-        };
+        }
     }
     refreshView(dataSource) {
         this.setState({
             dataSource:dataSource
-        });
+        })
     }
     render() {
         let {dataSource} = this.state;
@@ -157,54 +160,52 @@ class LineInfor extends Component {
         if (!dataSource||dataSource.length<1){
             return null;
         }
-        var viewArr = [];
+        var viewArr = []
         for (let i=0;i<dataSource.length;i++){
             let dataItem = dataSource[i];
             var itemView = (<div key={i}>
                 <div className={css.cell}>
                     <div className={css.left}>
-                        {this.createItemCell(dataItem.flight)}
+                        <div className={css.table}>
+                            {this.createItemCell(dataItem.flight)}
+                        </div>
                     </div>
                     <div className={css.right}>
-                        <div className={css.itemCenter}>
-                            <div style={{overflow:"hidden"}}>
-                                <div style={{
-                                    float:"left",
-                                    height:"35px",
-                                    lineHeight:"35px",
-                                }}>{dataItem.days}</div>
-                                <div style={{
-                                    float:"left",
-                                    marginLeft:"60px",
-                                    height:"35px",
-                                    lineHeight:"35px",
-                                }}>
-                                    <span style={{color:"red"}}>{"¥ "}</span>
-                                    <span style={{fontSize:"16px"}}>{dataItem.price}</span>
-                                    <span >{" 起"}</span>
-                                    <span >{dataItem.isTax?" (含税)":" "}</span>
+                        <div className={css.rightCenter}>
+                            <div className={css.table}>
+                                <div className={css.daysText}>
+                                    <span>{dataItem.days}</span>
+                                    <span>{" | 已团 233 "}</span>
+                                    <span>{"余位 "}</span>
+                                    <span style={{color:"#2db7f5"}}>{dataItem.remain}</span>
                                 </div>
-                                <div style={{
-                                    marginLeft:"20px",
-                                    float:"left",
-                                    width:"80px",
-                                    height:"35px",
-                                    lineHeight:"35px",
-                                    textAlign:"center",
-                                    borderRadius:"3px",
-                                    backgroundColor:"blue"
-                                }} onClick={()=>{
-                                    if (this.props.callBack){
-                                        this.props.callBack();
-                                    }
-                                }}>预定</div>
+                                <div className={css.shuiText}>
+                                    <div className={css.shuiTextTop}>
+                                        {(dataItem.isType==1?"往返":"")+(dataItem.isTax?" 含税":"")}
+                                        </div>
+                                    <div className={css.priceText}>
+                                        <span className={css.priceTextColor}>{"¥ "}</span>
+                                        <span className={css.priceTextFont}>{dataItem.price}</span>
+                                        <span >{" 起"}</span>
+                                    </div>
+
+                                </div>
+                                <div className={css.itemCenter}>
+                                    <div className={css.table}>
+                                        <div className={css.btn} onClick={()=>{
+                                            if (this.props.callBack){
+                                                this.props.callBack()
+                                            }
+                                        }}>预定</div>
+                                    </div>
+                                </div>
+
                             </div>
-                            <div style={{marginTop:"15px"}}>{"余位 "+dataItem.remain}</div>
                         </div>
                     </div>
                 </div>
-            </div>);
-            viewArr.push(itemView);
+            </div>)
+            viewArr.push(itemView)
         }
 
         return viewArr;
@@ -214,35 +215,54 @@ class LineInfor extends Component {
         if (!data||data.length<1){
             return null;
         }
-        var viewArr = [];
+        var viewArr = []
         for (let i=0;i<data.length;i++){
             let dataItem = data[i];
             var itemView = (<div key={i}>
                 <div className={css.cellLine}>
-                    <div className={css.type}>{dataItem.type==1?"去":"返"}</div>
-                    <div className={css.itemCenter}>
-                        <div className={css.companyTitle}>
-                            <img className={css.logo} src ={dataItem.logo}/>
-                            <div className={css.logoCompany}>{dataItem.company}</div>
+                    <div className={css.type}>
+                        <div className={css.typeText}>
+                            {dataItem.type==1?"去":"返"}
                         </div>
+                    </div>
+
+                    <div className={css.type}>
+                        <img className={css.logo} src ={dataItem.logo}/>
+                    </div>
+
+                    <div className={css.logoCompany_super}>
+                        <div className={css.logoCompany}>{dataItem.company}</div>
                         <div className={css.lineNum}>{dataItem.lineNum}</div>
                     </div>
 
                     <div className={css.itemCenter}>
                         <div className={css.timeLine}>
-                            <span className={css.timeLineItem}>{dataItem.startDay+" "+dataItem.startTime}</span>
-                            <span className={css.totalTime}>{dataItem.totalTime}</span>
-                            <span className={css.timeLineItem}>{dataItem.endDay+" "+dataItem.endTime}</span>
+                            <div className={css.timeLineItem}>
+                                <span className={css.fontBase}>{dataItem.startDay+" "}</span>
+                                <span style={{fontSize:"24px",textAlign:"right"}}>{dataItem.startTime}</span>
+                            </div>
+
+                            <div className={css.totalTime}>
+                                <div className={css.totalTimeText}>
+                                    {dataItem.totalTime}
+                                </div>
+                                <div style={{overflow:"hidden"}}>
+                                    <div className={css.lineRotate}></div>
+                                </div>
+                                <div className={css.line}></div>
+                            </div>
+                            <div className={css.timeLineItem} style={{textAlign:"left"}}>{dataItem.endTime}</div>
                         </div>
                         <div className={css.timeLine}>
-                            <span className={css.placeLineItem}>{dataItem.startPlace}</span>
-                            <span className={css.refPlaceLineItem}>{dataItem.endPlace}</span>
+                            <div className={css.placeLineItem}>{dataItem.startPlace}</div>
+                            <div className={css.space}></div>
+                            <div className={css.refPlaceLineItem}>{dataItem.endPlace}</div>
                         </div>
                     </div>
 
                 </div>
-            </div>);
-            viewArr.push(itemView);
+            </div>)
+            viewArr.push(itemView)
         }
 
         return viewArr;
@@ -252,12 +272,12 @@ class LineInfor extends Component {
 
 page.contextTypes = {
     router: React.PropTypes.object
-};
+}
 module.exports = page;
 
 
 {/*<Button className={less.rightRow} icon={"back"}*/}
-        {/*onClick={() => {*/}
-            {/*window.app_open(this, "/", {title: "回首页"});*/}
-        {/*}}*/}
+{/*onClick={() => {*/}
+{/*window.app_open(this, "/", {title: "回首页"});*/}
+{/*}}*/}
 {/*>回首页</Button>*/}
