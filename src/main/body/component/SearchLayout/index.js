@@ -18,7 +18,7 @@ class SearchLayout extends Component {
             data = {};
         }
         this.state = Object.assign({
-            loading: false,
+            loading: false
         }, data);
         this.img_login_check = require('../../../../images/check.png');
         this.img_login_uncheck = require('../../../../images/uncheck.png');
@@ -29,7 +29,7 @@ class SearchLayout extends Component {
         return {
             from: this.refs.from.getValue(),
             to: this.refs.to.getValue(),
-            one: this.state.one,
+            one: this.state.one
         };
     }
 
@@ -55,14 +55,14 @@ class SearchLayout extends Component {
                         () => {
                             let s = !this.state.one;
                             this.setState({
-                                one: s,
+                                one: s
                             });
                         })}
                     {this.getSwitchView(!this.state.one, "往返",
                         () => {
                             let s = !this.state.one;
                             this.setState({
-                                one: s,
+                                one: s
                             });
                         })}
 
@@ -110,7 +110,7 @@ class SearchLayout extends Component {
                     <div
                         onClick={() => {
                             this.setState({
-                                one: !this.state.one,
+                                one: !this.state.one
                             });
                         }} style={{marginTop: -3}}>
                         <img style={{
@@ -118,7 +118,7 @@ class SearchLayout extends Component {
                             marginRight: 5,
                             marginTop: 6,
                             float: "left",
-                            height: 10,
+                            height: 10
                         }} src={this.state.one ? this.img_login_check : this.img_login_uncheck}
                         />
                         <div style={{fontSize: 14, color: "#4F5762"}}>单程</div>
@@ -126,14 +126,14 @@ class SearchLayout extends Component {
                     <div
                         onClick={() => {
                             this.setState({
-                                two: !this.state.two,
+                                two: !this.state.two
                             });
                         }} style={{marginTop: 13}}>
                         <img style={{
                             width: 10,
                             marginRight: 5, float: "left",
                             height: 10,
-                            marginTop: 6,
+                            marginTop: 6
                         }} src={this.state.two ? this.img_login_check : this.img_login_uncheck}
                         />
                         <div style={{float: "left", fontSize: 14, color: "#4F5762"}}>往返</div>
@@ -186,7 +186,7 @@ class SearchLayout extends Component {
 
     setLoading(loading) {
         this.setState({
-            loading: loading,
+            loading: loading
         });
     }
 }

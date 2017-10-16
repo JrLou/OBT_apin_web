@@ -7,7 +7,7 @@ class page extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataSource: [],
+            dataSource: []
         };
     }
     componentDidMount() {

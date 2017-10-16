@@ -74,7 +74,7 @@ class page extends Component {
     render() {
 
         return (
-            <div style={{margin:"auto",maxWidth:1200,
+            <div style={{margin:"auto",maxWidth:1200
 
             }}>
                 <Row style={{}}>
@@ -122,7 +122,7 @@ class page extends Component {
                 <Row style={{
                     marginTop:10,
                     clear:"both", padding:5,
-                    width:"100%", backgroundColor:"#fff",paddingBottom:7,
+                    width:"100%", backgroundColor:"#fff",paddingBottom:7
                 }}>
                     {this.getSpecialList()}
                 </Row>

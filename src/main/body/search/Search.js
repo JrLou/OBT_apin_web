@@ -14,7 +14,7 @@ class page extends Component {
         super(props);
         this.state = {
             current: 1,
-            loading: true,
+            loading: true
         };
         this.par = window.app_getPar(this);
     }
@@ -43,7 +43,7 @@ class page extends Component {
     setLoading(loading, cb) {
         this.setState(
             {
-                loading: loading,
+                loading: loading
             }, cb
         );
         this.searchLayout.setLoading(loading);
@@ -128,7 +128,7 @@ class page extends Component {
                         clear: "both",
                         backgroundColor:"#fff",
                         padding:5,
-                        clear:"both",width:"100%"}}>
+                        width:"100%"}}>
                     {list.map((data, index) => {
                         return (
                             <Col  key={index} span={6}>
@@ -178,7 +178,7 @@ class page extends Component {
                     width: "873px",
                     background: "url('../../../images/icon.ico')",
                     backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
+                    backgroundRepeat: "no-repeat"
                 }}>
                     <div style={{position: "absolute", top: "62%", left: "32%"}}>
                         <h2 style={{
@@ -207,7 +207,7 @@ class page extends Component {
                     width: "873px",
                     background: "url('../../../images/icon.ico')",
                     backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
+                    backgroundRepeat: "no-repeat"
                 }}>
                     <div style={{position: "absolute", top: "62%", left: "32%"}}>
                         <h2 style={{

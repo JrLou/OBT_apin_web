@@ -8,7 +8,7 @@ class page extends Component{
     constructor(props){
         super(props);
         this.state = {
-            time:10,
+            time:10
         };
     }
     componentDidMount() {
@@ -22,7 +22,7 @@ class page extends Component{
                 }
                 exe();
                 this.setState({
-                    time,
+                    time
                 });
 
             },1000);

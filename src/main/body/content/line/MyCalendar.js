@@ -332,7 +332,7 @@ class CalendarItem extends Component{
     constructor(props) {
         super(props);
         this.state = ({
-            isMounseSel:false,
+            isMounseSel:false
         });
     }
 
@@ -348,12 +348,12 @@ class CalendarItem extends Component{
         return(<div className={this.state.isMounseSel?css.borderIsMounseSel:css.borderDefault}
                     onMouseEnter={()=>{
                         this.setState({
-                            isMounseSel:true,
+                            isMounseSel:true
                         });
                     }}
                     onMouseLeave={()=>{
                         this.setState({
-                            isMounseSel:false,
+                            isMounseSel:false
                         });
                     }}
         >
@@ -369,7 +369,7 @@ class MonthView extends Component{
         super(props);
         this.state = ({
             current_month:"2017-10",
-            remove_width:"0",
+            remove_width:"0"
         });
         this.removeNum = 0;
         this.removeTotal = 0;
@@ -408,7 +408,7 @@ class MonthView extends Component{
                          var remove_width = this.state.remove_width;
                          var remove = remove_width+90;
                          this.setState({
-                             remove_width:remove,
+                             remove_width:remove
                          });
                      }}/>
             </div>
@@ -422,7 +422,7 @@ class MonthView extends Component{
                 <div className={css.monthView_super}
                      style={{
                          width:month_width+"px",
-                         transform:translateX,
+                         transform:translateX
                      }}>
                     {this.createMonthItem(monthArr,selectMonth)}
                 </div>
@@ -434,21 +434,21 @@ class MonthView extends Component{
                      src={require("../../../../images/select_right_icon.png")}
                      onClick={()=>{
                          //日期所占背景的宽度
-                         var monthView_width = this.monthView.offsetWidth;
+                         let monthView_width = this.monthView.offsetWidth;
                          this.removeNum = this.removeNum+1;
                          this.removeTotal = this.removeTotal +90;
 
-                         var remove_width = this.state.remove_width;
+                         let remove_width = this.state.remove_width;
                          //此处减90是因为 第一个从零开始 然后减去最后一个的宽度
-                         var isBeyond = month_width-(monthView_width+this.removeTotal-90);
+                         let isBeyond = month_width-(monthView_width+this.removeTotal-90);
                          if (!monthArr || isBeyond<0){
                              this.removeNum = this.removeNum-1;
                              this.removeTotal = this.removeTotal -90;
                              return;
                          }
-                         var remove = remove_width-90;
+                         let remove = remove_width-90;
                          this.setState({
-                             remove_width:remove,
+                             remove_width:remove
                          });
                      }}/>
             </div>

@@ -40,7 +40,7 @@ var babelrc = {
         }
     }
 };
-var jsLoader = "babel-loader?"+JSON.stringify(babelrc).trim();
+var jsLoader = "babel-loader?"+JSON.stringify(babelrc).trim()+"!eslint-loader";
 var configModule = {
     loaders: [
         {
@@ -64,7 +64,7 @@ var configModule = {
         {
             test: /\.(png|jpg|gif)$/,
             loader: "url-loader?limit=5120&name=images/[hash:8].[name].[ext]"
-        },
+        }
 
     ]
 };
@@ -87,7 +87,7 @@ module.exports = {
 					filename: "spa.js",
 					publicPath: "/project"
 				},
-                module: configModule,
+                module: configModule
 			}
 
 
@@ -102,10 +102,10 @@ module.exports = {
                     chunkFilename: "[name].[chunkhash:5].chunk.js",
                     publicPath: "/project/"
                 },
-                module: configModule,
-			},
+                module: configModule
+			}
 
 		},
 		useBundle: false
-	},
+	}
 };
