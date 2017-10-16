@@ -1,60 +1,87 @@
 @import "../../../../theme.less";
 
-.cell{
+@lineH: 24px;
+.more {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-box-orient: vertical;
+}
+
+.cell {
   width: 100%;
   padding: @d_spadding_cell;
   background: #FFFFFF;
-  transition:transform 0.25s ease;
-  z-index: 1;
+  overflow: hidden;
 
 }
-.cell:hover{
-  z-index: 2;
+
+.border {
+  overflow: hidden;
+  border: 1px rgba(0, 0, 0, 0.10) solid;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
+}
+
+.content {
   position: relative;
-  transform:scale(1.05,1.05);
-  transition:transform 0.25s ease;
+
+  padding-bottom: 75%;
+  height: 0;
+  overflow: hidden;
+
 }
 
-.border{
-
-  border: 1px rgba(0,0,0,0.10) solid;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+.showFrame {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
-.content{
-  position: relative;
+
+.imageFrame {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  padding-bottom: 75%;
-  height: 0;
+  transition: transform 0.5s ease;
 }
-.titleLayout{
+
+.imageFrame:hover {
+  overflow: hidden;
+  transform: scale(1.1, 1.1);
+  transition: transform 0.5s ease;
+}
+
+.titleLayout {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   opacity: 0.96;
-  background: rgba(0,0,0,0.80);
+  background: rgba(0, 0, 0, 0.80);
   padding: @d_spadding_cell*2  @d_spadding_cell*3;
 
 }
-.title{
 
-  display: table;
-
-  font-family: MicrosoftYaHei;
+.title {
+  max-width: 100%;
   font-size: 16px;
   color: #FFFFFF;
   letter-spacing: 0;
+
 }
-.titleBlack{
+
+.titleBlack {
   composes: title;
   color: #333333;
 }
-.tag{
+
+.tag {
   position: absolute;
   top: 0;
-  right:@d_spadding_cell*2;
+  right: @d_spadding_cell*2;
   padding: @d_spadding_cell/3 @d_spadding_cell*2;
   font-family: MicrosoftYaHei;
   background: #29A6FF;
@@ -62,39 +89,60 @@
   color: #FFFFFF;
   letter-spacing: 0;
 }
-.text{
-  display: table-cell;
+
+.text {
+  float: left;
+  max-width: 42.5%;
   vertical-align: middle;
+  composes: more;
+  height: @lineH;
+  line-height: @lineH;
 }
-.text2{
+
+.text2 {
   composes: text;
-  padding: 0 @d_spadding_cell;
+  width: 15%;
+  overflow: hidden;
+  text-align: center;
+  position: relative;
+  height: @lineH;
 }
-.icon{
-  composes: text;
+
+.icon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
   width: 32px;
   height: 32px;
+
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 
 }
-.bottom{
+
+.bottom {
   width: 100%;
   display: table;
   padding: @d_spadding_cell*3 @d_spadding_cell*3;
 }
-.bottomLeft{
+
+.bottomLeft {
   display: table-cell;
   text-align: left;
   width: 50%;
   vertical-align: middle;
 }
-.bottomRight{
+
+.bottomRight {
   composes: bottomLeft;
   text-align: right;
 }
-.money{
+
+.money {
   display: inline-block;
   font-family: MicrosoftYaHei;
   font-size: 14px;
@@ -102,26 +150,31 @@
   letter-spacing: 0;
   vertical-align: bottom;
 }
-.moneyBig{
+
+.moneyBig {
   composes: money;
   font-size: 24px;
   line-height: 24px;
 }
-.moneyGray{
+
+.moneyGray {
   composes: money;
   font-size: 12px;
   color: #999;
   letter-spacing: 0;
 }
-.moneyBlack{
+
+.moneyBlack {
   composes: money;
-  color: #333333 ;
+  color: #333333;
 }
-.moneyWhite{
+
+.moneyWhite {
   composes: money;
-  color: #ffffff ;
+  color: #ffffff;
 }
-.moneyWhiteV{
+
+.moneyWhiteV {
   composes: moneyWhite;
   margin: 0 @d_spadding_cell;
 }

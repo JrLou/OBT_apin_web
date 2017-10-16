@@ -33,15 +33,18 @@ class RecommendView extends Component {
                 <div className={css.border}>
                     <div
                         className={css.content}
-                        style={{
-                            backgroundImage: "url(" + data.image + ")"
-                        }}
+
                     >
-                        {
-                            this.getImageBottom(data,template)
-                        }
-                        <div className={css.tag}>
-                            {data.tag}
+                        <div  className={css.imageFrame} style={{
+                            backgroundImage: "url(" + data.image + ")"
+                        }}/>
+                        <div className={css.showFrame}>
+                            {
+                                this.getImageBottom(data,template)
+                            }
+                            <div className={css.tag}>
+                                {data.tag}
+                            </div>
                         </div>
                     </div>
                     {
@@ -82,33 +85,27 @@ class RecommendView extends Component {
     getTitleLayout(data,template){
 
         let img = null;
-        if(template==1){
-            if(data.type==1){
-                img = require('../../../../images/wfw.png');
-            }else{
-                img = require('../../../../images/dcw.png');
-            }
-        }else {
-            if(data.type==1){
-                img = require('../../../../images/wfw.png');
-            }else{
-                img = require('../../../../images/dcw.png');
-            }
+        if(data.type==1){
+            img = require('../../../../images/wfw.png');
+        }else{
+            img = require('../../../../images/dcw.png');
         }
-
         return (
-            <div className={template==1?css.title:css.titleBlack} >
-                <div className={css.text}> {data.from}</div>
-                <div className={css.text2}>
-                    <div className={css.icon}
-                         style={{
-                             backgroundImage: "url(" + img + ")"
-                         }}
-                    >
+            <div>
+                <div className={template==1?css.title:css.titleBlack} >
+                    <div className={css.text}> {data.from}</div>
+                    <div className={css.text2}>
+                        <div className={css.icon}
+                             style={{
+                                 backgroundImage: "url(" + img + ")"
+                             }}
+                        >
 
+                        </div>
                     </div>
+                    <div className={css.text}> {data.to}</div>
                 </div>
-                <div className={css.text}> {data.to}</div>
+                <div style={{clear:"both"}}/>
             </div>
         );
 

@@ -1,45 +1,90 @@
 @import "../../../../theme.less";
-.cell{
+@lineH : 20px;
+.more {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-box-orient: vertical;
+}
+
+.cell {
   width: 19%;
-  margin:0.5%;
+  margin: 0.5%;
   background: #f6f6f6;
   float: left;
+  composes: more;
+  transition:transform 0.25s ease;
+  z-index: 1;
 }
-.text{
-  display: table-cell;
+.cell:hover{
+  z-index: 2;
+  position: relative;
+  transform:scale(1.1,1.1);
+  transition:transform 0.25s ease;
+}
+.text {
+  float: left;
+  text-align: center;
   vertical-align: middle;
   color: #333;
   font-size: 14px;
+  composes: more;
+  max-width: 40%;
+  line-height: @lineH;
+  height: @lineH;
 }
-.text2{
-  composes: text;
-  padding: 0 @d_spadding_cell;
+
+.text2 {
+  float: left;
+  width: 20%;
+  height: @lineH;
+  position: relative;
+  overflow: hidden;
 }
-.icon{
-  composes: text;
+
+.icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
   width: 25px;
   height: 25px;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-
 }
-.bottom{
+
+.table {
+}
+
+.bottom {
   width: 100%;
   display: table;
+  table-layout: fixed;
   padding: @d_spadding_cell*2 @d_spadding_cell*2;
 }
-.bottomLeft{
-   display: table-cell;
-   text-align: left;
-   width: 60%;
-   vertical-align: middle;
- }
-.bottomRight{
+
+.bottomLeft {
+  display: table-cell;
+  text-align: left;
+  max-width: 60%;
+  width: 60%;
+  min-width: 60%;
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+.bottomRight {
   composes: bottomLeft;
   text-align: right;
+  max-width: 40%;
+  width: 40%;
+  min-width: 40%;
 }
-.money{
+
+.money {
   display: inline-block;
   font-family: MicrosoftYaHei;
   font-size: 10px;
@@ -47,18 +92,21 @@
   letter-spacing: 0;
   vertical-align: bottom;
 }
-.moneyBig{
+
+.moneyBig {
   composes: money;
   font-size: 16px;
   line-height: 20px;
 }
-.moneyGray{
+
+.moneyGray {
   composes: money;
   font-size: 10px;
   color: #999;
   letter-spacing: 0;
 }
-.date{
+
+.date {
   padding-top: 4px;
   composes: money;
   font-size: 12px;
