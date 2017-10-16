@@ -11,7 +11,6 @@ import SearchHelp from '../search/SearchHelp.js';
 import routes from '../../../vm/routes.js';
 
 import Scroll from 'react-scroll'; // Imports all Mixins
-import {scroller} from 'react-scroll'; //Imports scroller mixin, can use as scroller.scrollTo()
 // Or Access Link,Element,etc as follows
 
 var Link       = Scroll.Link;
