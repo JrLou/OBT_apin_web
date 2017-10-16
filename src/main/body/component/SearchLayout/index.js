@@ -2,7 +2,7 @@
  * Created by lixifeng on 17/10/12.
  */
 import React, {Component} from 'react';
-import {Button, Input} from  'antd';
+import {Button, Input,Row,Col} from  'antd';
 import AutoInput from '../AutoInput'
 import less from './index.less'
 /**
@@ -67,31 +67,38 @@ class SearchLayout extends Component {
                         })}
 
                 </div>
-                <div className={less.buttonLayout}>
-                    <Button
-                        loading={this.state.loading}
-                        type="primary"
-                        className={less.button}
-                        onClick={() => {
-
-                            if (this.props.submit) {
-                                this.props.submit(this.getData())
-                            }
-                        }}>
-                        {"搜索" + (this.state.loading ? "中" : "")}
-                    </Button>
-                </div>
+                {this.getButton()}
             </div>            )
 
     }
 
+    getButton(){
+        return(
+            <div className={less.buttonLayout}>
+                <Button
+                    loading={this.state.loading}
+                    type="primary"
+                    className={less.button}
+                    onClick={() => {
+                        if (this.props.submit) {
+                            this.props.submit(this.getData())
+                        }
+                    }}>
+                    {"搜索" + (this.state.loading ? "中" : "")}
+                </Button>
+            </div>
+        )
+    }
+
     getSwitchView(v, title, cb) {
+
+        let {type} = this.props;
         return (
             <div
                 onClick={() => {
                     cb();
                 }}
-                className={less.action}
+                className={type===1?less.action:less.searchAction}
             >
                 <img  src={v ? this.img_login_check : this.img_login_uncheck}
                 />
@@ -104,74 +111,61 @@ class SearchLayout extends Component {
         return (
             <div style={{
                 width: "100%",
-                paddingTop: 20
+                paddingTop: 35,
             }}>
-                <div className={less.left} style={{marginLeft: 42}}>
-                    <div
-                        onClick={() => {
+<Row>
+                <Col span={2} style={{marginLeft: 42}}>
+                    {this.getSwitchView(this.state.one, "单程",
+                        () => {
+                            let s = !this.state.one;
                             this.setState({
-                                one: !this.state.one,
+                                one: s,
                             })
-                        }} style={{marginTop: -3}}>
-                        <img style={{
-                            width: 10,
-                            marginRight: 5,
-                            marginTop: 6,
-                            float: "left",
-                            height: 10,
-                        }} src={this.state.one ? this.img_login_check : this.img_login_uncheck}
-                        />
-                        <div style={{fontSize: 14, color: "#4F5762"}}>单程</div>
-                    </div>
-                    <div
-                        onClick={() => {
+                        })}
+                    {this.getSwitchView(!this.state.one, "往返",
+                        () => {
+                            let s = !this.state.one;
                             this.setState({
-                                two: !this.state.two,
+                                one: s,
                             })
-                        }} style={{marginTop: 13}}>
-                        <img style={{
-                            width: 10,
-                            marginRight: 5, float: "left",
-                            height: 10,
-                            marginTop: 6,
-                        }} src={this.state.two ? this.img_login_check : this.img_login_uncheck}
-                        />
-                        <div style={{float: "left", fontSize: 14, color: "#4F5762"}}>往返</div>
+                        })}
+
+                </Col>
+    <Col span={1}>
+                <div className={less.line}/>
+    </Col>
+                <Col span={8} >
+                    <div className={less.inputLayout}>
+                    <span>出发城市：</span>
+                    <div>
+                        <AutoInput
+                            ref="from"
+                            style={{width:"100%",}}
+                            defaultValue={this.state.from}
+                            placeholder="中文／拼音／三字码"/>
                     </div>
-                </div>
-                <div className={less.left} style={{width: 1, marginLeft: 20, height: 52, backgroundColor: "#cbd3e5"}}/>
+                    </div>
+                </Col>
 
-                <div className={less.left} style={{width: "30%", marginTop: 20}}>
-                    <div style={{marginTop: 7, fontSize: 14, color: "#393939", float: "left", zIndex: 2}}>出发城市：</div>
-                    <AutoInput
-                        ref="from"
-                        style={{marginLeft: 70, zIndex: 1}}
-                        defaultValue={this.state.from}
-                        placeholder="中文／拼音／三字码"/>
-                </div>
-                <div className={less.left} style={{width: "30%", marginTop: 20}}>
-                    <div style={{marginTop: 7, fontSize: 14, float: "left", color: "#393939", zIndex: 2}}>到达城市：</div>
-                    <AutoInput
-                        ref="to"
-                        style={{marginLeft: 70, zIndex: 1}}
-                        defaultValue={this.state.to}
-                        placeholder="中文／拼音／三字码"/>
-                </div>
-                <div className={less.left} style={{marginTop: 20}}>
-                    <div style={{clear: "both"}}/>
-                    <Button
-                        loading={this.state.loading}
-                        type="primary"
-                        style={{marginLeft: "20%", width: 169, height: 38, backgroundColor: "#29A6FF", color: "#fff"}}
-                        onClick={() => {
+    <Col span={8} >
+        <div className={less.inputLayout}>
+            <span className={less.searchTitle}>到达城市：</span>
+            <div>
+                <AutoInput
+                    ref="from"
+                    style={{width:"100%"}}
+                    defaultValue={this.state.from}
+                    placeholder="中文／拼音／三字码"/>
+            </div>
+        </div>
+    </Col>
+<Col>
+    <div>
+        {this.getButton()}
+    </div>
+</Col>
 
-                            if (this.props.submit) {
-                                this.props.submit(this.getData())
-                            }
-                        }}>
-                        {"搜索" + (this.state.loading ? "中" : "")}
-                    </Button>
-                </div>
+</Row>
             </div>)
     }
 
