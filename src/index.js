@@ -20,6 +20,7 @@ function getUrlSearch(str) {
     }
     return query;
 }
+
 window.log = function (obj) {
     /* eslint-disable no-console */
     console.log(obj);
@@ -30,8 +31,8 @@ window.app_getPar = function (obj) {
     }
     let state = obj.props.location.state;
     let query = obj.props.location.query;
-    let data =query?query.data:null;
-    return Object.assign(state||{},data?JSON.parse(decodeURIComponent(data)):{});
+    let data = query ? query.data : null;
+    return Object.assign(state || {}, data ? JSON.parse(decodeURIComponent(data)) : {});
 };
 window.app_open = function (obj, path, state, open, callBack) {
     log(obj);
@@ -43,14 +44,17 @@ window.app_open = function (obj, path, state, open, callBack) {
     }
 
     let search = getUrlSearch(window.location.href);
-    let ip = "";
-    if(search&&search.ip){
-        ip = "?ip="+search.ip+"&";
+    let ip = "?";
+    if (search && search.ip) {
+        ip = "?ip=" + search.ip + "&";
     }
     document.documentElement.scrollTop = document.body.scrollTop = 0;
 
     let get = state ? "data=" + encodeURIComponent(JSON.stringify(state)) : "";
-    get+=ip;
+    get = ip + get;
+    if(get==="?"){
+        get = "";
+    }
     if (open === "new") {
         window.open(path + get);
     } else if (open === "self") {
@@ -65,6 +69,7 @@ window.app_open = function (obj, path, state, open, callBack) {
 };
 
 window.apin = {};
+
 function exe() {
     apin.cache = new Map();
     apin.setCache = function (key, obj) {
@@ -79,6 +84,7 @@ function exe() {
         return v;
     };
 }
+
 exe();
 
 const React = require("react");

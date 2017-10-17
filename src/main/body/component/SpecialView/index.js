@@ -16,14 +16,30 @@ class SpecialView extends Component {
         };
     }
 
+    // departDate	出发日期	string	2017-10-23
+    // lineId	航线id	string
+    // price	价格	string	88.00
+    // saled	已团数量	object
+    // voyage	航程	string	杭州-北京
+    // flightType	航线类型	number	0：未定义；1：单程；2：往返
     render() {
         let {data} = this.props;
         if (!data)return null;
+        if(data.voyage){
+            data.voyage = data.voyage.replace("<->","-");
+            let arr = data.voyage.split("-");
+            if(arr.length===2){
+                data.from = arr[0];
+                data.to = arr[1];
+            }
+        }
+
         let img = null;
-        if(data.type===1){
-            img = require('../../../../images/wfw.png');
-        }else{
+        data.one = data.flightType===1;
+        if( data.one){
             img = require('../../../../images/dcw.png');
+        }else{
+            img = require('../../../../images/wfw.png');
         }
         return (
             <div
@@ -53,22 +69,41 @@ class SpecialView extends Component {
 
                     <div style={{clear:"both"}}>
                         <font className={css.money}>{"￥"}</font>
-                        <font className={css.moneyBig}>{data.money}</font>
+                        <font className={css.moneyBig}>{data.price}</font>
                         <font className={css.moneyGray}>{"起"}</font>
                     </div>
-
-
 
                 </div>
                     <div className={css.bottomRight}>
                         <font className={css.date}>{"已团"}</font>
-                        <font className={css.date}>{data.count+"张"}</font>
+                        <font className={css.date}>{data.saled+"张"}</font>
                         <br/>
-                        <font className={css.date}>10月13日</font>
+                        <font className={css.date}>{this.getTimeShow(data.departDate)}</font>
                     </div>
                 </div>
             </div>
         );
+    }
+
+    getTimeShow(value){
+        if(!value){
+            return value;
+        }
+        let arr= value.split("-");
+        if (arr) {
+            if (arr.length <= 3) {
+                let p = ["年", "月", "日"];
+                let time = "";
+                for (let i=0;i<arr.length;i++) {
+                    time+=(arr[i]+p[i]);
+                }
+                return p;
+            } else {
+                return value;
+            }
+        } else {
+            return value;
+        }
     }
 }
 module.exports = SpecialView;
