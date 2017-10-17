@@ -225,21 +225,23 @@ class page extends Component {
         return (
             <div className={less.topRight}>
 
-                <div className={less.topRightContent}>
-                    <Carousel autoplay>
-                        {
-                            [1, 2, 3].map((data, index) => {
-                                return (
-                                    <div
-                                        key={index}
-                                        className={less.topRightCarousel}>
-                                        {data}
-                                    </div>
-                                );
-                            })
-                        }
-                    </Carousel>
-                </div>
+               <div className={less.topRightContent}>
+                   <img className={less.topRightCarousel}
+                        src={require("../../../images/banner.png")}/>
+                   {/*<Carousel autoplay >*/}
+                       {/*{*/}
+                           {/*[1,2,3].map((data,index)=>{*/}
+                               {/*return  (*/}
+                                   {/*<div*/}
+                                       {/*key={index}*/}
+                                       {/*className={less.topRightCarousel}>*/}
+                                       {/*{data}*/}
+                                   {/*</div>*/}
+                               {/*);*/}
+                           {/*})*/}
+                       {/*}*/}
+                   {/*</Carousel>*/}
+               </div>
             </div>
 
         );
