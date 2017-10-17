@@ -13,9 +13,9 @@ import LoadingView from "../component/LoadingView.js";
 class page extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            dataSource:[]
-        };
+        this.myData = this.props.data;
+
+        alert(JSON.stringify(this.myData));
         let date = new Date();
         this.year = date.getFullYear();
         this.month = date.getMonth()+1;
@@ -141,7 +141,7 @@ class page extends Component {
         var div = (
             <div className={css.main}>
                 <div className={css.content}>
-                    <LineHeadTitle ref={(a)=>{this.lineHeadTitle = a;}}/>
+                    <LineHeadTitle dataSource = {this.myData}/>
                 </div>
                 <div className={css.content} style={{overflow:"hidden"}}>
                     <div className={css.myCalendar}
