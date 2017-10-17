@@ -65,6 +65,8 @@ class page extends Component {
 
 
         this.setLoading(true, () => {
+
+
             let param = {
                 arrCity	:par.to,
                 depCity	:par.from,
@@ -93,8 +95,15 @@ class page extends Component {
             };
             let failure = (code, msg, option) => {
                 //无结果
-                this.resutMessage = code+msg;
-                this.resut = null;
+                if(param.arrCity&&param.depCity){
+
+                    this.resut = param;
+                    alert(JSON.stringify(this.resut));
+                }else{
+                    this.resutMessage = code+msg;
+                    this.resut = null;
+                }
+
                 this.setLoading(false, () => {
                 });
             };

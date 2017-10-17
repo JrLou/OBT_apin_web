@@ -191,7 +191,7 @@ class page extends Component {
                     message.error(msg);
                 });
             };
-            HttpTool.request(HttpTool.typeEnum.POST, "/lineapi/v1.0/lines/new", success, failure, param,
+            HttpTool.request(HttpTool.typeEnum.POST, "/lineapi//v1.0/lines/new", success, failure, param,
                 {
                     ipKey: "hlIP"
                 });
