@@ -18,11 +18,11 @@ class InputAuto extends Component {
         a = a.concat(a).concat(a).concat(a).concat(a);
 
         this.state = {
-            dataSource: []
+            dataSource: [],
 
         };
-
-        this.onSelect(this.props.defaultValue);
+        this.selectValue = this.props.defaultValue;
+        this.keyWord = this.props.defaultValue;
 
     }
 
@@ -135,12 +135,20 @@ class InputAuto extends Component {
                     热门推荐
                 </div>
             </div>
-            {dataSource.length<1?(<div>
+            {dataSource.length<1?(   <div className={less.errorMessage}>
                 无热门城市
             </div>):null}
         </Option>;
 
-                let result = dataSource.map((obj, index) => {
+                let result =dataSource.length<1?(
+                    [
+                        <Option disabled key="all" className="show-all">
+                            <div className={less.errorMessage}>
+                                对不起,暂不支持该地点
+                            </div>
+                        </Option>
+                    ]
+                ): dataSource.map((obj, index) => {
                     return <Option className={this.keyWord?null:less.dropItemFloat} key={index}>{obj}</Option>;
                 });
                 if(this.keyWord){
