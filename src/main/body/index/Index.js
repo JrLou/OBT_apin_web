@@ -33,18 +33,18 @@ class page extends Component {
 
     componentDidMount() {
 
-        // Events.scrollEvent.register('begin', function() {
-        //     console.log("begin", arguments);
-        // });
-        //
-        // Events.scrollEvent.register('end', function() {
-        //     console.log("end", arguments);
-        // });
-        //
-        // scrollSpy.update();
-        //
-        // window.addEventListener('scroll', this.handleScroll);
-        // this.getNetData();
+        Events.scrollEvent.register('begin', function() {
+            console.log("begin", arguments);
+        });
+
+        Events.scrollEvent.register('end', function() {
+            console.log("end", arguments);
+        });
+
+        scrollSpy.update();
+
+        window.addEventListener('scroll', this.handleScroll);
+        this.getNetData();
         this.getBoutiqueData();
     }
     /*获取精品航线数据*/
