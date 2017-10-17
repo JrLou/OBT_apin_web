@@ -1,107 +1,113 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 
-import {Carousel, Input, Button,Row, Col} from 'antd';
-import less from './Index.less';
+import {Carousel, Input, Button, Row, Col,message} from "antd";
+import less from "./Index.less";
 
-import RecommendView from '../component/RecommendView';
-import SpecialView from '../component/SpecialView';
-import SearchLayout from '../component/SearchLayout';
-import SearchHelp from '../search/SearchHelp.js';
-import {HttpTool} from '../../../../lib/utils/index.js';
-import routes from '../../../vm/routes.js';
+import RecommendView from "../component/RecommendView";
+import SpecialView from "../component/SpecialView";
+import SearchLayout from "../component/SearchLayout";
+import SearchHelp from "../search/SearchHelp.js";
+import {HttpTool} from "../../../../lib/utils/index.js";
+import routes from "../../../vm/routes.js";
 
-import Scroll from 'react-scroll'; // Imports all Mixins
+import Scroll from "react-scroll"; // Imports all Mixins
 // Or Access Link,Element,etc as follows
 
-var Link       = Scroll.Link;
-var Events     = Scroll.Events;
-var scroll     = Scroll.animateScroll;
-var scrollSpy  = Scroll.scrollSpy;
+var Link = Scroll.Link;
+var Events = Scroll.Events;
+var scroll = Scroll.animateScroll;
+var scrollSpy = Scroll.scrollSpy;
 
 class page extends Component {
     constructor(props) {
         super(props);
         this.scrollToTop = this.scrollToTop.bind(this);
         this.handleScroll = this.handleScroll.bind(this);
-        this.page = 1;//页码
+        this.page = 0;//页码
         this.state = {
-
-            dataSource:[],
-            loading:false
+            dataSource: [],
+            dataSourceRecommend: [],
+            loading: false
         };
     }
 
     componentDidMount() {
 
-        Events.scrollEvent.register('begin', function() {
+        Events.scrollEvent.register("begin", function () {
             console.log("begin", arguments);
         });
 
-        Events.scrollEvent.register('end', function() {
+        Events.scrollEvent.register("end", function () {
             console.log("end", arguments);
         });
 
         scrollSpy.update();
 
-        window.addEventListener('scroll', this.handleScroll);
+        window.addEventListener("scroll", this.handleScroll);
         this.getNetData();
         this.getBoutiqueData();
     }
-    /*获取精品航线数据*/
-    getBoutiqueData(){
-        var param = {
 
-        };
+    /*获取精品航线数据*/
+    getBoutiqueData() {
+        var param = {};
         var success = (code, msg, json, option) => {
             log(json);
+            this.setState({
+                dataSourceRecommend: [].concat(json).concat(json).concat(json).concat(json)
+            });
         };
         var failure = (code, msg, option) => {
             log(msg);
+            message.error(msg);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,"/airlineapi/v1.0/bestList",success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/airlineapi/v1.0/bestList", success, failure, param,
             {
-                ipKey:'hlIP'
+                ipKey: "hlIP"
             });
     }
 
     componentWillUnmount() {
-        Events.scrollEvent.remove('begin');
-        Events.scrollEvent.remove('end');
-        window.removeEventListener('scroll', this.handleScroll);
+        Events.scrollEvent.remove("begin");
+        Events.scrollEvent.remove("end");
+        window.removeEventListener("scroll", this.handleScroll);
     }
-    handleScroll(){
+
+    handleScroll() {
         // var bodyRect = document.body.getBoundingClientRect();
         let sy = this.getScrollTop() + this.getWindowHeight();
         let sh = this.getScrollHeight();
-       // log(sh -sy);
-        if(sh -sy <100){
-          this.toBottom();
+        // log(sh -sy);
+        if (sh - sy < 100) {
+            this.toBottom();
         }
     }
 
 
-    toBottom(){
-            this.getNetData();
+    toBottom() {
+        this.getNetData();
     }
-    getScrollTop(){
+
+    getScrollTop() {
         let scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
-        if(document.body){
+        if (document.body) {
             bodyScrollTop = document.body.scrollTop;
         }
-        if(document.documentElement){
+        if (document.documentElement) {
             documentScrollTop = document.documentElement.scrollTop;
         }
         scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
         return scrollTop;
     }
+
     //文档的总高度
 
-    getScrollHeight(){
+    getScrollHeight() {
         let scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
-        if(document.body){
+        if (document.body) {
             bodyScrollHeight = document.body.scrollHeight;
         }
-        if(document.documentElement){
+        if (document.documentElement) {
             documentScrollHeight = document.documentElement.scrollHeight;
         }
         scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
@@ -110,74 +116,105 @@ class page extends Component {
 
 //浏览器视口的高度
 
-    getWindowHeight(){
+    getWindowHeight() {
         let windowHeight = 0;
-        if(document.compatMode == "CSS1Compat"){
+        if (document.compatMode == "CSS1Compat") {
             windowHeight = document.documentElement.clientHeight;
-        }else{
+        } else {
             windowHeight = document.body.clientHeight;
         }
         return windowHeight;
     }
+
     scrollToTop() {
         scroll.scrollToTop();
     }
+
     scrollToBottom() {
         scroll.scrollToBottom();
     }
-    getRecommendList() {
 
-        return routes.getData(8).map((data, index) => {
+    getRecommendList(data) {
+        if (!data) {
+            return;
+        }
+        return data.map((data, index) => {
             return (
-                <Col  key={index} span={6}>
+                <Col key={index} span={6}>
                     <RecommendView
                         template={1}
                         onClick={() => {
-                            SearchHelp.openSearch(this,data);
+                            SearchHelp.openSearch(this, data);
                         }}
                         data={data} key={index}/>
                 </Col>
             );
         });
     }
-    setLoading(loading,cb){
+
+    setLoading(loading, cb) {
         this.setState({
-            loading:loading
-        },cb);
+            loading: loading
+        }, cb);
     }
-    isLoading(){
+
+    isLoading() {
         return this.state.loading;
     }
 
-    getNetData(){
-        if(this.isLoading()){
+    getNetData() {
+        if (this.isLastPage||this.isLoading()) {
             return;
         }
+        this.setLoading(true, () => {
 
-        this.setLoading(true,()=>{
-            setTimeout(()=>{
-                this.setLoading(false,()=>{
+            var param = {
+                pageIndex:this.page.toString()
+            };
+            var success = (code, msg, json, option) => {
+                log(json);
+                this.setLoading(false, () => {
+                    this.isLastPage = json.isLastPage;
+                    this.page = this.page+1;
                     this.setState({
-                        dataSource:this.state.dataSource.concat(routes.getData(12))
-                    },()=>{
+                        dataSource: this.state.dataSource.concat(json.lines)
+                    }, () => {
+
                         // scroll.scrollToBottom();
                         // this.scrollToTop();
                     });
                 });
-            },200);
+            };
+            var failure = (code, msg, option) => {
+                log(msg);
+                this.setLoading(false, () => {
+                    message.error(msg);
+                });
+            };
+            HttpTool.request(HttpTool.typeEnum.POST, "/lineapi//v1.0/lines/new", success, failure, param,
+                {
+                    ipKey: "hlIP"
+                });
+
+            setTimeout(() => {
+
+            }, 200);
         });
 
     }
+
     getSpecialList(data) {
-        if(!data)return;
+        if (!data) {
+            return;
+        }
         return data.map((data, index) => {
             return (
-            <SpecialView
-                key={index}
-                onClick={() => {
-                    SearchHelp.openSearch(this,data);
-                }}
-                data={data}/>
+                <SpecialView
+                    key={index}
+                    onClick={() => {
+                        SearchHelp.openSearch(this, data);
+                    }}
+                    data={data}/>
             );
 
         });
@@ -186,60 +223,85 @@ class page extends Component {
     getSwitchLayout() {
 
         return (
-            <div className={less.topRight} >
+            <div className={less.topRight}>
 
-               <div className={less.topRightContent}>
-                   <Carousel autoplay >
-                       {
-                           [1,2,3].map((data,index)=>{
-                               return  (
-                                   <div
-                                       key={index}
-                                       className={less.topRightCarousel}>
-                                       {data}
-                                   </div>
-                               );
-                           })
-                       }
-                   </Carousel>
-               </div>
+                <div className={less.topRightContent}>
+                    <Carousel autoplay>
+                        {
+                            [1, 2, 3].map((data, index) => {
+                                return (
+                                    <div
+                                        key={index}
+                                        className={less.topRightCarousel}>
+                                        {data}
+                                    </div>
+                                );
+                            })
+                        }
+                    </Carousel>
+                </div>
             </div>
 
         );
     }
+    getRecommendLayout(){
+        if(this.state.dataSourceRecommend&&this.state.dataSourceRecommend.length>0){
+            return (
+                <div className={less.center}>
+                    <div className={less.centerTitleLayout}>
+                        <div className={less.centerIcon}/>
+                        <div className={less.centerTitle}>精品特价航线</div>
 
-    render22(){
+                        <div className={less.centerTitleMoreLayout}>
+                            <div className={less.centerTitleMore}>更多路线推荐</div>
+                            <div className={less.centerIconMore}/>
+                        </div>
+                        cro
+                    </div>
+                    <Row>
+                        {this.getRecommendList(this.state.dataSourceRecommend)}
+                    </Row>
+                    <br/>
+                </div>
+            );
+        }else{
+            return null;
+        }
+
+    }
+
+    render22() {
         let arr = [];
-        for(let i =0;i<100;i++){
+        for (let i = 0; i < 100; i++) {
             arr.push(<div key={i}>{i}</div>);
         }
         return (
             <div
-                style={{margin:"auto",maxWidth:1200}}
-                ref={(ref)=>{
+                style={{margin: "auto", maxWidth: 1200}}
+                ref={(ref) => {
                     this.myScroll = ref;
                 }}>
                 {arr}
-                    </div>
+            </div>
         );
     }
+
     render() {
 
         return (
             <div
-                style={{margin:"auto",maxWidth:1200}}>
-                <li> <a onClick={() => scroll.scrollToBottom()}>Scroll To 100!</a></li>
+                style={{margin: "auto", maxWidth: 1200}}>
                 <Row>
                     <Col span={6}>
-                        <div  className={less.topLeft}>
+                        <div className={less.topLeft}>
                             <div className={less.topLeftBorder}>
                                 <div className={less.topLeftTitle}>团飞机票搜索</div>
                                 <div className={less.topLeftContent}>
                                     <SearchLayout
                                         data={window.apin.getCache("search")}
                                         type={1}
-                                        submit={(data)=>{
-                                            SearchHelp.openSearch(this,data);
+                                        submit={(data) => {
+                                            SearchHelp.openSearch(this, data);
                                         }}
                                     />
                                 </div>
@@ -253,39 +315,26 @@ class page extends Component {
                     </Col>
                 </Row>
                 {/*精品特价航线*/}
-                <div className={less.center}>
-                    <div className={less.centerTitleLayout}>
-                        <div className={less.centerIcon}/>
-                        <div className={less.centerTitle}>精品特价航线</div>
-
-                        <div className={less.centerTitleMoreLayout}>
-                            <div className={less.centerTitleMore}>更多路线推荐</div>
-                            <div className={less.centerIconMore}/>
-                        </div>cro                  </div>
-                    <Row >
-                    {this.getRecommendList()}
-                    </Row>
-                    <br/>
-                </div>
+                {this.getRecommendLayout()}
                 {/*底部更多特价部分*/}
-                <div  className={less.center}>
+                <div className={less.center}>
                     <div className={less.centerTitleLayout}>
                         <div className={less.bottomIcon}/>
                         <div className={less.centerTitle}>更多机票路线</div>
                     </div>
-                <Row>
-                    {this.getSpecialList(this.state.dataSource)}
-                </Row>
+                    <Row>
+                        {this.getSpecialList(this.state.dataSource)}
+                    </Row>
                     <br/>
                 </div>
-                {this.state.loading?<div className={less.more}>
-                    加载中...</div>:
+                {this.state.loading ? <div className={less.more}>
+                        加载中...</div> :
                     <div className={less.more}
-                        onClick={()=>{
-                            this.getNetData();
-                        }}
+                         onClick={() => {
+                             this.getNetData();
+                         }}
                     >
-                    下拉加载更多</div>}
+                        {this.isLastPage?"没有更多航线啦":"下拉加载更多"}</div>}
 
 
             </div>

@@ -5,7 +5,7 @@ import RecommendView from '../component/RecommendView';
 import SearchLayout from '../component/SearchLayout';
 import OneWayDetail from '../content/OneWayDetail.js';
 import SearchHelp from '../search/SearchHelp.js';
-
+import {HttpTool} from "../../../../lib/utils/index.js";
 //获取模拟数据
 import routes from '../../../vm/routes.js';
 import less from './Search.less';
@@ -16,6 +16,7 @@ class page extends Component {
             current: 1,
             loading: true
         };
+        this.resutMessage = null;
         this.par = window.app_getPar(this);
     }
 
@@ -27,6 +28,7 @@ class page extends Component {
         // }
 
     }
+
 
     /**
      *页面打开之后,根据条件进行搜索
@@ -52,26 +54,46 @@ class page extends Component {
     /**
      * @param param 请求参数(根据搜索框与列表数据提取,不建议此外修改)
      */
-    loadData(param) {
+    loadData(par) {
+        // arrCity	到达城市名	string
+        // depCity	出发城市名	string
+        // flightType	航程类型：0、未定义；1、单程；2、往返；3、多程	number
+
+
         this.setLoading(true, () => {
-            //模拟请求网络
-            setTimeout(() => {
-                //请求结果
-                //假设结果
-                if (param.from == 0 && param.to == 0) {
+            let param = {
+                arrCity	:par.to,
+                depCity	:par.from,
+                flightType:par.one?1:2
+            };
+            let success = (code, msg, json, option) => {
+                log(json);
+                this.resutMessage = "";
+                if(!json){
                     //无结果
                     this.resut = null;
-                } else if (param.from && param.to) {
-                    //一定是结果的页面
-                    this.resut = {};
-                } else {
-                    //列表页面
-                    this.resut = routes.getData((Math.random() * 10).toFixed(0));
+                }else if(json&&json.length===1&&param.arrCity&&param.depCity){
+                    //有结果,并有详情
+                    //一定是结果的页面 转换成对像
+                    this.resut = json[0];
+                }else{
+                    this.resut = json;
                 }
                 //更新页面,此代码,一定是在此位置
                 this.setLoading(false, () => {
                 });
-            }, 2000);
+            };
+            let failure = (code, msg, option) => {
+                //无结果
+                this.resutMessage = code+msg;
+                this.resut = null;
+                this.setLoading(false, () => {
+                });
+            };
+            HttpTool.request(HttpTool.typeEnum.POST, "/airlineapi/v1.0/list", success, failure, param,
+                {
+                    ipKey: "hlIP"
+                });
         });
     }
 
@@ -187,6 +209,7 @@ class page extends Component {
             <div className={less.empty}>
                 <div className={less.emptyText}>
                     <div>没有查询到航班信息，请重新搜索或联系客服询问航班 </div>
+                    <div>{this.resutMessage}</div>
                     <Button type="primary">联系客服</Button>
                 </div>
             </div>

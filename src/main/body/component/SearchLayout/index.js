@@ -19,15 +19,12 @@ class SearchLayout extends Component {
             data = {};
         }
         this.state = Object.assign({
+            searchSource: [],
+            defaultSource : [],
             loading: false
         }, data);
-        this.state = {
-            searchSource: [],
-            defaultSource : []
-        };
         this.img_login_check = require("../../../../images/check.png");
         this.img_login_uncheck = require("../../../../images/uncheck.png");
-
     }
     componentDidMount() {
         this.loadDefaultData();

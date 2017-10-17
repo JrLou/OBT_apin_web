@@ -15,8 +15,7 @@ module.exports = {
         return {
             from:data.from,
             to:data.to,
-            one:data.one,
-            two:data.two
+            one:data.one
         };
     }
 };
