@@ -68,6 +68,7 @@ class page extends Component {
             };
             let success = (code, msg, json, option) => {
                 log(json);
+
                 this.resutMessage = "";
                 if(!json){
                     //无结果
@@ -77,6 +78,7 @@ class page extends Component {
                     //一定是结果的页面 转换成对像
                     this.resut = json[0];
                 }else{
+                    alert(json.length);
                     this.resut = json;
                 }
                 //更新页面,此代码,一定是在此位置
@@ -163,12 +165,20 @@ class page extends Component {
 
                 <div style={{clear: "both"}}/>
                 <div className={less.bottom}>
-                    <Pagination showQuickJumper current={this.state.current} total={500} onChange={this.onChange}/>
+                    <Pagination total={500} itemRender={this.itemRender.bind(this)}  />
                 </div>
             </div>
         );
     }
 
+    itemRender(current, type, originalElement) {
+        if (type === 'prev') {
+            return <a>上一页</a>;
+        } else if (type === 'next') {
+            return <a>下一页</a>;
+        }
+        return originalElement;
+    }
     /**
      *
      * @param data 单结果页面

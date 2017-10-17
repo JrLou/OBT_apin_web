@@ -54,7 +54,7 @@ class page extends Component {
         var success = (code, msg, json, option) => {
             log(json);
             this.setState({
-                dataSourceRecommend: [].concat(json).concat(json).concat(json).concat(json)
+                dataSourceRecommend: json
             });
         };
         var failure = (code, msg, option) => {
@@ -191,7 +191,7 @@ class page extends Component {
                     message.error(msg);
                 });
             };
-            HttpTool.request(HttpTool.typeEnum.POST, "/lineapi//v1.0/lines/new", success, failure, param,
+            HttpTool.request(HttpTool.typeEnum.POST, "/lineapi/v1.0/lines/new", success, failure, param,
                 {
                     ipKey: "hlIP"
                 });
