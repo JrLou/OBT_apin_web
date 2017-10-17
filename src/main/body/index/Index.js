@@ -54,7 +54,7 @@ class page extends Component {
         var success = (code, msg, json, option) => {
             log(json);
             this.setState({
-                dataSourceRecommend: [].concat(json).concat(json).concat(json).concat(json)
+                dataSourceRecommend: json
             });
         };
         var failure = (code, msg, option) => {

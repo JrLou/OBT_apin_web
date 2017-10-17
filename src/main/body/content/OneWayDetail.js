@@ -9,41 +9,114 @@ import APIGYW from "../../../api/APIGYW.js";
 import LineHeadTitle from "./line/LineHeadTitle.js";
 import MyCalendar from "./line/MyCalendar.js";
 import MyAlert from "./line/MyAlert.js";
+import LoadingView from "../component/LoadingView.js";
 class page extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            dataSource:[]
-        };
+        this.myData = this.props.data;
+
+        alert(JSON.stringify(this.myData));
+        let date = new Date();
+        this.year = date.getFullYear();
+        this.month = date.getMonth()+1;
+        this.day = date.getDate();
     }
     componentDidMount() {
-        // this.loadTripData();
-        // this.loadDaysData("2017-10-14");
-        this.loadData();
+        this.loadLeftHeadMonthData();
     }
-    loadDaysData(myDate) {
+
+    //左日历的headMonth
+    loadLeftHeadMonthData() {
         var param = {
             "depCity":"上海",
             "arrCity":"北京",
-            "depDate":myDate,
             "flightType":"2"
         };
+        this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
-            this.myCalendarRight.refreshCalendar(false,json,["2017-10"]);
+            this.loadingView.refreshView(false);
+            this.myCalendarLeft.refreshMonth(true,json);
+            this.loadLeftDay(json[0]);
         };
         var failure = (code, msg, option) => {
-            log(msg);
+            this.loadingView.refreshView(false);
+        };
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_month_query,success, failure, param,
+            {
+                ipKey:'hlIP'
+            });
+    }
+
+    //右日历的headMonth
+    loadRightHeadMonthData(depDate) {
+        var param = {
+            "depCity":"上海",
+            "arrCity":"北京",
+            "flightType":"2",
+            "depDate":depDate
+        };
+        var success = (code, msg, json, option) => {
+            this.myCalendarRight.refreshMonth(false,json);
+            this.loadRightDay(json[0],depDate);
+        };
+        var failure = (code, msg, option) => {
+            this.loadingView.refreshView(false);
+        };
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_retFlight_month_query,success, failure, param,
+            {
+                ipKey:'hlIP'
+            });
+    }
+
+    //左边日历每天的数据
+    loadLeftDay(month) {
+        var param = {
+            "depCity":"上海",
+            "arrCity":"北京",
+            "flightType":"2",
+            "month":month
+        };
+
+        var success = (code, msg, json, option) => {
+            this.myCalendarLeft.refreshCalendarDay(true,json);
+        };
+        var failure = (code, msg, option) => {
+            this.loadingView.refreshView(false);
+        };
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_day_query,success, failure, param,
+            {
+                ipKey:'hlIP'
+            });
+    }
+
+    //右日历每天的数据
+    loadRightDay(month,depDate) {
+        var param = {
+            "depCity":"上海",
+            "arrCity":"北京",
+            "flightType":"2",
+            "month":month,
+            "depDate":depDate
+        };
+
+        var success = (code, msg, json, option) => {
+            this.myCalendarRight.refreshCalendarDay(false,json);
+        };
+        var failure = (code, msg, option) => {
+            this.loadingView.refreshView(false);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param,
             {
                 ipKey:'hlIP'
             });
     }
+
     loadTripData(date,days) {
         if (!date||!days){
             message.warning("航程不存在");
             return;
         }
+        this.loadingView.refreshView(true);
         var param = {
             "depCity":"上海",
             "arrCity":"北京",
@@ -53,80 +126,22 @@ class page extends Component {
         };
         var success = (code, msg, json, option) => {
             this.myLineInfor.refreshView(json);
+            this.loadingView.refreshView(false);
         };
         var failure = (code, msg, option) => {
-
+            this.loadingView.refreshView(false);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_query,success, failure, param,
             {
                 ipKey:'hlIP'
             });
-        // var myJson = [
-        //     {
-        //         flight:[
-        //             {
-        //                 type:1,
-        //                 logo:require("../../../images/login_loading.gif"),
-        //                 company:"东方航空1杭州萧山机场",
-        //                 lineNum:"NX005",
-        //                 startDay:"10月11日",
-        //                 endDay:"10月16日",
-        //                 startTime:"06:30",
-        //                 endTime:"08:55",
-        //                 startPlace:"杭州萧山机场",
-        //                 endPlace:"素万那普机场",
-        //                 totalTime:"3小时50分钟"
-        //             },
-        //             {
-        //                 type:2,
-        //                 logo:require("../../../images/login_loading.gif"),
-        //                 company:"东方航空2",
-        //                 lineNum:"NX005",
-        //                 startDay:"10月11日",
-        //                 endDay:"10月16日",
-        //                 startTime:"06:30",
-        //                 endTime:"08:55",
-        //                 startPlace:"杭州萧山机场",
-        //                 endPlace:"素万那普机场素万那普机场",
-        //                 totalTime:"3小时50分钟"
-        //             }
-        //         ],
-        //         days:"6天",
-        //         price:"2333",
-        //         isTax:true,
-        //         remain:23,
-        //         isType:1
-        //     }
-        // ];
-        // this.myLineInfor.refreshView(myJson);
     }
-    loadData() {
-        var param = {
-            "cityList":[{
-                "depCity":"上海",
-                "arrCity":"北京",
-                "flightType":"2"
-            }]
-        };
-        var success = (code, msg, json, option) => {
-            let dataSource = json[0]?json[0]:[];
-            let dataCal = dataSource.dateList;
-            this.lineHeadTitle.refreshLineHead(dataSource);
-            this.myCalendarLeft.refreshCalendar(true,dataCal,["2017-10"]);
-        };
-        var failure = (code, msg, option) => {
-            log(msg);
-        };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flight_query,success, failure, param,
-            {
-                ipKey:'hlIP'
-            });
-    }
+
     render() {
         var div = (
             <div className={css.main}>
                 <div className={css.content}>
-                    <LineHeadTitle ref={(a)=>{this.lineHeadTitle = a;}}/>
+                    <LineHeadTitle dataSource = {this.myData}/>
                 </div>
                 <div className={css.content} style={{overflow:"hidden"}}>
                     <div className={css.myCalendar}
@@ -136,14 +151,16 @@ class page extends Component {
                             onSelectDate={(select_year, select_month , select_day,selDataItem)=>{
                                 this.selectDate(select_year, select_month, select_day,selDataItem);
                             }}
+                            onSelectMonth = {(selMonth,isLeft)=>{
+                                this.loadLeftDay(selMonth);
+                            }}
                             title={"去程月份"}
-                            year={"2017"}
-                            month={"10"}
-                            day={"11"}
+                            current_Y_M={this.year+"-"+this.month+"-"+this.day}
+                            year={this.year}
+                            month={this.month}
+                            day={this.day}
                             row_number = {6}
                             col_number = {7}
-                            monthArr = {["2017-10","2017-11","2017-12","2018-01","2018-02","2018-03","2018-04","2018-05","2018-06"]}
-                            tags = {[8,11,14,21,22,23]}
                         />
                     </div>
                     <div className={css.myCalendar}
@@ -154,39 +171,37 @@ class page extends Component {
                                 this.selectDate(select_year, select_month, select_day,selDataItem);
                             }}
                             title={"返程月份"}
+                            current_Y_M={this.year+"-"+this.month+"-"+this.day}
                             year={"2017"}
                             month={"10"}
                             day={"11"}
                             row_number = {6}
                             col_number = {7}
-                            monthArr = {["2017-11","2017-12","2018-01","2018-02"]}
-                            tags = {[5, 21]}
                         />
                     </div>
 
                 </div>
 
                 <div className={css.content}>
-                    <div className={css.title}>
-                        航班信息
-                    </div>
+                    <div className={css.title}>航班信息</div>
                     <LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor} callBack={()=>{
                         this.myAlert.refreshView();
                     }}/>
                 </div>
 
                 <MyAlert ref={(a)=>this.myAlert = a}/>
+                <LoadingView ref={(a)=>this.loadingView = a}/>
             </div>
         );
         return div;
     }
     selectDate(selDataItem,isLeft){
-        let days = selDataItem?selDataItem.days:undefined;
-        let date = selDataItem?selDataItem.retDate:undefined;
         if (isLeft) {
-            this.loadDaysData(date);
+            this.date = selDataItem?selDataItem.retDate:undefined;
+            this.loadRightHeadMonthData(this.date);
         }else {
-            this.loadTripData(date, days);
+            let days = selDataItem?selDataItem.days:undefined;
+            this.loadTripData(this.date, days);
         }
     }
 }
