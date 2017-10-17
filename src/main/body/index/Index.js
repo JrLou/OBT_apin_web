@@ -270,7 +270,7 @@ class page extends Component {
                 {/*底部更多特价部分*/}
                 <div  className={less.center}>
                     <div className={less.centerTitleLayout}>
-                        <div className={less.centerIcon}/>
+                        <div className={less.bottomIcon}/>
                         <div className={less.centerTitle}>更多机票路线</div>
                     </div>
                 <Row>

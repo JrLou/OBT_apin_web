@@ -117,7 +117,6 @@ class SearchLayout extends Component {
     getFromInput(){
        return <AutoInput
             ref="from"
-            value={this.state.from}
             defaultValue={this.state.from}
             placeholder={'中文／拼音／三字码'}
             max={'10'}
@@ -132,7 +131,6 @@ class SearchLayout extends Component {
     getToInput(){
         return  <AutoInput
             ref="to"
-            value={this.state.to}
             defaultValue={this.state.to}
             placeholder={'中文／拼音／三字码'}
             max={'10'}
