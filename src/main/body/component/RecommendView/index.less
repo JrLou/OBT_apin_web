@@ -90,56 +90,29 @@
   letter-spacing: 0;
 }
 
-.text {
-  float: left;
-  max-width: 42.5%;
-  vertical-align: middle;
-  composes: more;
-  height: @lineH;
-  line-height: @lineH;
-}
-
-.text2 {
-  composes: text;
-  width: 15%;
-  overflow: hidden;
-  text-align: center;
-  position: relative;
-  height: @lineH;
-}
-
-.icon {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  width: 32px;
-  height: 32px;
-
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-
-}
-
 .bottom {
   width: 100%;
   display: table;
+  table-layout: fixed;
   padding: @d_spadding_cell*3 @d_spadding_cell*3;
 }
 
 .bottomLeft {
   display: table-cell;
   text-align: left;
-  width: 50%;
+  max-width: 60%;
+  width: 60%;
+  min-width: 60%;
   vertical-align: middle;
+  overflow: hidden;
 }
 
 .bottomRight {
   composes: bottomLeft;
   text-align: right;
+  max-width: 40%;
+  width: 40%;
+  min-width: 40%;
 }
 
 .money {
@@ -177,4 +150,36 @@
 .moneyWhiteV {
   composes: moneyWhite;
   margin: 0 @d_spadding_cell;
+}
+
+.text {
+  float: left;
+  text-align: center;
+  vertical-align: middle;
+  composes: more;
+  max-width: 40%;
+  line-height: @lineH;
+  height: @lineH;
+}
+
+.text2 {
+  float: left;
+  width: 20%;
+  height: @lineH;
+  position: relative;
+  overflow: hidden;
+}
+
+.icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 25px;
+  height: 25px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }

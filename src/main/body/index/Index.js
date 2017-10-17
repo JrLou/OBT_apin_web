@@ -7,7 +7,7 @@ import RecommendView from '../component/RecommendView';
 import SpecialView from '../component/SpecialView';
 import SearchLayout from '../component/SearchLayout';
 import SearchHelp from '../search/SearchHelp.js';
-
+import {HttpTool} from '../../../../lib/utils/index.js';
 import routes from '../../../vm/routes.js';
 
 import Scroll from 'react-scroll'; // Imports all Mixins
@@ -31,10 +31,6 @@ class page extends Component {
         };
     }
 
-
-
-
-
     componentDidMount() {
 
         Events.scrollEvent.register('begin', function() {
@@ -49,7 +45,25 @@ class page extends Component {
 
         window.addEventListener('scroll', this.handleScroll);
         this.getNetData();
+        this.getBoutiqueData();
     }
+    /*获取精品航线数据*/
+    getBoutiqueData(){
+        var param = {
+
+        };
+        var success = (code, msg, json, option) => {
+            log(json);
+        };
+        var failure = (code, msg, option) => {
+            log(msg);
+        };
+        HttpTool.request(HttpTool.typeEnum.POST,"/airlineapi/v1.0/bestList",success, failure, param,
+            {
+                ipKey:'hlIP'
+            });
+    }
+
     componentWillUnmount() {
         Events.scrollEvent.remove('begin');
         Events.scrollEvent.remove('end');
@@ -159,6 +173,7 @@ class page extends Component {
         return data.map((data, index) => {
             return (
             <SpecialView
+                key={index}
                 onClick={() => {
                     SearchHelp.openSearch(this,data);
                 }}
@@ -192,8 +207,6 @@ class page extends Component {
 
         );
     }
-
-
 
     render22(){
         let arr = [];
@@ -257,7 +270,7 @@ class page extends Component {
                 {/*底部更多特价部分*/}
                 <div  className={less.center}>
                     <div className={less.centerTitleLayout}>
-                        <div className={less.centerIcon}/>
+                        <div className={less.bottomIcon}/>
                         <div className={less.centerTitle}>更多机票路线</div>
                     </div>
                 <Row>

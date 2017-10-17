@@ -22,7 +22,6 @@ class SearchLayout extends Component {
             loading: false
         }, data);
         this.state = {
-            value:'',
             searchSource: [],
             defaultSource : []
         };
@@ -49,33 +48,9 @@ class SearchLayout extends Component {
             <div className={less.i_content}>
 
                 <div className={less.title}>出发城市：</div>
-                <AutoInput
-                    ref="from"
-                    value={this.state.value}
-                    defaultValue={this.state.from}
-                    placeholder={'中文／拼音／三字码'}
-                    max={'10'}
-                    defaultSource={this.state.defaultSource}
-                    searchSource={this.state.searchSource}
-                    onChange={(val)=>{this.valChange(val);}}
-                    onSelect={(val,index,opt)=>{this.userSelect(val,index,opt);}}
-                    onFocus={()=>{log(1);}}
-                    onBlur={()=>{log(2);}}
-                />
+                {this.getFromInput()}
                 <div className={less.title}>到达城市：</div>
-                <AutoInput
-                    ref="to"
-                    value={this.state.value}
-                    defaultValue={this.state.to}
-                    placeholder={'中文／拼音／三字码'}
-                    max={'10'}
-                    defaultSource={this.state.defaultSource}
-                    searchSource={this.state.searchSource}
-                    onChange={(val)=>{this.valChange(val);}}
-                    onSelect={(val,index,opt)=>{this.userSelect(val,index,opt);}}
-                    onFocus={()=>{log(1);}}
-                    onBlur={()=>{log(2);}}
-                />
+                {this.getToInput()}
 
                 {this.getSwitchLayout()}
                 {this.getButton()}
@@ -138,6 +113,35 @@ class SearchLayout extends Component {
             </div>
         );
     }
+
+    getFromInput(){
+       return <AutoInput
+            ref="from"
+            defaultValue={this.state.from}
+            placeholder={'中文／拼音／三字码'}
+            max={'10'}
+            defaultSource={this.state.defaultSource}
+            searchSource={this.state.searchSource}
+            onChange={(val)=>{this.valChange(val);}}
+            onSelect={(val,index,opt)=>{this.userSelect("from",val,index,opt);}}
+            onFocus={()=>{log(1);}}
+            onBlur={()=>{log(2);}}
+        />;
+    }
+    getToInput(){
+        return  <AutoInput
+            ref="to"
+            defaultValue={this.state.to}
+            placeholder={'中文／拼音／三字码'}
+            max={'10'}
+            defaultSource={this.state.defaultSource}
+            searchSource={this.state.searchSource}
+            onChange={(val)=>{this.valChange(val);}}
+            onSelect={(val,index,opt)=>{this.userSelect("to",val,index,opt);}}
+            onFocus={()=>{log(1);}}
+            onBlur={()=>{log(2);}}
+        />;
+    }
     searchView() {
         return (
             <div className={less.bar}>
@@ -150,20 +154,14 @@ class SearchLayout extends Component {
                 <div className={less.inputLayout}>
                     <span className={less.inputLayoutSpan}>出发城市：</span>
                     <div className={less.inputLayoutDiv}>
-                        <AutoInput
-                            ref="from"
-                            defaultValue={this.state.from}
-                            placeholder="中文／拼音／三字码"/>
+                        {this.getFromInput()}
                     </div>
                 </div>
 
                 <div className={less.inputLayout}>
                     <span className={less.inputLayoutSpan}>到达城市：</span>
                     <div className={less.inputLayoutDiv}>
-                        <AutoInput
-                            ref="to"
-                            defaultValue={this.state.to}
-                            placeholder="中文／拼音／三字码"/>
+                        {this.getToInput()}
                     </div>
                 </div>
                 <div className={less.row}>
@@ -197,9 +195,9 @@ class SearchLayout extends Component {
         this.loadSearchData(val);
     }
 
-    userSelect(val,index,opt){
+    userSelect(m,val,index,opt){
         this.setState({
-            value:val
+            [m]:val
         });
         this.loadSearchData(val);
     }
@@ -240,7 +238,26 @@ class SearchLayout extends Component {
                         cityName: '西安1',
                         idata: '1211122121',
                         value:'西安（XA）'
-                    }]
+                    },
+                        {
+                            cityName: '北京',
+                            idata: '12112211121',
+                            value:'北京(BJ)'
+                        }, {
+                            cityName: '西安1',
+                            idata: '1211122121',
+                            value:'北京(BJ)'
+                        },
+                        {
+                            cityName: '北京',
+                            idata: '12112211121',
+                            value:'北京(BJ)'
+                        }, {
+                            cityName: '西安1',
+                            idata: '1211122121',
+                            value:'北京(BJ)'
+                        }
+                    ]
                 },
                 {
                     title: 'Apin推荐',

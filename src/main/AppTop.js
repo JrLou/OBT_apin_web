@@ -28,7 +28,7 @@ import less from "./AppTop.less";
                 <div className={less.right}>
                     <div className={less.rightItem}>
                         <img
-                            className={less.rightIcon}src={require('../images/check.png')}
+                            className={less.rightIcon}src={require('../images/phone.png')}
                         />
                     </div>
                     <div className={less.rightItem}>
