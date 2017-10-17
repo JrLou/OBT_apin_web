@@ -18,6 +18,10 @@ class page extends Component {
         };
         this.resutMessage = null;
         this.par = window.app_getPar(this);
+
+        this.pageSize = 16;
+        this.pageIndex = 1;
+        this.pageAllSize = 21;
     }
 
 
@@ -64,11 +68,13 @@ class page extends Component {
             let param = {
                 arrCity	:par.to,
                 depCity	:par.from,
-                flightType:par.one?1:2
+                flightType:par.one?1:2,
+                pageIndex:this.pageIndex,
+                pageSize:this.pageSize
             };
             let success = (code, msg, json, option) => {
                 log(json);
-
+                this.pageAllSize = 21;
                 this.resutMessage = "";
                 if(!json){
                     //无结果
@@ -165,7 +171,16 @@ class page extends Component {
 
                 <div style={{clear: "both"}}/>
                 <div className={less.bottom}>
-                    <Pagination total={500} itemRender={this.itemRender.bind(this)}  />
+                    <Pagination total={this.pageAllSize}
+                                defaultPageSize={this.pageSize}
+                                current={this.pageIndex}
+                                itemRender={this.itemRender.bind(this)}
+                        onChange={(page, pageSize)=>{
+                            log(page);
+                            this.pageIndex = page;
+                            this.loadData(this.searchLayout.getData());
+                        }}
+                        />
                 </div>
             </div>
         );
