@@ -6,20 +6,12 @@ import css from './LineHeadTitle.less';
 class page extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            dataSource: []
-        };
     }
     componentDidMount() {
 
     }
-    refreshLineHead(dataSource){
-        this.setState({
-            dataSource:dataSource
-        });
-    }
     render() {
-        let {dataSource} = this.state;
+        let {dataSource} = this.props;
         if (!dataSource){
             return null;
         }
