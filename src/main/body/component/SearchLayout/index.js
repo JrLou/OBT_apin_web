@@ -139,7 +139,7 @@ class SearchLayout extends Component {
             defaultSource={this.state.defaultSource}
             searchSource={this.state.searchSource}
             onChange={(val)=>{this.valChange(val);}}
-            onSelect={(val,index,opt)=>{this.userSelect("from",val,index,opt);}}
+            onSelect={(val,index,opt)=>{this.userSelect("to",val,index,opt);}}
             onFocus={()=>{log(1);}}
             onBlur={()=>{log(2);}}
         />;
@@ -240,7 +240,26 @@ class SearchLayout extends Component {
                         cityName: '西安1',
                         idata: '1211122121',
                         value:'西安（XA）'
-                    }]
+                    },
+                        {
+                            cityName: '北京',
+                            idata: '12112211121',
+                            value:'北京(BJ)'
+                        }, {
+                            cityName: '西安1',
+                            idata: '1211122121',
+                            value:'北京(BJ)'
+                        },
+                        {
+                            cityName: '北京',
+                            idata: '12112211121',
+                            value:'北京(BJ)'
+                        }, {
+                            cityName: '西安1',
+                            idata: '1211122121',
+                            value:'北京(BJ)'
+                        }
+                    ]
                 },
                 {
                     title: 'Apin推荐',
