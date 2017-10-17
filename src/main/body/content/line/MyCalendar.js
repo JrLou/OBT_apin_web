@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import css from './MyCalendar.less';
 import { Icon} from 'antd';
 import CalendarHelp from './CalendarHelp';
+import DealDate from './DealDate';
 class page extends Component {
     constructor(props) {
         super(props);
@@ -26,10 +27,19 @@ class page extends Component {
         //用于记录日期，显示的时候，根据dateObj中的日期的年月显示
 
     }
-    refreshCalendar(isLeft, dataSource,monthArr){
+    refreshMonth(isLeft,monthArr){
+        // let myDateArr = DealDate.dealDateArr(dataSource);
+
+        this.setState({
+            // tags:dataSource,
+            monthArr:monthArr,
+            isLeft:isLeft
+        });
+    }
+    //刷新日历每天的数据
+    refreshCalendarDay(isLeft,dataSource){
         this.setState({
             tags:dataSource,
-            monthArr:monthArr,
             isLeft:isLeft
         });
     }
@@ -131,7 +141,7 @@ class page extends Component {
     }
 
     //选择的月份
-    selectMonth(selMonth) {
+    selectMonth(selMonth,isLeft) {
         let { current_year, current_month, current_day,
             select_year, select_month, select_day, date_num_array, first_day} = this.state;
 
@@ -159,6 +169,11 @@ class page extends Component {
             select_day : select_day,
             date_num_array : date_num_array,
             first_day : first_day
+        }, () => {
+            if (this.props.onSelectMonth){
+                //返回年月
+                this.props.onSelectMonth(selMonth,isLeft);
+            }
         });
     }
 
@@ -167,7 +182,7 @@ class page extends Component {
      * @returns {XML}
      */
     render() {
-        let { row_number, col_number,title} = this.props;
+        let {current_Y_M, row_number, col_number,title} = this.props;
 
         let { current_year, current_month, current_day,
             select_year, select_month, select_day,
@@ -192,14 +207,15 @@ class page extends Component {
         previous_month_days = date_num_array[previous_month];
         //在本月之前的
         for (let i = 0; i < first_day; i++) {
-            log(i);
             let itemView = (<div className={css.itemGray}>
                 <div className={css.dayGray}>
                     {previous_month_days - (first_day - i) + 1}
                 </div>
             </div>);
 
-            let previous_link = (<CalendarItem key={'previous'+i} itemView = {itemView}/>);
+            let previous_link = (<CalendarItem
+                key={'previous'+i+(isLeft?"left":"right")}
+                itemView = {itemView}/>);
             previous_days.push(previous_link);
         }
 
@@ -224,7 +240,6 @@ class page extends Component {
             current_link = (<CalendarItem key={'current'+i} itemView = {itemView}/>);
 
 
-
             // 添加tag样式
             if (tags&&tags.length > 0) {
                 for (let j = 0; j < tags.length; j++) {
@@ -235,28 +250,31 @@ class page extends Component {
                         // 判断选择样式与历史样式是否相等，相等激活
                         if (select_year == history_year && select_month == history_month && history_day == (i + 1)) {
                             currentClassName = css.itemSelect;
-                            let itemView = (<div className={currentClassName}
-                                                 onClick={this.selectDate.bind(this, i + 1,tagDataItem)}>
-                                <img className={css.itemSelect_sign}
-                                     src={require("../../../../images/select_sign.png")}/>
-                                <div className={css.dayActive}>
-                                    {currentText}
-                                </div>
-                                <div className={css.price}> {"¥"+tagDataItem.basePrice}</div>
-                                {isLeft?null:<div className={css.sit}>{"余位"+tagDataItem.remainCount}</div>}
-                            </div>);
-
+                            let itemView = (
+                                <div className={currentClassName}
+                                     onClick={this.selectDate.bind(this, i + 1,tagDataItem)}>
+                                    <img className={css.itemSelect_sign}
+                                         src={require("../../../../images/select_sign.png")}/>
+                                    <div className={css.dayActive}>
+                                        {currentText}
+                                    </div>
+                                    <div className={css.price}> {"¥"+tagDataItem.basePrice}</div>
+                                    {isLeft?null:<div className={css.sit}>{"余位"+tagDataItem.remainCount}</div>}
+                                </div>);
                             current_link = (<CalendarItem key={'current'+i+(isLeft?"left":"right")} itemView = {itemView}/>);
                         } else {
                             currentClassName = css.itemTags;
-                            let itemView = (<div className={currentClassName}
-                                                 onClick={this.selectDate.bind(this, i + 1,tagDataItem)}>
-                                <div className={css.dayActive}>
-                                    {currentText}
-                                </div>
-                                <div className={isLeft?css.refPrice:css.price}> {"¥"+tagDataItem.basePrice}</div>
-                                {isLeft?null:<div className={css.sit}>{"余位"+tagDataItem.remainCount}</div>}
-                            </div>);
+                            log(tagDataItem);
+                            log("---------");
+                            let itemView = (
+                                <div className={currentClassName}
+                                     onClick={this.selectDate.bind(this, i + 1,tagDataItem)}>
+                                    <div className={css.dayActive}>
+                                        {currentText}
+                                    </div>
+                                    <div className={isLeft?css.refPrice:css.price}> {"¥"+tagDataItem.basePrice}</div>
+                                    {isLeft?null:<div className={css.sit}>{"余位"+tagDataItem.remainCount}</div>}
+                                </div>);
 
                             current_link = (<CalendarItem  key={'current'+i+(isLeft?"left":"right")} itemView={itemView}/>);
                             break;
@@ -269,10 +287,10 @@ class page extends Component {
 
         //紧随本月之后的
         for (let i = 0; i < n_day; i++) {
-
-            let itemView = (<div className={css.itemGray} >
-                <div className={css.dayGray}>{i + 1}</div>
-            </div>);
+            let itemView = (
+                <div className={css.itemGray} >
+                    <div className={css.dayGray}>{i + 1}</div>
+                </div>);
 
             let next_link = (<CalendarItem key={'next'+i} itemView={itemView}/>);
             next_days.push(next_link);
@@ -299,9 +317,10 @@ class page extends Component {
                     <div className={css.calendarHeader_title}>{title}</div>
                     <div className={css.calendarHeader_con}>
                         <MonthView
-                            selectMonth={(selMonth)=>{
-                                this.selectMonth(selMonth);
+                            selectMonthAction={(selMonth)=>{
+                                this.selectMonth(selMonth,isLeft);
                             }}
+                            current_month={current_Y_M}
                             select_year = {select_year}
                             select_month = {select_month}
                             monthArr = {monthArr}
@@ -373,8 +392,10 @@ class CalendarItem extends Component{
 class MonthView extends Component{
     constructor(props) {
         super(props);
+        let {current_month} = this.props;
+        current_month = current_month.substring(0,7);
         this.state = ({
-            current_month:"2017-10",
+            current_month:current_month,
             remove_width:"0"
         });
         this.removeNum = 0;
@@ -388,7 +409,7 @@ class MonthView extends Component{
 
     }
     render(){
-        let {select_year,selectMonth,select_month,monthArr} = this.props;
+        let {select_year,selectMonthAction,select_month,monthArr} = this.props;
 
         let month_width = 0;
         if (monthArr&&monthArr.length>0){
@@ -435,7 +456,7 @@ class MonthView extends Component{
                          width:month_width+"px",
                          transform:translateX
                      }}>
-                    {this.createMonthItem(monthArr,selectMonth)}
+                    {this.createMonthItem(monthArr,selectMonthAction)}
                 </div>
             </div>
             {/*<div className={css.blurEffect}></div>*/}
@@ -465,7 +486,7 @@ class MonthView extends Component{
             </div>
         </div>);
     }
-    createMonthItem(monthArr,selectMonth){
+    createMonthItem(monthArr,selectMonthAction){
         if (!monthArr){
             return null;
         }
@@ -474,21 +495,21 @@ class MonthView extends Component{
             // 判断选择样式与历史样式是否相等，相等激活
             let item_MonthView = null;
             let monthData_item = monthArr[i];
-            let isSelect = monthData_item == this.state.current_month;
-            let myMonth = monthData_item.replace("-","年");
+            let isSelect = (monthData_item == this.state.current_month);
+            // let myMonth = monthData_item?monthData_item.replace("-","年"):"";
             item_MonthView = (
                 <div key={"current_month"+i}
                      onClick={()=>{
                          this.setState({
                              current_month:monthData_item
                          },()=>{
-                             if (selectMonth){
-                                 selectMonth(monthData_item);
+                             if (selectMonthAction){
+                                 selectMonthAction(monthData_item);
                              }
                          });
                      }}
                      className={isSelect?css.select_monthItem:css.monthItem}>
-                    {myMonth+"月"}
+                    {monthData_item+"月"}
                 </div>);
             monthItemArr.push(item_MonthView);
         }
