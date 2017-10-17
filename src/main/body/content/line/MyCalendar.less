@@ -170,9 +170,14 @@
 }
 .price{
   color: #FF5841;
-  font-size: @font_size_cell;
+  font-size: @font_size_small;
   padding-right: @d_spadding_small;
   text-align: right;
+}
+.refPrice{
+  composes: price;
+  margin-top: @d_spadding_small;
+
 }
 .sit{
   composes: price;
@@ -195,5 +200,5 @@
 }
 .itemRed{
   composes: defaultItem;
-  background-color: red;
+  background-color: @all-backcolor;
 }

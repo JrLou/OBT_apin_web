@@ -26,8 +26,7 @@ class MyAlert extends Component {
                 </div>
                 <div className={css.con}>
                     <span style={{color:"#888D99",fontSize:"14px"}}>客服电话 :</span>
-                    <span>0571-85071773</span>
-
+                    <span>0571-58122998</span>
                 </div>
 
                 <div className={css.btn} onClick={()=>{

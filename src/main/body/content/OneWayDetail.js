@@ -2,6 +2,7 @@
  * Created by lixifeng on 16/10/25.
  */
 import React, {Component} from 'react';
+import {message} from 'antd';
 import css from './OneWayDetail.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APIGYW from "../../../api/APIGYW.js";
@@ -17,13 +18,14 @@ class page extends Component {
     }
     componentDidMount() {
         // this.loadTripData();
-        this.loadDaysData();
+        // this.loadDaysData("2017-10-14");
+        this.loadData();
     }
-    loadDaysData() {
+    loadDaysData(myDate) {
         var param = {
             "depCity":"上海",
             "arrCity":"北京",
-            "depDate":"2017-10-14",
+            "depDate":myDate,
             "flightType":"2"
         };
         var success = (code, msg, json, option) => {
@@ -37,12 +39,16 @@ class page extends Component {
                 ipKey:'hlIP'
             });
     }
-    loadTripData() {
+    loadTripData(date,days) {
+        if (!date||!days){
+            message.warning("航程不存在");
+            return;
+        }
         var param = {
             "depCity":"上海",
-            "day":"2",
             "arrCity":"北京",
-            "depDate":"2017-10-14",
+            "day":days,
+            "depDate":date,
             "flightType":"2"
         };
         var success = (code, msg, json, option) => {
@@ -96,19 +102,22 @@ class page extends Component {
     }
     loadData() {
         var param = {
-            "depCity":"上海",
-            "arrCity":"北京",
-            "depDate":"2017-10-14",
-            "flightType":"1"
+            "cityList":[{
+                "depCity":"上海",
+                "arrCity":"北京",
+                "flightType":"2"
+            }]
         };
         var success = (code, msg, json, option) => {
-            log(json);
-            log("gyw-------------");
+            let dataSource = json[0]?json[0]:[];
+            let dataCal = dataSource.dateList;
+            this.lineHeadTitle.refreshLineHead(dataSource);
+            this.myCalendarLeft.refreshCalendar(true,dataCal,["2017-10"]);
         };
         var failure = (code, msg, option) => {
             log(msg);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flight_query,success, failure, param,
             {
                 ipKey:'hlIP'
             });
@@ -117,16 +126,17 @@ class page extends Component {
         var div = (
             <div className={css.main}>
                 <div className={css.content}>
-                    <LineHeadTitle/>
+                    <LineHeadTitle ref={(a)=>{this.lineHeadTitle = a;}}/>
                 </div>
                 <div className={css.content} style={{overflow:"hidden"}}>
                     <div className={css.myCalendar}
                          style={{width:"49%",float:"left"}}>
                         <MyCalendar
                             ref={(a)=>{this.myCalendarLeft = a;}}
-                            onSelectDate={(select_year, select_month , select_day)=>{
-                                this.selectDate(select_year, select_month, select_day);
+                            onSelectDate={(select_year, select_month , select_day,selDataItem)=>{
+                                this.selectDate(select_year, select_month, select_day,selDataItem);
                             }}
+                            title={"去程月份"}
                             year={"2017"}
                             month={"10"}
                             day={"11"}
@@ -140,9 +150,10 @@ class page extends Component {
                          style={{width:"49%",float:"right"}}>
                         <MyCalendar
                             ref={(a)=>{this.myCalendarRight = a;}}
-                            onSelectDate={(select_year, select_month , select_day)=>{
-                                this.selectDate(select_year, select_month, select_day);
+                            onSelectDate={(select_year, select_month , select_day,selDataItem)=>{
+                                this.selectDate(select_year, select_month, select_day,selDataItem);
                             }}
+                            title={"返程月份"}
                             year={"2017"}
                             month={"10"}
                             day={"11"}
@@ -169,9 +180,14 @@ class page extends Component {
         );
         return div;
     }
-    selectDate(y,m,d){
-        alert(y+"年"+m+"月"+d+"日");
-        this.myLineInfor.refreshView([]);
+    selectDate(selDataItem,isLeft){
+        let days = selDataItem?selDataItem.days:undefined;
+        let date = selDataItem?selDataItem.retDate:undefined;
+        if (isLeft) {
+            this.loadDaysData(date);
+        }else {
+            this.loadTripData(date, days);
+        }
     }
 }
 
@@ -219,7 +235,7 @@ class LineInfor extends Component {
                                 <div className={css.shuiText}>
                                     <div className={css.shuiTextTop}>
                                         {dataItem.flightType==2?"往返含税":"单程含税"}
-                                        </div>
+                                    </div>
                                     <div className={css.priceText}>
                                         <span className={css.priceTextColor}>{"¥ "}</span>
                                         <span className={css.priceTextFont}>{dataItem.basePrice}</span>
