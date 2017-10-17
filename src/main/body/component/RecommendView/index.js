@@ -92,19 +92,18 @@ class RecommendView extends Component {
         }
         return (
             <div>
-                <div className={template==1?css.title:css.titleBlack} >
-                    <div className={css.text}> {data.from}</div>
-                    <div className={css.text2}>
-                        <div className={css.icon}
-                             style={{
-                                 backgroundImage: "url(" + img + ")"
-                             }}
-                        >
-
-                        </div>
-                    </div>
-                    <div className={css.text}> {data.to}</div>
+            <div className={template==1?css.title:css.titleBlack} >
+            <div className={css.text}> {data.from}</div>
+            <div className={css.text2}>
+                <div className={css.icon}
+                     style={{
+                         backgroundImage: "url(" + img + ")"
+                     }}
+                >
                 </div>
+            </div>
+            <div className={css.text}> {data.to}</div>
+        </div>
                 <div style={{clear:"both"}}/>
             </div>
         );
