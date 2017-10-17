@@ -33,18 +33,18 @@ class page extends Component {
 
     componentDidMount() {
 
-        Events.scrollEvent.register('begin', function() {
-            console.log("begin", arguments);
-        });
-
-        Events.scrollEvent.register('end', function() {
-            console.log("end", arguments);
-        });
-
-        scrollSpy.update();
-
-        window.addEventListener('scroll', this.handleScroll);
-        this.getNetData();
+        // Events.scrollEvent.register('begin', function() {
+        //     console.log("begin", arguments);
+        // });
+        //
+        // Events.scrollEvent.register('end', function() {
+        //     console.log("end", arguments);
+        // });
+        //
+        // scrollSpy.update();
+        //
+        // window.addEventListener('scroll', this.handleScroll);
+        // this.getNetData();
         this.getBoutiqueData();
     }
     /*获取精品航线数据*/
@@ -228,7 +228,7 @@ class page extends Component {
         return (
             <div
                 style={{margin:"auto",maxWidth:1200}}>
-                <li> <a onClick={() => scroll.scrollToBottom()}>Scroll To 100!</a></li>
+                {/*<li> <a onClick={() => scroll.scrollToBottom()}>Scroll To 100!</a></li>*/}
                 <Row>
                     <Col span={6}>
                         <div  className={less.topLeft}>

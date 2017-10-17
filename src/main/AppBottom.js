@@ -8,14 +8,21 @@ class page  extends Component {
         return (
             <div
                 style={{
-                    lineHeight:"25px",
                     textAlign:"center"
                 }}
             >
-                设为首页 | 收藏本站 | 隐私条款 | 免责声明 | 联系我们
+                <font style={{color:"#9c9999",fontSize:12}}>Copyright©2015 杭州爱拼机网络科技有限公司版权所有 浙ICP备 15024358号-1</font>
                 <br/>
-                Copyright©2015 杭州爱拼机网络科技有限公司版权所有 浙ICP备 15024358号-1
                 <br/>
+                <p>
+                    <a href="http://www.itrust.org.cn/home/index/rz_certifi/wm/RZ2017081801" target='_blank'>
+                        <img style={{height:29}}
+                        src={require("../images/believe1.png")}/></a>
+                    <a href="https://ss.knet.cn/verifyseal.dll?sn=e17082333010068646dvwe000000&pa=111332" tabindex="-1"
+                       id="urlknet" target="_blank"><img style={{height:29,marginLeft:20}} src={require("../images/believe3.png")}/></a>
+                    <a id='___szfw_logo___' href='https://credit.szfw.org/CX20170824035710820330.html'
+                       target='_blank'><img style={{height:29,marginLeft:20}} src={require("../images/believe2.png")}/></a>
+                </p>
                 <img src="/dang.jpg"/>
             </div>
         );
