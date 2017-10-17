@@ -1,4 +1,25 @@
 //重写日志系统
+function getUrlSearch(str) {
+    var query = {};
+    var name, value;
+    var num = str.indexOf("?");
+    if (num < 0) {
+        return query;
+    }
+
+    str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
+    var arr = str.split("&"); //各个参数放到数组里
+
+    for (var i = 0; i < arr.length; i++) {
+        num = arr[i].indexOf("=");
+        if (num > 0) {
+            name = arr[i].substring(0, num);
+            value = arr[i].substr(num + 1);
+            query[name] = value;
+        }
+    }
+    return query;
+}
 window.log = function (obj) {
     /* eslint-disable no-console */
     console.log(obj);
@@ -21,9 +42,15 @@ window.app_open = function (obj, path, state, open, callBack) {
         }
     }
 
+    let search = getUrlSearch(window.location.href);
+    let ip = "";
+    if(search&&search.ip){
+        ip = "?ip="+search.ip+"&";
+    }
     document.documentElement.scrollTop = document.body.scrollTop = 0;
 
-    let get = state ? "?data=" + encodeURIComponent(JSON.stringify(state)) : "";
+    let get = state ? "data=" + encodeURIComponent(JSON.stringify(state)) : "";
+    get+=ip;
     if (open === "new") {
         window.open(path + get);
     } else if (open === "self") {
