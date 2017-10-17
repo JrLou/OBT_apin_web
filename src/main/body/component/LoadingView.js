@@ -1,0 +1,34 @@
+/**
+ * Created by apin on 2017/10/17.
+ */
+import React, { Component } from 'react';
+import css from './LoadingView.less';
+class MyAlert extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isShow: false
+        };
+    }
+    componentDidMount() {
+
+    }
+    refreshView(isShow){
+        setTimeout(()=>{
+            this.setState({
+                isShow:isShow
+            });
+        },0);
+
+    }
+    render() {
+        var div = (<div className={this.state.isShow?css.main:css.hidden}>
+            <img className={css.alertbg} src={require("../../../images/loading.gif")}/>
+        </div>);
+        return div;
+    }
+}
+MyAlert.contextTypes = {
+    router: React.PropTypes.object
+};
+module.exports = MyAlert;

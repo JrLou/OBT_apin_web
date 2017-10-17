@@ -76,7 +76,7 @@ module.exports = {
 		custom: {
             serverRoutes:router
 		},
-        hlIP:"http://192.168.0.46:8080"
+        hlIP:"http://192.168.0.237:8080"
 	},
 	webpack: {
 		dev: {
