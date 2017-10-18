@@ -68,7 +68,6 @@
             left: 0;
             right: 0;
             height: 1rem;
-            background-color: #e979b3;
             display: table;
             width: 100%;
             text-align: center;
@@ -137,6 +136,12 @@
             color: #001100;
             margin-top: 0.1rem;
         }
+
+        .itemLayout{
+            max-height: 2rem;
+            height: 2rem;
+            background-color: #d9b8f7;
+        }
     </style>
     <script>
         document.documentElement.style.fontSize = innerWidth / 10 + "px";
@@ -158,7 +163,7 @@
     </div>
     <div class="contentTop">
 
-        <div id="itemLayout">
+        <div id="itemLayout" class="itemLayout">
 
         </div>
 
@@ -181,11 +186,10 @@
             money:(Math.random()*10*(i+1)).toFixed(2),
         })
     }
-
     let innerHTML = "";
     for(let data of dataSource){
         innerHTML+= '<div class="c_t_item">\n' +
-            '                <div class="c_t_item_image" style="background-image: url(\'./test.png\')"></div>\n' +
+            '                <div class="c_t_item_image" style="background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1508304466477&di=6e022eb4772a01c846fb8beded44f684&imgtype=0&src=http%3A%2F%2Fpic33.nipic.com%2F20130928%2F8821914_220446979000_2.jpg)"></div>\n' +
             '                <div class="c_t_item_info">\n' +
             '                    <div class="c_t_item_info_title">'+data.title+'</div>\n' +
             '                    <div class="c_t_item_info_title">X'+data.count+'</div>\n' +
@@ -193,6 +197,7 @@
             '                </div>\n' +
             '            </div>';
     }
+
 
     itemLayout.innerHTML=innerHTML;
 </script>
