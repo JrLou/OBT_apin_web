@@ -119,7 +119,8 @@ class page extends Component {
                     }}
                 />
                 <div style={{paddingTop:42}}>
-                {this.state.loading ? this.getLogingLayout() : this.getContentLayout(this.resut)}
+                    <OneWayDetail/>
+                {/*{this.state.loading ? this.getLogingLayout() : this.getContentLayout(this.resut)}*/}
                 </div>
             </div>
         );
