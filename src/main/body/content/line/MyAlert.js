@@ -19,7 +19,12 @@ class MyAlert extends Component {
         });
     }
     render() {
-        var div = (<div className={this.state.isShow?css.main:css.hidden}>
+        var div = (<div className={this.state.isShow?css.main:css.hidden}
+                        onClick={()=>{
+                            this.setState({
+                                isShow:false
+                            });
+                        }}>
             <div className={css.alertbg}>
                 <div className={css.title}>
                     {this.props.data?this.props.data:"请联系客服预订下单"}
@@ -33,9 +38,7 @@ class MyAlert extends Component {
                     this.setState({
                         isShow:false
                     });
-                }}>
-                    关闭
-                </div>
+                }}>关闭</div>
             </div>
         </div>);
         return div;

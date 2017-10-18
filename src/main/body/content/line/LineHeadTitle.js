@@ -18,13 +18,13 @@ class page extends Component {
         var div = (<div className={css.main}>
             <div className={css.con}>
                 <div className={css.left}>
-                    <img className={css.img} src={dataSource.arrCityImgUrl?dataSource.arrCityImgUrl:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1507698872895&di=e104eaeed7c2a466f932aa30d8885831&imgtype=0&src=http%3A%2F%2Fimgditan.cang.com%2F201309%2F15%2F2013091522503938058130.JPG"}/>
+                    <img className={css.img} src={dataSource.arrCityImgUrl?dataSource.arrCityImgUrl:require("../../../../images/default.png")}/>
                 </div>
                 <div className={css.right}>
                     <div className={css.title}>
                         <div className={css.titleHead}>{dataSource.depCity}</div>
                         <img className={css.imgIcon}
-                             src={require("../../../../images/trip_single.png")}/>
+                             src={dataSource.flightType==2?require("../../../../images/trip_round.png"):require("../../../../images/trip_single.png")}/>
                         <div className={css.refTitleHead}>{dataSource.arrCity}（往返）</div>
                     </div>
 

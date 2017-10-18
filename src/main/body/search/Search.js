@@ -106,7 +106,7 @@ class page extends Component {
                 this.setLoading(false, () => {
                 });
             };
-            HttpTool.request(HttpTool.typeEnum.POST, "/airlineapi/v1.0/list", success, failure, param,
+            HttpTool.request(HttpTool.typeEnum.POST, "/ba/flightapi/v1.0/flightDetail/list", success, failure, param,
                 {
                     ipKey: "hlIP"
                 });
@@ -127,7 +127,8 @@ class page extends Component {
                     }}
                 />
                 <div style={{paddingTop:42}}>
-                {this.state.loading ? this.getLogingLayout() : this.getContentLayout(this.resut)}
+                    <OneWayDetail/>
+                {/*{this.state.loading ? this.getLogingLayout() : this.getContentLayout(this.resut)}*/}
                 </div>
             </div>
         );

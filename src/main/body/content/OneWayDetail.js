@@ -15,11 +15,24 @@ class page extends Component {
         super(props);
         this.myData = this.props.data;
 
-        alert(JSON.stringify(this.myData));
+        this.depCity = this.myData?this.myData.depCity:"";
+        this.arrCity = this.myData?this.myData.arrCity:"";
+        this.flightType = this.myData?this.myData.flightType:"2";
+
+        this.depCity = "上海";
+        this.arrCity = "北京";
+        this.flightType = "2";
+
         let date = new Date();
         this.year = date.getFullYear();
         this.month = date.getMonth()+1;
         this.day = date.getDate();
+        this.state = {
+            isShowRightCal:this.year+"-"+this.month+"-"+this.day,
+            rightY:this.year,
+            rightM:this.month,
+            rightD:this.day
+        };
     }
     componentDidMount() {
         this.loadLeftHeadMonthData();
@@ -28,14 +41,18 @@ class page extends Component {
     //左日历的headMonth
     loadLeftHeadMonthData() {
         var param = {
-            "depCity":"上海",
-            "arrCity":"北京",
-            "flightType":"2"
+            "depCity":this.depCity,
+            "arrCity":this.arrCity,
+            "flightType":this.flightType
         };
         this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
             this.loadingView.refreshView(false);
-            this.myCalendarLeft.refreshMonth(true,json);
+            if (this.flightType == "2"){
+                this.myCalendarLeft.refreshMonth(true,json);
+            }else {
+                this.myCalendarRight.refreshMonth(false,json);
+            }
             this.loadLeftDay(json[0]);
         };
         var failure = (code, msg, option) => {
@@ -50,14 +67,24 @@ class page extends Component {
     //右日历的headMonth
     loadRightHeadMonthData(depDate) {
         var param = {
-            "depCity":"上海",
-            "arrCity":"北京",
-            "flightType":"2",
+            "depCity":this.depCity,
+            "arrCity":this.arrCity,
+            "flightType":this.flightType,
             "depDate":depDate
         };
         var success = (code, msg, json, option) => {
             this.myCalendarRight.refreshMonth(false,json);
-            this.loadRightDay(json[0],depDate);
+            if (json[0]){
+                let YMDArr = json[0].split("-");
+                this.setState({
+                    isShowRightCal:json[0],
+                    rightY:YMDArr[0]?YMDArr[0]:this.year,
+                    rightM:YMDArr[1]?YMDArr[1]:this.month,
+                    rightD:YMDArr[2]?YMDArr[2]:this.day
+                });
+                this.loadRightDay(json[0],depDate);
+            }
+
         };
         var failure = (code, msg, option) => {
             this.loadingView.refreshView(false);
@@ -71,14 +98,19 @@ class page extends Component {
     //左边日历每天的数据
     loadLeftDay(month) {
         var param = {
-            "depCity":"上海",
-            "arrCity":"北京",
-            "flightType":"2",
+            "depCity":this.depCity,
+            "arrCity":this.arrCity,
+            "flightType":this.flightType,
             "month":month
         };
 
         var success = (code, msg, json, option) => {
-            this.myCalendarLeft.refreshCalendarDay(true,json);
+            if (this.flightType=="2"){
+                this.myCalendarLeft.refreshCalendarDay(true,json);
+            }else {
+                this.myCalendarRight.refreshCalendarDay(false,json);
+            }
+
         };
         var failure = (code, msg, option) => {
             this.loadingView.refreshView(false);
@@ -92,9 +124,9 @@ class page extends Component {
     //右日历每天的数据
     loadRightDay(month,depDate) {
         var param = {
-            "depCity":"上海",
-            "arrCity":"北京",
-            "flightType":"2",
+            "depCity":this.depCity,
+            "arrCity":this.arrCity,
+            "flightType":this.flightType,
             "month":month,
             "depDate":depDate
         };
@@ -112,20 +144,28 @@ class page extends Component {
     }
 
     loadTripData(date,days) {
-        if (!date||!days){
-            message.warning("航程不存在");
-            return;
+        if (this.flightType=="2"){
+            if (!date||!days){
+                message.warning("航程不存在");
+                return;
+            }
+        }else {
+            if (!date){
+                message.warning("航程不存在");
+                return;
+            }
         }
+
         this.loadingView.refreshView(true);
         var param = {
-            "depCity":"上海",
-            "arrCity":"北京",
+            "depCity":this.depCity,
+            "arrCity":this.arrCity,
+            "flightType":this.flightType,
             "day":days,
-            "depDate":date,
-            "flightType":"2"
+            "depDate":date
         };
         var success = (code, msg, json, option) => {
-            this.myLineInfor.refreshView(json);
+            this.myLineInfor.refreshView(json,this.flightType);
             this.loadingView.refreshView(false);
         };
         var failure = (code, msg, option) => {
@@ -144,8 +184,8 @@ class page extends Component {
                     <LineHeadTitle dataSource = {this.myData}/>
                 </div>
                 <div className={css.content} style={{overflow:"hidden"}}>
-                    <div className={css.myCalendar}
-                         style={{width:"49%",float:"left"}}>
+                    {this.flightType==2?<div className={css.myCalendar}
+                                             style={{width:"49%",float:"left"}}>
                         <MyCalendar
                             ref={(a)=>{this.myCalendarLeft = a;}}
                             onSelectDate={(select_year, select_month , select_day,selDataItem)=>{
@@ -162,19 +202,27 @@ class page extends Component {
                             row_number = {6}
                             col_number = {7}
                         />
-                    </div>
+                    </div>:null}
+
                     <div className={css.myCalendar}
-                         style={{width:"49%",float:"right"}}>
+                         style={{width:this.flightType==2?"49%":"70%",float:this.flightType==2?"right":"none"}}>
                         <MyCalendar
                             ref={(a)=>{this.myCalendarRight = a;}}
                             onSelectDate={(select_year, select_month , select_day,selDataItem)=>{
                                 this.selectDate(select_year, select_month, select_day,selDataItem);
                             }}
-                            title={"返程月份"}
-                            current_Y_M={this.year+"-"+this.month+"-"+this.day}
-                            year={"2017"}
-                            month={"10"}
-                            day={"11"}
+                            onSelectMonth = {(selMonth,isLeft)=>{
+                                if (this.flightType==2){
+                                    this.loadRightDay(selMonth,this.date);
+                                }else {
+                                    this.loadLeftDay(selMonth);
+                                }
+                            }}
+                            title={this.flightType==2?"返程月份":""}
+                            current_Y_M={this.state.isShowRightCal}
+                            year={this.year}
+                            month={this.month}
+                            day={this.day}
                             row_number = {6}
                             col_number = {7}
                         />
@@ -200,8 +248,13 @@ class page extends Component {
             this.date = selDataItem?selDataItem.retDate:undefined;
             this.loadRightHeadMonthData(this.date);
         }else {
-            let days = selDataItem?selDataItem.days:undefined;
-            this.loadTripData(this.date, days);
+            if (this.flightType==2){
+                let days = selDataItem?selDataItem.days:undefined;
+                this.loadTripData(this.date, days);
+            }else {
+                let days = 0;
+                this.loadTripData(selDataItem.retDate, days);
+            }
         }
     }
 }
@@ -210,21 +263,23 @@ class LineInfor extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataSource: []
+            dataSource: [],
+            flightType:true
         };
     }
-    refreshView(dataSource) {
+    refreshView(dataSource,flightType) {
         this.setState({
-            dataSource:dataSource
+            dataSource:dataSource,
+            flightType:flightType==2
         });
     }
     render() {
-        let {dataSource} = this.state;
+        let {dataSource,flightType} = this.state;
         return (<div>
-            {this.createCell(dataSource)}
+            {this.createCell(dataSource,flightType)}
         </div>);
     }
-    createCell(dataSource){
+    createCell(dataSource,flightType){
         if (!dataSource||dataSource.length<1){
             return null;
         }
@@ -235,7 +290,7 @@ class LineInfor extends Component {
                 <div className={css.cell}>
                     <div className={css.left}>
                         <div className={css.table}>
-                            {this.createItemCell(dataItem.airlineInfo)}
+                            {this.createItemCell(dataItem.airlineInfo,flightType)}
                         </div>
                     </div>
                     <div className={css.right}>
@@ -278,7 +333,7 @@ class LineInfor extends Component {
         return viewArr;
     }
 
-    createItemCell(data){
+    createItemCell(data,flightType){
         if (!data||data.length<1){
             return null;
         }
@@ -304,11 +359,11 @@ class LineInfor extends Component {
             endDate = endDate.replace("-","月")+"日";
             var itemView = (<div key={i}>
                 <div className={css.cellLine}>
-                    <div className={css.type}>
+                    {flightType?<div className={css.type}>
                         <div className={css.typeText}>
                             {dataItem.flightType==1?"去":"返"}
                         </div>
-                    </div>
+                    </div>:null}
 
                     <div className={css.type}>
                         <img className={css.logo} src ={dataItem.logo}/>

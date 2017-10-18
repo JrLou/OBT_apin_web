@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import css from './MyCalendar.less';
-import { Icon} from 'antd';
+import { Icon,Button} from 'antd';
 import CalendarHelp from './CalendarHelp';
 import DealDate from './DealDate';
 class page extends Component {
@@ -314,8 +314,10 @@ class page extends Component {
         return (
             <div className={css.calendar}>
                 <div className={css.calendarHeader}>
-                    <div className={css.calendarHeader_title}>{title}</div>
-                    <div className={css.calendarHeader_con}>
+                    <div className={css.calendarHeader_title}
+                         style={{width:title!=""?"12%":"0px"}}
+                    >{title}</div>
+                    <div className={css.calendarHeader_con} style={{width:title!=""?"88%":"100%"}}>
                         <MonthView
                             selectMonthAction={(selMonth)=>{
                                 this.selectMonth(selMonth,isLeft);
@@ -422,8 +424,8 @@ class MonthView extends Component{
 
         return(<div className={css.monthView_bg}>
             <div className={css.calendarHeaderIcon}>
-                <img className={css.icon}
-                     src={require("../../../../images/select_left_icon.png")}
+
+                <img className={css.icon} style={{float: "right"}}
                      onClick={()=>{
                          this.removeNum = this.removeNum-1;
                          this.removeTotal = this.removeTotal -90;
@@ -434,13 +436,14 @@ class MonthView extends Component{
                          }
                          var remove_width = this.state.remove_width;
                          var remove = remove_width+90;
-
                          setTimeout(()=>{
                              this.setState({
                                  remove_width:remove
                              });
                          },1000);
-                     }}/>
+                     }}
+                     src={require("../../../../images/select_left_icon.png")}/>
+
             </div>
 
 
@@ -509,7 +512,8 @@ class MonthView extends Component{
                          });
                      }}
                      className={isSelect?css.select_monthItem:css.monthItem}>
-                    {monthData_item+"月"}
+                    {monthData_item}
+                    {/*{monthData_item+"月"}*/}
                 </div>);
             monthItemArr.push(item_MonthView);
         }

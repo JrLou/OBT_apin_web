@@ -61,7 +61,7 @@ class page extends Component {
             log(msg);
             message.error(msg);
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/airlineapi/v1.0/bestList", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/os/airlineapi/v1.0/bestList", success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -191,7 +191,7 @@ class page extends Component {
                     message.error(msg);
                 });
             };
-            HttpTool.request(HttpTool.typeEnum.POST, "/lineapi//v1.0/lines/new", success, failure, param,
+            HttpTool.request(HttpTool.typeEnum.POST, "/ba/lineapi//v1.0/lines/new", success, failure, param,
                 {
                     ipKey: "hlIP"
                 });
