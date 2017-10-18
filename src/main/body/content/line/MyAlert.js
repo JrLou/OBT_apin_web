@@ -22,7 +22,7 @@ class MyAlert extends Component {
         var div = (<div className={this.state.isShow?css.main:css.hidden}>
             <div className={css.alertbg}>
                 <div className={css.title}>
-                    请联系客服预订下单
+                    {this.props.data?this.props.data:"请联系客服预订下单"}
                 </div>
                 <div className={css.con}>
                     <span style={{color:"#888D99",fontSize:"14px"}}>客服电话 :</span>

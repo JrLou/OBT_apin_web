@@ -9,6 +9,7 @@ import {HttpTool} from "../../../../lib/utils/index.js";
 //获取模拟数据
 import routes from '../../../vm/routes.js';
 import less from './Search.less';
+import MyAlert from "../content/line/MyAlert";
 class page extends Component {
     constructor(props) {
         super(props);
@@ -244,8 +245,9 @@ class page extends Component {
                 <div className={less.emptyText}>
                     <div>没有查询到航班信息，请重新搜索或联系客服询问航班 </div>
                     <div>{this.resutMessage}</div>
-                    <Button type="primary">联系客服</Button>
+                    <Button type="primary" onClick={()=>{this.myAlert.refreshView();}}>联系客服</Button>
                 </div>
+                <MyAlert data={"客服电话"} ref={(a)=>this.myAlert = a}/>
             </div>
         );
     }
