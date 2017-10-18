@@ -27,7 +27,7 @@ class page extends Component {
         var div = (<div className={css.main}>
             <div className={css.con}>
                 <div className={css.left}>
-                    <img className={css.img} src={dataSource.arrCityImgUrl?dataSource.arrCityImgUrl:require("../../../../images/default.png")}/>
+                    <img className={css.img} src={this.getImageUrlForQiNiu(dataSource.arrCityImgUrl)}/>
                 </div>
                 <div className={css.right}>
                     <div className={css.title}>
@@ -37,7 +37,7 @@ class page extends Component {
                         <div className={css.refTitleHead}>{dataSource.arrCity}（往返）</div>
                     </div>
 
-                    <div className={css.rightLine} style={{marginTop:"50px"}}>
+                    <div className={css.rightLine} style={{marginTop:"30px"}}>
                         <div className={css.lineLeft}>时间</div>
                         <div className={css.lineRight}>{dataSource.startDate}</div>
                         <div className={css.center}> 至</div>
@@ -47,10 +47,9 @@ class page extends Component {
                     <div className={css.rightLine}>
                         <div className={css.lineLeft}>团购价</div>
                         <div className={css.thirdLineRight}>
-                            <span style={{color:"#FC5948",fontSize:"12px"}}>{"¥ "}</span>
-                            <span style={{color:"#FC5948",fontSize:"20px"}}>{dataSource.basePrice}</span>
-                            <span style={{color:"#333333",fontSize:"12px"}}>{" 起"}</span>
-
+                            <span className={css.price}>{"¥ "}</span>
+                            <span className={css.refPrice}>{dataSource.basePrice}</span>
+                            <span className={css.text}>{" 起"}</span>
                         </div>
                     </div>
 
@@ -67,6 +66,12 @@ class page extends Component {
 
             </div>);
         return div;
+    }
+    getImageUrlForQiNiu(url, w = 500) {
+        if (!url) {
+            return require("../../../../images/default.png");
+        }
+        return url.split("?")[0] + "?imageView2/0/w/" + w + "/interlace/1/q/75";
     }
 }
 page.contextTypes = {
