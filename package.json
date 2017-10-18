@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "start": "node ./lib/bin/apin-cli debug server",
-    "build": "NODE_ENV=production node ./lib/bin/apin-cli release server",
+    "build": "NODE_ENV=production node ./lib/bin/apnpm in-cli release",
+    "server": "node ./lib/bin/apin-cli",
     "lib": "git submodule init &&git submodule update -f && git submodule foreach git pull origin master",
     "test": "jest --watch --coverage"
   },
