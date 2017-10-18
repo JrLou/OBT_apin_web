@@ -54,7 +54,7 @@
         .contentTop {
             position: absolute;
             top: 1rem;
-            bottom: 0;
+            bottom: 1rem;
             left: 0;
             right: 0;
             overflow: scroll;
@@ -178,16 +178,16 @@
     </style>
     <script>
         //规定使用REM单位
-        document.documentElement.style.fontSize = innerWidth / 10 + "px";
+       // document.documentElement.style.fontSize = innerWidth / 10 + "px";
 
         //方便调试
-        let autoReload = function () {
+        var autoReload = function () {
             setTimeout(function () {
-                window.location.reload();
+//                window.location.reload();
 //                autoReload();
             }, 5000);
         };
-        autoReload();
+//        autoReload();
     </script>
 </head>
 <body>
@@ -211,24 +211,26 @@
         </div>
 
     </div>
-
+    <div class="contentBottom">
+        <div class="c_b_title">应付总额:￥36</div>
+        <div class="c_b_submit">支付</div>
+    </div>
 </div>
 <script>
 
-    let dataSource = [];
-    let names = ["芒", "雪", "导", "方便", "商"];
-    let names2 = ["果", "盒子", "面", "品"];
+    var dataSource = [];
+    var names = ["芒", "雪", "导", "方便", "商"];
+    var names2 = ["果", "盒子", "面", "品"];
     //模拟数据
-    for (let i = 0; i < 10; i++) {
+    for (var i = 0; i < 10; i++) {
         dataSource.push({
-            id:i,
             title: names[i % names.length] + names2[i % names2.length],
             count: (Math.random() * 10).toFixed(0) * (i + 1),
             money: (Math.random() * 10 * (i + 1)).toFixed(2),
         });
     }
 
-    let infoDataArr = [
+    var infoDataArr = [
         {
             title: "商品金额:",
             value: "￥36",
@@ -250,13 +252,11 @@
         },
     ];
 
-    function openPage(id) {
-        window.open("http://www.baidu.com")
-    }
     function loadItemData(showArr) {
-        let innerHTML = "";
-        for (let data of showArr) {
-            innerHTML += "<div class=\"c_t_item\"  onclick=\"openPage("+data.id+")\">\n" +
+        var innerHTML = "";
+        for (var i=0;i<showArr;i++) {
+            var data = showArr[i];
+            innerHTML += "<div class=\"c_t_item\">\n" +
                 "<div class=\"c_t_item_info_title\">" + data.title + "</div>\n" +
                 "                    <div class=\"c_t_item_info_title\">X" + data.count + "</div>\n" +
                 "                    <div class=\"c_t_item_info_title\">￥" + data.money + "</div>\n" +
@@ -265,10 +265,10 @@
         document.getElementById("itemLayout").innerHTML = innerHTML;
     }
 
-
     function loadItemInfo(showArr) {
-        let innerHTML = "";
-        for (let data of showArr) {
+        var innerHTML = "";
+        for (var i=0;i<showArr;i++) {
+            var data = showArr[i];
             innerHTML += "<div class=\"info\">\n" +
                 "        <div class=\"infoTitle\">" + data.title + "</div>\n" +
                 "        <div class=\"infoValue\" style=\"" + data.style + "\">" + data.value + "</div>\n" +
@@ -280,9 +280,9 @@
     loadItemInfo(infoDataArr);
 
 
-    let more = document.getElementById("more");
+    var more = document.getElementById("more");
     var showMore = true;//默认展开更多 与 不展开 true:不展开 取反意
-    var showMin = 9999999;//不展开时,显示数量
+    var showMin = 2;//不展开时,显示数量
     //如果数据小于或者等于最小展开数量 ,不显示更多
     if (showMin >= dataSource.length) {
         more.style.display = "none";
