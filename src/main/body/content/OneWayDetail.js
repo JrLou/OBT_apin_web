@@ -15,24 +15,20 @@ class page extends Component {
         super(props);
         this.myData = this.props.data;
 
+
         this.depCity = this.myData?this.myData.depCity:"";
         this.arrCity = this.myData?this.myData.arrCity:"";
         this.flightType = this.myData?this.myData.flightType:"2";
 
-        this.depCity = "上海";
-        this.arrCity = "北京";
-        this.flightType = "2";
+        // this.depCity = "上海";
+        // this.arrCity = "北京";
+        // this.flightType = "1";
 
         let date = new Date();
         this.year = date.getFullYear();
         this.month = date.getMonth()+1;
         this.day = date.getDate();
-        this.state = {
-            isShowRightCal:this.year+"-"+this.month+"-"+this.day,
-            rightY:this.year,
-            rightM:this.month,
-            rightD:this.day
-        };
+        this.isShowRightCal=this.year+"-"+this.month+"-"+this.day;
     }
     componentDidMount() {
         this.loadLeftHeadMonthData();
@@ -73,15 +69,15 @@ class page extends Component {
             "depDate":depDate
         };
         var success = (code, msg, json, option) => {
-            this.myCalendarRight.refreshMonth(false,json);
             if (json[0]){
+                let current_Y_M = json[0];
                 let YMDArr = json[0].split("-");
-                this.setState({
-                    isShowRightCal:json[0],
-                    rightY:YMDArr[0]?YMDArr[0]:this.year,
-                    rightM:YMDArr[1]?YMDArr[1]:this.month,
-                    rightD:YMDArr[2]?YMDArr[2]:this.day
-                });
+                let rightY=YMDArr[0]?YMDArr[0]:this.year;
+                let rightM=YMDArr[1]?YMDArr[1]:this.month;
+                let rightD=YMDArr[2]?YMDArr[2]:this.day;
+
+                this.myCalendarRight.initYMD(rightY,rightM,rightD,current_Y_M);
+                this.myCalendarRight.refreshMonth(false,json);
                 this.loadRightDay(json[0],depDate);
             }
 
@@ -195,7 +191,7 @@ class page extends Component {
                                 this.loadLeftDay(selMonth);
                             }}
                             title={"去程月份"}
-                            current_Y_M={this.year+"-"+this.month+"-"+this.day}
+                            current_Y_M={this.isShowRightCal}
                             year={this.year}
                             month={this.month}
                             day={this.day}
@@ -219,7 +215,7 @@ class page extends Component {
                                 }
                             }}
                             title={this.flightType==2?"返程月份":""}
-                            current_Y_M={this.state.isShowRightCal}
+                            current_Y_M={this.isShowRightCal}
                             year={this.year}
                             month={this.month}
                             day={this.day}

@@ -3,9 +3,9 @@
  * 设置日历的大小
  */
 @height_head : 30px;
-@height_item : 60px;
-@color_bg : #EFF7FD;
-@color_select : #29A6FF;
+@height_item : 55px;
+@color_bg : @c_bg_gray;
+@color_select : @c_theme_blue;
 .calendar{
   margin-top: @d_spadding_small;
   width: 100%;
@@ -28,7 +28,7 @@
   height: @height_head;
   line-height: @height_head;
   font-size: 15px;
-  color: #888D99;
+  color: @c_title_gray;
   text-align: center;
 }
 .calendarHeader_con{
@@ -151,7 +151,7 @@
   border-style: solid;
   border-color: #eeeeee;
   border-width: 1px;
-  padding: 2px 0px 0px 5px;
+  padding: 3px 0px 0px 5px;
 }
 .cBodyItem{
   float: left;
@@ -179,30 +179,38 @@
   composes: defaultItem;
   background-color: white;
 }
-.dayActive{
-  color: #333333;
+.dayTitle{
+  color: @c_title_gray_base;
   font-size: @font_size_cell;
+  height: 15px;
+  line-height: 15px;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 .price{
-  color: #FF5841;
-  font-size: @font_size_small;
+  composes: dayTitle;
   padding-right: @d_spadding_small;
+  color: @c_text_red;
+  font-size: @font_size_center;
   text-align: right;
+  height: 18px;
+  line-height: 18px;
 }
 .refPrice{
   composes: price;
   margin-top: @d_spadding_small;
-
 }
 .sit{
   composes: price;
-  color: #333333;
+  color: @c_title_black;
   font-size: @font_size_cell;
 }
 
 .itemSelect {
   composes: defaultItem;
-  border: 2px solid #29A6FF;
+  border: 1.5px solid @c_border_blue;
   position: relative;
   background-color: #8bf1fc;
 }
@@ -212,8 +220,4 @@
   bottom: -1px;
   width: 18px;
   height: 18px;
-}
-.itemRed{
-  composes: defaultItem;
-  background-color: @all-backcolor;
 }
