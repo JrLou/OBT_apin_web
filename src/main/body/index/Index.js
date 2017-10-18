@@ -169,7 +169,7 @@ class page extends Component {
         this.setLoading(true, () => {
 
             var param = {
-                pageIndex:this.page.toString()
+                pageIndex:this.page
             };
             var success = (code, msg, json, option) => {
                 log(json);
@@ -191,7 +191,7 @@ class page extends Component {
                     message.error(msg);
                 });
             };
-            HttpTool.request(HttpTool.typeEnum.POST, "/ba/lineapi//v1.0/lines/new", success, failure, param,
+            HttpTool.request(HttpTool.typeEnum.POST, "/ba/lineapi/v1.0/lines/new", success, failure, param,
                 {
                     ipKey: "hlIP"
                 });

@@ -180,7 +180,7 @@ class RecommendView extends Component {
 
 
     getImageUrlForQiNiu(url, w = 500) {
-        if (url) {
+        if (!url) {
             return require("../../../../images/default.png");
         }
         return url.split("?")[0] + "?imageView2/0/w/" + w + "/interlace/1/q/75";

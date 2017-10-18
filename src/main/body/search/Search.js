@@ -95,14 +95,16 @@ class page extends Component {
             };
             let failure = (code, msg, option) => {
                 //无结果
-                if(param.arrCity&&param.depCity){
+                // if(param.arrCity&&param.depCity){
+                //
+                //     this.resut = param;
+                // }else{
+                //     this.resutMessage = code+msg;
+                //     this.resut = null;
+                // }
 
-                    this.resut = param;
-                }else{
-                    this.resutMessage = code+msg;
-                    this.resut = null;
-                }
-
+                this.resutMessage = code+msg;
+                this.resut = null;
                 this.setLoading(false, () => {
                 });
             };
