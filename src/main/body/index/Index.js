@@ -260,7 +260,6 @@ class page extends Component {
                             <div className={less.centerTitleMore}>更多路线推荐</div>
                             <div className={less.centerIconMore}/>
                         </div>
-                        cro
                     </div>
                     <Row>
                         {this.getRecommendList(this.state.dataSourceRecommend)}
