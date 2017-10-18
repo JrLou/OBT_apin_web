@@ -10,6 +10,17 @@ import LineHeadTitle from "./line/LineHeadTitle.js";
 import MyCalendar from "./line/MyCalendar.js";
 import MyAlert from "./line/MyAlert.js";
 import LoadingView from "../component/LoadingView.js";
+
+
+
+import Scroll from 'react-scroll/modules/index'; // Imports all Mixins
+
+
+var Link = Scroll.Link;
+var Events = Scroll.Events;
+var scroll = Scroll.animateScroll;
+var scrollSpy = Scroll.scrollSpy;
+
 class page extends Component {
     constructor(props) {
         super(props);
@@ -28,12 +39,18 @@ class page extends Component {
         this.state={
             upData:0
         };
+
+        this.scrollTo = this.scrollTo.bind(this);
     }
     componentWillReceiveProps(nextProps) {
         // todo
         this.setParam(nextProps.data);
         this.upView();
     }
+    scrollTo(y) {
+        scroll.scrollTo(y);
+    }
+
     upView(){
         this.setState({
             upData:this.state.upData++
@@ -49,8 +66,19 @@ class page extends Component {
 
     componentDidMount() {
         this.loadLeftHeadMonthData();
-    }
+        Events.scrollEvent.register("begin", function () {
+            console.log("begin", arguments);
+        });
+        Events.scrollEvent.register("end", function () {
+            console.log("end", arguments);
+        });
 
+        scrollSpy.update();
+    }
+    componentWillUnmount() {
+        Events.scrollEvent.remove("begin");
+        Events.scrollEvent.remove("end");
+    }
     //左日历的headMonth
     loadLeftHeadMonthData() {
         var param = {
@@ -190,15 +218,17 @@ class page extends Component {
             "depDate":date
         };
         var success = (code, msg, json, option) => {
-            this.loadingView.refreshView(false);
-            if (json&&json.length>0){
-                let y = this.myflightCon?this.myflightCon.offsetTop:0;
-                let isBigZero = y-150;
-                if (isBigZero>0){
-                    window.scrollTo(0,isBigZero);
+            this.loadingView.refreshView(false,()=>{
+                if (json&&json.length>0){
+                    let y = this.myflightCon?this.myflightCon.offsetTop:0;
+                    let isBigZero = y-150;
+                    if (isBigZero>0){
+                        this.scrollTo(isBigZero);
+                    }
                 }
-            }
-            this.myLineInfor.refreshView(json,this.flightType);
+                this.myLineInfor.refreshView(json,this.flightType);
+            });
+
         };
         var failure = (code, msg, option) => {
             message(msg);

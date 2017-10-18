@@ -254,7 +254,7 @@ class page extends Component {
                         <div className={less.centerTitleMoreLayout} onClick={()=>{
                             SearchHelp.openSearch(this, {});
                         }}>
-                            <div className={less.centerTitleMore}>更多路线推荐</div>
+                            <a className={less.centerTitleMore}>更多路线推荐</a>
                             <div className={less.centerIconMore}/>
                         </div>
                     </div>

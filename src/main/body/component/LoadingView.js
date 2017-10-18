@@ -13,7 +13,7 @@ class MyAlert extends Component {
     componentDidMount() {
 
     }
-    refreshView(isShow){
+    refreshView(isShow,cb){
         if (isShow){
             this.setState({
                 isShow:isShow
@@ -22,7 +22,7 @@ class MyAlert extends Component {
             setTimeout(()=>{
                 this.setState({
                     isShow:isShow
-                });
+                },cb);
             },500);
         }
 

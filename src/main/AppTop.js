@@ -17,6 +17,7 @@ import less from "./AppTop.less";
     render() {
         return (
             <div className={less.head}>
+                <a>
                 <img
                     onClick={() => {
                         log(this.props.root);
@@ -25,6 +26,7 @@ import less from "./AppTop.less";
                     className={less.left}
                     src={require('../images/index_logo.png')}
                 />
+                </a>
                 <div className={less.right}>
                     <div className={less.rightItem}>
                         <img
