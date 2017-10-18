@@ -22,7 +22,7 @@ class page extends Component {
 
         this.pageSize = 1;
         this.pageIndex = 1;
-        this.pageAllSize = 0;
+        this.pageAllSize = 1;
     }
 
 
@@ -77,7 +77,7 @@ class page extends Component {
             };
             let success = (code, msg, json, option) => {
                 log(json);
-                this.pageAllSize = option.option;
+                // this.pageAllSize = option.option;
                 this.resutMessage = "";
                 if(!json){
                     //无结果
@@ -108,7 +108,7 @@ class page extends Component {
                 this.setLoading(false, () => {
                 });
             };
-            HttpTool.request(HttpTool.typeEnum.POST, "/ba/flightapi/v1.0/flightDetail/list", success, failure, param,
+            HttpTool.request(HttpTool.typeEnum.POST, "/os/airlineapi/v1.0/list", success, failure, param,
                 {
                     ipKey: "hlIP"
                 });
