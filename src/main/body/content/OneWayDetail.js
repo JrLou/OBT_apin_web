@@ -40,6 +40,7 @@ class page extends Component {
         });
     }
     setParam(myData){
+        // alert(JSON.stringify(myData));
         this.myData = myData;
         this.depCity = myData?myData.depCity:"";
         this.arrCity = myData?myData.arrCity:"";
@@ -57,18 +58,27 @@ class page extends Component {
             "arrCity":this.arrCity,
             "flightType":this.flightType
         };
-        this.loadingView.refreshView(true);
+        // this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
-            this.loadingView.refreshView(false);
+            // this.loadingView.refreshView(false);
+
+            let current_Y_M = json?json[0]:[];
+            let YMDArr = current_Y_M.split("-");
+            let rightY=YMDArr[0]?YMDArr[0]:this.year;
+            let rightM=YMDArr[1]?YMDArr[1]:this.month;
+            let rightD=YMDArr[2]?YMDArr[2]:this.day;
             if (this.flightType == "2"){
+                this.myCalendarLeft.initYMD(rightY,rightM,rightD,current_Y_M);
                 this.myCalendarLeft.refreshMonth(true,json);
             }else {
+                this.myCalendarRight.initYMD(rightY,rightM,rightD,current_Y_M);
                 this.myCalendarRight.refreshMonth(false,json);
             }
             this.loadLeftDay(json[0]);
         };
         var failure = (code, msg, option) => {
-            this.loadingView.refreshView(false);
+            message(msg);
+            // this.loadingView.refreshView(false);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_month_query,success, failure, param,
             {
@@ -86,7 +96,7 @@ class page extends Component {
         };
         var success = (code, msg, json, option) => {
             if (json[0]){
-                let current_Y_M = json[0];
+                let current_Y_M = json[0]?json[0]:[];
                 let YMDArr = json[0].split("-");
                 let rightY=YMDArr[0]?YMDArr[0]:this.year;
                 let rightM=YMDArr[1]?YMDArr[1]:this.month;
@@ -96,10 +106,9 @@ class page extends Component {
                 this.myCalendarRight.refreshMonth(false,json);
                 this.loadRightDay(json[0],depDate);
             }
-
         };
         var failure = (code, msg, option) => {
-            this.loadingView.refreshView(false);
+            message(msg);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_retFlight_month_query,success, failure, param,
             {
@@ -142,11 +151,13 @@ class page extends Component {
             "month":month,
             "depDate":depDate
         };
-
+        this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
+            this.loadingView.refreshView(false);
             this.myCalendarRight.refreshCalendarDay(false,json);
         };
         var failure = (code, msg, option) => {
+            message(msg);
             this.loadingView.refreshView(false);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param,
@@ -181,6 +192,7 @@ class page extends Component {
             this.loadingView.refreshView(false);
         };
         var failure = (code, msg, option) => {
+            message(msg);
             this.loadingView.refreshView(false);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_query,success, failure, param,
@@ -378,7 +390,9 @@ class LineInfor extends Component {
                     </div>:null}
 
                     <div className={css.type}>
-                        <img className={css.logo} src ={dataItem.logo}/>
+                        <img className={css.logo}
+                             src ={dataItem.logo?dataItem.logo:require("../../../images/logo.png")}
+                        />
                     </div>
 
                     <div className={css.logoCompany_super}>
