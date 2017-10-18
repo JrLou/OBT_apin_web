@@ -57,7 +57,7 @@ class InputAuto extends Component {
                 dataSource:this.hotDataSource
             });
         };
-        let api = this.props.type==="from"?"/hotcityapi/v1.0/depCity/list":"/hotcityapi/v1.0/arrCity/list";
+        let api = this.props.type==="from"?"/os/hotcityapi/v1.0/depCity/list":"/os/hotcityapi/v1.0/arrCity/list";
         HttpTool.request(HttpTool.typeEnum.POST, api, success, failure, param,
             {
                 ipKey: "hlIP"
@@ -80,7 +80,7 @@ class InputAuto extends Component {
                 dataSource:[]
             });
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/baseapi/v1.0/cities/list/key", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/ba/baseapi/v1.0/cities/list/key", success, failure, param,
             {
                 ipKey: "hlIP"
             });
