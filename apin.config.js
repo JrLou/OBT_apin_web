@@ -1,5 +1,5 @@
 var path = require("path");
-var router = require("./router.js");
+var setting = require("./config/setting.js");
 
 
 
@@ -69,15 +69,7 @@ var configModule = {
     ]
 };
 module.exports = {
-	server: {
-		port: 3000,
-		assetPath: "./public",
-        viewPath:"./view",
-		custom: {
-            serverRoutes:router
-		},
-        hlIP:"http://192.168.0.237:8080"
-	},
+	server: setting,
 	webpack: {
 		dev: {
 			useAnalyzer:false,
