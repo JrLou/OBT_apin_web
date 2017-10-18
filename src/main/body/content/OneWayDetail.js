@@ -13,12 +13,7 @@ import LoadingView from "../component/LoadingView.js";
 class page extends Component {
     constructor(props) {
         super(props);
-        this.myData = this.props.data;
-
-
-        this.depCity = this.myData?this.myData.depCity:"";
-        this.arrCity = this.myData?this.myData.arrCity:"";
-        this.flightType = this.myData?this.myData.flightType:"2";
+        this.setParam(props.data);
 
         // this.depCity = "上海";
         // this.arrCity = "北京";
@@ -29,7 +24,28 @@ class page extends Component {
         this.month = date.getMonth()+1;
         this.day = date.getDate();
         this.isShowRightCal=this.year+"-"+this.month+"-"+this.day;
+
+        this.state={
+          upData:0
+        };
     }
+    componentWillReceiveProps(nextProps) {
+        // todo
+        this.setParam(nextProps.data);
+        this.upView();
+    }
+    upView(){
+        this.setState({
+            upData:this.state.upData++
+        });
+    }
+    setParam(myData){
+        this.myData = myData;
+        this.depCity = myData?myData.depCity:"";
+        this.arrCity = myData?myData.arrCity:"";
+        this.flightType = myData?myData.flightType:"2";
+    }
+
     componentDidMount() {
         this.loadLeftHeadMonthData();
     }

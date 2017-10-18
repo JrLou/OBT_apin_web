@@ -6,13 +6,22 @@ import css from './LineHeadTitle.less';
 class page extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            dataSource:props.dataSource
+        };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            dataSource:nextProps.dataSource
+        });
     }
     componentDidMount() {
 
     }
     render() {
-        let {dataSource} = this.props;
-        if (!dataSource){
+        let {dataSource} = this.state;
+        if (!dataSource ||dataSource.length<1){
             return null;
         }
         var div = (<div className={css.main}>
