@@ -58,7 +58,7 @@
             left: 0;
             right: 0;
             overflow: scroll;
-            background-color: #0D3349;
+            background-color: #e5e5e5;
         }
 
         .contentBottom {
@@ -128,6 +128,8 @@
         }
 
         .c_t_item_info_title {
+            display: table-cell;
+
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -136,20 +138,22 @@
             margin-top: 0.1rem;
         }
 
-        .itemLayout{
-            background-color: #d9b8f7;
+        .itemLayout {
+            background-color: #ffffff;
             overflow: hidden;
         }
-        .more{
+
+        .more {
             width: 100%;
-            background-color: #F3F5F7;
+            background-color: #ffffff;
             font-size: 0.4rem;
             line-height: 1rem;
             text-align: center;
             color: #565656;
             margin-bottom: 0.3rem;
         }
-        .info{
+
+        .info {
             display: table;
             table-layout: fixed;
             width: 100%;
@@ -157,13 +161,15 @@
             box-sizing: border-box;
             background-color: #ffffff;
         }
-        .infoTitle{
+
+        .infoTitle {
             display: table-cell;
             width: 50%;
             text-align: left;
             color: #565656;
         }
-        .infoValue{
+
+        .infoValue {
             display: table-cell;
             width: 50%;
             text-align: right;
@@ -171,16 +177,17 @@
         }
     </style>
     <script>
-        document.documentElement.style.fontSize = innerWidth / 10 + "px";
+        //规定使用REM单位
+       // document.documentElement.style.fontSize = innerWidth / 10 + "px";
 
         //方便调试
-        let autoReload = function () {
+        var autoReload = function () {
             setTimeout(function () {
-                window.location.reload();
+//                window.location.reload();
 //                autoReload();
             }, 5000);
         };
-        autoReload();
+//        autoReload();
     </script>
 </head>
 <body>
@@ -194,7 +201,7 @@
 
         </div>
 
-        <div id="more" class="more" onclick="showMoreAction()">更多商品</div>
+        <div id="more" class="more" onclick="showMoreAction();">更多商品</div>
         <div id="infoLayout">
 
             <div class="info">
@@ -211,82 +218,88 @@
 </div>
 <script>
 
-    let dataSource = [];
-    let names=["芒","雪","导","方便","商"];
-    let names2=["果","盒子","面","品"];
+    var dataSource = [];
+    var names = ["芒", "雪", "导", "方便", "商"];
+    var names2 = ["果", "盒子", "面", "品"];
     //模拟数据
-    for(let i=0;i<10;i++){
+    for (var i = 0; i < 10; i++) {
         dataSource.push({
-            title:names[i%names.length]+names2[i%names2.length],
-            count:(Math.random()*10).toFixed(0)*(i+1),
-            money:(Math.random()*10*(i+1)).toFixed(2),
-        })
+            title: names[i % names.length] + names2[i % names2.length],
+            count: (Math.random() * 10).toFixed(0) * (i + 1),
+            money: (Math.random() * 10 * (i + 1)).toFixed(2),
+        });
     }
 
-    let infoData = [
+    var infoDataArr = [
         {
             title: "商品金额:",
-            value: "￥36"
-        },{
+            value: "￥36",
+        }, {
             title: "促销优惠:",
-            value: "-￥13"
-        },{
+            value: "-￥13",
+            style: "color: #ff0000"
+        }, {
             title: "优惠券:",
             value: "￥0.00"
-        },{
+        }, {
             title: "包装费:",
-            value: "+￥1.00"
-        },{
-            title: "商品金额:",
-            value: "￥36"
+            value: "+￥1.00",
+            style: "color: green"
+        }, {
+            title: "包装费减免:",
+            value: "-￥1.00",
+            style: "color: #ff0000"
         },
     ];
+
     function loadItemData(showArr) {
-        let innerHTML = "";
-        for(let data of showArr){
-            innerHTML+= '<div class="c_t_item">\n' +
-                '                <div class="c_t_item_image" style="background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1508304466477&di=6e022eb4772a01c846fb8beded44f684&imgtype=0&src=http%3A%2F%2Fpic33.nipic.com%2F20130928%2F8821914_220446979000_2.jpg)"></div>\n' +
-                '                <div class="c_t_item_info">\n' +
-                '                    <div class="c_t_item_info_title">'+data.title+'</div>\n' +
-                '                    <div class="c_t_item_info_title">X'+data.count+'</div>\n' +
-                '                    <div class="c_t_item_info_title">￥'+data.money+'</div>\n' +
-                '                </div>\n' +
-                '            </div>';
+        var innerHTML = "";
+        for (var i=0;i<showArr;i++) {
+            var data = showArr[i];
+            innerHTML += "<div class=\"c_t_item\">\n" +
+                "<div class=\"c_t_item_info_title\">" + data.title + "</div>\n" +
+                "                    <div class=\"c_t_item_info_title\">X" + data.count + "</div>\n" +
+                "                    <div class=\"c_t_item_info_title\">￥" + data.money + "</div>\n" +
+                "            </div>";
         }
-        document.getElementById("itemLayout").innerHTML=innerHTML;
+        document.getElementById("itemLayout").innerHTML = innerHTML;
     }
 
-    function loadItemInfo(arr) {
-        let innerHTML = "";
-        for(let data of showArr){
-            innerHTML+= '<div class="info">\n' +
-                '        <div class="infoTitle">商品金额</div>\n' +
-                '        <div class="infoValue">￥36</div>\n' +
-                '    </div>';
+    function loadItemInfo(showArr) {
+        var innerHTML = "";
+        for (var i=0;i<showArr;i++) {
+            var data = showArr[i];
+            innerHTML += "<div class=\"info\">\n" +
+                "        <div class=\"infoTitle\">" + data.title + "</div>\n" +
+                "        <div class=\"infoValue\" style=\"" + data.style + "\">" + data.value + "</div>\n" +
+                "    </div>";
         }
-        document.getElementById("infoLayout").innerHTML=innerHTML;
+        document.getElementById("infoLayout").innerHTML = innerHTML;
     }
 
+    loadItemInfo(infoDataArr);
 
-    let more = document.getElementById("more");
+
+    var more = document.getElementById("more");
     var showMore = true;//默认展开更多 与 不展开 true:不展开 取反意
     var showMin = 2;//不展开时,显示数量
     //如果数据小于或者等于最小展开数量 ,不显示更多
-    if(showMin>=dataSource.length){
-        more.style.display="none";
-        loadItemData(dataSource)
-    }else{
-        more.style.display="block";
-        var showMax = Math.min(showMin,dataSource.length);
-        var showArr = dataSource.slice(0,showMax);
+    if (showMin >= dataSource.length) {
+        more.style.display = "none";
+        loadItemData(dataSource);
+    } else {
+        more.style.display = "block";
+        var showMax = Math.min(showMin, dataSource.length);
+        var showArr = dataSource.slice(0, showMax);
+
         function showMoreAction() {
-            showMore=!showMore;
-            loadItemData(showMore?dataSource:showArr)
-                more.innerHTML=showMore?"收起商品列表":"更多商品列表";
+            showMore = !showMore;
+            loadItemData(showMore ? dataSource : showArr);
+            more.innerHTML = showMore ? "收起商品列表" : "更多商品列表";
         }
+
         showMoreAction();
     }
-
 
 
 </script>
@@ -295,10 +308,10 @@
 
 
 <!--<div class="c_t_item">-->
-    <!--<div class="c_t_item_image" style="background-image: url('./test.png')"></div>-->
-    <!--<div class="c_t_item_info">-->
-        <!--<div class="c_t_item_info_title">导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹</div>-->
-        <!--<div class="c_t_item_info_title">X1</div>-->
-        <!--<div class="c_t_item_info_title">￥0.02</div>-->
-    <!--</div>-->
+<!--<div class="c_t_item_image" style="background-image: url('./test.png')"></div>-->
+<!--<div class="c_t_item_info">-->
+<!--<div class="c_t_item_info_title">导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹导弹</div>-->
+<!--<div class="c_t_item_info_title">X1</div>-->
+<!--<div class="c_t_item_info_title">￥0.02</div>-->
+<!--</div>-->
 <!--</div>-->
