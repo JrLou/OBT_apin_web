@@ -226,7 +226,7 @@ class page extends Component {
             <div>
                 正在为您搜索航班信息...
             </div>
-            <img src={require('../../../images/check.png')}
+            <img src={require('../../../images/load.gif')}
             />
         </div>
 

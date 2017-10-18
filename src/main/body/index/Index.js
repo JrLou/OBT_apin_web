@@ -254,7 +254,9 @@ class page extends Component {
                         <div className={less.centerIcon}/>
                         <div className={less.centerTitle}>精品特价航线</div>
 
-                        <div className={less.centerTitleMoreLayout}>
+                        <div className={less.centerTitleMoreLayout} onClick={()=>{
+                            SearchHelp.openSearch(this, {});
+                        }}>
                             <div className={less.centerTitleMore}>更多路线推荐</div>
                             <div className={less.centerIconMore}/>
                         </div>
