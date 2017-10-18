@@ -14,11 +14,18 @@ class MyAlert extends Component {
 
     }
     refreshView(isShow){
-        setTimeout(()=>{
+        if (isShow){
             this.setState({
                 isShow:isShow
             });
-        },0);
+        }else {
+            setTimeout(()=>{
+                this.setState({
+                    isShow:isShow
+                });
+            },500);
+        }
+
 
     }
     render() {
