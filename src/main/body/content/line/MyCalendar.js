@@ -336,6 +336,9 @@ class page extends Component {
                     <div className={css.calendarHeader_con} style={{width:title!=""?"88%":"100%"}}>
                         <MonthView
                             selectMonthAction={(selMonth)=>{
+                                this.setState({
+                                    current_Y_M:selMonth
+                                });
                                 this.selectMonth(selMonth,isLeft);
                             }}
                             current_month={current_Y_M}
@@ -406,7 +409,6 @@ class CalendarItem extends Component{
             {itemView}
         </div>);
     }
-
 }
 
 
@@ -452,7 +454,6 @@ class MonthView extends Component{
 
         return(<div className={css.monthView_bg}>
             <div className={css.calendarHeaderIcon}>
-
                 <img className={css.icon} style={{float: "right"}}
                      onClick={()=>{
                          this.removeNum = this.removeNum-1;
@@ -471,7 +472,6 @@ class MonthView extends Component{
                          },1000);
                      }}
                      src={require("../../../../images/select_left_icon.png")}/>
-
             </div>
 
 
@@ -518,16 +518,22 @@ class MonthView extends Component{
         </div>);
     }
     createMonthItem(monthArr,selectMonthAction){
-        if (!monthArr){
-            return null;
+        if (!monthArr||monthArr.length<1){
+            let date = new Date();
+            let year = date.getFullYear();
+            let month = date.getMonth()+1;
+
+            let y_m_d = year+"-"+month;
+            monthArr = [y_m_d];
         }
+
         var monthItemArr = [];
         for (let i = 0; i < monthArr.length; i++) {
             // 判断选择样式与历史样式是否相等，相等激活
             let item_MonthView = null;
             let monthData_item = monthArr[i];
             let isSelect = (monthData_item == this.state.current_month);
-            // let myMonth = monthData_item?monthData_item.replace("-","年"):"";
+            let myMonth = monthData_item?monthData_item.replace("-","年"):"";
             item_MonthView = (
                 <div key={"current_month"+i}
                      onClick={()=>{
@@ -540,8 +546,7 @@ class MonthView extends Component{
                          });
                      }}
                      className={isSelect?css.select_monthItem:css.monthItem}>
-                    {/*{monthData_item}*/}
-                    {monthData_item+"月"}
+                    {myMonth+"月"}
                 </div>);
             monthItemArr.push(item_MonthView);
         }
