@@ -140,6 +140,35 @@
             background-color: #d9b8f7;
             overflow: hidden;
         }
+        .more{
+            width: 100%;
+            background-color: #F3F5F7;
+            font-size: 0.4rem;
+            line-height: 1rem;
+            text-align: center;
+            color: #565656;
+            margin-bottom: 0.3rem;
+        }
+        .info{
+            display: table;
+            table-layout: fixed;
+            width: 100%;
+            padding: 0.2rem;
+            box-sizing: border-box;
+            background-color: #ffffff;
+        }
+        .infoTitle{
+            display: table-cell;
+            width: 50%;
+            text-align: left;
+            color: #565656;
+        }
+        .infoValue{
+            display: table-cell;
+            width: 50%;
+            text-align: right;
+            color: #565656;
+        }
     </style>
     <script>
         document.documentElement.style.fontSize = innerWidth / 10 + "px";
@@ -165,7 +194,14 @@
 
         </div>
 
-        <div id="more">显示更多</div>
+        <div id="more" class="more" onclick="showMoreAction()">更多商品</div>
+        <div id="infoLayout">
+
+            <div class="info">
+                <div class="infoTitle">商品金额</div>
+                <div class="infoValue">￥36</div>
+            </div>
+        </div>
 
     </div>
     <div class="contentBottom">
@@ -174,12 +210,10 @@
     </div>
 </div>
 <script>
-    let itemLayout = document.getElementById("itemLayout");
+
     let dataSource = [];
     let names=["芒","雪","导","方便","商"];
     let names2=["果","盒子","面","品"];
-
-
     //模拟数据
     for(let i=0;i<10;i++){
         dataSource.push({
@@ -189,28 +223,72 @@
         })
     }
 
-    var showMore = false;
-    var showMax = 3;
-    var showArr = dataSource.slice(0,showMax);
-
-    let innerHTML = "";
-    for(let data of showArr){
-        innerHTML+= '<div class="c_t_item">\n' +
-            '                <div class="c_t_item_image" style="background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1508304466477&di=6e022eb4772a01c846fb8beded44f684&imgtype=0&src=http%3A%2F%2Fpic33.nipic.com%2F20130928%2F8821914_220446979000_2.jpg)"></div>\n' +
-            '                <div class="c_t_item_info">\n' +
-            '                    <div class="c_t_item_info_title">'+data.title+'</div>\n' +
-            '                    <div class="c_t_item_info_title">X'+data.count+'</div>\n' +
-            '                    <div class="c_t_item_info_title">￥'+data.money+'</div>\n' +
-            '                </div>\n' +
-            '            </div>';
+    let infoData = [
+        {
+            title: "商品金额:",
+            value: "￥36"
+        },{
+            title: "促销优惠:",
+            value: "-￥13"
+        },{
+            title: "优惠券:",
+            value: "￥0.00"
+        },{
+            title: "包装费:",
+            value: "+￥1.00"
+        },{
+            title: "商品金额:",
+            value: "￥36"
+        },
+    ];
+    function loadItemData(showArr) {
+        let innerHTML = "";
+        for(let data of showArr){
+            innerHTML+= '<div class="c_t_item">\n' +
+                '                <div class="c_t_item_image" style="background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1508304466477&di=6e022eb4772a01c846fb8beded44f684&imgtype=0&src=http%3A%2F%2Fpic33.nipic.com%2F20130928%2F8821914_220446979000_2.jpg)"></div>\n' +
+                '                <div class="c_t_item_info">\n' +
+                '                    <div class="c_t_item_info_title">'+data.title+'</div>\n' +
+                '                    <div class="c_t_item_info_title">X'+data.count+'</div>\n' +
+                '                    <div class="c_t_item_info_title">￥'+data.money+'</div>\n' +
+                '                </div>\n' +
+                '            </div>';
+        }
+        document.getElementById("itemLayout").innerHTML=innerHTML;
     }
 
-    if(dataSource.length>3){
-
+    function loadItemInfo(arr) {
+        let innerHTML = "";
+        for(let data of showArr){
+            innerHTML+= '<div class="info">\n' +
+                '        <div class="infoTitle">商品金额</div>\n' +
+                '        <div class="infoValue">￥36</div>\n' +
+                '    </div>';
+        }
+        document.getElementById("infoLayout").innerHTML=innerHTML;
     }
 
 
-    itemLayout.innerHTML=innerHTML;
+    let more = document.getElementById("more");
+    var showMore = true;//默认展开更多 与 不展开 true:不展开 取反意
+    var showMin = 2;//不展开时,显示数量
+    //如果数据小于或者等于最小展开数量 ,不显示更多
+    if(showMin>=dataSource.length){
+        more.style.display="none";
+        loadItemData(dataSource)
+    }else{
+        more.style.display="block";
+        var showMax = Math.min(showMin,dataSource.length);
+        var showArr = dataSource.slice(0,showMax);
+        function showMoreAction() {
+            showMore=!showMore;
+            loadItemData(showMore?dataSource:showArr)
+                more.innerHTML=showMore?"收起商品列表":"更多商品列表";
+        }
+        showMoreAction();
+    }
+
+
+
 </script>
 </body>
 </html>
