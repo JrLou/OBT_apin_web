@@ -2,7 +2,7 @@
  * Created by lixifeng on 16/10/25.
  */
 import React, {Component} from 'react';
-import {message} from 'antd';
+import {message,Button} from 'antd';
 import css from './OneWayDetail.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APIGYW from "../../../api/APIGYW.js";
@@ -13,12 +13,7 @@ import LoadingView from "../component/LoadingView.js";
 class page extends Component {
     constructor(props) {
         super(props);
-        this.myData = this.props.data;
-
-
-        this.depCity = this.myData?this.myData.depCity:"";
-        this.arrCity = this.myData?this.myData.arrCity:"";
-        this.flightType = this.myData?this.myData.flightType:"2";
+        this.setParam(props.data);
 
         // this.depCity = "上海";
         // this.arrCity = "北京";
@@ -29,7 +24,29 @@ class page extends Component {
         this.month = date.getMonth()+1;
         this.day = date.getDate();
         this.isShowRightCal=this.year+"-"+this.month+"-"+this.day;
+
+        this.state={
+          upData:0
+        };
     }
+    componentWillReceiveProps(nextProps) {
+        // todo
+        this.setParam(nextProps.data);
+        this.upView();
+    }
+    upView(){
+        this.setState({
+            upData:this.state.upData++
+        });
+    }
+    setParam(myData){
+        // alert(JSON.stringify(myData));
+        this.myData = myData;
+        this.depCity = myData?myData.depCity:"";
+        this.arrCity = myData?myData.arrCity:"";
+        this.flightType = myData?myData.flightType:"2";
+    }
+
     componentDidMount() {
         this.loadLeftHeadMonthData();
     }
@@ -41,18 +58,27 @@ class page extends Component {
             "arrCity":this.arrCity,
             "flightType":this.flightType
         };
-        this.loadingView.refreshView(true);
+        // this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
-            this.loadingView.refreshView(false);
+            // this.loadingView.refreshView(false);
+
+            let current_Y_M = json?json[0]:[];
+            let YMDArr = current_Y_M.split("-");
+            let rightY=YMDArr[0]?YMDArr[0]:this.year;
+            let rightM=YMDArr[1]?YMDArr[1]:this.month;
+            let rightD=YMDArr[2]?YMDArr[2]:this.day;
             if (this.flightType == "2"){
+                this.myCalendarLeft.initYMD(rightY,rightM,rightD,current_Y_M);
                 this.myCalendarLeft.refreshMonth(true,json);
             }else {
+                this.myCalendarRight.initYMD(rightY,rightM,rightD,current_Y_M);
                 this.myCalendarRight.refreshMonth(false,json);
             }
             this.loadLeftDay(json[0]);
         };
         var failure = (code, msg, option) => {
-            this.loadingView.refreshView(false);
+            message(msg);
+            // this.loadingView.refreshView(false);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_month_query,success, failure, param,
             {
@@ -70,7 +96,7 @@ class page extends Component {
         };
         var success = (code, msg, json, option) => {
             if (json[0]){
-                let current_Y_M = json[0];
+                let current_Y_M = json[0]?json[0]:[];
                 let YMDArr = json[0].split("-");
                 let rightY=YMDArr[0]?YMDArr[0]:this.year;
                 let rightM=YMDArr[1]?YMDArr[1]:this.month;
@@ -80,10 +106,9 @@ class page extends Component {
                 this.myCalendarRight.refreshMonth(false,json);
                 this.loadRightDay(json[0],depDate);
             }
-
         };
         var failure = (code, msg, option) => {
-            this.loadingView.refreshView(false);
+            message(msg);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_retFlight_month_query,success, failure, param,
             {
@@ -100,7 +125,9 @@ class page extends Component {
             "month":month
         };
 
+        this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
+            this.loadingView.refreshView(false);
             if (this.flightType=="2"){
                 this.myCalendarLeft.refreshCalendarDay(true,json);
             }else {
@@ -126,11 +153,13 @@ class page extends Component {
             "month":month,
             "depDate":depDate
         };
-
+        this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
+            this.loadingView.refreshView(false);
             this.myCalendarRight.refreshCalendarDay(false,json);
         };
         var failure = (code, msg, option) => {
+            message(msg);
             this.loadingView.refreshView(false);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param,
@@ -165,6 +194,7 @@ class page extends Component {
             this.loadingView.refreshView(false);
         };
         var failure = (code, msg, option) => {
+            message(msg);
             this.loadingView.refreshView(false);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_query,success, failure, param,
@@ -311,11 +341,23 @@ class LineInfor extends Component {
                                 </div>
                                 <div className={css.itemCenter}>
                                     <div className={css.table}>
-                                        <div className={css.btn} onClick={()=>{
-                                            if (this.props.callBack){
-                                                this.props.callBack();
-                                            }
-                                        }}>预定</div>
+                                        <Button
+                                            loading={this.state.loading}
+                                            type="primary"
+                                            className={css.btn}
+                                            onClick={() => {
+                                                if (this.props.callBack){
+                                                    this.props.callBack();
+                                                }
+                                            }}>
+                                            {"预定"}
+                                        </Button>
+
+                                        {/*<div className={css.btn} onClick={()=>{*/}
+                                            {/*if (this.props.callBack){*/}
+                                                {/*this.props.callBack();*/}
+                                            {/*}*/}
+                                        {/*}}>预定</div>*/}
                                     </div>
                                 </div>
                             </div>
@@ -362,7 +404,9 @@ class LineInfor extends Component {
                     </div>:null}
 
                     <div className={css.type}>
-                        <img className={css.logo} src ={dataItem.logo}/>
+                        <img className={css.logo}
+                             src ={dataItem.logo?dataItem.logo:require("../../../images/logo.png")}
+                        />
                     </div>
 
                     <div className={css.logoCompany_super}>

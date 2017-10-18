@@ -2,6 +2,7 @@
  * Created by apin on 2017/10/11.
  */
 import React, { Component } from 'react';
+import {Button} from 'antd';
 import css from './MyAlert.less';
 class MyAlert extends Component {
     constructor(props) {
@@ -31,14 +32,19 @@ class MyAlert extends Component {
                 </div>
                 <div className={css.con}>
                     <span style={{color:"#888D99",fontSize:"14px"}}>客服电话 :</span>
-                    <span>0571-58122998</span>
+                    <span> 0571-58122998</span>
                 </div>
 
-                <div className={css.btn} onClick={()=>{
-                    this.setState({
-                        isShow:false
-                    });
-                }}>关闭</div>
+                <div className={css.btn}><Button
+                    type="primary"
+                    className={css.btnText}
+                    onClick={() => {
+                        this.setState({
+                            isShow:false
+                        });
+                    }}>{"关闭"}
+                </Button>
+                </div>
             </div>
         </div>);
         return div;
