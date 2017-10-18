@@ -132,7 +132,6 @@ class page extends Component {
         };
 
         var success = (code, msg, json, option) => {
-            alert("www");
             this.myCalendarRight.refreshCalendarDay(false,json);
         };
         var failure = (code, msg, option) => {

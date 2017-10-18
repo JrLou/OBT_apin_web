@@ -512,7 +512,8 @@ class MonthView extends Component{
                          });
                      }}
                      className={isSelect?css.select_monthItem:css.monthItem}>
-                    {monthData_item+"月"}
+                    {monthData_item}
+                    {/*{monthData_item+"月"}*/}
                 </div>);
             monthItemArr.push(item_MonthView);
         }
