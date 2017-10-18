@@ -178,7 +178,7 @@
     </style>
     <script>
         //规定使用REM单位
-       // document.documentElement.style.fontSize = innerWidth / 10 + "px";
+        document.documentElement.style.fontSize = innerWidth / 10 + "px";
 
         //方便调试
         var autoReload = function () {
@@ -254,7 +254,7 @@
 
     function loadItemData(showArr) {
         var innerHTML = "";
-        for (var i=0;i<showArr;i++) {
+        for (var i=0;i<showArr.length;i++) {
             var data = showArr[i];
             innerHTML += "<div class=\"c_t_item\">\n" +
                 "<div class=\"c_t_item_info_title\">" + data.title + "</div>\n" +
@@ -267,7 +267,7 @@
 
     function loadItemInfo(showArr) {
         var innerHTML = "";
-        for (var i=0;i<showArr;i++) {
+        for (var i=0;i<showArr.length;i++) {
             var data = showArr[i];
             innerHTML += "<div class=\"info\">\n" +
                 "        <div class=\"infoTitle\">" + data.title + "</div>\n" +
@@ -301,7 +301,7 @@
         showMoreAction();
     }
 
-
+    document.documentElement.style.fontSize = innerWidth / 10 + "px";
 </script>
 </body>
 </html>

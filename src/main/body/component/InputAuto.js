@@ -127,7 +127,7 @@ class InputAuto extends Component {
 
     getOptions(dataSource) {
         if(!dataSource){
-            return [];
+            dataSource = [];
         }
         let head = <Option disabled key="all" className="show-all">
             <div className={less.drop}>
