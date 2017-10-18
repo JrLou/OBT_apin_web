@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import {Button} from 'antd';
 import css from './MyAlert.less';
+import ClickHelp from '../../tool/ClickHelp.js';
 class MyAlert extends Component {
     constructor(props) {
         super(props);
@@ -26,7 +27,9 @@ class MyAlert extends Component {
                                 isShow:false
                             });
                         }}>
-            <div className={css.alertbg}>
+            <div className={css.alertbg} onClick={(event)=>{
+                ClickHelp.stopClick(event);
+            }}>
                 <div className={css.title}>
                     {this.props.data?this.props.data:"请联系客服预订下单"}
                 </div>
