@@ -23,7 +23,6 @@ class InputAuto extends Component {
         };
         this.selectValue = this.props.defaultValue;
         this.keyWord = this.props.defaultValue;
-
     }
 
     componentDidMount() {
@@ -162,6 +161,7 @@ class InputAuto extends Component {
 
     }
 
+
     render() {
         return (
             <div className="certain-category-search-wrapper" style={{width: 250}}>
@@ -176,6 +176,14 @@ class InputAuto extends Component {
                     onSearch={(value)=>{
                         this.keyWord = value;
                         this.selectValue = value;
+
+                        //防止连续快速搜索，请求接口
+                        let time = new Date().getTime();
+                        if(time-this.timeTemp<300){
+                            return;
+                        }
+                        this.timeTemp =time;
+
                         this.setState({
                             dataSource:[]
                         },()=>{

@@ -169,7 +169,7 @@ class page extends Component {
         this.setLoading(true, () => {
 
             var param = {
-                pageIndex:this.page.toString()
+                pageIndex:this.page
             };
             var success = (code, msg, json, option) => {
                 log(json);
@@ -191,7 +191,7 @@ class page extends Component {
                     message.error(msg);
                 });
             };
-            HttpTool.request(HttpTool.typeEnum.POST, "/ba/lineapi//v1.0/lines/new", success, failure, param,
+            HttpTool.request(HttpTool.typeEnum.POST, "/ba/lineapi/v1.0/lines/new", success, failure, param,
                 {
                     ipKey: "hlIP"
                 });
@@ -226,21 +226,18 @@ class page extends Component {
             <div className={less.topRight}>
 
                <div className={less.topRightContent}>
-                   <img className={less.topRightCarousel}
-                        src={require("../../../images/banner.png")}/>
-                   {/*<Carousel autoplay >*/}
-                       {/*{*/}
-                           {/*[1,2,3].map((data,index)=>{*/}
-                               {/*return  (*/}
-                                   {/*<div*/}
-                                       {/*key={index}*/}
-                                       {/*className={less.topRightCarousel}>*/}
-                                       {/*{data}*/}
-                                   {/*</div>*/}
-                               {/*);*/}
-                           {/*})*/}
-                       {/*}*/}
-                   {/*</Carousel>*/}
+                   {/*<img className={less.topRightCarousel}*/}
+                        {/*src={require("../../../images/banner.png")}/>*/}
+                   <Carousel autoplay >
+                       <a href="/html/Activepage.html" target='_blank'>
+                           <img className={less.topRightCarousel}
+                                src={require("../../../images/banner1.png")}/>
+                       </a>
+                       <a href="/html/Activecont.html" target='_blank'>
+                           <img className={less.topRightCarousel}
+                                src={require("../../../images/banner2.png")}/>
+                       </a>
+                   </Carousel>
                </div>
             </div>
 

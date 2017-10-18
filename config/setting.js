@@ -2,6 +2,8 @@
 var router = require("../router.js");
 module.exports = {
     port: 3000,
+    browserSupport:9,
+    blockPageName:"hintPage.html",
     assetPath: "./public",
     viewPath:"./view",
     custom: {
