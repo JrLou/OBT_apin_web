@@ -26,7 +26,7 @@ class page extends Component {
         this.isShowRightCal=this.year+"-"+this.month+"-"+this.day;
 
         this.state={
-          upData:0
+            upData:0
         };
     }
     componentWillReceiveProps(nextProps) {
@@ -62,7 +62,7 @@ class page extends Component {
         var success = (code, msg, json, option) => {
             // this.loadingView.refreshView(false);
 
-            let current_Y_M = json?json[0]:[];
+            let current_Y_M = json?json[0]:"";
             let YMDArr = current_Y_M.split("-");
             let rightY=YMDArr[0]?YMDArr[0]:this.year;
             let rightM=YMDArr[1]?YMDArr[1]:this.month;
@@ -96,7 +96,7 @@ class page extends Component {
         };
         var success = (code, msg, json, option) => {
             if (json[0]){
-                let current_Y_M = json[0]?json[0]:[];
+                let current_Y_M = json[0]?json[0]:"";
                 let YMDArr = json[0].split("-");
                 let rightY=YMDArr[0]?YMDArr[0]:this.year;
                 let rightM=YMDArr[1]?YMDArr[1]:this.month;
@@ -190,8 +190,15 @@ class page extends Component {
             "depDate":date
         };
         var success = (code, msg, json, option) => {
-            this.myLineInfor.refreshView(json,this.flightType);
             this.loadingView.refreshView(false);
+            if (json&&json.length>0){
+                let y = this.myflightCon?this.myflightCon.offsetTop:0;
+                let isBigZero = y-150;
+                if (isBigZero>0){
+                    window.scrollTo(0,isBigZero);
+                }
+            }
+            this.myLineInfor.refreshView(json,this.flightType);
         };
         var failure = (code, msg, option) => {
             message(msg);
@@ -256,11 +263,13 @@ class page extends Component {
 
                 </div>
 
-                <div className={css.content}>
+                <div className={css.content}
+                     ref={(div)=>this.myflightCon = div}>
                     <div className={css.title}>航班信息</div>
-                    <LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor} callBack={()=>{
-                        this.myAlert.refreshView();
-                    }}/>
+                    <LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor}
+                               callBack={()=>{
+                                   this.myAlert.refreshView();
+                               }}/>
                 </div>
 
                 <MyAlert ref={(a)=>this.myAlert = a}/>
@@ -352,12 +361,6 @@ class LineInfor extends Component {
                                             }}>
                                             {"预定"}
                                         </Button>
-
-                                        {/*<div className={css.btn} onClick={()=>{*/}
-                                            {/*if (this.props.callBack){*/}
-                                                {/*this.props.callBack();*/}
-                                            {/*}*/}
-                                        {/*}}>预定</div>*/}
                                     </div>
                                 </div>
                             </div>
@@ -367,7 +370,6 @@ class LineInfor extends Component {
             </div>);
             viewArr.push(itemView);
         }
-
         return viewArr;
     }
 
@@ -382,7 +384,7 @@ class LineInfor extends Component {
             startDate = startDate.replace("-","月")+"日";
 
 
-            let totalTime = dataItem.flightTime;
+            let totalTime = dataItem.flightTime?dataItem.flightTime:"";
             let timeArr = totalTime.split(":");
             let totalText = "";
             if (timeArr[0]&&timeArr[0]>0){
@@ -443,10 +445,8 @@ class LineInfor extends Component {
             </div>);
             viewArr.push(itemView);
         }
-
         return viewArr;
     }
-
 }
 
 page.contextTypes = {
