@@ -244,7 +244,7 @@ class page extends Component {
                </div>
             </div>
 
-        );length
+        );
     }
     getRecommendLayout(){
         if(this.state.dataSourceRecommend&&this.state.dataSourceRecommend.length>0){
