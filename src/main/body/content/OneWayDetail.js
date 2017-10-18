@@ -2,7 +2,7 @@
  * Created by lixifeng on 16/10/25.
  */
 import React, {Component} from 'react';
-import {message} from 'antd';
+import {message,Button} from 'antd';
 import css from './OneWayDetail.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APIGYW from "../../../api/APIGYW.js";
@@ -125,7 +125,9 @@ class page extends Component {
             "month":month
         };
 
+        this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
+            this.loadingView.refreshView(false);
             if (this.flightType=="2"){
                 this.myCalendarLeft.refreshCalendarDay(true,json);
             }else {
@@ -339,11 +341,23 @@ class LineInfor extends Component {
                                 </div>
                                 <div className={css.itemCenter}>
                                     <div className={css.table}>
-                                        <div className={css.btn} onClick={()=>{
-                                            if (this.props.callBack){
-                                                this.props.callBack();
-                                            }
-                                        }}>预定</div>
+                                        <Button
+                                            loading={this.state.loading}
+                                            type="primary"
+                                            className={css.btn}
+                                            onClick={() => {
+                                                if (this.props.callBack){
+                                                    this.props.callBack();
+                                                }
+                                            }}>
+                                            {"预定"}
+                                        </Button>
+
+                                        {/*<div className={css.btn} onClick={()=>{*/}
+                                            {/*if (this.props.callBack){*/}
+                                                {/*this.props.callBack();*/}
+                                            {/*}*/}
+                                        {/*}}>预定</div>*/}
                                     </div>
                                 </div>
                             </div>
