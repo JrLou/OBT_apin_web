@@ -105,7 +105,6 @@
             table-layout: fixed;
             max-width: 10rem;
             box-sizing: border-box;
-            background-color: #ffffff;
             padding: 0.3rem;
             display: table;
             border-bottom: 1px solid #F3F5F7;
@@ -138,9 +137,8 @@
         }
 
         .itemLayout{
-            max-height: 2rem;
-            height: 2rem;
             background-color: #d9b8f7;
+            overflow: hidden;
         }
     </style>
     <script>
@@ -167,6 +165,7 @@
 
         </div>
 
+        <div id="more">显示更多</div>
 
     </div>
     <div class="contentBottom">
@@ -179,6 +178,9 @@
     let dataSource = [];
     let names=["芒","雪","导","方便","商"];
     let names2=["果","盒子","面","品"];
+
+
+    //模拟数据
     for(let i=0;i<10;i++){
         dataSource.push({
             title:names[i%names.length]+names2[i%names2.length],
@@ -186,8 +188,13 @@
             money:(Math.random()*10*(i+1)).toFixed(2),
         })
     }
+
+    var showMore = false;
+    var showMax = 3;
+    var showArr = dataSource.slice(0,showMax);
+
     let innerHTML = "";
-    for(let data of dataSource){
+    for(let data of showArr){
         innerHTML+= '<div class="c_t_item">\n' +
             '                <div class="c_t_item_image" style="background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1508304466477&di=6e022eb4772a01c846fb8beded44f684&imgtype=0&src=http%3A%2F%2Fpic33.nipic.com%2F20130928%2F8821914_220446979000_2.jpg)"></div>\n' +
             '                <div class="c_t_item_info">\n' +
@@ -196,6 +203,10 @@
             '                    <div class="c_t_item_info_title">￥'+data.money+'</div>\n' +
             '                </div>\n' +
             '            </div>';
+    }
+
+    if(dataSource.length>3){
+
     }
 
 
