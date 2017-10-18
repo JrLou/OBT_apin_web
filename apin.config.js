@@ -40,13 +40,39 @@ var babelrc = {
         }
     }
 };
-var jsLoader = "babel-loader?"+JSON.stringify(babelrc).trim()+"!eslint-loader";
+var configModuleDebug= {
+    loaders: [
+        {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: "babel-loader?"+JSON.stringify(babelrc).trim()+"!eslint-loader"
+            // include: path.join(__dirname, "src")
+        },
+        {
+            test: /\.css/,
+            loader: "style-loader!css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]!"
+        },
+        {
+            test: /^(?!.*?(\\|\/)src(\\|\/)).*less$/,
+            loader: "style-loader!css-loader!less-loader?{\"sourceMap\":true,\"modifyVars\":"+themeV+"}"
+        },
+        {
+            test: /(.*?(\\|\/)src(\\|\/)).*less$/,
+            loader: "style-loader!css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]!less-loader"
+        },
+        {
+            test: /\.(png|jpg|gif)$/,
+            loader: "url-loader?limit=5120&name=images/[hash:8].[name].[ext]"
+        }
+
+    ]
+};
 var configModule = {
     loaders: [
         {
             test: /\.js$/,
             exclude: /node_modules/,
-            loader: jsLoader
+            loader: "babel-loader?"+JSON.stringify(babelrc).trim()
             // include: path.join(__dirname, "src")
         },
         {
@@ -80,7 +106,7 @@ module.exports = {
 					filename: "spa.js",
 					publicPath: "/project"
 				},
-                module: configModule
+                module: configModuleDebug
 			}
 
 

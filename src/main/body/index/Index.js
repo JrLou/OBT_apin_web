@@ -10,7 +10,7 @@ import SearchHelp from "../search/SearchHelp.js";
 import {HttpTool} from "../../../../lib/utils/index.js";
 import routes from "../../../vm/routes.js";
 
-import Scroll from "react-scroll"; // Imports all Mixins
+import Scroll from 'react-scroll/modules/index'; // Imports all Mixins
 // Or Access Link,Element,etc as follows
 
 var Link = Scroll.Link;
