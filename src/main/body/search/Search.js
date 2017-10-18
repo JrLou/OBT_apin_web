@@ -222,13 +222,26 @@ class page extends Component {
      * @returns {XML}
      */
     getLogingLayout() {
+
+        let flag = (navigator.appName == "Microsoft Internet Explorer" &&
+        (navigator.appVersion.match(/9./i)=="9."||navigator.appVersion.match(/8./i)=="8."
+            ||navigator.appVersion.match(/7./i)=="7."||navigator.appVersion.match(/6./i)=="6."
+            ||navigator.appVersion.match(/5./i)=="5."
+        ));
+
         return (
         <div className={less.load}>
             <div>
                 正在为您搜索航班信息...
             </div>
-            <img src={require('../../../images/load.gif')}
-            />
+            {flag?<img src={require('../../../images/load.gif')}/>:
+                <div style={{marginTop:30}}>
+                    <div className={less.child1}></div>
+                    <div className={less.child2}></div>
+                    <div className={less.child3}></div>
+                </div>
+            }
+
         </div>
 
         );
