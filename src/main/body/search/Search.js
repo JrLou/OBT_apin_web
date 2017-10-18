@@ -9,6 +9,7 @@ import {HttpTool} from "../../../../lib/utils/index.js";
 //获取模拟数据
 import routes from '../../../vm/routes.js';
 import less from './Search.less';
+import MyAlert from "../content/line/MyAlert";
 class page extends Component {
     constructor(props) {
         super(props);
@@ -65,6 +66,8 @@ class page extends Component {
 
 
         this.setLoading(true, () => {
+
+
             let param = {
                 arrCity	:par.to,
                 depCity	:par.from,
@@ -84,7 +87,6 @@ class page extends Component {
                     //一定是结果的页面 转换成对像
                     this.resut = json[0];
                 }else{
-                    alert(json.length);
                     this.resut = json;
                 }
                 //更新页面,此代码,一定是在此位置
@@ -93,12 +95,18 @@ class page extends Component {
             };
             let failure = (code, msg, option) => {
                 //无结果
-                this.resutMessage = code+msg;
-                this.resut = null;
+                if(param.arrCity&&param.depCity){
+
+                    this.resut = param;
+                }else{
+                    this.resutMessage = code+msg;
+                    this.resut = null;
+                }
+
                 this.setLoading(false, () => {
                 });
             };
-            HttpTool.request(HttpTool.typeEnum.POST, "/airlineapi/v1.0/list", success, failure, param,
+            HttpTool.request(HttpTool.typeEnum.POST, "/ba/flightapi/v1.0/flightDetail/list", success, failure, param,
                 {
                     ipKey: "hlIP"
                 });
@@ -219,7 +227,7 @@ class page extends Component {
             <div>
                 正在为您搜索航班信息...
             </div>
-            <img src={require('../../../images/check.png')}
+            <img src={require('../../../images/load.gif')}
             />
         </div>
 
@@ -236,8 +244,9 @@ class page extends Component {
                 <div className={less.emptyText}>
                     <div>没有查询到航班信息，请重新搜索或联系客服询问航班 </div>
                     <div>{this.resutMessage}</div>
-                    <Button type="primary">联系客服</Button>
+                    <Button type="primary" onClick={()=>{this.myAlert.refreshView();}}>联系客服</Button>
                 </div>
+                <MyAlert data={"客服电话"} ref={(a)=>this.myAlert = a}/>
             </div>
         );
     }

@@ -3,7 +3,7 @@
  */
 import React, {Component} from "react";
 import {Button, Input, Row, Col} from "antd";
-import AutoInput from "../AutoInput";
+import AutoInput from "../InputAuto";
 import less from "./index.less";
 
 /**
@@ -113,7 +113,9 @@ class SearchLayout extends Component {
 
     getFromInput(){
        return <AutoInput
+            className={less.inputAuto}
             ref="from"
+            type={"from"}
             defaultValue={this.state.from}
             placeholder={'中文／拼音／三字码'}
             max={'10'}
@@ -121,13 +123,13 @@ class SearchLayout extends Component {
             searchSource={this.state.searchSource}
             onChange={(val)=>{this.valChange(val);}}
             onSelect={(val,index,opt)=>{this.userSelect("from",val,index,opt);}}
-            onFocus={()=>{log(1);}}
-            onBlur={()=>{log(2);}}
         />;
     }
     getToInput(){
         return  <AutoInput
+            className={less.inputAuto}
             ref="to"
+            type={"to"}
             defaultValue={this.state.to}
             placeholder={'中文／拼音／三字码'}
             max={'10'}
@@ -135,8 +137,6 @@ class SearchLayout extends Component {
             searchSource={this.state.searchSource}
             onChange={(val)=>{this.valChange(val);}}
             onSelect={(val,index,opt)=>{this.userSelect("to",val,index,opt);}}
-            onFocus={()=>{log(1);}}
-            onBlur={()=>{log(2);}}
         />;
     }
     searchView() {
