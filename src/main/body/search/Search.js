@@ -87,7 +87,6 @@ class page extends Component {
                     //一定是结果的页面 转换成对像
                     this.resut = json[0];
                 }else{
-                    alert(json.length);
                     this.resut = json;
                 }
                 //更新页面,此代码,一定是在此位置
@@ -99,7 +98,6 @@ class page extends Component {
                 if(param.arrCity&&param.depCity){
 
                     this.resut = param;
-                    alert(JSON.stringify(this.resut));
                 }else{
                     this.resutMessage = code+msg;
                     this.resut = null;
