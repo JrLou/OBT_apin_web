@@ -465,9 +465,9 @@ class LineInfor extends Component {
                             </div>
                         </div>
                         <div className={css.timeLine}>
-                            <div className={css.placeLineItem}>{dataItem.arrAirport}</div>
+                            <div className={css.placeLineItem}>{dataItem.depAirport}</div>
                             <div className={css.space}></div>
-                            <div className={css.refPlaceLineItem}>{dataItem.depAirport}</div>
+                            <div className={css.refPlaceLineItem}>{dataItem.arrAirport}</div>
                         </div>
                     </div>
 
