@@ -97,7 +97,7 @@ class SpecialView extends Component {
                 for (let i=0;i<arr.length;i++) {
                     time+=(arr[i]+p[i]);
                 }
-                return p;
+                return time;
             } else {
                 return value;
             }

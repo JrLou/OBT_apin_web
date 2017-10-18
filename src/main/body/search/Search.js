@@ -20,9 +20,9 @@ class page extends Component {
         this.resutMessage = null;
         this.par = window.app_getPar(this);
 
-        this.pageSize = 16;
+        this.pageSize = 1;
         this.pageIndex = 1;
-        this.pageAllSize = 21;
+        this.pageAllSize = 0;
     }
 
 
@@ -77,7 +77,7 @@ class page extends Component {
             };
             let success = (code, msg, json, option) => {
                 log(json);
-                this.pageAllSize = 21;
+                this.pageAllSize = option.option;
                 this.resutMessage = "";
                 if(!json){
                     //无结果
