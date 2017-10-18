@@ -48,7 +48,6 @@ window.app_open = function (obj, path, state, open, callBack) {
     if (search && search.ip) {
         ip = "?ip=" + search.ip + "&";
     }
-    document.documentElement.scrollTop = document.body.scrollTop = 0;
 
     let get = state ? "data=" + encodeURIComponent(JSON.stringify(state)) : "";
     get = ip + get;
@@ -60,6 +59,7 @@ window.app_open = function (obj, path, state, open, callBack) {
     } else if (open === "self") {
         window.location.pathname = path + get;
     } else {
+        document.documentElement.scrollTop = document.body.scrollTop = 0;
         obj.context.router.push(
             {
                 pathname: path,
