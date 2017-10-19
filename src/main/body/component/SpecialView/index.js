@@ -22,6 +22,8 @@ class SpecialView extends Component {
     // saled	已团数量	object
     // voyage	航程	string	杭州-北京
     // flightType	航线类型	number	0：未定义；1：单程；2：往返
+    // depCity 出发
+    // arrCity 到达
     render() {
         let {data} = this.props;
         if (!data)return null;
@@ -32,7 +34,17 @@ class SpecialView extends Component {
                 data.from = arr[0];
                 data.to = arr[1];
             }
+        }else{
+            if(data.depCity){
+                data.from = data.depCity;
+                // delete  data.depCity;
+            }
+            if(data.arrCity){
+                data.to = data.arrCity;
+                // delete  data.arrCity;
+            }
         }
+
 
         let img = null;
         data.one = data.flightType===1;

@@ -1,10 +1,15 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+    <title>团购机票就上爱拼机</title>
+    <meta name="keywords" content="团购|机票|就上|爱拼机">
+    <meta name="description" content="团购机票就上爱拼机">
+    <meta name="爱拼机" content="团购机票就上爱拼机">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="shortcut icon" href="/images/icon.ico" >
-	<title>爱拼机</title>
+    <script type="application/javascript" src="/js/verie.js"></script>
+
     <style>
         body{
             min-width: 1024px;
@@ -12,7 +17,14 @@
     </style>
 </head>
 <body>
-	<div id="root"></div>
-	<script src="/project/spa.js"></script>
+
+	<div id="root">团购机票就上爱拼机</div>
+    <script>
+        if(!window.checkIE||(checkIE.isIE()&&(checkIE.isIE6()||checkIE.isIE7()||checkIE.isIE8()))){
+            window.location.pathname = "/hintPage.html"
+        }
+    </script>
+    <script type="application/javascript" src="/project/spa.js"></script>
+
 </body>
 </html>

@@ -19,25 +19,25 @@ class InputAuto extends Component {
 
         this.state = {
             dataSource: [],
-            ifFirst:true,
+            ifFirst: true,
         };
         this.selectValue = this.props.defaultValue;
         this.keyWord = this.props.defaultValue;
     }
 
     componentDidMount() {
-        if(this.keyWord){
+        if (this.keyWord) {
             this.loadDataForKeyWord(this.keyWord);
-        }else{
+        } else {
             this.loadData();
         }
 
     }
 
     loadData() {
-        if(this.hotDataSource){
+        if (this.hotDataSource) {
             this.setState({
-                dataSource:this.hotDataSource
+                dataSource: this.hotDataSource
             });
             return;
         }
@@ -46,17 +46,17 @@ class InputAuto extends Component {
             log(json);
             this.hotDataSource = json;
             this.setState({
-                dataSource:this.hotDataSource
+                dataSource: this.hotDataSource
             });
         };
         let failure = (code, msg, option) => {
             //无结果
             this.hotDataSource = [];
             this.setState({
-                dataSource:this.hotDataSource
+                dataSource: this.hotDataSource
             });
         };
-        let api = this.props.type==="from"?"/os/hotcityapi/v1.0/depCity/list":"/os/hotcityapi/v1.0/arrCity/list";
+        let api = this.props.type === "from" ? "/os/hotcityapi/v1.0/depCity/list" : "/os/hotcityapi/v1.0/arrCity/list";
         HttpTool.request(HttpTool.typeEnum.POST, api, success, failure, param,
             {
                 ipKey: "hlIP"
@@ -65,18 +65,18 @@ class InputAuto extends Component {
 
     loadDataForKeyWord(keyWord) {
         let param = {
-            str:keyWord
+            str: keyWord
         };
         let success = (code, msg, json, option) => {
             log(json);
             this.setState({
-                dataSource:json
+                dataSource: json
             });
         };
         let failure = (code, msg, option) => {
             //无结果
             this.setState({
-                dataSource:[]
+                dataSource: []
             });
         };
         HttpTool.request(HttpTool.typeEnum.POST, "/ba/baseapi/v1.0/cities/list/key", success, failure, param,
@@ -95,10 +95,11 @@ class InputAuto extends Component {
         });
     }
 
-    formatValue(value){
+    formatValue(value) {
 
         return this.state.dataSource[value];
     }
+
     onSelect(value, option) {
         this.selectValue = this.formatValue(value);
         this.keyWord = this.formatValue(value);
@@ -125,7 +126,7 @@ class InputAuto extends Component {
     }
 
     getOptions(dataSource) {
-        if(!dataSource||this.state.ifFirst){
+        if (!dataSource || this.state.ifFirst) {
             return [];
         }
         let head = <Option disabled key="all0" className="show-all">
@@ -137,64 +138,74 @@ class InputAuto extends Component {
                     热门推荐
                 </div>
             </div>
-            {dataSource.length<1?(   <div className={less.errorMessage}>
+            {dataSource.length < 1 ? (   <div className={less.errorMessage}>
                 无热门城市
-            </div>):null}
+            </div>) : null}
         </Option>;
 
-                let result =dataSource.length<1?(
-                    [
-                        <Option disabled key="all1" className="show-all">
-                            <div className={less.errorMessage}>
-                                对不起,暂不支持该地点
-                            </div>
-                        </Option>
-                    ]
-                ): dataSource.map((obj, index) => {
-                    return <Option className={this.keyWord?null:less.dropItemFloat} key={index}>{obj}</Option>;
-                });
-                if(this.keyWord){
-                    return result;
-                }else{
-                    return [head].concat(result);
-                }
+        let result = dataSource.length < 1 ? (
+            [
+                <Option disabled key="all1" className="show-all">
+                    <div className={less.errorMessage}>
+                        对不起,暂不支持该地点
+                    </div>
+                </Option>
+            ]
+        ) : dataSource.map((obj, index) => {
+            return <Option className={this.keyWord ? null : less.dropItemFloat} key={index}>{obj}</Option>;
+        });
+        if (this.keyWord) {
+            return result;
+        } else {
+            return [head].concat(result);
+        }
 
     }
 
-    changeFirstState(){
-        if(this.state.ifFirst) {
+    changeFirstState() {
+        if (this.state.ifFirst) {
             this.setState({ifFirst: false});
         }
     }
 
-    render(){
+    render() {
         return (
             <div className="certain-category-search-wrapper" style={{width: 250}}>
                 <AutoComplete
                     {...this.props}
                     dropdownMatchSelectWidth={false}
-                    dropdownStyle={{width:'300px'}}
+                    dropdownStyle={{width: "300px"}}
                     size="large"
                     style={{width: "100%"}}
                     dataSource={this.getOptions(this.state.dataSource)}
                     onSelect={this.onSelect.bind(this)}
-                    onFocus={()=>{this.changeFirstState();}}
-                    onSearch={(value)=>{
+                    onFocus={() => {
+                        this.changeFirstState();
+                    }}
+                    onSearch={(value) => {
                         this.keyWord = value;
                         this.selectValue = value;
-
                         //防止连续快速搜索，请求接口
                         let time = new Date().getTime();
-                        if(time-this.timeTemp<300){
+                        if (time - this.timeTemp < 300) {
+                            if(this.keyWord){
+                                this.setState({
+                                    dataSource:null
+                                });
+                            }else{
+                                this.loadData();
+                            }
                             return;
                         }
-                        this.timeTemp =time;
-
-                        if(this.keyWord){
-                            this.loadDataForKeyWord(this.keyWord);
-                        }else{
-                            this.loadData();
-                        }
+                        this.timeTemp = time;
+                        this.setState({
+                        },()=>{
+                             if(this.keyWord) {
+                                 this.loadDataForKeyWord(this.keyWord);
+                            }else{
+                                 this.loadData();
+                             }
+                        });
                     }}
 
 
