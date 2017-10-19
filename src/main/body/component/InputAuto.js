@@ -162,8 +162,9 @@ class InputAuto extends Component {
     }
 
     changeFirstState(){
-        if(this.state.ifFirst){
-            this.setState({ifFirst:false});
+        if(this.state.ifFirst) {
+            this.setState({ifFirst: false});
+        }
     }
 
     render(){
