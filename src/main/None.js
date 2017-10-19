@@ -3,12 +3,14 @@
  */
 import React, {Component} from 'react';
 import { Layout} from 'antd';
+
+import less from "./None.less";
 class page extends Component{
 
     constructor(props){
         super(props);
         this.state = {
-            time:10
+            time:100
         };
     }
     componentDidMount() {
@@ -33,8 +35,12 @@ class page extends Component{
 
     render(){
         return(
-            <Layout>
-              {"404页面,查找不到指向页面 ("+this.state.time+"秒后,回到首页)"}
+            <Layout className={less.content}>
+                <div className={less.empty}>
+                    <div className={less.emptyText}>
+                        <div>{"404页面,查找不到指向页面 ("+this.state.time+"秒后,回到首页)"}</div>
+                    </div>
+                </div>
             </Layout>
         );
     }
