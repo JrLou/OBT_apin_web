@@ -187,7 +187,7 @@ class InputAuto extends Component {
                         this.selectValue = value;
                         //防止连续快速搜索，请求接口
                         let time = new Date().getTime();
-                        if (time - this.timeTemp < 300) {
+                        if (time - this.timeTemp < 50) {
                             if(this.keyWord){
                                 this.setState({
                                     dataSource:null
