@@ -27,11 +27,15 @@ class page extends Component {
         var div = (<div className={css.main}>
             <div className={css.con}>
                 <div className={css.left}>
-                    <img className={css.img} src={this.getImageUrlForQiNiu(dataSource.arrCityImgUrl)}/>
+                    <div className={css.img} style={{
+                        backgroundImage: "url(" + this.getImageUrlForQiNiu(dataSource.arrCityImgUrl) + ")"
+                    }}/>
                 </div>
                 <div className={css.right}>
                     <div className={css.title}>
                         <div className={css.titleHead}>{dataSource.depCity}</div>
+
+
                         <img className={css.imgIcon}
                              src={dataSource.flightType==2?require("../../../../images/trip_round.png"):require("../../../../images/trip_single.png")}/>
                         <div className={css.refTitleHead}>{dataSource.arrCity}{dataSource.flightType==2?"（往返）":"（单程）"}</div>
