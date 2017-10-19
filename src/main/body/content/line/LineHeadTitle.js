@@ -35,7 +35,6 @@ class page extends Component {
                     <div className={css.title}>
                         <div className={css.titleHead}>{dataSource.depCity}</div>
 
-
                         <img className={css.imgIcon}
                              src={dataSource.flightType==2?require("../../../../images/trip_round.png"):require("../../../../images/trip_single.png")}/>
                         <div className={css.refTitleHead}>{dataSource.arrCity}{dataSource.flightType==2?"（往返）":"（单程）"}</div>

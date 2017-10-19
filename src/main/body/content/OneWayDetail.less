@@ -7,20 +7,39 @@
 @color_black:#333333;
 
 .main{
-  padding-left: @d_spadding_center;
-  padding-right: @d_spadding_center;
   min-width: @content_width;
+  background-color: @c_bg_gray;
 }
 .content{
+  background-color: @c_bg_white;
   margin-left: auto;
   margin-right: auto;
   width: @content_width;
+  margin-bottom: @d_spadding_center;
+}
+
+.refContent{
+  composes: content;
+  margin-bottom: 0px;
+  padding-left: @d_spadding_center;
+  padding-right: @d_spadding_center;
+}
+.thirdContent{
+  composes: content;
+  margin-bottom: 0px;
+  padding-bottom: 5px;
 }
 .myCalendar{
   margin-left:auto;
   margin-right:auto;
 }
-
+.calendarTitle{
+  font-family: MicrosoftYaHei-Bold;
+  font-size: @font_size_center;
+  color: #4F5762;
+  padding-top: @d_spadding_small;
+  padding-bottom: @d_spadding_base;
+}
 
 .fontBase{
   font-size: @font_size_cell;
@@ -38,7 +57,8 @@
   font-size: @font_size_title;
   font-weight: 900;
   padding-top: @d_spadding_small;
-  padding-bottom: @d_spadding_small;
+  padding-bottom: @d_spadding_base;
+  text-align: center;
 }
 
 .cell{

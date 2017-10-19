@@ -19,7 +19,7 @@ class InputAuto extends Component {
 
         this.state = {
             dataSource: [],
-
+            ifFirst:true,
         };
         this.selectValue = this.props.defaultValue;
         this.keyWord = this.props.defaultValue;
@@ -125,7 +125,7 @@ class InputAuto extends Component {
     }
 
     getOptions(dataSource) {
-        if(!dataSource){
+        if(!dataSource||this.state.ifFirst){
             return [];
         }
         let head = <Option disabled key="all" className="show-all">
@@ -161,18 +161,23 @@ class InputAuto extends Component {
 
     }
 
+    changeFirstState(){
+        if(this.state.ifFirst){
+            this.setState({ifFirst:false});
+    }
 
-    render() {
+    render(){
         return (
             <div className="certain-category-search-wrapper" style={{width: 250}}>
                 <AutoComplete
                     {...this.props}
                     dropdownMatchSelectWidth={false}
-                    dropdownStyle={{width: 300}}
+                    dropdownStyle={{width:'300px'}}
                     size="large"
                     style={{width: "100%"}}
                     dataSource={this.getOptions(this.state.dataSource)}
                     onSelect={this.onSelect.bind(this)}
+                    onFocus={()=>{this.changeFirstState();}}
                     onSearch={(value)=>{
                         this.keyWord = value;
                         this.selectValue = value;

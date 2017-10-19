@@ -251,9 +251,10 @@ class page extends Component {
                 <div className={css.content}>
                     <LineHeadTitle dataSource = {this.myData}/>
                 </div>
-                <div className={css.content} style={{overflow:"hidden"}}>
+                <div className={css.refContent} style={{overflow:"hidden"}}>
                     {this.flightType==2?<div className={css.myCalendar}
                                              style={{width:"49%",float:"left"}}>
+                        <div className={css.calendarTitle}>第一步：请选择去程日期</div>
                         <MyCalendar
                             ref={(a)=>{this.myCalendarLeft = a;}}
                             onSelectDate={(select_year, select_month , select_day,selDataItem)=>{
@@ -274,6 +275,7 @@ class page extends Component {
 
                     <div className={css.myCalendar}
                          style={{width:this.flightType==2?"49%":"70%",float:this.flightType==2?"right":"none"}}>
+                        {this.flightType==2?(<div className={css.calendarTitle}>第二步：请选择返程日期</div>):null}
                         <MyCalendar
                             ref={(a)=>{this.myCalendarRight = a;}}
                             onSelectDate={(select_year, select_month , select_day,selDataItem)=>{
@@ -298,9 +300,8 @@ class page extends Component {
 
                 </div>
 
-                <div className={css.content}
+                <div className={css.thirdContent}
                      ref={(div)=>this.myflightCon = div}>
-                    <div className={css.title}>航班信息</div>
                     <LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor}
                                callBack={()=>{
                                    this.myAlert.refreshView();
@@ -346,6 +347,7 @@ class LineInfor extends Component {
     render() {
         let {dataSource,flightType} = this.state;
         return (<div>
+            {(dataSource&&dataSource.length>0)?(<div className={css.title}>航班信息</div>):null}
             {this.createCell(dataSource,flightType)}
         </div>);
     }
@@ -429,7 +431,7 @@ class LineInfor extends Component {
             let endDate = dataItem.arrDate?dataItem.arrDate.substring(5):"";
             endDate = endDate.replace("-","月")+"日";
             var itemView = (<div key={i}>
-                <div className={css.cellLine}>
+                <div className={css.cellLine} style={{borderBottomWidth:(flightType&&i==0)?"1px":"0px"}}>
                     {flightType?<div className={css.type}>
                         <div className={css.typeText}>
                             {i==0?"去":"返"}
