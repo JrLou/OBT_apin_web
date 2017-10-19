@@ -18,10 +18,10 @@ class page  extends Component {
                     <a href="http://www.itrust.org.cn/home/index/rz_certifi/wm/RZ2017081801" target='_blank'>
                         <img style={{height:29}}
                         src={require("../images/believe1.png")}/></a>
-                    <a href="https://ss.knet.cn/verifyseal.dll?sn=e17082333010068646dvwe000000&pa=111332"
-                       id="urlknet" target="_blank"><img style={{height:29,marginLeft:20}} src={require("../images/believe3.png")}/></a>
                     <a id='___szfw_logo___' href='https://credit.szfw.org/CX20170824035710820330.html'
-                       target='_blank'><img style={{height:29,marginLeft:20}} src={require("../images/believe2.png")}/></a>
+                       target='_blank'><img style={{height:29,marginLeft:20}} src={require("../images/believe3.png")}/></a>
+                    <a href="https://ss.knet.cn/verifyseal.dll?sn=e17082333010068646dvwe000000&pa=111332"
+                       id="urlknet" target="_blank"><img style={{height:29,marginLeft:20}} src={require("../images/believe2.png")}/></a>
                 </p>
             </div>
         );
