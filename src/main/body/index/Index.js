@@ -326,13 +326,20 @@ class page extends Component {
                             <div className={less.bottomIcon}/>
                             <div className={less.centerTitle}>更多机票路线</div>
                         </div>
-                        <div>
+                        <Row>
                             {this.getSpecialList(this.state.dataSource)}
-                            <div style={{clear:"both"}}/>
-                        </div>
+                        </Row>
                         <br/>
                     </div>
-
+                    {this.state.loading ? <div className={less.more}>
+                            加载中...</div> :
+                        <div className={less.more}
+                             onClick={() => {
+                                 this.getNetData();
+                             }}
+                        >
+                            {this.isLastPage ? "没有更多航线啦" : <div style={{
+                                cursor: "pointer"}}>下拉加载更多</div>}</div>}
 
 
                 </div>
