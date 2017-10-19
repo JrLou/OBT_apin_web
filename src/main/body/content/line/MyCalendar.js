@@ -6,6 +6,13 @@ import css from './MyCalendar.less';
 import { Icon,Button} from 'antd';
 import CalendarHelp from './CalendarHelp';
 import DealDate from './DealDate';
+
+import Scroll from 'react-scroll/modules/index'; // Imports all Mixins
+var Link = Scroll.Link;
+var Events = Scroll.Events;
+var scroll = Scroll.animateScroll;
+var scrollSpy = Scroll.scrollSpy;
+
 class page extends Component {
     constructor(props) {
         super(props);
@@ -337,8 +344,6 @@ class page extends Component {
                                 this.selectMonth(selMonth,isLeft);
                             }}
                             current_month={current_Y_M}
-                            select_year = {select_year}
-                            select_month = {select_month}
                             monthArr = {monthArr}
                         />
                     </div>
@@ -412,17 +417,44 @@ class MonthView extends Component{
         super(props);
         this.state = ({
             current_month:"",
-            remove_width:"0"
+            remove_width:"0",
+            isBeyond:false
         });
         this.removeNum = 0;
         this.removeTotal = 0;
+        this.scrollTo = this.scrollTo.bind(this);
+    }
+    scrollTo(y) {
+        scroll.scrollTo(y);
     }
 
     /**
      * 组件渲染完后执行
      */
     componentDidMount() {
+        let monthView_width = this.monthView.offsetWidth;
+        let {monthArr} = this.props;
+        let month_width = 0;
+        if (monthArr&&monthArr.length>0){
+            month_width = monthArr.length*90;
+        }
+        let isBig = month_width>monthView_width;
+        this.setState({
+            isBeyond:!isBig
+        });
 
+        Events.scrollEvent.register("begin", function () {
+            console.log("begin", arguments);
+        });
+        Events.scrollEvent.register("end", function () {
+            console.log("end", arguments);
+        });
+
+        scrollSpy.update();
+    }
+    componentWillUnmount() {
+        Events.scrollEvent.remove("begin");
+        Events.scrollEvent.remove("end");
     }
 
     componentWillReceiveProps(nextProps) {
@@ -436,17 +468,13 @@ class MonthView extends Component{
         }
     }
     render(){
-        let {select_year,selectMonthAction,select_month,monthArr} = this.props;
-
+        let {selectMonthAction,monthArr} = this.props;
         let month_width = 0;
         if (monthArr&&monthArr.length>0){
             month_width = monthArr.length*90;
         }
-
         var translateX = "translateX("+this.state.remove_width +"px)";
         var monthView_With = this.monthView?this.monthView.offsetWidth:0;
-        var blurEffect = "-webkit-gradient(linear, "+(monthView_With!=0?(monthView_With-10):0)+" 0,"+ monthView_With+" 0, from(rgba(0, 0, 0, 10)), to(rgba(5, 5, 0, 0)))";
-
         return(<div className={css.monthView_bg}>
             <div className={css.calendarHeaderIcon}>
                 <img className={css.icon} style={{float: "right",cursor: 'pointer'}}
@@ -458,38 +486,36 @@ class MonthView extends Component{
                              this.removeTotal = this.removeTotal +90;
                              return;
                          }
+                         this.setState({
+                             isBeyond:false
+                         });
                          var remove_width = this.state.remove_width;
                          var remove = remove_width+90;
-                         setTimeout(()=>{
-                             this.setState({
-                                 remove_width:remove
-                             });
-                         },1000);
+                         this.setState({
+                             remove_width:remove
+                         });
+                         // this.scrollTo(remove);
                      }}
-                     src={require("../../../../images/select_left_icon.png")}/>
+                     src={this.removeNum==0?require("../../../../images/select_left_icon_def.png"):require("../../../../images/select_left_icon.png")}/>
             </div>
 
-
-            {/*<div className={css.blurEffect}></div>*/}
             <div ref={(a)=>this.monthView = a}
-                 className={css.monthView}
-                 style={{
-                     WebkitMaskImage: blurEffect
-                 }}
-            >
+                 className={css.monthView}>
                 <div className={css.monthView_super}
                      style={{
                          width:month_width+"px",
-                         transform:translateX
+                         transform:translateX,
+                         transition:"(all 0.5s)"
                      }}>
                     {this.createMonthItem(monthArr,selectMonthAction)}
                 </div>
+                {this.removeNum==0?null:<div className={css.blurLeft}></div>}
+                <div className={css.blurRight}></div>
             </div>
-            {/*<div className={css.blurEffect}></div>*/}
 
             <div className={css.refCalendarHeaderIcon}>
                 <img className={css.icon} style={{cursor: 'pointer'}}
-                     src={require("../../../../images/select_right_icon.png")}
+                     src={this.state.isBeyond?require("../../../../images/select_right_icon_def.png"):require("../../../../images/select_right_icon.png")}
                      onClick={()=>{
                          //日期所占背景的宽度
                          let monthView_width = this.monthView.offsetWidth;
@@ -499,12 +525,19 @@ class MonthView extends Component{
                          let remove_width = this.state.remove_width;
                          //此处减90是因为 第一个从零开始 然后减去最后一个的宽度
                          let isBeyond = month_width-(monthView_width+this.removeTotal-90);
-                         if (!monthArr || isBeyond<0){
+
+                         let isBig = month_width-(monthView_width+this.removeTotal);
+                         this.setState({
+                             isBeyond:isBig<0
+                         });
+                         let isBool = (!monthArr || isBeyond<0);
+                         if (isBool){
                              this.removeNum = this.removeNum-1;
                              this.removeTotal = this.removeTotal -90;
                              return;
                          }
                          let remove = remove_width-90;
+                         // this.scrollTo(remove);
                          this.setState({
                              remove_width:remove
                          });

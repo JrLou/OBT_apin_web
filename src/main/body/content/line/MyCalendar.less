@@ -50,6 +50,7 @@
 .refCalendarHeaderIcon{
   composes: calendarHeaderIcon;
   float: right;
+
 }
 .btn{
   float:right;
@@ -75,15 +76,28 @@
 .monthView{
   float: left;
   height: @height_head;
-  width: 84%;
+  width: 85%;
+  margin-left: 2%;
+  margin-right: 2%;
   overflow: hidden;
-
+  position: relative;
 }
-.blurEffect{
-  float: left;
-  height: @height_head;
-  width: 3%;
-  -webkit-mask-image: -webkit-gradient(linear, 0 0, 50 0, from(rgba(0, 0, 0, 10)), to(rgba(5, 5, 0, 0)));
+.blurLeft{
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: -5px;
+  width: 50px;
+  background-image: url("../../../../images/blur_left.png");
+}
+.blurRight{
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  right: -8px;
+  width: 40px;
+  pointer-events: none;
+  background-image: url("../../../../images/blur_right.png");
 }
 .hidden{
   display: none;
@@ -148,7 +162,7 @@
   height: @height_item;
   font-size: @font-size-base;
   border-style: solid;
-  border-color: #eeeeee;
+  border-color: @c_border_gray;
   border-width: 1px;
   padding: 3px 0px 0px 5px;
 }
@@ -164,10 +178,10 @@
 
 .itemGray{
   composes: defaultItem;
-  background-color: #F7F7F7;
+  background-color: @c_bg_white;
 }
 .dayGray{
-  color: #8bf188;
+  color: @c_border_gray;
 }
 
 .itemActive{
@@ -192,10 +206,10 @@
   composes: dayTitle;
   padding-right: @d_spadding_small;
   color: @c_text_red;
-  font-size: @font_size_center;
+  font-size: @font_size_cell;
   text-align: right;
-  height: 18px;
-  line-height: 18px;
+  height: 16px;
+  line-height: 16px;
 }
 .refPrice{
   composes: price;

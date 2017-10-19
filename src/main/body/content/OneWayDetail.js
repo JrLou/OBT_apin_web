@@ -148,8 +148,7 @@ class page extends Component {
         this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
             this.loadingView.refreshView(false);
-            let retDateObj = json?json[0]:{};
-
+            let retDateObj = json&&json[0]?json[0]:{};
             let current_Y_M_D = retDateObj.retDate?retDateObj.retDate:this.isShowRightCal;
             let YMDArr = current_Y_M_D.split("-");
             let rightY=YMDArr[0]?YMDArr[0]:this.year;
@@ -166,7 +165,6 @@ class page extends Component {
                 let days = 0;
                 this.loadTripData(current_Y_M_D, days);
             }
-
         };
         var failure = (code, msg, option) => {
             this.loadingView.refreshView(false);
@@ -274,7 +272,7 @@ class page extends Component {
                     </div>:null}
 
                     <div className={css.myCalendar}
-                         style={{width:this.flightType==2?"49%":"70%",float:this.flightType==2?"right":"none"}}>
+                         style={{width:this.flightType==2?"49%":"60%",float:this.flightType==2?"right":"none"}}>
                         {this.flightType==2?(<div className={css.calendarTitle}>第二步：请选择返程日期</div>)
                             :
                             <div style={{height:"15px"}}></div>
