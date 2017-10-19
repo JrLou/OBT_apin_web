@@ -128,7 +128,7 @@ class InputAuto extends Component {
         if(!dataSource||this.state.ifFirst){
             return [];
         }
-        let head = <Option disabled key="all" className="show-all">
+        let head = <Option disabled key="all0" className="show-all">
             <div className={less.drop}>
                 <div className={less.dropHeadLineLayout}>
                     <div className={less.dropHeadLine}/>
@@ -144,7 +144,7 @@ class InputAuto extends Component {
 
                 let result =dataSource.length<1?(
                     [
-                        <Option disabled key="all" className="show-all">
+                        <Option disabled key="all1" className="show-all">
                             <div className={less.errorMessage}>
                                 对不起,暂不支持该地点
                             </div>
@@ -190,16 +190,11 @@ class InputAuto extends Component {
                         }
                         this.timeTemp =time;
 
-                        this.setState({
-                            dataSource:[]
-                        },()=>{
-                            if(this.keyWord){
-                                this.loadDataForKeyWord(this.keyWord);
-                            }else{
-                                this.loadData();
-                            }
-                        });
-
+                        if(this.keyWord){
+                            this.loadDataForKeyWord(this.keyWord);
+                        }else{
+                            this.loadData();
+                        }
                     }}
 
 

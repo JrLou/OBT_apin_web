@@ -23,7 +23,6 @@ class page  extends Component {
                     <a id='___szfw_logo___' href='https://credit.szfw.org/CX20170824035710820330.html'
                        target='_blank'><img style={{height:29,marginLeft:20}} src={require("../images/believe2.png")}/></a>
                 </p>
-                <img src="/dang.jpg"/>
             </div>
         );
     }
