@@ -275,7 +275,10 @@ class page extends Component {
 
                     <div className={css.myCalendar}
                          style={{width:this.flightType==2?"49%":"70%",float:this.flightType==2?"right":"none"}}>
-                        {this.flightType==2?(<div className={css.calendarTitle}>第二步：请选择返程日期</div>):null}
+                        {this.flightType==2?(<div className={css.calendarTitle}>第二步：请选择返程日期</div>)
+                            :
+                            <div style={{height:"15px"}}></div>
+                        }
                         <MyCalendar
                             ref={(a)=>{this.myCalendarRight = a;}}
                             onSelectDate={(select_year, select_month , select_day,selDataItem)=>{
@@ -389,10 +392,10 @@ class LineInfor extends Component {
                                     <div className={css.table}>
                                         <div className={css.btn} style={{cursor: 'pointer'}}
                                              onClick={() => {
-                                            if (this.props.callBack){
-                                                this.props.callBack();
-                                            }
-                                        }}>{"预定"}</div>
+                                                 if (this.props.callBack){
+                                                     this.props.callBack();
+                                                 }
+                                             }}>{"预定"}</div>
 
                                     </div>
                                 </div>

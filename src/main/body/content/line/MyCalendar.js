@@ -229,11 +229,13 @@ class page extends Component {
         previous_month_days = date_num_array[previous_month];
         //在本月之前的
         for (let i = 0; i < first_day; i++) {
-            let itemView = (<div className={css.itemGray}>
-                <div className={css.dayGray}>
-                    {previous_month_days - (first_day - i) + 1}
-                </div>
-            </div>);
+            let itemView =
+                (<div className={css.itemGray}
+                      key={'previousItem'+i+(isLeft?"left":"right")}>
+                    <div className={css.dayGray}>
+                        {previous_month_days - (first_day - i) + 1}
+                    </div>
+                </div>);
 
             let previous_link = (<CalendarItem
                 key={'previous'+i+(isLeft?"left":"right")}
@@ -244,7 +246,7 @@ class page extends Component {
         //在本月当中的
         let currentClassName = '',
             currentText = '';
-        let current_link = null;
+        let itemView = null;
         for (let i = 0; i < month_day; i++) {
             // 今天样式
             if (current_year == select_year && current_month == select_month && current_day == (i + 1)) {
@@ -253,12 +255,12 @@ class page extends Component {
                 currentText = i + 1;
             }
             currentClassName = css.itemActive;
-            let itemView = (<div className={currentClassName}>
+            itemView = (<div className={currentClassName} key={'currentItem'+i+(isLeft?"left":"right")}>
                 <div className={css.dayTitle}>
                     {currentText}
                 </div>
             </div>);
-            current_link = (<CalendarItem key={'current'+i} itemView = {itemView}/>);
+
 
 
             // 添加tag样式
@@ -269,38 +271,28 @@ class page extends Component {
                     tagDay = parseInt(tagDay.substring(8));
                     if ((i + 1) === tagDay) {
                         // 判断选择样式与历史样式是否相等，相等激活
-                        if (select_year == history_year && select_month == history_month && history_day == (i + 1)) {
-                            currentClassName = css.itemSelect;
-                            let itemView = (
-                                <div className={currentClassName} style={{cursor: 'pointer'}}
-                                     onClick={this.selectDate.bind(this, i + 1,tagDataItem)}>
-                                    <img className={css.itemSelect_sign}
-                                         src={require("../../../../images/select_sign.png")}/>
-                                    <div className={css.dayTitle}>
-                                        {currentText}
-                                    </div>
-                                    <div className={isLeft?css.refPrice:css.price}> {"¥"+tagDataItem.basePrice}</div>
-                                    {isLeft?null:<div className={css.sit}>{"余位"+tagDataItem.remainCount}</div>}
-                                </div>);
-                            current_link = (<CalendarItem key={'current'+i+(isLeft?"left":"right")} itemView = {itemView}/>);
-                        } else {
-                            currentClassName = css.itemTags;
-                            let itemView = (
-                                <div className={currentClassName} style={{cursor: 'pointer'}}
-                                     onClick={this.selectDate.bind(this, i + 1,tagDataItem)}>
-                                    <div className={css.dayTitle}>
-                                        {currentText}
-                                    </div>
-                                    <div className={isLeft?css.refPrice:css.price}> {"¥"+tagDataItem.basePrice}</div>
-                                    {isLeft?null:<div className={css.sit}>{"余位"+tagDataItem.remainCount}</div>}
-                                </div>);
-
-                            current_link = (<CalendarItem  key={'current'+i+(isLeft?"left":"right")} itemView={itemView}/>);
-                            break;
-                        }
+                        let isSelect = (select_year == history_year && select_month == history_month && history_day == (i + 1));
+                        currentClassName = isSelect?css.itemSelect:css.itemTags;
+                        itemView = (
+                            <div className={currentClassName}
+                                 key={'currentItem'+i+(isLeft?"left":"right")}
+                                 style={{cursor: 'pointer'}}
+                                 onClick={this.selectDate.bind(this, i + 1,tagDataItem)}>
+                                {isSelect?(<img className={css.itemSelect_sign}
+                                                src={require("../../../../images/select_sign.png")}/>):null}
+                                <div className={css.dayTitle}>
+                                    {currentText}
+                                </div>
+                                <div className={isLeft?css.refPrice:css.price}> {"¥"+tagDataItem.basePrice}</div>
+                                {isLeft?null:<div className={css.sit}>{"余位"+tagDataItem.remainCount}</div>}
+                            </div>);
                     }
                 }
             }
+            let current_link = (
+                <CalendarItem
+                    key={'calendarItem'+i+(isLeft?"left":"right")}
+                    itemView = {itemView}/>);
             current_days.push(current_link);
         }
 
