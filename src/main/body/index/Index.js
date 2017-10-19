@@ -337,7 +337,8 @@ class page extends Component {
                                  this.getNetData();
                              }}
                         >
-                            {this.isLastPage ? "没有更多航线啦" : "下拉加载更多"}</div>}
+                            {this.isLastPage ? "没有更多航线啦" : <div style={{
+                                cursor: "pointer"}}>下拉加载更多</div>}</div>}
 
 
                 </div>

@@ -89,17 +89,9 @@ class page extends Component {
         // this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
             // this.loadingView.refreshView(false);
-
-            let current_Y_M = json?json[0]:"";
-            let YMDArr = current_Y_M.split("-");
-            let rightY=YMDArr[0]?YMDArr[0]:this.year;
-            let rightM=YMDArr[1]?YMDArr[1]:this.month;
-            let rightD=YMDArr[2]?YMDArr[2]:this.day;
             if (this.flightType == "2"){
-                this.myCalendarLeft.initYMD(rightY,rightM,rightD,current_Y_M);
                 this.myCalendarLeft.refreshMonth(true,json);
             }else {
-                this.myCalendarRight.initYMD(rightY,rightM,rightD,current_Y_M);
                 this.myCalendarRight.refreshMonth(false,json);
             }
             this.loadLeftDay(json[0]);
@@ -124,15 +116,15 @@ class page extends Component {
         };
         var success = (code, msg, json, option) => {
             if (json[0]){
-                let current_Y_M = json[0]?json[0]:"";
-                let YMDArr = json[0].split("-");
+                let current_Y_M_D = json[0]?json[0]:this.isShowRightCal;
+                let YMDArr = current_Y_M_D.split("-");
                 let rightY=YMDArr[0]?YMDArr[0]:this.year;
                 let rightM=YMDArr[1]?YMDArr[1]:this.month;
                 let rightD=YMDArr[2]?YMDArr[2]:this.day;
 
-                this.myCalendarRight.initYMD(rightY,rightM,rightD,current_Y_M);
+                this.myCalendarRight.initYMD(rightY,rightM,rightD,current_Y_M_D);
                 this.myCalendarRight.refreshMonth(false,json);
-                this.loadRightDay(json[0],depDate);
+                this.loadRightDay(current_Y_M_D,depDate);
             }
         };
         var failure = (code, msg, option) => {
@@ -156,10 +148,23 @@ class page extends Component {
         this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
             this.loadingView.refreshView(false);
+            let retDateObj = json?json[0]:{};
+
+            let current_Y_M_D = retDateObj.retDate?retDateObj.retDate:this.isShowRightCal;
+            let YMDArr = current_Y_M_D.split("-");
+            let rightY=YMDArr[0]?YMDArr[0]:this.year;
+            let rightM=YMDArr[1]?YMDArr[1]:this.month;
+            let rightD=YMDArr[2]?YMDArr[2]:this.day;
             if (this.flightType=="2"){
+                this.myCalendarLeft.initYMD(rightY,rightM,rightD,current_Y_M_D);
                 this.myCalendarLeft.refreshCalendarDay(true,json);
+                this.date = current_Y_M_D;
+                this.loadRightHeadMonthData(current_Y_M_D);
             }else {
+                this.myCalendarRight.initYMD(rightY,rightM,rightD,current_Y_M_D);
                 this.myCalendarRight.refreshCalendarDay(false,json);
+                let days = 0;
+                this.loadTripData(current_Y_M_D, days);
             }
 
         };
@@ -208,7 +213,7 @@ class page extends Component {
                 return;
             }
         }
-
+        this.myLineInfor.refreshView([],this.flightType);
         this.loadingView.refreshView(true);
         var param = {
             "depCity":this.depCity,
@@ -246,9 +251,10 @@ class page extends Component {
                 <div className={css.content}>
                     <LineHeadTitle dataSource = {this.myData}/>
                 </div>
-                <div className={css.content} style={{overflow:"hidden"}}>
+                <div className={css.refContent} style={{overflow:"hidden"}}>
                     {this.flightType==2?<div className={css.myCalendar}
                                              style={{width:"49%",float:"left"}}>
+                        <div className={css.calendarTitle}>第一步：请选择去程日期</div>
                         <MyCalendar
                             ref={(a)=>{this.myCalendarLeft = a;}}
                             onSelectDate={(select_year, select_month , select_day,selDataItem)=>{
@@ -269,6 +275,7 @@ class page extends Component {
 
                     <div className={css.myCalendar}
                          style={{width:this.flightType==2?"49%":"70%",float:this.flightType==2?"right":"none"}}>
+                        {this.flightType==2?(<div className={css.calendarTitle}>第二步：请选择返程日期</div>):null}
                         <MyCalendar
                             ref={(a)=>{this.myCalendarRight = a;}}
                             onSelectDate={(select_year, select_month , select_day,selDataItem)=>{
@@ -293,9 +300,8 @@ class page extends Component {
 
                 </div>
 
-                <div className={css.content}
+                <div className={css.thirdContent}
                      ref={(div)=>this.myflightCon = div}>
-                    <div className={css.title}>航班信息</div>
                     <LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor}
                                callBack={()=>{
                                    this.myAlert.refreshView();
@@ -341,6 +347,7 @@ class LineInfor extends Component {
     render() {
         let {dataSource,flightType} = this.state;
         return (<div>
+            {(dataSource&&dataSource.length>0)?(<div className={css.title}>航班信息</div>):null}
             {this.createCell(dataSource,flightType)}
         </div>);
     }
@@ -380,17 +387,13 @@ class LineInfor extends Component {
                                 </div>
                                 <div className={css.itemCenter}>
                                     <div className={css.table}>
-                                        <Button
-                                            loading={this.state.loading}
-                                            type="primary"
-                                            className={css.btn}
-                                            onClick={() => {
-                                                if (this.props.callBack){
-                                                    this.props.callBack();
-                                                }
-                                            }}>
-                                            {"预定"}
-                                        </Button>
+                                        <div className={css.btn} style={{cursor: 'pointer'}}
+                                             onClick={() => {
+                                            if (this.props.callBack){
+                                                this.props.callBack();
+                                            }
+                                        }}>{"预定"}</div>
+
                                     </div>
                                 </div>
                             </div>
@@ -428,10 +431,10 @@ class LineInfor extends Component {
             let endDate = dataItem.arrDate?dataItem.arrDate.substring(5):"";
             endDate = endDate.replace("-","月")+"日";
             var itemView = (<div key={i}>
-                <div className={css.cellLine}>
+                <div className={css.cellLine} style={{borderBottomWidth:(flightType&&i==0)?"1px":"0px"}}>
                     {flightType?<div className={css.type}>
                         <div className={css.typeText}>
-                            {dataItem.flightType==1?"去":"返"}
+                            {i==0?"去":"返"}
                         </div>
                     </div>:null}
 
@@ -461,7 +464,8 @@ class LineInfor extends Component {
                             </div>
                             <div className={css.timeLineItem} style={{textAlign:"left"}}>
                                 <span className={css.fontBase}>{endDate+" "}</span>
-                                <span style={{fontSize:"24px",textAlign:"right"}}>{dataItem.arrTime}</span>
+                                <span style={{fontSize:"24px"}}>{dataItem.arrTime}</span>
+                                <span style={{fontSize:"12px",color:"#FF5841"}}>{dataItem.tag==1?"+1天":""}</span>
                             </div>
                         </div>
                         <div className={css.timeLine}>
