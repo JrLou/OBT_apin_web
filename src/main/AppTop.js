@@ -17,28 +17,30 @@ import less from "./AppTop.less";
     render() {
         return (
             <div className={less.head}>
-                <a>
-                <img
-                    onClick={() => {
-                        log(this.props.root);
-                        window.app_open(this.props.root, "/");
-                    }}
-                    className={less.left}
-                    src={require('../images/index_logo.png')}
-                />
-                </a>
-                <div className={less.right}>
-                    <div className={less.rightItem}>
-                        <img
-                            className={less.rightIcon}src={require('../images/phone.png')}
-                        />
-                    </div>
-                    <div className={less.rightItem}>
-                        <font style={{fontSize:14,color:"#666"}}>客服电话</font>
-                        <br/>
-                        <font style={{fontSize:16,color:"#34b0ff"}}>0571-58122998</font>
-                </div>
-                </div>
+               <div className={less.headContent}>
+                   <a>
+                       <img
+                           onClick={() => {
+                               log(this.props.root);
+                               window.app_open(this.props.root, "/");
+                           }}
+                           className={less.left}
+                           src={require('../images/index_logo.png')}
+                       />
+                   </a>
+                   <div className={less.right}>
+                       <div className={less.rightItem}>
+                           <img
+                               className={less.rightIcon}src={require('../images/phone.png')}
+                           />
+                       </div>
+                       <div className={less.rightItem}>
+                           <font style={{fontSize:14,color:"#666"}}>客服电话</font>
+                           <br/>
+                           <font style={{fontSize:16,color:"#34b0ff"}}>0571-58122998</font>
+                       </div>
+                   </div>
+               </div>
             </div>
         );
     }
