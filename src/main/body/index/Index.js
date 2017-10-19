@@ -169,7 +169,8 @@ class page extends Component {
         this.setLoading(true, () => {
 
             var param = {
-                pageIndex: this.page
+                pageIndex: this.page,
+                pageSize:25
             };
             var success = (code, msg, json, option) => {
                 log(json);
