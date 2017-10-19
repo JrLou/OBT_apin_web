@@ -80,6 +80,9 @@ class page extends Component {
                 select_year : year,
                 select_month : month - 1,
                 select_day : day,
+                history_year : year,
+                history_month : month - 1,
+                history_day : day,
                 date_num_array : date_num_array,
                 first_day : first_day,
                 current_Y_M:current_Y_M
@@ -269,7 +272,7 @@ class page extends Component {
                         if (select_year == history_year && select_month == history_month && history_day == (i + 1)) {
                             currentClassName = css.itemSelect;
                             let itemView = (
-                                <div className={currentClassName}
+                                <div className={currentClassName} style={{cursor: 'pointer'}}
                                      onClick={this.selectDate.bind(this, i + 1,tagDataItem)}>
                                     <img className={css.itemSelect_sign}
                                          src={require("../../../../images/select_sign.png")}/>
@@ -283,7 +286,7 @@ class page extends Component {
                         } else {
                             currentClassName = css.itemTags;
                             let itemView = (
-                                <div className={currentClassName}
+                                <div className={currentClassName} style={{cursor: 'pointer'}}
                                      onClick={this.selectDate.bind(this, i + 1,tagDataItem)}>
                                     <div className={css.dayTitle}>
                                         {currentText}
@@ -454,7 +457,7 @@ class MonthView extends Component{
 
         return(<div className={css.monthView_bg}>
             <div className={css.calendarHeaderIcon}>
-                <img className={css.icon} style={{float: "right"}}
+                <img className={css.icon} style={{float: "right",cursor: 'pointer'}}
                      onClick={()=>{
                          this.removeNum = this.removeNum-1;
                          this.removeTotal = this.removeTotal -90;
@@ -493,7 +496,7 @@ class MonthView extends Component{
             {/*<div className={css.blurEffect}></div>*/}
 
             <div className={css.refCalendarHeaderIcon}>
-                <img className={css.icon}
+                <img className={css.icon} style={{cursor: 'pointer'}}
                      src={require("../../../../images/select_right_icon.png")}
                      onClick={()=>{
                          //日期所占背景的宽度
@@ -536,6 +539,8 @@ class MonthView extends Component{
             let myMonth = monthData_item?monthData_item.replace("-","年"):"";
             item_MonthView = (
                 <div key={"current_month"+i}
+                     className={isSelect?css.select_monthItem:css.monthItem}
+                     style={{cursor: 'pointer'}}
                      onClick={()=>{
                          this.setState({
                              current_month:monthData_item
@@ -544,9 +549,7 @@ class MonthView extends Component{
                                  selectMonthAction(monthData_item);
                              }
                          });
-                     }}
-                     className={isSelect?css.select_monthItem:css.monthItem}>
-                    {myMonth+"月"}
+                     }}>{myMonth+"月"}
                 </div>);
             monthItemArr.push(item_MonthView);
         }

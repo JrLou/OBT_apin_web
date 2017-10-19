@@ -201,13 +201,19 @@ class RecommendView extends Component {
         if(!value){
             return value;
         }
+        let ny = new Date().getFullYear().toString();
         let arr= value.split("-");
         if (arr) {
             if (arr.length <= 3) {
                 let p = ["年", "月", "日"];
                 let time = "";
                 for (let i=0;i<arr.length;i++) {
-                    time+=(arr[i]+p[i]);
+                    if(i===0&&arr[i]===ny){
+                        //
+                    }else{
+                        time+=(arr[i]+p[i]);
+                    }
+
                 }
                 return time;
             } else {

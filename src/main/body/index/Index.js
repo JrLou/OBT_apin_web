@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-import {Carousel, Input, Button, Row, Col,message} from "antd";
+import {Carousel, Input, Button, Row, Col, message} from "antd";
 import less from "./Index.less";
 
 import RecommendView from "../component/RecommendView";
@@ -10,7 +10,7 @@ import SearchHelp from "../search/SearchHelp.js";
 import {HttpTool} from "../../../../lib/utils/index.js";
 import routes from "../../../vm/routes.js";
 
-import Scroll from 'react-scroll/modules/index'; // Imports all Mixins
+import Scroll from "react-scroll/modules/index"; // Imports all Mixins
 // Or Access Link,Element,etc as follows
 
 var Link = Scroll.Link;
@@ -163,19 +163,19 @@ class page extends Component {
     }
 
     getNetData() {
-        if (this.isLastPage||this.isLoading()) {
+        if (this.isLastPage || this.isLoading()) {
             return;
         }
         this.setLoading(true, () => {
 
             var param = {
-                pageIndex:this.page
+                pageIndex: this.page
             };
             var success = (code, msg, json, option) => {
                 log(json);
                 this.setLoading(false, () => {
                     this.isLastPage = json.isLastPage;
-                    this.page = this.page+1;
+                    this.page = this.page + 1;
                     this.setState({
                         dataSource: this.state.dataSource.concat(json.lines)
                     }, () => {
@@ -225,33 +225,34 @@ class page extends Component {
         return (
             <div className={less.topRight}>
 
-               <div className={less.topRightContent}>
-                   {/*<img className={less.topRightCarousel}*/}
-                        {/*src={require("../../../images/banner.png")}/>*/}
-                   <Carousel autoplay >
-                       <a href="/html/Activepage.html" target='_blank'>
-                           <img className={less.topRightCarousel}
-                                src={require("../../../images/banner1.png")}/>
-                       </a>
-                       <a href="/html/Activecont.html" target='_blank'>
-                           <img className={less.topRightCarousel}
-                                src={require("../../../images/banner2.png")}/>
-                       </a>
-                   </Carousel>
-               </div>
+                <div className={less.topRightContent}>
+                    {/*<img className={less.topRightCarousel}*/}
+                    {/*src={require("../../../images/banner.png")}/>*/}
+                    <Carousel autoplay>
+                        <a href="/html/Activepage.html" target='_blank'>
+                            <img className={less.topRightCarousel}
+                                 src={require("../../../images/banner1.png")}/>
+                        </a>
+                        <a href="/html/Activecont.html" target='_blank'>
+                            <img className={less.topRightCarousel}
+                                 src={require("../../../images/banner2.png")}/>
+                        </a>
+                    </Carousel>
+                </div>
             </div>
 
         );
     }
-    getRecommendLayout(){
-        if(this.state.dataSourceRecommend&&this.state.dataSourceRecommend.length>0){
+
+    getRecommendLayout() {
+        if (this.state.dataSourceRecommend && this.state.dataSourceRecommend.length > 0) {
             return (
                 <div className={less.center}>
                     <div className={less.centerTitleLayout}>
                         <div className={less.centerIcon}/>
                         <div className={less.centerTitle}>精品特价航线</div>
 
-                        <div className={less.centerTitleMoreLayout} onClick={()=>{
+                        <div className={less.centerTitleMoreLayout} onClick={() => {
                             SearchHelp.openSearch(this, {});
                         }}>
                             <a className={less.centerTitleMore}>更多路线推荐</a>
@@ -264,7 +265,7 @@ class page extends Component {
                     <br/>
                 </div>
             );
-        }else{
+        } else {
             return null;
         }
 
@@ -289,53 +290,58 @@ class page extends Component {
     render() {
 
         return (
-            <div
-                style={{margin: "auto", maxWidth: 1200}}>
-                <Row>
-                    <Col span={6}>
-                        <div className={less.topLeft}>
-                            <div className={less.topLeftBorder}>
-                                <div className={less.topLeftTitle}>团飞机票搜索</div>
-                                <div className={less.topLeftContent}>
-                                    <SearchLayout
-                                        data={window.apin.getCache("search")}
-                                        type={1}
-                                        submit={(data) => {
-                                            SearchHelp.openSearch(this, data);
-                                        }}
-                                    />
+            <div    className={less.main}>
+                <div
+                    className={less.mainContent}
+                >
+                    <Row>
+                        <Col span={6}>
+                            <div className={less.topLeft}>
+                                <div className={less.topLeftBorder}>
+                                    <div className={less.topLeftTitle}>团飞机票搜索</div>
+                                    <div className={less.topLeftContent}>
+                                        <SearchLayout
+                                            data={window.apin.getCache("search")}
+                                            type={1}
+                                            submit={(data) => {
+                                                SearchHelp.openSearch(this, data);
+                                            }}
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Col>
-                    <Col span={18}
-                    >
-                        {/*轮播部分*/}
-                        {this.getSwitchLayout()}
-                    </Col>
-                </Row>
-                {/*精品特价航线*/}
-                {this.getRecommendLayout()}
-                {/*底部更多特价部分*/}
-                <div className={less.center}>
-                    <div className={less.centerTitleLayout}>
-                        <div className={less.bottomIcon}/>
-                        <div className={less.centerTitle}>更多机票路线</div>
-                    </div>
-                    <Row>
-                        {this.getSpecialList(this.state.dataSource)}
+                        </Col>
+                        <Col span={18}
+                        >
+                            {/*轮播部分*/}
+                            {this.getSwitchLayout()}
+                        </Col>
                     </Row>
-                    <br/>
+                    {/*精品特价航线*/}
+                    {this.getRecommendLayout()}
+                    {/*底部更多特价部分*/}
+                    <div className={less.center}>
+                        <div className={less.centerTitleLayout}>
+                            <div className={less.bottomIcon}/>
+                            <div className={less.centerTitle}>更多机票路线</div>
+                        </div>
+                        <Row>
+                            {this.getSpecialList(this.state.dataSource)}
+                        </Row>
+                        <br/>
+                    </div>
+                    {this.state.loading ? <div className={less.more}>
+                            加载中...</div> :
+                        <div className={less.more}
+                             onClick={() => {
+                                 this.getNetData();
+                             }}
+                        >
+                            {this.isLastPage ? "没有更多航线啦" : <div style={{
+                                cursor: "pointer"}}>下拉加载更多</div>}</div>}
+
+
                 </div>
-                {this.state.loading ? <div className={less.more}>
-                        加载中...</div> :
-                    <div className={less.more}
-                         onClick={() => {
-                             this.getNetData();
-                         }}
-                    >
-                        {this.isLastPage?"没有更多航线啦":<div style={{
-                            cursor: "pointer"}}>下拉加载更多</div>}</div>}
             </div>
         );
 

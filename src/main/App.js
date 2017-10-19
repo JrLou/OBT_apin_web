@@ -6,12 +6,12 @@ import AppTop from './AppTop.js';
 import AppBottom from './AppBottom.js';
 import { Layout} from 'antd';
 const { Header, Content, Footer } = Layout;
-
+import less from './App.less';
 class page extends Component{
 
     render(){
         return(
-            <Layout>
+            <Layout className={less.main}>
                 <AppTop root={this}/>
                 <Content style={{marginTop:10}}>
                     {this.props.children}
