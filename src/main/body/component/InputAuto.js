@@ -185,21 +185,26 @@ class InputAuto extends Component {
                     onSearch={(value) => {
                         this.keyWord = value;
                         this.selectValue = value;
-
                         //防止连续快速搜索，请求接口
                         let time = new Date().getTime();
                         if (time - this.timeTemp < 300) {
+                            if(this.keyWord){
+                                this.setState({
+                                    dataSource:null
+                                });
+                            }else{
+                                this.loadData();
+                            }
                             return;
                         }
                         this.timeTemp = time;
-
                         this.setState({
                         },()=>{
-                            if (this.keyWord) {
-                                this.loadDataForKeyWord(this.keyWord);
-                            } else {
-                                this.loadData();
-                            }
+                             if(this.keyWord) {
+                                 this.loadDataForKeyWord(this.keyWord);
+                            }else{
+                                 this.loadData();
+                             }
                         });
                     }}
 
