@@ -59,7 +59,7 @@ class page extends Component {
         };
         var failure = (code, msg, option) => {
             log(msg);
-            message.error(msg);
+            // message.error(msg);
         };
         HttpTool.request(HttpTool.typeEnum.POST, "/os/airlineapi/v1.0/bestList", success, failure, param,
             {
@@ -188,7 +188,7 @@ class page extends Component {
             var failure = (code, msg, option) => {
                 log(msg);
                 this.setLoading(false, () => {
-                    message.error(msg);
+                    // message.error(msg);
                 });
             };
             HttpTool.request(HttpTool.typeEnum.POST, "/ba/lineapi/v1.0/lines/new", success, failure, param,
