@@ -148,7 +148,7 @@ class RecommendView extends Component {
             return (
                 <div className={css.bottom}>
                     <div className={css.bottomLeft}>
-                        <font className={css.money}>{"￥"}</font>
+                        <font className={css.money}>{"¥"}</font>
                         <font className={css.moneyBig}>{data.basePrice}</font>
                         <font className={css.moneyGray}>{"起"}</font>
                         <br/>
@@ -208,7 +208,8 @@ class RecommendView extends Component {
                 let p = ["年", "月", "日"];
                 let time = "";
                 for (let i=0;i<arr.length;i++) {
-                    if(i===0&&arr[i]===ny){
+                // &&arr[i]===ny
+                    if(i===0){
                         //
                     }else{
                         time+=(arr[i]+p[i]);
