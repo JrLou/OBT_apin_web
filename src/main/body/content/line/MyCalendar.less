@@ -2,7 +2,7 @@
 /**
  * 设置日历的大小
  */
-@height_head : 30px;
+@height_head : 40px;
 @height_item : 55px;
 @color_bg : @c_bg_gray;
 @color_select : @c_theme_blue;
@@ -15,24 +15,22 @@
 .calendarHeader{
   overflow: hidden;
   background-color: @color_bg;
-  padding-top: @d_spadding_cell;
-  padding-bottom: @d_spadding_cell;
   border-width: 0px 0 1px 0;
   border-style: solid;
   border-color: @color_select;
 }
 .calendarHeader_title{
   float: left;
-  width:12%;
+  width:15%;
   height: @height_head;
   line-height: @height_head;
   font-size: 15px;
   color: @c_title_gray;
-  text-align: center;
+  text-align: right;
 }
 .calendarHeader_con{
   float: left;
-  width:88%;
+  width:85%;
   height: @height_head;
 }
 
@@ -45,13 +43,10 @@
 .calendarHeaderIcon{
   float: left;
   height: @height_head;
-  width: 5%;
-  text-align: center;
-  padding-right: @d_spadding_cell;
+  width: 7%;
 }
 .refCalendarHeaderIcon{
   composes: calendarHeaderIcon;
-  padding-right: 0;
   float: right;
 
 }
@@ -72,14 +67,14 @@
   margin:auto
 }
 .icon{
-  margin-top: 7.5px;
+  margin-top: 12.5px;
   width: 15px;
   height: 15px;
 }
 .monthView{
   float: left;
   height: @height_head;
-  width: 90%;
+  width: 84%;
   overflow: hidden;
   position: relative;
 }
@@ -231,6 +226,8 @@
   position: absolute;
   right: -1px;
   bottom: -1px;
-  width: 18px;
-  height: 18px;
+  width: 23px;
+  height: 23px;
+  background-image: url("../../../../images/select_sign.png");
+  background-size: cover;
 }

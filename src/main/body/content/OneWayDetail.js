@@ -97,7 +97,7 @@ class page extends Component {
             this.loadLeftDay(json[0]);
         };
         var failure = (code, msg, option) => {
-            message(msg);
+            message.warning(msg);
             // this.loadingView.refreshView(false);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_month_query,success, failure, param,
@@ -128,7 +128,7 @@ class page extends Component {
             }
         };
         var failure = (code, msg, option) => {
-            message(msg);
+            message.warning(msg);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_retFlight_month_query,success, failure, param,
             {
@@ -190,7 +190,7 @@ class page extends Component {
             this.myCalendarRight.refreshCalendarDay(false,json);
         };
         var failure = (code, msg, option) => {
-            message(msg);
+            message.warning(msg);
             this.loadingView.refreshView(false);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param,
@@ -234,7 +234,7 @@ class page extends Component {
 
         };
         var failure = (code, msg, option) => {
-            message(msg);
+            message.warning(msg);
             this.loadingView.refreshView(false);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_query,success, failure, param,
@@ -251,7 +251,7 @@ class page extends Component {
                 </div>
                 <div className={css.refContent} style={{overflow:"hidden"}}>
                     {this.flightType==2?<div className={css.myCalendar}
-                                             style={{width:"49%",float:"left"}}>
+                                             style={{width:"49.5%",float:"left"}}>
                         <div className={css.calendarTitle}>第一步：请选择去程日期</div>
                         <MyCalendar
                             ref={(a)=>{this.myCalendarLeft = a;}}
@@ -272,7 +272,7 @@ class page extends Component {
                     </div>:null}
 
                     <div className={css.myCalendar}
-                         style={{width:this.flightType==2?"49%":"60%",float:this.flightType==2?"right":"none"}}>
+                         style={{width:this.flightType==2?"49.5%":"60%",float:this.flightType==2?"right":"none"}}>
                         {this.flightType==2?(<div className={css.calendarTitle}>第二步：请选择返程日期</div>)
                             :
                             <div style={{height:"15px"}}></div>
