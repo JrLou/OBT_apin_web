@@ -418,7 +418,8 @@ class MonthView extends Component{
         this.state = ({
             current_month:"",
             remove_width:"0",
-            isBeyond:false
+            isBeyond:false,
+            monthArr:[]
         });
         this.removeNum = 0;
         this.removeTotal = 0;
@@ -432,16 +433,8 @@ class MonthView extends Component{
      * 组件渲染完后执行
      */
     componentDidMount() {
-        let monthView_width = this.monthView.offsetWidth;
-        let {monthArr} = this.props;
-        let month_width = 0;
-        if (monthArr&&monthArr.length>0){
-            month_width = monthArr.length*90;
-        }
-        let isBig = month_width>monthView_width;
-        this.setState({
-            isBeyond:!isBig
-        });
+        let {monthArr,current_month} = this.props;
+        this.setUpViewMonthWith(monthArr,current_month);
 
         Events.scrollEvent.register("begin", function () {
             console.log("begin", arguments);
@@ -458,46 +451,60 @@ class MonthView extends Component{
     }
 
     componentWillReceiveProps(nextProps) {
-        // todo
-        let current_month = nextProps.current_month;
-        if (current_month){
-            current_month = current_month.substring(0,7);
-            this.setState({
-                current_month:current_month,
-            });
-        }
+        let {monthArr,current_month} = nextProps;
+        this.setUpViewMonthWith(monthArr,current_month);
     }
-    render(){
-        let {selectMonthAction,monthArr} = this.props;
+
+    setUpViewMonthWith(monthArr,current_month){
+        // monthArr = ["2017-10","2017-11","2017-12","2018-01","2018-02","2018-03","2018-04","2018-05"];
+        let monthView_width = this.monthView.offsetWidth;
         let month_width = 0;
         if (monthArr&&monthArr.length>0){
-            month_width = monthArr.length*90;
+            month_width = monthArr.length*85;
+        }
+        let isBig = month_width>monthView_width;
+
+        current_month = current_month?current_month.substring(0,7):"";
+        this.setState({
+            isBeyond:!isBig,
+            monthArr:monthArr,
+            current_month:current_month
+        });
+    }
+    render(){
+        let {selectMonthAction} = this.props;
+        let {monthArr} = this.state;
+        let month_width = 0;
+        if (monthArr&&monthArr.length>0){
+            month_width = monthArr.length*85;
         }
         var translateX = "translateX("+this.state.remove_width +"px)";
         var monthView_With = this.monthView?this.monthView.offsetWidth:0;
         return(<div className={css.monthView_bg}>
-            <div className={css.calendarHeaderIcon}>
-                <img className={css.icon} style={{float: "right",cursor: 'pointer'}}
-                     onClick={()=>{
-                         this.removeNum = this.removeNum-1;
-                         this.removeTotal = this.removeTotal -90;
-                         if (this.removeNum<0){
-                             this.removeNum = this.removeNum+1;
-                             this.removeTotal = this.removeTotal +90;
-                             return;
-                         }
-                         this.setState({
-                             isBeyond:false
-                         });
-                         var remove_width = this.state.remove_width;
-                         var remove = remove_width+90;
-                         this.setState({
-                             remove_width:remove
-                         });
-                         // this.scrollTo(remove);
-                     }}
-                     src={this.removeNum==0?require("../../../../images/select_left_icon_def.png"):require("../../../../images/select_left_icon.png")}/>
-            </div>
+            {this.removeNum==0?(<div style={{float: "left",width:"10px",height:"20px" }}></div>):
+                (<div className={css.calendarHeaderIcon}>
+                    <img className={css.icon} style={{float: "right",cursor: 'pointer'}}
+                         onClick={()=>{
+                             this.removeNum = this.removeNum-1;
+                             this.removeTotal = this.removeTotal -85;
+                             if (this.removeNum<0){
+                                 this.removeNum = this.removeNum+1;
+                                 this.removeTotal = this.removeTotal +85;
+                                 return;
+                             }
+                             this.setState({
+                                 isBeyond:false
+                             });
+                             var remove_width = this.state.remove_width;
+                             var remove = remove_width+85;
+                             this.setState({
+                                 remove_width:remove
+                             });
+                             // this.scrollTo(remove);
+                         }}
+                         src={require("../../../../images/select_left_icon.png")}/>
+                </div>)}
+
 
             <div ref={(a)=>this.monthView = a}
                  className={css.monthView}>
@@ -513,36 +520,39 @@ class MonthView extends Component{
                 <div className={css.blurRight}></div>
             </div>
 
-            <div className={css.refCalendarHeaderIcon}>
-                <img className={css.icon} style={{cursor: 'pointer'}}
-                     src={this.state.isBeyond?require("../../../../images/select_right_icon_def.png"):require("../../../../images/select_right_icon.png")}
-                     onClick={()=>{
-                         //日期所占背景的宽度
-                         let monthView_width = this.monthView.offsetWidth;
-                         this.removeNum = this.removeNum+1;
-                         this.removeTotal = this.removeTotal +90;
+            {
+                this.state.isBeyond?null:(<div className={css.refCalendarHeaderIcon}>
+                    <img className={css.icon} style={{cursor: 'pointer'}}
+                         src={require("../../../../images/select_right_icon.png")}
+                         onClick={()=>{
+                             //日期所占背景的宽度
+                             let monthView_width = this.monthView.offsetWidth;
+                             this.removeNum = this.removeNum+1;
+                             this.removeTotal = this.removeTotal +85;
 
-                         let remove_width = this.state.remove_width;
-                         //此处减90是因为 第一个从零开始 然后减去最后一个的宽度
-                         let isBeyond = month_width-(monthView_width+this.removeTotal-90);
+                             let remove_width = this.state.remove_width;
+                             //此处减85是因为 第一个从零开始 然后减去最后一个的宽度
+                             let isBeyond = month_width-(monthView_width+this.removeTotal-85);
 
-                         let isBig = month_width-(monthView_width+this.removeTotal);
-                         this.setState({
-                             isBeyond:isBig<0
-                         });
-                         let isBool = (!monthArr || isBeyond<0);
-                         if (isBool){
-                             this.removeNum = this.removeNum-1;
-                             this.removeTotal = this.removeTotal -90;
-                             return;
-                         }
-                         let remove = remove_width-90;
-                         // this.scrollTo(remove);
-                         this.setState({
-                             remove_width:remove
-                         });
-                     }}/>
-            </div>
+                             let isBig = month_width-(monthView_width+this.removeTotal);
+                             this.setState({
+                                 isBeyond:isBig<0
+                             });
+                             let isBool = (!monthArr || isBeyond<0);
+                             if (isBool){
+                                 this.removeNum = this.removeNum-1;
+                                 this.removeTotal = this.removeTotal -85;
+                                 return;
+                             }
+                             let remove = remove_width-85;
+                             // this.scrollTo(remove);
+                             this.setState({
+                                 remove_width:remove
+                             });
+                         }}/>
+                </div>)
+            }
+
         </div>);
     }
     createMonthItem(monthArr,selectMonthAction){

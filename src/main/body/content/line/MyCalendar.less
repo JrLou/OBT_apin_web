@@ -46,9 +46,12 @@
   float: left;
   height: @height_head;
   width: 5%;
+  text-align: center;
+  padding-right: @d_spadding_cell;
 }
 .refCalendarHeaderIcon{
   composes: calendarHeaderIcon;
+  padding-right: 0;
   float: right;
 
 }
@@ -76,9 +79,7 @@
 .monthView{
   float: left;
   height: @height_head;
-  width: 85%;
-  margin-left: 2%;
-  margin-right: 2%;
+  width: 90%;
   overflow: hidden;
   position: relative;
 }
@@ -94,9 +95,8 @@
   position: absolute;
   top: 0px;
   bottom: 0px;
-  right: -8px;
+  right: 0px;
   width: 40px;
-  pointer-events: none;
   background-image: url("../../../../images/blur_right.png");
 }
 .hidden{
@@ -108,7 +108,7 @@
 }
 .monthItem{
   display: inline-block;
-  width: 85px;
+  width: 80px;
   height: @height_head;
   line-height: @height_head;
   text-align: center;

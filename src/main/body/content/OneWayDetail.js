@@ -261,7 +261,7 @@ class page extends Component {
                             onSelectMonth = {(selMonth,isLeft)=>{
                                 this.loadLeftDay(selMonth);
                             }}
-                            title={"去程月份"}
+                            title={"去程月份:"}
                             current_Y_M={this.isShowRightCal}
                             year={this.year}
                             month={this.month}
@@ -289,7 +289,7 @@ class page extends Component {
                                     this.loadLeftDay(selMonth);
                                 }
                             }}
-                            title={this.flightType==2?"返程月份":""}
+                            title={this.flightType==2?"返程月份:":""}
                             current_Y_M={this.isShowRightCal}
                             year={this.year}
                             month={this.month}
