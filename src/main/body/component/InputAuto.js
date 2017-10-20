@@ -216,9 +216,9 @@ class InputAuto extends Component {
                         if(this.keyWord){
                             //搜索
 
-                            this.setState({
-                                dataSource:null
-                            });
+                            // this.setState({
+                            //     dataSource:null
+                            // });
                             clearTimeout(this.seeIng);
                             this.seeIng = null;
                             let time = 300;
