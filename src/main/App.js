@@ -13,12 +13,12 @@ class page extends Component{
         return(
             <Layout className={less.main}>
                 <AppTop root={this}/>
-                <Content style={{marginTop:10}}>
+                <Content style={{marginTop:10,minHeight:"100%"}}>
                     {this.props.children}
                 </Content>
-                <Footer>
+                <div style={{padding:"30px"}}>
                     <AppBottom/>
-                </Footer>
+                </div>
             </Layout>
         );
     }

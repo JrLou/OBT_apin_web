@@ -49,9 +49,9 @@ class SpecialView extends Component {
         let img = null;
         data.one = data.flightType===1;
         if( data.one){
-            img = require('../../../../images/dcw.png');
+            img = require('../../../../images/oneWay.png');
         }else{
-            img = require('../../../../images/wfw.png');
+            img = require('../../../../images/return.png');
         }
         return (
             <div
@@ -80,7 +80,7 @@ class SpecialView extends Component {
 
 
                     <div style={{clear:"both"}}>
-                        <font className={css.money}>{"￥"}</font>
+                        <font className={css.money}>{"¥"}</font>
                         <font className={css.moneyBig}>{data.price}</font>
                         <font className={css.moneyGray}>{"起"}</font>
                     </div>
