@@ -295,8 +295,8 @@ class page extends Component {
                 <div
                     className={less.mainContent}
                 >
-                    <Row>
-                        <Col span={6}>
+                    <div>
+                        <div className={less.headLeft} span={6}>
                             <div className={less.topLeft}>
                                 <div className={less.topLeftBorder}>
                                     <div className={less.topLeftTitle}>团飞机票搜索</div>
@@ -311,13 +311,14 @@ class page extends Component {
                                     </div>
                                 </div>
                             </div>
-                        </Col>
-                        <Col span={18}
+                        </div>
+                        <div className={less.headRight} span={18}
                         >
                             {/*轮播部分*/}
                             {this.getSwitchLayout()}
-                        </Col>
-                    </Row>
+                        </div>
+                        <div style={{clear:"both"}}/>
+                    </div>
                     {/*精品特价航线*/}
                     {this.getRecommendLayout()}
                     {/*底部更多特价部分*/}

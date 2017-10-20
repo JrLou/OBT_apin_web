@@ -7,10 +7,22 @@
   max-width: @d_screen_width;
   margin: auto;
 }
+@left : 31.66%;
+.headLeft{
+  float: left;
+  width: 31.65%;
+  position: relative;
+}
+.headRight{
+  float: left;
+  width: 100-@left;
+  position: relative;
+}
 .topRight{
+  position: absolute;
   width: 100%;
   height: 0;
-  padding-bottom: 33.33%;
+  padding-bottom: 39.8%;
 }
 .topRightContent{
   background-color: #00A3FF;
@@ -54,7 +66,7 @@
 
   width: 100%;
   height: 0;
-  padding-bottom: 100%;
+  padding-bottom: 86%;
   position: relative;
   overflow: visible;
 }

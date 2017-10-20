@@ -143,6 +143,10 @@ class InputAuto extends Component {
             </div>) : null}
         </Option>;
 
+        if(dataSource.length < 1){
+            return [head];
+        }
+
         let result = dataSource.length < 1 ? (
             [
                 <Option disabled key="all1" className="show-all">
@@ -170,11 +174,11 @@ class InputAuto extends Component {
 
     render() {
         return (
-            <div className="certain-category-search-wrapper" style={{width: 250}}>
+            <div className="certain-category-search-wrapper" style={{width: "100%"}}>
                 <AutoComplete
                     {...this.props}
                     dropdownMatchSelectWidth={false}
-                    dropdownStyle={{width: "300px"}}
+                    dropdownStyle={{width: "320px"}}
                     size="large"
                     style={{width: "100%"}}
                     dataSource={this.getOptions(this.state.dataSource)}
