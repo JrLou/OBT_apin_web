@@ -29,7 +29,7 @@ class page extends Component {
                 <div className={css.left}>
                     <div className={css.img} style={{
                         backgroundImage: "url(" + this.getImageUrlForQiNiu(dataSource.arrCityImgUrl) + ")"
-                    }}/>
+                    }}></div>
                 </div>
                 <div className={css.right}>
                     <div className={css.title}>

@@ -180,7 +180,7 @@ class page extends Component {
                     </Row>
 
                 <div style={{clear: "both"}}/>
-                <div className={less.bottom}>
+                <div className={less.bottom} style={{display:"none"}}>
                     <Pagination total={this.pageAllSize}
                                 defaultPageSize={this.pageSize}
                                 current={this.pageIndex}
@@ -257,7 +257,6 @@ class page extends Component {
             <div className={less.empty}>
                 <div className={less.emptyText}>
                     <div>没有查询到航班信息，请重新搜索或联系客服询问航班 </div>
-                    <div>{this.resutMessage}</div>
                     <Button type="primary" onClick={()=>{this.myAlert.refreshView();}}>联系客服</Button>
                 </div>
                 <MyAlert data={"客服电话"} ref={(a)=>this.myAlert = a}/>
