@@ -285,8 +285,7 @@ class page extends Component {
                                  key={'currentItem'+i+(isLeft?"left":"right")}
                                  style={{cursor: 'pointer'}}
                                  onClick={this.selectDate.bind(this, i + 1,tagDataItem)}>
-                                {isSelect?(<img className={css.itemSelect_sign}
-                                                src={require("../../../../images/select_sign.png")}/>):null}
+                                {isSelect?(<div className={css.itemSelect_sign}></div>):null}
                                 <div className={css.dayTitle}>
                                     {currentText}
                                 </div>
@@ -333,9 +332,9 @@ class page extends Component {
             <div className={css.calendar}>
                 <div className={css.calendarHeader}>
                     <div className={css.calendarHeader_title}
-                         style={{width:title!=""?"12%":"0px"}}
+                         style={{width:title!=""?"15%":"0px"}}
                     >{title}</div>
-                    <div className={css.calendarHeader_con} style={{width:title!=""?"88%":"100%"}}>
+                    <div className={css.calendarHeader_con} style={{width:title!=""?"85%":"100%"}}>
                         <MonthView
                             selectMonthAction={(selMonth)=>{
                                 this.setState({
@@ -481,7 +480,7 @@ class MonthView extends Component{
         var translateX = "translateX("+this.state.remove_width +"px)";
         var monthView_With = this.monthView?this.monthView.offsetWidth:0;
         return(<div className={css.monthView_bg}>
-            {this.removeNum==0?(<div style={{float: "left",width:"10px",height:"20px" }}></div>):
+            {this.removeNum==0?(<div style={{float: "left",width:"15px",height:"20px" }}></div>):
                 (<div className={css.calendarHeaderIcon}>
                     <img className={css.icon} style={{float: "right",cursor: 'pointer'}}
                          onClick={()=>{
