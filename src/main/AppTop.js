@@ -2,7 +2,6 @@
  * Created by lixifeng on 17/3/24.
  */
 import React, {Component} from 'react';
-import {Modal, Button,Icon,Menu,Dropdown} from 'antd';
 
 import less from "./AppTop.less";
  class page extends Component {
