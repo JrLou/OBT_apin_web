@@ -69,15 +69,21 @@ class InputAuto extends Component {
         };
         let success = (code, msg, json, option) => {
             log(json);
-            this.setState({
-                dataSource: json
-            });
+            if(this.keyWord){
+                this.setState({
+                    dataSource: json
+                });
+            }
+
         };
         let failure = (code, msg, option) => {
             //无结果
-            this.setState({
-                dataSource: []
-            });
+            if(this.keyWord){
+                this.setState({
+                    dataSource: []
+                });
+            }
+
         };
         HttpTool.request(HttpTool.typeEnum.POST, "/ba/baseapi/v1.0/cities/list/key", success, failure, param,
             {
@@ -129,39 +135,51 @@ class InputAuto extends Component {
         if (!dataSource || this.state.ifFirst) {
             return [];
         }
-        let head = <Option disabled key="all0" className="show-all">
-            <div className={less.drop}>
-                <div className={less.dropHeadLineLayout}>
-                    <div className={less.dropHeadLine}/>
-                </div>
-                <div className={less.dropHead}>
-                    热门推荐
-                </div>
-            </div>
-            {dataSource.length < 1 ? (   <div className={less.errorMessage}>
-                无热门城市
-            </div>) : null}
-        </Option>;
+        let hasValue = this.keyWord;
+        let noData = dataSource.length< 1;
 
-        if(dataSource.length < 1){
-            return [head];
-        }
 
-        let result = dataSource.length < 1 ? (
-            [
-                <Option disabled key="all1" className="show-all">
-                    <div className={less.errorMessage}>
-                        对不起,暂不支持该地点
+        let getHotHead = (view)=>{
+            return (
+                <Option disabled key="all0" className="show-all">
+                    <div className={less.drop}>
+                        <div className={less.dropHeadLineLayout}>
+                            <div className={less.dropHeadLine}/>
+                        </div>
+                        <div className={less.dropHead}>
+                            热门推荐
+                        </div>
                     </div>
+                    {view}
                 </Option>
-            ]
-        ) : dataSource.map((obj, index) => {
+            );
+        };
+
+        if(noData){
+            if (hasValue) {
+                return [
+                    <Option disabled key="all1" className="show-all">
+                        <div className={less.errorMessage}>
+                            对不起,暂不支持该地点
+                        </div>
+                    </Option>
+                ];
+            } else {
+                return [getHotHead(
+                    <div className={less.errorMessage}>
+                        无热门城市
+                    </div>
+                )];
+            }
+        }
+        let result = dataSource.map((obj, index) => {
             return <Option className={this.keyWord ? null : less.dropItemFloat} key={index}>{obj}</Option>;
         });
-        if (this.keyWord) {
+
+        if (hasValue) {
             return result;
         } else {
-            return [head].concat(result);
+            return [getHotHead()].concat(result);
         }
 
     }
@@ -189,27 +207,44 @@ class InputAuto extends Component {
                     onSearch={(value) => {
                         this.keyWord = value;
                         this.selectValue = value;
+                        log("==========");
+                        log(value);
                         //防止连续快速搜索，请求接口
-                        let time = new Date().getTime();
-                        if (time - this.timeTemp < 50) {
-                            if(this.keyWord){
-                                this.setState({
-                                    dataSource:null
-                                });
+
+
+
+                        if(this.keyWord){
+                            //搜索
+
+                            this.setState({
+                                dataSource:null
+                            });
+                            clearTimeout(this.seeIng);
+                            this.seeIng = null;
+                            let time = 300;
+                        //   1:输入频率,是否超过300MS
+                            if(new Date().getTime()-this.tempTime>time){
+                                //可以去搜索
+                                this.loadDataForKeyWord(this.keyWord);
                             }else{
-                                this.loadData();
+                                //频率太高,不搜索
+                                //计时 300后开始搜索
+                                this.seeIng = setTimeout(()=>{
+                                    clearTimeout(this.seeIng);
+                                    this.seeIng = null;
+                                    if(this.keyWord) {
+                                        this.loadDataForKeyWord(this.keyWord);
+                                    }else{
+                                        this.loadData();
+                                    }
+                                },time);
                             }
-                            return;
+                        }else{
+                            //热门
+                            this.loadData();
                         }
-                        this.timeTemp = time;
-                        this.setState({
-                        },()=>{
-                             if(this.keyWord) {
-                                 this.loadDataForKeyWord(this.keyWord);
-                            }else{
-                                 this.loadData();
-                             }
-                        });
+
+                        this.tempTime = new Date().getTime();
                     }}
 
 

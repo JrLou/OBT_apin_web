@@ -21,7 +21,7 @@ import less from "./AppTop.less";
                        <img
                            onClick={() => {
                                log(this.props.root);
-                               window.app_open(this.props.root, "/");
+                               window.app_open(this.props.root, "/",null,"self");
                            }}
                            className={less.left}
                            src={require('../images/index_logo.png')}
