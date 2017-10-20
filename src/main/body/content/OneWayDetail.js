@@ -187,7 +187,16 @@ class page extends Component {
         this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
             this.loadingView.refreshView(false);
+            let retDateObj = json&&json[0]?json[0]:{};
+            let current_Y_M_D = retDateObj.retDate?retDateObj.retDate:this.isShowRightCal;
+            let YMDArr = current_Y_M_D.split("-");
+            let rightY=YMDArr[0]?YMDArr[0]:this.year;
+            let rightM=YMDArr[1]?YMDArr[1]:this.month;
+            let rightD=YMDArr[2]?YMDArr[2]:this.day;
+            this.myCalendarRight.initYMD(rightY,rightM,rightD,current_Y_M_D);
             this.myCalendarRight.refreshCalendarDay(false,json);
+            let days = retDateObj.days;
+            this.loadTripData(depDate, days);
         };
         var failure = (code, msg, option) => {
             message.warning(msg);
