@@ -49,9 +49,9 @@ class SpecialView extends Component {
         let img = null;
         data.one = data.flightType===1;
         if( data.one){
-            img = require('../../../../images/dcw.png');
+            img = require('../../../../images/oneWay.png');
         }else{
-            img = require('../../../../images/wfw.png');
+            img = require('../../../../images/return.png');
         }
         return (
             <div
