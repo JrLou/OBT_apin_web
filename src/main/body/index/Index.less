@@ -113,8 +113,9 @@
 }
 .centerIcon{
    display: inline-block;
-   width: 20px;
-   height: 20px;
+   width: 18px;
+   height: 18px;
+   vertical-align: middle;
    background-image: url("../../../images/boutique.png");
    background-repeat: no-repeat;
    background-size: cover;
@@ -122,9 +123,10 @@
  }
 .centerTitle{
   display: inline-block;
-  font-size: 24px;
+  font-size: 18px;
   margin-left: @d_spadding_cell;
   color: #000000;
+  vertical-align: middle;
 }
 .centerTitleMoreLayout{
   position: absolute;
@@ -136,7 +138,7 @@
 }
 .centerTitleMore{
   composes: centerTitle;
-  font-size: 16px;
+  font-size: 14px;
   margin-left: 0;
   color:#666;
   line-height: 40px;
@@ -144,10 +146,10 @@
 }
 .centerIconMore{
   composes: centerIcon;
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   vertical-align: middle;
-  margin-left: @d_spadding_cell;
+  margin-left: 3px;
   background-image: url("../../../images/more.png");
 }
 .more{
@@ -179,6 +181,7 @@ active {
   display: inline-block;
   width: 23px;
   height: 17px;
+  vertical-align: middle;
   background-image: url("../../../images/plane.png");
   background-repeat: no-repeat;
   background-size: cover;

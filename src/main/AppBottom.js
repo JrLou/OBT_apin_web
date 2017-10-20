@@ -4,6 +4,7 @@
 import React, {Component} from 'react';
 class page  extends Component {
 
+
     render() {
         return (
             <div
@@ -16,14 +17,14 @@ class page  extends Component {
                 <br/>
                 <p>
                     <a href="http://www.itrust.org.cn/home/index/rz_certifi/wm/RZ2017081801" target='_blank'>
-                        <img style={{height:31}}
+                        <img style={{height:32}}
                         src={require("../images/believe1.png")}/></a>
                     <a id='___szfw_logo___' href='https://credit.szfw.org/CX20170824035710820330.html'
                        target='_blank'>
-                        <img style={{height:31,marginLeft:20}} src={require("../images/believe3.jpg")}/></a>
+                        <img style={{height:32,marginLeft:20}} src={require("../images/believe3.png")}/></a>
                     <a href="https://ss.knet.cn/verifyseal.dll?sn=e17082333010068646dvwe000000&pa=111332"
                        id="urlknet" target="_blank">
-                        <img style={{height:31,marginLeft:20}} src={require("../images/believe2.jpg")}/></a>
+                        <img style={{height:32,marginLeft:20}} src={require("../images/believe2.png")}/></a>
                 </p>
             </div>
         );
