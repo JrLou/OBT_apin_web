@@ -97,7 +97,7 @@ class page extends Component {
             this.loadLeftDay(json[0]);
         };
         var failure = (code, msg, option) => {
-            message(msg);
+            message.warning(msg);
             // this.loadingView.refreshView(false);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_month_query,success, failure, param,
@@ -128,7 +128,7 @@ class page extends Component {
             }
         };
         var failure = (code, msg, option) => {
-            message(msg);
+            message.warning(msg);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_retFlight_month_query,success, failure, param,
             {
@@ -190,7 +190,7 @@ class page extends Component {
             this.myCalendarRight.refreshCalendarDay(false,json);
         };
         var failure = (code, msg, option) => {
-            message(msg);
+            message.warning(msg);
             this.loadingView.refreshView(false);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param,
@@ -234,7 +234,7 @@ class page extends Component {
 
         };
         var failure = (code, msg, option) => {
-            message(msg);
+            message.warning(msg);
             this.loadingView.refreshView(false);
         };
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_query,success, failure, param,
