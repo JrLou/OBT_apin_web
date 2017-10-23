@@ -232,7 +232,7 @@ class page extends Component {
                     <Carousel autoplay>
                         <a href="/html/Activepage.html" target='_blank'>
                             <img className={less.topRightCarousel}
-                                 src={require("../../../images/banner1.png")}/>
+                                 src={require("../../../images/banner1.jpg")}/>
                         </a>
                         <a href="/html/Activecont.html" target='_blank'>
                             <img className={less.topRightCarousel}
