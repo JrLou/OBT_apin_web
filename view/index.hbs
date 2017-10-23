@@ -32,12 +32,27 @@
             -ms-user-select:none;
             user-select:none;
         }
+        .title{
+
+            position: absolute;
+            margin: auto;
+            color: #666666;
+            line-height: 20px;
+            text-align: center;
+            height: 20px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
 
     </style>
 </head>
 <body>
 
-	<div id="root">团购机票就上爱拼机</div>
+	<div id="root" >
+        <div class="title">团购机票就上爱拼机</div>
+    </div>
     <script>
         if(!window.checkIE||(checkIE.isIE()&&(checkIE.isIE6()||checkIE.isIE7()||checkIE.isIE8()))){
             window.location.pathname = "/hintPage.html"

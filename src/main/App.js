@@ -9,15 +9,18 @@ class page extends Component{
 
     render(){
         return(
-            <div className={less.main}>
-                <AppTop root={this}/>
-                <div style={{marginTop:10,minHeight:"100%"}}>
-                    {this.props.children}
-                </div>
-                <div style={{padding:"30px"}}>
-                    <AppBottom/>
-                </div>
-            </div>
+           <div className={less.main}>
+               <div className={less.mainBG}/>
+               <div className={less.mainContent}>
+                   <AppTop root={this}/>
+                   <div style={{marginTop:10,minHeight:"100%"}}>
+                       {this.props.children}
+                   </div>
+                   <div style={{padding:"30px"}}>
+                       <AppBottom/>
+                   </div>
+               </div>
+           </div>
         );
     }
 }
