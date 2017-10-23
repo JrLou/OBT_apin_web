@@ -128,7 +128,7 @@ class page extends Component {
                         this.loadData(data);
                     }}
                 />
-                <div style={{paddingTop:42}}>
+                <div >
                 {this.state.loading ? this.getLogingLayout() : this.getContentLayout(this.resut)}
                 </div>
             </div>
