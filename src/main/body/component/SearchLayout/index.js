@@ -81,9 +81,9 @@ class SearchLayout extends Component {
                 }}
                 className={type === 1 ?less.searchAction:  less.action }
             >
-                <img src={v ? this.img_login_check : this.img_login_uncheck}
+                <img className={less.actionImg} src={v ? this.img_login_check : this.img_login_uncheck}
                 />
-                <div>{title}</div>
+                <div className={less.actionTitle} >{title}</div>
             </div>
         );
     }
@@ -99,6 +99,8 @@ class SearchLayout extends Component {
                             one: s
                         });
                     },type)}
+                {type!==1?<div style={{width:20,display:"inline-block"}}/>:null}
+
                 {this.getSwitchView(!this.state.one, "往返",
                     () => {
                         let s = !this.state.one;
@@ -142,25 +144,29 @@ class SearchLayout extends Component {
     searchView() {
         return (
             <div className={less.bar}>
+                <div className={less.inputLayoutLeft} style={{width:40}}/>
                 <div className={less.row}>
                     {this.getSwitchLayout(1)}
                 </div>
+                <div className={less.inputLayoutLeft} style={{width:40}}/>
                 <div className={less.lineLayout}>
                     <div className={less.line}/>
                 </div>
+                <div className={less.inputLayoutLeft} style={{width:40}}/>
                 <div className={less.inputLayout}>
-                    <span className={less.inputLayoutSpan}>出发城市：</span>
+                    <div className={less.inputLayoutSpan}>出发城市：</div>
                     <div className={less.inputLayoutDiv}>
                         {this.getFromInput()}
                     </div>
                 </div>
-
+                <div className={less.inputLayoutLeft} style={{width:20}}/>
                 <div className={less.inputLayout}>
-                    <span className={less.inputLayoutSpan}>到达城市：</span>
+                    <div className={less.inputLayoutSpan}>到达城市：</div>
                     <div className={less.inputLayoutDiv}>
                         {this.getToInput()}
                     </div>
                 </div>
+                <div className={less.inputLayoutLeft} style={{width:40}}/>
                 <div className={less.row}>
                     {this.getButton()}
                 </div>
