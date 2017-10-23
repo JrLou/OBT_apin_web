@@ -44,7 +44,7 @@ class InputAuto extends Component {
         let param = {};
         let success = (code, msg, json, option) => {
             log(json);
-            this.hotDataSource = json;
+            this.hotDataSource = json||[];
             this.setState({
                 dataSource: this.hotDataSource
             });
@@ -167,7 +167,7 @@ class InputAuto extends Component {
             } else {
                 return [getHotHead(
                     <div className={less.errorMessage}>
-                        无热门城市
+                        暂无热门城市
                     </div>
                 )];
             }
