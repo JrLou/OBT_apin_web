@@ -167,7 +167,7 @@ class InputAuto extends Component {
             } else {
                 return [getHotHead(
                     <div className={less.errorMessage}>
-                        无热门城市
+                        暂无热门城市
                     </div>
                 )];
             }
