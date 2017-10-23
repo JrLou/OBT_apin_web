@@ -399,9 +399,15 @@ class LineInfor extends Component {
                                     <div className={css.table}>
                                         <div className={css.btn} style={{cursor: 'pointer'}}
                                              onClick={() => {
-                                                 if (this.props.callBack){
-                                                     this.props.callBack();
+                                                 if( window.ysf&& window.ysf.open){
+                                                     window.ysf.open();
+                                                 }else{
+                                                     if (this.props.callBack){
+                                                         this.props.callBack();
+                                                     }
                                                  }
+
+
                                              }}>{"预定"}</div>
 
                                     </div>
