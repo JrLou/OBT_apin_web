@@ -395,6 +395,21 @@ class LineInfor extends Component {
                                              onClick={() => {
                                                  if( window.ysf&& window.ysf.open){
                                                      window.ysf.open();
+
+                                                     // window.ysf.product({
+                                                     //     show : 1, // 1为打开， 其他参数为隐藏（包括非零元素）
+                                                     //     title : '航班信息',
+                                                     //     desc : '兰州=>重庆',
+                                                     //     picture : "http://voucher.apin.com/a6f6445ff6394a0a99c16b5dd73bbd4c.jpeg?imageView2/0/w/100/interlace/1/q/75",
+                                                     //     note : '四川航空股份有限公司 3U8514',
+                                                     //     url : window.location.href,
+                                                     //     success: function(){     // 成功回调
+                                                     //         window.ysf.open();
+                                                     //     },
+                                                     //     error: function(){       // 错误回调
+                                                     //         // handle error
+                                                     //     }
+                                                     // });
                                                  }else{
                                                      if (this.props.callBack){
                                                          this.props.callBack();
