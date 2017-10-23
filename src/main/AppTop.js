@@ -33,9 +33,8 @@ import less from "./AppTop.less";
                            {/*<img*/}
                                {/*className={less.rightIcon}src={require('../images/phone.png')}*/}
                            {/*/>*/}
-                           <Button type="primary" className={less.login}>登录</Button>
+                           <Button type="primary"  className={less.login}>登录</Button>
                            <Button type="primary" className={less.register}>注册</Button>
-
                        </div>
                        <div className={less.rightItem}>
                            <font style={{fontSize:14,color:"#666"}}>客服电话</font>
