@@ -26,10 +26,6 @@ class page extends Component {
         super(props);
         this.setParam(props.data);
 
-        // this.depCity = "上海";
-        // this.arrCity = "北京";
-        // this.flightType = "1";
-
         let date = new Date();
         this.year = date.getFullYear();
         this.month = date.getMonth()+1;
@@ -39,7 +35,6 @@ class page extends Component {
         this.state={
             upData:0
         };
-
         this.scrollTo = this.scrollTo.bind(this);
     }
     componentWillReceiveProps(nextProps) {
@@ -57,7 +52,6 @@ class page extends Component {
         });
     }
     setParam(myData){
-        // alert(JSON.stringify(myData));
         this.myData = myData;
         this.depCity = myData?myData.depCity:"";
         this.arrCity = myData?myData.arrCity:"";
@@ -479,7 +473,7 @@ class LineInfor extends Component {
                                 <img className={css.line} src={require('../../../images/trip_line.png')}/>
                             </div>
                             <div className={css.timeLineItem} style={{textAlign:"left"}}>
-                                <span className={css.fontBase}>{endDate+" "}</span>
+                                {/*<span className={css.fontBase}>{endDate+" "}</span>*/}
                                 <span style={{fontSize:"24px"}}>{dataItem.arrTime}</span>
                                 <span style={{fontSize:"12px",color:"#FF5841"}}>{dataItem.tag==1?"+1天":""}</span>
                             </div>

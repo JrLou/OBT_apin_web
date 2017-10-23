@@ -378,7 +378,6 @@ class CalendarItem extends Component{
             isMounseSel:false
         });
     }
-
     /**
      * 组件渲染完后执行
      */
@@ -387,7 +386,6 @@ class CalendarItem extends Component{
     }
     render(){
         let {itemView} = this.props;
-
         return(<div className={this.state.isMounseSel?css.borderIsMounseSel:css.borderDefault}
                     onMouseEnter={()=>{
                         this.setState({
@@ -425,7 +423,7 @@ class MonthView extends Component{
      */
     componentDidMount() {
         let {monthArr,current_month} = this.props;
-        this.setUpViewMonthWith(monthArr,current_month);
+        this.setUpViewMonthWidth(monthArr,current_month);
     }
     componentWillUnmount() {
 
@@ -433,10 +431,10 @@ class MonthView extends Component{
 
     componentWillReceiveProps(nextProps) {
         let {monthArr,current_month} = nextProps;
-        this.setUpViewMonthWith(monthArr,current_month);
+        this.setUpViewMonthWidth(monthArr,current_month);
     }
 
-    setUpViewMonthWith(monthArr,current_month){
+    setUpViewMonthWidth(monthArr,current_month){
         // monthArr = ["2017-10","2017-11","2017-12","2018-01","2018-02","2018-03","2018-04","2018-05"];
         let monthView_width = this.monthView.offsetWidth;
         let month_width = 0;
@@ -465,19 +463,20 @@ class MonthView extends Component{
                 (<div className={css.calendarHeaderIcon}>
                     <img className={css.icon} style={{float: "right",cursor: 'pointer',pointerEvents:this.state.clickLeft}}
                          onClick={()=>{
+                             //控制不能点击过快
                              this.setState({
                                  clickLeft:"none"
                              });
-                             this.removeNum = this.removeNum-1;
-                             this.removeTotal = this.removeTotal -85;
-                             if (this.removeNum<0){
-                                 this.removeNum = this.removeNum+1;
-                                 this.removeTotal = this.removeTotal +85;
+
+                             if (this.removeNum<1){
                                  this.setState({
                                      clickLeft:"auto"
                                  });
                                  return;
                              }
+                             this.removeNum = this.removeNum-1;
+                             this.removeTotal = this.removeTotal -85;
+
                              this.setState({
                                  isBeyond:false
                              });
@@ -489,7 +488,6 @@ class MonthView extends Component{
                                      this.setState({
                                          remove_width:remove_width+moveStep
                                      });
-
                                  }else {
                                      moveStep = 0;
                                      this.setState({
@@ -497,13 +495,10 @@ class MonthView extends Component{
                                      });
                                      clearInterval(myInterval);
                                  }
-                             },1,()=>{
-                                 alert(1);
-                             });
+                             },1);
                          }}
                          src={require("../../../../images/select_left_icon.png")}/>
                 </div>)}
-
 
             <div ref={(a)=>this.monthView = a}
                  className={css.monthView}>
@@ -518,55 +513,49 @@ class MonthView extends Component{
                 <div className={css.blurRight}></div>
             </div>
 
-            {
-                this.state.isBeyond?null:(<div className={css.refCalendarHeaderIcon}>
-                    <img className={css.icon} style={{cursor: 'pointer',pointerEvents:this.state.clickRight}}
-                         src={require("../../../../images/select_right_icon.png")}
-                         onClick={()=>{
+            {this.state.isBeyond?null:(<div className={css.refCalendarHeaderIcon}>
+                <img className={css.icon} style={{cursor: 'pointer',pointerEvents:this.state.clickRight}}
+                     src={require("../../../../images/select_right_icon.png")}
+                     onClick={()=>{
+                         this.setState({
+                             clickRight:"none"
+                         });
+                         //日期所占背景的宽度
+                         let monthView_width = this.monthView.offsetWidth;
+                         let remove_width = this.state.remove_width;
+                         let isBeyond = month_width-(monthView_width+this.removeTotal);
+                         let isBool = (!monthArr || isBeyond<0);
+                         if (isBool){
                              this.setState({
-                                 clickRight:"none"
+                                 clickRight:"auto"
                              });
-                             //日期所占背景的宽度
-                             let monthView_width = this.monthView.offsetWidth;
-                             this.removeNum = this.removeNum+1;
-                             this.removeTotal = this.removeTotal +85;
+                             return;
+                         }
 
-                             let remove_width = this.state.remove_width;
-                             //此处减85是因为 第一个从零开始 然后减去最后一个的宽度
-                             let isBeyond = month_width-(monthView_width+this.removeTotal-85);
+                         this.removeNum = this.removeNum+1;
+                         this.removeTotal = this.removeTotal +85;
+                         let isBig = month_width-(monthView_width+this.removeTotal);
+                         this.setState({
+                             isBeyond:isBig<0
+                         });
 
-                             let isBig = month_width-(monthView_width+this.removeTotal);
-                             this.setState({
-                                 isBeyond:isBig<0
-                             });
-                             let isBool = (!monthArr || isBeyond<0);
-                             if (isBool){
+                         let moveStep = 0;
+                         let myInterval = setInterval(()=>{
+                             moveStep++;
+                             if (moveStep<=85){
+                                 this.setState({
+                                     remove_width:remove_width-moveStep
+                                 });
+                             }else {
+                                 moveStep = 0;
                                  this.setState({
                                      clickRight:"auto"
                                  });
-                                 this.removeNum = this.removeNum-1;
-                                 this.removeTotal = this.removeTotal -85;
-                                 return;
+                                 clearInterval(myInterval);
                              }
-                             let moveStep = 0;
-                             let myInterval = setInterval(()=>{
-                                 moveStep++;
-                                 if (moveStep<=85){
-                                     this.setState({
-                                         remove_width:remove_width-moveStep
-                                     });
-                                 }else {
-                                     moveStep = 0;
-                                     this.setState({
-                                         clickRight:"auto"
-                                     });
-                                     clearInterval(myInterval);
-                                 }
-                             },1);
-                         }}/>
-                </div>)
-            }
-
+                         },1);
+                     }}/>
+            </div>)}
         </div>);
     }
     createMonthItem(monthArr,selectMonthAction){
