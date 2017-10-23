@@ -69,8 +69,8 @@ window.onload = function () {
             success: function(){
                 // todo
                 var YSF_BTN_HOLDER =  document.getElementById('YSF-BTN-HOLDER');
-                YSF_BTN_HOLDER.style.top = 50 ;
-                YSF_BTN_HOLDER.style.right = 50 ;
+                YSF_BTN_HOLDER.style.top = "50px" ;
+                YSF_BTN_HOLDER.style.right = "50px"  ;
             },
             error: function(){
                 // handle error
