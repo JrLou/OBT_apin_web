@@ -44,7 +44,7 @@ class InputAuto extends Component {
         let param = {};
         let success = (code, msg, json, option) => {
             log(json);
-            this.hotDataSource = json;
+            this.hotDataSource = json||[];
             this.setState({
                 dataSource: this.hotDataSource
             });
