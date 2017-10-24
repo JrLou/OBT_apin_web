@@ -126,7 +126,6 @@ class page extends Component {
                     break;
             }
         }
-
         return _date_array;
     }
 
@@ -201,11 +200,9 @@ class page extends Component {
 
     /**
      * 渲染页面
-     * @returns {XML}
      */
     render() {
         let {row_number, col_number,title} = this.props;
-
 
         let {current_Y_M, current_year, current_month, current_day,
             select_year, select_month, select_day,
@@ -261,8 +258,6 @@ class page extends Component {
                     {currentText}
                 </div>
             </div>);
-
-
 
             // 添加tag样式
             if (tags&&tags.length > 0) {
@@ -384,18 +379,19 @@ class CalendarItem extends Component{
     componentDidMount() {
 
     }
+    isMounseIn(isIn){
+        this.setState({
+            isMounseSel:isIn
+        });
+    }
     render(){
         let {itemView} = this.props;
         return(<div className={this.state.isMounseSel?css.borderIsMounseSel:css.borderDefault}
                     onMouseEnter={()=>{
-                        this.setState({
-                            isMounseSel:true
-                        });
+                        this.isMounseIn(true);
                     }}
                     onMouseLeave={()=>{
-                        this.setState({
-                            isMounseSel:false
-                        });
+                        this.isMounseIn(false);
                     }}>
             {itemView}
         </div>);

@@ -309,7 +309,7 @@ class page extends Component {
                     <LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor}
                                myData = {this.myData}
                                callBack={()=>{
-                                   this.myAlert.refreshView();
+                                   this.myAlert.showView();
                                }}/>
                 </div>
 
@@ -401,7 +401,7 @@ class LineInfor extends Component {
                                                      // window.ysf.open();
                                                      window.ysf.product({
                                                          show : 1, // 1为打开， 其他参数为隐藏（包括非零元素）
-                                                         title : (myData.depCity?(myData.depCity+" 至 "):"")+(myData.arrCity?myData.arrCity:""),
+                                                         title : (myData.depCity?(myData.depCity+" —— "):"")+(myData.arrCity?myData.arrCity:""),
                                                          desc : desc,
                                                          picture : myData.arrCityImgUrl,
                                                          note : "参考价（含税）￥"+(dataItem.basePrice||"0"),
