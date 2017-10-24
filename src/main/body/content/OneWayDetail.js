@@ -307,6 +307,7 @@ class page extends Component {
                 <div className={css.thirdContent}
                      ref={(div)=>this.myflightCon = div}>
                     <LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor}
+                               myData = {this.myData}
                                callBack={()=>{
                                    this.myAlert.refreshView();
                                }}/>
@@ -350,23 +351,27 @@ class LineInfor extends Component {
     }
     render() {
         let {dataSource,flightType} = this.state;
+        let {myData} = this.props;
         return (<div>
             {(dataSource&&dataSource.length>0)?(<div className={css.title}>航班信息</div>):null}
-            {this.createCell(dataSource,flightType)}
+            {this.createCell(dataSource,flightType,myData)}
         </div>);
     }
-    createCell(dataSource,flightType){
-        if (!dataSource||dataSource.length<1){
+    createCell(dataSource,flightType,myData){
+        if (!dataSource||dataSource.length<1||!myData){
             return null;
         }
         var viewArr = [];
         for (let i=0;i<dataSource.length;i++){
             let dataItem = dataSource[i];
+            let airlineInfo = (dataItem.airlineInfo&&dataItem.airlineInfo.length>0)?dataItem.airlineInfo:[];
+            let airlineInfo_One = airlineInfo[0]?airlineInfo[0]:{};
+            let desc = (airlineInfo_One.depDate||"")+" "+(airlineInfo_One.depTime||"")+" --> "+(airlineInfo_One.arrDate||"")+" "+(airlineInfo_One.arrTime||"")+" "+(airlineInfo_One.depAirport||"")+"-->"+(airlineInfo_One.arrAirport||"");
             var itemView = (<div key={i}>
                 <div className={css.cell}>
                     <div className={css.left}>
                         <div className={css.table}>
-                            {this.createItemCell(dataItem.airlineInfo,flightType)}
+                            {this.createItemCell(airlineInfo,flightType)}
                         </div>
                     </div>
                     <div className={css.right}>
@@ -384,41 +389,36 @@ class LineInfor extends Component {
                                     </div>
                                     <div className={css.priceText}>
                                         <span className={css.priceTextColor}>{"¥ "}</span>
-                                        <span className={css.priceTextFont}>{dataItem.basePrice}</span>
+                                        <span className={css.priceTextFont}>{dataItem.basePrice||"0"}</span>
                                         <span >{" 起"}</span>
                                     </div>
-
                                 </div>
                                 <div className={css.itemCenter}>
                                     <div className={css.table}>
                                         <div className={css.btn} style={{cursor: 'pointer'}}
                                              onClick={() => {
                                                  if( window.ysf&& window.ysf.open){
-                                                     window.ysf.open();
-
-                                                     // window.ysf.product({
-                                                     //     show : 1, // 1为打开， 其他参数为隐藏（包括非零元素）
-                                                     //     title : '航班信息',
-                                                     //     desc : '兰州=>重庆',
-                                                     //     picture : "http://voucher.apin.com/a6f6445ff6394a0a99c16b5dd73bbd4c.jpeg?imageView2/0/w/100/interlace/1/q/75",
-                                                     //     note : '四川航空股份有限公司 3U8514',
-                                                     //     url : window.location.href,
-                                                     //     success: function(){     // 成功回调
-                                                     //         window.ysf.open();
-                                                     //     },
-                                                     //     error: function(){       // 错误回调
-                                                     //         // handle error
-                                                     //     }
-                                                     // });
+                                                     // window.ysf.open();
+                                                     window.ysf.product({
+                                                         show : 1, // 1为打开， 其他参数为隐藏（包括非零元素）
+                                                         title : (myData.depCity?(myData.depCity+" 至 "):"")+(myData.arrCity?myData.arrCity:""),
+                                                         desc : desc,
+                                                         picture : myData.arrCityImgUrl,
+                                                         note : "参考价（含税）￥"+(dataItem.basePrice||"0"),
+                                                         url : window.location.href,
+                                                         success: function(){     // 成功回调
+                                                             window.ysf.open();
+                                                         },
+                                                         error: function(){       // 错误回调
+                                                             // handle error
+                                                         }
+                                                     });
                                                  }else{
                                                      if (this.props.callBack){
                                                          this.props.callBack();
                                                      }
                                                  }
-
-
                                              }}>{"预定"}</div>
-
                                     </div>
                                 </div>
                             </div>
