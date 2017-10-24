@@ -418,7 +418,7 @@ class LineInfor extends Component {
                                                          this.props.callBack();
                                                      }
                                                  }
-                                             }}>{"预定"}</div>
+                                             }}>{"预订"}</div>
                                     </div>
                                 </div>
                             </div>
