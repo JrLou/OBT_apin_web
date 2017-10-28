@@ -23,7 +23,7 @@
     "log":true
   },
   "rules": {
-    "semi": 2,
+    "semi": 0,
     "comma-dangle": [0, "never"],//对象字面量项尾不能有逗号
     "no-undef": 2,//不能有未定义的变量
     "no-console":0,//0 可用使用//禁止使用console

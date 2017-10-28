@@ -89,5 +89,5 @@ exe();
 
 const React = require("react");
 const ReactDOM = require("react-dom");
-const routes = require("./routes.js");
-ReactDOM.render(routes, document.getElementById("root"));
+const App = require("./main/App.js");
+ReactDOM.render(<App/>, document.getElementById("root"));

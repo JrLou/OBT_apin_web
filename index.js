@@ -2,7 +2,7 @@
 var express = require("express");
 var router = express.Router();
 var request = require("request");
-var myconfig = require("../config/setting.js");
+var myconfig = require("./config/setting.js");
 /* GET home page. */
 /*
  162
