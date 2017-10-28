@@ -6,6 +6,9 @@ import less from './App.less';
 import Panel from './assembly/Panel.js';
 import { Row, Col } from 'antd';
 import { Tabs, Select } from 'antd';
+import { Input } from 'antd';
+const Search = Input.Search;
+
 const TabPane = Tabs.TabPane;
 import Control from './assembly/Control.js';
 class page extends Component {
@@ -97,6 +100,7 @@ class page extends Component {
         return (<Panel
 
             com={"tab"}
+            animated={false}
             tabPosition={"top"}
             type={'editable-card'}
             action={"none"}
