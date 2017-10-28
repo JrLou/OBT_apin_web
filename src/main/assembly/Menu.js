@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import Base from './Base.js';
-import { Menu, Icon, Spin } from 'antd';
+import { Menu, Icon, Input} from 'antd';
 const SubMenu = Menu.SubMenu;
 import css from './Panel.less';
-
+const Search = Input.Search;
 
 /**
  * data:[{title:"123",data:[data:[]]}]
@@ -24,48 +24,6 @@ class ComMenu extends Base {
         });
 
     }
-    loadDataDone(){
-        this.setDefaultKey();
-        this.successBind();
-    }
-    successBind(){
-        //打开当前页面
-
-        console.log("successBind")
-        console.log(this.state.selectedKeys)
-        if(this.state.selectedKeys&&this.state.selectedKeys.length>0){
-            this.activeSelect(this.state.selectedKeys[0]);
-        }
-
-    }
-    setDefaultKey(){
-        let key = this.getDefaultKeysForData(this.state.net.data,"");
-        if(key){
-            this.state.selectedKeys = [key];
-            this.state.defaultOpenKeys = this.trm(key);
-        }
-        // log(key);
-
-    }
-    getDefaultKeysForData(data,key ){
-        if(data&&data.length>0){
-            key = key+(key?"_":"")+"0";
-            return this.getDefaultKeysForData(data[0].data,key)
-        }else{
-            return  key;
-        }
-    }
-    exeBind(key){
-        if(this.state.selectedKeys&&this.state.selectedKeys.length===1&&key===this.state.selectedKeys[0]){
-            return;
-        }
-        this.setSelect(key);
-    }
-    setSelect(key){
-        this.setState({
-            selectedKeys:[key],
-        });
-    }
 
     getMenuDataView(data,key = "") {
         return data.map((obj,index)=>{
@@ -85,51 +43,6 @@ class ComMenu extends Base {
             );
         });
     }
-
-    /**
-     * 查找选择值
-     * @param data
-     * @param key
-     * @returns {*}
-     */
-    findData(data,key){
-        let obj = data;
-        let arr =  key.split("_");
-        let size = arr.length;
-        for(let i=0;i<size;i++){
-            obj =  obj[arr[i]]
-            if(i<(size-1)){
-                obj =  obj.data
-            }
-        }
-        return obj;
-    }
-
-
-    trm(key){
-        if(key) {
-            let arr = key.split("_");
-            let keyPath = [];
-            let temp = "";
-            for (let v of arr) {
-                keyPath.push(temp + v)
-                temp = v+"_";
-            }
-            keyPath.pop()
-            return keyPath;
-        }
-
-    }
-
-    activeSelect(key){
-        let data = this.findData(this.state.net.data,key);
-        if(this.props.onSelectRow){
-            this.props.onSelectRow(data,key);
-        }
-
-        this.sendBind({data, key});
-        this.setSelect(key);
-    }
     renderBase(){
         return this.state.net.data && this.state.net.data.length > 0 ? (
             <Menu
@@ -144,7 +57,7 @@ class ComMenu extends Base {
                 }
                 }
             >
-                {this.getMenuDataView(this.state.net.data,"")}
+                {this.getMenuDataView(this.state.net.data,this.getCom())}
             </Menu>
         ) : this.getNoneView();
     }

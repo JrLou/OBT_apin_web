@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import css from './Tab.less';
 import Base from './Base.js';
 import {Tabs} from 'antd';
 
@@ -38,24 +37,42 @@ class Tab extends Base {
         }
        if(!exits){
            panes.push(data);
+
        }
-        this.setState({panes, activeKey});
+       let exe = ()=>{
+           this.setState({panes, activeKey});
+       };
+       if(this.state.loading!==1){
+           this.setLoading(1,exe)
+       }else{
+           exe();
+       }
     }
 
     exeBind(obj){
         console.log("tab");
         console.log(obj);
-        let {data,key} = obj;
+        let {type,data,key} = obj;
 
-                this.addTab({
-                    title: data.title,
-                    activeKey:key,
-                    getView: () => {
-                        return (
-                            <div>{data.title}</div>
-                        );
-                    }
-                })
+        if(type==="add"){
+            this.addTab({
+                title: data.title,
+                activeKey:key,
+                getView: () => {
+                    return (
+                        <div>{this.getJsonView(data)}</div>
+                    );
+                }
+            })
+        }else if(type==="loading"){
+            this.setLoading(0)
+            this.state.panes = [];
+        }else
+            {
+            this.state.net = {msg:"无模板"}
+            this.setLoading(-1)
+        }
+
     }
     remove(targetKey) {
         let activeKey = this.state.activeKey;

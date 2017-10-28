@@ -5,6 +5,8 @@ import React, {Component} from 'react';
 import less from './App.less';
 import Panel from './assembly/Panel.js';
 import { Row, Col } from 'antd';
+import { Tabs, Select } from 'antd';
+const TabPane = Tabs.TabPane;
 import Control from './assembly/Control.js';
 class page extends Component {
     constructor(props) {
@@ -12,23 +14,53 @@ class page extends Component {
         this.control = new Control();
     }
 
+    renderMenuAndTab() {
 
-    render() {
-
+        let left = 4;
         return (
             <Row justify="space-around" align="middle" className={less.main}>
-                <Col span={4} className={less.mainLeft}>
+                <Col span={left} className={less.mainLeft}>
                     {this.getMenu()}
                 </Col>
-                <Col span={24-4} className={less.mainRight}>
+                <Col span={24-left} className={less.mainRight}>
                     {this.getTab()}
                 </Col>
             </Row>
         );
     }
-
+    renderTreeAndTab() {
+        let left = 4;
+        return (
+            <Row justify="space-around" align="middle" className={less.main}>
+                <Col span={left} className={less.mainLeft}>
+                    {this.getTree()}
+                </Col>
+                <Col span={24-left} className={less.mainRight}>
+                    {this.getTab()}
+                </Col>
+            </Row>)
+    }
+    renderTreeAndMenuTab() {
+        let left = 4;
+        return (
+            <Row justify="space-around" align="middle" className={less.main}>
+                <Col span={left} className={less.mainLeft}>
+                    {this.getMenu()}
+                </Col>
+                <Col span={24-left*2} className={less.mainRight}>
+                    {this.getTab()}
+                </Col>
+                <Col span={left} className={less.mainLeft}>
+                    {this.getTree()}
+                </Col>
+            </Row>)
+    }
+    render(){
+        return this.renderMenuAndTab();
+    }
     componentDidMount() {
         this.control.bind(this.menuPanel,this.tabPanel);
+        // this.control.bind(this.tabPanel,this.treePanel,false);
     }
 
 // <div onClick={()=>{
@@ -41,32 +73,19 @@ class page extends Component {
 //         }
 //     })
 // }}>add</div>
+    getTree(){
+        return (<Panel com={"tree"}
+                       relation={ this.tabPanel }
+                       action={"vm"}
+                       ref={(ref) => {
+                           this.treePanel = ref;
+                       }}
 
+        />);
+    }
     getMenu(){
-        let vmData = (max,title = "",count)=>{
-            max--;
-            if(max<0){
-                return null;
-            }
-            let data = [];
-            for(let i = 0;i<count;i++){
-                let t = title+i;
-                let arr = vmData(max,t+"_",count);
-                let obj = {
-                    title:t,
-                    icon:"lock"
-                };
-                if(arr){
-                    obj.data = arr;
-                }
-                data.push(obj);
-            }
-            return data;
-        }
-        let data = vmData(2,"标题",10)
         return (<Panel com={"menu"}
                        relation={ this.tabPanel }
-                       data={data}
                        action={"vm"}
                        ref={(ref) => {
                            this.menuPanel = ref;
@@ -80,6 +99,7 @@ class page extends Component {
             com={"tab"}
             tabPosition={"top"}
             type={'editable-card'}
+            action={"none"}
             onTabClick={(key)=>{
                 //alert(key)
             }}

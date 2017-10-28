@@ -1,7 +1,7 @@
 class Control{
 
 
-    bind(c1,c2,showDown){
+    bind(c1,c2,relation = true,showDown){
 
         if(!c1||!c2){
             return
@@ -21,8 +21,8 @@ class Control{
             panel1["successBind"]();
         }
 
-        if(!showDown){
-            this.bind(c2,c1,true)
+        if(!showDown&&relation){
+            this.bind(c2,c1,relation,true)
         }
 
     }

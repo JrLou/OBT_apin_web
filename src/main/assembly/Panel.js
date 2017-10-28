@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Window from './Window.js';
 import Tab from './Tab.js';
 import Menu from './Menu.js';
+import Tree from './Tree.js';
 import css from './Panel.less';
 
 class Panel extends Window {
@@ -26,6 +27,9 @@ class Panel extends Window {
                 break;
             case "menu":
                 Com = Menu;
+                break;
+            case "tree":
+                Com = Tree;
                 break;
             default:
                 break;
