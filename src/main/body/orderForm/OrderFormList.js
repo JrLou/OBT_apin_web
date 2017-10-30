@@ -2,12 +2,12 @@
  * Created by louxudong on 2017/10/30.
  */
 import React, {Component} from 'react';
-import css from './orderFormList.less';
+import css from './OrderFormList.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
 import LoadingView from "../component/LoadingView.js";
 
-class orderFormList extends Component{
+class OrderFormList extends Component{
     constructor(props){
         super(props);
         this.state = {};
@@ -27,7 +27,7 @@ class orderFormList extends Component{
     }
 }
 
-orderFormList.contextTypes = {
+OrderFormList.contextTypes = {
     router: React.PropTypes.object
 };
-module.exports = orderFormList;
+module.exports = OrderFormList;

@@ -40,6 +40,23 @@ const root = (
             }
             >
             </Route>
+            <Route path="/OrderFormList" getComponent={
+                (nextState,cb)=>{
+                    require.ensure([], require =>{
+                        cb(null, require("./main/body/orderForm/OrderFormList.js"));
+                    }, "OrderFormList");
+                }
+            }
+            >
+            </Route>
+            <Route path="/OrderFormDetail" getComponent={
+                (nextState,cb)=>{
+                    require.ensure([], require => {
+                        cb(null, require("./main/body/orderForm/OrderFormDetail.js"));
+                    }, "OrderFormDetail");
+                }
+            }>
+            </Route>
             <Route path="/Login" getComponent={
                 (nextState, cb) => {
                     require.ensure([], require => {
