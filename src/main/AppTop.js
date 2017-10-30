@@ -35,7 +35,10 @@ import less from "./AppTop.less";
                            {/*/>*/}
                            <Button type="primary" className={less.login}
                             onClick={()=>{
-                                window.open("http://mvp.apin.com");
+                                // window.open("http://mvp.apin.com");
+                                window.app_open(this, "/Login", {
+                                    data:{}
+                                },"new");
                             }}
                            >登录</Button>
                            <Button type="primary" className={less.register}

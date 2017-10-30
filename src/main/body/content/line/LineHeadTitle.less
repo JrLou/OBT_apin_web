@@ -13,6 +13,8 @@
 .con{
   display: table;
   width: 100%;
+  position: relative;
+  overflow: hidden;
 }
 .left{
   display: table-cell;
@@ -95,4 +97,50 @@
 .text{
   color:@c_title_black;
   fontSize:@font_size_cell;
+}
+
+
+
+
+
+.requireAlert{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 350px;
+  height: 60px;
+  display: table;
+  padding: 0 @d_spadding_cell;
+  border-radius: 3px;
+  border-width: 1px 0 1px 1px;
+  border-style: solid;
+  border-color: @c_border_gray;
+  margin-bottom: @d_spadding_cell;
+}
+
+.requireAlert_left{
+  display: table-cell;
+  vertical-align: middle;
+  width: 30px;
+  text-align: center;
+}
+.alert_img{
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  color: @c_theme_blue;
+  font-size: @font_size_center;
+}
+.requireAlert_center{
+  composes: requireAlert_left;
+  padding-left: @d_spadding_base;
+  padding-right: @d_spadding_base;
+  text-align: left;
+  width: 70%;
+  font-size: @d_spadding_base;
+  color: @c_title_black;
+}
+.requireAlert_right{
+  composes: requireAlert_left;
+  width: 30%;
 }

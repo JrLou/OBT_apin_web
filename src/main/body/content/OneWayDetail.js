@@ -308,8 +308,11 @@ class page extends Component {
                      ref={(div)=>this.myflightCon = div}>
                     <LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor}
                                myData = {this.myData}
-                               callBack={()=>{
-                                   this.myAlert.showView();
+                               callBack={(data)=>{
+                                   // this.myAlert.showView();
+                                   window.app_open(this.props.obj, "/FlightDetail", {
+                                       data:data
+                                   },"new");
                                }}/>
                 </div>
 
@@ -397,7 +400,7 @@ class LineInfor extends Component {
                                     <div className={css.table}>
                                         <div className={css.btn} style={{cursor: 'pointer'}}
                                              onClick={() => {
-                                                 if( window.ysf&& window.ysf.open){
+                                                 if( window.ysf&& window.ysf.open &&(1==0)){
                                                      // window.ysf.open();
                                                      window.ysf.product({
                                                          show : 1, // 1为打开， 其他参数为隐藏（包括非零元素）
@@ -415,7 +418,7 @@ class LineInfor extends Component {
                                                      });
                                                  }else{
                                                      if (this.props.callBack){
-                                                         this.props.callBack();
+                                                         this.props.callBack(dataItem);
                                                      }
                                                  }
                                              }}>{"预订"}</div>

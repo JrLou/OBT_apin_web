@@ -31,6 +31,24 @@ const root = (
             }
             >
             </Route>
+            <Route path="/FlightDetail" getComponent={
+                (nextState, cb) => {
+                    require.ensure([], require => {
+                        cb(null, require("./main/body/content/detail/FlightDetail.js"));
+                    }, "Search");
+                }
+            }
+            >
+            </Route>
+            <Route path="/Login" getComponent={
+                (nextState, cb) => {
+                    require.ensure([], require => {
+                        cb(null, require("./main/body/login/Login.js"));
+                    }, "Login");
+                }
+            }
+            >
+            </Route>
             <Route key="1" path='*' getComponent={None}/>,
         </Route>
 

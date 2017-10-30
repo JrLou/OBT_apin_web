@@ -1,0 +1,120 @@
+@import "../../../../theme.less";
+@width_icon : 25px;
+@content_width : 100%;
+@height_Input:25px;
+
+.main{
+  min-width: @content_width;
+  background-color: @c_bg_gray;
+}
+.content{
+  background-color: @c_bg_white;
+  margin-left: auto;
+  margin-right: auto;
+  width: @content_width;
+  max-width: @d_screen_width;
+  margin-bottom: @d_spadding_base;
+  padding: @d_spadding_base @d_spadding_small;
+}
+
+.table{
+  display: table;
+  width: 100%;
+}
+.line_bg{
+  display: table-cell;
+  vertical-align: middle;
+  width: @d_spadding_small;
+}
+.line{
+  height: @d_spadding_center;
+  width: 3px;
+  background-color: @c_border_blue;
+}
+.title{
+  display: table-cell;
+  vertical-align: middle;
+  font-size: @font_size_title;
+  color: @c_title_black;
+  padding-right: @d_spadding_small;
+}
+
+
+.orderCell{
+  display: table;
+  padding: @d_spadding_cell @d_spadding_base;
+}
+.verticalMiddle{
+  display: table-cell;
+  vertical-align: middle;
+}
+.orderInforTitle{
+  composes: verticalMiddle;
+  padding-right: @d_spadding_base;
+  padding-left: @d_spadding_cell;
+  font-size: @d_spadding_small;
+  color: @c_title_black;
+}
+.orderInforCon{
+  composes: verticalMiddle;
+  width: 100px;
+  font-size: @d_spadding_small;
+  color: @c_text_red;
+}
+.orderInforInput{
+  width: 60px;
+  height: @height_Input;
+  composes: verticalMiddle;
+  padding-right: @d_spadding_base;
+  font-size: @d_spadding_small;
+  color: @c_title_black;
+  text-align: center;
+  border-width: 0px;
+  border-radius: 2px;
+  cursor: pointer;
+  outline:none;
+}
+.priceText{
+  text-align: right;
+}
+.priceTextColor{
+  font-size: 12px;
+  color: @c_text_red;
+}
+.priceTextFont{
+  composes: priceTextColor;
+  font-size: 20px;
+}
+
+.space{
+  composes: verticalMiddle;
+  width: 2*@d_spadding_center;
+  height: auto;
+}
+.perInfor{
+  composes: verticalMiddle;
+  font-size: @d_spadding_base;
+  color: @c_title_black;
+  width: 200px;
+  height: @height_Input;
+  padding-left: @d_spadding_cell;
+  outline: none;
+  border-width: 0px;
+  border-radius: 3px;
+}
+
+
+.btnCon{
+  composes: content;
+  margin-top: 1.5*@d_spadding_center;
+  background-color: @c_bg_gray;
+  text-align: center;
+}
+.alertText{
+  color: @c_text_red;
+}
+.depositPriceBg{
+  width: 100%;
+  display: table-cell;
+  vertical-align: middle;
+}
