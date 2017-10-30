@@ -231,12 +231,13 @@ class page extends Component {
                     {/*src={require("../../../images/banner.png")}/>*/}
                     <Carousel autoplay>
                         <a href="/html/Activepage.html" target='_blank'>
-                            <img className={less.topRightCarousel}
-                                 src={require("../../../images/banner1.png")}/>
+                            <div className={less.topRightCarousel}
+                                 style={{backgroundImage:"url("+require("../../../images/banner1.png")+")"}}
+                            />
                         </a>
                         <a href="/html/Activecont.html" target='_blank'>
-                            <img className={less.topRightCarousel}
-                                 src={require("../../../images/banner2.png")}/>
+                            <div className={less.topRightCarousel}
+                                 style={{backgroundImage:"url("+require("../../../images/banner2.png")+")"}}/>
                         </a>
                     </Carousel>
                 </div>
@@ -299,7 +300,7 @@ class page extends Component {
                         <div className={less.headLeft} span={6}>
                             <div className={less.topLeft}>
                                 <div className={less.topLeftBorder}>
-                                    <div className={less.topLeftTitle}>团飞机票搜索</div>
+                                    <div className={less.topLeftTitle}>团队机票搜索</div>
                                     <div className={less.topLeftContent}>
                                         <SearchLayout
                                             data={window.apin.getCache("search")}

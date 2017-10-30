@@ -15,17 +15,15 @@ class MyAlert extends Component {
     componentDidMount() {
 
     }
-    refreshView(){
+    showView(isShow){
         this.setState({
-            isShow:true
+            isShow:isShow
         });
     }
     render() {
         var div = (<div className={this.state.isShow?css.main:css.hidden}
                         onClick={()=>{
-                            this.setState({
-                                isShow:false
-                            });
+                            this.showView(false);
                         }}>
             <div className={css.alertbg} onClick={(event)=>{
                 ClickHelp.stopClick(event);
@@ -42,9 +40,7 @@ class MyAlert extends Component {
                     type="primary"
                     className={css.btnText}
                     onClick={() => {
-                        this.setState({
-                            isShow:false
-                        });
+                        this.showView(false);
                     }}>{"关闭"}
                 </Button>
                 </div>

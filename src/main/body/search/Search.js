@@ -257,7 +257,7 @@ class page extends Component {
             <div className={less.empty}>
                 <div className={less.emptyText}>
                     <div>没有查询到航班信息，请重新搜索或联系客服询问航班 </div>
-                    <Button type="primary" onClick={()=>{this.myAlert.refreshView();}}>联系客服</Button>
+                    <Button type="primary" onClick={()=>{this.myAlert.showView(true);}}>联系客服</Button>
                 </div>
                 <MyAlert data={"客服电话"} ref={(a)=>this.myAlert = a}/>
             </div>
