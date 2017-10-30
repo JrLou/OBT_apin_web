@@ -11,7 +11,7 @@ import { HttpTool } from '../../../../../lib/utils/index.js';
 import APIGYW from "../../../../api/APIGYW.js";
 import LoadingView from "../../component/LoadingView.js";
 import StateProgress from "./detailComp/StateProgress.js";
-import CellFlight from "./CellFlight.js";
+import CellFlight from "../cell/CellFlight.js";
 import PubRequirement from "./detailComp/PubRequirement.js";
 
 import MyInput from '../../component/MyInput.js';
