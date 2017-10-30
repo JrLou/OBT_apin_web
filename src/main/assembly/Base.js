@@ -1,27 +1,43 @@
 import React, {Component} from 'react';
 import css from './Panel.less';
+
 import {Button, Spin, message, Card, Collapse, Icon} from 'antd';
 
 const Panel = Collapse.Panel;
 
-class Base extends Component {
+class Base {
 
-    constructor(props) {
-        super(props);
-        this.state = {
+    /**
+     * 和调用类绑定
+     * @param child 调用类
+     */
+    constructor(child) {
+        this.child = child;
+    }
+
+    /**
+     * 得到状态模板
+     * @returns {{init: number, loading: number, selectedKeys: Array, defaultOpenKeys: Array, net: {}}}
+     */
+    getDefaultState(){
+        return {
+            init:0,
             loading: 0,
             selectedKeys:[],
             defaultOpenKeys:[],
             net: {},
-
-        }
-
+        };
     }
 
-    getNoneView() {
+    /**
+     * 无数据显示
+     * @param msg
+     * @returns {XML}
+     */
+    getNoneView(msg) {
         return (
             <div>
-                <div>{this.getCom() + ":请添加基础数据"}</div>
+                <div>{this.getCom() +( msg||":请添加基础数据")}</div>
                 {this.getRefreshView()}
             </div>
         )
@@ -31,44 +47,64 @@ class Base extends Component {
         return <div>{this.getCom() + ":请添加基础行数据"}</div>
     }
 
+    /**
+     * 向控制组件发送一件消息/如果控制组件无加载/加载中/不存在  无法唤醒
+     * @param v
+     */
     sendBind(v) {
-        if (this.addBind) {
-            this.addBind(v);
+        //如果没有绑定的组件,不处理
+        if (this.child.addBind) {
+            this.child.addBind(v);
+        }else{
+            console.log("无法绑定 缺少绑定对像")
         }
     }
 
+
+    /**
+     * 显示加载状态
+     * @param loading
+     * @param cb
+     */
     setLoading(loading, cb) {
         this.loadDataIng(loading);
-        this.setState({
+        this.child.setState({
             loading,
         }, cb);
     }
 
 
+    //加载完毕,进行加载数据
     componentDidMount() {
-
         this.refreshLoad();
     }
 
+    /**
+     * 当前组件类型
+     * @returns {*}
+     */
     getCom() {
-        return this.props.com;
+        return this.child.props.com;
     }
 
     getData() {
-        return this.props.data;
+        return this.child.props.data;
     }
 
     verData(data) {
         //校验
-
         return true;
     }
 
+    /**
+     * 刷新组件
+     */
     refreshLoad() {
         //加载数据
         this.setLoading(0);
-        this.loadData(this.props.action, this.props.param, (code, msg, data, power, option) => {
-            this.setState({
+        this.loadData(this.child.props.action, this.child.props.param, (code, msg, data, power, option) => {
+
+            this.child.setState({
                 net: {code, msg, data, power, option},
             }, () => {
                 this.loadDataDone();
@@ -128,6 +164,7 @@ class Base extends Component {
             callBack(1, "返回成功", this.getData(), {key: "r|e|a|s|d"}, {});
         } else if (action === "none") {
             //不处理/当前位于加载中=>如要消失,请主动调用 setLoading(-1);
+            callBack(1, "成功", {}, {}, {});
         } else {
             //请求网络
             callBack(-88883, "暂无网络接口", null, {key: "r|e|a|s|d"}, {});
@@ -135,30 +172,47 @@ class Base extends Component {
 
     }
 
-
-    renderBase() {
-        return this.getNoneView();
+    /**
+     * 调用类实现,显示结果
+     * @returns {XML}
+     */
+    renderBase(){
+        return this.child.renderBase?this.child.renderBase():this.getNoneView("请实现renderBase函数");
     }
 
+    /**
+     * 得到刷新按钮视图
+     * @returns {*}
+     */
     getRefreshView() {
-        return this.props.action !== "none" ? (
-                <div onClick={() => this.refreshLoad()} className={css.refresh}>
+        return this.child.props.action !== "none" ? (
+                <div onClick={() => {this.refreshLoad()}} className={css.refresh}>
                     <Button type="primary" ghost> <Icon type="reload"/>加载</Button>
                 </div>
             )
             : null
     }
 
+    /**
+     * 得到JSON排版视图
+     * @param json
+     * @returns {XML}
+     */
     getJsonView(json){
         return  <pre className={css.pre} dangerouslySetInnerHTML={{__html: this.syntaxHighlight(json)}}/>;
     }
+
+    /**
+     * 得到显示错误排版视图
+     * @returns {XML}
+     */
     renderError() {
         return (
             <div className={css.error}>
                 <Collapse bordered={true} defaultActiveKey={['1']}>
                     <Panel header={<div style={{color: "#ff0000"}}><Icon type={'question-circle'}/><span
-                        style={{marginLeft: 5}}>{this.state.net.msg}</span></div>} key="1">
-                        {this.getJsonView(this.state)}
+                        style={{marginLeft: 5}}>{this.child.state.net.msg}</span></div>} key="1">
+                        {this.getJsonView(this.child.state)}
                         {this.getRefreshView()}
                     </Panel>
                 </Collapse>
@@ -168,7 +222,11 @@ class Base extends Component {
         )
     }
 
-    syntaxHighlight(json) {
+    /**
+     * 高亮JSON
+     * @param json
+     */
+    syntaxHighlight(json = {}) {
         if (typeof json !== 'string') {
             json = JSON.stringify(json, undefined, 2);
         }
@@ -191,24 +249,30 @@ class Base extends Component {
     }
 
 
+    /**
+     * 显示入口
+     * @returns {XML}
+     */
     render() {
         //返回空结构
-
         return (
 
-            <div className={css.main} ref={(ref) => {
-                this.baseRef = ref;
-            }}>
-                {this.state.loading === 0 ? (
+            <div className={css.main}>
+                {this.child.state.loading === 0 ? (
                     <div className={css.mainLoading}><Spin className={css.loading} tip={"" + this.getCom() + "..."}
                                                            spinning={true} size="large"/></div>
-                ) : (this.state.loading > 0 ? this.renderBase() : this.renderError())}
+                ) : (this.child.state.loading > 0 ? this.renderBase() : this.renderError())}
 
             </div>
         )
 
     }
 
+    /**
+     * 层级KEY反转
+     * @param key
+     * @returns {*}
+     */
     transformKey(key){
         if(key&&key.indexOf(this.getCom())>-1){
             return key.replace(this.getCom(),"")
@@ -234,51 +298,66 @@ class Base extends Component {
         }
         return obj;
     }
+
+    /**
+     * 选项被激活
+     * @param key
+     */
     activeSelect(key){
-        let data = this.findData(this.state.net.data,key);
-        if(this.props.onSelectRow){
-            this.props.onSelectRow(data,key);
+        let data = this.findData(this.child.state.net.data,key);
+        if(this.child.props.onSelectRow){
+            this.child.props.onSelectRow(data,key);
         }
+
         this.sendBind({type:"add",data, key});
         this.setSelect(key);
     }
     setSelect(key){
-        this.setState({
+        this.child.setState({
             selectedKeys:[key],
         });
     }
-    exeBind(key){
-        if(this.state.selectedKeys&&this.state.selectedKeys.length===1&&key===this.state.selectedKeys[0]){
-            return;
-        }
-        this.setSelect(key);
-    }
-    loadDataIng(loading){
-        if(loading===0){
-            this.sendBind({type:"loading"})
-        }
 
+    /**
+     * 加载中
+     * @param loading
+     */
+    loadDataIng(loading){
+        // if(loading===0){
+        //     this.sendBind({type:"loading"})
+        // }
     }
+
+    /**
+     * 加载完成
+     */
     loadDataDone(){
+        if(this.child.loadDataDone){
+            this.child.loadDataDone();
+        }
+    }
+
+    /**
+     * 获取当前的第一个可打开值
+     */
+    openDefaultKey(){
         this.setDefaultKey();
-        if(this.state.selectedKeys&&this.state.selectedKeys.length>0){
-            this.activeSelect(this.state.selectedKeys[0]);
+        if(this.child.state.selectedKeys&&this.child.state.selectedKeys.length>0){
+            this.activeSelect(this.child.state.selectedKeys[0]);
         }else{
             //通知,无数据显示
             this.sendBind({type:"none"})
         }
     }
     setDefaultKey(){
-        let key = this.getDefaultKeysForData(this.state.net.data);
+        let key = this.getDefaultKeysForData(this.child.state.net.data);
         if(key){
-            this.state.selectedKeys = [key];
-            this.state.defaultOpenKeys = this.trm(key);
+            this.child.state.selectedKeys = [key];
+            this.child.state.defaultOpenKeys = this.trm(key);
         }else{
-            this.state.selectedKeys = [];
-            this.state.defaultOpenKeys = [];
+            this.child.state.selectedKeys = [];
+            this.child.state.defaultOpenKeys = [];
         }
-        // log(key);
-
     }
     getDefaultKeysForData(data,key = "" ){
         if(data&&data.length>0){
@@ -294,7 +373,7 @@ class Base extends Component {
             let keyPath = [];
             let temp = "";
             for (let v of arr) {
-                keyPath.push(temp + v)
+                keyPath.push(this.getCom()+temp + v)
                 temp = v+"_";
             }
             keyPath.pop()
@@ -303,6 +382,10 @@ class Base extends Component {
 
     }
 
+    /**
+     * 产生模拟数据
+     * @param title
+     */
     getVMData(title){
         let vmData = (max, title = "", count) => {
             max--;

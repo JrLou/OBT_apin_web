@@ -11,6 +11,7 @@ const Search = Input.Search;
 
 const TabPane = Tabs.TabPane;
 import Control from './assembly/Control.js';
+import UserPage from './user/UserPage.js';
 class page extends Component {
     constructor(props) {
         super(props);
@@ -59,11 +60,14 @@ class page extends Component {
             </Row>)
     }
     render(){
-        return this.renderMenuAndTab();
+        return this.renderTreeAndTab();
+    }
+    render2(){
+        return <UserPage data={{}}/>;
     }
     componentDidMount() {
-        this.control.bind(this.menuPanel,this.tabPanel);
-        // this.control.bind(this.tabPanel,this.treePanel,false);
+        // this.control.bind(this.menuPanel,this.tabPanel);
+        this.control.bind(this.treePanel,this.tabPanel);
     }
 
 // <div onClick={()=>{
@@ -88,8 +92,8 @@ class page extends Component {
     }
     getMenu(){
         return (<Panel com={"menu"}
-                       relation={ this.tabPanel }
-                       action={"vm"}
+                       action={"data"}
+                       data={[{title:"系统设置 ",data:[{title:"用户管理",page:"user"},{title:"角色管理"}]},{title:"系统监控 ",data:[{title:"系统概览"},{title:"其它模块"}]}]}
                        ref={(ref) => {
                            this.menuPanel = ref;
                        }}
@@ -104,6 +108,17 @@ class page extends Component {
             tabPosition={"top"}
             type={'editable-card'}
             action={"none"}
+            childrenType={"view"}
+            getChildRenView={(data)=>{
+
+                //根据页面数据,展示不同的页面
+                if(data.page==="user"){
+                    return <UserPage data={data}/>
+                }
+
+                return <div>{JSON.stringify(data)}</div>
+            }
+            }
             onTabClick={(key)=>{
                 //alert(key)
             }}

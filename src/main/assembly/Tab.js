@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import Base from './Base.js';
 import {Tabs} from 'antd';
-
+import Base from "./Base.js";
 const TabPane = Tabs.TabPane;
-
-class Tab extends Base {
+import css from './Panel.less';
+class Tab extends Component {
 
     /**
      *
@@ -13,12 +12,15 @@ class Tab extends Base {
     constructor(props) {
         super(props);
         this.newTabIndex = 0;
-        this.state = Object.assign(this.state,{
+        this.base = new Base(this);
+        this.state = {
             panes: [],
             activeKey: null,
-        });
+        };
     }
 
+    componentDidMount() {
+    }
     /**
      *
      * @param data title:选择卡标题
@@ -43,14 +45,36 @@ class Tab extends Base {
            this.setState({panes, activeKey});
        };
        if(this.state.loading!==1){
-           this.setLoading(1,exe)
+           this.base.setLoading(1,exe)
        }else{
            exe();
        }
     }
 
+
+    getChildrenView(data){
+        let  view = <div>{this.base.getJsonView(data)}</div>;
+        switch (this.props.childrenType){
+            case "view":
+                if(this.props.getChildRenView){
+                    view =   this.props.getChildRenView(data);
+                }else{
+                    view = <div>none getChildRenView</div>;
+                }
+                break;
+            default:
+               //
+                break;
+        }
+        return view;
+    }
+    /**
+     * 执行被唤醒
+     * 注:如果当前组件没有被加载,此方法执行无效
+     * @param obj
+     */
     exeBind(obj){
-        console.log("tab");
+        console.log("tab say:");
         console.log(obj);
         let {type,data,key} = obj;
 
@@ -59,18 +83,16 @@ class Tab extends Base {
                 title: data.title,
                 activeKey:key,
                 getView: () => {
-                    return (
-                        <div>{this.getJsonView(data)}</div>
-                    );
+                    return this.getChildrenView(data);
                 }
             })
         }else if(type==="loading"){
-            this.setLoading(0)
+            this.base.setLoading(0)
             this.state.panes = [];
         }else
             {
             this.state.net = {msg:"无模板"}
-            this.setLoading(-1)
+            this.base.setLoading(-1)
         }
 
     }
@@ -87,19 +109,20 @@ class Tab extends Base {
             activeKey = panes[lastIndex].key;
         }
         this.setState({panes, activeKey},()=>{
-            this.sendBind(activeKey)
+            this.base.sendBind({type:"key",activeKey})
         });
     }
 
-    renderBase() {
+    render() {
         //返回空结构
         return this.state.panes && this.state.panes.length > 0 ? (
             <Tabs
                 {...this.props}
                 activeKey={this.state.activeKey}
+                className={css.main}
                 onChange={(activeKey) => {
                     this.setState({activeKey},()=>{
-                        this.sendBind(activeKey)
+                        this.base.sendBind({type:"key",activeKey})
                     });
                 }}
                 onEdit={(targetKey, action) => {
@@ -117,13 +140,16 @@ class Tab extends Base {
                     }
                     return (
                         <TabPane key={data.key}
-                                 tab={data.title}>
-                            {data.getView ? data.getView() : this.getNoneItemView(this.props.com)}
+                                 tab={data.title}
+                            style={{[""+this.props.tabPosition]:(32+16)+"px"}}
+                             className={css.content}
+                        >
+                            {data.getView ? data.getView() : this.base.getNoneItemView(this.props.com)}
                         </TabPane>
                     );
                 })}
             </Tabs>
-        ) : this.getNoneView(this.props.com);
+        ) : this.base.getNoneView();
     }
 }
 
