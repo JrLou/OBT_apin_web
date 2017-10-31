@@ -4,7 +4,7 @@
 import React, {Component} from 'react';
 import less from './App.less';
 import Panel from './assembly/Panel.js';
-import { Row, Col } from 'antd';
+import { Row, Col ,Modal} from 'antd';
 import { Tabs, Select } from 'antd';
 import { Input } from 'antd';
 const Search = Input.Search;
@@ -59,15 +59,40 @@ class page extends Component {
                 </Col>
             </Row>)
     }
+    addLayer(){
+        let view =  <div className={less.layer_main}>
+
+            <Modal
+                title="Basic Modal"
+                visible={false}
+                footer={null}
+                closable={false}
+                maskClosable={true}
+                width={document.body.clientWidth*0.8}
+                className={less.layer_modal}
+            >
+                {
+                    "|".repeat(100).split("|").map((v,index)=>{
+                        return <p key={index}>Some contents{index}...</p>
+                    })
+                }
+
+            </Modal>
+
+        </div>;
+        return view;
+    }
     render(){
-        return this.renderTreeAndTab();
+        return <div>
+            {this.renderMenuAndTab()}
+        </div>;
     }
     render2(){
         return <UserPage data={{}}/>;
     }
     componentDidMount() {
-        // this.control.bind(this.menuPanel,this.tabPanel);
-        this.control.bind(this.treePanel,this.tabPanel);
+        this.control.bind(this.menuPanel,this.tabPanel);
+        // this.control.bind(this.treePanel,this.tabPanel);
     }
 
 // <div onClick={()=>{

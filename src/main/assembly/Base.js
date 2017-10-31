@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import css from './Panel.less';
 
-import {Button, Spin, message, Card, Collapse, Icon} from 'antd';
-
+import {Button, Spin, message, Card, Modal,Collapse, Icon} from 'antd';
+const confirm = Modal.confirm;
 const Panel = Collapse.Panel;
 
 class Base {
@@ -13,6 +13,8 @@ class Base {
      */
     constructor(child) {
         this.child = child;
+        this.message = message;
+        this.Modal = Modal;
     }
 
     /**
@@ -23,6 +25,7 @@ class Base {
         return {
             init:0,
             loading: 0,
+            model:false,
             selectedKeys:[],
             defaultOpenKeys:[],
             net: {},
@@ -249,6 +252,13 @@ class Base {
     }
 
 
+    showModel(){
+       return Modal;
+
+        // this.child.setState({
+        //     model,
+        // })
+    }
     /**
      * 显示入口
      * @returns {XML}
@@ -416,6 +426,21 @@ class Base {
     getData_tree(){
         return this.getVMData("树")
     }
+    getData_table(){
+        let data = [];
+        for(let i=0;i<30;i++){
+            data.push({
+                title: '标题'+i,
+                sex: (i%5<2?"男":"女")+i,
+                age: (Math.random(10)*10).toFixed(0)+i,
+            })
+        }
+
+        return data;
+    }
+
+
+
 }
 
 module.exports = Base;
