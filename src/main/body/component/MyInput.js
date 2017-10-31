@@ -22,34 +22,74 @@ class MyInput extends Component {
     componentDidMount() {
 
     }
+    addAction(isAdd,callBack){
+        let {myNum} = this.state;
+        if (!myNum){
+            myNum = 0;
+        }
+        let num_Int = parseInt(myNum);
+        if (isAdd){
+            num_Int++;
+        }else {
+            num_Int--;
+        }
+        num_Int = num_Int<=0?"0":num_Int;
+        this.setState({
+            myNum:num_Int
+        },()=>{
+            if (callBack){
+                callBack(num_Int);
+            }
+        });
 
+    }
     render() {
         let {callBack,obj} = this.props;
-        let div = (<input
-            {...this.props}
-            value={this.state.myNum}
-            onChange={(e)=>{
-                let value = e.target.value;
-                if (obj&&obj.isRandom){
-                    this.setState({
-                        myNum:value,
-                    },()=>{
-                        if (callBack){
-                            callBack(value);
-                        }
-                    });
-                }else {
-                    this.recycleNum(value,callBack);
-                }
+        let div = (<div className={css.inputCell}>
+            {obj&&obj.isAddOrSub?<div style={{float:"left"}}>
+                <MyDiv div={<div className={css.addItem}
+                                 onClick={()=>{
+                                     this.addAction(false,callBack);
+                                 }}
+                >{"-"}</div>}/>
+            </div>:null}
 
-            }}
-            onMouseLeave={(e)=>{
-                if (obj&&obj.regular && e.target.value){
-                    alert("请核对您的手机号");
-                }
-            }}
-            />);
-        return (<MyDiv div={div}/>);
+
+            <div style={{float:"left"}}>
+                <MyDiv div={<input
+                    {...this.props}
+                    value={this.state.myNum}
+                    onChange={(e)=>{
+                        let value = e.target.value;
+                        if (obj&&obj.isRandom){
+                            this.setState({
+                                myNum:value,
+                            },()=>{
+                                if (callBack){
+                                    callBack(value);
+                                }
+                            });
+                        }else {
+                            this.recycleNum(value,callBack);
+                        }
+                    }}
+                    onMouseLeave={(e)=>{
+                        if (obj&&obj.regular && e.target.value){
+                            alert("请核对您的手机号");
+                        }
+                    }}
+                />}/>
+            </div>
+
+            {obj&&obj.isAddOrSub?<div style={{float:"left"}}>
+                <MyDiv div={<div className={css.addItem}
+                                 onClick={()=>{
+                                     this.addAction(true,callBack);
+                                 }}
+                >{"+"}</div>}/>
+            </div>:null}
+        </div>);
+        return (div);
     }
     recycleNum(value,callBack){
         if(!/^[0-9]*$/.test(value) && value!=""){
