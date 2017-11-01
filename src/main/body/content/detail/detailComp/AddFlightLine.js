@@ -2,11 +2,10 @@
  * Created by apin on 2017/11/1.
  */
 import React, { Component } from 'react';
-import {Button,Form} from 'antd';
+import {Button} from 'antd';
 import css from './AddFlightLine.less';
 import MyDatePick from "../../../component/DatePick/MyDatePick.js";
 import TimeHelp from "../../../tool/TimeHelp.js";
-const FormItem = Form.Item;
 class AddFlightLine extends Component {
     constructor(props){
         super(props);
@@ -58,8 +57,7 @@ class AddFlightLine extends Component {
                 />
                 <div className={css.space}></div>
                 {(isSelType==2)?
-                    (<MyDatePick
-                        className={css.cellTitle} style={{textAlign:"center"}}
+                    (<MyDatePick className={css.cellTitle} style={{textAlign:"center"}}
                         beforeCur={this.state.right_LimitDate}
                         myDate={this.state.right_MyDate}
                         callBack={(YMD)=>{
@@ -75,11 +73,12 @@ class AddFlightLine extends Component {
             </div>
             <div className={css.myLine}></div>
 
-            {/*<Button type="primary"*/}
-                    {/*style={{float:"right",height:"32",letterSpacing:"1px",fontSize:"13px",borderRadius:"2px"}}*/}
-                    {/*onClick={()=>{*/}
-                        {/*alert("提交需求");*/}
-                    {/*}}>提交需求</Button>*/}
+
+            <Button type="primary"
+                    style={{float:"right",height:"32",letterSpacing:"1px",fontSize:"13px",borderRadius:"2px"}}
+                    onClick={()=>{
+                        alert("提交需求");
+                    }}>提交需求</Button>
         </div>);
     }
 }
