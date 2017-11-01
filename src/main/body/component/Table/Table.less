@@ -1,0 +1,42 @@
+@import "../../../../theme.less";
+.containerOutside{
+  min-width: 800px;
+  width: 100%;
+}
+.tableStyle{
+  width:100%;
+  text-align: center;
+  border: 1px solid @c_border_blue;
+  border-collapse: collapse;
+
+  & tr{
+
+  }
+  & th{
+    height: 40px;
+    vertical-align: middle;
+    background-color: @c_bg_gray;
+  }
+  & td{
+    height: 60px;
+    max-width: 150px;
+    vertical-align: middle;
+    line-break: auto;
+    word-break: break-all;
+  }
+}
+.bodyLine{
+  border-bottom: 1px solid @c_border_gray;
+
+  &:first-child{
+    border-top-color: transparent;
+  }
+  &:last-child{
+    border-bottom:none;
+  }
+  &:hover{
+    border-top: 1px solid @c_border_gray;
+    transition:all .2S;
+    background-color: @c_bg_gray;
+  }
+}

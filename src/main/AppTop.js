@@ -48,7 +48,15 @@ import less from "./AppTop.less";
                            >注册</Button>
 
                        </div>
-                       <div className={less.rightItem}>
+                       <div className={less.rightItem}
+                            title="开发测试：打开订单列表"
+                            onClick={()=>{
+                                // window.open("http://mvp.apin.com");
+                                window.app_open(this, "/OrderFormList", {
+                                    data:{}
+                                },"new");
+                            }}
+                       >
                            <font style={{fontSize:14,color:"#666"}}>客服电话</font>
                            <br/>
                            <font style={{fontSize:16,color:"#34b0ff"}}>0571-58122998</font>

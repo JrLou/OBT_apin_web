@@ -1,1 +1,27 @@
 @import "../../../theme.less";
+.mainPage{
+  width: 1200px;
+  height:auto;
+  margin: 0 auto;
+}
+.searchContainer,.resultContainer{
+  box-sizing: border-box;
+  border: 1px solid @c_border_gray;
+  padding: @d_spadding_center @d_spadding_small;
+  width: 100%;
+  height: auto;
+  background: @bg-color;
+  margin-bottom: @d_spadding_base;
+}
+.operation{
+  color: @primary-color;
+  cursor: pointer;
+
+  &:hover{
+    font-weight: bold;
+  }
+}
+.pagination{
+  text-align: right;
+  margin-top: @d_spadding_small;
+}
