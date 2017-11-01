@@ -1,0 +1,262 @@
+@import "../../../../theme.less";
+@content_width : 100%;
+@width_text : 20px;
+@width_icon : 20px;
+
+.themeLine{
+  overflow: hidden;
+  margin: @d_spadding_base @d_spadding_base 0 @d_spadding_base;
+}
+.themeTitle{
+  float: left;
+  font-size: @font_size_small;
+  color: @c_title_black;
+  margin-right: @d_spadding_base;
+}
+.themeCon{
+  float: left;
+  font-size: @font_size_small;
+  color: @c_title_gray;
+  padding-right: 3*@d_spadding_center;
+}
+
+.cell{
+  display: table;
+  background: white;
+  width: @content_width;
+  padding:0 0 0 @d_spadding_base;
+  margin-bottom: @d_spadding_base;
+  position: relative;
+}
+.sign{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 60px;
+  height: 25px;
+  line-height: 25px;
+  font-size: @font_size_small;
+  text-align: center;
+  background-color: #4ff92e;
+  color: @c_white;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+}
+.table{
+  width: 100%;
+  display: table;
+}
+.itemCenter{
+  display: table-cell;
+  vertical-align: middle;
+}
+.left{
+  composes: itemCenter;
+  width: 70%;
+}
+.right{
+  composes: itemCenter;
+  width: 30%;
+}
+
+//右边的样式
+.rightCenter{
+  display: table;
+  width: 100%;
+}
+.daysText{
+  composes: itemCenter;
+  padding-left: @d_spadding_center;
+  font-size: 14px;
+  background-color: #2db7f5;
+  width: 40%;
+  text-align: center;
+}
+.shuiText{
+  composes: itemCenter;
+  width: 40%;
+  background-color: #00ff23;
+  padding-right: @d_spadding_cell;
+  text-align: right;
+}
+.shuiTextTop{
+  font-size: 14px;
+  color: #999999;
+}
+
+.priceTextColor{
+  font-size: 12px;
+  color: @c_text_red;
+}
+.priceTextFont{
+  composes: priceTextColor;
+  font-size: 20px;
+}
+
+.btn{
+  width: 90px;
+  background-color: @c_text_red;
+  height: 35px;
+  line-height: 35px;
+  border-radius: 2px;
+  text-align: center;
+  font-size: @font_size_small;
+  color: #FFFFFF;
+}
+
+
+
+//左边的样式
+.fontBase{
+  font-size: @font_size_cell;
+}
+.cellLine{
+  composes: table;
+  padding: @d_spadding_cell;
+  border-width: 0 0 1px 0;
+  border-style: dashed;
+  border-color: #C2C6CC;
+}
+
+
+.type {
+  composes: itemCenter;
+  width: 5%;
+}
+.typeText{
+  width: @width_text;
+  text-align: center;
+  font-size: 12px;
+  color: @c_title_gray;
+}
+
+.date_super {
+  composes: itemCenter;
+  width: 10%;
+  min-width: 90px;
+}
+.date{
+  font-size: 14px;
+  color: #4F5762;
+  width: 100%;
+  text-align: center;
+}
+.week{
+  composes: date;
+  font-size: 12px;
+  color: #999999;
+}
+
+.flightLine{
+  display: table;
+  width: 100%;
+  margin-left: @d_spadding_cell;
+  color: @c_title_black;
+  text-align: center;
+}
+
+
+.placeLine{
+  display: table-cell;
+  vertical-align: middle;
+  font-size: @font_size_super_big;
+  width: 20%;
+  color: @c_title_black;
+  text-align: right;
+  padding-top: @d_spadding_cell;
+}
+.placeLineItem{
+  max-width: 120px;
+  color: @c_title_black;
+  text-align: right;
+  font-size: @font_size_small;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow: hidden;
+}
+.refPlaceLineItem{
+  composes: placeLineItem;
+  text-align: left;
+}
+
+
+
+.totalTime{
+  display: table-cell;
+  vertical-align: middle;
+  width: 30%;
+  padding-left: 1%;
+  padding-right: 1%;
+}
+.totalTimeText{
+  width: 100%;
+  font-size: @font_size_cell;
+  color: @c_title_gray;
+}
+
+.logoCompany_super {
+  width: 100%;
+  min-width: 170px;
+}
+.logoBg{
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 auto;
+}
+.logo{
+  width: @width_icon;
+  height: @width_icon;
+}
+
+.logoCompany{
+  display: inline-block;
+  vertical-align: top;
+  max-width: 150px;
+  height: @width_icon;
+  margin: 0 auto;
+}
+.logoCompanyText{
+  font-size: @font_size_cell;
+  padding: 2px;
+  color: #4F5762;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow: hidden;
+}
+.flightLineNum{
+  font-size: @font_size_cell;
+  color: @c_title_black;
+  text-align: center;
+}
+
+.lineBg{
+  display: table-cell;
+  vertical-align: middle;
+  width: 14%;
+  text-align: center;
+}
+.line{
+  margin: 0 auto;
+  width: 70%;
+  height: 2px;
+  background-color: #4ff92e;
+}
+
+
+.isMore{
+  composes: itemCenter;
+  width: 10%;
+  text-align: center;
+}
+.isMoreTime{
+  font-size: 14px;
+  text-align: center;
+  color: #4F5762;
+  width: 100%;
+}
+.isMoreImg{
+  width: 20px;
+  line-height: 20px;
+  height: 20px;
+  font-size: 20px;
+}

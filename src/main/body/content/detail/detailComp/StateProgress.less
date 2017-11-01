@@ -21,7 +21,7 @@
   margin-top: 23px;
   height: 4px;
   width: 100%;
-  background-color: @c_border_gray;
+  background-color: @c_bg_gray;
   overflow: hidden;
 }
 .line{
@@ -31,7 +31,7 @@
 }
 .lineShow{
   composes: line;
-  background-color: #00ff23;
+  background-color: @c_theme_blue;
   border-radius: 2px;
 }
 .lineHidden{
@@ -45,10 +45,10 @@
   right: 0px;
   bottom:0px;
   margin: auto;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
-  background-color: #00ff23;
+  //background-color: #00ff23;
 }
 .imgHidden{
   composes: imgShow;
@@ -62,21 +62,30 @@
   bottom:0px;
   margin: auto;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  background-color: #00ff23;
+  width: 25px;
+  height: 25px;
+  background-color: @c_theme_blue;
 }
-.img{
+.img_small{
   position: absolute;
   top: 0px;
   left: 0px;
   right: 0px;
   bottom:0px;
   margin: auto;
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
   border-radius: 50%;
-  background-color: #2db7f5;
+  background-color: @c_theme_blue;
+  color: @c_white;
+  text-align: center;
+  font-size: @font_size_small;
+}
+.img_smallHidden{
+  composes: img_small;
+  background-color: @c_bg_gray;
+  color: @c_title_gray;
 }
 .hidden{
   display: none;
@@ -86,7 +95,7 @@
 .titleShow{
   text-align: center;
   font-size: @font_size_small;
-  color: @c_title_black;
+  color: @c_theme_blue;
 }
 .titleHidden{
   composes: titleShow;
