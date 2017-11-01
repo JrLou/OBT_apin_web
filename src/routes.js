@@ -31,6 +31,15 @@ const root = (
             }
             >
             </Route>
+            <Route path="/Pay" getComponent={
+                (nextState, cb) => {
+                    require.ensure([], require => {
+                        cb(null, require("./pay/Pay.js"));
+                    }, "Pay");
+                }
+            }
+            >
+            </Route>
             <Route key="1" path='*' getComponent={None}/>,
         </Route>
 
