@@ -369,9 +369,9 @@ class page extends Component {
                 ul_list.push(li_list);
             }
         }
-
+        // style={{left:(0.5*(datePick_width-200))+"px"}}
         return (
-            <div className={isShow?css.calendar:css.hidden} style={{left:(0.5*(datePick_width-200))+"px"}}>
+            <div className={isShow?css.calendar:css.hidden}>
                 <div className={css.calendarHeader}>
                     <Icon type="left" onClick={()=>{
                         this.previousMonth();

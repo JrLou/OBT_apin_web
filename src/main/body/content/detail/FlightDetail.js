@@ -13,7 +13,6 @@ import LoadingView from "../../component/LoadingView.js";
 import StateProgress from "./detailComp/StateProgress.js";
 import CellFlight from "../cell/CellFlight.js";
 import CellNewFlight from "../cell/CellNewFlight.js";
-import PubRequirement from "./detailComp/PubRequirement.js";
 
 import MyInput from '../../component/MyInput.js';
 
@@ -209,7 +208,9 @@ class page extends Component {
                     <Button type="primary"
                             style={{height:"35",letterSpacing:"1px",fontSize:"14px"}}
                             onClick={()=>{
-                                this.pubRequirement.showView(true);
+                                window.app_open(this, "/PubRequirement", {
+                                    data:{}
+                                },"new");
                             }}>提交订单</Button>
                     <div className={css.alertText}>{"提交订单30分钟内，即可确认资源信息"}</div>
                 </div>
@@ -230,11 +231,9 @@ class page extends Component {
                         </div>
                     </div>
                     <div className={css.bottomDiv_right} onClick={()=>{
-                        this.pubRequirement.showView(true);
+                        alert("立即支付");
                     }}>{"立即支付"}</div>
                 </div>
-
-                <PubRequirement ref={(a)=>this.pubRequirement = a}/>
             </div>
         );
         return div;

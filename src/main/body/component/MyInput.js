@@ -56,29 +56,40 @@ class MyInput extends Component {
 
 
             <div style={{float:"left"}}>
-                <MyDiv div={<input
-                    {...this.props}
-                    value={this.state.myNum}
-                    onChange={(e)=>{
-                        let value = e.target.value;
-                        if (obj&&obj.isRandom){
-                            this.setState({
-                                myNum:value,
-                            },()=>{
-                                if (callBack){
-                                    callBack(value);
-                                }
-                            });
-                        }else {
-                            this.recycleNum(value,callBack);
-                        }
-                    }}
-                    onMouseLeave={(e)=>{
-                        if (obj&&obj.regular && e.target.value){
-                            alert("请核对您的手机号");
-                        }
-                    }}
-                />}/>
+                <MyDiv div={<div>
+                    <input
+                        {...this.props}
+                        value={this.state.myNum}
+                        onChange={(e)=>{
+                            let value = e.target.value;
+                            if (obj&&obj.isRandom){
+                                this.setState({
+                                    myNum:value,
+                                },()=>{
+                                    if (callBack){
+                                        callBack(value);
+                                    }
+                                });
+                            }else {
+                                this.recycleNum(value,callBack);
+                            }
+                        }}
+                        onMouseLeave={(e)=>{
+                            if (obj&&obj.regular && e.target.value){
+                                alert("请核对您的手机号");
+                            }
+                        }}
+                    />
+                    {obj&&obj.text?<div style={{float:"right",
+                        height:"30px",
+                        lineHeight:"30px",
+                        paddingRight:"5px",
+                        paddingLeft:"5px",
+                        fontSize:"12px",
+                        color:"#CBD3E5",
+                    }}>{obj.text}</div>:null}
+
+                </div>}/>
             </div>
 
             {obj&&obj.isAddOrSub?<div style={{float:"left"}}>

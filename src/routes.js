@@ -35,7 +35,16 @@ const root = (
                 (nextState, cb) => {
                     require.ensure([], require => {
                         cb(null, require("./main/body/content/detail/FlightDetail.js"));
-                    }, "Search");
+                    }, "FlightDetail");
+                }
+            }
+            >
+            </Route>
+            <Route path="/PubRequirement" getComponent={
+                (nextState, cb) => {
+                    require.ensure([], require => {
+                        cb(null, require("./main/body/content/detail/PubRequirement.js"));
+                    }, "PubRequirement");
                 }
             }
             >
