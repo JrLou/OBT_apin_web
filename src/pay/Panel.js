@@ -83,6 +83,7 @@ class Panel extends Component{
                 view = this.getSuccessLayout();
                 break;
             case "paying":
+            case "unioning":
                 view = this.getPayingLayout();
                 break;
         }

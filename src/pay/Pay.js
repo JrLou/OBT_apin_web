@@ -49,7 +49,34 @@ class page extends Component {
             stepView =  this.getFirstStep();
         }else{
             let Com = this.getSecondStep();
-            stepView = <Com  back={()=>{
+            stepView = <Com
+                ref={(ref)=>{
+                    this.stepAction = ref;
+                }
+                }
+                onAction={(type,data,callBack)=>{
+                    //打开
+                    if(type==="unionopen"){
+                        //打开开通银联
+                        this.openUnionPay(data);
+                    }else if(type==="unionpay"){
+                        //打开银联支付
+                        this.openUnionPayIng(callBack);
+
+                    }else if(type==="unionpaysuccess"){
+                        //打开银联支付
+                        this.openUnionPaySuccess(callBack);
+
+                    }else if(type==="unionpayerror"){
+                        //打开银联支付
+                        this.openUnionPayError(data,callBack);
+
+                    }
+
+
+                }
+                }
+                back={()=>{
                 this.setStep(1);
             }
             }/>;
@@ -61,8 +88,13 @@ class page extends Component {
                     onAction={(action, showType) => {
 
                         if (showType === "paying") {
-                            this.handVer();
-                        } else if (action === "ok" && showType === "success") {
+                            //验证是否支付
+                            this.handVer("pay");
+                        }else  if (showType === "unioning") {
+                            //验证是否开通
+                           this.handVer("union");
+                        }
+                        else if (action === "ok" && showType === "success") {
                             //打开订单页
                             alert("打开订单页面");
                         }
@@ -139,9 +171,46 @@ class page extends Component {
             step
         });
     }
+    openUnionPayIng(callBack){
+        this.panel.show(true, {
+            content: "正在支付....",
+            title: "支付信息",
+            showType: "loading"
 
-    openUnionPay() {
-//银联支付页面
+        },callBack);
+    }
+    openUnionPaySuccess(callBack){
+        this.panel.show(true, {
+            content: "支付成功",
+            title: "支付信息",
+            showType: "success"
+
+        },callBack);
+    }
+
+    openUnionPayError(msg,callBack){
+        this.panel.show(true, {
+            okText: "我知道了",
+            content: msg,
+            title: "支付信息",
+            showType: "error"
+
+        },callBack);
+    }
+    openUnionPay(data) {
+        let apinPanel = this.wh.openInitWindow();
+        this.panel.show(true, {
+            okText: "我已经开通",
+            cancelText: "还没开通",
+            content: "正在开通....",
+            title: "银联开通",
+            showType: "unioning"
+
+        }, () => {
+            //3秒后去开始验证,是否支付成功
+            // setTimeout(()=>{this.autoVer(apinPanel,"union");},3000);
+            this.wh.openWindow(apinPanel, data.url);
+        });
 
     }
 
@@ -156,11 +225,11 @@ class page extends Component {
             this.loadPayOrder(this.data, (code, msg, data) => {
                 if (code > 0) {
                     //3秒后去开始验证,是否支付成功
-                    // setTimeout(()=>{this.autoVer(apinPanel);},3000);
+                    // setTimeout(()=>{this.autoVer(apinPanel,"pay");},3000);
                     this.panel.show(true, {
                         okText: "我已经支付",
                         cancelText: "还没支付",
-                        content: "正在支付....",
+                        content: "确认是否已支付",
                         title: "支付信息",
                         showType: "paying"
 
@@ -184,32 +253,38 @@ class page extends Component {
     }
 
 
-    handVer() {
+    handVer(type) {
         //关闭已经存在的窗口
         this.wh.closeWindow();
         //验证是否支付
         this.panel.show(true, {
-            content: "验证支付中",
+            content: type==="pay"?"验证支付中":"验证开通中",
             showType: "verpay"
         }, () => {
-            this.loadPayOrderVer(this.data, (code, msg, data) => {
+            this[type==="pay"?"loadPayOrderVer":"loadUnionVer"](this.data, (code, msg, data) => {
                 //验证是否支付成功
                 if (code > 0) {
-                    //支付成功
-                    //关闭支付窗口
-                    //提示支付成功
-                    this.panel.show(true, {
-                        content: msg,
-                        showType: "success"
-                    }, () => {
 
+                    if(type==="pay"){
+                        //支付成功/提示支付成功/通知用户去订单详情
+                        this.panel.show(true, {
+                            content: msg,
+                            showType: "success"
+                        }, () => {
+                        });
+                    }else{
+                        //开通成功/关闭提示/关闭卡号输入
+                        this.panel.show(false);
+                        if(this.stepAction&&this.stepAction.onAction){
+                            this.stepAction.onAction("closeAdd");
+                        }
+                    }
 
-                    });
                 } else {
                     this.panel.show(true, {
                         okText: "我知道了",
                         content: msg,
-                        title: "支付信息",
+                        title: type==="pay"?"支付信息":"银联开通",
                         showType: "error"
                     }, () => {
 
@@ -224,8 +299,8 @@ class page extends Component {
     }
 
 
-    autoVer(apinPanel) {
-        this.loadPayOrderVer(this.data, (code, msg, data) => {
+    autoVer(apinPanel,type) {
+        this[type==="pay"?"loadPayOrderVer":"loadUnionVer"](this.data, (code, msg, data) => {
             //验证是否支付成功
             if (code > 0) {
                 //支付成功
@@ -248,10 +323,17 @@ class page extends Component {
         });
 
     }
-
+    loadUnionVer(param, cb) {
+        setTimeout(() => {
+            let code = (Math.random() * 10).toFixed(0) - 1;
+            let data = {};
+            data.url = "http://www.baidu.com";
+            cb(code, code > 0 ? "开通成功" : "开通失败", data);
+        }, Math.random() * 1000 + 2000);
+    }
     loadPayOrderVer(param, cb) {
         setTimeout(() => {
-            let code = (Math.random() * 10).toFixed(0) - 5;
+            let code = (Math.random() * 10).toFixed(0) - 1;
             let data = {};
             data.url = "http://www.baidu.com";
             cb(code, code > 0 ? "支付成功" : "支付失败", data);
@@ -260,7 +342,7 @@ class page extends Component {
 
     loadPayOrder(param, cb) {
         setTimeout(() => {
-            let code = (Math.random() * 10).toFixed(0) - 5;
+            let code = (Math.random() * 10).toFixed(0) - 1;
             let data = {};
             data.url = "http://www.baidu.com";
             cb(code, "无库存了/或者其他", data);
