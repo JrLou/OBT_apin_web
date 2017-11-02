@@ -1,0 +1,31 @@
+@import "../../../theme.less";
+.bgIn{
+  border:1px solid @c_border_blue;
+  -webkit-transition:border linear .2s,-webkit-box-shadow linear .5s;
+  -webkit-box-shadow:0 0 3px @c_border_blue;
+  -moz-box-shadow: 0 0 3px @c_border_blue;
+  box-shadow:0 0 3px @c_border_blue;
+  border-radius: 3px;
+}
+.bgOut{
+  border-width: 1px;
+  border-radius: 3px;
+  border-style: solid;
+  border-color: @c_border_gray;
+}
+.inputCell{
+  overflow: hidden;
+
+}
+.addItem{
+  width: 20px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  font-size: @font_size_big;
+  background-color: @c_bg_gray;
+  color: @c_text_red;
+}
+.subItem{
+  composes: addItem;
+}

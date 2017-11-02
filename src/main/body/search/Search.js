@@ -213,7 +213,7 @@ class page extends Component {
 
         return (
             <div style={{clear: "both"}}>
-                <OneWayDetail data={data}/>
+                <OneWayDetail data={data} obj = {this}/>
             </div>
         );
     }

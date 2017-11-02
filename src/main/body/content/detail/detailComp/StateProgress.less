@@ -1,0 +1,104 @@
+@import "../../../../../theme.less";
+.main{
+  width: 100%;
+  background-color: @c_bg_white;
+  padding-top: @d_spadding_center;
+  padding-bottom: @d_spadding_center;
+  overflow: hidden;
+}
+.itemBG{
+  float: left;
+  width: 25%;
+  text-align: center;
+}
+.table{
+  width: 100%;
+  height: 50px;
+  position: relative;
+  overflow: hidden;
+}
+.lineBg{
+  margin-top: 23px;
+  height: 4px;
+  width: 100%;
+  background-color: @c_bg_gray;
+  overflow: hidden;
+}
+.line{
+  float: left;
+  width: 50%;
+  height: 100%;
+}
+.lineShow{
+  composes: line;
+  background-color: @c_theme_blue;
+  border-radius: 2px;
+}
+.lineHidden{
+  composes: line;
+  background-color: white;
+}
+.imgShow{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom:0px;
+  margin: auto;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  //background-color: #00ff23;
+}
+.imgHidden{
+  composes: imgShow;
+  background-color: @c_border_gray;
+}
+.imgCenter{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom:0px;
+  margin: auto;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  background-color: @c_theme_blue;
+}
+.img_small{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom:0px;
+  margin: auto;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  border-radius: 50%;
+  background-color: @c_theme_blue;
+  color: @c_white;
+  text-align: center;
+  font-size: @font_size_small;
+}
+.img_smallHidden{
+  composes: img_small;
+  background-color: @c_bg_gray;
+  color: @c_title_gray;
+}
+.hidden{
+  display: none;
+}
+
+
+.titleShow{
+  text-align: center;
+  font-size: @font_size_small;
+  color: @c_theme_blue;
+}
+.titleHidden{
+  composes: titleShow;
+  color: @c_title_gray;
+}
+

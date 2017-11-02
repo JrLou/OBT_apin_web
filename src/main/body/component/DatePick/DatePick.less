@@ -1,0 +1,127 @@
+@import "../../../../theme.less";
+/**
+ * 设置日历的大小
+ */
+@height_head : 40px;
+@height_item : 25px;
+@color_bg : @c_bg_gray;
+@color_select : @c_theme_blue;
+.calendar{
+  position:absolute;
+  top:0px;
+  left: 0px;
+  width:100%;
+  max-width: 220px;
+  background-color: @color_bg;
+  border: 1px solid @color_select;
+  padding: 3px;
+  border-radius: 3px;
+}
+.hidden{
+  display: none;
+}
+
+.calendarHeader{
+  overflow: hidden;
+  background-color: @color_bg;
+  border-width: 0px 0 1px 0;
+  border-style: solid;
+  border-color: @color_select;
+}
+
+.calendarTitle{
+  margin-left:10px;
+  margin-right:10px;
+  font-size:15px;
+}
+.cBodyHead{
+  overflow: hidden;
+}
+.contentRow{
+  background-color: white;
+  overflow: hidden;
+}
+.borderDefault{
+  float: left;
+  width: 14%;
+  margin: 0.14%;
+  border-style: solid;
+  border-color: white;
+  border-width: 1px;
+  box-sizing: border-box;
+}
+.borderIsMounseSel{
+  composes: borderDefault;
+  border-color: #29A6FF;
+}
+.defaultItem{
+  width: 100%;
+  height: @height_item;
+  line-height: @height_item;
+  font-size: @font-size-base;
+  border-style: solid;
+  border-color: @c_border_gray;
+  border-width: 1px;
+  position: relative;
+}
+.cBodyItem{
+  float: left;
+  width: 14.2%;
+  background-color: white;
+  border-width: 0px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+}
+
+.itemGray{
+  composes: defaultItem;
+  background-color: @c_bg_white;
+}
+.itemRed{
+  composes: defaultItem;
+  background-color: red;
+}
+.dayGray{
+  color: @c_border_gray;
+  font-size: @font_size_cell;
+}
+
+.itemActive{
+  composes: defaultItem;
+  background-color: #F7F7F7;
+}
+.itemToday{
+  composes: defaultItem;
+  background-color: @c_theme_blue;
+}
+.itemTags{
+  composes: defaultItem;
+}
+.dayTitle{
+  color: @c_title_gray_base;
+  font-size: @font_size_cell;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.todayColor{
+  composes: dayTitle;
+  color: @c_white;
+}
+.daySelect{
+  composes: dayTitle;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+
+  color: @c_white;
+  background-color: #4ff92e;
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  border-radius: 100%;
+}

@@ -31,6 +31,50 @@ const root = (
             }
             >
             </Route>
+            <Route path="/FlightDetail" getComponent={
+                (nextState, cb) => {
+                    require.ensure([], require => {
+                        cb(null, require("./main/body/content/detail/FlightDetail.js"));
+                    }, "FlightDetail");
+                }
+            }
+            >
+            </Route>
+            <Route path="/PubRequirement" getComponent={
+                (nextState, cb) => {
+                    require.ensure([], require => {
+                        cb(null, require("./main/body/content/detail/PubRequirement.js"));
+                    }, "PubRequirement");
+                }
+            }
+            >
+            </Route>
+            <Route path="/OrderFormList" getComponent={
+                (nextState,cb)=>{
+                    require.ensure([], require =>{
+                        cb(null, require("./main/body/orderForm/OrderFormList.js"));
+                    }, "OrderFormList");
+                }
+            }
+            >
+            </Route>
+            <Route path="/OrderFormDetail" getComponent={
+                (nextState,cb)=>{
+                    require.ensure([], require => {
+                        cb(null, require("./main/body/orderForm/OrderFormDetail.js"));
+                    }, "OrderFormDetail");
+                }
+            }>
+            </Route>
+            <Route path="/Pay" getComponent={
+                (nextState, cb) => {
+                    require.ensure([], require => {
+                        cb(null, require("./pay/Pay.js"));
+                    }, "Pay");
+                }
+            }
+            >
+            </Route>
             <Route key="1" path='*' getComponent={None}/>,
         </Route>
 

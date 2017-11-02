@@ -1,0 +1,209 @@
+@import "../../../../theme.less";
+@width_icon : 25px;
+@content_width : 100%;
+@height_Input:25px;
+
+.main{
+  min-width: @content_width;
+  background-color: @c_bg_gray;
+}
+.content{
+  background-color: @c_bg_white;
+  margin-left: auto;
+  margin-right: auto;
+  width: @content_width;
+  max-width: @d_screen_width;
+  margin-bottom: @d_spadding_base;
+  padding: @d_spadding_base @d_spadding_small;
+
+  border-width: 0px 0px 1px 0px;
+  border-style: solid;
+  border-color: rgba(0,0,0,0.10);
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+}
+
+.table{
+  display: table;
+  width: 100%;
+}
+
+.title{
+  margin-left: auto;
+  margin-right: auto;
+  width: @content_width;
+  max-width: @d_screen_width;
+  padding: @d_spadding_base 0 @d_spadding_cell @d_spadding_small;
+  font-size: @font_size_title_small;
+  color: @c_title_black;
+  padding-right: @d_spadding_small;
+  border-style: solid;
+  border-width: 0 0 1px 0;
+  border-color: @c_border_gray;
+  background-color: @c_bg_white;
+}
+.verticalMiddle{
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.cell{
+  display: table;
+  padding-top: @d_spadding_small;
+  padding-bottom: @d_spadding_cell;
+  padding-left: @d_spadding_big;
+}
+.cell_left{
+  composes: verticalMiddle;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-size: @font_size_center;
+  color: @c_white;
+  border-radius: 100%;
+  background-color: @c_theme_blue;
+}
+.cell_right{
+  composes: verticalMiddle;
+  padding-left: @d_spadding_small;
+  font-size: @font_size_center;
+  color: @c_title_black;
+}
+
+
+.orderCellItem{
+  width: 50%;
+  display: table-cell;
+  vertical-align: middle;
+
+}
+.refOrderCellItem{
+  composes: orderCellItem;
+  width: 50%;
+  text-align: left;
+  overflow: hidden;
+}
+
+.orderCell{
+  display: table;
+  padding: @d_spadding_cell @d_spadding_base;
+}
+.orderInforTitle{
+  composes: verticalMiddle;
+  width: 250px;
+  text-align: right;
+  font-size: @d_spadding_small;
+  color: @c_title_black;
+  padding-right: 50px;
+}
+.orderInforCon{
+  composes: verticalMiddle;
+  width: 100px;
+  font-size: @d_spadding_small;
+  color: @c_text_red;
+  padding-left: 50px;
+}
+.orderInforInput{
+  width: 50px;
+  height: @height_Input;
+  composes: verticalMiddle;
+  font-size: @d_spadding_small;
+  color: @c_title_black;
+  text-align: center;
+  border-width: 0px;
+  border-radius: 2px;
+  cursor: pointer;
+  outline:none;
+}
+.perTotal{
+  font-size:@font_size_small;
+  color:@c_title_black;
+  float:left;
+  width:200px;
+  height: 40px;
+  line-height: 40px;
+}
+.priceText{
+  text-align: right;
+  float: right;
+  width: 200px;
+  height: 40px;
+  line-height: 40px;
+}
+.priceTextColor{
+  font-size: 12px;
+  color: @c_text_red;
+}
+.priceTextFont{
+  composes: priceTextColor;
+  font-size: 20px;
+}
+
+.perInfor{
+  composes: verticalMiddle;
+  font-size: @font_size_small;
+  color: @c_title_black;
+  width: 220px;
+  height: 35px;
+  padding-left: @d_spadding_cell;
+  outline: none;
+  border-width: 0px;
+  border-radius: 3px;
+}
+
+
+.btnCon{
+  composes: content;
+  margin-top: 1.5*@d_spadding_center;
+  background-color: @c_bg_gray;
+  text-align: center;
+}
+.alertText{
+  color: @c_text_red;
+}
+.depositPriceBg{
+  width: 100%;
+  text-align: right;
+  padding-right: @d_spadding_small;
+}
+
+.bottomDiv{
+  background-color: @c_bg_white;
+  margin-left: auto;
+  margin-right: auto;
+  width: @content_width;
+  height: 70px;
+  max-width: @d_screen_width;
+  margin-bottom: @d_spadding_base;
+
+  border-width: 2px;
+  border-style: solid;
+  border-color: @c_text_red;
+  display: table;
+}
+.bottomDiv_left{
+  composes: verticalMiddle;
+  padding-left: @d_spadding_small;
+  width: 40%
+}
+.bottomDiv_center{
+  composes: verticalMiddle;
+  width: 45%
+}
+.bottomBtn{
+  height:40px;
+  line-height:40px;
+  float:left;
+  font-size: @font_size_small;
+  color: @c_title_black;
+
+}
+.bottomDiv_right{
+  composes: verticalMiddle;
+  width: 15%;
+  background-color: @c_text_red;
+  font-size: @font_size_big;
+  color: @c_white;
+  text-align: right;
+  padding-right: @d_spadding_small;
+}

@@ -300,7 +300,7 @@ class page extends Component {
                         <div className={less.headLeft} span={6}>
                             <div className={less.topLeft}>
                                 <div className={less.topLeftBorder}>
-                                    <div className={less.topLeftTitle}>团队机票搜索</div>
+                                    <div className={less.topLeftTitle}>团队出行机票搜索</div>
                                     <div className={less.topLeftContent}>
                                         <SearchLayout
                                             data={window.apin.getCache("search")}
