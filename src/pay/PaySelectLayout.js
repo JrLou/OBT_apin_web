@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import less from './Pay.less';
 import { Col, Row} from 'antd';
+import  Item from './Item';
 class PaySelectLayout extends Component {
     constructor(props) {
         super(props);
@@ -70,7 +71,7 @@ class PaySelectLayout extends Component {
                                 data.type = obj.type;
                                 data.defaultIndex = index;
                             }
-                            return <PayItem
+                            return <Item
                                 key={index}
                                 {...obj}
                                 onClick={() => {
@@ -85,7 +86,7 @@ class PaySelectLayout extends Component {
                                 }
                             >
                                 {obj.getView()}
-                            </PayItem>;
+                            </Item>;
                         })
                     }
                 </Row>
@@ -104,23 +105,6 @@ class PaySelectLayout extends Component {
 }
 
 
-class PayItem extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <Col
-                {...this.props}
-            >
-                <div className={this.props.select ? less.payItemSelect : less.payItem}>
-                    {this.props.children}
-                </div>
-            </Col>
-        );
-    }
-}
 
 PaySelectLayout.contextTypes = {
     router: React.PropTypes.object

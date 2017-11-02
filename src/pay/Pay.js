@@ -21,7 +21,7 @@ class page extends Component {
         super(props);
         this.wh = new WindowHelp();
         this.state = {
-            step: 1,
+            step: 2,
         };
         //id
         this.data = {
@@ -128,9 +128,9 @@ class page extends Component {
     getSecondStep() {
         switch (this.data.pay.type) {
             case "bank":
-               return UnionPay;
-            default:
                 return BankPay;
+            default:
+                return UnionPay;
         }
 
     }
