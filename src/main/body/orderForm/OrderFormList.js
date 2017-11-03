@@ -7,7 +7,7 @@ import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
 import LoadingView from "../component/LoadingView.js";
 import Table from "../component/Table/index.js";
-import {Pagination,Input,DatePicker,Select,Button} from 'antd';
+import {Pagination,Input,DatePicker,Select,Button,Spin} from 'antd';
 import moment from 'moment';
 const Option = Select.Option;
 
@@ -22,9 +22,40 @@ class OrderFormList extends Component{
             orderState:'',
             startDate:null,
             endDate:null,
+
+            pageSize:10,            //每页展示数据数目
+            currentPage:1,          //列表当前页
+
+            loading: false,          //是否处于加载状态
         };
 
         this.earliest = new Date(2015,0,1);
+
+        //航程类型
+        this.routeTypeList = [
+            {
+                title:'单程',
+                value:'0',
+            },
+            {
+                title:'往返',
+                value:'1',
+            },{
+                title:'多程',
+                value:'2',
+            },
+        ];
+        //订单状态
+        this.routeType = [
+            {
+                title:'订单取消',
+                value:'0',
+            },
+            {
+                title:'等待确认',
+                value:'1',
+            }
+        ];
 
     }
 
@@ -34,7 +65,8 @@ class OrderFormList extends Component{
     }
 
     componentDidMount(){
-
+        //查询订单列表数据
+        this.setLoading(true,this.loadData());
     }
 
     /**
@@ -72,9 +104,17 @@ class OrderFormList extends Component{
             },{
                 title:'航程',
                 dataIndex:'route',
+                render:(text,record)=>(
+                    <div className={css.routeStyle}>
+                        {text}
+                    </div>
+                ),
             },{
                 title:'出发日期',
-                dataIndex:'data',
+                dataIndex:'startDate',
+            },{
+                title:'返回日期',
+                dataIndex:'endDate',
             },{
                 title:'航程类型',
                 dataIndex:'routeType',
@@ -84,6 +124,9 @@ class OrderFormList extends Component{
             },{
                 title:'含税价格',
                 dataIndex:'price',
+            },{
+                title:'订单创建时间',
+                dataIndex:'createDate',
             },{
                 title:'订单状态',
                 dataIndex:'orderState',
@@ -110,52 +153,49 @@ class OrderFormList extends Component{
                 key:1,
                 orderNum:'20170923132332333',
                 route:'杭州-宁波',
-                data:'2017-09-13',
-                routeType:'往返',
+                startDate:'2017-09-13',
+                routeType:'单程',
                 peopleNum:'12/2',
                 price:'¥1200',
+                createDate:'2017-08-23 16:23',
                 orderState:'等待确认',
                 operation:'查看详情',
             },
             {
-                index:1,
-                key:1,
+                index:2,
+                key:2,
                 orderNum:'20170923132332333',
                 route:'波罗地亚吉卜力岛-阿西列宁科克丽缇岛',
-                data:'2017-09-13',
+                startDate:'2017-09-13',
+                endDate:'2017-09-13',
                 routeType:'往返',
                 peopleNum:'12/2',
                 price:'¥1200',
+                createDate:'2017-08-23 16:23',
                 orderState:'等待确认',
                 operation:'查看详情',
             },
             {
-                index:1,
-                key:1,
+                index:3,
+                key:3,
                 orderNum:'20170923132332333',
-                route:'杭州-宁波',
-                data:'2017-09-13',
-                routeType:'往返',
+                route:'杭州-宁波，上海-天津，北京-厦门',
+                startDate:'2017-09-13',
+                endDate:'2017-09-13',
+                routeType:'多程',
                 peopleNum:'12/2',
                 price:'¥1200',
-                orderState:'等待确认',
+                createDate:'2017-08-23 16:23',
+                orderState:'已付款（未录乘机人）',
                 operation:'查看详情',
             },
         ];
-        let routeType = [
-            {
-                title:'等待确认',
-                value:'0',
-            },
-            {
-                title:'支付订单',
-                value:'1',
-            }
-        ];
+        dataSource = dataSource.concat(dataSource).concat(dataSource);
 
 
         return(
             <div className={css.mainPage}>
+                <Spin spinning={this.state.loading} size={'large'}>
                 <div className={css.searchContainer}>
                     <div className={css.searchItem01}>
                         <span>出发城市：</span>
@@ -214,25 +254,25 @@ class OrderFormList extends Component{
                     <div className={css.searchItem01}>
                         <span>航程类型：</span>
                         <Select
-                            className={css.inputStyle}
+                            className={css.selectStyle}
                             placeholder={'请选择'}
                             onChange={(value)=>{
                                 this.changeState('routeType',value);
                             }}
                         >
-                            {this.getOptions(routeType)}
+                            {this.getOptions(this.routeTypeList)}
                         </Select>
                     </div>
                     <div className={css.searchItem01}>
                         <span>订单状态：</span>
                         <Select
-                            className={css.inputStyle}
+                            className={css.selectStyle}
                             placeholder={'请选择'}
                             onChange={(value)=>{
                                 this.changeState('orderState',value);
                             }}
                         >
-                            {this.getOptions(routeType)}
+                            {this.getOptions(this.routeType)}
                         </Select>
                     </div>
                     <div className={css.searchItem01}>
@@ -246,20 +286,22 @@ class OrderFormList extends Component{
                     </div>
                 </div>
                 <div className={css.resultContainer}>
-                    <Table
-                        columns={columns}
-                        dataSource={dataSource}
-                    />
-                    <div className={css.pagination}>
-                        <Pagination
-                            showQuickJumper
-                            total={500}
-                            defaultCurrent={1}
-                            defaultPageSize={8}
-                            onChange={(num)=>{this.pageNumChange(num);}}
+
+                        <Table
+                            columns={columns}
+                            dataSource={dataSource}
                         />
-                    </div>
+                        <div className={css.pagination}>
+                            <Pagination
+                                showQuickJumper
+                                total={500}
+                                defaultCurrent={1}
+                                defaultPageSize={8}
+                                onChange={(num)=>{this.pageNumChange(num);}}
+                            />
+                        </div>
                 </div>
+                </Spin>
             </div>
         );
     }
@@ -320,6 +362,9 @@ class OrderFormList extends Component{
      * @param num
      */
     pageNumChange(num){
+        if(this.isLoading()){
+            return;
+        }
         log(num);
     }
 
@@ -327,8 +372,75 @@ class OrderFormList extends Component{
      * 点击查询按钮
      */
     searchOrderForm(){
+        if(this.isLoading()){
+            return;
+        }
         log(this.state);
     }
+
+    /**
+     * 请求数据
+     * @param searchParames
+     */
+    loadData(){
+        let parames = this.getSearchParames();
+
+        let successCB = (code, msg, json, option)=>{
+            this.setLoading(false);
+        };
+
+        let failureCB = (code, msg, option)=>{
+            this.setLoading(false);
+        };
+
+        // HttpTool.request(HttpTool.typeEnum.POST,APILXD.XXXXXXXX, successCB, failureCB, parames,
+        //     {
+        //         ipKey: "hlIP"
+        //     });
+
+        //模拟接口
+        setTimeout(()=>{
+            let num = Math.random();
+            if(num<0.5){
+                successCB();
+            }else{
+                failureCB();
+            }
+        },1000);
+    }
+
+    /**
+     * 从状态机中解析出请求需要的参数
+     * @returns {{}}
+     */
+    getSearchParames(){
+        let state = this.state;
+        let parames = {
+            pageSize:state.pageSize,
+            //todo 完善请求参数
+        };
+        return parames;
+    }
+
+    /**
+     * 更改请求数据的状态并回调
+     * @param loading
+     * @param cb
+     */
+    setLoading(loading, cb) {
+        this.setState({
+            loading: loading
+        }, cb);
+    }
+
+    /**
+     * 返回加载的状态
+     * @returns {boolean}
+     */
+    isLoading() {
+        return this.state.loading;
+    }
+
 }
 
 OrderFormList.contextTypes = {
