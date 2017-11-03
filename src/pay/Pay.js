@@ -27,6 +27,7 @@ class page extends Component {
         };
         // get id
         this.par = window.app_getPar(this);
+        console.log(this.par);
         this.id = this.par?this.par.id:null;
 
 
@@ -209,10 +210,17 @@ class page extends Component {
 
                 <div className={less.nextLayout}>
                     <div>
-                        订单含机票 ,民......
+                        <span className={less.nextLayout_priceTitle}>需支付：</span>
+                        <span className={less.nextLayout_price}>
+                        <span className={less.nextLayout_price_rmb}>¥</span>
+                           {(1000000/100).toFixed(2)}
+                        </span>
                     </div>
-                    <Button type="primary"
 
+
+                    <p>订单含机票、民航发展基金、燃油费、税费</p>
+                    <Button type="primary"
+                            className={less.nextLayout_btn}
                             onClick={() => {
                                 //1:如果是在线支付,进入银联支付
                                 //2:如果是银行转账,进入银行转账
@@ -304,7 +312,7 @@ class page extends Component {
             this.loadPayOrder(this.data, (code, msg, data) => {
                 if (code > 0) {
                     //3秒后去开始验证,是否支付成功
-                    setTimeout(()=>{this.autoVer(apinPanel,"pay");},3000);
+                  //   setTimeout(()=>{this.autoVer(apinPanel,"pay");},3000);
                     this.panel.show(true, {
                         okText: "我已经支付",
                         cancelText: "还没支付",
@@ -429,10 +437,10 @@ class page extends Component {
         }, Math.random() * 1000 + 2000);
     }
     loadPayInfo(param, cb) {
-        if(!param||!param.id){
-            cb(-3, "缺少订单号", null);
-            return;
-        }
+      //   if(!param||!param.id){
+      //       cb(-3, "缺少订单号", null);
+      //       return;
+      //   }
         setTimeout(() => {
             let code = (Math.random() * 10).toFixed(0) - 0;
             let data = {};
@@ -440,8 +448,8 @@ class page extends Component {
             if (code > 0) {
                 data =  {
                     order: {
-                        title: "一个不知道的山=>一个不知道的岛",
-                        desc: "5天6晚 2007年12月12号-2009年XXXX",
+                        orderId: "201711111111",
+                        passengersInfo: "2成人/1儿童",
                         price: (Math.random()*100000).toFixed(0),
                     },
                     integral: {

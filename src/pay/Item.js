@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import less from './Pay.less';
-import {Col} from  'antd';
+import less from './Item.less';
 class Item extends Component{
     constructor(props) {
         super(props);
@@ -8,13 +7,14 @@ class Item extends Component{
 
     render() {
         return (
-            <Col
+            <div
                 {...this.props}
+                className={less.payItem + " "+ (this.props.select ? less.payItemSelect : "")}
             >
-                <div className={this.props.select ? less.payItemSelect : less.payItem}>
+                <div>
                     {this.props.children}
                 </div>
-            </Col>
+            </div>
         );
     }
 }

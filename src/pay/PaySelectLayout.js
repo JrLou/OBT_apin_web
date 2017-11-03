@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import less from './Pay.less';
-import { Col, Row} from 'antd';
+import less from './PaySelectLayout.less';
 import  Item from './Item';
 class PaySelectLayout extends Component {
     constructor(props) {
@@ -21,31 +20,39 @@ class PaySelectLayout extends Component {
                 type: "ali",
                 title: "支付宝",
                 getView: () => {
-                    return <div>支付宝图片</div>;
+                    return <img src={require("./images/pay_ali.png")} alt={"支付宝图片"}/>;
                 },
-                span: 8,
+                span: 5,
             },
             {
                 type: "wechat",
                 title: "微信支付",
                 getView: () => {
-                    return "微信支付";
+                    return <img src={require("./images/pay_wechat.png")} alt={"微信图片"}/>;
                 },
-                span: 8,
+                span: 5,
             }, {
                 type: "online",
                 title: "银联支付",
                 getView: () => {
-                    return "银联支付";
+                    return <img src={require("./images/pay_union.png")} alt={"银联图片"}/>;
                 },
-                span: 8,
+                span: 5,
             }, {
                 type: "bank",
                 title: "银行转账",
                 getView: () => {
-                    return "银行转账";
+                    return (
+                       <div>
+                           <div className={less.bankItme_msg}>
+                               <p>银行转账</p>
+                               <p>(上传转账凭证)</p>
+                           </div>
+                           <img src={require("./images/pay_bank.png")} alt={"银行图片"}/>
+                       </div>
+                    );
                 },
-                span: 10,
+                span: 12,
             }
         ];
     }
@@ -62,52 +69,60 @@ class PaySelectLayout extends Component {
                 {...this.props}
                 className={less.payLayout}
             >
-                <Row>
 
-                    {
-                        payList.map((obj, index) => {
-                            obj.select = this.state.selectIndex === index;
+                    <div className={less.payLayout_top}>请选择支付方式</div>
+                    <div className={less.payLayout_middle}>
+                        <div>
+                           {
+                              payList.map((obj, index) => {
+                                 obj.select = this.state.selectIndex === index;
 
-                            if(obj.select){
-                                data.type = obj.type;
-                                data.defaultIndex = index;
-                            }
-                            return <Item
-                                key={index}
-                                {...obj}
-                                onClick={() => {
-                                    //选择当前选项
-                                    let last = payList.length===index+1&&this.state.showMore;
-                                    if(last){
-                                    //打开新的页面
-                                        if(this.props.onAction){
-                                            this.props.onAction();
-                                        }
-                                        return;
+                                 if(obj.select){
+                                    data.type = obj.type;
+                                    data.defaultIndex = index;
+                                 }
+                                 return <Item
+                                    key={index}
+                                    {...obj}
+                                    onClick={() => {
+                                       //选择当前选项
+                                       let last = payList.length===index+1&&this.state.showMore;
+                                       if(last){
+                                          //打开新的页面
+                                          if(this.props.onAction){
+                                             this.props.onAction();
+                                          }
+                                          return;
+                                       }
+                                       this.setState({
+                                          selectIndex: index
+                                       }, () => {
+
+                                       });
+                                       //清空其他选择
                                     }
-                                    this.setState({
-                                        selectIndex: index
-                                    }, () => {
+                                    }
+                                 >
+                                    {obj.getView()}
+                                 </Item>;
+                              })
+                           }
+                        </div>
+                        <div
+                           className={less.payMore}
+                           onClick={() => {
+                              this.setState({
+                                 showMore: !this.state.showMore
+                              },()=>{
+                                 data.defaultshowMore = this.state.showMore;
+                              });
+                           }}>
+                           {(this.state.showMore ? <span className={less.payMore_noshowmore}>收起↑</span> : <span className={less.payMore_showmore}>更多支付方式↓</span>)}
+                        </div>
+                    </div>
 
-                                    });
-                                    //清空其他选择
-                                }
-                                }
-                            >
-                                {obj.getView()}
-                            </Item>;
-                        })
-                    }
-                </Row>
-                <div
-                    className={less.payMore}
-                    onClick={() => {
-                        this.setState({
-                            showMore: !this.state.showMore
-                        },()=>{
-                            data.defaultshowMore = this.state.showMore;
-                        });
-                    }}>{"" + (this.state.showMore ? "收起↑" : "更多支付方式↓")}</div>
+
+
             </div>
         );
     }

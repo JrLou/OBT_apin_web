@@ -1,0 +1,18 @@
+@import "../theme.less";
+
+.payItem {
+    position: relative;
+    border: 2px solid #F1F1F1;
+    width: 200px;
+    height: 60px;
+    margin-right: 30px;
+    display: inline-block;
+    &[type=bank]{
+        display: block;
+    }
+}
+
+.payItemSelect {
+    composes: payItem;
+    border: 2px solid #00A3FF ;
+}

@@ -15,6 +15,8 @@
 @line-color:#333;
 //字体颜色
 @font-color:#333;
+@font-light-color:#999;
+@font-dark-color:#221A18;
 //背景色
 @bg-color:#fff;
 
@@ -55,6 +57,7 @@
 @font_size_center: 16px;
 @font_size_big: 20px;
 @font_size_super_big: 24px;
+@font_size_super_big_x: 28px;
 
 // Color;
 @normal-color			: #131C30; // 主色
@@ -92,4 +95,32 @@
   right:0;
   left: 0;
   background:rgba(255, 255, 255, 0.12);
+}
+
+.payCpmBox{
+  background-color: @content-backcolor;
+  margin: 10px 0;
+  box-shadow: 0 1px 2px 0;
+  .top{
+    line-height: 50px;
+    height: 50px;
+    font-size: @font_size_center;
+    font-weight: bolder;
+    padding-left: 20px;
+    border-bottom: 1px solid #EDEDED;
+    color: @font-color;
+  }
+  .middle{
+    font-size: @font_size_small;
+    color: @font-light-color;
+    padding: 25px 20px 30px 20px;
+  }
+}
+
+.fl{
+  float: left;
+}
+
+.fr{
+  float: right;
 }

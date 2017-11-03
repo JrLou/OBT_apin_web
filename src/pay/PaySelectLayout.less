@@ -1,0 +1,47 @@
+@import "../theme.less";
+
+.payLayout {
+   .payCpmBox;
+   &_top{
+      .top;
+   }
+   &_middle{
+      .middle;
+      &>div{
+         &>div[type]{
+            margin-bottom: 26px;
+            position: relative;
+            img{
+               position: absolute;
+               top: 0;
+               right: 0;
+               bottom: 0;
+               left: 0;
+               margin: auto;
+            }
+         }
+         &>div[type=bank]{
+            margin-bottom: 5px;
+            img{
+               right: 105px;
+            }
+         }
+      }
+   }
+}
+
+.bankItme_msg{
+   p:first-child{
+      font-size: @font_size_big;
+      color: #545456;
+   }
+   margin-left: 74px;
+}
+
+.payMore {
+   font-size: @font_size_center;
+   //margin: @space*2;
+   text-align: center;
+   width: 200px;
+
+}

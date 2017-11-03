@@ -36,10 +36,9 @@ class WXPay extends Component {
                 }}
             >
                 <div style={{textAlign:"center"}}>
-                    <span style={{color:"#333333",fontSize:14}}>支付金额:</span> <span style={{color:"#f67c27",fontSize:12}}>￥</span><span style={{color:"#f67c27",fontSize:28}}>{((data.payPrice)/100).toFixed(2)}</span>元
+                    <span style={{color:"#333333",fontSize:14}}>支付金额:</span> <span style={{color:"#FF6600",fontSize:12}}>￥</span><span style={{color:"#FF6600",fontSize:28}}>{((data.payPrice)/100).toFixed(2)}</span>元
 
-                    <div style={{color:"#333333",fontSize:14}}>请使用微信扫描下方二维码完成支付</div>
-                    <br/>
+                    <div style={{color:"#333333",fontSize:14,margin: "8px 0 3px 0"}}>请使用微信扫描下方二维码完成支付</div>
                     <div style={{position:"relative",width:"85%",display:"inline-block"}}>
                         <div  dangerouslySetInnerHTML={{__html: qr.imageSync(data.url, { type: 'svg' })}} />
                         <img style={{position:"absolute",top:0,left:0,right:0,bottom:0,margin:"auto"}} src={require("./images/wx.png")}/>
