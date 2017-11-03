@@ -3,44 +3,33 @@
 @width_text : 20px;
 @width_icon : 20px;
 
-.themeLine{
-  overflow: hidden;
-  margin: @d_spadding_base @d_spadding_base 0 @d_spadding_base;
+.main{
+  width: 100%;
+  background: white;
+  display: table;
 }
-.themeTitle{
-  float: left;
-  font-size: @font_size_small;
-  color: @c_title_black;
-  margin-right: @d_spadding_base;
+.left{
+  display: table-cell;
+  vertical-align: middle;
+  width: 90%;
 }
-.themeCon{
-  float: left;
-  font-size: @font_size_small;
-  color: @c_title_gray;
-  padding-right: 3*@d_spadding_center;
+.right{
+  display: table-cell;
+  vertical-align: middle;
+  width: 10%;
+  padding-left: @d_spadding_small;
+  color: @c_theme_blue;
+  opacity: 0.8;
+  font-size: @font_size_cell;
+  letter-spacing: 0;
 }
 
-.cell{
-  display: table;
-  background: white;
-  width: @content_width;
-  padding:0 0 0 @d_spadding_base;
-  margin-bottom: @d_spadding_base;
-  position: relative;
-}
-.sign{
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  width: 60px;
-  height: 25px;
-  line-height: 25px;
-  font-size: @font_size_small;
-  text-align: center;
-  background-color: #4ff92e;
-  color: @c_white;
-  border-bottom-left-radius: 5px;
-  border-top-left-radius: 5px;
+
+//左边的样式
+.cellBg{
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: @c_border_gray;
 }
 .table{
   width: 100%;
@@ -50,76 +39,8 @@
   display: table-cell;
   vertical-align: middle;
 }
-.left{
-  composes: itemCenter;
-  width: 70%;
-}
-.right{
-  composes: itemCenter;
-  width: 30%;
-}
 
-//右边的样式
-.rightCenter{
-  display: table;
-  width: 100%;
-}
-.daysText{
-  composes: itemCenter;
-  padding-left: @d_spadding_center;
-  font-size: 14px;
-  background-color: #2db7f5;
-  width: 40%;
-  text-align: center;
-}
-.shuiText{
-  composes: itemCenter;
-  width: 40%;
-  background-color: #00ff23;
-  padding-right: @d_spadding_cell;
-  text-align: right;
-}
-.shuiTextTop{
-  font-size: 14px;
-  color: #999999;
-}
-
-.priceTextColor{
-  font-size: 12px;
-  color: @c_text_red;
-}
-.priceTextFont{
-  composes: priceTextColor;
-  font-size: 20px;
-}
-
-.btn{
-  width: 90px;
-  background-color: @c_text_red;
-  height: 35px;
-  line-height: 35px;
-  border-radius: 2px;
-  text-align: center;
-  font-size: @font_size_small;
-  color: #FFFFFF;
-}
-
-
-
-//左边的样式
-.fontBase{
-  font-size: @font_size_cell;
-}
-.cellLine{
-  composes: table;
-  padding: @d_spadding_cell;
-  border-width: 0 0 1px 0;
-  border-style: dashed;
-  border-color: #C2C6CC;
-}
-
-
-.type {
+.type_super {
   composes: itemCenter;
   width: 5%;
 }
@@ -132,7 +53,7 @@
 
 .date_super {
   composes: itemCenter;
-  width: 10%;
+  width: 15%;
   min-width: 90px;
 }
 .date{
@@ -147,6 +68,10 @@
   color: #999999;
 }
 
+.flightLine_super{
+  composes: itemCenter;
+  width: 80%;
+}
 .flightLine{
   display: table;
   width: 100%;
@@ -162,13 +87,15 @@
   font-size: @font_size_super_big;
   width: 20%;
   color: @c_title_black;
-  text-align: right;
   padding-top: @d_spadding_cell;
+  overflow: hidden;
 }
 .placeLineItem{
-  max-width: 120px;
+  float: right;
+  width: 100%;
+  max-width: 137px;
   color: @c_title_black;
-  text-align: right;
+  text-align: center;
   font-size: @font_size_small;
   white-space:nowrap;
   text-overflow:ellipsis;
@@ -176,27 +103,23 @@
 }
 .refPlaceLineItem{
   composes: placeLineItem;
-  text-align: left;
+  float: left;
+  text-align: center;
 }
 
 
 
-.totalTime{
+.company_super{
   display: table-cell;
   vertical-align: middle;
   width: 30%;
   padding-left: 1%;
   padding-right: 1%;
 }
-.totalTimeText{
-  width: 100%;
-  font-size: @font_size_cell;
-  color: @c_title_gray;
-}
 
 .logoCompany_super {
   width: 100%;
-  min-width: 170px;
+  min-width: 200px;
 }
 .logoBg{
   display: inline-block;
@@ -211,9 +134,8 @@
 .logoCompany{
   display: inline-block;
   vertical-align: top;
-  max-width: 150px;
+  max-width: 180px;
   height: @width_icon;
-  margin: 0 auto;
 }
 .logoCompanyText{
   font-size: @font_size_cell;
@@ -223,7 +145,14 @@
   text-overflow:ellipsis;
   overflow: hidden;
 }
+.totalTimeText{
+  width: 100%;
+  font-size: @font_size_cell;
+  color: @c_title_gray;
+  text-align: center;
+}
 .flightLineNum{
+  width: 100%;
   font-size: @font_size_cell;
   color: @c_title_black;
   text-align: center;
@@ -243,20 +172,11 @@
 }
 
 
-.isMore{
-  composes: itemCenter;
-  width: 10%;
-  text-align: center;
-}
-.isMoreTime{
-  font-size: 14px;
-  text-align: center;
-  color: #4F5762;
-  width: 100%;
-}
-.isMoreImg{
-  width: 20px;
+.moreText{
+  margin-bottom: @d_spadding_cell;
+  margin-left: @d_spadding_super_big;
   line-height: 20px;
   height: 20px;
-  font-size: 20px;
+  font-size: @font_size_small;
+  color: @c_theme_blue;
 }
