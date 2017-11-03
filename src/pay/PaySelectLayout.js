@@ -67,6 +67,7 @@ class PaySelectLayout extends Component {
                     {
                         payList.map((obj, index) => {
                             obj.select = this.state.selectIndex === index;
+
                             if(obj.select){
                                 data.type = obj.type;
                                 data.defaultIndex = index;
@@ -76,6 +77,14 @@ class PaySelectLayout extends Component {
                                 {...obj}
                                 onClick={() => {
                                     //选择当前选项
+                                    let last = payList.length===index+1&&this.state.showMore;
+                                    if(last){
+                                    //打开新的页面
+                                        if(this.props.onAction){
+                                            this.props.onAction();
+                                        }
+                                        return;
+                                    }
                                     this.setState({
                                         selectIndex: index
                                     }, () => {

@@ -86,6 +86,8 @@ class UnionPay extends Component {
     }
 
     getCardList(data) {
+        //添加
+        data=  data.concat([{}]);
         return (
             <div>
                 <Row>
@@ -279,7 +281,7 @@ class InputLayout extends Component{
         return {
             moblie: this.state.moblie,
             code:this.state.code,
-            error:this.state.moblie.length!==11?"手机号错误":(this.state.code.length!==6?"验证码错误":null)
+            error:this.state.moblie.length!==11?"请填写正确的手机号":(this.state.code.length!==6?"请填写正确的验证码":null)
         };
 
     }
