@@ -1,4 +1,8 @@
-import './reactLess';
+
+
+import '../react_page_less/button/index.less';
+
+
 
 //重写日志系统
 function getUrlSearch(str) {
