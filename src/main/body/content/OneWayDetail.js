@@ -372,6 +372,7 @@ class LineInfor extends Component {
             let desc = (airlineInfo_One.depDate||"")+" "+(airlineInfo_One.depTime||"")+" --> "+(airlineInfo_One.arrDate||"")+" "+(airlineInfo_One.arrTime||"")+" "+(airlineInfo_One.depAirport||"")+"-->"+(airlineInfo_One.arrAirport||"");
             var itemView = (<div key={i}>
                 <div className={css.cell}>
+                    <div className={css.sign}>直营</div>
                     <div className={css.left}>
                         <div className={css.table}>
                             {this.createItemCell(airlineInfo,flightType)}
