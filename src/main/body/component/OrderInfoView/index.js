@@ -22,6 +22,22 @@ const {Column, ColumnGroup} = Table;
  * 支付审核失败   10
  * 我的需求      0
  */
+/**
+ * 订单状态  status
+ * 订单号    orderNo
+ * 创建时间  createTime
+ * 成人价格  adultMoney
+ * 儿童价格  childrenMoney
+ * 航班人数  总人数 totalNum  儿童人数 adultNum  成人人数  childrenNum
+ * 订单总金额 totalMoney
+ * 支付订金  deposit  支付方式  paymentMethod  支付时间  payTime
+ * 支付尾款  tailMoney  支付方式  paymentTailMethod  支付时间  payTailTime
+ * 支付凭证
+ * 关闭原因  closeReason
+ * 关闭时间  closeTime
+ * 支付截止日 endTime
+ * 审核不通过原因  notPassReason
+ */
 class OrderInfoView extends Component {
 
     constructor(props) {
@@ -113,12 +129,7 @@ class OrderInfoView extends Component {
                     </div>
                 );
             default:
-                return (
-                    <div className={css.bottom}>
-                        {this.getPayDeposit(type, data)}
-                        {this.getPayTailMoney(type, data)}
-                    </div>
-                );
+               null;
         }
     }
 
@@ -234,7 +245,7 @@ class OrderInfoView extends Component {
                     <div className={css.mainTextLayout}>
                         <div>
                             <font className={css.mainTitle}>订单状态：</font>
-                            <font className={css.mainContent}>{data && data.status ? data.status : "暂无"}</font>
+                            <font className={type===0?css.mainGreenContent:css.mainContent}>{data && data.status ? data.status : "暂无"}</font>
                         </div>
                         <div>
                             <div>{this.getMessage(type, data)}</div>
