@@ -21,10 +21,10 @@
   border-color: rgba(0,0,0,0.10);
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
 }
-
-.table{
-  display: table;
-  width: 100%;
+.refContent{
+  composes: content;
+  padding: 0;
+  background-color: @c_bg_gray;
 }
 
 .title{
@@ -41,6 +41,111 @@
   border-color: @c_border_gray;
   background-color: @c_bg_white;
 }
+
+.itemCenter{
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.table{
+  display: table;
+  width: 100%;
+}
+.flightLineCell{
+  width:100%;
+  background-color:@c_bg_white;
+  margin-bottom: @d_spadding_small;
+  position:relative;
+}
+.sign{
+  background-image: url("../../../../images/sold_icon.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 64px;
+  height: 20px;
+  line-height: 20px;
+  font-size: @font_size_small;
+  text-align: center;
+  color: @c_white;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+}
+.schemeDiv{
+  background-image: url("../../../../images/scheme_icon.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 63px;
+  height: 29px;
+  line-height: 29px;
+  font-size: @font_size_cell;
+  color: @c_white;
+  text-align: center;
+
+}
+.tableCell{
+  composes: table;
+  padding: 0 2% 0 5%;
+}
+.left{
+  composes: itemCenter;
+  width: 82%;
+  background: @c_bg_white;
+}
+
+//右边的样式
+.right{
+  composes: itemCenter;
+  width: 18%;
+  background: @c_bg_white;
+}
+
+.priceText{
+  text-align: right;
+  font-size: @font_size_small;
+  color: @c_title_gray;
+}
+.priceTextColor{
+  font-size: 12px;
+  color: @c_text_red;
+}
+.priceTextFont{
+  composes: priceTextColor;
+  font-size: 22px;
+}
+
+.btn{
+  float: right;
+  width: 90px;
+  background-color: @c_text_red;
+  height: 35px;
+  line-height: 35px;
+  border-radius: 2px;
+  text-align: center;
+  font-size: @font_size_small;
+  color: #FFFFFF;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .verticalMiddle{
   display: table-cell;
   vertical-align: middle;
@@ -123,21 +228,7 @@
   height: 40px;
   line-height: 40px;
 }
-.priceText{
-  text-align: right;
-  float: right;
-  width: 200px;
-  height: 40px;
-  line-height: 40px;
-}
-.priceTextColor{
-  font-size: 12px;
-  color: @c_text_red;
-}
-.priceTextFont{
-  composes: priceTextColor;
-  font-size: 20px;
-}
+
 
 .perInfor{
   composes: verticalMiddle;

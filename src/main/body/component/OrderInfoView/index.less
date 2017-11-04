@@ -1,12 +1,15 @@
 @import "../../../../theme.less";
 .title{
-  margin:20px;
-  font-size:15px;
+  font-size:16px;
+  margin-left: 20px;
+  margin-top: 15px;
+  margin-bottom: 14px;
+  font-weight: bold;
 }
 .line{
   width:100%;
   height:1px;
-  background-color:#eee;
+  background-color:#ededed;
 }
 .content{
   display: inline-block;
@@ -17,7 +20,7 @@
   text-align: center;
   display: table-cell;
   vertical-align: middle;
-  min-width: 150px;
+  min-width: 200px;
   border-left-width: 1px;
   border-left-style: solid;
   border-left-color: #eee;
@@ -25,7 +28,7 @@
 }
 .emptyButton{
   display: table-cell;
-  min-width: 150px;
+  min-width: 200px;
 }
 .moneyLayout{
   text-align: center;
@@ -39,37 +42,117 @@
   padding-left: 20px;
   padding-top: 20px;
   padding-bottom: 20px;
+  div{
+    margin-top:8px;
+  }
 }
 .messageLayout{
   width: 200px;
-  background-color: #fff2c3;
-  border: 1px #eeb65f solid;
+  background-color: #fff7d9;
   vertical-align: middle;
-  margin-left: 78px;
+  display: inline-block;
+  overflow: hidden;
+  height:26px;
+  margin-left:95px ;
+  padding-left: 6px;
+  margin-bottom: 10px;
+  border: 1px #ff9901 solid;
 }
-.img{
+.messageText{
+  padding-left: 5px;
+  height:26px;
+  font-size: 12px;
   vertical-align: middle;
-  width:10px;
-  margin-left: 5px;
-  margin-right: 5px;
-  height:10px;
+  display: table-cell;
+  color: #4d4d4d;
 }
-.mainTitlt{
+.mainTitle{
   color: #999;
+  font-size: 14px;
 }
 .mainContent{
   color:#333;
-  margin-left: 20px;
+  font-size: 16px;
+  margin-left: 25px;
 }
+
+.mainGreenContent {
+  color: #30c27b;
+  font-size: 16px;
+  margin-left: 25px;
+}
+
 .mainContent1{
   color:#333;
-  margin-left: 30px;
+  font-size: 16px;
+  margin-left: 39px;
 }
 .bottom{
-  padding: 20px;
-  background-color: #eee;
+  padding-left: 20px;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  background-color: #f0f4fb;
 }
 .detailButton{
+  font-size: 16px;
+  height:36px;
   background-color: #29A6FF;
   color: #fff;
 }
+
+.buttonCancel{
+  font-size: 16px;
+  height:36px;
+  width: 110px;
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+  border: 1px #e6e6e6 solid;
+  border-radius: 2px;
+  background-color: #fff;
+  color: #666;
+}
+.payInfo{
+  font-size: 12px;
+  color:#333;
+
+}
+.voucher{
+  width: 100%;
+  margin-top: 25px;
+  padding-left: 86px;
+  font-size: 12px;
+  color:#333;
+  float: left;
+  font{
+    float: left;
+  }
+  img{
+    float: left;
+    width:100px;
+    height:60px;
+    margin-left: 25px;
+  }
+
+}
+.payTailLayout{
+  display: inline-block;
+}
+.aginButton{
+  height: 36px;
+  background-color: #29A6FF;
+  color: #fff;
+  font-size: 16px;
+  width: 110px;
+}
+.aginButtonLayout{
+  display: table-cell;
+  text-align: center;
+  min-width: 200px;
+}
+.payTailInfoLayout{
+  width: 100%;
+  display: table-cell;
+}
+
+

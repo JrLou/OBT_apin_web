@@ -67,7 +67,7 @@ class SearchLayout extends Component {
                             this.props.submit(this.getData());
                         }
                     }}>
-                    {"搜索" + (this.state.loading ? "中" : "")}
+                    {"搜索航班" + (this.state.loading ? "中" : "")}
                 </Button>
             </div>
         );
