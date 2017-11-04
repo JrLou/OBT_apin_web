@@ -1,16 +1,15 @@
 @import "../../../../../theme.less";
 @height_Input :30px;
-@width_item:200px;
+@width_item:50%;
 @width_space:25px;
 .verticalMiddle{
   display: table-cell;
   vertical-align: middle;
 }
 .cell{
-  display: table;
+  overflow: hidden;
   padding: 0 @d_spadding_base;
   width: 100%;
-  margin-bottom: @d_spadding_base;
 }
 .refCell{
   composes: cell;
@@ -25,10 +24,19 @@
 }
 
 .cellTitle{
-  margin-top: @d_spadding_big;
-  composes: verticalMiddle;
+  float: left;
   width: @width_item;
   font-size: @d_spadding_small;
+  color: @c_title_black;
+}
+.refCellTitle{
+  composes: cellTitle;
+  float: right;
+}
+.title{
+  height: 25px;
+  line-height:25px;
+  font-size: @font_size_small;
   color: @c_title_black;
 }
 
@@ -68,9 +76,12 @@
 }
 .deleBtn{
   cursor: pointer;
+  float: right;
   width: 70px;
   height: 30px;
   line-height: 30px;
+  margin-top: 20px;
+  margin-right: 15px;
   background-color: @c_theme_blue;
   border-radius: 3px;
   text-align: center;
@@ -83,3 +94,24 @@
   background-color: @c_border_gray;
   color: @c_title_gray;
 }
+
+
+
+
+
+.dynamicDeleteButton {
+  cursor: pointer;
+  position: relative;
+  top: 4px;
+  font-size: 24px;
+  color: #999;
+  transition: all .3s;
+}
+.dynamicDeleteButtonHover {
+  color: #777;
+}
+.dynamic-delete-button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+

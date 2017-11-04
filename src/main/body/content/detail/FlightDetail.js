@@ -46,6 +46,57 @@ class page extends Component {
     componentDidMount() {
         this.loadData();
 
+        let dataArr = this.par.data&&this.par.data.airlineInfo?this.par.data.airlineInfo:{};
+        let itemData = dataArr;
+
+
+        let go = itemData[0];
+        let back = itemData[1];
+
+
+        let zhongZhuanObj=[{
+            isGo:true,
+            obj:go
+        },{
+            isGo:true,
+            obj:go
+        },{
+            isGo:false,
+            obj:back
+        }];
+
+        let flightTypeObj = [{
+            isGo:true,
+            obj:go,
+            data:zhongZhuanObj
+        },{
+            isGo:true,
+            obj:go,
+            data:zhongZhuanObj
+        },{
+            isGo:false,
+            obj: back,
+            data:zhongZhuanObj
+        }
+        ];
+
+
+
+        this.listData = [{
+            rule:"1.行李规则行李规则行李规则行李规则行李",
+            obj:flightTypeObj,
+            flightType:1
+        }];
+    // ,{
+    //         rule:"2.行李规则行李规则行李规则行李规则行李",
+    //             obj:flightTypeObj,
+    //             flightType:2
+    //     }
+        // ,{
+        //         rule:"3.行李规则行李规则行李规则行李规则行李",
+        //             obj:flightTypeObj
+        //     }
+        this.upView();
     }
     loadData() {
         var param = {};
@@ -65,7 +116,6 @@ class page extends Component {
         //     {ipKey:'hlIP'});
         // this.cellFlight.refreshView(this.par.data,2,true,true);
     }
-
 
     render() {
         this.totalPrice = 2300*this.childNum+2333*this.adultNum;
@@ -89,13 +139,7 @@ class page extends Component {
                     {/*data:data*/}
                     {/*},"new");*/}
                     {/*}}/>*/}
-                    <CellNewFlight
-                        dataSource = {this.par.data}
-                        flightType={2}
-                        isShowFlightLine={true}
-                        isShowAdd={true}
-                        isOrder={true}
-                    />
+                    {this.createList(this.listData)}
                 </div>
 
                 <div className={css.title}>订单信息</div>
@@ -237,6 +281,44 @@ class page extends Component {
             </div>
         );
         return div;
+    }
+
+    createList(dataArr){
+        if (!dataArr||dataArr.length<1){
+            return null;
+        }
+        var viewArr = [];
+        for (let i=0;i<dataArr.length;i++){
+            let itemData = dataArr[i];
+            let itemDiv = (
+                <div key={i} style={{display:"table",width:"100%",position:"relative"}}>
+                    <div className={css.sign}>直营</div>
+                    <div className={css.left}>
+                        <CellNewFlight dataSource = {itemData} flightType={2} isOrder={true}/>
+                    </div>
+
+                    <div className={css.right}>
+                        <div className={css.table}>
+                            <div className={css.itemCenter} style={{width:"52%"}}>
+                                <div className={css.priceText}>{"含税价"}</div>
+                                <div className={css.priceText}>
+                                    <span className={css.priceTextColor}>{"¥ "}</span>
+                                    <span className={css.priceTextFont}>{itemData.basePrice||"0"}</span>
+                                    <span >{" 起"}</span>
+                                </div>
+                            </div>
+                            <div className={css.itemCenter} style={{width:"48%"}}>
+                                <div className={css.btn} style={{cursor: 'pointer'}}
+                                     onClick={() => {
+                                         alert("确定航班");
+                                     }}>{"确定此航班"}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>);
+            viewArr.push(itemDiv);
+        }
+        return viewArr;
     }
 }
 page.contextTypes = {
