@@ -5,9 +5,7 @@ import React, {Component} from 'react';
 import css from './OrderFormList.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
-import LoadingView from "../component/LoadingView.js";
-import Table from "../component/Table/index.js";
-import {Pagination,Input,DatePicker,Select,Button,Spin} from 'antd';
+import {Table,Input,DatePicker,Select,Button,message} from 'antd';
 import moment from 'moment';
 const Option = Select.Option;
 
@@ -16,23 +14,26 @@ class OrderFormList extends Component{
         super(props);
         //状态机
         this.state = {
-            startCity:'',
-            endCity:'',
-            routeType:'',
-            orderState:'',
+            cityDep:'',
+            cityArrive:'',
+            flightType:'',
+            orderStatus:'',
             startDate:null,
             endDate:null,
 
-            pageSize:10,            //每页展示数据数目
-            currentPage:1,          //列表当前页
+            dataSource:null,        //传入Table组件的数据
 
-            loading: false,          //是否处于加载状态
+            pageSize:10,            //每页展示数据数目
+            pageNumber:1,           //列表当前页
+            total:0,                //总数据
+
+            loading: false,         //是否处于加载状态
         };
 
         this.earliest = new Date(2015,0,1);
 
         //航程类型
-        this.routeTypeList = [
+        this.flightTypeList = [
             {
                 title:'单程',
                 value:'0',
@@ -46,7 +47,7 @@ class OrderFormList extends Component{
             },
         ];
         //订单状态
-        this.routeType = [
+        this.flightType = [
             {
                 title:'订单取消',
                 value:'0',
@@ -66,7 +67,7 @@ class OrderFormList extends Component{
 
     componentDidMount(){
         //查询订单列表数据
-        this.setLoading(true,this.loadData());
+        this.loadData();
     }
 
     /**
@@ -104,20 +105,36 @@ class OrderFormList extends Component{
             },{
                 title:'航程',
                 dataIndex:'route',
-                render:(text,record)=>(
-                    <div className={css.routeStyle}>
-                        {text}
-                    </div>
-                ),
+                render:(list,record)=>{
+                    let flightType = record.flightType;
+                    let tipList = ['→','⇌','-'];
+
+                    let view = [];
+                    let length = list.length;
+                    for(let key in list){
+                        view.push(
+                            <span key={`cell${key}`}>
+                                {list[key].cityDep}
+                                {tipList[flightType]}
+                                {list[key].cityArrive}
+                                {key<length-1?'，':''}
+                            </span>
+                        );
+                    }
+                    return(<div className={css.routeStyle}>
+                        {view}
+                    </div>);
+
+                },
             },{
                 title:'出发日期',
-                dataIndex:'startDate',
+                dataIndex:'dateDep',
             },{
                 title:'返回日期',
                 dataIndex:'endDate',
             },{
                 title:'航程类型',
-                dataIndex:'routeType',
+                dataIndex:'flightType',
             },{
                 title:'人数(成人／儿童)',
                 dataIndex:'peopleNum',
@@ -129,7 +146,7 @@ class OrderFormList extends Component{
                 dataIndex:'createDate',
             },{
                 title:'订单状态',
-                dataIndex:'orderState',
+                dataIndex:'orderStatus',
             },{
                 title:'操作',
                 dataIndex:'operation',
@@ -152,72 +169,87 @@ class OrderFormList extends Component{
                 index:1,
                 key:1,
                 orderNum:'20170923132332333',
-                route:'杭州-宁波',
-                startDate:'2017-09-13',
-                routeType:'单程',
+                route:[{
+                    cityDep:'宁波',
+                    cityArrive:'杭州',
+                },],
+                dateDep:'2017-09-13',
+                flightType:0,
                 peopleNum:'12/2',
                 price:'¥1200',
                 createDate:'2017-08-23 16:23',
-                orderState:'等待确认',
+                orderStatus:'等待确认',
                 operation:'查看详情',
             },
             {
                 index:2,
                 key:2,
                 orderNum:'20170923132332333',
-                route:'波罗地亚吉卜力岛-阿西列宁科克丽缇岛',
-                startDate:'2017-09-13',
+                route:[{
+                    cityDep:'波罗地亚吉卜力岛',
+                    cityArrive:'阿西列宁科克丽缇岛',
+                }],
+                dateDep:'2017-09-13',
                 endDate:'2017-09-13',
-                routeType:'往返',
+                flightType:1,
                 peopleNum:'12/2',
                 price:'¥1200',
                 createDate:'2017-08-23 16:23',
-                orderState:'等待确认',
+                orderStatus:'等待确认',
                 operation:'查看详情',
             },
             {
                 index:3,
                 key:3,
                 orderNum:'20170923132332333',
-                route:'杭州-宁波，上海-天津，北京-厦门',
-                startDate:'2017-09-13',
+                route:[
+                        {
+                            cityDep:'杭州',
+                            cityArrive:'厦门',
+                        },{
+                            cityDep:'北京',
+                            cityArrive:'天津',
+                        },{
+                            cityDep:'宁波',
+                            cityArrive:'广州',
+                        }
+                    ],
+                dateDep:'2017-09-13',
                 endDate:'2017-09-13',
-                routeType:'多程',
+                flightType:2,
                 peopleNum:'12/2',
                 price:'¥1200',
                 createDate:'2017-08-23 16:23',
-                orderState:'已付款（未录乘机人）',
+                orderStatus:'已付款（未录乘机人）',
                 operation:'查看详情',
             },
         ];
-        dataSource = dataSource.concat(dataSource).concat(dataSource);
 
 
         return(
             <div className={css.mainPage}>
-                <Spin spinning={this.state.loading} size={'large'}>
                 <div className={css.searchContainer}>
                     <div className={css.searchItem01}>
                         <span>出发城市：</span>
                         <Input
-                            value={this.state.startCity}
+                            value={this.state.cityDep}
                             className={css.inputStyle}
                             placeholder={'请输入'}
                             onChange={(obj)=>{
                                 let value = this.replaceSpace(obj.target.value);
-                                this.changeState('startCity',value);
+                                this.changeState('cityDep',value);
                             }}
                         />
                     </div>
                     <div className={css.searchItem01}>
                         <span>目的城市：</span>
                         <Input
-                            value={this.state.endCity}
+                            value={this.state.cityArrive}
                             className={css.inputStyle}
                             placeholder={'请输入'}
                             onChange={(obj)=>{
                                 let value = this.replaceSpace(obj.target.value);
-                                this.changeState('endCity',value);
+                                this.changeState('cityArrive',value);
                             }}
                         />
                     </div>
@@ -257,10 +289,10 @@ class OrderFormList extends Component{
                             className={css.selectStyle}
                             placeholder={'请选择'}
                             onChange={(value)=>{
-                                this.changeState('routeType',value);
+                                this.changeState('flightType',value);
                             }}
                         >
-                            {this.getOptions(this.routeTypeList)}
+                            {this.getOptions(this.flightTypeList)}
                         </Select>
                     </div>
                     <div className={css.searchItem01}>
@@ -269,16 +301,17 @@ class OrderFormList extends Component{
                             className={css.selectStyle}
                             placeholder={'请选择'}
                             onChange={(value)=>{
-                                this.changeState('orderState',value);
+                                this.changeState('orderStatus',value);
                             }}
                         >
-                            {this.getOptions(this.routeType)}
+                            {this.getOptions(this.flightType)}
                         </Select>
                     </div>
                     <div className={css.searchItem01}>
                         <Button
                             className={css.buttonStyle}
                             type="primary"
+                            disabled={this.state.loading}
                             onClick={()=>{this.searchOrderForm();}}
                         >
                             查询
@@ -286,22 +319,22 @@ class OrderFormList extends Component{
                     </div>
                 </div>
                 <div className={css.resultContainer}>
-
                         <Table
                             columns={columns}
                             dataSource={dataSource}
+                            loading={{
+                                spinning:this.state.loading,
+                                size:'large',
+                            }}
+                            pagination={{
+                                current:this.state.pageNumber,
+                                total:this.state.total,
+                                defaultCurrent:1,
+                                showQuickJumper:true,
+                            }}
+                            onChange={(pagination, filters, sorter)=>{this.pageNumChange(pagination, filters, sorter);}}
                         />
-                        <div className={css.pagination}>
-                            <Pagination
-                                showQuickJumper
-                                total={500}
-                                defaultCurrent={1}
-                                defaultPageSize={8}
-                                onChange={(num)=>{this.pageNumChange(num);}}
-                            />
-                        </div>
                 </div>
-                </Spin>
             </div>
         );
     }
@@ -361,11 +394,14 @@ class OrderFormList extends Component{
      * 分页器改变页码
      * @param num
      */
-    pageNumChange(num){
+    pageNumChange(pagination, filters, sorter){
         if(this.isLoading()){
             return;
         }
-        log(num);
+        let currentNum = pagination.current;
+        this.setState({
+            pageNumber:currentNum,
+        },this.loadData());
     }
 
     /**
@@ -375,7 +411,7 @@ class OrderFormList extends Component{
         if(this.isLoading()){
             return;
         }
-        log(this.state);
+        this.loadData();
     }
 
     /**
@@ -391,22 +427,30 @@ class OrderFormList extends Component{
 
         let failureCB = (code, msg, option)=>{
             this.setLoading(false);
+            // message.error(msg);
+            message.error('测试-请求错误的回调');
         };
 
-        // HttpTool.request(HttpTool.typeEnum.POST,APILXD.XXXXXXXX, successCB, failureCB, parames,
-        //     {
-        //         ipKey: "hlIP"
-        //     });
+        // this.setLoading(true,()=>{
+        //     HttpTool.request(HttpTool.typeEnum.GET,APILXD.XXXXXXXX, successCB, failureCB, parames,
+        //         {
+        //             ipKey: "hlIP"
+        //         });
+        // });
 
         //模拟接口
-        setTimeout(()=>{
-            let num = Math.random();
-            if(num<0.5){
-                successCB();
-            }else{
-                failureCB();
-            }
-        },1000);
+        this.setLoading(true,()=>{
+            log(parames);
+            setTimeout(()=>{
+                let num = Math.random();
+                if(num<0.5){
+                    successCB();
+                }else{
+                    failureCB();
+                }
+            },1000);
+        });
+
     }
 
     /**
@@ -416,10 +460,43 @@ class OrderFormList extends Component{
     getSearchParames(){
         let state = this.state;
         let parames = {
+            bdCharger:'',
+            customerName:'',
+            orderNo:'',
+            orderStatus:'',
+            cityDep:state.cityDep,
+            cityArrive:state.cityArrive,
+            flightType:state.flightType,
+            pageNumber:state.pageNumber,
             pageSize:state.pageSize,
-            //todo 完善请求参数
         };
+        let dateDepStart = state.startDate?this.getDateFormat(state.startDate.valueOf()):'',
+            dateDepEnd = state.endDate?this.getDateFormat(state.endDate.valueOf()):'',
+            dateDep = '';
+        if(dateDepStart){
+            dateDep = dateDepStart+'-'+dateDepEnd;
+        }else{
+            dateDep = dateDepEnd?dateDepEnd+'-':'';
+        }
+        parames.dateDep = dateDep;
         return parames;
+    }
+
+    /**
+     * 从时间对象中解析出特定时间格式字符串
+     * @param time
+     * @returns {string}   eg:20170324
+     */
+    getDateFormat(time){
+        let date = '';
+        if(time){
+            let newDate = new Date(time);
+            let year = newDate.getFullYear();
+            let month = (newDate.getMonth()+1)>9?(newDate.getMonth()+1):'0'+(newDate.getMonth()+1);
+            let day = newDate.getDate()>9?newDate.getDate():'0'+newDate.getDate();
+            date = ''+year+month+day;
+        }
+        return date;
     }
 
     /**

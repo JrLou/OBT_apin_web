@@ -5,17 +5,22 @@ import React, {Component} from 'react';
 import css from './OrderFormDetail.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
-import LoadingView from "../component/LoadingView.js";
-import Passengers from "./Passengers/Passengers.js";
+import TitleBar from './TitleBar/index.js';
+import Passengers from './Passengers/index.js';
+
+/**
+ * 订单状态说明
+ * 0：订单取消 1：等待确认 2：待付订金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
+ * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中 15：支付审核失败
+ */
 
 class OrderFormDetail extends Component{
     constructor(props){
         super(props);
         this.state = {
-            orderState:2,  //0：等待确认 1：待付定金 2：待付尾款 3：待付款 4：已付尾款(未录乘机人) 5：等待出票 6：已出票 7：订单取消 8：订单关闭
+            orderState:2,
             orderID:'',
         };
-
     }
 
     componentWillReceiveProps(nextProps) {
@@ -33,7 +38,7 @@ class OrderFormDetail extends Component{
      * @returns {XML}
      */
     getStateBar(state){
-        let titleList = ['等待确认资源中...','待付订金...','待付尾款...','待付款...','已付尾款...','等待出票...','已出票...','订单取消...','订单关闭...'];
+        let titleList = [];
         let deadLine = '2017-9-29';
         return(
             <div className={css.stateBar}>
