@@ -30,12 +30,11 @@ class DemandInfoView extends Component {
         let {data, type} = this.props;
         return (
             <div className={less.top}>
-                <h2 className={less.title}>需求信息</h2>
-                <div className={less.line}/>
+
                 {this.getTop(type,data)}
                 {this.getMessage()}
-                {this.getButton(type)}
                 {type===3?this.getCloseReason():null}
+                {this.getButton(type)}
                 {type===2?<OrderInfoView type={0}/>:null}
             </div>
         );
@@ -69,7 +68,7 @@ class DemandInfoView extends Component {
             <div className={less.closeMessageLayout}>
                 <h2 className={less.title}>关闭原因</h2>
                 <div className={less.line}/>
-                <div style={{marginLeft:20}}>
+                <div className={less.closeMessage}>
                     用户操作不规范，填写的信息有误
                     <br/>
                     需要较大的改动
@@ -82,7 +81,7 @@ class DemandInfoView extends Component {
         if(type===1){
            return(
                <div className={less.buttonLayout}>
-                   <Button>取消需求</Button>
+                   <Button className={less.buttonCancel}>取消需求</Button>
                </div>
            );
         }else if(type===2){
@@ -98,54 +97,99 @@ class DemandInfoView extends Component {
         }
     }
 
+    getMultiPass(type,data){
+        return(
+            <div className={less.topMessage}>
+                <h2 className={less.title}>需求信息</h2>
+                <div className={less.line}/>
+                <div className={less.content}>
+                    <div className={less.mainTextLayout}>
+                        <div>
+                            <font className={less.mainTitle}>需求状态：</font>
+                            <font className={type===1?less.mainContentGreenStatus:(type===3?less.mainContentClose:less.mainContent)}>{data&&data.status?data.status:"暂无"}</font>
+                        </div>
+                        <div>
+                            <font className={less.mainTitle}>创建时间：</font>
+                            <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.creatTime?data.creatTime:"暂无"}</font>
+                        </div>
+                        <div>
+                            <font className={less.mainTitle}>航程类型：</font>
+                            <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.vayageType?data.vayageType:"暂无"}</font>
+                        </div>
+                        <div>
+                            <font className={less.mainTitle}>航班人数：</font>
+                            <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.peopleNum?data.peopleNum:"暂无"}</font>
+                        </div>
 
+                        <div >
+
+
+
+                        </div>
+
+
+                        <div>
+                            <font className={less.mainTitle}>备注：</font>
+                            <font className={type===3?less.mainContentClose1:less.mainContent1}>{data&&data.mark?data.mark:"暂无"}</font>
+                        </div>
+
+
+                    </div>
+                    {this.getDemandButton(type)}
+
+                </div>
+            </div>
+        );
+    }
 
 
     getTop(type,data){
         return(
-           <div>
+           <div className={less.topMessage}>
+               <h2 className={less.title}>需求信息</h2>
+               <div className={less.line}/>
                <div className={less.content}>
                    <div className={less.mainTextLayout}>
                        <div>
                            <font className={less.mainTitle}>需求状态：</font>
-                           <font className={type===1?less.mainContentBlueStatus:(type===3?less.mainTitle:less.mainContent)}>{data&&data.status?data.status:"暂无"}</font>
+                           <font className={type===1?less.mainContentGreenStatus:(type===3?less.mainContentClose:less.mainContent)}>{data&&data.status?data.status:"暂无"}</font>
                        </div>
                        <div>
                            <font className={less.mainTitle}>创建时间：</font>
-                           <font className={type===3?less.mainTitle:less.mainContent}>{data&&data.creatTime?data.creatTime:"暂无"}</font>
+                           <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.creatTime?data.creatTime:"暂无"}</font>
                        </div>
                        <div>
                            <font className={less.mainTitle}>航程：</font>
-                           <font className={type===3?less.mainTitle:less.mainContent1}>{data&&data.vayage?data.vayage:"暂无"}</font>
+                           <font className={type===3?less.mainContentCloseBig:less.mainContentBig}>{data&&data.vayage?data.vayage:"暂无"}</font>
                        </div>
                        <div>
                            <font className={less.mainTitle}>需求类型：</font>
-                           <font className={type===3?less.mainTitle:less.mainContent}>{data&&data.demandType?data.demandType:"暂无"}</font>
+                           <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.demandType?data.demandType:"暂无"}</font>
                        </div>
                        <div>
                            <font className={less.mainTitle}>航程类型：</font>
-                           <font className={type===3?less.mainTitle:less.mainContent}>{data&&data.vayageType?data.vayageType:"暂无"}</font>
+                           <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.vayageType?data.vayageType:"暂无"}</font>
                        </div>
                        <div>
                            <font className={less.mainTitle}>航班人数：</font>
-                           <font className={type===3?less.mainTitle:less.mainContent}>{data&&data.peopleNum?data.peopleNum:"暂无"}</font>
+                           <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.peopleNum?data.peopleNum:"暂无"}</font>
                        </div>
                        <div>
                            <font className={less.mainTitle}>出发日期：</font>
-                           <font className={type===3?less.mainTitle:less.mainContent}>{data&&data.startTime?data.startTime:"暂无"}</font>
+                           <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.startTime?data.startTime:"暂无"}</font>
                        </div>
                        <div>
                            <font className={less.mainTitle}>返程日期：</font>
-                           <font className={type===3?less.mainTitle:less.mainContent}>{data&&data.returnTime?data.returnTime:"暂无"}</font>
+                           <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.returnTime?data.returnTime:"暂无"}</font>
                        </div>
                        <div>
                            <font className={less.mainTitle}>备注：</font>
-                           <font className={type===3?less.mainTitle:less.mainContent1}>{data&&data.mark?data.mark:"暂无"}</font>
+                           <font className={type===3?less.mainContentClose1:less.mainContent1}>{data&&data.mark?data.mark:"暂无"}</font>
                        </div>
 
 
                    </div>
-                   {this.getDemandButton()}
+                   {this.getDemandButton(type)}
 
                </div>
            </div>

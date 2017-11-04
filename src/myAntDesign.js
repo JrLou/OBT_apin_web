@@ -1,0 +1,1 @@
+import '../react_page_less/button/index.less';
