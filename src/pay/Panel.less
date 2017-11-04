@@ -1,112 +1,55 @@
-import React, {Component} from 'react';
-import less from './Pay.less';
+@import "../theme.less";
+@color1: #b8f5ff;
+@color2: #5edaff;
+@color3: #1a9cff;
 
-import { Button, Modal} from 'antd';
-class Panel extends Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            loading:false,
-            data:{},
-        };
+.modalConent{
+    text-align: center;
+    font-size: @font_size_center;
+    height: 184px;
+    &:after{
+        content:"";
+        height: 0;
+        visibility:hidden;
+        display:block;
+        clear:both;
     }
-    show(loading,data,callBack){
-        this.setState({
-            loading,
-            data
-        },callBack);
+    .infoImg{
+        padding-top: 37px;
+        padding-bottom: 10px;
     }
-
-
-    getPayingLayout(){
-        let verPay = (action)=>{
-
-            if(this.props.onAction){
-                this.props.onAction(action,this.state.data.showType);
+    .getPayingLayout{
+        padding-top: 51px;
+        padding-bottom: 68px;
+    }
+    .animationGroup{
+        padding-top: 64px;
+        padding-bottom: 30px;
+        &_circle{
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin: 0 5px 0;
+            background-color: #29A6FF;
+            &:nth-child(1){
+                animation: mymove 1.5s infinite;
             }
-        };
-        const ButtonGroup = Button.Group;
-        return (
-            <div>
-                <div >{this.state.data.content}</div>
-                <ButtonGroup>
-                    <Button onClick={()=>{verPay("cancel");}} >{this.state.data.cancelText}</Button>
-                    <Button onClick={()=>{verPay("ok");}} type="primary">{this.state.data.okText}</Button>
-
-                </ButtonGroup>
-            </div>
-        );
-    }
-
-    getErrorLayout(){
-        return (
-            <div>
-                <div style={{color:"red"}}>{this.state.data.content}</div>
-                <Button onClick={()=>this.show(false)} >我知道了</Button>
-            </div>
-        );
-    }
-    getSuccessLayout(){
-        return (
-            <div>
-                <div style={{color:"green"}}>{this.state.data.content}</div>
-                <Button  onClick={(action)=>{
-                    if(this.props.onAction){
-                        this.props.onAction("ok",this.state.data.showType);
-                    }
-                }} >查看订单</Button>
-            </div>
-        );
-    }
-    getLoadingLayout(){
-        return (
-            <div style={{textAlign:"center"}}>
-                <span className={less.circle}>1</span>
-                <span className={less.circle}>1</span>
-                <span className={less.circle}>1</span>
-                <div style={{color:"block"}}>{this.state.data.content}</div>
-            </div>
-        );
-    }
-
-    render(){
-        if( !this.state.loading){
-            return null;
-        }
-        let view = null;
-        switch (this.state.data.showType){
-            case "loading":
-            case "verpay":
-                view = this.getLoadingLayout();
-                break;
-            case "error":
-                view = this.getErrorLayout();
-                break;
-            case "success":
-                view = this.getSuccessLayout();
-                break;
-            case "paying":
-            case "unioning":
-                view = this.getPayingLayout();
-                break;
+            &:nth-child(2){
+                animation: mymove 1.5s infinite 0.5s;
+            }
+            &:nth-child(3){
+                animation: mymove 1.5s infinite 1s;
+            }
         }
 
-        return (
-            <Modal
-                visible={true}
-                style={{ top: 300 }}
-                confirmLoading={false}
-                maskClosable={false}
-                closable={false}
-                footer={null}
-                {...this.state.data}
-            >
-                {view}
-            </Modal>
-        );
+        @keyframes mymove
+        {
+            0%   {background: @color1;}
+            50%  {background: @color2;}
+            100% {background: @color3;}
+        }
     }
 }
-Panel.contextTypes = {
-    router: React.PropTypes.object
-};
-module.exports = Panel;
+
+

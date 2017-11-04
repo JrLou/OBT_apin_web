@@ -59,7 +59,16 @@ class UnionPayAdd extends Component {
             <Modal
                 visible={true}
                 title={"添加银联卡"}
-                style={{top: 300}}
+                style={{
+                   position: "absolute",
+                   margin: "auto",
+                   top: 0,
+                   bottom: 0,
+                   right: 0,
+                   left: 0,
+                   height: 220
+                }}
+                width={400}
                 confirmLoading={false}
                 footer={null}
                 onCancel={() => {
