@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Icon} from 'antd';
 import less from './PaySelectLayout.less';
 import  Item from './Item';
 class PaySelectLayout extends Component {
@@ -117,7 +118,7 @@ class PaySelectLayout extends Component {
                                  data.defaultshowMore = this.state.showMore;
                               });
                            }}>
-                           {(this.state.showMore ? <span className={less.payMore_noshowmore}>收起↑</span> : <span className={less.payMore_showmore}>更多支付方式↓</span>)}
+                           {(this.state.showMore ? <span className={less.payMore_noshowmore}>收起<Icon type="up" /></span> : <span className={less.payMore_showmore}>更多支付方式<Icon type="down" /></span>)}
                         </div>
                     </div>
 

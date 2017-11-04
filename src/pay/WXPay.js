@@ -33,7 +33,8 @@ class WXPay extends Component {
                    bottom: 0,
                    right: 0,
                    left: 0,
-                   height: 220
+                   height: 470,
+
                 }}
                 width={400}
                 maskClosable={false}
