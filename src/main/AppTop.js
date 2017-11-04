@@ -38,7 +38,6 @@ class page extends Component {
                                     window.open("http://mvp.apin.com");
                                 }}
                             >登录</Button>*/}
-                            <div className="my-ant-btn">aasass</div>
                             <Button type="primary" className={less.login}
                                 onClick={() => this.modal.showModal(0)}
                             >登录</Button>
