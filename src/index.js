@@ -1,3 +1,5 @@
+import './reactLess';
+
 //重写日志系统
 function getUrlSearch(str) {
     var query = {};

@@ -1,0 +1,79 @@
+@import "../../node_modules/antd/lib/style/themes/default";
+@import "../../node_modules/antd/lib/style/mixins/index";
+@import "../../react_page/theme.less";//引入自己项目的变量
+
+@message-prefix-cls: my-ant-message;
+
+.@{message-prefix-cls} {
+  font-size: @font-size-base;
+  position: fixed;
+  z-index: @zindex-message;
+  width: 100%;
+  top: 16px;
+  left: 0;
+  pointer-events: none;
+
+  &-notice {
+    padding: 8px;
+    text-align: center;
+    &:first-child {
+      margin-top: -8px;
+    }
+  }
+
+  &-notice-content {
+    padding: 8px 16px;
+    border-radius: @border-radius-base;
+    box-shadow: @shadow-2;
+    background: #131c30;
+    display: inline-block;
+    color:@tooltip-color;
+    pointer-events: all;
+    span {
+      font-size: @font-size-lg;
+   }
+  }
+
+  &-success .@{iconfont-css-prefix} {
+    color: @font_green;
+  }
+
+  &-error .@{iconfont-css-prefix} {
+    color: @font_orange;
+  }
+
+  &-warning .@{iconfont-css-prefix} {
+    color: @calendar_yellow_dot;
+  }
+
+  &-info .@{iconfont-css-prefix},
+  &-loading .@{iconfont-css-prefix} {
+    color: @calendar_purper_dot;
+  }
+
+  .@{iconfont-css-prefix} {
+    margin-right: 8px;
+    font-size: @font-size-lg;
+    top: 1px;
+    position: relative;
+  }
+
+  &-notice.move-up-leave.move-up-leave-active {
+    animation-name: MessageMoveOut;
+    overflow: hidden;
+    animation-duration: .3s;
+  }
+}
+
+@keyframes MessageMoveOut {
+  0% {
+    opacity: 1;
+    max-height: 150px;
+    padding: 8px;
+  }
+  100% {
+    opacity: 0;
+    max-height: 0;
+    padding: 0;
+  }
+}
