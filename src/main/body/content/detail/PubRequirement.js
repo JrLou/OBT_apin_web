@@ -55,7 +55,7 @@ class PubRequirement extends Component {
                         <div className={css.lineBg}>
                             <div className={css.headLine}></div>
                         </div>
-                        <div className={css.title}>需求信息</div>
+                        <div className={css.headHitle}>需求信息</div>
                     </div>
 
                     {/*航程类型*/}
@@ -79,6 +79,9 @@ class PubRequirement extends Component {
                             moreFlightNum:myNum
                         });
                     }}>{"加一程"}</div>:null}
+
+
+
 
                     {/*出行人数*/}
                     <div className={css.refCell}>
@@ -171,8 +174,15 @@ class PubRequirement extends Component {
         for (let i=0;i<num;i++){
             let item = (<AddFlightLine
                 key={i}
+                numFlight={i}
                 isSelType={isSelType}
-                isNoCanDel={i<num-1||i<2} callBack={()=>{
+                callBackParam={(value)=>{
+
+                }}
+
+
+                isNoCanDel={i<num-1||i<2}
+                callBack={()=>{
                 let myNum = this.state.moreFlightNum -1;
                 if (isSelType>=3){
                     this.setState({
