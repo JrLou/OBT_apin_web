@@ -7,6 +7,7 @@ import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
 import TitleBar from './TitleBar/index.js';
 import Passengers from './Passengers/index.js';
+import CellNewFlight from '../content/cell/CellNewFlight.js';
 
 /**
  * 订单状态说明
@@ -17,99 +18,127 @@ import Passengers from './Passengers/index.js';
 class OrderFormDetail extends Component{
     constructor(props){
         super(props);
+
         this.state = {
-            orderState:2,
+            orderState:1,
             orderID:'',
+            upDate:0,
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-
-    }
-
     componentDidMount(){
+        //模拟航班数据
+        let go = {arrAirport:"塞班",
+            arrDate:"2017-11-05",
+            arrTime:"15:30",
+            compName:"北京首都航空有限公司",
+            depAirport:"杭州萧山",
+            depDate:"2017-11-05",
+            depTime:"08:10",
+            flightTime:"7:20",
+            flightType:"2",
+            logo:null,
+            num:"JD395",
+            tag:0
+        };
+        let back = {
+            arrAirport: "杭州萧山",
+            arrDate: "2017-11-09",
+            arrTime: "10:25",
+            compName: "北京首都航空有限公司",
+            depAirport: "塞班",
+            depDate: "2017-11-09",
+            depTime: "07:00",
+            flightTime: "3:25",
+            flightType: "2",
+            logo: null,
+            num: "JD396",
+            tag: 0,
+        };
+        let zhongZhuanObj=[{
+            flightType:true,
+            obj:go
+        },{
+            flightType:true,
+            obj:go
+        },{
+            flightType:false,
+            obj:back
+        }];
+
+        let flightTypeGo = [{
+            flightType:true,
+            obj:go,
+            data:zhongZhuanObj
+        }];
+
+
+        let flightTypeGoAndBack = [{
+            flightType:true,
+            obj:go,
+            data:zhongZhuanObj
+        },{
+            flightType:false,
+            obj: back,
+            data:zhongZhuanObj
+        }];
+
+        let moreFlightObj = [{
+            numFlight:"一",
+            obj:go,
+        },{
+            numFlight:"二",
+            obj:go,
+        },{
+            numFlight:"三",
+            obj: back,
+        }];
+
+        //航班信息所需要的数据
+        this.listData = {
+            rule:"1.行李规则行李规则行李规则行李规则行李",
+            obj:flightTypeGoAndBack,
+            flightType:2
+        };
+
+        this.upView();
 
     }
 
-
-    /**
-     * 绘制状态条
-     * @param state
-     * @returns {XML}
-     */
-    getStateBar(state){
-        let titleList = [];
-        let deadLine = '2017-9-29';
-        return(
-            <div className={css.stateBar}>
-                <div className={css.stateTitle}>
-                    <span className={css.stateIcon}>(图)</span>
-                    {titleList[state]}
-                </div>
-                <div className={css.helpMsg}>
-                    {this.getHelpMsg(state)}
-                </div>
-                <div className={css.deleteOrder}>
-                    {
-                        (state==7||state==8)
-                            ?<span onClick={()=>{this.deleteOrder();}}>删除订单</span>
-                            :''
-                    }
-                </div>
-            </div>
-        );
-    }
-
-    /**
-     * 根据订单状态显示不同点提示信息
-     * @param state
-     * @returns {string}
-     */
-    getHelpMsg(state){
-        let deadLine = '';
-        let msg = '';
-        switch(state){
-            case 0: msg = '30分钟以内，即可确认资源信息';
-                    break;
-            case 2: deadLine = 'XXXX-XX-XX';
-                    msg = '请在'+deadLine+'18点之前支付尾款';
-                    break;
-            case 3: deadLine = '#####';
-                    msg = '请在'+deadLine+'18点之前支付';
-                    break;
-            case 4: deadLine = '$$$$$$$';
-                    msg = '您还没有录入齐全乘机人信息，请在'+deadLine+'18点之前支付';
-                    break;
-            case 5: msg = '爱拼机正在为您出票中，请耐心等待';
-                    break;
-            case 1:
-            case 6:
-            case 7:
-            case 8:break;
-            default:break;
-        }
-
-        return msg;
+    //更新状态机
+    upView(){
+        this.setState({
+            upDate:this.state.upDate+1,
+        });
     }
 
     render(){
         //仅在此处做状态异常判断，如果状态不在此列，说明出现异常，页面不展示
-        if(!(this.state.orderState in [0,1,2,3,4,5,6,7,8])){
+        if(!(this.state.orderState in [0,1,2,3,5,7,8,12,13,14,15])){
             return(
                 <div className={css.noMessage}>订单查询中，请稍后...</div>
             );
         }
         return(
             <div className={css.mainPage}>
-                {this.getStateBar(this.state.orderState)}
-                <div className={css.itemContainer}>
-                    航班信息
-                </div>
-                <Passengers
+                <TitleBar
                     orderState={this.state.orderState}
+                    deadLine={'2017-11-27'}
                     orderID={this.state.orderID}
-                    passengerData={[]}
+                    onDelete={()=>{this.deleteOrderCB();}}
                 />
+                <div className={css.itemContainer}>
+                    <CellNewFlight
+                        dataSource = {this.listData}
+                    />
+                </div>
+                <div className={css.itemContainer}>
+                    <Passengers
+                        orderState={this.state.orderState}
+                        orderID={this.state.orderID}
+                        defaultData={[]}
+                    />
+                </div>
                 <div className={css.itemContainer}>
                     订单信息
                 </div>
@@ -123,8 +152,11 @@ class OrderFormDetail extends Component{
         );
     }
 
-    deleteOrder(){
-        alert('删除');
+    /**
+     * 订单删除以后的回调
+     */
+    deleteOrderCB(){
+        alert('订单删除啦！');
     }
 }
 
