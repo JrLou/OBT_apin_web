@@ -109,6 +109,13 @@ class InputAuto extends Component {
     onSelect(value, option) {
         this.selectValue = this.formatValue(value);
         this.keyWord = this.formatValue(value);
+        this.onChangeValue();
+    }
+    onChangeValue(){
+        const onChangeValue = this.props.onChangeValue;
+        if (onChangeValue) {
+            onChangeValue(this.selectValue);
+        }
     }
 
     getValue() {
@@ -191,10 +198,17 @@ class InputAuto extends Component {
     }
 
     render() {
+        let props = {};
+        for(let v in this.props){
+            //去除值选项
+            if(v!=="value"){
+                props[v]= this.props[v];
+            }
+        }
         return (
             <div className="certain-category-search-wrapper" style={{width: "100%"}}>
                 <AutoComplete
-                    {...this.props}
+                    {...props}
                     dropdownMatchSelectWidth={false}
                     dropdownStyle={{width: "320px"}}
                     size="large"
@@ -207,6 +221,7 @@ class InputAuto extends Component {
                     onSearch={(value) => {
                         this.keyWord = value;
                         this.selectValue = value;
+                        this.onChangeValue();
                         log("==========");
                         log(value);
                         //防止连续快速搜索，请求接口
