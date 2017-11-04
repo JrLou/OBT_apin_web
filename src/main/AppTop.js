@@ -40,7 +40,7 @@ class page extends Component {
                             >登录</Button>*/}
                             <Button type="primary" className={less.login}
                                 onClick={() => this.modal.showModal(0)}
-                            >登录2</Button>
+                            >登录</Button>
                             {/*<Button type="primary" className={less.register}
                                 onClick={() => {
                                     window.open("http://mvp.apin.com/#/TestPage");
