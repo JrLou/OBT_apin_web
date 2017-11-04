@@ -54,48 +54,62 @@ class page extends Component {
         let back = itemData[1];
 
 
+
+
         let zhongZhuanObj=[{
-            isGo:true,
+            flightType:true,
             obj:go
         },{
-            isGo:true,
+            flightType:true,
             obj:go
         },{
-            isGo:false,
+            flightType:false,
             obj:back
         }];
 
-        let flightTypeObj = [{
-            isGo:true,
+        let flightTypeGo = [{
+            flightType:true,
+            obj:go,
+            data:zhongZhuanObj
+        }];
+
+
+        let flightTypeGoAndBack = [{
+            flightType:true,
             obj:go,
             data:zhongZhuanObj
         },{
-            isGo:true,
-            obj:go,
-            data:zhongZhuanObj
-        },{
-            isGo:false,
+            flightType:false,
             obj: back,
             data:zhongZhuanObj
-        }
-        ];
+        }];
+
+        let moreFlightObj = [{
+            numFlight:"一",
+            obj:go,
+        },{
+            numFlight:"二",
+            obj:go,
+        },{
+            numFlight:"三",
+            obj: back,
+        }];
 
 
 
         this.listData = [{
             rule:"1.行李规则行李规则行李规则行李规则行李",
-            obj:flightTypeObj,
+            obj:flightTypeGo,
             flightType:1
+        },{
+            rule:"2.行李规则行李规则行李规则行李规则行李",
+            obj:flightTypeGoAndBack,
+            flightType:2
+        },{
+            rule:"3.行李规则行李规则行李规则行李规则行李",
+            obj:moreFlightObj,
+            flightType:3
         }];
-    // ,{
-    //         rule:"2.行李规则行李规则行李规则行李规则行李",
-    //             obj:flightTypeObj,
-    //             flightType:2
-    //     }
-        // ,{
-        //         rule:"3.行李规则行李规则行李规则行李规则行李",
-        //             obj:flightTypeObj
-        //     }
         this.upView();
     }
     loadData() {
@@ -125,7 +139,7 @@ class page extends Component {
                     <StateProgress num = {1}/>
                 </div>
 
-                <div className={css.content}>
+                <div className={css.refContent}>
                     <div className={css.table}>
                         <div className={css.line_bg}>
                             <div className={css.line}></div>
@@ -278,8 +292,7 @@ class page extends Component {
                         alert("立即支付");
                     }}>{"立即支付"}</div>
                 </div>
-            </div>
-        );
+            </div>);
         return div;
     }
 
@@ -291,30 +304,35 @@ class page extends Component {
         for (let i=0;i<dataArr.length;i++){
             let itemData = dataArr[i];
             let itemDiv = (
-                <div key={i} style={{display:"table",width:"100%",position:"relative"}}>
+                <div key={i} className={css.flightLineCell}>
+                    <div className={css.schemeDiv}>{"方案 "+(i+1)}</div>
                     <div className={css.sign}>直营</div>
-                    <div className={css.left}>
-                        <CellNewFlight dataSource = {itemData} flightType={2} isOrder={true}/>
-                    </div>
 
-                    <div className={css.right}>
-                        <div className={css.table}>
-                            <div className={css.itemCenter} style={{width:"52%"}}>
-                                <div className={css.priceText}>{"含税价"}</div>
-                                <div className={css.priceText}>
-                                    <span className={css.priceTextColor}>{"¥ "}</span>
-                                    <span className={css.priceTextFont}>{itemData.basePrice||"0"}</span>
-                                    <span >{" 起"}</span>
+                    <div className={css.tableCell}>
+                        <div className={css.left}>
+                            <CellNewFlight dataSource = {itemData}/>
+                        </div>
+
+                        <div className={css.right}>
+                            <div className={css.table}>
+                                <div className={css.itemCenter} style={{width:"52%"}}>
+                                    <div className={css.priceText}>{"含税价"}</div>
+                                    <div className={css.priceText}>
+                                        <span className={css.priceTextColor}>{"¥ "}</span>
+                                        <span className={css.priceTextFont}>{itemData.basePrice||"0"}</span>
+                                        <span >{" 起"}</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className={css.itemCenter} style={{width:"48%"}}>
-                                <div className={css.btn} style={{cursor: 'pointer'}}
-                                     onClick={() => {
-                                         alert("确定航班");
-                                     }}>{"确定此航班"}</div>
+                                <div className={css.itemCenter} style={{width:"48%"}}>
+                                    <div className={css.btn} style={{cursor: 'pointer'}}
+                                         onClick={() => {
+                                             alert("确定航班");
+                                         }}>{"确定此航班"}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>);
             viewArr.push(itemDiv);
         }
