@@ -260,7 +260,7 @@ class page extends Component {
     openUnionPayIng(callBack){
         this.panel.show(true, {
             content: "正在支付....",
-            title: "支付信息",
+            // title: "支付信息",
             showType: "loading"
 
         },callBack);
@@ -268,7 +268,7 @@ class page extends Component {
     openUnionPaySuccess(callBack){
         this.panel.show(true, {
             content: "支付成功",
-            title: "支付信息",
+            // title: "支付信息",
             showType: "success"
 
         },callBack);
@@ -278,7 +278,7 @@ class page extends Component {
         this.panel.show(true, {
             okText: "我知道了",
             content: msg,
-            title: "支付信息",
+            // title: "支付信息",
             showType: "error"
 
         },callBack);
@@ -304,11 +304,12 @@ class page extends Component {
 
         this.panel.show(true, {
             content: "正在下单....",
-            title: "支付信息",
+            // title: "支付信息",
             showType: "loading"
 
         }, () => {
             let apinPanel = this.wh.openInitWindow(showType==="wechat"?this.wxPay:null);
+            //todo 开启
             this.loadPayOrder(this.data, (code, msg, data) => {
                 if (code > 0) {
                     //3秒后去开始验证,是否支付成功
@@ -317,9 +318,8 @@ class page extends Component {
                         okText: "我已经支付",
                         cancelText: "还没支付",
                         content: "确认是否已支付",
-                        title: "支付信息",
+                        // title: "支付信息",
                         showType: "paying"
-
                     }, () => {
                         this.wh.openWindow(apinPanel, showType==="wechat"?data:data.url);
                     });
@@ -328,7 +328,7 @@ class page extends Component {
                     this.panel.show(true, {
                         okText: "我知道了",
                         content: msg,
-                        title: "支付信息",
+                        // title: "支付信息",
                         showType: "error"
                     }, () => {
 
@@ -371,7 +371,7 @@ class page extends Component {
                     this.panel.show(true, {
                         okText: "我知道了",
                         content: msg,
-                        title: type==="pay"?"支付信息":"银联开通",
+                        // title: type==="pay"?"支付信息":"银联开通",
                         showType: "error"
                     }, () => {
 

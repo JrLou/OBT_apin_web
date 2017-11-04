@@ -26,7 +26,15 @@ class WXPay extends Component {
             <Modal
                 visible={true}
                 title={"微信支付"}
-                style={{top: 100}}
+                style={{
+                   position: "absolute",
+                   margin: "auto",
+                   top: 0,
+                   bottom: 0,
+                   right: 0,
+                   left: 0,
+                   height: 220
+                }}
                 width={400}
                 maskClosable={false}
                 confirmLoading={false}
