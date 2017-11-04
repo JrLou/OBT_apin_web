@@ -66,6 +66,14 @@ const root = (
                 }
             }>
             </Route>
+            <Route path="/Score" getComponent={
+                (nextState,cb)=>{
+                    require.ensure([], require => {
+                        cb(null, require("./main/body/score/Score.js"));
+                    }, "Score");
+                }
+            }>
+            </Route>
             <Route path="/Pay" getComponent={
                 (nextState, cb) => {
                     require.ensure([], require => {

@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-01 14:09:48 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-03 15:41:42
+ * @Last Modified time: 2017-11-04 14:35:24
  */
 
 import React, { Component } from 'react';
@@ -31,6 +31,7 @@ class SignUpView extends Component {
                 visible={visible}
                 onCancel={this.handleCancel}
                 footer={null}
+                style={{width:'100px'}}
             >
                 <Froms mode={mode} handleChangeMode={this.handleChangeMode} onOK={this.handleOk}></Froms>
             </Modal>
