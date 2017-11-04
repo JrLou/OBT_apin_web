@@ -6,51 +6,32 @@ import {Button,Icon} from 'antd';
 import css from './CellNewFlight.less';
 import ClickHelp from '../../tool/ClickHelp.js';
 import CellNewFlightDetail from './CellNewFlightDetail.js';
-/**
- * dataSource: 数据源 是一个对象
- * flightType: 航程类型 {单程 往返 多程}
- * isOrder: 是否显示最右侧价格及"确定此航班"按钮
- */
+
 class CellNewFlight extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            dataSource: props.dataSource,
-            flightType:true,
-        };
+
     }
 
     componentWillReceiveProps(nextProps) {
-        this.state = {
-            dataSource: nextProps.dataSource,
-        };
+
     }
     render() {
-        let {dataSource} = this.state;
-        let {flightType,isOrder} = this.props;
+        let {dataSource} = this.props;
         if (!dataSource){
             return null;
         }
         return (<div className={css.main}>
             <div className={css.left}>
-                {this.createCell(dataSource.obj)}
+                {this.createCell(dataSource.obj||[])}
             </div>
-
             <div className={css.right}>{dataSource.rule}</div>
         </div>);
     }
     createCell(dataArr){
-        if (!dataArr||dataArr.length<1){
-            return null;
-        }
-        var viewArr = [];
-        for (let i=0;i<dataArr.length;i++){
-            let itemData = dataArr[i];
-            let itemDiv = (
-                <CellLine key={i} obj = {itemData}/>);
-            viewArr.push(itemDiv);
-        }
-        return viewArr;
+        return dataArr.map((data, index)=>{
+           return (<CellLine key={index} data = {data}/>);
+        });
     }
 }
 CellNewFlight.contextTypes = {
@@ -60,34 +41,15 @@ CellNewFlight.contextTypes = {
 class CellLine extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            isUp:false,
-            data:props.obj
-        };
     }
     componentWillReceiveProps(nextProps) {
-        this.setState({
-            data:nextProps.obj,
-        });
+
     }
     render(){
-        let {data} = this.state;
+        let {data} = this.props;
         return (<div className={css.cellBg}>
             {this.createItemCell(data)}
-            {data.data&&data.data.length>1?
-                <div className={css.moreText}
-                     onClick={()=>{
-                         this.setState({
-                             isUp:!this.state.isUp,
-                         });
-                     }}><span>{"航程详情 "}</span>
-                    <Icon type={this.state.isUp==true?"up":"down"}/>
-                </div>:null}
-
-            <div style={{paddingLeft:"35px"}}>
-                {this.createTransferFlight(this.state.isUp?data.data:undefined)}
-            </div>
-
+            {data.data&&data.data.length>1?<CellNewFlightDetail data = {data.data}/>:null}
         </div>);
     }
 
@@ -116,7 +78,7 @@ class CellLine extends Component {
         var itemView = (<div className={css.table}>
             <div className={css.type_super}>
                 <div className={css.typeText}>
-                    {data.isGo?"去程":"回程"}
+                    {data.numFlight?("第"+data.numFlight+"程"):(data.flightType?"去程":"回程")}
                 </div>
             </div>
 
@@ -176,7 +138,7 @@ class CellLine extends Component {
         var viewArr = [];
         for (let i=0;i<dataArr.length;i++){
             let itemData = dataArr[i];
-            let itemDiv = (<CellNewFlightDetail key={i} data = {itemData} flightType={2}/>);
+            let itemDiv = (<CellNewFlightDetail key={i} data = {itemData}/>);
             viewArr.push(itemDiv);
         }
         return viewArr;

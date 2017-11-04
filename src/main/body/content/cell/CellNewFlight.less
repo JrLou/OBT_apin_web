@@ -5,19 +5,19 @@
 
 .main{
   width: 100%;
-  background: white;
   display: table;
 }
 .left{
   display: table-cell;
   vertical-align: middle;
-  width: 90%;
+  width: 75%;
 }
 .right{
   display: table-cell;
   vertical-align: middle;
-  width: 10%;
-  padding-left: @d_spadding_small;
+  width: 18%;
+  padding-left: 3.5%;
+  padding-right: 3.5%;
   color: @c_theme_blue;
   opacity: 0.8;
   font-size: @font_size_cell;
@@ -27,6 +27,9 @@
 
 //左边的样式
 .cellBg{
+  width: 100%;
+  padding-top: @d_spadding_center;
+  padding-bottom: @d_spadding_center;
   border-width: 0 0 1px 0;
   border-style: solid;
   border-color: @c_border_gray;
@@ -172,11 +175,3 @@
 }
 
 
-.moreText{
-  margin-bottom: @d_spadding_cell;
-  margin-left: @d_spadding_super_big;
-  line-height: 20px;
-  height: 20px;
-  font-size: @font_size_small;
-  color: @c_theme_blue;
-}

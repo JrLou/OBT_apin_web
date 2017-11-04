@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Button } from 'antd';
+import Menus from './Menu';
 
 import Sign from './body/component/SignView';
 
@@ -28,6 +29,7 @@ class page extends Component {
                             src={require('../images/index_logo.png')}
                         />
                     </a>
+                    <Menus {...this.props} />
                     <div className={less.right}>
                         <div className={less.rightItem}>
                             {/*<img*/}
@@ -38,7 +40,6 @@ class page extends Component {
                                     window.open("http://mvp.apin.com");
                                 }}
                             >登录</Button>*/}
-                            <div className="my-ant-btn">aasass</div>
                             <Button type="primary" className={less.login}
                                 onClick={() => this.modal.showModal(0)}
                             >登录</Button>
@@ -64,7 +65,7 @@ class page extends Component {
                         >
                             <font style={{ fontSize: 12, color: "#666" }}>客服电话  9:00~21:00</font>
                             <br />
-                            <font style={{ fontSize: 16, color: "#34b0ff" }}>0571-58122998</font>
+                            <font style={{ fontSize: 16, color: "#34b0ff" }}>0571—58122998</font>
                         </div>
                     </div>
                 </div>

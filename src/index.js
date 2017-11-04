@@ -1,8 +1,4 @@
-
-
-import '../react_page_less/button/index.less';
-
-
+import './myAntDesign';
 
 //重写日志系统
 function getUrlSearch(str) {
