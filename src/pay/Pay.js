@@ -25,7 +25,7 @@ class page extends Component {
             step: 1,
             loading:true,
         };
-        // get id
+        // ?data={"id":1}
         this.par = window.app_getPar(this);
         console.log(this.par);
         this.id = this.par?this.par.id:null;
@@ -437,10 +437,10 @@ class page extends Component {
         }, Math.random() * 1000 + 2000);
     }
     loadPayInfo(param, cb) {
-      //   if(!param||!param.id){
-      //       cb(-3, "缺少订单号", null);
-      //       return;
-      //   }
+        if(!param||!param.id){
+            cb(-3, "缺少订单号", null);
+            return;
+        }
         setTimeout(() => {
             let code = (Math.random() * 10).toFixed(0) - 0;
             let data = {};
