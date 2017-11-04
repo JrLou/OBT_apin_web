@@ -12,7 +12,8 @@ class page extends Component {
             dataSource:props.dataSource,
             isShow:true,
             step:0,
-            isClick:"auto"
+            isClick:"auto",
+            isMyOut:true,
         };
     }
 
@@ -73,41 +74,66 @@ class page extends Component {
                     </div>
                 </div>
 
-                <div className={css.requireAlert}
-                     style={{
-                    transform:translateX,
-                }}>
-                    <div className={css.requireAlert_left}
+                <div className={css.requireAlertBg} style={{transform:translateX,}}>
+                    <div className={css.alertImage}
                          style={{pointerEvents:this.state.isClick}}
                          onClick={()=>{
-                        this.setState({
-                            isClick:"none",
-                            isShow:!this.state.isShow
-                        },()=>{
-                            let moveStep = this.state.isShow?320:0;
-                            let myInterval = setTimeout(()=>{
-                                this.timeOut(moveStep);
-                            },0);
-                        });
-                    }}>
-                        <MyDiv div={<Icon type={this.state.isShow?"right":"left"} className={css.alert_img}/>}/>
+                             this.actionInOut();
+                         }}>
+                    <Icon type={this.state.isShow?"right":"left"}
+                          style={{width: "24px",
+                              height: "24px",
+                              lineHeight:"24px",
+                              fontWeight:"bold"
+                          }}/>
                     </div>
-                    <div className={css.requireAlert_center}>{"若无合适的日期或航班可发布需求，爱拼机将为您寻找合适的航班信息"}</div>
-                    <div className={css.requireAlert_right}>
-                        <Button type="primary"
-                                style={{height:"32",letterSpacing:"1px",fontSize:"13px",borderRadius:"2px"}}
-                                onClick={()=>{
+
+
+                    <div className={css.requireAlert}>
+                        {this.state.isMyOut?<div className={css.requireAlert_center}>
+                            <div>
+                                <span>{"若无合适的日期或航班可"}</span>
+                                <span style={{fontWeight:"bold"}}>{"发布需求"}</span>，
+                            </div>
+                            <div>
+                                <span style={{color:"#29A6FF"}}>{"爱拼机"}</span>
+                                <span>{"将为您寻找合适的航班信息"}</span>
+                            </div>
+                        </div>:<div className={css.requireAlert_center}>
+                            <div className={css.noFlight} onClick={()=>{
+                                this.actionInOut();
+                            }}>没有航班</div>
+                        </div>}
+
+                        <div className={css.requireAlert_right}>
+                            <MyDiv div={
+                                <div className={css.requireBtn} onClick={()=>{
                                     alert("提交需求");
-                                }}>提交需求</Button>
+                                }}>提交需求</div>
+                            }/>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
         </div>);
         return div;
     }
-
+    actionInOut(){
+        this.setState({
+            isClick:"none",
+            isShow:!this.state.isShow
+        },()=>{
+            if (this.state.isShow){
+                this.setState({
+                    isMyOut:true,
+                });
+            }
+            let moveStep = this.state.isShow?290:0;
+            let myInterval = setTimeout(()=>{
+                this.timeOut(moveStep);
+            },0);
+        });
+    }
     timeOut(moveStep){
             if (this.state.isShow){
                 moveStep = moveStep-5;
@@ -120,12 +146,13 @@ class page extends Component {
                     },0);
                 }else {
                     this.setState({
+                        isMyOut:true,
                         isClick:"auto"
                     });
                 }
             }else {
                 moveStep = moveStep+5;
-                if (moveStep<=320){
+                if (moveStep<=290){
                     this.setState({
                         step:moveStep
                     });
@@ -134,6 +161,7 @@ class page extends Component {
                     },0);
                 }else {
                     this.setState({
+                        isMyOut:false,
                         isClick:"auto"
                     });
                 }
