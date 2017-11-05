@@ -48,7 +48,7 @@ class Panel extends Component {
       return (
          <div className={less.payResultContainer}>
             <div>
-               <img className={less.infoImg} src={require("./images/payErr.png")} alt="支付失败"/>
+               <img className={less.infoImg} src={require("./images/pay_err.png")} alt="支付失败"/>
                <div className={less.tips}>{this.state.data.content}</div>
             </div>
          </div>
@@ -58,7 +58,7 @@ class Panel extends Component {
    getSuccessLayout() {
       return (
          <div className={less.payResultContainer}>
-            <img className={less.infoImg} src={require("./images/paySucc.png")} alt="支付成功"/>
+            <img className={less.infoImg} src={require("./images/pay_succ.png")} alt="支付成功"/>
             <div className={less.tips}>{this.state.data.content}</div>
             <Button
                className={less.modalBtn}

@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import less from './UnionPay.less';
 import {Button, Row, Input, Form, Icon, message} from 'antd';
 
-const FormItem = Form.Item;
 import Item from './Item';
 import UnionPayAdd from './UnionPayAdd.js';
 
@@ -60,17 +59,16 @@ class UnionPay extends Component {
       setTimeout(() => {
          let code = (Math.random() * 10).toFixed(0) - 1;
          let data = [];
-         code = 0;
+         code = 11;
          if (code > 0) {
             for (let i = 0; i < code; i++) {
                data.push({
-                  code: "62202171700458" + i.toString().repeat(4),
+                  code: "622***" + i.toString().repeat(4),
                   type: "招商",
-                  icon: ""
+                  icon: "./images/zhaoshang.png"
                });
             }
          }
-         console.log(data);
          cb(code, code > 0 ? "获取成功" : "暂无卡列表/获取失败", data);
       }, Math.random() * 1000);
    }
@@ -94,13 +92,12 @@ class UnionPay extends Component {
       data = data.concat([{}]);
       return (
          <div>
-            <Row>
+            <div>
                {data.map((obj, index) => {
                   let last = data.length === index + 1;
                   return (
                      <Item
                         key={index}
-                        span={(6).toFixed(0)}
                         select={this.state.selectIndex === index}
                         onClick={() => {
                            //选择当前选项
@@ -117,27 +114,25 @@ class UnionPay extends Component {
                         }
                         }
                      >
-                        {last ?
-                           (
-                              <div>
-                                 <Button type="primary" icon={"plus"}
-                                 >
-                                    添加银行卡
-                                 </Button>
-                              </div>
-                           ) : (
-                              <div>
-                                 <div>卡号:{obj.code}</div>
-                                 <div>银行:{obj.type}</div>
-                              </div>
-                           )
-                        }
-
+                        <div style={{textAlign: "center"}}>
+                           {last ?
+                              (
+                                 <div className={less.addCardBtn}>
+                                    <Icon type="plus"/>&nbsp;添加银行卡
+                                 </div>
+                              ) : (
+                                 <div>
+                                    <img src={require("./images/zhaoshang.png")} alt="bank_LOGO"/>
+                                    <div>{obj.code}</div>
+                                 </div>
+                              )
+                           }
+                        </div>
 
                      </Item>
                   );
                })}
-            </Row>
+            </div>
             <InputLayout ref={(ref) => {
                this.inputLayout = ref;
             }}/>
@@ -155,27 +150,32 @@ class UnionPay extends Component {
    getDefaultView() {
       return (
          <div className={less.loading}>
+            <img className={less.nocardImg} src={require("./images/pay_noCard.png")} alt="没有卡列表"/>
             {this.state.error ? <div className={less.loading}> {"服务器繁忙:" + this.state.error}</div> : null}
-            <div>还没有开通卡? <a onClick={() => {
-               this.openAddCard();
-            }}>点击开通</a></div>
-            <Item
-               span={(6).toFixed(0)}
-               onClick={
-                  () => {
+            <div>还没有开通卡?
+               <a onClick={() => {
+                  this.openAddCard();
+               }}>点击开通</a>
+            </div>
+            <div>
+               <Button
+                  style={{height: 60, width: 200, fontSize: 16, marginBottom: 12, marginTop: 15}}
+                  type="primary"
+                  onClick={() => {
                      this.openAddCard();
                      return;
-                  }
-               }
-            >
-               <div>
-                  <Button type="primary" icon={"plus"}
-                  >
-                     添加银行卡
-                  </Button>
-               </div>
-
-            </Item>
+                  }}
+               >
+                  <Icon type="plus" style={{fontWeight: "bolder"}}/>添加银行卡
+               </Button>
+            </div>
+            <a
+               className={less.backUp}
+               onClick={(e) => {
+                  e.preventDefault();
+                  this.props.back();
+               }}
+            ><Icon type="left"/>返回上一级</a>
          </div>
       );
 
@@ -194,78 +194,84 @@ class UnionPay extends Component {
          contentView = this.getDefaultView();
       }
       return (
-         <div className={less.unionPay}>
-            <div className={less.unionPay_top}>选择银联卡</div>
-            <div className={less.unionPay_middle}>
-               <a
-                  onClick={(e) => {
-                     e.preventDefault();
-                     this.props.back();
-                  }}
-               ><Icon type="left"/>返回上一级</a>
+         <div>
+            <div className={less.unionPay}>
+
+               <div className={less.unionPay_top}>选择银联卡</div>
+               <div className={less.unionPay_middle}>
+                  {contentView}
+               </div>
+            </div>
+            <div>
                {
                   hasCard ?
-                     <Button
-                        type="primary"
-                        onClick={() => {
-
-                           //第一步:得到银行卡号
-
-                           if (this.state.selectIndex < 0) {
-                              message.error("请选择银行卡");
-                              return;
-                           }
-                           if (this.state.cardList && this.state.cardList.length > this.state.selectIndex) {
-                              let card = this.state.cardList[this.state.selectIndex];
-                              let data = this.inputLayout.getData();
-                              if (data.error) {
-                                 message.error(data.error);
+                     <div style={{textAlign: "right"}}>
+                        <a
+                           onClick={(e) => {
+                              e.preventDefault();
+                              this.props.back();
+                           }}
+                        ><Icon type="left"/>返回上一级</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <Button
+                           type="primary"
+                           className={less.payBtn}
+                           onClick={() => {
+                              //第一步:得到银行卡号
+                              if (this.state.selectIndex < 0) {
+                                 message.error("请选择银行卡");
                                  return;
                               }
-                              data.card = card.code;
-                              console.log(card);
+                              if (this.state.cardList && this.state.cardList.length > this.state.selectIndex) {
+                                 let card = this.state.cardList[this.state.selectIndex];
+                                 let data = this.inputLayout.getData();
+                                 if (data.error) {
+                                    message.error(data.error);
+                                    return;
+                                 }
+                                 data.card = card.code;
+                                 console.log(card);
 
-                              if (this.props.onAction) {
-                                 this.props.onAction("unionpay", data, () => {
-                                    //开始支付 10 秒 轮询支付
-                                    let diffTime = new Date().getTime();
-                                    let pay = () => {
-                                       this.doUnionPay(data, (code, msg, data) => {
-                                          if (code > 0) {
-                                             //支付成功
-                                             this.props.onAction("unionpaysuccess");
-                                          } else {
-                                             console.log(msg);
-                                             if ((new Date().getTime() - diffTime) / 1000 > 10) {
-                                                //不再查询,支付失败了
-                                                console.log("真的失败了");
-                                                this.props.onAction("unionpayerror", msg);
+                                 if (this.props.onAction) {
+                                    this.props.onAction("unionpay", data, () => {
+                                       //开始支付 10 秒 轮询支付
+                                       let diffTime = new Date().getTime();
+                                       let pay = () => {
+                                          this.doUnionPay(data, (code, msg, data) => {
+                                             if (code > 0) {
+                                                //支付成功
+                                                this.props.onAction("unionpaysuccess");
                                              } else {
-                                                //支付失败,等1秒,再次提交
-                                                setTimeout(() => {
-                                                   pay();
-                                                }, 1000);
+                                                console.log(msg);
+                                                if ((new Date().getTime() - diffTime) / 1000 > 10) {
+                                                   //不再查询,支付失败了
+                                                   console.log("真的失败了");
+                                                   this.props.onAction("unionpayerror", msg);
+                                                } else {
+                                                   //支付失败,等1秒,再次提交
+                                                   setTimeout(() => {
+                                                      pay();
+                                                   }, 1000);
+                                                }
+
                                              }
-
-                                          }
-                                       });
-                                    };
-                                    pay();
-                                 });
+                                          });
+                                       };
+                                       pay();
+                                    });
+                                 }
+                              } else {
+                                 message.error("选择银行卡异常");
                               }
-                           } else {
-                              message.error("选择银行卡异常");
-                           }
 
-                           //第二步:得到手机号和验证码
-                           //第三步:调用支付
-                        }}
-                     >付款</Button>
+                              //第二步:得到手机号和验证码
+                              //第三步:调用支付
+                           }}
+                        >付款</Button>
+                     </div>
                      : null
                }
             </div>
-            {contentView}
-
             <UnionPayAdd
                onAction={(data) => {
                   //打开开通
@@ -343,34 +349,41 @@ class InputLayout extends Component {
 
       return (
          <div>
-            <Input
-               addonBefore={"输入手机号"}
-               onChange={(e) => {
-                  let v = e.target.value;
-                  this.setState({
-                     moblie: v
-                  }, () => {
-
-
-                  });
-
-               }}
-               style={{width: 250}}
-               prefix={<Icon type="mobile" style={{fontSize: 13}}/>} placeholder={"请输入预留手机号"}/>
-            <div>
+            <div style={{lineHeight: "40px"}}>
+               <label htmlFor="mobileIpt" className={less.label}>银行卡预留手机号：</label>
                <Input
-                  addonBefore={"短信验证码"}
+                  id="mobileIpt"
+                  size="large"
+                  onChange={(e) => {
+                     let v = e.target.value;
+                     this.setState({
+                        moblie: v
+                     }, () => {
+
+                     });
+
+                  }}
+                  style={{width: 130}}
+                  prefix={<Icon type="mobile" style={{fontSize: 13}}/>} placeholder={"请输入银行卡预留手机号"}
+               />
+            </div>
+            <div style={{lineHeight: "40px"}}>
+               <label htmlFor="codeIpt" className={less.label}>短信验证码：</label>
+               <Input
+                  id="codeIpt"
+                  size="large"
                   onChange={(e) => {
                      let v = e.target.value;
                      this.setState({
                         code: v
                      });
                   }}
-                  style={{width: 250}}
+                  style={{width: 130, marginRight:"15px"}}
                   prefix={<Icon type="key" style={{fontSize: 13}}/>}
                   placeholder={"请输入短信验证码"}
                />
                <Button
+                  size={"large"}
                   loading={this.state.loading}
                   type="primary"
                   disabled={this.state.time > 0 || this.state.moblie.length !== 11}

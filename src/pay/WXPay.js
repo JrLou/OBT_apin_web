@@ -50,7 +50,7 @@ class WXPay extends Component {
                     <div style={{color:"#333333",fontSize:14,margin: "8px 0 3px 0"}}>请使用微信扫描下方二维码完成支付</div>
                     <div style={{position:"relative",width:"85%",display:"inline-block"}}>
                         <div  dangerouslySetInnerHTML={{__html: qr.imageSync(data.url, { type: 'svg' })}} />
-                        <img style={{position:"absolute",top:0,left:0,right:0,bottom:0,margin:"auto"}} src={require("./images/wx.png")}/>
+                        <img style={{position:"absolute",top:0,left:0,right:0,bottom:0,margin:"auto"}} src={require("./images/pay_wechat_logo.png")}/>
                     </div>
                 </div>
             </Modal>

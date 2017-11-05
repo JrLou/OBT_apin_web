@@ -298,8 +298,8 @@ class page extends Component {
       this.panel.show(true, {
          okText: "我已经开通",
          cancelText: "还没开通",
-         content: "正在开通....",
-         title: "银联开通",
+         content: "确认是否已开通",
+         // title: "银联开通",
          showType: "unioning"
 
       }, () => {
