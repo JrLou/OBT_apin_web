@@ -78,7 +78,7 @@ const root = (
             <Route path="/UpLoad" getComponent={
                 (nextState, cb) => {
                     require.ensure([], require => {
-                        cb(null, require("./main/body/bank/Upload"));
+                        cb(null, require("./main/body/bank/BankUpload"));
                     }, "UpLoad");
                 }
             }

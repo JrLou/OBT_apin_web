@@ -172,23 +172,23 @@ class page extends Component {
                      this.panel = ref;
                   }}/>
                <PayPassWord
-                   onAction={(pw) => {
-                       //调用积分支付//完全用积分支付
-                       this.openPayIng(()=>{
-                           this.loadPayIntegral({pw:pw},(code,msg,data)=>{
-                               if(code>0){
-                                   //
-                                   this.openPaySuccess();
-                               }else{
-                                   this.openPayError(msg,null);
-                               }
-                           });
-                       });
-                     
-                   }}
-                   ref={(ref) => {
-                       this.payPassWord = ref;
-                   }}/>
+                  onAction={(pw) => {
+                     //调用积分支付//完全用积分支付
+                     this.openPayIng(() => {
+                        this.loadPayIntegral({pw: pw}, (code, msg, data) => {
+                           if (code > 0) {
+                              //
+                              this.openPaySuccess();
+                           } else {
+                              this.openPayError(msg, null);
+                           }
+                        });
+                     });
+
+                  }}
+                  ref={(ref) => {
+                     this.payPassWord = ref;
+                  }}/>
                <WXPay
                   ref={(ref) => {
                      this.wxPay = ref;
@@ -202,8 +202,6 @@ class page extends Component {
          </div>
       );
    }
-
-
 
 
    getFirstStep() {
@@ -223,8 +221,8 @@ class page extends Component {
             <IntegralInfo
                data={this.data}
                onPriceChange={(use) => {
-                  if(this.refMoney){
-                      this.refMoney.upDatePrice(use);
+                  if (this.refMoney) {
+                     this.refMoney.upDatePrice(use);
                   }
 
                }}
@@ -236,10 +234,10 @@ class page extends Component {
                   <span className={less.nextLayout_price}>
                         <span className={less.nextLayout_price_rmb}>¥</span>
                       <Money
-                        ref={(ref)=>{
-                          this.refMoney = ref;
-                        }}
-                        data={this.data.order}
+                         ref={(ref) => {
+                            this.refMoney = ref;
+                         }}
+                         data={this.data.order}
                       />
                         </span>
                </div>
@@ -253,25 +251,25 @@ class page extends Component {
                           //2:如果是银行转账,进入银行转账
                           //3:如果是支付宝/微信支付,进入支付
                           console.log(this.data);
-                          if(this.data.order.payPrice<=0){
+                          if (this.data.order.payPrice <= 0) {
                              //提示输入密码,积分支付
-                              this.payPassWord.show(true);
+                             this.payPassWord.show(true);
                              return;
                           }
 
 
-                          let downIng = (fun)=>{
-                              this.openPayIng(()=>{
-                                  this.loadPayIntegral({},(code,msg,data)=>{
-                                      if(code>0){
-                                          this.panel.show(false,{},()=>{
-                                              fun();
-                                          });
-                                      }else{
-                                          this.openPayError(msg,null,"下单");
-                                      }
-                                  });
-                              },"下单");
+                          let downIng = (fun) => {
+                             this.openPayIng(() => {
+                                this.loadPayIntegral({}, (code, msg, data) => {
+                                   if (code > 0) {
+                                      this.panel.show(false, {}, () => {
+                                         fun();
+                                      });
+                                   } else {
+                                      this.openPayError(msg, null, "下单");
+                                   }
+                                });
+                             }, "下单");
                           };
                           switch (this.data.pay.type) {
                              case "ali"://
@@ -279,21 +277,21 @@ class page extends Component {
                                 this.openPay(this.data.pay.type);
                                 break;
                              case "online":
-                                 //
-                                downIng(()=>{
-                                    this.setStep(2);
+                                //
+                                downIng(() => {
+                                   this.setStep(2);
                                 });
 
                                 break;
                              case "bank":
-                                 //打开新页面
-                                 downIng(()=>{
-                                     window.app_open(this, "/Upload", {
-                                         id: this.id,
-                                         price:this.data.order.payPrice,
-                                         payType:this.data.order.PayType
-                                     }, "self");
-                                 });
+                                //打开新页面
+                                downIng(() => {
+                                   window.app_open(this, "/Upload", {
+                                      id: this.id,
+                                      price: this.data.order.payPrice,
+                                      payType: this.data.order.PayType
+                                   }, "self");
+                                });
 
                                 break;
                           }
@@ -321,24 +319,25 @@ class page extends Component {
       });
    }
 
-   openPayIng(callBack,title = "支付") {
+   openPayIng(callBack, title = "支付") {
       this.panel.show(true, {
-         content: "正在"+title+"....",
+         content: "正在" + title + "....",
          // title: "支付信息",
          showType: "loading"
 
       }, callBack);
    }
-   openPaySuccess(callBack,title = "支付") {
+
+   openPaySuccess(callBack, title = "支付") {
       this.panel.show(true, {
-         content: title+"成功",
+         content: title + "成功",
          // title: "支付信息",
          showType: "success"
 
       }, callBack);
    }
 
-   openPayError(msg, callBack,title = "支付") {
+   openPayError(msg, callBack, title = "支付") {
       this.panel.show(true, {
          okText: "我知道了",
          content: msg,
@@ -368,34 +367,34 @@ class page extends Component {
    openPay(showType) {
 
       this.openPayIng(() => {
-          let apinPanel = this.wh.openInitWindow(showType === "wechat" ? this.wxPay : null);
-          this.loadPayOrder(this.data, (code, msg, data) => {
-              if (code > 0) {
-                  //3秒后去开始验证,是否支付成功
-                  //   setTimeout(()=>{this.autoVer(apinPanel,"pay");},3000);
-                  this.panel.show(true, {
-                      okText: "我已经支付",
-                      cancelText: "还没支付",
-                      content: "确认是否已支付",
-                      // title: "支付信息",
-                      showType: "paying"
-                  }, () => {
-                      this.wh.openWindow(apinPanel, showType === "wechat" ? data : data.url);
-                  });
-              } else {
-                  this.wh.closeWindow(apinPanel);
-                  this.panel.show(true, {
-                      // okText: "我知道了",
-                      content: msg,
-                      // title: "支付信息",
-                      showType: "error"
-                  }, () => {
+         let apinPanel = this.wh.openInitWindow(showType === "wechat" ? this.wxPay : null);
+         this.loadPayOrder(this.data, (code, msg, data) => {
+            if (code > 0) {
+               //3秒后去开始验证,是否支付成功
+               //   setTimeout(()=>{this.autoVer(apinPanel,"pay");},3000);
+               this.panel.show(true, {
+                  okText: "我已经支付",
+                  cancelText: "还没支付",
+                  content: "确认是否已支付",
+                  // title: "支付信息",
+                  showType: "paying"
+               }, () => {
+                  this.wh.openWindow(apinPanel, showType === "wechat" ? data : data.url);
+               });
+            } else {
+               this.wh.closeWindow(apinPanel);
+               this.panel.show(true, {
+                  // okText: "我知道了",
+                  content: msg,
+                  // title: "支付信息",
+                  showType: "error"
+               }, () => {
 
 
-                  });
-              }
-          });
-      },"下单");
+               });
+            }
+         });
+      }, "下单");
    }
 
 
@@ -457,12 +456,15 @@ class page extends Component {
                let content = null;
                content = (
                   <div>
-                     {msg}
-                     <br/>
+                     {/*UI说：长文字的时候，就不提示“支付失败”了*/}
                      {action === "ok" ?
                         <div>抱歉，当前未收到银行或第三方平台支付确认，为避免重复支付，请确认您的账户已扣款。如已扣款请&nbsp;{connectUsLink}</div>
                         :
-                        <div>如有疑问，请&nbsp;{connectUsLink}&nbsp;</div>
+                        <div>
+                           {msg}
+                           <br/>
+                           <div>如有疑问，请&nbsp;{connectUsLink}&nbsp;</div>
+                        </div>
                      }
                   </div>
                );
@@ -508,13 +510,14 @@ class page extends Component {
       });
 
    }
-    loadPayIntegral(param, cb) {
-        setTimeout(() => {
-            let code = (Math.random() * 10).toFixed(0) - 1;
-            let data = {};
-            cb(code, code > 0 ? "下单成功" : "下单失败", data);
-        }, Math.random() * 1000 + 2000);
-    }
+
+   loadPayIntegral(param, cb) {
+      setTimeout(() => {
+         let code = (Math.random() * 10).toFixed(0) - 1;
+         let data = {};
+         cb(code, code > 0 ? "下单成功" : "下单失败", data);
+      }, Math.random() * 1000 + 2000);
+   }
 
    loadUnionVer(param, cb) {
       setTimeout(() => {
@@ -527,7 +530,7 @@ class page extends Component {
 
    loadPayOrderVer(param, cb) {
       setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 9;
+         let code = (Math.random() * 10).toFixed(0) - 11;
          let data = {};
          data.url = "http://www.baidu.com";
          cb(code, code > 0 ? "支付成功" : "支付失败", data);
@@ -558,10 +561,10 @@ class page extends Component {
                order: {
                   orderId: "201711111111",
                   passengersInfo: "2成人/1儿童",
-                  price: (Math.random() * 1000).toFixed(0)*100,
+                  price: (Math.random() * 1000).toFixed(0) * 100,
                },
                integral: {
-                  all: (Math.random() * 100000*10).toFixed(0),
+                  all: (Math.random() * 100000 * 10).toFixed(0),
                   use: 0
                }
             };
@@ -578,28 +581,31 @@ class page extends Component {
 
 }
 
-class Money extends Component{
-   constructor(props){
+class Money extends Component {
+   constructor(props) {
       super(props);
       this.state = {
-          use:0,
+         use: 0,
       };
    }
-    /**
-     *
-     * @param use 单位 / 分
-     */
-    upDatePrice(use) {
-        this.setState({
-            use: use*100
-        });
-    }
-    getData() {
-        return this.props.data || {};
-    }
-   render(){
-       let data = this.getData();
-       data.payPrice = data.price - this.state.use;
+
+   /**
+    *
+    * @param use 单位 / 分
+    */
+   upDatePrice(use) {
+      this.setState({
+         use: use * 100
+      });
+   }
+
+   getData() {
+      return this.props.data || {};
+   }
+
+   render() {
+      let data = this.getData();
+      data.payPrice = data.price - this.state.use;
       return <span {...this.props}>
        {((data.payPrice) / 100).toFixed(2)}
       </span>;
