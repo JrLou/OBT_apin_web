@@ -5,7 +5,6 @@ import React, {Component} from 'react';
 import css from './Passengers.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APILXD from "../../../../api/APILXD.js";
-import LoadingView from "../../component/LoadingView.js";
 import Table from "../../component/Table/index.js";
 import {Button,Checkbox} from 'antd';
 
@@ -15,15 +14,12 @@ class PassengerMsg extends Component{
         this.state = {
             orderState:this.props.orderState,  //0：等待确认 1：待付定金 2：待付尾款 3：待付款 4：已付尾款(未录乘机人) 5：等待出票 6：已出票 7：订单取消 8：订单关闭
             orderID:this.props.orderID,
-            passengerData:this.props.passengerData,
+            defaultData:this.props.defaultData,
             checkedMsg:false,       //是否已经点击确认乘机人信息
         };
 
     }
 
-    componentWillReceiveProps(nextProps) {
-
-    }
 
     componentDidMount(){
 
