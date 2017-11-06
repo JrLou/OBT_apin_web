@@ -7,14 +7,16 @@
   width: 100%;
   display: table;
 }
-.left{
+.itemCenter{
   display: table-cell;
   vertical-align: middle;
+}
+.left{
+  composes: itemCenter;
   width: 75%;
 }
 .right{
-  display: table-cell;
-  vertical-align: middle;
+  composes: itemCenter;
   width: 18%;
   padding-left: 3.5%;
   padding-right: 3.5%;
@@ -37,10 +39,6 @@
 .table{
   width: 100%;
   display: table;
-}
-.itemCenter{
-  display: table-cell;
-  vertical-align: middle;
 }
 
 .type_super {
@@ -85,8 +83,7 @@
 
 
 .placeLine{
-  display: table-cell;
-  vertical-align: middle;
+  composes: itemCenter;
   font-size: @font_size_super_big;
   width: 20%;
   color: @c_title_black;
@@ -113,8 +110,7 @@
 
 
 .company_super{
-  display: table-cell;
-  vertical-align: middle;
+  composes: itemCenter;
   width: 30%;
   padding-left: 1%;
   padding-right: 1%;
@@ -162,16 +158,37 @@
 }
 
 .lineBg{
-  display: table-cell;
-  vertical-align: middle;
+  composes: itemCenter;
   width: 14%;
-  text-align: center;
+}
+.line_item{
+  padding-left: 10%;
+  padding-right: 10%;
+  width: 100%;
+  display: table;
 }
 .line{
-  margin: 0 auto;
-  width: 70%;
+  composes: itemCenter;
+  height:6px;
+  width: 95%;
+}
+.line_line{
+  width: 100%;
   height: 2px;
-  background-color: #4ff92e;
+  background-color: #BABABA;
+}
+.line_icon{
+  composes: itemCenter;
+  width: 5%;
+  height:6px;
+}
+.line_icon_icon{
+  width: 3px;
+  height: 6px;
+  background-image: url("../../../../images/CombinedShape.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 

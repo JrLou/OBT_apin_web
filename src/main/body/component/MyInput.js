@@ -45,60 +45,66 @@ class MyInput extends Component {
     }
     render() {
         let {callBack,obj} = this.props;
-        let div = (<div className={css.inputCell}>
-            {obj&&obj.isAddOrSub?<div style={{float:"left"}}>
-                <MyDiv div={<div className={css.addItem}
-                                 onClick={()=>{
-                                     this.addAction(false,callBack);
-                                 }}
-                >{"-"}</div>}/>
-            </div>:null}
+        let div = (<div>
+            <div className={css.cell}>
+                <div className={css.title}>{obj.title}</div>
+                <div className={css.inputCell}>
+                    {obj&&obj.isAddOrSub?<div style={{float:"left"}}>
+                        <MyDiv div={<div className={css.addItem}
+                                         onClick={()=>{
+                                             this.addAction(false,callBack);
+                                         }}
+                        >{"-"}</div>}/>
+                    </div>:null}
 
 
-            <div style={{float:"left"}}>
-                <MyDiv div={<div>
-                    <input
-                        {...this.props}
-                        value={this.state.myNum}
-                        onChange={(e)=>{
-                            let value = e.target.value;
-                            if (obj&&obj.isRandom){
-                                this.setState({
-                                    myNum:value,
-                                },()=>{
-                                    if (callBack){
-                                        callBack(value);
-                                    }
-                                });
-                            }else {
-                                this.recycleNum(value,callBack);
-                            }
-                        }}
-                        onMouseLeave={(e)=>{
-                            if (obj&&obj.regular && e.target.value){
-                                alert("请核对您的手机号");
-                            }
-                        }}
-                    />
-                    {obj&&obj.text?<div style={{float:"right",
-                        height:"30px",
-                        lineHeight:"30px",
-                        paddingRight:"5px",
-                        paddingLeft:"5px",
-                        fontSize:"12px",
-                        color:"#CBD3E5",
-                    }}>{obj.text}</div>:null}
+                    <div style={{float:"left"}}>
+                        <MyDiv div={<div>
+                            <input {...this.props}
+                                   value={this.state.myNum}
+                                   onChange={(e)=>{
+                                       let value = e.target.value;
+                                       if (obj&&obj.isRandom){
+                                           this.setState({
+                                               myNum:value,
+                                           },()=>{
+                                               if (callBack){
+                                                   callBack(value);
+                                               }
+                                           });
+                                       }else {
+                                           this.recycleNum(value,callBack);
+                                       }
+                                   }}
+                                   onMouseLeave={(e)=>{
+                                       if (obj&&obj.regular && e.target.value){
+                                           alert("请核对您的手机号");
+                                       }
+                                   }}
+                            />
+                            {obj&&obj.text?<div style={{float:"right",
+                                height:"30px",
+                                lineHeight:"30px",
+                                paddingRight:"5px",
+                                paddingLeft:"5px",
+                                fontSize:"12px",
+                                color:"#CBD3E5",
+                            }}>{obj.text}</div>:null}
 
-                </div>}/>
+                        </div>}/>
+                    </div>
+
+                    {obj&&obj.isAddOrSub?<div style={{float:"left"}}>
+                        <MyDiv div={<div className={css.addItem}
+                                         onClick={()=>{
+                                             this.addAction(true,callBack);
+                                         }}
+                        >{"+"}</div>}/>
+                    </div>:null}
+                </div>
+                <div className={css.subtitle}>{obj.subtitle}</div>
             </div>
-
-            {obj&&obj.isAddOrSub?<div style={{float:"left"}}>
-                <MyDiv div={<div className={css.addItem}
-                                 onClick={()=>{
-                                     this.addAction(true,callBack);
-                                 }}
-                >{"+"}</div>}/>
-            </div>:null}
+            <div className={css.error}>{"人数必须大于0"}</div>
         </div>);
         return (div);
     }

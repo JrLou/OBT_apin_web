@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-01 14:09:48 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-03 15:41:42
+ * @Last Modified time: 2017-11-06 11:02:21
  */
 
 import React, { Component } from 'react';
@@ -31,6 +31,8 @@ class SignUpView extends Component {
                 visible={visible}
                 onCancel={this.handleCancel}
                 footer={null}
+                style={{width:'100px'}}
+                prefixCls="my-ant-modal"
             >
                 <Froms mode={mode} handleChangeMode={this.handleChangeMode} onOK={this.handleOk}></Froms>
             </Modal>
@@ -42,7 +44,6 @@ class SignUpView extends Component {
      * @param {0-2} mode 
      */
     handleChangeMode(mode){
-        console.log(mode);
         this.setState({
             mode
         });
