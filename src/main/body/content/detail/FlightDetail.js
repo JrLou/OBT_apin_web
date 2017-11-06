@@ -4,8 +4,8 @@
 /**
  * Created by lixifeng on 16/10/25.
  */
-import React, {Component,Input} from 'react';
-import {message,Button} from 'antd';
+import React, {Component} from 'react';
+import {message,Button,Form,Input,Icon} from 'antd';
 import css from './FlightDetail.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APIGYW from "../../../../api/APIGYW.js";
@@ -14,21 +14,22 @@ import StateProgress from "./detailComp/StateProgress.js";
 import CellFlight from "../cell/CellFlight.js";
 import CellNewFlight from "../cell/CellNewFlight.js";
 import PayBottom from "./detailComp/PayBottom.js";
+import MyModalRequire from "./detailComp/MyModalRequire.js";
 
 import MyInput from '../../component/MyInput.js';
 
+const FormItem = Form.Item;
 class page extends Component {
     constructor(props) {
         super(props);
         this.par = window.app_getPar(this);
 
         this.state = {
-            totalNum:1,
-            upData:0
+            upData:0,
+            adultNum:1,
+            childNum:0,
+            phone:""
         };
-        this.adultNum = 1;
-        this.childNum = 0;
-        this.phoneNum = "";
     }
     componentWillReceiveProps(nextProps) {
 
@@ -39,11 +40,7 @@ class page extends Component {
             upData:this.state.upData++
         });
     }
-    setTotal(totalNum){
-        this.setState({
-            totalNum:totalNum
-        });
-    }
+
     componentDidMount() {
         this.loadData();
     }
@@ -63,7 +60,6 @@ class page extends Component {
         //     failure,
         //     param,
         //     {ipKey:'hlIP'});
-        // this.cellFlight.refreshView(this.par.data,2,true,true);
 
         let dataArr = this.par.data&&this.par.data.airlineInfo?this.par.data.airlineInfo:{};
         let itemData = dataArr;
@@ -71,9 +67,6 @@ class page extends Component {
 
         let go = itemData[0];
         let back = itemData[1];
-
-
-
 
         let zhongZhuanObj=[{
             flightType:true,
@@ -91,7 +84,6 @@ class page extends Component {
             obj:go,
             data:zhongZhuanObj
         }];
-
 
         let flightTypeGoAndBack = [{
             flightType:true,
@@ -114,8 +106,6 @@ class page extends Component {
             obj: back,
         }];
 
-
-
         this.listData = [{
             rule:"1.行李规则行李规则行李规则行李规则行李",
             obj:flightTypeGo,
@@ -132,9 +122,104 @@ class page extends Component {
         this.upView();
     }
 
+    addAction(isAdult,isAdd){
+        let {adultNum,childNum} = this.state;
+        if (!adultNum){
+            adultNum = 0;
+        }
+        if (!childNum){
+            childNum = 0;
+        }
+        let num_Int = parseInt(isAdult?adultNum:childNum);
+        if (isAdd){
+            num_Int++;
+        }else {
+            num_Int--;
+        }
+        num_Int = num_Int<=0?"0":num_Int;
+        if (isAdult){
+            this.setState({
+                adultNum:num_Int
+            },()=>{
+                this.setAdultNum(num_Int);
+            });
+        }else {
+            this.setState({
+                childNum:num_Int
+            },()=>{
+                this.setChildNum(num_Int);
+            });
+        }
+    }
+
+    verPhone(value){
+        if (value && (value!="")&& /^[0-9]*$/.test(value)){
+            this.setState({
+                phone:value
+            },()=>{
+                this.props.form.setFieldsValue({
+                    phone:value
+                });
+            });
+        }else {
+            this.setState({
+                phone:""
+            },()=>{
+                this.props.form.setFieldsValue({
+                    phone:""
+                });
+            });
+        }
+    }
+    recycleNum(isAdult,value){
+        if (value && (value!="")&& /^[0-9]*$/.test(value)){
+            if (isAdult){
+                let num = parseInt(value);
+                this.setState({
+                    adultNum:num,
+                },()=>{
+                    this.setAdultNum(num);
+                });
+            }else {
+                let num = parseInt(value);
+                this.setState({
+                    childNum:num,
+                },()=>{
+                    this.setChildNum(num);
+                });
+            }
+        }else {
+            if (isAdult){
+                this.setState({
+                    adultNum:"",
+                },()=>{
+                    this.setAdultNum("");
+                });
+            }else {
+                this.setState({
+                    childNum:"0",
+                },()=>{
+                    this.setChildNum("");
+                });
+            }
+        }
+    }
+    setAdultNum(value){
+        this.props.form.setFieldsValue({
+            adultNum:value
+        });
+    }
+    setChildNum(value){
+        this.props.form.setFieldsValue({
+            childNum:value
+        });
+    }
     render() {
-        this.totalPrice = 2300*this.childNum+2333*this.adultNum;
-        var div = (
+        let {childNum,adultNum}=this.state;
+        this.totolNum = parseInt(childNum?childNum:0)+parseInt(adultNum?adultNum:0);
+        this.totalPrice = 2300*childNum+2333*adultNum;
+        const { getFieldDecorator } = this.props.form;
+        let div = (
             <div className={css.main}>
                 <div className={css.content} style={{paddingLeft:"100px",paddingRight:"100px"}}>
                     <StateProgress num = {1}/>
@@ -158,42 +243,71 @@ class page extends Component {
                     </div>
                     <div className={css.table}>
                         <div className={css.orderCellItem}>
-                            <MyInput
-                                ref="adult"
-                                maxLength={4}
-                                className={css.orderInforInput}
-                                value={this.adultNum}
-                                obj = {{
-                                    title:"成人(12岁以上):",
-                                    subtitle:"¥2333",
-                                    isAddOrSub:true,
-                                }}
-                                callBack={(val)=>{
-                                    this.adultNum = val?val:"";
-                                    let totalNum = parseInt(this.adultNum?this.adultNum:0)+parseInt(this.childNum?this.childNum:0);
-                                    this.setTotal(totalNum);
-                                }}/>
+                            <div className={css.i_cell}>
+                                <div className={css.i_title}>{"成人(12岁以上):"}</div>
+                                <FormItem style={{float:"left"}}>
+                                    {getFieldDecorator('adultNum', {
+                                        rules: [{
+                                            required: true,
+                                            message: '人数必须大于0',
+                                        }],
+                                        initialValue: adultNum,
+                                    })(<Input style={{width:"110px",height:"35px"}}
+                                              placeholder={"人数"}
+                                              addonBefore={<Icon type="minus"
+                                                                 style={{color:"#FF6600"}}
+                                                                 onClick={()=>{
+                                                                     this.addAction(true,false);
+                                                                 }}/>}
+                                              addonAfter={<Icon type="plus"
+                                                                style={{color:"#FF6600"}}
+                                                                onClick={()=>{
+                                                                    this.addAction(true,true);
+                                                                }}/>}
+                                              onChange={(e)=>{
+                                                  let value = e.target.value;
+                                                  this.recycleNum(true,value);
+                                              }}/>)}
+                                </FormItem>
+                                <div className={css.i_subtitle}>{"¥2333"}</div>
+                            </div>
 
-                            <MyInput
-                                ref="child"
-                                maxLength={4}
-                                className={css.orderInforInput}
-                                value={this.childNum}
-                                obj = {{
-                                    title:"儿童(2-12岁):",
-                                    subtitle:"¥2300",
-                                    isAddOrSub:true,
-                                }}
-                                callBack={(val)=>{
-                                    this.childNum = val?val:"";
-                                    let totalNum = parseInt(this.adultNum?this.adultNum:0)+parseInt(this.childNum?this.childNum:0);
-                                    this.setTotal(totalNum);
-                                }}/>
+
+                            <div className={css.i_cell}>
+                                <div className={css.i_title}>{"儿童(2-12岁):"}</div>
+                                <FormItem style={{float:"left"}}>
+                                    {getFieldDecorator('childNum', {
+                                        rules: [{
+                                            required: false,
+                                            message: '人数必须大于0',
+                                        }],
+                                        initialValue: childNum
+                                    })(
+                                        <Input style={{width:"110px"}}
+                                               placeholder={"人数"}
+                                               addonBefore={<Icon type="minus"
+                                                                  style={{color:"#FF6600",}}
+                                                                  onClick={()=>{
+                                                                      this.addAction(false,false);
+                                                                  }}/>}
+                                               addonAfter={<Icon type="plus"
+                                                                 style={{color:"#FF6600"}}
+                                                                 onClick={()=>{
+                                                                     this.addAction(false,true);
+                                                                 }}/>}
+                                               onChange={(e)=>{
+                                                   let value = e.target.value;
+                                                   this.recycleNum(false,value);
+                                               }}/>
+                                    )}
+                                </FormItem>
+                                <div className={css.i_subtitle}>{"¥2300"}</div>
+                            </div>
                         </div>
                         <div className={css.refOrderCellItem}>
                             <div className={css.perTotal}>
                                 <span>{"总人数: "}</span>
-                                <span style={{color:"#29A6FF"}}>{this.state.totalNum}</span>
+                                <span style={{color:"#29A6FF"}}>{this.totolNum}</span>
                             </div>
                             <div className={css.priceText}>
                                 <span>{"参考价（含税）"}</span>
@@ -209,54 +323,76 @@ class page extends Component {
                         <div className={css.cell_right} >填写联系人信息</div>
                     </div>
                     <div className={css.orderCellItem}>
-                        <MyInput ref="name"
-                                 placeholder={"请输入姓名"}
-                                 obj = {{
-                                     title:"姓名:",
-                                     isRandom:true,
-                                 }}
-                                 maxLength={12}
-                                 className={css.perInfor}
-                                 value={this.name}
-                                 callBack={(val)=>{
-                                     this.name = val;
-                                 }}/>
-                        <MyInput ref="phone"
-                                 placeholder={"请输入可联系的手机号码"}
-                                 obj = {{
-                                     title:"手机号码:",
-                                     regular:/^1\d{10}$/
-                                 }}
-                                 maxLength={11}
-                                 className={css.perInfor}
-                                 value={this.phoneNum}
-                                 callBack={(val)=>{
-                                     this.phoneNum = val;
-                                 }}/>
+                        <div className={css.i_cell}>
+                            <div className={css.i_title}>{"姓名:"}</div>
+                            <FormItem style={{float:"left"}}>
+                                {getFieldDecorator('name', {
+                                    rules: [{
+                                        max:20,
+                                        required: true,
+                                        message: '姓名不能为空',
+                                    },{
+                                        pattern: /^[a-zA-Z\u4e00-\u9fa5]{2,20}$/,
+                                        message: '输入汉字与英文长度2-20'
+                                    }],
+                                })(<Input style={{width:"220px"}}
+                                          placeholder={"请输入姓名"}/>)
+                                }
+                            </FormItem>
+                        </div>
+
+
+                        <div className={css.i_cell}>
+                            <div className={css.i_title}>{"手机号码:"}</div>
+                            <FormItem style={{float:"left"}}>
+                                {getFieldDecorator('phone', {
+                                    rules: [{
+                                        required: true,
+                                        message: '手机号不能为空',
+                                    },{
+                                        pattern: /^1[3|5|7|8|][0-9]{9}$/,
+                                        message: '请输入正确的11位手机号码'
+                                    }],
+                                })(
+                                    <Input max={11} style={{width:"220px"}}
+                                           placeholder={"请输入手机号"}
+                                           onChange={(e)=>{
+                                               let val = e.target.value;
+                                               this.verPhone(val);
+                                           }}/>
+                                )}
+                            </FormItem>
+                        </div>
                     </div>
                 </div>
 
-                <div className={css.content} style={{padding: "0px",backgroundColor:"#EFF7FD",paddingTop:"8px",paddingBottom:"8px"}}>
-                    <div className={css.orderCell} style={{padding: "0px"}}>
-                        <div className={css.orderInforTitle} style={{paddingRight: "30px"}}>{"直营余票: "+1200}</div>
-                        <div className={css.orderInforTitle} style={{textAlign:"left",paddingLeft: "30px",}}>{"代售余票: "+33}</div>
-                    </div>
-                </div>
+                <PayBottom param={{
+                    orderPrice:"2333",
+                    adultPrice:"2333",
+                    childPrice:"2000",
+                    childNum:childNum,
+                    adultNum:adultNum,
+                    totalPrice:this.totalPrice,
+                }}
+                           isPay={true}
+                           callBack={()=>{
+                               this.props.form.validateFields((err, values) => {
+                                   if (!err) {
+                                       console.log('Received values of form: ', values);
+                                   }
+                               });
 
-                <PayBottom
-                    param={{
-                        orderPrice:"2333",
-                        adultPrice:"2333",
-                        childPrice:"2000",
-                        childNum:this.childNum,
-                        adultNum:this.adultNum,
-                        totalPrice:this.totalPrice,
-                    }}
-                    isPay={false}
-                    callBack={()=>{
-                        alert("支付成功");
-                    }}/>
+                               // this.myModalRequire.showModal(true,
+                               //     {
+                               //         title:"提示",
+                               //         desc:"您下单的人数已超过库存余位,是否提交至客服处理?"
+                               //     });
+                           }}/>
 
+                <MyModalRequire ref={(a) => this.myModalRequire = a}
+                                callBack={(myNum)=>{
+                                    // this.commitSit(myNum);
+                                }}/>
             </div>);
         return div;
     }
@@ -304,7 +440,8 @@ class page extends Component {
         return viewArr;
     }
 }
+const FlightDetail = Form.create()(page);
 page.contextTypes = {
     router: React.PropTypes.object
 };
-module.exports = page;
+module.exports = FlightDetail;

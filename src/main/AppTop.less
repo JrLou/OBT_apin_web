@@ -2,7 +2,6 @@
 
 @space: 50px;
 .head {
-  height: 74px;
   background-color: #ffffff;
   border-width: 0px 0px 1px 0px;
   border-style: solid;
@@ -15,12 +14,13 @@
   margin: auto;
   left: 0;
   right: 0;
-  height: 74px;
+  height: 72px;
 }
 .left {
   width: 180px;
   height: 50px;
   float: left;
+  cursor: pointer;
   margin-top: 11px;
   margin-right: 22px;
 }
@@ -40,7 +40,7 @@
 }
 
 .rightItem {
-  display: table-cell;
+  display: inline-block;
   vertical-align: middle;
 }
 .login{
@@ -62,10 +62,20 @@
   display: table-cell;
   vertical-align: middle;
   margin-left: 10px;
-  margin-right: 30px;
   width: 70px;
   border: 1px #29A6FF solid;
   border-radius: 2px;
   background-color: #dcf7fc;
   color: #29A6FF;
+}
+
+@media screen {
+  .step {
+    width: 53%;
+  }
+  @media (min-width: 1200px) {
+    .step {
+      width: 640px;
+    }
+  }
 }

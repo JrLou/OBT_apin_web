@@ -471,14 +471,9 @@ class OrderFormList extends Component{
             pageSize:state.pageSize,
         };
         let dateDepStart = state.startDate?this.getDateFormat(state.startDate.valueOf()):'',
-            dateDepEnd = state.endDate?this.getDateFormat(state.endDate.valueOf()):'',
-            dateDep = '';
-        if(dateDepStart){
-            dateDep = dateDepStart+'-'+dateDepEnd;
-        }else{
-            dateDep = dateDepEnd?dateDepEnd+'-':'';
-        }
-        parames.dateDep = dateDep;
+            dateDepStop = state.endDate?this.getDateFormat(state.endDate.valueOf()):'';
+        parames.dateDepStart = dateDepStart;
+        parames.dateDepStop = dateDepStop;
         return parames;
     }
 

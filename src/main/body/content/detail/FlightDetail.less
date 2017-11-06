@@ -135,17 +135,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 .verticalMiddle{
   display: table-cell;
   vertical-align: middle;
@@ -189,37 +178,6 @@
   overflow: hidden;
 }
 
-.orderCell{
-  display: table;
-  padding: @d_spadding_cell @d_spadding_base;
-}
-.orderInforTitle{
-  composes: verticalMiddle;
-  width: 250px;
-  text-align: right;
-  font-size: @d_spadding_small;
-  color: @c_title_black;
-  padding-right: 50px;
-}
-.orderInforCon{
-  composes: verticalMiddle;
-  width: 100px;
-  font-size: @d_spadding_small;
-  color: @c_text_red;
-  padding-left: 50px;
-}
-.orderInforInput{
-  width: 50px;
-  height: @height_Input;
-  composes: verticalMiddle;
-  font-size: @d_spadding_small;
-  color: @c_title_black;
-  text-align: center;
-  border-width: 0px;
-  border-radius: 2px;
-  cursor: pointer;
-  outline:none;
-}
 .perTotal{
   font-size:@font_size_small;
   color:@c_title_black;
@@ -230,15 +188,35 @@
 }
 
 
-.perInfor{
-  composes: verticalMiddle;
+
+.i_cell{
+  overflow: hidden;
+  width: 100%;
+}
+.i_title{
+  float: left;
+  width: 130px;
+  height: 32px;
+  line-height: 32px;
+  margin-right: 70px;
+  text-align: right;
   font-size: @font_size_small;
   color: @c_title_black;
-  width: 220px;
-  height: 30px;
-  line-height: 30px;
-  padding-left: @d_spadding_cell;
-  outline: none;
-  border-width: 0px;
-  border-radius: 3px;
 }
+.i_error{
+  color: @c_text_red;
+  font-size: @font_size_cell;
+  margin-left: 200px;
+  margin-top: 3px;
+  margin-bottom: @d_spadding_cell;
+}
+
+.i_subtitle{
+  margin-left: 70px;
+  float: left;
+  height: 32px;
+  line-height: 32px;
+  font-size: @d_spadding_small;
+  color: @c_text_red;
+}
+

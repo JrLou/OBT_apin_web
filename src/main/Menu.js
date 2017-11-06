@@ -34,21 +34,23 @@ class Menus extends Component {
         const pathname = this.props.pathname;
 
         return (
-            <div>
-                <Menu prefixCls="my-ant-menu" selectedKeys={[pathname]} mode="horizontal">
-                    {
-                        menus.map((menu, index) => {
-                            return (
-                                <MenuItem key={menu.path}>
-                                    <span style={{ display: 'inline-block', width: '100%', height: '100%' }} onClick={() => {
-                                        window.app_open(this.props.root, menu.path, null);
-                                    }}>{menu.name}</span>
-                                </MenuItem>
-                            );
-                        })
-                    }
-                </Menu>
-            </div>
+
+            <Menu prefixCls="my-ant-menu" selectedKeys={[pathname]} mode="horizontal">
+                {
+                    menus.map((menu, index) => {
+                        return (
+                            <MenuItem key={menu.path}>
+                                <span style={{ display: 'inline-block', width: '100%', height: '100%' }} onClick={() => {
+                                    window.app_open(this.props.root, menu.path, {
+                                        step: menu.path == '/Score' ? 1 : 0
+                                    });
+                                }}>{menu.name}</span>
+                            </MenuItem>
+                        );
+                    })
+                }
+            </Menu>
+
         );
     }
 }

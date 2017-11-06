@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-03 19:29:27
+ * @Last Modified time: 2017-11-06 16:03:01
  */
 
 import React, { Component } from 'react';
@@ -33,29 +33,33 @@ class AccountLoginForm extends React.Component {
         const userNameError = isFieldTouched('userName') && getFieldError('userName');
         const passwordError = isFieldTouched('password') && getFieldError('password');
         return (
-            <Form onSubmit={this.handleSubmit}>
+            <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <FormItem
+                prefixCls="my-ant-form"
                     validateStatus={userNameError ? 'error' : ''}
                     help={userNameError || ''}
                 >
                     {getFieldDecorator('userName', {
                         rules: [{ required: true, message: '请输入用户名!' }],
                     })(
-                        <Input placeholder="账号/手机号" />
+                        <Input prefixCls='my-ant-input' placeholder="账号/手机号" />
                         )}
                 </FormItem>
                 <FormItem
+                prefixCls="my-ant-form"
                     validateStatus={passwordError ? 'error' : ''}
                     help={passwordError || ''}
                 >
                     {getFieldDecorator('password', {
                         rules: [{ required: true, message: '请输入密码!' }],
                     })(
-                        <Input type="password" placeholder="密码" autoComplete="new-password" />
+                        <Input prefixCls='my-ant-input' type="password" placeholder="密码" autoComplete="new-password" />
                         )}
                 </FormItem>
-                <FormItem>
+                <FormItem prefixCls="my-ant-form">
                     <Button
+                        prefixCls="my-ant-btn"
+                        size="large"
                         type="primary"
                         htmlType="submit"
                         className={css.btnSubmit}
@@ -66,7 +70,7 @@ class AccountLoginForm extends React.Component {
             </Form>
         );
     }
-    
+
     handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -94,7 +98,7 @@ class MsgLoginForm extends React.Component {
         const checkImgCodeError = isFieldTouched('checkImgCode') && getFieldError('checkImgCode');
         const checkCodeError = isFieldTouched('checkCode') && getFieldError('checkCode');
         return (
-            <Form onSubmit={this.handleSubmit}>
+            <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <FormItem
                     validateStatus={telError ? 'error' : ''}
                     help={telError || ''}
@@ -102,7 +106,7 @@ class MsgLoginForm extends React.Component {
                     {getFieldDecorator('tel', {
                         rules: [{ required: true, message: '请输入11位手机号' }],
                     })(
-                        <Input placeholder="请输入11位手机号" />
+                        <Input prefixCls='my-ant-input' placeholder="请输入11位手机号" />
                         )}
                 </FormItem>
                 <FormItem
@@ -112,9 +116,9 @@ class MsgLoginForm extends React.Component {
                     {getFieldDecorator('checkImgCode', {
                         rules: [{ required: true, message: '请输入图形验证码' }],
                     })(
-                        <Input placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
+                        <Input prefixCls='my-ant-input' placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
                         )}
-                    <img src="http://placehold.it/98x32" alt="" className={css.checkCodeImg} />
+                    <img src="http://placehold.it/98x36" alt="" className={css.checkCodeImg} />
                 </FormItem>
                 <FormItem
                     validateStatus={checkCodeError ? 'error' : ''}
@@ -123,12 +127,13 @@ class MsgLoginForm extends React.Component {
                     {getFieldDecorator('checkCode', {
                         rules: [{ required: true, message: '请输入验证码' }],
                     })(
-                        <Input placeholder="请输入验证码" className={css.checkCodeInput} />
+                        <Input prefixCls='my-ant-input' placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
                     <CheckCode />
                 </FormItem>
                 <FormItem>
                     <Button
+                        prefixCls="my-ant-btn"
                         type="primary"
                         htmlType="submit"
                         className={css.btnSubmit}
@@ -163,19 +168,19 @@ class Login extends React.Component {
     render() {
         const { type } = this.state;
         return (
-            <div>
-                <ul className={css.clearfix}>
-                    <li className={`${css.left} ${type === 0 && css.active}`} onClick={() => this.handleChangeType(0)}>账号密码登录</li>
-                    <li className={`${css.right} ${type === 1 && css.active}`} onClick={() => this.handleChangeType(1)}>验证码登录</li>
+            <div className={css.login}>
+                <ul className={`${css.clearfix} ${css.head}`}>
+                    <li className={`${css.left} ${css.title} ${type === 0 && css.active}`} onClick={() => this.handleChangeType(0)}>账号密码登录</li>
+                    <li className={`${css.right} ${css.title} ${type === 1 && css.active}`} onClick={() => this.handleChangeType(1)}>验证码登录</li>
                 </ul>
                 {
                     type === 0 ?
                         <WrappedAccountLoginForm onOK={this.props.onOK} />
                         : <WrappedMsgLoginForm onOK={this.props.onOK} />
                 }
-                <div className={css.clearfix}>
-                    <div className={css.left} onClick={()=>this.props.handleChangeMode(2)}>忘记密码</div>
-                    <div className={css.right} onClick={()=>this.props.handleChangeMode(1)}>注册账号</div>
+                <div className={`${css.clearfix} ${css.bottom}`}>
+                    <div className={`${css.left} ${css.forget}`} onClick={() => this.props.handleChangeMode(2)}>忘记密码</div>
+                    <div className={css.right} onClick={() => this.props.handleChangeMode(1)}>注册账号</div>
                 </div>
             </div>
         );
