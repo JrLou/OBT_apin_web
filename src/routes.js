@@ -74,6 +74,14 @@ const root = (
                 }
             }>
             </Route>
+            <Route path="/Account" getComponent={
+                (nextState,cb)=>{
+                    require.ensure([], require => {
+                        cb(null, require("./main/body/account/Account.js"));
+                    }, "Account");
+                }
+            }>
+            </Route>
             <Route path="/Pay" getComponent={
                 (nextState, cb) => {
                     require.ensure([], require => {

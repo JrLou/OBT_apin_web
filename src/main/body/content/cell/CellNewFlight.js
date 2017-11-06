@@ -30,7 +30,7 @@ class CellNewFlight extends Component {
     }
     createCell(dataArr){
         return dataArr.map((data, index)=>{
-           return (<div className={css.cellBg} style={{borderBottomWidth:(index==dataArr.length-1)?"0px":"1px"}}>
+           return (<div key={index} className={css.cellBg} style={{borderBottomWidth:(index==dataArr.length-1)?"0px":"1px"}}>
                {this.createItemCell(data)}
                {data.data&&data.data.length>1?<CellNewFlightDetail data = {data.data}/>:null}
            </div>);
