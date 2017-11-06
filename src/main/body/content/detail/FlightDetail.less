@@ -135,17 +135,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 .verticalMiddle{
   display: table-cell;
   vertical-align: middle;
@@ -242,3 +231,55 @@
   border-width: 0px;
   border-radius: 3px;
 }
+
+
+
+.i_cell{
+  overflow: hidden;
+  width: 100%;
+}
+.i_title{
+  float: left;
+  width: 130px;
+  height: 30px;
+  line-height: 30px;
+  margin-right: 70px;
+  text-align: right;
+  font-size: @font_size_small;
+  color: @c_title_black;
+}
+.i_inputCell{
+  float: left;
+  overflow: hidden;
+}
+.i_error{
+  color: @c_text_red;
+  font-size: @font_size_cell;
+  margin-left: 200px;
+  margin-top: 3px;
+  margin-bottom: @d_spadding_cell;
+}
+
+.i_subtitle{
+  margin-left: 70px;
+  float: left;
+  height: 30px;
+  line-height: 30px;
+  font-size: @d_spadding_small;
+  color: @c_text_red;
+}
+
+
+.i_addItem{
+  width: 20px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  font-size: @font_size_big;
+  background-color: @c_bg_gray;
+  color: @c_text_red;
+}
+.i_subItem{
+  composes: i_addItem;
+}
+
