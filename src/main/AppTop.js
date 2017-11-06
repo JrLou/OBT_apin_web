@@ -2,7 +2,7 @@
  * Created by lixifeng on 17/3/24.
  */
 import React, { Component } from 'react';
-import { Button } from 'antd';
+import { Button, Menu, Dropdown, Icon } from 'antd';
 import Menus from './Menu';
 
 import Sign from './body/component/SignView';
@@ -15,14 +15,29 @@ class page extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            order: false
+            step: 0,
+            isLogin: true
         };
     }
 
     render() {
-        let { order } = this.state;
+        let { step, isLogin } = this.state;
         const { state } = this.props;
-        state && state.hasOwnProperty('order') ? order = state.order : '';
+        state && state.hasOwnProperty('step') ? step = state.step : '';
+        const menu = (
+            <Menu>
+                <Menu.Item>
+                    <a onClick={() => {
+                        window.app_open(this.props.root, '/Account', {
+                            id: '112122323'
+                        });
+                    }}>用户中心</a>
+                </Menu.Item>
+                <Menu.Item>
+                    <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">退出登录</a>
+                </Menu.Item>
+            </Menu>
+        );
         return (
             <div className={less.head}>
                 <div className={less.headContent}>
@@ -35,34 +50,33 @@ class page extends Component {
                         src={require('../images/index_logo.png')}
                     />
 
-                    {!order && <Menus {...this.props} />}
-                    {order ?
-                        <div className={less.right}>
-                            <Steps></Steps>
+                    {!step && <Menus {...this.props} />}
+                    {step ?
+                        <div className={`${less.right} ${less.step}`}>
+                            <Steps step={step}></Steps>
                         </div>
                         :
                         <div className={less.right}>
-                            <div className={less.rightItem}>
-                                {/*<img*/}
-                                {/*className={less.rightIcon}src={require('../images/phone.png')}*/}
-                                {/*/>*/}
-                                {/*<Button type="primary" className={less.login}
-                                onClick={() => {
-                                    window.open("http://mvp.apin.com");
-                                }}
-                            >登录</Button>*/}
-                                <Button type="primary" className={less.login}
-                                    onClick={() => this.modal.showModal(0)}
-                                >登录</Button>
-                                {/*<Button type="primary" className={less.register}
-                                onClick={() => {
-                                    window.open("http://mvp.apin.com/#/TestPage");
-                                }}
-                            >注册</Button>*/}
-                                <Button type="primary" className={less.register}
-                                    prefixCls='my-ant-btn'
-                                    onClick={() => this.modal.showModal(1)}
-                                >注册</Button>
+                            <div className={less.rightItem} style={isLogin ? { marginRight: '44px' } : { marginRight: '30px' }}>
+                                {
+                                    !isLogin && <Button type="primary" className={less.login}
+                                        onClick={() => this.modal.showModal(0)}
+                                    >登录</Button>
+                                }
+                                {
+                                    !isLogin && <Button type="primary" className={less.register}
+                                        prefixCls='my-ant-btn'
+                                        onClick={() => this.modal.showModal(1)}
+                                    >注册</Button>
+                                }
+                                {
+                                    isLogin && <Dropdown overlay={menu}>
+                                        <span>
+                                            Hi,
+                                        <a className="ant-dropdown-link" href="#">对对对<Icon type="down" /></a>
+                                        </span>
+                                    </Dropdown>
+                                }
 
                             </div>
                             <div className={less.rightItem}
