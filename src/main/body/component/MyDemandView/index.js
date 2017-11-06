@@ -78,10 +78,12 @@ class MyDemandView extends Component {
     render() {
 
         return (
-            <div style={{padding:10}} ref="main">
-                出发城市：<input ref="fromPlace" style={{marginRight:30,width:200}}/>
-                目的城市：<input ref="toPlace" style={{marginRight:30,width:200}}/>
-                出发日期：
+            <div style={{paddingLeft:20,paddingTop:30,paddingBottom:30,paddingRight:20}} ref="main">
+                <font className={css.title}>出发城市：</font>
+                <input ref="fromPlace" className={css.input}/>
+                <font className={css.title} >目的城市：</font>
+                <input ref="toPlace" className={css.input} />
+                <font className={css.title} >出发日期：</font>
                 <DatePicker
                     allowClear = {false}
                     getCalendarContainer={() => this.refs.main}
@@ -91,7 +93,7 @@ class MyDemandView extends Component {
                     value={this.state.startValue}
                     onOpenChange={this.handleStartOpenChange.bind(this)}
                 />
-                <font style={{paddingRight:5,paddingLeft:5}}>~</font>
+                <font style={{paddingRight:10,paddingLeft:10}}>—</font>
                 <DatePicker
                     allowClear = {false}
                     getCalendarContainer={() => this.refs.main}
@@ -101,16 +103,16 @@ class MyDemandView extends Component {
                     open={this.state.endOpen}
                     value={this.state.endValue}
                     onOpenChange={this.handleEndOpenChange.bind(this)}
-                    style={{marginRight:30}}/>
-                航程类型：
-                <Select style={{width:100,marginRight:40}} onChange={this.handleChangeType.bind(this)}>
+                    />
+                <font className={css.title} >航程类型：</font>
+                <Select style={{width:160}} onChange={this.handleChangeType.bind(this)}>
                     <Option value="0">哈哈</Option>
                     <Option value="1">呵呵</Option>
                     <Option value="3">嘿嘿</Option>
                     <Option value="">全部</Option>
                 </Select>
-                订单状态：
-                <Select style={{width:100,marginTop:20}} onChange={this.handleChangeStatus.bind(this)}>
+                <font className={css.title}>订单状态：</font>
+                <Select style={{width:160,marginTop:20}} onChange={this.handleChangeStatus.bind(this)}>
                     <Option value="0">待付款</Option>
                     <Option value="1">待发货</Option>
                     <Option value="3">已取消</Option>

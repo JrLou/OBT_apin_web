@@ -6,6 +6,7 @@ import { Button } from 'antd';
 import Menus from './Menu';
 
 import Sign from './body/component/SignView';
+import Steps from './body/component/Steps';
 
 import less from "./AppTop.less";
 
@@ -13,9 +14,15 @@ class page extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            order: false
+        };
     }
 
     render() {
+        let { order } = this.state;
+        const { state } = this.props;
+        state && state.hasOwnProperty('order') ? order = state.order : '';
         return (
             <div className={less.head}>
                 <div className={less.headContent}>
@@ -28,45 +35,51 @@ class page extends Component {
                         src={require('../images/index_logo.png')}
                     />
 
-                    <Menus {...this.props} />
-                    <div className={less.right}>
-                        <div className={less.rightItem}>
-                            {/*<img*/}
-                            {/*className={less.rightIcon}src={require('../images/phone.png')}*/}
-                            {/*/>*/}
-                            {/*<Button type="primary" className={less.login}
+                    {!order && <Menus {...this.props} />}
+                    {order ?
+                        <div className={less.right}>
+                            <Steps></Steps>
+                        </div>
+                        :
+                        <div className={less.right}>
+                            <div className={less.rightItem}>
+                                {/*<img*/}
+                                {/*className={less.rightIcon}src={require('../images/phone.png')}*/}
+                                {/*/>*/}
+                                {/*<Button type="primary" className={less.login}
                                 onClick={() => {
                                     window.open("http://mvp.apin.com");
                                 }}
                             >登录</Button>*/}
-                            <Button type="primary" className={less.login}
-                                onClick={() => this.modal.showModal(0)}
-                            >登录</Button>
-                            {/*<Button type="primary" className={less.register}
+                                <Button type="primary" className={less.login}
+                                    onClick={() => this.modal.showModal(0)}
+                                >登录</Button>
+                                {/*<Button type="primary" className={less.register}
                                 onClick={() => {
                                     window.open("http://mvp.apin.com/#/TestPage");
                                 }}
                             >注册</Button>*/}
-                            <Button type="primary" className={less.register}
-                                prefixCls='my-ant-btn'
-                                onClick={() => this.modal.showModal(1)}
-                            >注册</Button>
+                                <Button type="primary" className={less.register}
+                                    prefixCls='my-ant-btn'
+                                    onClick={() => this.modal.showModal(1)}
+                                >注册</Button>
 
-                        </div>
-                        <div className={less.rightItem}
-                            title="开发测试：打开订单列表"
-                            onClick={() => {
-                                // window.open("http://mvp.apin.com");
-                                window.app_open(this, "/OrderFormList", {
-                                    data: {}
-                                }, "new");
-                            }}
-                        >
-                            <font style={{ fontSize: 12, color: "#666" }}>客服电话  9:00~21:00</font>
-                            <br />
-                            <font style={{ fontSize: 16, color: "#34b0ff" }}>0571—58122998</font>
-                        </div>
-                    </div>
+                            </div>
+                            <div className={less.rightItem}
+                                title="开发测试：打开订单列表"
+                                onClick={() => {
+                                    // window.open("http://mvp.apin.com");
+                                    window.app_open(this, "/OrderFormList", {
+                                        data: {}
+                                    }, "new");
+                                }}
+                            >
+                                <font style={{ fontSize: 12, color: "#666" }}>客服电话  9:00~21:00</font>
+                                <br />
+                                <font style={{ fontSize: 16, color: "#34b0ff" }}>0571—58122998</font>
+                            </div>
+                        </div>}
+
                 </div>
                 <Sign ref={(modal) => this.modal = modal}></Sign>
             </div>

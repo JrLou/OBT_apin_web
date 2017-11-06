@@ -41,7 +41,9 @@ class Menus extends Component {
                         return (
                             <MenuItem key={menu.path}>
                                 <span style={{ display: 'inline-block', width: '100%', height: '100%' }} onClick={() => {
-                                    window.app_open(this.props.root, menu.path, null);
+                                    window.app_open(this.props.root, menu.path, {
+                                        order: menu.path == '/Score'
+                                    });
                                 }}>{menu.name}</span>
                             </MenuItem>
                         );
