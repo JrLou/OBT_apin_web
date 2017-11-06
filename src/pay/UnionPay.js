@@ -64,7 +64,7 @@ class UnionPay extends Component {
             for (let i = 0; i < code; i++) {
                data.push({
                   code: "622***" + i.toString().repeat(4),
-                  type: "招商",
+                  type: "信用卡",
                   icon: "./images/zhaoshang.png"
                });
             }
@@ -122,8 +122,8 @@ class UnionPay extends Component {
                                  </div>
                               ) : (
                                  <div>
-                                    <img src={require("./images/zhaoshang.png")} alt="bank_LOGO"/>
-                                    <div>{obj.code}</div>
+                                    <img className={less.bankLogoImg} src={require("./images/zhaoshang.png")} alt="bank_LOGO"/>
+                                    <div>{obj.type}:&nbsp;&nbsp;{obj.code}</div>
                                  </div>
                               )
                            }

@@ -15,16 +15,21 @@
          font-size: @font_size_center;
          color: @font-dark-color;
       }
-      &_priceTitle{
+
+      &_priceBox{
          font-size: @font_size_cell;
-      }
-      &_price{
-         color:#FF5841;
-         font-size: @font_size_super_big_x;
+         text-align: right;
          &_rmb{
-            font-size: @font_size_cell;
+            color:@font-paytitle-color;
+         }
+         &_price{
+            color:@font-paytitle-color;
+            font-size: @font_size_super_big_x;
+            font-weight: bolder;
          }
       }
+
+
    }
    &_bottom{
       background-color: #F5F5F5;
