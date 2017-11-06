@@ -38,6 +38,16 @@ class page extends Component {
                                     window.open("http://mvp.apin.com");
                                 }}
                             >登录</Button>*/}
+
+                            <Button type="primary" className={less.login} style={{marginLeft:200}}
+                                onClick={()=>{
+                                        window.app_open(this, "/PublishMsg", {
+                                            data:{}
+                                        });
+                                    }
+                                }
+                            >发布</Button>
+
                             <Button type="primary" className={less.login}
                                 onClick={() => this.modal.showModal(0)}
                             >登录</Button>

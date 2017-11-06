@@ -190,6 +190,7 @@ class InputAuto extends Component {
         }
     }
 
+
     render() {
         return (
             <div className="certain-category-search-wrapper" style={{width: "100%"}}>
