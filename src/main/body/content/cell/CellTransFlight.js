@@ -16,13 +16,13 @@ class CellTransFlight extends Component {
     }
 
     render() {
-        let {data} = this.props;
+        let {data,isNoFirst} = this.props;
         if (!data){
             return null;
         }
-        return (<div className={css.main}>{this.createCell(data||{})}</div>);
+        return (<div className={css.main}>{this.createCell(data||{},isNoFirst)}</div>);
     }
-    createCell(data){
+    createCell(data,isNoFirst){
         let obj = data.obj;
         let startDate = obj.depDate?obj.depDate.substring(5):"";
         startDate = startDate.replace("-","月")+"日";
@@ -41,7 +41,8 @@ class CellTransFlight extends Component {
         endDate = endDate.replace("-","月")+"日";
         var itemView = (<div style={{width:"100%",overflow:"hidden"}}>
                 <div className={css.type}>
-                    <img className={css.typeImg} src={data.flightType?require("../../../../images/select_left_icon.png"):require("../../../../images/select_right_icon_def.png")}/>
+                    <div className={css.refTypeLine} style={{borderColor:isNoFirst?"#888D99":"white"}}></div>
+                    <div className={data.flightType?css.typeImg:css.refTypeImg}></div>
                     {data.flightType?<div className={css.typeLine}></div>:null}
                 </div>
                 <div className={css.cellLine}>
@@ -93,7 +94,7 @@ class CellTransFlight extends Component {
                 {data.flightType?<div className={css.table}>
                     <div className={css.trans}>
                         <div className={css.transLineTop}></div>
-                        <img className={css.transImg} src={require("../../../../images/select_left_icon.png")}/>
+                        <div className={css.transImg}></div>
                         <div className={css.transLineBottom}></div>
                     </div>
                     <div className={css.transText}>

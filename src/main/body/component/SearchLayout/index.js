@@ -91,6 +91,7 @@ class SearchLayout extends Component {
     getSwitchLayout(type){
         return (
             <div >
+                
 
                 {this.getSwitchView(this.state.one, "单程",
                     () => {

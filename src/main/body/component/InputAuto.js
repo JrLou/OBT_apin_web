@@ -197,6 +197,7 @@ class InputAuto extends Component {
         }
     }
 
+
     render() {
         let props = {};
         for(let v in this.props){
