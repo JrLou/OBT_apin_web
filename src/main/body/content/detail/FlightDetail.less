@@ -170,21 +170,21 @@
 }
 .cell_right{
   composes: verticalMiddle;
-  padding-left: @d_spadding_small;
+  padding-left: @d_spadding_center;
   font-size: @font_size_center;
   color: @c_title_black;
 }
 
 
 .orderCellItem{
-  width: 50%;
+  width: 35%;
   display: table-cell;
   vertical-align: middle;
-
+  padding-left: 100px;
 }
 .refOrderCellItem{
   composes: orderCellItem;
-  width: 50%;
+  width: 30%;
   text-align: left;
   overflow: hidden;
 }
@@ -235,66 +235,10 @@
   font-size: @font_size_small;
   color: @c_title_black;
   width: 220px;
-  height: 35px;
+  height: 30px;
+  line-height: 30px;
   padding-left: @d_spadding_cell;
   outline: none;
   border-width: 0px;
   border-radius: 3px;
-}
-
-
-.btnCon{
-  composes: content;
-  margin-top: 1.5*@d_spadding_center;
-  background-color: @c_bg_gray;
-  text-align: center;
-}
-.alertText{
-  color: @c_text_red;
-}
-.depositPriceBg{
-  width: 100%;
-  text-align: right;
-  padding-right: @d_spadding_small;
-}
-
-.bottomDiv{
-  background-color: @c_bg_white;
-  margin-left: auto;
-  margin-right: auto;
-  width: @content_width;
-  height: 70px;
-  max-width: @d_screen_width;
-  margin-bottom: @d_spadding_base;
-
-  border-width: 2px;
-  border-style: solid;
-  border-color: @c_text_red;
-  display: table;
-}
-.bottomDiv_left{
-  composes: verticalMiddle;
-  padding-left: @d_spadding_small;
-  width: 40%
-}
-.bottomDiv_center{
-  composes: verticalMiddle;
-  width: 45%
-}
-.bottomBtn{
-  height:40px;
-  line-height:40px;
-  float:left;
-  font-size: @font_size_small;
-  color: @c_title_black;
-
-}
-.bottomDiv_right{
-  composes: verticalMiddle;
-  width: 15%;
-  background-color: @c_text_red;
-  font-size: @font_size_big;
-  color: @c_white;
-  text-align: right;
-  padding-right: @d_spadding_small;
 }
