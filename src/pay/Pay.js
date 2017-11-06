@@ -206,11 +206,13 @@ class page extends Component {
                }}
             />
             <IntegralInfo
-               data={this.data.integral}
+               data={this.data}
                onPriceChange={(use) => {
-                  this.payInfo.upDatePrice(use);
-               }}
+                  if(this.refMoney){
+                      this.refMoney.upDatePrice(use);
+                  }
 
+               }}
             />
 
             <div className={less.nextLayout}>
@@ -218,7 +220,12 @@ class page extends Component {
                   <span className={less.nextLayout_priceTitle}>需支付：</span>
                   <span className={less.nextLayout_price}>
                         <span className={less.nextLayout_price_rmb}>¥</span>
-                     {(1000000 / 100).toFixed(2)}
+                      <Money
+                        ref={(ref)=>{
+                          this.refMoney = ref;
+                        }}
+                        data={this.data.order}
+                      />
                         </span>
                </div>
 
@@ -501,10 +508,10 @@ class page extends Component {
                order: {
                   orderId: "201711111111",
                   passengersInfo: "2成人/1儿童",
-                  price: (Math.random() * 100000).toFixed(0),
+                  price: (Math.random() * 1000).toFixed(0)*100,
                },
                integral: {
-                  all: (Math.random() * 100000).toFixed(0),
+                  all: (Math.random() * 100000*10).toFixed(0),
                   use: 0
                }
             };
@@ -521,6 +528,33 @@ class page extends Component {
 
 }
 
+class Money extends Component{
+   constructor(props){
+      super(props);
+      this.state = {
+          use:0,
+      };
+   }
+    /**
+     *
+     * @param use 单位 / 分
+     */
+    upDatePrice(use) {
+        this.setState({
+            use: use*100
+        });
+    }
+    getData() {
+        return this.props.data || {};
+    }
+   render(){
+       let data = this.getData();
+       data.payPrice = data.price - this.state.use;
+      return <span {...this.props}>
+       {((data.payPrice) / 100).toFixed(2)}
+      </span>;
+   }
+}
 
 page.contextTypes = {
    router: React.PropTypes.object

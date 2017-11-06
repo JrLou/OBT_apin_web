@@ -12,7 +12,7 @@ class IntegralInfo extends Component {
 
    componentDidMount() {
       if (this.props.onPriceChange) {
-         this.props.onPriceChange(this.getData().use);
+         this.props.onPriceChange(this.getData().integral.use);
       }
    }
 
@@ -21,8 +21,10 @@ class IntegralInfo extends Component {
    }
 
    render() {
-      let data = this.getData();
+      let {integral,order} = this.getData();
 
+
+      let maxValue =Math.min( Math.floor(integral.all/1000),Math.floor(order.price/100));
       return (
          <div
             {...this.props}
@@ -32,23 +34,39 @@ class IntegralInfo extends Component {
                   <div className={less.integralInfo_top}>积分抵扣</div>
                   <div className={less.integralInfo_middle}>
                      <div className={less.integralInfo_middle_line1}>
-                        <span className={less.integralInfo_middle_line1_light}>您目前有{data.all}积分:</span>
-                        <span className={less.integralInfo_middle_line1_heavy}>可抵用付款500元</span>
+                        <span className={less.integralInfo_middle_line1_light}>您目前有{integral.all}积分:</span>
+                        <span className={less.integralInfo_middle_line1_heavy}>最低1000积分开始抵扣 </span>
                      </div>
                      <div className={less.integralInfo_middle_line2}>
                         <span className={less.integralInfo_middle_line2_light}>请输入您要抵用的积分:</span>
                         <InputNumber
-                           defaultValue={data.use === 0 ? "": data.use}
+                           defaultValue={integral.use === 0 ? "": integral.use}
                            min={0}
                            step={1}
                            size="large"
-                           formatter={value => `${value}千`}
-                           parser={value => value.replace('千', '')}
-                           onChange={(e) => {
-                              console.log(e);
-                              let v = Number(e)*1000;// Number(e.target.value);
-                              if (Number.isInteger(v)) {
-                                 data.use = v;
+                           formatter={(value) => {
+                           //
+                              console.log(value);
+                              if(!value){
+                                  value = 0;
+                              }
+                               value = Number(value);
+                              if(value> maxValue){
+                                 value = maxValue;
+                              }
+                              return value;
+                           }}
+                           //parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                           placeholder="1000积分/每元"
+                           onChange={(value) => {
+                               value = Number(value);
+                               if(value> maxValue){
+                                   value = maxValue;
+                               }
+                              console.log("eL:"+value);
+                              // let v = Number(value)*1000;// Number(e.target.value);
+                              if (Number.isInteger(value)) {
+                                  integral.use = value;
                                  this.setState({
                                     upData: this.state.upData + 1
                                  });
@@ -56,14 +74,15 @@ class IntegralInfo extends Component {
                                  //请输入数字
                               }
                               if (this.props.onPriceChange) {
-                                 this.props.onPriceChange(data.use);
+                                 this.props.onPriceChange(integral.use);
                               }
                            }}
-                           style={{width: "120"}}
+                           style={{width: "60"}}
                         />&nbsp;
+                        千积分
                         <span className={less.integralInfo_middle_line2_msg}>
                                     可抵用<span
-                           className={less.integralInfo_middle_line2_msg_price}>{(data.use / 1000).toFixed(2)}</span>元
+                           className={less.integralInfo_middle_line2_msg_price}>{integral.use}</span>元
                                 </span>
                      </div>
 

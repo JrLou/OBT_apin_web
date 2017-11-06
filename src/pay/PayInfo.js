@@ -9,9 +9,13 @@ class PayInfo extends Component {
       };
    }
 
+    /**
+     *
+     * @param use 单位 / 分
+     */
    upDatePrice(use) {
       this.setState({
-         use: use
+         use: use*100
       });
    }
 
