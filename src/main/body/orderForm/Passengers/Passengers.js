@@ -105,7 +105,7 @@ class PassengerMsg extends Component{
         ];
 
 
-        if(this.state.orderState in [0,1]){
+        if(this.hasKey(this.state.orderState,[0,1])){
             return(
                 <div></div>
             );
@@ -135,6 +135,22 @@ class PassengerMsg extends Component{
                 </div>
             );
         }
+    }
+
+    /**
+     * 判断数组中是否含有某值
+     * @param key
+     * @param array
+     * @returns {boolean}
+     */
+    hasKey(key,array){
+        let result = false;
+        if(array instanceof Array){
+            if(array.indexOf(key)>=0){
+                result = true;
+            }
+        }
+        return result;
     }
 }
 

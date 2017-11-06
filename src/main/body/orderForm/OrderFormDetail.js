@@ -9,6 +9,7 @@ import TitleBar from './TitleBar/index.js';
 import Passengers from './Passengers/index.js';
 import CellNewFlight from '../content/cell/CellNewFlight.js';
 import OrderInfoView from '../component/OrderInfoView/index.js';
+import PayBottom from '../content/detail/detailComp/PayBottomForDetail.js';
 
 /**
  * 订单状态说明(页面)：
@@ -124,7 +125,7 @@ class OrderFormDetail extends Component{
 
     render(){
         //仅在此处做状态异常判断，如果状态不在此列，说明出现异常，页面不展示
-        if(!(this.state.orderState in [0,1,2,3,5,7,8,12,13,14,15])){
+        if(!(this.hasKey(this.state.orderState,[0,1,2,3,5,7,8,12,13,14,15]))){
             return(
                 <div className={css.noMessage}>订单查询中，请稍后...</div>
             );
@@ -147,7 +148,7 @@ class OrderFormDetail extends Component{
                     </div>
                 </div>
                     {
-                        (this.state.orderState in [0,3,5,7,8,12,13]||this.returnState in [3,5])
+                        (this.hasKey(this.state.orderState,[0,3,5,7,8,12,13])||this.hasKey(this.state.orderState,[3,5]))
                         ?   <div className={css.itemContainer}>
                                 <Passengers
                                     orderState={this.state.orderState}
@@ -162,13 +163,32 @@ class OrderFormDetail extends Component{
                 <div className={css.itemContainer}>
                     <div className={css.orderInfoBox}>
                         <OrderInfoView
-                            type={1}
+                            type={9}
+                            data={{
+                                orderNo:'12312312313',
+                                message:'请在XXXX之前支付',
+                                createTime:'2017-03-02',
+                            }}
                         />
                     </div>
                 </div>
-                <div>
-                    底部操作条
-                </div>
+                {
+                    ([2,3,5].indexOf(this.state.orderState)>=0)
+                    ?<PayBottom
+                        param={{
+                            orderPrice:"2333",
+                            adultPrice:"2333",
+                            childPrice:"2000",
+                            childNum:2,
+                            adultNum:1,
+                            totalPrice:'33333',
+                        }}
+                        payType={this.state.orderState}
+                        timer={3888}
+                    />
+                    :''
+                }
+
             </div>
         );
     }
@@ -178,6 +198,22 @@ class OrderFormDetail extends Component{
      */
     deleteOrderCB(){
         alert('订单删除啦！');
+    }
+
+    /**
+     * 判断数组中是否含有某值
+     * @param key
+     * @param array
+     * @returns {boolean}
+     */
+    hasKey(key,array){
+        let result = false;
+        if(array instanceof Array){
+            if(array.indexOf(key)>=0){
+                result = true;
+            }
+        }
+        return result;
     }
 }
 

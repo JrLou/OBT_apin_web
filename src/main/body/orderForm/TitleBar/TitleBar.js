@@ -77,10 +77,10 @@ class TitleBar extends Component{
     }
 
     render(){
-        if(!(this.state.orderState in [0,1,2,3,5,7,8,12,13,14,15])){
+        let state = this.state.orderState;
+        if(!(this.hasKey(state,[0,1,2,3,5,7,8,12,13,14,15]))){
             return <div></div>;
         }
-        let state = this.state.orderState;
         return(
             <div className={css.stateBar}>
                 <div className={css.stateTitle}>
@@ -107,6 +107,22 @@ class TitleBar extends Component{
     deleteOrder(){
         log('执行删除操作');
         this.deleteCB();
+    }
+
+    /**
+     * 判断数组中是否含有某值
+     * @param key
+     * @param array
+     * @returns {boolean}
+     */
+    hasKey(key,array){
+        let result = false;
+        if(array instanceof Array){
+            if(array.indexOf(key)>=0){
+                result = true;
+            }
+        }
+        return result;
     }
 }
 
