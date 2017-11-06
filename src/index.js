@@ -1,5 +1,5 @@
 import './myAntDesign';
-
+window._ = require('lodash');
 //重写日志系统
 function getUrlSearch(str) {
     var query = {};
