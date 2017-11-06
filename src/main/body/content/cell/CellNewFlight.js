@@ -30,27 +30,11 @@ class CellNewFlight extends Component {
     }
     createCell(dataArr){
         return dataArr.map((data, index)=>{
-           return (<CellLine key={index} data = {data}/>);
+           return (<div className={css.cellBg} style={{borderBottomWidth:(index==dataArr.length-1)?"0px":"1px"}}>
+               {this.createItemCell(data)}
+               {data.data&&data.data.length>1?<CellNewFlightDetail data = {data.data}/>:null}
+           </div>);
         });
-    }
-}
-CellNewFlight.contextTypes = {
-    router: React.PropTypes.object
-};
-
-class CellLine extends Component {
-    constructor(props) {
-        super(props);
-    }
-    componentWillReceiveProps(nextProps) {
-
-    }
-    render(){
-        let {data} = this.props;
-        return (<div className={css.cellBg}>
-            {this.createItemCell(data)}
-            {data.data&&data.data.length>1?<CellNewFlightDetail data = {data.data}/>:null}
-        </div>);
     }
 
     createItemCell(data){
@@ -95,7 +79,11 @@ class CellLine extends Component {
                     </div>
 
                     <div className={css.lineBg}>
-                        <div className={css.line}></div>
+                        <div className={css.line_item}>
+                            <div className={css.line}>
+                                <div className={css.line_line}></div>
+                            </div>
+                        </div>
                     </div>
 
 
@@ -115,7 +103,14 @@ class CellLine extends Component {
 
 
                     <div className={css.lineBg}>
-                        <div className={css.line}></div>
+                        <div className={css.line_item}>
+                            <div className={css.line}>
+                                <div className={css.line_line}></div>
+                            </div>
+                            <div className={css.line_icon}>
+                                <div className={css.line_icon_icon}></div>
+                            </div>
+                        </div>
                     </div>
 
                     <div className={css.placeLine}>
@@ -130,19 +125,8 @@ class CellLine extends Component {
         </div>);
         return itemView;
     }
-
-    createTransferFlight(dataArr){
-        if (!dataArr||dataArr.length<1){
-            return null;
-        }
-        var viewArr = [];
-        for (let i=0;i<dataArr.length;i++){
-            let itemData = dataArr[i];
-            let itemDiv = (<CellNewFlightDetail key={i} data = {itemData}/>);
-            viewArr.push(itemDiv);
-        }
-        return viewArr;
-    }
 }
-
+CellNewFlight.contextTypes = {
+    router: React.PropTypes.object
+};
 module.exports = CellNewFlight;
