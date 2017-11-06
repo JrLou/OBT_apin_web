@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import less from './Panel.less';
 
-import {Button, Modal} from 'antd';
+import {Button, Modal, message} from 'antd';
 
 class Panel extends Component {
    constructor(props) {
@@ -19,7 +19,6 @@ class Panel extends Component {
       }, callBack);
    }
 
-
    getPayingLayout() {
       let verPay = (action) => {
 
@@ -33,37 +32,34 @@ class Panel extends Component {
             <Button
                className={less.modalBtn}
                onClick={() => {
-               verPay("cancel");
-            }}>{this.state.data.cancelText}</Button>
+                  verPay("cancel");
+               }}>{this.state.data.cancelText}</Button>
             <Button
                className={less.modalBtn}
+               type="primary"
                onClick={() => {
-               verPay("ok");
-            }} type="primary">{this.state.data.okText}</Button>
+                  verPay("ok");
+               }}>{this.state.data.okText}</Button>
          </div>
       );
    }
 
    getErrorLayout() {
       return (
-         <div>
-            <img className={less.infoImg} src={require("./images/payErr.png")} alt="支付失败"/>
-            <div style={{color: "red"}}>{this.state.data.content}</div>
-            <Button
-               className={less.modalBtn}
-               type={"primary"}
-               onClick={() => this.show(false)}>
-               我知道了
-            </Button>
+         <div className={less.payResultContainer}>
+            <div>
+               <img className={less.infoImg} src={require("./images/pay_err.png")} alt="支付失败"/>
+               <div className={less.tips}>{this.state.data.content}</div>
+            </div>
          </div>
       );
    }
 
    getSuccessLayout() {
       return (
-         <div>
-            <img className={less.infoImg} src={require("./images/paySucc.png")} alt="支付成功"/>
-            <div style={{color: "green"}}>{this.state.data.content}</div>
+         <div className={less.payResultContainer}>
+            <img className={less.infoImg} src={require("./images/pay_succ.png")} alt="支付成功"/>
+            <div className={less.tips}>{this.state.data.content}</div>
             <Button
                className={less.modalBtn}
                type={"primary"}
@@ -112,6 +108,25 @@ class Panel extends Component {
             break;
       }
 
+      //当为“error”时候，设置显示“X”并且点击“X”或“蒙版”均可以关闭模态框
+      let errProps = null;
+      if(this.state.data.showType === "error"){
+         errProps = {
+            maskClosable: true,
+            closable: this.state.data.showType === "error" ? true : false,
+            onCancel: () => {
+               //不能删除该方法
+               //这里IDE提示没有引用，但实际是引用了的，
+               this.show(false);
+            }
+         };
+      } else {
+         errProps = {
+            confirmLoading: false,
+            maskClosable: false
+         };
+      }
+
       return (
          <Modal
             visible={true}
@@ -125,10 +140,9 @@ class Panel extends Component {
                left: 0,
                height: 220,
             }}
-            confirmLoading={false}
-            maskClosable={false}
             closable={false}
             footer={null}
+            {...errProps}
             {...this.state.data}
          >
             <div className={less.modalConent}>

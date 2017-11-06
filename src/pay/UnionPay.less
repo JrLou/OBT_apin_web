@@ -1,9 +1,44 @@
-.nextLayout{
-  text-align: center;
+@import "../theme.less";
+
+.unionPay {
+
+  .payCpmBox;
+  &_top {
+    .top;
+  }
+  &_middle {
+    .middle;
+    .nocardImg {
+      margin: 20px auto 12px;
+    }
+    .backUp {
+      font-size: 14px;
+      height: 18px;
+      line-height: 18px;
+    }
+  }
 }
-.loading{
+
+.label{
+  display: inline-block;
+  width: 140px;
+}
+
+.addCardBtn {
+  font-weight: bolder;
+  font-size: @font_size_center;
+  line-height: 56px;
+  height: 56px;
+  color: #25B1FF;
+}
+
+.payBtn {
+  .bigOrangeBtn;
+}
+
+.loading {
   text-align: center;
   color: #ff5500;
-  line-height: 50px;
-  font-size: 20px;
+  line-height: 30px;
+  font-size: 18px;
 }

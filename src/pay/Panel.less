@@ -1,55 +1,71 @@
 @import "../theme.less";
+
 @color1: #b8f5ff;
 @color2: #5edaff;
 @color3: #1a9cff;
 
-.modalConent{
-    text-align: center;
-    font-size: @font_size_center;
-    height: 184px;
-    &:after{
-        content:"";
-        height: 0;
-        visibility:hidden;
-        display:block;
-        clear:both;
-    }
-    .infoImg{
-        padding-top: 37px;
-        padding-bottom: 10px;
-    }
-    .getPayingLayout{
-        padding-top: 51px;
-        padding-bottom: 68px;
-    }
-    .animationGroup{
-        padding-top: 64px;
-        padding-bottom: 30px;
-        &_circle{
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            margin: 0 5px 0;
-            background-color: #29A6FF;
-            &:nth-child(1){
-                animation: mymove 1.5s infinite;
-            }
-            &:nth-child(2){
-                animation: mymove 1.5s infinite 0.5s;
-            }
-            &:nth-child(3){
-                animation: mymove 1.5s infinite 1s;
-            }
-        }
+.modalConent {
+   text-align: center;
+   font-size: @font_size_center;
+   height: auto;
+   &:after {
+      content: "";
+      height: 0;
+      visibility: hidden;
+      display: block;
+      clear: both;
+   }
+   .payResultContainer {
+      .infoImg {
+         padding-top: 15px;
+         padding-bottom: 10px;
+      }
+      .tips {
+         line-height: 28px;
+      }
+   }
 
-        @keyframes mymove
-        {
-            0%   {background: @color1;}
-            50%  {background: @color2;}
-            100% {background: @color3;}
-        }
-    }
+   .specialErr {
+      padding: 30px;
+   }
+
+   .getPayingLayout {
+      padding-top: 51px;
+      padding-bottom: 68px;
+   }
+   .animationGroup {
+      padding-top: 64px;
+      padding-bottom: 30px;
+      &_circle {
+         display: inline-block;
+         width: 16px;
+         height: 16px;
+         border-radius: 50%;
+         margin: 0 5px 0;
+         background-color: #29A6FF;
+         &:nth-child(1) {
+            animation: mymove 1.5s infinite;
+         }
+         &:nth-child(2) {
+            animation: mymove 1.5s infinite 0.5s;
+         }
+         &:nth-child(3) {
+            animation: mymove 1.5s infinite 1s;
+         }
+      }
+
+      @keyframes mymove {
+         0% {
+            background: @color1;
+         }
+         50% {
+            background: @color2;
+         }
+         100% {
+            background: @color3;
+         }
+      }
+   }
 }
 
 
