@@ -20,6 +20,7 @@ const {Column, ColumnGroup} = Table;
  * 订单取消      8
  * 订单关闭      9
  * 支付审核失败   10
+ * 支付审核中    11
  * 我的需求      0
  */
 /**
@@ -121,7 +122,16 @@ class OrderInfoView extends Component {
                         </div>
                     </div>
                 );
-            case 10:
+            case 10: {/*支付审核失败*/
+            }
+                return (
+                    <div className={css.bottom}>
+                        {this.getPayDeposit(type, data)}
+                        {this.getPayTailMoney(type, data)}
+                    </div>
+                );
+            case 11: {/*支付审核中*/
+            }
                 return (
                     <div className={css.bottom}>
                         {this.getPayDeposit(type, data)}
@@ -129,7 +139,7 @@ class OrderInfoView extends Component {
                     </div>
                 );
             default:
-               null;
+                null;
         }
     }
 
@@ -178,20 +188,20 @@ class OrderInfoView extends Component {
                               style={{marginLeft: 15}}>（支付方式：{data && data.paymentTailMethod ? data.paymentTailMethod : ""}
                             {type === 10 ? <font className={css.payInfo}
                                                  style={{marginLeft: 15}}>审核不通过原因:{data && data.notPassReason ? data.notPassReason : ""}
-                                </font>
+                            </font>
                                 : null  }
                             <font className={css.payInfo}
                                   style={{marginLeft: 25}}>支付时间：{data && data.payTailTime ? data.payTailTime : "" + "）"}</font></font>
                     </div>
                     {
-                        type===10? <div className={css.aginButtonLayout}>
+                        type === 10 ? <div className={css.aginButtonLayout}>
                             <Button className={css.aginButton}>重新上传</Button>
 
-                        </div>:null
+                        </div> : null
                     }
 
                 </div>
-                {type === 10 ? this.getPayVoucher() : null}
+                {type === 10||type === 11 ? this.getPayVoucher() : null}
 
             </div>
         );
@@ -221,7 +231,7 @@ class OrderInfoView extends Component {
                         <Button className={css.detailButton}>查看订单详情</Button>
                     </div>
                 );
-            case 1, 2, 3, 4, 6, 7, 8, 9:
+            case 1, 2, 3, 4, 6, 7, 8, 9, 11:
                 return (
                     <div className={css.buttonLayout}>
                         <Button className={css.buttonCancel}>取消订单</Button>
@@ -245,7 +255,8 @@ class OrderInfoView extends Component {
                     <div className={css.mainTextLayout}>
                         <div>
                             <font className={css.mainTitle}>订单状态：</font>
-                            <font className={type===0?css.mainGreenContent:css.mainContent}>{data && data.status ? data.status : "暂无"}</font>
+                            <font
+                                className={type === 0 ? css.mainGreenContent : css.mainContent}>{data && data.status ? data.status : "暂无"}</font>
                         </div>
                         <div>
                             <div>{this.getMessage(type, data)}</div>

@@ -3,7 +3,8 @@
  */
 import React, {Component} from "react";
 import less from "./index.less";
-import {DatePicker,Button,Select,Table} from "antd";
+import {DatePicker, Button, Select, Table} from "antd";
+import CellNewFlight from "../../content/cell/CellNewFlight";
 
 import OrderInfoView from '../../component/OrderInfoView/index';
 /**
@@ -24,34 +25,117 @@ class DemandInfoView extends Component {
         super(props);
 
         this.state = {
-            itemNum:3
+            itemNum: 3,
+            upView: 1,
+            index: 0,
         };
     }
 
+    getUpView() {
+        this.setState({
+            upView: this.state.upView + 1
+        });
+    }
+
     componentDidMount() {
+        let go = {
+            arrAirport: "塞班",
+            arrDate: "2017-11-05",
+            arrTime: "15:30",
+            compName: "北京首都航空有限公司",
+            depAirport: "杭州萧山",
+            depDate: "2017-11-05",
+            depTime: "08:10",
+            flightTime: "7:20",
+            flightType: "2",
+            logo: null,
+            num: "JD395",
+            tag: 0
+        };
+        let back = {
+            arrAirport: "杭州萧山",
+            arrDate: "2017-11-09",
+            arrTime: "10:25",
+            compName: "北京首都航空有限公司",
+            depAirport: "塞班",
+            depDate: "2017-11-09",
+            depTime: "07:00",
+            flightTime: "3:25",
+            flightType: "2",
+            logo: null,
+            num: "JD396",
+            tag: 0,
+        };
+        let zhongZhuanObj = [{
+            flightType: true,
+            obj: go
+        }, {
+            flightType: true,
+            obj: go
+        }, {
+            flightType: false,
+            obj: back
+        }];
+
+        let flightTypeGo = [{
+            flightType: true,
+            obj: go,
+            data: zhongZhuanObj
+        }];
+
+
+        let flightTypeGoAndBack = [{
+            flightType: true,
+            obj: go,
+            data: zhongZhuanObj
+        }, {
+            flightType: false,
+            obj: back,
+            data: zhongZhuanObj
+        }];
+
+        let moreFlightObj = [{
+            numFlight: "一",
+            obj: go,
+        }, {
+            numFlight: "二",
+            obj: go,
+        }, {
+            numFlight: "三",
+            obj: back,
+        }];
+
+
+        this.listData = {
+            rule: "行李规行李规则行李规则行李规则行李规则行李规则行李规则行李规则则",
+            obj: flightTypeGo,
+            flightType: 1
+        };
+        this.getUpView();
     }
 
     render() {
+
         let {data, type} = this.props;
         return (
             <div className={less.top}>
 
-                {type===7?this.getMultiPass(type,data):this.getTop(type,data)}
-                {type===1?this.getMessage("预计在30分钟内为您处理需求"):
-                    (type===3?this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭"):null)}
-                {type===3?this.getCloseReason():null}
-                {type===1||type===3||type===4?this.getButton(type):null}
-                {type===2||type===5?<OrderInfoView type={0}/>:null}
-                {type===7?this.getFlightInfo():null}
+                {type === 7 ? this.getMultiPass(type, data) : this.getTop(type, data)}
+                {type === 1 ? this.getMessage("预计在30分钟内为您处理需求") :
+                    (type === 3 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
+                {type === 3 ? this.getCloseReason() : null}
+                {type === 1 || type === 3 || type === 4 ? this.getButton(type) : null}
+                {type === 2 || type === 5 ? <OrderInfoView type={0}/> : null}
+                {type === 7 ? this.getFlightInfo() : null}
             </div>
         );
     }
 
 
-    getMessage(messge){
-        return(
+    getMessage(messge) {
+        return (
             <div className={less.messageLayout}>
-                <div  className={less.img}>
+                <div className={less.img}>
                     <img src={require("../../../../images/login_check.png")}/>
                 </div>
                 <div className={less.messageText}>{messge}</div>
@@ -59,21 +143,21 @@ class DemandInfoView extends Component {
         );
     }
 
-    getButton(type){
-        return(
+    getButton(type) {
+        return (
             <div className={less.buttonBottomLayout}>
                 <div>
-                    <Button className={less.buttonAgin}>{type===1?"联系爱拼机客服":"重新发布需求"}</Button>
+                    <Button className={less.buttonAgin}>{type === 1 ? "联系爱拼机客服" : "重新发布需求"}</Button>
                     {
-                        type===3?<Button className={less.buttonContact}>联系爱拼机客服</Button>:null
+                        type === 3 ? <Button className={less.buttonContact}>联系爱拼机客服</Button> : null
                     }
-                    </div>
+                </div>
             </div>
         );
     }
 
-    getCloseReason(){
-        return(
+    getCloseReason() {
+        return (
             <div className={less.closeMessageLayout}>
                 <h2 className={less.title}>关闭原因</h2>
                 <div className={less.line}/>
@@ -86,19 +170,19 @@ class DemandInfoView extends Component {
         );
     }
 
-    getDemandButton(type){
-        if(type===1||type===5||type===7||type===8){
-           return(
-               <div className={less.buttonLayout}>
-                   <Button className={less.buttonCancel}>取消需求</Button>
-               </div>
-           );
-        }else if(type===2){
-            return(
-               null
+    getDemandButton(type) {
+        if (type === 1 || type === 5 || type === 7 || type === 8) {
+            return (
+                <div className={less.buttonLayout}>
+                    <Button className={less.buttonCancel}>取消需求</Button>
+                </div>
             );
-        }else {
-            return(
+        } else if (type === 2) {
+            return (
+                null
+            );
+        } else {
+            return (
                 <div className={less.buttonLayout}>
                     <Button className={less.buttonDelete}>删除需求</Button>
                 </div>
@@ -106,8 +190,8 @@ class DemandInfoView extends Component {
         }
     }
 
-    getMultiPass(type,data){
-        return(
+    getMultiPass(type, data) {
+        return (
             <div className={less.topMessage}>
                 <h2 className={less.title}>需求信息</h2>
                 <div className={less.line}/>
@@ -115,66 +199,103 @@ class DemandInfoView extends Component {
                     <div className={less.mainTextLayout}>
                         <div>
                             <font className={less.mainTitle}>需求状态：</font>
-                            <font className={type===1?less.mainContentGreenStatus:(type===3?less.mainContentClose:less.mainContent)}>{data&&data.status?data.status:"暂无"}</font>
+                            <font
+                                className={type === 1 ? less.mainContentGreenStatus : (type === 3 ? less.mainContentClose : less.mainContent)}>{data && data.status ? data.status : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
-                            <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.creatTime?data.creatTime:"暂无"}</font>
+                            <font
+                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.creatTime ? data.creatTime : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>航程类型：</font>
-                            <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.vayageType?data.vayageType:"暂无"}</font>
+                            <font
+                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.vayageType ? data.vayageType : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>航班人数：</font>
-                            <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.peopleNum?data.peopleNum:"暂无"}</font>
+                            <font
+                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.peopleNum ? data.peopleNum : "暂无"}</font>
                         </div>
                     </div>
                     {this.getDemandButton(type)}
                     <div className={less.tripLayout}>
                         {this.getTripList()}
-                        <div style={{clear:"both"}}/>
+                        <div style={{clear: "both"}}/>
                     </div>
 
 
-                    <div style={{paddingTop:17,paddingLeft:20,marginBottom:50}}>
+                    <div style={{paddingTop: 17, paddingLeft: 20, marginBottom: 50}}>
                         <font className={less.mainTitle}>备注：</font>
-                        <font className={type===3?less.mainContentClose1:less.mainContent1}>{data&&data.mark?data.mark:"暂无"}</font>
+                        <font
+                            className={type === 3 ? less.mainContentClose1 : less.mainContent1}>{data && data.mark ? data.mark : "暂无"}</font>
                     </div>
                 </div>
             </div>
         );
     }
 
-    getFlightInfo(){
-        return(
-            <div className={less.topMessage}>
-                <h2 className={less.title}>航班信息</h2>
-                <div className={less.line}/>
-
-                <div>
-                    {this.getConfirmButton()}
-                </div>
-
+    getFlightInfo() {
+        return (
+            <div>
+                {this.getConfirmButton()}
             </div>
         );
     }
-    getConfirmButton(){
-        let arr=[];
-        for(let i=0;i<6;i++){
+
+    getConfirmButton() {
+        let arr = [];
+        for (let i = 0; i < 6; i++) {
             arr.push(i);
         }
-        return(
+
+        return (
             arr.map((data, index) => {
                 return (
-                   <div style={{marginTop:20}}>
-                       <div className={less.uncertainFlightButton}>
-                           <div className={less.uncertainBtnImg}>
-                               <img src={require("../../../../images/login_check.png")}/>
-                           </div>
-                           <div className={less.uncertainBtnText}>确定此航班</div>
-                       </div>
-                   </div>
+                    <div className={less.flightItem}>
+                        {
+                            index === 0 ? <div style={{paddingTop: 15}}><h2 className={less.title}>航班信息</h2>
+                                <div className={less.line}/>
+                            </div> : null
+                        }
+                        <div className={less.programmeLayout}>方案{index + 1}</div>
+
+                        <div style={{marginTop: 20}} className={less.flightInfoLayout}>
+                            <div className={less.flightButtonLeftLayout}>
+                                <CellNewFlight dataSource={ this.listData}/>
+                            </div>
+                            <div className={less.flightButtonRightLayout}>
+                                <div className={less.flightButtonRightContentLayout}>
+                                    <div className={less.flightRightButton} style={{paddingRight: 30}}>
+                                        <div style={{color: "#999", fontSize: 14, textAlign: "right"}}>含税价</div>
+                                        <div style={{textAlign: "right"}}>
+                                            <font className={less.monetSymbol}>¥</font>
+                                            <font
+                                                className={less.money}>{data && data.totalMoney ? data.totalMoney : "0"}</font>
+                                            <font className={less.monetSymbol}>起</font>
+                                        </div>
+                                    </div>
+                                    <div className={less.flightLeftButton}>
+                                        <div
+                                            className={this.state.index === index ? less.confirmFlightButton : less.uncertainFlightButton}
+                                            onClick={() => {
+                                                this.setState({index: index});
+                                            }}>
+                                            <div
+                                                className={this.state.index === index ? less.confirmBtnImg : less.uncertainBtnImg}>
+                                                <img src={
+                                                    this.state.index === index ? require('../../../../images/confirm_check.png') : require('../../../../images/confirm_uncheck.png')}/>
+                                            </div>
+                                            <div
+                                                className={this.state.index === index ? less.confirmBtnText : less.uncertainBtnText}>
+                                                确定此航班
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 );
 
             })
@@ -182,75 +303,108 @@ class DemandInfoView extends Component {
     }
 
 
-    getTop(type,data){
-        return(
-           <div className={less.topMessage}>
-               <h2 className={less.title}>需求信息</h2>
-               <div className={less.line}/>
-               <div className={less.content}>
-                   <div className={less.mainTextLayout}>
-                       <div>
-                           <font className={less.mainTitle}>需求状态：</font>
-                           <font className={type===1||type===8?less.mainContentGreenStatus:(type===3?less.mainContentClose:less.mainContent)}>{data&&data.status?data.status:"暂无"}</font>
-                       </div>
-                       <div>
-                           <font className={less.mainTitle}>创建时间：</font>
-                           <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.creatTime?data.creatTime:"暂无"}</font>
-                       </div>
-                       <div>
-                           <font className={less.mainTitle}>航程：</font>
-                           <font className={type===3?less.mainContentCloseBig:less.mainContentBig}>{data&&data.vayage?data.vayage:"暂无"}</font>
-                       </div>
-                       <div>
-                           <font className={less.mainTitle}>需求类型：</font>
-                           <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.demandType?data.demandType:"暂无"}</font>
-                       </div>
-                       <div>
-                           <font className={less.mainTitle}>航程类型：</font>
-                           <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.vayageType?data.vayageType:"暂无"}</font>
-                       </div>
-                       <div>
-                           <font className={less.mainTitle}>航班人数：</font>
-                           <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.peopleNum?data.peopleNum:"暂无"}</font>
-                       </div>
-                       <div>
-                           <font className={less.mainTitle}>出发日期：</font>
-                           <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.startTime?data.startTime:"暂无"}</font>
-                       </div>
-                       <div>
-                           <font className={less.mainTitle}>返程日期：</font>
-                           <font className={type===3?less.mainContentClose:less.mainContent}>{data&&data.returnTime?data.returnTime:"暂无"}</font>
-                       </div>
-                       <div>
-                           <font className={less.mainTitle}>备注：</font>
-                           <font className={type===3?less.mainContentClose1:less.mainContent1}>{data&&data.mark?data.mark:"暂无"}</font>
-                       </div>
+    getTop(type, data) {
+
+        let img = require('../../../../images/flight_return.png');
+        return (
+            <div className={less.topMessage}>
+                <h2 className={less.title}>需求信息</h2>
+                <div className={less.line}/>
+                <div className={less.content}>
+                    <div className={less.mainTextLayout}>
+                        <div>
+                            <font className={less.mainTitle}>需求状态：</font>
+                            <font
+                                className={type === 1 || type === 8 ? less.mainContentGreenStatus : (type === 3 ? less.mainContentClose : less.mainContent)}>{data && data.status ? data.status : "暂无"}</font>
+                        </div>
+                        <div>
+                            <font className={less.mainTitle}>创建时间：</font>
+                            <font
+                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.creatTime ? data.creatTime : "暂无"}</font>
+                        </div>
+                        <div className={less.voyageLayout} style={{marginTop: 0}}>
+                            <div className={less.voyageTitle}>航程：</div>
+                            {/*<font*/}
+                            {/*className={type === 3 ? less.mainContentCloseBig : less.mainContentBig}>{data && data.vayage ? data.vayage : "暂无"}</font>*/}
+                            <div className={less.voyageContentLayout}>
+                                <div className={less.voyageContent}>
+                                    <div className={type === 3 ? less.voyageGray : less.voyage}
+                                         style={{paddingLeft: 54, paddingRight: 10}}>杭州
+                                    </div>
+                                    <div
+                                        className={less.voyageImg}
+                                        style={{
+                                            width: 19,
+                                            height: 10,
+                                            backgroundImage: "url(" + img + ")",
+                                        }}
+                                    >
+                                    </div>
+                                    <div className={type === 3 ? less.voyageGray : less.voyage}
+                                         style={{paddingLeft: 10}}>杭州
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div style={{clear: "both", marginTop: 0}}/>
+                        <div style={{marginTop: 0}}>
+                            <font className={less.mainTitle}>需求类型：</font>
+                            <font
+                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.demandType ? data.demandType : "暂无"}</font>
+                        </div>
+                        <div>
+                            <font className={less.mainTitle}>航程类型：</font>
+                            <font
+                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.vayageType ? data.vayageType : "暂无"}</font>
+                        </div>
+                        <div>
+                            <font className={less.mainTitle}>航班人数：</font>
+                            <font
+                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.peopleNum ? data.peopleNum : "暂无"}</font>
+                        </div>
+                        <div>
+                            <font className={less.mainTitle}>出发日期：</font>
+                            <font
+                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.startTime ? data.startTime : "暂无"}</font>
+                        </div>
+                        <div>
+                            <font className={less.mainTitle}>返程日期：</font>
+                            <font
+                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.returnTime ? data.returnTime : "暂无"}</font>
+                        </div>
+                        <div>
+                            <font className={less.mainTitle}>备注：</font>
+                            <font
+                                className={type === 3 ? less.mainContentClose1 : less.mainContent1}>{data && data.mark ? data.mark : "暂无"}</font>
+                        </div>
 
 
-                   </div>
-                   {this.getDemandButton(type)}
+                    </div>
+                    {this.getDemandButton(type)}
 
-               </div>
-           </div>
+                </div>
+            </div>
         );
     }
 
-    getTripList(){
-        let arr=[];
-        for(let i=0;i<6;i++){
+    getTripList() {
+        let arr = [];
+        for (let i = 0; i < 6; i++) {
             arr.push(i);
         }
-        return(
+        return (
             arr.map((data, index) => {
                 return (
-                    this.getTripItem(data,index)
+                    this.getTripItem(data, index)
                 );
 
             })
-    );
+        );
     }
 
-    getTripItem(data,index){
+    getTripItem(data, index) {
         // if (!data)return null;
         // if(data.voyage){
         //     data.voyage = data.voyage.replace("<->","-");
@@ -276,7 +430,7 @@ class DemandInfoView extends Component {
         // }else{
         //     img = require('../../../../images/return.png');
         // }
-        return(
+        return (
             <div
                 className={less.cell}
             >
@@ -301,24 +455,25 @@ class DemandInfoView extends Component {
                         </div>
                     </div>
                     <div className={less.bottomRight}>
-                        <div className={less.date}>{"行程"+index}</div>
-                        <div className={less.date} style={{marginTop:5}}>{this.getTimeShow("2-10")}</div>
+                        <div className={less.date}>{"行程" + index}</div>
+                        <div className={less.date} style={{marginTop: 5}}>{this.getTimeShow("2-10")}</div>
                     </div>
                 </div>
             </div>
         );
     }
-    getTimeShow(value){
-        if(!value){
+
+    getTimeShow(value) {
+        if (!value) {
             return value;
         }
-        let arr= value.split("-");
+        let arr = value.split("-");
         if (arr) {
             if (arr.length < 3) {
-                let p = [ "月", "日"];
+                let p = ["月", "日"];
                 let time = "";
-                for (let i=0;i<arr.length;i++) {
-                    time+=(arr[i]+p[i]);
+                for (let i = 0; i < arr.length; i++) {
+                    time += (arr[i] + p[i]);
                 }
                 return time;
             } else {

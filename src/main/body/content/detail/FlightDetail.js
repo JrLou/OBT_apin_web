@@ -4,8 +4,8 @@
 /**
  * Created by lixifeng on 16/10/25.
  */
-import React, {Component,Input} from 'react';
-import {message,Button} from 'antd';
+import React, {Component} from 'react';
+import {message,Button,Form,Input} from 'antd';
 import css from './FlightDetail.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APIGYW from "../../../../api/APIGYW.js";
@@ -14,9 +14,11 @@ import StateProgress from "./detailComp/StateProgress.js";
 import CellFlight from "../cell/CellFlight.js";
 import CellNewFlight from "../cell/CellNewFlight.js";
 import PayBottom from "./detailComp/PayBottom.js";
+import MyModalRequire from "./detailComp/MyModalRequire.js";
 
 import MyInput from '../../component/MyInput.js';
 
+const FormItem = Form.Item;
 class page extends Component {
     constructor(props) {
         super(props);
@@ -134,7 +136,8 @@ class page extends Component {
 
     render() {
         this.totalPrice = 2300*this.childNum+2333*this.adultNum;
-        var div = (
+        const { getFieldDecorator } = this.props.form;
+        let div = (
             <div className={css.main}>
                 <div className={css.content} style={{paddingLeft:"100px",paddingRight:"100px"}}>
                     <StateProgress num = {1}/>
@@ -158,6 +161,54 @@ class page extends Component {
                     </div>
                     <div className={css.table}>
                         <div className={css.orderCellItem}>
+                            <div className={css.i_cell}>
+                                <div className={css.i_title}>{"成人(12岁以上):"}</div>
+                                <div className={css.i_inputCell}>
+                                    <div style={{float:"left"}}>
+                                        <div className={css.i_addItem}
+                                             onClick={()=>{
+                                                 // this.addAction(false);
+                                             }}
+                                        >{"-"}</div>
+                                    </div>
+
+                                    <FormItem style={{float:"left"}}>
+                                        {getFieldDecorator('adultNum', {
+                                            rules: [{
+                                                required: true,
+                                                message: '人数必须大于0',
+                                            }],
+                                            initialValue: this.state.adultNum
+                                        })(
+                                            <Input value={this.state.myNum}
+                                                   style={{float:"left",width:"80px",height:"25px"}}
+                                                   onChange={(e)=>{
+                                                       let value = e.target.value;
+                                                       this.setState({
+                                                           myNum:value,
+                                                       },()=>{
+
+                                                       });
+                                                   }}/>
+                                        )}
+                                    </FormItem>
+
+
+                                    <div style={{float:"left"}}>
+                                        <div className={css.i_addItem}
+                                             onClick={()=>{
+                                                 // this.addAction(true);
+                                             }}
+                                        >{"+"}</div>
+                                    </div>
+                                </div>
+                                <div className={css.i_subtitle}>{"2333"}</div>
+                            </div>
+
+
+
+
+
                             <MyInput
                                 ref="adult"
                                 maxLength={4}
@@ -252,11 +303,25 @@ class page extends Component {
                         adultNum:this.adultNum,
                         totalPrice:this.totalPrice,
                     }}
-                    isPay={false}
+                    isPay={true}
                     callBack={()=>{
-                        alert("支付成功");
+                        this.props.form.validateFields((err, values) => {
+                            if (!err) {
+                                console.log('Received values of form: ', values);
+                            }
+                        });
+
+                        // this.myModalRequire.showModal(true,
+                        //     {
+                        //         title:"提示",
+                        //         desc:"您下单的人数已超过库存余位,是否提交至客服处理?"
+                        //     });
                     }}/>
 
+                <MyModalRequire ref={(a) => this.myModalRequire = a}
+                         callBack={(myNum)=>{
+                             // this.commitSit(myNum);
+                         }}/>
             </div>);
         return div;
     }
@@ -304,7 +369,8 @@ class page extends Component {
         return viewArr;
     }
 }
+const FlightDetail = Form.create()(page);
 page.contextTypes = {
     router: React.PropTypes.object
 };
-module.exports = page;
+module.exports = FlightDetail;

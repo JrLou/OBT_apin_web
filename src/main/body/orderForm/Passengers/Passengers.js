@@ -1,6 +1,16 @@
 /**
  * Created by louxudong on 2017/11/1.
  */
+
+/**
+ * 订单状态说明  orderState
+ * 0：订单取消 1：等待确认 2：待付订金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
+ * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中 15：支付审核失败
+ *
+ * 接口可能返回的值： returnState
+ * 0：订单取消 1：等待确认 2：待付订金 3：待付全款 5：待付尾款 7：已出票 8：已关闭
+ */
+
 import React, {Component} from 'react';
 import css from './Passengers.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
@@ -12,10 +22,11 @@ class PassengerMsg extends Component{
     constructor(props){
         super(props);
         this.state = {
-            orderState:this.props.orderState,  //0：等待确认 1：待付定金 2：待付尾款 3：待付款 4：已付尾款(未录乘机人) 5：等待出票 6：已出票 7：订单取消 8：订单关闭
+            orderState:this.props.orderState,
             orderID:this.props.orderID,
             defaultData:this.props.defaultData,
-            checkedMsg:false,       //是否已经点击确认乘机人信息
+            isPassed:this.props.isPassed?this.props.isPassed:false,     //是否已经确认了乘机人
+            checkedMsg:false,       //是否已经勾选'确认乘机人信息'
         };
 
     }
@@ -98,7 +109,7 @@ class PassengerMsg extends Component{
             return(
                 <div></div>
             );
-        }else if(this.state.orderState in [2,3,4]){
+        }else{
             return(
                 <div className={css.passengerList}>
                     <div className={css.titleBar}>
@@ -123,14 +134,7 @@ class PassengerMsg extends Component{
                     </div>
                 </div>
             );
-        }else{
-            return(
-              <div>
-                  5678
-              </div>
-            );
         }
-
     }
 }
 
