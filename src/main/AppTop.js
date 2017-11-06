@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Button } from 'antd';
+import Menus from './Menu';
 
 import Sign from './body/component/SignView';
 
@@ -18,16 +19,16 @@ class page extends Component {
         return (
             <div className={less.head}>
                 <div className={less.headContent}>
-                    <a>
-                        <img
-                            onClick={() => {
-                                log(this.props.root);
-                                window.app_open(this.props.root, "/", null, "self");
-                            }}
-                            className={less.left}
-                            src={require('../images/index_logo.png')}
-                        />
-                    </a>
+                    <img
+                        onClick={() => {
+                            log(this.props.root);
+                            window.app_open(this.props.root, "/", null, "self");
+                        }}
+                        className={less.left}
+                        src={require('../images/index_logo.png')}
+                    />
+
+                    <Menus {...this.props} />
                     <div className={less.right}>
                         <div className={less.rightItem}>
                             {/*<img*/}
@@ -63,7 +64,7 @@ class page extends Component {
                         >
                             <font style={{ fontSize: 12, color: "#666" }}>客服电话  9:00~21:00</font>
                             <br />
-                            <font style={{ fontSize: 16, color: "#34b0ff" }}>0571-58122998</font>
+                            <font style={{ fontSize: 16, color: "#34b0ff" }}>0571—58122998</font>
                         </div>
                     </div>
                 </div>

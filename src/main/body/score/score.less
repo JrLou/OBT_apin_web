@@ -1,0 +1,66 @@
+@import '../../../theme.less';
+.scoreContainer {
+    background-color: @bg-color;
+    padding: 16px 20px;
+}
+
+.scoreTitle {
+    font-size: @font_size_center;
+    color: @font-color;
+    line-height: 21px;
+    margin-bottom: 15px;
+}
+
+.scoreHead {
+    background: #F5F5F5;
+    border: 1px solid #DDDDDD;
+    height: 131px;
+    padding: 32px 0;
+    position: relative;
+    .line {
+        width: 1px;
+        height: 36px;
+        background-color: #DDDDDD;
+        position: absolute;
+        top: 48px;
+        left: 50%;
+    }
+}
+
+.scoreDes {
+    display: inline-block;
+    width: 50%;
+    text-align: center;
+    .title {
+        font-size: @font-size-base + 4px;
+        line-height: 24px;
+    }
+    .scoreNum {
+        font-size: 34px;
+        line-height: 45px;
+        &.scoreTotal {
+            color: #30C27B;
+        }
+        &.scoreConsume {
+            color: #F36F00;
+        }
+    }
+}
+
+.scoreList {
+    margin-top: 20px;
+}
+
+.rule {
+    font-size: 14px;
+    line-height: 22px;
+    li {
+        margin-bottom: 12px;
+    }
+}
+
+.explain {
+    text-align: center;
+    color: #999;
+    margin-top: 84px;
+}

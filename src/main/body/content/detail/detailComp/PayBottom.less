@@ -1,0 +1,49 @@
+@import "../../../../../theme.less";
+.payDiv{
+  position: fixed;
+  bottom: 25px;
+}
+.bottomDiv{
+  background-color: @c_bg_white;
+  margin-left: auto;
+  margin-right: auto;
+  width: @d_screen_width;
+  height: 80px;
+
+  border-width: 2px;
+  border-style: solid;
+  border-color: @c_text_red;
+  display: table;
+}
+.bottomDiv_left{
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: @d_spadding_small;
+  width: 40%
+}
+.bottomDiv_center{
+  display: table-cell;
+  vertical-align: middle;
+  width: 40%
+}
+.bottomBtn{
+  height:40px;
+  line-height:40px;
+  float:left;
+  font-size: @font_size_small;
+  color: @c_title_black;
+}
+.bottomDiv_right{
+  display: table-cell;
+  vertical-align: middle;
+  width: 20%;
+  background-color: @c_text_red;
+  font-size: 28px;
+  color: @c_white;
+  text-align: center;
+}
+.depositPriceBg{
+  width: 100%;
+  text-align: right;
+  padding-right: @d_spadding_small;
+}
