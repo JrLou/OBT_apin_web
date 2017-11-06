@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-06 15:28:09
+ * @Last Modified time: 2017-11-06 16:03:01
  */
 
 import React, { Component } from 'react';
@@ -35,6 +35,7 @@ class AccountLoginForm extends React.Component {
         return (
             <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <FormItem
+                prefixCls="my-ant-form"
                     validateStatus={userNameError ? 'error' : ''}
                     help={userNameError || ''}
                 >
@@ -45,6 +46,7 @@ class AccountLoginForm extends React.Component {
                         )}
                 </FormItem>
                 <FormItem
+                prefixCls="my-ant-form"
                     validateStatus={passwordError ? 'error' : ''}
                     help={passwordError || ''}
                 >
@@ -54,7 +56,7 @@ class AccountLoginForm extends React.Component {
                         <Input prefixCls='my-ant-input' type="password" placeholder="密码" autoComplete="new-password" />
                         )}
                 </FormItem>
-                <FormItem>
+                <FormItem prefixCls="my-ant-form">
                     <Button
                         prefixCls="my-ant-btn"
                         size="large"
