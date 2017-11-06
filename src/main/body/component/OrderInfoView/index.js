@@ -94,20 +94,43 @@ class OrderInfoView extends Component {
                         </div>
                     </div>
                 );
-            case 5 , 6, 7: {/*已付尾款*/
-            }
-            {/*等待出票*/
-            }
-            {/*已出票*/
+            case 5: {/*已付尾款*/
             }
                 return (
                     <div className={css.bottom}>
                         {this.getPayDeposit(type, data)}
                         {this.getPayTailMoney(type, data)}
                     </div>);
-            case 8, 9: {/*订单关闭*/
+            case 6: {/*等待出票*/
             }
-            {/*订单取消*/
+                return (
+                    <div className={css.bottom}>
+                        {this.getPayDeposit(type, data)}
+                        {this.getPayTailMoney(type, data)}
+                    </div>);
+            case 7: {/*已出票*/
+            }
+                return (
+                    <div className={css.bottom}>
+                        {this.getPayDeposit(type, data)}
+                        {this.getPayTailMoney(type, data)}
+                    </div>);
+            case 8: {/*订单关闭*/
+            }
+                return (
+                    <div className={css.bottom}>
+                        {this.getPayDeposit(type, data)}
+                        {this.getPayTailMoney(type, data)}
+                        <div style={{marginTop: 25}}>
+                            <font className={css.payInfo}>订单关闭：</font>
+                            <font className={css.payInfo}
+                                  style={{marginLeft: 25}}> {data && data.closeReason ? data.closeReason : "暂无"}
+                                <font
+                                    style={{marginLeft: 15}}>（关闭时间 {data && data.closeTime ? data.closeTime : ""}）</font></font>
+                        </div>
+                    </div>
+                );
+            case  9: {/*订单取消*/
             }
                 return (
                     <div className={css.bottom}>
@@ -201,48 +224,43 @@ class OrderInfoView extends Component {
                     }
 
                 </div>
-                {type === 10||type === 11 ? this.getPayVoucher() : null}
+                {type === 10 || type === 11 ? this.getPayVoucher() : null}
 
             </div>
         );
     }
 
     getMessage(type, data) {
-        switch (type) {
-            case 1, 2, 3, 4, 6, 7, 8, 9:
-                return (
-                    <div className={css.messageLayout}>
-                        <div className={css.img}>
-                            <img src={require("../../../../images/login_check.png")}/>
-                        </div>
-                        <div className={css.messageText}>{data && data.message ? data.message : ""}</div>
+        if (type === 1 || type === 2 || type === 3 || type === 4) {
+            return (
+                <div className={css.messageLayout}>
+                    <div className={css.img}>
+                        <img src={require("../../../../images/login_check.png")}/>
                     </div>
-                );
-            default:
-                null;
+                    <div className={css.messageText}>{data && data.message ? data.message : "暂无"}</div>
+                </div>
+            );
         }
     }
 
     getButton(type) {
-        switch (type) {
-            case 0:
-                return (
-                    <div className={css.buttonLayout}>
-                        <Button className={css.detailButton}>查看订单详情</Button>
-                    </div>
-                );
-            case 1, 2, 3, 4, 6, 7, 8, 9, 11:
-                return (
-                    <div className={css.buttonLayout}>
-                        <Button className={css.buttonCancel}>取消订单</Button>
-                    </div>
-                );
-            default:
-                return (
-                    <div className={css.emptyButton}/>
-                );
+        if(type===0){
+            return (
+                <div className={css.buttonLayout}>
+                    <Button className={css.detailButton}>查看订单详情</Button>
+                </div>
+            );
+        }else if(type===1||type===2||type===3||type===4||type===11){
+            return (
+                <div className={css.buttonLayout}>
+                    <Button className={css.buttonCancel}>取消订单</Button>
+                </div>
+            );
+        }else {
+            return (
+                <div className={css.emptyButton}/>
+            );
         }
-
     }
 
     render() {
