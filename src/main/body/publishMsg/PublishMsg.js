@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Form, DatePicker, TimePicker, Button, Input, Row, Col, Radio, AutoComplete, Icon } from 'antd';
+import { Form, DatePicker, TimePicker, Button, Input, Row, Col, Radio, AutoComplete, Icon, message } from 'antd';
+import { HttpTool } from "../../../../lib/utils/index.js";
 import AutoInput from "../component/InputAuto";
 import less from './PublishMsg.less';
+import moment from 'moment';
 const dateFormat = 'YYYY-MM-DD';
 const FormItem = Form.Item;
 const MonthPicker = DatePicker.MonthPicker;
@@ -19,50 +21,84 @@ class page extends Component {
         };
     }
 
-    //提交
-    check() {
-        //  e.preventDefault();
+
+    check() {//拼接数据
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                //console.log(values);
+                //组装数据
+                if (values.flightType == 1 || values.flightType == 2) {//单程+往返
+                    values["cityDep"] = values.fromCity0;
+                    values["cityArr"] = values.toCity0;
+                    values["dateDep"] = values.fromDateTime0 ? values.fromDateTime0.format(dateFormat) : "";
+                    values["dateRet"] = values.toDateTime0 ? values.toDateTime0.format(dateFormat) : "";
+                    values["cityCodeDep"] = "",
+                        values["cityCodeArr"] = "",
+                        values["voyage"] = "";
+                } else if (values.flightType == 3) {//多程
+                    let voyage = [];
+                    for (let i = 0; i < this.state.lineNum; i++) {
+                        values["cityDep"] = values.fromCity0;
+                        values["cityArr"] = values.toCity0;
+                        values["dateDep"] = values.fromDateTime0 ? values.fromDateTime0.format(dateFormat) : "";
+                        values["cityCodeDep"] = "",
+                            values["cityCodeArr"] = "",
+                            voyage.push({
+                                tripIndex: (i + 1),
+                                dateDep: values["fromDateTime" + i] ? values["fromDateTime" + i].format(dateFormat) : "",
+                                cityDep: values["fromCity" + i],
+                                cityArr: values["toCity" + i],
+                                cityCodeDep: "",
+                                cityCodeArr: "",
+                            });
+                    }
+                    values["voyage"] = "{\"voyage\":" + JSON.stringify(voyage) + "}";
+                }
+                this.httpPostAdd(values);
+                // cityCodeArr	到达城市三字码	string	 数据没对比
+                // cityCodeDep	出发城市三字码	string	
             }
         });
     }
-    //航线选择
-    lineTypeonChange(e) {
-        console.log("==========================================");
-        console.log(e);
-        console.log("==========================================");
+    httpPostAdd(param) {//发送数据
+        let success = (code, msg, json, option) => {
+            //   console.log(msg);
+            message.success();
+        };
+        let failure = (code, msg, option) => {
+            //   console.log(msg);
+            message.error(msg);
+        };
+        //  let api ="http://192.168.0.58:6300/demandapi/v1.0/demands";
+        let api = "/demandapi/v1.0/demands";
+        HttpTool.request(HttpTool.typeEnum.POST, api, success, failure, param);
+    }
+    lineTypeonChange(e) {//航线选择
         let { lineNum } = this.state;
         lineNum = e.target.value == 3 ? 2 : 1;
-
         this.setState({
-            lineType: e.target.value,
-            lineNum
+            lineType: e.target.value, lineNum
         });
     }
-
-    lineDel() {
+    lineDel() {//多程删除
         let { lineNum } = this.state;
         lineNum = lineNum - 1;
         this.setState({
             lineNum
         });
-        this.lineDetails();
+        this.lineDetails();//控制航线信息
     }
 
-    lineAdd() {
+    lineAdd() {//多程添加
         let { lineNum } = this.state;
         console.log(lineNum);
         lineNum = lineNum + 1;
         this.setState({
             lineNum
         });
-        this.lineDetails();
+        this.lineDetails();//控制航线信息
     }
-
-    //航线信息
-    lineDetails() {
+    lineDetails() {//航线信息
         let { lineNum } = this.state;
         const { getFieldDecorator } = this.props.form;
         let div = [];
@@ -76,7 +112,6 @@ class page extends Component {
                             </Col>
                         </Row>
                     }
-
                     <Row style={{ marginBottom: 8 }}>
                         <Col span={10} >出发城市：</Col>
                         <Col span={10} offset={3}>目的城市：</Col>
@@ -92,9 +127,9 @@ class page extends Component {
                                     trigger: "onChangeValue",
                                     validateTrigger: "onChangeValue",
                                 })(
-                                    <AutoInput
+                                    <AutoInput style={{borderRadius:"2px"}}
                                         type={"from"}
-                                        placeholder={'中文／拼音／三字码'} />
+                                        placeholder={'中文／拼音／三字码'} /> 
                                     )}
                             </FormItem>
                         </Col>
@@ -108,18 +143,16 @@ class page extends Component {
                                     trigger: "onChangeValue",
                                     validateTrigger: "onChangeValue",
                                 })(
-                                    <AutoInput
+                                    <AutoInput style={{borderRadius:"2px"}}
                                         type={"from"}
                                         placeholder={'中文／拼音／三字码'} />
                                     )}
                             </FormItem>
                         </Col>
                     </Row>
-
                     <Row style={{ marginBottom: 8 }}>
                         <Col span={10} >出发日期：</Col>
-                        {this.state.lineType == 2
-                            &&
+                        {this.state.lineType == 2 &&
                             <Col span={10} offset={3}>返回日期：</Col>
                         }
                     </Row>
@@ -132,12 +165,11 @@ class page extends Component {
                                         message: '请选择时间',
                                     }],
                                 })(
-                                    <DatePicker style={{ minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' />
+                                    <DatePicker style={{borderRadius:"2px"}} style={{ minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' />
                                     )}
                             </FormItem>
                         </Col>
-                        {this.state.lineType == 2
-                            &&
+                        {this.state.lineType == 2 &&
                             <Col span={11} offset={2}>
                                 <FormItem >
                                     {getFieldDecorator('toDateTime' + i, {
@@ -146,13 +178,12 @@ class page extends Component {
                                             message: '请选择时间',
                                         }],
                                     })(
-                                        <DatePicker style={{ minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' />
+                                        <DatePicker style={{borderRadius:"2px"}} style={{ minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' />
                                         )}
                                 </FormItem>
                             </Col>
                         }
-                        {this.state.lineType == 3
-                            &&
+                        {this.state.lineType == 3 &&
                             <Col span={11} offset={2}>
                                 <Button type="primary" style={{ float: "right" }} disabled={this.state.lineNum != (i + 1) || i == 0} onClick={() => this.lineDel()}>删除</Button>
                             </Col>
@@ -176,46 +207,29 @@ class page extends Component {
 
 
 
-    handleConfirmNum(rule, value, callback) {
-        console.log(rule,value);
-        if(!/^[0-9]*$/.test(value)){
-            callback('请输入正确的数字!'); 
-        }else{
-            callback();
+    handleConfirmNum(str, e) {//成人人数和儿童人数判断
+        let { childNum, adultNum } = this.state;
+        if (str == "adultNum") {
+            adultNum = e.target.value;
+        } else if (str == "childNum") {
+            childNum = e.target.value;
         }
-
-
-        
-
-
-        // const { getFieldValue } = this.props.form;
-        // let contactPhone = getFieldValue('adultNum');
-        // if (contactPhone) {
-            // if (/^1[3|5|7|8|][0-9]{9}$/.test(contactPhone) || /^([0-9]{3,4}-)?[0-9]{7,8}$/.test(contactPhone)) {
-            //     callback();
-            // } else {
-            //     callback('请输入正确格式的手机号或座机号!');
-            // }
-        // } else {
-            callback();
-        // }
-
+        this.setState({
+            childNum, adultNum
+        });
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         let { lineType } = this.state;
-        console.log(lineType + "====");
         return (
             <div className={less.content}>
                 <div style={{ paddingTop: 10, width: 520, margin: "auto" }}>
-
                     {/**标题*/}
                     <div style={{ position: "relative" }}>
-                        <div style={{ width: 6, height: 20, position: "absolute", backgroundColor: "#29A6FF", marginTop: 5 }}></div>
+                        <div style={{ width: 6, height: 20, position: "absolute", backgroundColor: "#29A6FF", marginTop: 8 }}></div>
                         <div style={{ color: "#333", fontSize: 20, marginLeft: 22 }}>需求信息</div>
                     </div>
-
                     <div style={{ margin: "20px 0px" }}>
                         <hr size='1' style={{ color: "#CBD3E5", borderStyle: "dotted" }}></hr>
                     </div>
@@ -225,7 +239,7 @@ class page extends Component {
                     </Row>
                     <Row >
                         <FormItem >
-                            {getFieldDecorator('lineType', {
+                            {getFieldDecorator('flightType', {//lineType
                                 initialValue: this.state.lineType,
                             })(
                                 <RadioGroup onChange={(e) => this.lineTypeonChange(e)}>
@@ -236,23 +250,8 @@ class page extends Component {
                                 )}
                         </FormItem>
                     </Row>
-
-
                     {/*航线+时间*/}
-
-
-
-
-
-
-
-
-                    {/*测试*/}
                     {this.lineDetails()}
-
-
-
-
                     {/**出行人数*/}
                     <Row style={{ marginBottom: 8 }}>
                         <Col span={4}>出行人数：</Col>
@@ -260,45 +259,38 @@ class page extends Component {
                     <Row >
                         <Col span={10} >
                             <FormItem >
-                                {getFieldDecorator('adultNum', {
+                                {getFieldDecorator('adultCount', {//adultNum
                                     rules: [{
                                         required: true,
-                                        message: '成人人数',
-                                    }
-                                ],
-                                    initialValue: this.state.adultNum
+                                        message: '请输入成人人数',
+                                    }, {
+                                        pattern: /^[0-9]*$/,
+                                        message: '请输入正确的数字'
+                                    }],
                                 })(
-                                    <Input style={{ width: 207, height: 34 }} onChange={(e) => {
-                                        this.setState({
-                                            adultNum: e.target.value
-                                        });
-                                    }} placeholder="成人" />
+                                    <Input  style={{ width: 207, height: 34,borderRadius:"2px" }} onChange={(e) => this.handleConfirmNum("adultNum", e)} maxLength="4" placeholder="成人" />
                                     )}
                             </FormItem>
                         </Col>
                         <Col span={10} offset={1}>
                             <FormItem >
-                                {getFieldDecorator('childNum', {
+                                {getFieldDecorator('childCount', {//childNum
                                     rules: [{
                                         required: true,
-                                        message: '儿童人数',
+                                        message: '请输入儿童人数',
+                                    }, {
+                                        pattern: /^[0-9]*$/,
+                                        message: '请输入正确的数字'
                                     }],
-                                    initialValue: this.state.childNum
                                 })(
-                                    <Input style={{ width: 207, height: 34 }} onChange={(e) => {
-                                        this.setState({
-                                            childNum: e.target.value
-                                        });
-                                    }} placeholder="儿童(2～12周岁）" />
+                                    <Input style={{ width: 207, height: 34,borderRadius:"2px" }} maxLength="4" onChange={(e) => this.handleConfirmNum("childNum", e)} placeholder="儿童(2～12周岁）" />
                                     )}
                             </FormItem>
                         </Col>
                         <Col span={3}>
-                            <div style={{ height: 32, lineHeight: "32px",float:"right"}}>共:{ (this.state.adultNum==""?0:parseInt(this.state.adultNum)) + (this.state.childNum==""?0:parseInt(this.state.childNum))}人</div>
+                            <div style={{ height: 32, lineHeight: "32px", float: "right" }}>共:{(this.state.adultNum == "" ? 0 : parseInt(this.state.adultNum)) + (this.state.childNum == "" ? 0 : parseInt(this.state.childNum))}人</div>
                         </Col>
                     </Row>
-
-
 
                     <Row style={{ marginBottom: 8 }}>
                         <Col span={4}>备注：</Col>
@@ -306,21 +298,18 @@ class page extends Component {
                     <Row>
                         <Col >
                             <FormItem >
-                                {getFieldDecorator('annotation', {
+                                {getFieldDecorator('remark', {//annotation
                                     rules: [{
                                         required: true,
                                         message: '请输入备注',
                                     }],
                                 })(
-                                    <Input type="textarea" style={{ height: 180 }} placeholder="如：价格、时间等" />
+                                    <Input type="textarea" maxLength="99" style={{ height: 180 }} placeholder="如：价格、时间等" />
                                     )}
                             </FormItem>
 
                         </Col>
                     </Row>
-
-
-
                     <Row style={{ marginBottom: 8 }}>
                         <Col span={4}>联系电话：</Col>
                     </Row>
@@ -331,10 +320,13 @@ class page extends Component {
                                     rules: [{
                                         required: true,
                                         message: '请输入联系电话',
+                                    }, {
+                                        pattern: /^1[3|5|7|8|][0-9]{9}$/,
+                                        message: '请输入正确的11位手机号码'
                                     }],
                                 })(
                                     <div style={{ width: "100%" }}>
-                                        <Input style={{ width: 240, height: 36 }} placeholder="输入可联系的手机号码" />
+                                        <Input style={{ width: 240, height: 36,borderRadius:"2px" }} placeholder="输入可联系的手机号码" /><span style={{color:"red",marginLeft:10}}>*</span>
                                     </div>
                                     )}
                             </FormItem>
@@ -343,10 +335,9 @@ class page extends Component {
                     </Row>
 
 
-
-
-
-                    <Button type="primary" onClick={() => this.check()}>提交需求</Button>
+                    <Row style={{ textAlign: "center", paddingBottom: 26 }}>
+                        <Button type="primary" style={{ width: 170,height: 36,borderRadius:"2px",fontSize:16 }} onClick={() => this.check()}>提交需求</Button>
+                    </Row>
                 </div>
             </div >
         );
