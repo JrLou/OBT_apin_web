@@ -11,7 +11,7 @@ import UnionPay from './UnionPay';
 import BankPay from './BankPay';
 import IntegralInfo from './IntegralInfo';
 import PaySelectLayout from './PaySelectLayout';
-
+import PayPassWord from './PayPassWord';
 
 //获取模拟数据
 import less from './Pay.less';
@@ -122,18 +122,18 @@ class page extends Component {
                   //打开
                   if (type === "unionopen") {
                      //打开开通银联
-                     this.openUnionPay(data);
+                     this.openUnionPayAdd(data);
                   } else if (type === "unionpay") {
                      //打开银联支付
-                     this.openUnionPayIng(callBack);
+                     this.openPayIng(callBack);
 
                   } else if (type === "unionpaysuccess") {
                      //打开银联支付
-                     this.openUnionPaySuccess(callBack);
+                     this.openPaySuccess(callBack);
 
                   } else if (type === "unionpayerror") {
                      //打开银联支付
-                     this.openUnionPayError(data, callBack);
+                     this.openPayError(data, callBack);
 
                   }
 
@@ -171,6 +171,24 @@ class page extends Component {
                   ref={(ref) => {
                      this.panel = ref;
                   }}/>
+               <PayPassWord
+                   onAction={(pw) => {
+                       //调用积分支付//完全用积分支付
+                       this.openPayIng(()=>{
+                           this.loadPayIntegral({pw:pw},(code,msg,data)=>{
+                               if(code>0){
+                                   //
+                                   this.openPaySuccess();
+                               }else{
+                                   this.openPayError(msg,null);
+                               }
+                           });
+                       });
+                     
+                   }}
+                   ref={(ref) => {
+                       this.payPassWord = ref;
+                   }}/>
                <WXPay
                   ref={(ref) => {
                      this.wxPay = ref;
@@ -185,6 +203,9 @@ class page extends Component {
       );
    }
 
+
+
+
    getFirstStep() {
       return (
          <div>
@@ -198,12 +219,6 @@ class page extends Component {
                defaultshowMore={this.data.pay.defaultshowMore}
                defaultIndex={this.data.pay.defaultIndex}
                data={this.data.pay}
-               onAction={() => {
-                  //打开新页面
-                  window.app_open(this, "/Upload", {
-                     id: this.id
-                  }, "new");
-               }}
             />
             <IntegralInfo
                data={this.data}
@@ -237,15 +252,49 @@ class page extends Component {
                           //1:如果是在线支付,进入银联支付
                           //2:如果是银行转账,进入银行转账
                           //3:如果是支付宝/微信支付,进入支付
-                          console.log(this.data.pay.type);
+                          console.log(this.data);
+                          if(this.data.order.payPrice<=0){
+                             //提示输入密码,积分支付
+                              this.payPassWord.show(true);
+                             return;
+                          }
+
+
+                          let downIng = (fun)=>{
+                              this.openPayIng(()=>{
+                                  this.loadPayIntegral({},(code,msg,data)=>{
+                                      if(code>0){
+                                          this.panel.show(false,{},()=>{
+                                              fun();
+                                          });
+                                      }else{
+                                          this.openPayError(msg,null,"下单");
+                                      }
+                                  });
+                              },"下单");
+                          };
                           switch (this.data.pay.type) {
                              case "ali"://
                              case "wechat"://
                                 this.openPay(this.data.pay.type);
                                 break;
                              case "online":
+                                 //
+                                downIng(()=>{
+                                    this.setStep(2);
+                                });
+
+                                break;
                              case "bank":
-                                this.setStep(2);
+                                 //打开新页面
+                                 downIng(()=>{
+                                     window.app_open(this, "/Upload", {
+                                         id: this.id,
+                                         price:this.data.order.payPrice,
+                                         payType:this.data.order.PayType
+                                     }, "self");
+                                 });
+
                                 break;
                           }
 
@@ -272,25 +321,24 @@ class page extends Component {
       });
    }
 
-   openUnionPayIng(callBack) {
+   openPayIng(callBack,title = "支付") {
       this.panel.show(true, {
-         content: "正在支付....",
+         content: "正在"+title+"....",
          // title: "支付信息",
          showType: "loading"
 
       }, callBack);
    }
-
-   openUnionPaySuccess(callBack) {
+   openPaySuccess(callBack,title = "支付") {
       this.panel.show(true, {
-         content: "支付成功",
+         content: title+"成功",
          // title: "支付信息",
          showType: "success"
 
       }, callBack);
    }
 
-   openUnionPayError(msg, callBack) {
+   openPayError(msg, callBack,title = "支付") {
       this.panel.show(true, {
          okText: "我知道了",
          content: msg,
@@ -300,7 +348,7 @@ class page extends Component {
       }, callBack);
    }
 
-   openUnionPay(data) {
+   openUnionPayAdd(data) {
       let apinPanel = this.wh.openInitWindow();
       this.panel.show(true, {
          okText: "我已经开通",
@@ -319,40 +367,35 @@ class page extends Component {
 
    openPay(showType) {
 
-      this.panel.show(true, {
-         content: "正在下单....",
-         // title: "支付信息",
-         showType: "loading"
-
-      }, () => {
-         let apinPanel = this.wh.openInitWindow(showType === "wechat" ? this.wxPay : null);
-         this.loadPayOrder(this.data, (code, msg, data) => {
-            if (code > 0) {
-               //3秒后去开始验证,是否支付成功
-               //   setTimeout(()=>{this.autoVer(apinPanel,"pay");},3000);
-               this.panel.show(true, {
-                  okText: "我已经支付",
-                  cancelText: "还没支付",
-                  content: "确认是否已支付",
-                  // title: "支付信息",
-                  showType: "paying"
-               }, () => {
-                  this.wh.openWindow(apinPanel, showType === "wechat" ? data : data.url);
-               });
-            } else {
-               this.wh.closeWindow(apinPanel);
-               this.panel.show(true, {
-                  // okText: "我知道了",
-                  content: msg,
-                  // title: "支付信息",
-                  showType: "error"
-               }, () => {
+      this.openPayIng(() => {
+          let apinPanel = this.wh.openInitWindow(showType === "wechat" ? this.wxPay : null);
+          this.loadPayOrder(this.data, (code, msg, data) => {
+              if (code > 0) {
+                  //3秒后去开始验证,是否支付成功
+                  //   setTimeout(()=>{this.autoVer(apinPanel,"pay");},3000);
+                  this.panel.show(true, {
+                      okText: "我已经支付",
+                      cancelText: "还没支付",
+                      content: "确认是否已支付",
+                      // title: "支付信息",
+                      showType: "paying"
+                  }, () => {
+                      this.wh.openWindow(apinPanel, showType === "wechat" ? data : data.url);
+                  });
+              } else {
+                  this.wh.closeWindow(apinPanel);
+                  this.panel.show(true, {
+                      // okText: "我知道了",
+                      content: msg,
+                      // title: "支付信息",
+                      showType: "error"
+                  }, () => {
 
 
-               });
-            }
-         });
-      });
+                  });
+              }
+          });
+      },"下单");
    }
 
 
@@ -465,6 +508,13 @@ class page extends Component {
       });
 
    }
+    loadPayIntegral(param, cb) {
+        setTimeout(() => {
+            let code = (Math.random() * 10).toFixed(0) - 1;
+            let data = {};
+            cb(code, code > 0 ? "下单成功" : "下单失败", data);
+        }, Math.random() * 1000 + 2000);
+    }
 
    loadUnionVer(param, cb) {
       setTimeout(() => {
