@@ -25,9 +25,12 @@ import PayBottom from '../content/detail/detailComp/PayBottomForDetail.js';
 class OrderFormDetail extends Component{
     constructor(props){
         super(props);
+        //模拟随机状态
+        let random = Math.floor(Math.random()*11);
+        let list = [0,1,2,3,5,7,8,12,13,14,15];
 
         this.state = {
-            orderState:5,       //页面订单状态
+            orderState:list[random],       //页面订单状态
             isPassed:false,     //乘机人信息是否已经确认
             orderID:'',         //订单ID
             upDate:0,
@@ -173,7 +176,7 @@ class OrderFormDetail extends Component{
                     </div>
                 </div>
                 {
-                    ([2,3,5].indexOf(this.state.orderState)>=0)
+                    (this.hasKey(this.state.orderState,[2,3,5]))
                     ?<PayBottom
                         param={{
                             orderPrice:"2333",

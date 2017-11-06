@@ -105,7 +105,7 @@ class PassengerMsg extends Component{
         ];
 
 
-        if(this.hasKey(this.state.orderState,[0,1])){
+        if(this.hasKey(this.state.orderState,[1,2])){
             return(
                 <div></div>
             );

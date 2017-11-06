@@ -20,7 +20,7 @@ class PayBottom extends Component {
     }
 
     componentDidMount(){
-        if(this.state.timer){
+        if(this.state.timer&&(this.state.payType==2||this.state.payType==3)){
             //启动倒计时
             this.getTimeOut(this.state.timer);
         }
@@ -76,7 +76,10 @@ class PayBottom extends Component {
                     {
                         (this.state.payType==2||this.state.payType==3)
                         ?<div style={{fontSize:"12px"}}>{this.state.timerStr}</div>
-                        :<div style={{fontSize:"12px"}}>{"( 提交订单30分钟内,即可确认资源信息 )"}</div>
+                        :
+                            (this.state.payType==5)
+                            ?''
+                            :<div style={{fontSize:"12px"}}>{"( 提交订单30分钟内,即可确认资源信息 )"}</div>
                     }
                 </div>
             </div>
