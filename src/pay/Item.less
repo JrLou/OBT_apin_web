@@ -3,11 +3,13 @@
 .payItem {
     position: relative;
     border: 2px solid #F1F1F1;
+    padding: 2px;
     width: 200px;
     height: 60px;
     margin-right: 30px;
     font-weight: bolder;
     display: inline-block;
+
     &[type=bank]{
         display: block;
     }
@@ -20,8 +22,10 @@
 }
 
 .payItemSelect {
-    //composes: payItem;
     color: #000;
-    background-image: url("/src/pay/images/selected.png");
-    border: 2px solid #00A3FF ;
+    border: 2px solid transparent;
+    background-image: url("../pay/images/selected.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }

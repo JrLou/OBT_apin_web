@@ -23,7 +23,6 @@ class PaySelectLayout extends Component {
                 getView: () => {
                     return <img src={require("./images/pay_ali.png")} alt={"支付宝图片"}/>;
                 },
-                span: 5,
             },
             {
                 type: "wechat",
@@ -31,14 +30,12 @@ class PaySelectLayout extends Component {
                 getView: () => {
                     return <img src={require("./images/pay_wechat.png")} alt={"微信图片"}/>;
                 },
-                span: 5,
             }, {
                 type: "online",
                 title: "银联支付",
                 getView: () => {
                     return <img src={require("./images/pay_union.png")} alt={"银联图片"}/>;
                 },
-                span: 5,
             }, {
                 type: "bank",
                 title: "银行转账",
@@ -53,7 +50,6 @@ class PaySelectLayout extends Component {
                        </div>
                     );
                 },
-                span: 12,
             }
         ];
     }
