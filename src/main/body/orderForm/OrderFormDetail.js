@@ -10,20 +10,29 @@ import Passengers from './Passengers/index.js';
 import CellNewFlight from '../content/cell/CellNewFlight.js';
 
 /**
- * 订单状态说明
+ * 订单状态说明(页面)：
  * 0：订单取消 1：等待确认 2：待付订金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
  * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中 15：支付审核失败
+ *
+ * 接口可能返回的值：
+ * 0：订单取消 1：等待确认 2：待付订金 3：待付全款 5：待付尾款 7：已出票 8：已关闭
  */
+
+
 
 class OrderFormDetail extends Component{
     constructor(props){
         super(props);
 
         this.state = {
-            orderState:1,
-            orderID:'',
+            orderState:5,       //页面订单状态
+            isPassed:false,     //乘机人信息是否已经确认
+            orderID:'',         //订单ID
             upDate:0,
         };
+
+        //接口返回的订单状态  （接口返回的状态需要经过转换才赋值给状态机）
+        this.returnState = -1;
     }
 
     componentDidMount(){
@@ -124,26 +133,34 @@ class OrderFormDetail extends Component{
                 <TitleBar
                     orderState={this.state.orderState}
                     deadLine={'2017-11-27'}
+                    reason={'审核失败的原因'}
                     orderID={this.state.orderID}
                     onDelete={()=>{this.deleteOrderCB();}}
                 />
-                <div className={css.itemContainer}>
-                    <CellNewFlight
-                        dataSource = {this.listData}
-                    />
+                 <div className={css.itemContainer}>
+                    <div className={css.itemTitle}>航班信息</div>
+                    <div className={css.itemContent}>
+                        <CellNewFlight
+                            dataSource = {this.listData}
+                        />
+                    </div>
                 </div>
+                    {
+                        (this.state.orderState in [0,3,5,7,8,12,13]||this.returnState in [3,5])
+                        ?   <div className={css.itemContainer}>
+                                <Passengers
+                                    orderState={this.state.orderState}
+                                    returnState={this.returnState}
+                                    isPassed={this.state.isPassed}
+                                    orderID={this.state.orderID}
+                                    defaultData={[]}
+                                />
+                            </div>
+                        :   <div></div>
+                    }
                 <div className={css.itemContainer}>
-                    <Passengers
-                        orderState={this.state.orderState}
-                        orderID={this.state.orderID}
-                        defaultData={[]}
-                    />
-                </div>
-                <div className={css.itemContainer}>
-                    订单信息
-                </div>
-                <div>
-                    支付明细
+                    <div className={css.itemTitle}>订单信息</div>
+                    <div className={css.itemTitle}>支付明细</div>
                 </div>
                 <div>
                     底部操作条
