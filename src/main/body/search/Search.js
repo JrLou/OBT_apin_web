@@ -6,7 +6,6 @@ import SearchLayout from '../component/SearchLayout';
 import OneWayDetail from '../content/OneWayDetail.js';
 import SearchHelp from '../search/SearchHelp.js';
 import {HttpTool} from "../../../../lib/utils/index.js";
-import View from "../component/OrderInfoView/index";
 //获取模拟数据
 import routes from '../../../vm/routes.js';
 import less from './Search.less';
@@ -255,7 +254,13 @@ class page extends Component {
      */
     getNoneLayout() {
         return (
-           <View type={1}/>
+            <div className={less.empty}>
+                <div className={less.emptyText}>
+                    <div>没有查询到航班信息，请重新搜索或联系客服询问航班 </div>
+                    <Button type="primary" onClick={()=>{this.myAlert.showView(true);}}>联系客服</Button>
+                </div>
+                <MyAlert data={"客服电话"} ref={(a)=>this.myAlert = a}/>
+            </div>
         );
     }
 }
