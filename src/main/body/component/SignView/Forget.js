@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-03 19:37:39
+ * @Last Modified time: 2017-11-06 15:21:28
  */
 
 import React, { Component } from 'react';
@@ -54,7 +54,7 @@ class ForgetForm extends Component {
                     })(
                         <Input placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
                         )}
-                    <img src="http://placehold.it/98x32" alt="" className={css.checkCodeImg} />
+                    <img src="http://placehold.it/98x36" alt="" className={css.checkCodeImg} />
                 </FormItem>
                 <FormItem
                     validateStatus={passwordError ? 'error' : ''}
