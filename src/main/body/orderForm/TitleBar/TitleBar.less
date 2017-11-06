@@ -12,7 +12,12 @@
   color: #ff5500;
 }
 .stateIcon{
-  padding: 0 10px;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-size: 100% 100%;
+  vertical-align: sub;
+  margin-right: @d_spadding_cell;
 }
 .helpMsg{
   padding-left: 10px;
@@ -26,4 +31,9 @@
   font-size: @font-size-base;
   cursor: pointer;
   padding-top: 3px;
+
+  span{
+    font-size: @font_size_center;
+    color:#999;
+  }
 }

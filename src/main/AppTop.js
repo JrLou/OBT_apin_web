@@ -19,16 +19,15 @@ class page extends Component {
         return (
             <div className={less.head}>
                 <div className={less.headContent}>
-                    <a>
-                        <img
-                            onClick={() => {
-                                log(this.props.root);
-                                window.app_open(this.props.root, "/", null, "self");
-                            }}
-                            className={less.left}
-                            src={require('../images/index_logo.png')}
-                        />
-                    </a>
+                    <img
+                        onClick={() => {
+                            log(this.props.root);
+                            window.app_open(this.props.root, "/", null, "self");
+                        }}
+                        className={less.left}
+                        src={require('../images/index_logo.png')}
+                    />
+
                     <Menus {...this.props} />
                     <div className={less.right}>
                         <div className={less.rightItem}>
