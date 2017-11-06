@@ -12,7 +12,7 @@ class Menus extends Component {
                 path: '/'
             }, {
                 name: '发布需求',
-                path: '/1'
+                path: '/PublishMsg'
             }, {
                 name: '航班查询',
                 path: '/2'
