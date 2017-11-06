@@ -8,6 +8,7 @@ import APILXD from "../../../api/APILXD.js";
 import TitleBar from './TitleBar/index.js';
 import Passengers from './Passengers/index.js';
 import CellNewFlight from '../content/cell/CellNewFlight.js';
+import OrderInfoView from '../component/OrderInfoView/index.js';
 
 /**
  * 订单状态说明(页面)：
@@ -106,8 +107,8 @@ class OrderFormDetail extends Component{
         //航班信息所需要的数据
         this.listData = {
             rule:"1.行李规则行李规则行李规则行李规则行李",
-            obj:flightTypeGoAndBack,
-            flightType:2
+            obj:flightTypeGo,
+            flightType:1
         };
 
         this.upView();
@@ -159,8 +160,11 @@ class OrderFormDetail extends Component{
                         :   <div></div>
                     }
                 <div className={css.itemContainer}>
-                    <div className={css.itemTitle}>订单信息</div>
-                    <div className={css.itemTitle}>支付明细</div>
+                    <div className={css.orderInfoBox}>
+                        <OrderInfoView
+                            type={1}
+                        />
+                    </div>
                 </div>
                 <div>
                     底部操作条
