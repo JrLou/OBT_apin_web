@@ -55,9 +55,9 @@ class Menus extends Component {
                                     this.setState({
                                         selectedKey: menu.path
                                     });
-                                    window.app_open(this.props.root, menu.path, {
-                                        step: menu.path == '/Score' ? 1 : 0
-                                    });
+                                    window.app_open(this, menu.path, {
+                                        step: menu.path === '/Score' ? 1 : 0
+                                    },"self");
                                 }}>{menu.name}</span>
                             </MenuItem>
                         );
@@ -68,5 +68,7 @@ class Menus extends Component {
         );
     }
 }
-
+Menus.contextTypes = {
+    router: React.PropTypes.object
+};
 module.exports = Menus;

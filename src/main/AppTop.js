@@ -15,20 +15,16 @@ class page extends Component {
 
     constructor(props) {
         super(props);
+        this.par = window.app_getPar(this);
         this.state = {
-            step: 0,
+            step: this.par?this.par.step:0,
             isLogin: false
         };
+
     }
 
     render() {
         let { step, isLogin } = this.state;
-        try {
-            const nowStep = this.props.location.state.step;
-            nowStep ? step = nowStep : '';
-        } catch (error) {
-            log(error);
-        }
         const menu = (
             <Menu>
                 <Menu.Item>

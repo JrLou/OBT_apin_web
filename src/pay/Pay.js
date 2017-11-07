@@ -46,7 +46,7 @@ class page extends Component {
    refresh() {
       this.show(true, () => {
          this.loadPayInfo({
-            id: this.id
+             orderId: this.id
          }, (code, msg, data) => {
             if (this.un) {
                return;
@@ -548,35 +548,40 @@ class page extends Component {
    }
 
    loadPayInfo(param, cb) {
-      if (!param || !param.id) {
+      if (!param || !param.orderId) {
          cb(-3, "缺少订单号", null);
          return;
       }
-      setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 0;
-         let data = {};
-         // code = 10;
-         if (code > 0) {
-            data = {
+       HttpTool.request(HttpTool.typeEnum.POST, "/v1.0/orders/payInfo", (code, msg, json, option) => {
+
+          let data =  {
                order: {
-                  orderId: "201711111111",
-                  passengersInfo: "2成人/1儿童",
-                  price: (Math.random() * 1000).toFixed(0) * 100,
+                   orderNo:json.orderNo,
+                   adultCount:json.adultCount,
+                   payment:json.payment,
+                   childCount:json.childCount,
+                   expiredTime:json.expiredTime,
+                   phone:json.phone,
+                   price: json.amount,
+                   passengersInfo: "2成人/1儿童",
                },
                integral: {
-                  all: (Math.random() * 100000 * 10).toFixed(0),
-                  use: 0
+                   all: json.point,
+                       use: 0
                }
-            };
-            if (!data.pay) {
-               data.pay = {
-                  defaultIndex: 0,
-                  defaultshowMore: false
-               };
-            }
-         }
-         cb(code, code > 0 ? "获取成功" : "获取支付信息失败", data);
-      }, Math.random() * 1000);
+           };
+           if (code > 0) {
+               if (!data.pay) {
+                   data.pay = {
+                       defaultIndex: 0,
+                       defaultshowMore: false
+                   };
+               }
+           }
+           cb(code, msg, data);
+       }, (code, msg, option) => {
+           cb(code, msg, {pay:{},integral:{},order:{}});
+       }, param);
    }
 
 }

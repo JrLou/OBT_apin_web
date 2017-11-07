@@ -4,7 +4,7 @@ if (typeof window == "undefined") {
 
 var getMappedAddr = function (url) {
 	var addrMap = {
-		"http://test.com": ["localhost:3000", "127.0.0.1:3000", "192.168.0.24:3000"]
+		"http://10.0.0.62:9008": ["localhost:3000", "127.0.0.1:3000", "192.168.0.23:3000"]
 	};
 	var _getMappedAddr = function (originalUrl) {
 		var key = null, i = null, searchFlag = true, result = null;
