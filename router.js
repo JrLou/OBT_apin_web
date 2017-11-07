@@ -2,12 +2,14 @@ var express = require("express");
 var router = express.Router();
 var request = require("request");
 
-// router.get("/aaa/*", function (req, res, next) {
-//     console.log(req.headers.referer);
-//     res.render("index");
-//     // res.redirect("/app/v2/index")
-// });
+function setIp(ip) {
+    this.ip = ip;
+}
+router.get("/apin/*", function (req, res, next) {
+    console.log("serviceIP:"+this.ip);
+    var url = this.ip+""+req.originalUrl.slice("/apin".length);
+    res.redirect(url);
+});
 
 
-
-module.exports = router;
+module.exports = {router,setIp};

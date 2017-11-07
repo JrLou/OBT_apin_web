@@ -1,5 +1,11 @@
 import './myAntDesign';
-
+//添加公用库
+window._ = require('lodash');
+//引用用公用库
+import moment from 'moment';
+// 推荐在入口文件全局设置 locale
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
 //重写日志系统
 function getUrlSearch(str) {
     var query = {};
@@ -59,7 +65,7 @@ window.app_open = function (obj, path, state, open, callBack) {
     if (open === "new") {
         window.open(path + get);
     } else if (open === "self") {
-        window.location.pathname = path + get;
+        window.location.href = path + get;
     } else {
         document.documentElement.scrollTop = document.body.scrollTop = 0;
         obj.context.router.push(
