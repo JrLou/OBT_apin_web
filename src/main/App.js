@@ -14,8 +14,9 @@ class page extends Component {
                 <div className={less.mainContent}>
                     <AppTop
                         root={this}
-                        pathname={this.props.location.pathname}
-                        state={this.props.location.state} />
+                        // pathname={this.props.location.pathname}
+                        // state={this.props.location.state}
+                        />
                     <div className={less.container}>
                         {this.props.children}
                     </div>

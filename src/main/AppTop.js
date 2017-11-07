@@ -26,8 +26,8 @@ class page extends Component {
 
     render() {
         let { step, isLogin } = this.state;
-        const { state } = this.props;
-        state && state.hasOwnProperty('step') ? step = state.step : '';
+        // const { state } = this.props;
+        // state && state.hasOwnProperty('step') ? step = state.step : '';
         const menu = (
             <Menu>
                 <Menu.Item>
