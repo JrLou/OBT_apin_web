@@ -65,7 +65,7 @@ window.app_open = function (obj, path, state, open, callBack) {
     if (open === "new") {
         window.open(path + get);
     } else if (open === "self") {
-        window.location.pathname = path + get;
+        window.location.href = path + get;
     } else {
         document.documentElement.scrollTop = document.body.scrollTop = 0;
         obj.context.router.push(

@@ -15,6 +15,11 @@
 @line-color:#333;
 //字体颜色
 @font-color:#333;
+@font-light-color:#999;
+@font-dark-color:#221A18;
+@font-paytitle-color:#FF5841;
+@font-light2-color:#545456;
+
 //背景色
 @bg-color:#fff;
 
@@ -55,6 +60,7 @@
 @font_size_center: 16px;
 @font_size_big: 20px;
 @font_size_super_big: 24px;
+@font_size_super_big_x: 28px;
 
 // Color;
 @normal-color			: #131C30; // 主色
@@ -75,7 +81,10 @@
 @c_title_gray: #888D99;
 @c_title_gray_base: #4F5762;
 
+
 @c_text_red: #FF6600;
+@c_text_red_dark: #ff5100;
+@c_text_red_light: #ff9100;
 //边距
 @d_spadding_super_big: 35px;
 @d_spadding_big: 30px;
@@ -92,4 +101,80 @@
   right:0;
   left: 0;
   background:rgba(255, 255, 255, 0.12);
+}
+
+.payOutBox {
+  margin: auto;
+  max-width: 1200px;
+  margin-top: 10px;
+  position: relative;
+}
+
+.toContainAllSon{
+  content: "";
+  height: 0;
+  visibility: hidden;
+  display: block;
+  clear: both;
+}
+
+.payCpmBox{
+  background-color: @content-backcolor;
+  margin: 10px 0;
+  box-shadow: 0 1px 2px 0;
+  .top{
+    line-height: 50px;
+    height: 50px;
+    font-size: @font_size_center;
+    font-weight: bolder;
+    padding-left: 20px;
+    border-bottom: 1px solid #EDEDED;
+    color: @font-color;
+  }
+  .middle{
+    font-size: @font_size_small;
+    color: @font-light-color;
+    padding: 25px 20px 30px 20px;
+  }
+}
+
+.modalBtn{
+  width: 165px;
+  height: 35px;
+  margin: 0 8px;
+}
+
+.bigOrangeBtn{
+  width: 200px;
+  height: 50px;
+  font-size: @font_size_big;
+  margin-top: 11px;
+  background-color: @c_text_red;
+  border-color: @c_text_red;
+  &:hover, &:focus{
+    background-color: @c_text_red_light;
+    border-color: @c_text_red_light;
+  }
+  &:active{
+    background-color: @c_text_red_dark;
+    border-color: @c_text_red_dark;
+  }
+}
+
+.normalSizeBtn{
+  width: 145px;
+  height: 36px;
+  font-size: @font_size_center;
+}
+
+.fl{
+  float: left;
+}
+
+.fr{
+  float: right;
+}
+
+.txtCenter{
+  text-align: center;
 }

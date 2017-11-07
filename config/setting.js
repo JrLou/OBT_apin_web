@@ -1,5 +1,7 @@
 
-var router = require("../router.js");
+var {router,setIp} = require("../router.js");
+var serviceIP = "http://192.168.0.58:6300";
+setIp(serviceIP);
 module.exports = {
     port: 3000,
     browserSupport:9,
@@ -9,6 +11,6 @@ module.exports = {
     custom: {
         serverRoutes:router
     },
-    hlIP:"http://192.168.0.58:6300",
-    serviceIP:"http://192.168.0.58:6300"
+    hlIP:serviceIP,
+    serviceIP:serviceIP
 };

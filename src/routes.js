@@ -91,6 +91,15 @@ const root = (
             }
             >
             </Route>
+            <Route path="/UpLoad" getComponent={
+                (nextState, cb) => {
+                    require.ensure([], require => {
+                        cb(null, require("./main/body/bank/BankUpload"));
+                    }, "UpLoad");
+                }
+            }
+            >
+            </Route>
             {/**发布需求*/}
             <Route path="/PublishMsg" getComponent={
                 (nextState, cb) => {
