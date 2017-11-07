@@ -23,6 +23,8 @@ class CellNewFlight extends Component {
         if (!dataSource){
             return null;
         }
+        log(dataSource);
+        log("-------gygygy--------");
         return (<div className={css.main}>
             <div className={css.left}>
                 {this.createCell(dataSource.obj||[])}

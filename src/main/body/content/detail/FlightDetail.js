@@ -23,13 +23,26 @@ class page extends Component {
     constructor(props) {
         super(props);
         this.par = window.app_getPar(this);
-
         this.state = {
             upData:0,
             adultNum:1,
             childNum:0,
             phone:""
         };
+
+        this.requireParam = {
+            lineType:3,
+            lineNum:1,
+            adultCount:"10",
+            childCount:"10",
+            remark:"",
+            phone:"",
+            listData:[{
+                fromCity:"北京",
+                toCity:"杭州",
+                fromDateTime:"2017-11-20",
+                toDateTime:"2017-11-20"
+            }]};
     }
     componentWillReceiveProps(nextProps) {
 
@@ -46,13 +59,13 @@ class page extends Component {
     }
     loadData() {
         var param = {};
-        // this.loadingView.refreshView(true);
+        this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
-
+            this.loadingView.refreshView(false);
         };
         var failure = (code, msg, option) => {
             message.warning(msg);
-            // this.loadingView.refreshView(false);
+            this.loadingView.refreshView(false);
         };
         // HttpTool.request(HttpTool.typeEnum.POST,
         //     APIGYW.flightapi_flightDetail_month_query,
@@ -119,7 +132,34 @@ class page extends Component {
             obj:moreFlightObj,
             flightType:3
         }];
-        this.upView();
+
+        setTimeout(()=>{
+            this.loadingView.refreshView(false);
+            this.upView();
+        },2000);
+    }
+    commit(value){
+        var param = value;
+        alert(JSON.stringify(param));
+        this.loadingView.refreshView(true);
+        var success = (code, msg, json, option) => {
+            this.loadingView.refreshView(false);
+        };
+        var failure = (code, msg, option) => {
+            message.warning(msg);
+            this.loadingView.refreshView(false);
+        };
+        setTimeout(()=>{
+            this.myModalRequire.hidden(()=>{
+                this.loadingView.refreshView(false);
+            });
+        },2000);
+        // HttpTool.request(HttpTool.typeEnum.POST,
+        //     APIGYW.flightapi_flightDetail_month_query,
+        //     success,
+        //     failure,
+        //     param,
+        //     {ipKey:'hlIP'});
     }
 
     addAction(isAdult,isAdd){
@@ -378,24 +418,26 @@ class page extends Component {
                 }}
                            isPay={true}
                            callBack={()=>{
-                               this.props.form.validateFields((err, values) => {
-                                   if (!err) {
-                                       console.log('Received values of form: ', values);
-                                       console.log('Received values of form: ', values);
-                                   }
-                               });
+                               // this.props.form.validateFields((err, values) => {
+                               //     if (!err) {
+                               //         console.log('Received values of form: ', values);
+                               //         console.log('Received values of form: ', values);
+                               //     }
+                               // });
 
-                               // this.myModalRequire.showModal(true,
-                               //     {
-                               //         title:"提示",
-                               //         desc:"您下单的人数已超过库存余位,是否提交至客服处理?"
-                               //     });
+                               this.myModalRequire.showModal(true,
+                                   {
+                                       title:"提示",
+                                       desc:"您下单的人数已超过库存余位,是否提交至客服处理?",
+                                       param:this.requireParam,
+                                   });
                            }}/>
 
                 <MyModalRequire ref={(a) => this.myModalRequire = a}
-                                callBack={(myNum)=>{
-                                    // this.commitSit(myNum);
+                                callBack={(value)=>{
+                                    this.commit(value);
                                 }}/>
+                <LoadingView ref={(a)=>this.loadingView = a}/>
             </div>);
         return div;
     }
