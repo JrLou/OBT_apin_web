@@ -34,11 +34,15 @@ const Title = (props) => {
 };
 
 class AccountForm extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
+        this.state = {
+            isView: true
+        };
     }
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+        const { isView } = this.state;
         return (
             <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <Title>账号信息</Title>
@@ -46,11 +50,12 @@ class AccountForm extends Component {
                     {...formItemLayout}
                     label="账号名"
                 >
-                    {getFieldDecorator('name', {
-                        rules: [{ required: true, message: 'Please select time!' }],
-                    })(
-                        <Input prefixCls="my-ant-input" />
-                        )}
+                    {
+                        !isView ? getFieldDecorator('name', {
+                            rules: [{ required: true, message: 'Please select time!' }],
+                        })(
+                            <Input prefixCls="my-ant-input" />
+                            ) : <div>111</div>}
                 </FormItem>
                 <FormItem prefixCls="my-ant-form"
                     {...formItemLayout}
