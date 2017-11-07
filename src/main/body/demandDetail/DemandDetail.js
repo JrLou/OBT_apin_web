@@ -25,12 +25,14 @@ class page extends Component {
 
     loadData(){
         let success = (code, msg, json, option) => {
-            log(json);
+            this.state=json;
+                log(json);
+            alert(json);
         };
         let failure = (code, msg, option) => {
 
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/81a366cd6c754cbcbbc978a8b956982b", success, failure, {},
+        HttpTool.request(HttpTool.typeEnum.GET, "/demandapi/v1.0/demands/81a366cd6c754cbcbbc978a8b956982b", success, failure, {},
             {
                 ipKey: "hlIP"
             });
@@ -39,7 +41,7 @@ class page extends Component {
     render() {
         return (
             <div>
-                <View type={"已确认"}/>
+                <View type={"询价中多程"} data={this.state}/>
             </div>
         );
     }

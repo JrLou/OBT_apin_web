@@ -10,5 +10,5 @@ module.exports = {
         serverRoutes:router
     },
     hlIP:"http://192.168.0.58:6300",
-    serviceIP:"http://10.0.0.72:9008"
+    serviceIP:"http://192.168.0.58:6300"
 };
