@@ -21,7 +21,7 @@ class Menus extends Component {
                 path: '/3'
             }, {
                 name: '我的需求',
-                path: '/4'
+                path: '/DemandDetail'
             }, {
                 name: '我的积分',
                 path: '/Score'

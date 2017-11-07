@@ -6,6 +6,7 @@ import {Button,Icon} from 'antd';
 import css from './CellNewFlight.less';
 import ClickHelp from '../../tool/ClickHelp.js';
 import CellNewFlightDetail from './CellNewFlightDetail.js';
+import NumTransToTextHelp from '../../tool/NumTransToTextHelp.js';
 
 class CellNewFlight extends Component {
     constructor(props) {
@@ -30,14 +31,15 @@ class CellNewFlight extends Component {
     }
     createCell(dataArr){
         return dataArr.map((data, index)=>{
-           return (<div key={index} className={css.cellBg} style={{borderBottomWidth:(index==dataArr.length-1)?"0px":"1px"}}>
-               {this.createItemCell(data)}
+            let i = index;
+           return (<div key={i} className={css.cellBg} style={{borderBottomWidth:(i==dataArr.length-1)?"0px":"1px"}}>
+               {this.createItemCell(data, i)}
                {data.data&&data.data.length>1?<CellNewFlightDetail data = {data.data}/>:null}
            </div>);
         });
     }
 
-    createItemCell(data){
+    createItemCell(data, index){
         if (!data){
             return null;
         }
@@ -62,7 +64,7 @@ class CellNewFlight extends Component {
         var itemView = (<div className={css.table}>
             <div className={css.type_super}>
                 <div className={css.typeText}>
-                    {data.numFlight?("第"+data.numFlight+"程"):(data.flightType?"去程":"回程")}
+                    {data.numFlight?("第"+ NumTransToTextHelp.getValue(index+1)+"程"):(data.flightType?"去程":"回程")}
                 </div>
             </div>
 

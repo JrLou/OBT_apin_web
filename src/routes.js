@@ -101,7 +101,26 @@ const root = (
             }
             >
             </Route>
-
+            {/**发布需求*/}
+            <Route path="/Demand" getComponent={
+                (nextState, cb) => {
+                    require.ensure([], require => {
+                        cb(null, require("./main/body/demand/Demand.js"));
+                    }, "Demand");
+                }
+            }
+            >
+            </Route>
+            {/**需求详情*/}
+            <Route path="/DemandDetail" getComponent={
+                (nextState, cb) => {
+                    require.ensure([], require => {
+                        cb(null, require("./main/body/demandDetail/DemandDetail.js"));
+                    }, "DemandDetail");
+                }
+            }
+            >
+            </Route>
             <Route key="1" path='*' getComponent={None}/>,
         </Route>
 
