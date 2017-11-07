@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-07 14:45:04
+ * @Last Modified time: 2017-11-07 16:54:06
  */
 
 import React, { Component } from 'react';
@@ -30,16 +30,16 @@ class AccountLoginForm extends React.Component {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
 
         // Only show error after a field is touched.
-        const userNameError = isFieldTouched('userName') && getFieldError('userName');
-        const passwordError = isFieldTouched('password') && getFieldError('password');
+        const accountError = isFieldTouched('account') && getFieldError('account');
+        const signatureError = isFieldTouched('signature') && getFieldError('signature');
         return (
             <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <FormItem
                     prefixCls="my-ant-form"
-                    validateStatus={userNameError ? 'error' : ''}
-                    help={userNameError || ''}
+                    validateStatus={accountError ? 'error' : ''}
+                    help={accountError || ''}
                 >
-                    {getFieldDecorator('userName', {
+                    {getFieldDecorator('account', {
                         rules: [{ required: true, message: '请输入用户名!' }
                         ],
                     })(
@@ -48,10 +48,10 @@ class AccountLoginForm extends React.Component {
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"
-                    validateStatus={passwordError ? 'error' : ''}
-                    help={passwordError || ''}
+                    validateStatus={signatureError ? 'error' : ''}
+                    help={signatureError || ''}
                 >
-                    {getFieldDecorator('password', {
+                    {getFieldDecorator('signature', {
                         rules: [{ required: true, message: '请输入密码!' },
                         { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
@@ -96,17 +96,17 @@ class MsgLoginForm extends React.Component {
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
 
-        const telError = isFieldTouched('tel') && getFieldError('tel');
+        const accountError = isFieldTouched('account') && getFieldError('account');
         const checkImgCodeError = isFieldTouched('checkImgCode') && getFieldError('checkImgCode');
-        const checkCodeError = isFieldTouched('checkCode') && getFieldError('checkCode');
+        const signatureError = isFieldTouched('signature') && getFieldError('signature');
         return (
             <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <FormItem
                     prefixCls="my-ant-form"
-                    validateStatus={telError ? 'error' : ''}
-                    help={telError || ''}
+                    validateStatus={accountError ? 'error' : ''}
+                    help={accountError || ''}
                 >
-                    {getFieldDecorator('tel', {
+                    {getFieldDecorator('account', {
                         rules: [{ required: true, message: '请输入11位手机号' }, {
                             pattern: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/, message: '手机号格式不正确！'
                         }],
@@ -128,10 +128,10 @@ class MsgLoginForm extends React.Component {
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"
-                    validateStatus={checkCodeError ? 'error' : ''}
-                    help={checkCodeError || ''}
+                    validateStatus={signatureError ? 'error' : ''}
+                    help={signatureError || ''}
                 >
-                    {getFieldDecorator('checkCode', {
+                    {getFieldDecorator('signature', {
                         rules: [{ required: true, message: '请输入验证码' }],
                     })(
                         <Input prefixCls='my-ant-input' placeholder="请输入验证码" className={css.checkCodeInput} />

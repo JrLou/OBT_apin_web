@@ -2,6 +2,7 @@
  * Created by lixifeng on 17/3/24.
  */
 import React, { Component } from 'react';
+import { history } from 'react-router';
 import { Button, Menu, Dropdown, Icon } from 'antd';
 import Menus from './Menu';
 
@@ -20,14 +21,14 @@ class page extends Component {
         };
     }
 
-    componentDidMount(){
-        // console.log(this.props.state.id);
-    }
-
     render() {
         let { step, isLogin } = this.state;
-        // const { state } = this.props;
-        // state && state.hasOwnProperty('step') ? step = state.step : '';
+        try {
+            const nowStep = this.props.location.state.step;
+            nowStep ? step = nowStep : '';
+        } catch (error) {
+            log(error);
+        }
         const menu = (
             <Menu>
                 <Menu.Item>

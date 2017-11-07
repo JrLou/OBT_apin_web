@@ -25,22 +25,36 @@ class Menus extends Component {
             }, {
                 name: '我的积分',
                 path: '/Score'
-            }]
+            }],
+            selectedKey: '/'
         };
+    }
+
+    componentDidMount(){
+        try {
+            const pathname = this.props.location.pathname;
+            this.setState({
+                selectedKey: pathname
+            });
+        } catch (error) {
+            log(error);
+        }
     }
 
     render() {
         const { selectedKey, menus } = this.state;
-        const pathname = this.props.pathname;
 
         return (
 
-            <Menu prefixCls="my-ant-menu" selectedKeys={[pathname]} mode="horizontal">
+            <Menu prefixCls="my-ant-menu" selectedKeys={[selectedKey]} mode="horizontal">
                 {
                     menus.map((menu, index) => {
                         return (
                             <MenuItem key={menu.path}>
                                 <span style={{ display: 'inline-block', width: '100%', height: '100%' }} onClick={() => {
+                                    this.setState({
+                                        selectedKey: menu.path
+                                    });
                                     window.app_open(this.props.root, menu.path, {
                                         step: menu.path == '/Score' ? 1 : 0
                                     });
