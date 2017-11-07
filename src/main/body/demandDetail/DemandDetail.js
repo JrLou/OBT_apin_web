@@ -22,50 +22,57 @@ class page extends Component {
         this.state = {
             itemNum: 3,
             index: -1,
+            upData: 1
         };
-        this.data=null;
+        this.data = null;
 
     }
+
+    getUpData() {
+        this.setState({
+            upData: this.state.upData + 1
+        });
+    }
+
     componentDidMount() {
         this.loadData();
+        this.getUpData();
     }
-    loadData(){
+
+    loadData() {
+        let param = {
+            id: "81a366cd6c754cbcbbc978a8b956982b",
+        };
         let success = (code, msg, json, option) => {
-            if(!json){
-                this.data=null;
-            }else {
-                this.data=json;
-            }
+            if (!json) {
+                this.data = null;
+            } else
+                this.data = json;
         };
         let failure = (code, msg, option) => {
-            this.data=null;
+            this.data = null;
         };
-        HttpTool.request(HttpTool.typeEnum.GET, "/demandapi/v1.0/demands/81a366cd6c754cbcbbc978a8b956982b", success, failure, {},
+        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/read", success, failure, param,
             {
                 ipKey: "hlIP"
             });
     }
 
     render() {
-        alert(this.date);
-        if(this.date){
-            return (
-                <div className={less.top}>
+        if(!this.data) return null;
+        return (
+            <div className={less.top}>
 
-                    {(this.data.demandStatus === 1 &&this.data.flightType===3)|| (this.data.demandStatus === 2&&this.data.flightType===3) ? this.getMultiPass(this.data.demandStatus, this.data) : this.getTop(this.data.demandStatus, this.data)}
-                    {this.data.demandStatus === 4 ? this.getCellNewFlight(this.data && this.data.palns ? this.data.palns : []) : null}
-                    {this.data.demandStatus === 1 ? this.getMessage("预计在30分钟内为您处理需求") :
-                        (this.data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
-                    {this.data.demandStatus === 5 ? this.getCloseReason() : null}
-                    {(this.data.demandStatus === 1&&this.data.flightType!=3) || this.data.demandStatus === 5 || this.data.demandStatus === 0 ? this.getButton(this.data.demandStatus) : null}
-                    {this.data.demandStatus === 4 ? <OrderInfoView type={0}/> : null}
-                    {this.data.demandStatus === 2 ? this.getFlightInfo(this.data && this.data.palns ? this.data.palns : []) : null}
-                </div>
-            );
-        }else {
-            return null;
-        }
-
+                {(this.data.demandStatus === 1 && this.data.flightType === 3) || (this.data.demandStatus === 2 && this.data.flightType === 3) ? this.getMultiPass(this.data.demandStatus, this.data) : this.getTop(this.data.demandStatus, this.data)}
+                {this.data.demandStatus === 4 ? this.getCellNewFlight(this.data && this.data.palns ? this.data.palns : []) : null}
+                {this.data.demandStatus === 1 ? this.getMessage("预计在30分钟内为您处理需求") :
+                    (this.data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
+                {this.data.demandStatus === 5 ? this.getCloseReason() : null}
+                {(this.data.demandStatus === 1 && this.data.flightType != 3) || this.data.demandStatus === 5 || this.data.demandStatus === 0 ? this.getButton(this.data.demandStatus) : null}
+                {this.data.demandStatus === 4 ? <OrderInfoView type={0}/> : null}
+                {this.data.demandStatus === 2 ? this.data(this.data && this.data.palns ? this.data.palns : []) : null}
+            </div>
+        );
     }
 
     getCellNewFlight(data) {
@@ -191,19 +198,12 @@ class page extends Component {
         );
     }
 
-    getFlightInfo(datas) {
-        return (
-            <div>
-                {this.getConfirmButton(datas)}
-            </div>
-        );
-    }
 
     getConfirmButton(datas) {
         return (
             datas.map((data, index) => {
                 return (
-                    <div className={less.flightItem}>
+                    <div key={index} className={less.flightItem}>
                         {
                             index === 0 ? <div style={{paddingTop: 15}}><h2 className={less.title}>航班信息</h2>
                                 <div className={less.line}/>
@@ -257,7 +257,7 @@ class page extends Component {
     getTop(type, data) {
         if (!data)return null;
         let img = null;
-        if (data.flightType===1) {
+        if (data.flightType === 1) {
             img = require('../../../images/oneWay.png');
         } else {
             img = require('../../../images/return.png');
@@ -285,7 +285,10 @@ class page extends Component {
                             <div className={less.voyageContentLayout}>
                                 <div className={less.voyageContent}>
                                     <div className={type === 5 ? less.voyageGray : less.voyage}
-                                         style={{paddingLeft: 54, paddingRight: 10}}>{data&&data.cityDep?data.cityDep:"暂无"}
+                                         style={{
+                                             paddingLeft: 54,
+                                             paddingRight: 10
+                                         }}>{data && data.cityDep ? data.cityDep : "暂无"}
                                     </div>
                                     <div
                                         className={less.voyageImg}
@@ -297,7 +300,7 @@ class page extends Component {
                                     >
                                     </div>
                                     <div className={type === 5 ? less.voyageGray : less.voyage}
-                                         style={{paddingLeft: 10}}>{data&&data.cityArr?data.cityArr:"暂无"}
+                                         style={{paddingLeft: 10}}>{data && data.cityArr ? data.cityArr : "暂无"}
                                     </div>
                                 </div>
                             </div>
@@ -364,7 +367,7 @@ class page extends Component {
         if (!data)return null;
 
         let img = null;
-        if (data.flightType===1) {
+        if (data.flightType === 1) {
             img = require('../../../images/oneWay.png');
         } else {
             img = require('../../../images/return.png');
@@ -377,7 +380,7 @@ class page extends Component {
                     <div className={less.bottomLeft}>
 
                         <div className={less.table}>
-                            <div className={less.text}>{data&&data.cityDep?data.cityDep:"暂无"}</div>
+                            <div className={less.text}>{data && data.cityDep ? data.cityDep : "暂无"}</div>
 
 
                             <div className={less.text2}>
@@ -390,7 +393,7 @@ class page extends Component {
                             </div>
 
 
-                            <div className={less.text}>{data&&data.cityArr?data.cityArr:"暂无"}</div>
+                            <div className={less.text}>{data && data.cityArr ? data.cityArr : "暂无"}</div>
                         </div>
                     </div>
                     <div className={less.bottomRight}>
