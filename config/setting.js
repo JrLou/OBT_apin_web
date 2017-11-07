@@ -9,6 +9,6 @@ module.exports = {
     custom: {
         serverRoutes:router
     },
-    hlIP:"http://10.0.0.62:9008",
+    hlIP:"http://192.168.0.58:6300",
     serviceIP:"http://10.0.0.72:9008"
 };
