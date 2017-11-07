@@ -47,9 +47,8 @@ class page extends Component {
     }
 
     render() {
-        if(this.date===null||this.data.demandStatus===null){
-           return null;
-        }else {
+        alert(this.date);
+        if(this.date){
             return (
                 <div className={less.top}>
 
@@ -63,6 +62,8 @@ class page extends Component {
                     {this.data.demandStatus === "询价中多程" || this.data.demandStatus === "询价中单程" ? this.getFlightInfo(this.data && this.data.palns ? this.data.palns : []) : null}
                 </div>
             );
+        }else {
+            return null;
         }
 
     }
