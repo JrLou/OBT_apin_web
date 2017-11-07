@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-06 16:03:01
+ * @Last Modified time: 2017-11-07 13:45:34
  */
 
 import React, { Component } from 'react';
@@ -35,25 +35,27 @@ class AccountLoginForm extends React.Component {
         return (
             <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <FormItem
-                prefixCls="my-ant-form"
+                    prefixCls="my-ant-form"
                     validateStatus={userNameError ? 'error' : ''}
                     help={userNameError || ''}
                 >
                     {getFieldDecorator('userName', {
-                        rules: [{ required: true, message: '请输入用户名!' }],
+                        rules: [{ required: true, message: '请输入用户名!' }
+                        ],
                     })(
                         <Input prefixCls='my-ant-input' placeholder="账号/手机号" />
                         )}
                 </FormItem>
                 <FormItem
-                prefixCls="my-ant-form"
+                    prefixCls="my-ant-form"
                     validateStatus={passwordError ? 'error' : ''}
                     help={passwordError || ''}
                 >
                     {getFieldDecorator('password', {
-                        rules: [{ required: true, message: '请输入密码!' }],
+                        rules: [{ required: true, message: '请输入密码!' },
+                        { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
-                        <Input prefixCls='my-ant-input' type="password" placeholder="密码" autoComplete="new-password" />
+                        <Input prefixCls='my-ant-input' type="password" placeholder="请输入8-16位数字、字母" autoComplete="new-password" />
                         )}
                 </FormItem>
                 <FormItem prefixCls="my-ant-form">
@@ -100,16 +102,20 @@ class MsgLoginForm extends React.Component {
         return (
             <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <FormItem
+                    prefixCls="my-ant-form"
                     validateStatus={telError ? 'error' : ''}
                     help={telError || ''}
                 >
                     {getFieldDecorator('tel', {
-                        rules: [{ required: true, message: '请输入11位手机号' }],
+                        rules: [{ required: true, message: '请输入11位手机号' }, {
+                            pattern: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/, message: '手机号格式不正确！'
+                        }],
                     })(
                         <Input prefixCls='my-ant-input' placeholder="请输入11位手机号" />
                         )}
                 </FormItem>
                 <FormItem
+                    prefixCls="my-ant-form"
                     validateStatus={checkImgCodeError ? 'error' : ''}
                     help={checkImgCodeError || ''}
                 >
@@ -121,6 +127,7 @@ class MsgLoginForm extends React.Component {
                     <img src="http://placehold.it/98x36" alt="" className={css.checkCodeImg} />
                 </FormItem>
                 <FormItem
+                    prefixCls="my-ant-form"
                     validateStatus={checkCodeError ? 'error' : ''}
                     help={checkCodeError || ''}
                 >
@@ -131,7 +138,7 @@ class MsgLoginForm extends React.Component {
                         )}
                     <CheckCode />
                 </FormItem>
-                <FormItem>
+                <FormItem prefixCls="my-ant-form">
                     <Button
                         prefixCls="my-ant-btn"
                         type="primary"
