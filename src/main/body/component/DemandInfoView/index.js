@@ -19,89 +19,13 @@ class DemandInfoView extends Component {
             upView: 1,
             index: -1,
         };
+
     }
 
     getUpView() {
         this.setState({
             upView: this.state.upView + 1
         });
-    }
-
-    componentDidMount() {
-        let go = {
-            arrAirport: "塞班",
-            arrDate: "2017-11-05",
-            arrTime: "15:30",
-            compName: "北京首都航空有限公司",
-            depAirport: "杭州萧山",
-            depDate: "2017-11-05",
-            depTime: "08:10",
-            flightTime: "7:20",
-            flightType: "2",
-            logo: null,
-            num: "JD395",
-            tag: 0
-        };
-        let back = {
-            arrAirport: "杭州萧山",
-            arrDate: "2017-11-09",
-            arrTime: "10:25",
-            compName: "北京首都航空有限公司",
-            depAirport: "塞班",
-            depDate: "2017-11-09",
-            depTime: "07:00",
-            flightTime: "3:25",
-            flightType: "2",
-            logo: null,
-            num: "JD396",
-            tag: 0,
-        };
-        let zhongZhuanObj = [{
-            flightType: true,
-            obj: go
-        }, {
-            flightType: true,
-            obj: go
-        }, {
-            flightType: false,
-            obj: back
-        }];
-
-        let flightTypeGo = [{
-            flightType: true,
-            obj: go,
-            data: zhongZhuanObj
-        }];
-
-
-        let flightTypeGoAndBack = [{
-            flightType: true,
-            obj: go,
-            data: zhongZhuanObj
-        }, {
-            flightType: false,
-            obj: back,
-            data: zhongZhuanObj
-        }];
-
-        let moreFlightObj = [{
-            numFlight: "一",
-            obj: go,
-        }, {
-            numFlight: "二",
-            obj: go,
-        }, {
-            numFlight: "三",
-            obj: back,
-        }];
-
-
-        this.listData = {
-            rule: "行李规行李规则行李规则行李规则行李规则行李规则行李规则行李规则则",
-            obj: flightTypeGo,
-            flightType: 1
-        };
-        this.getUpView();
     }
 
     render() {
@@ -117,18 +41,18 @@ class DemandInfoView extends Component {
                 {type === "已关闭" ? this.getCloseReason() : null}
                 {type === "待出价单程" || type === "已关闭" || type === "已取消" ? this.getButton(type) : null}
                 {type === "已确认" ? <OrderInfoView type={0}/> : null}
-                {type === "询价中多程" ||type === "询价中单程"? this.getFlightInfo() : null}
+                {type === "询价中多程" ||type === "询价中单程"? this.getFlightInfo(data) : null}
             </div>
         );
     }
 
-    getCellNewFlight() {
+    getCellNewFlight(data) {
         return (
             <div className={less.cellNewFlightLayout}>
                 <h2 className={less.title}>航班信息</h2>
                 <div className={less.line}/>
                 <div className={less.cellNewFlight}>
-                    <CellNewFlight dataSource={ this.listData}/>
+                    <CellNewFlight dataSource={data.plans}/>
                 </div>
             </div>
         );

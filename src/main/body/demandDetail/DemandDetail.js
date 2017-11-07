@@ -17,6 +17,9 @@ import {HttpTool} from "../../../../lib/utils/index.js";
 class page extends Component {
     constructor(props) {
         super(props);
+        this.state={
+            data:null
+        };
     }
 
     componentDidMount() {
@@ -25,9 +28,10 @@ class page extends Component {
 
     loadData(){
         let success = (code, msg, json, option) => {
-            this.state=json;
-                log(json);
-            alert(json);
+            this.setState({
+                data:json
+            });
+
         };
         let failure = (code, msg, option) => {
 
@@ -41,7 +45,7 @@ class page extends Component {
     render() {
         return (
             <div>
-                <View type={"询价中多程"} data={this.state}/>
+                <View type={"询价中多程"} data={this.state.data}/>
             </div>
         );
     }
