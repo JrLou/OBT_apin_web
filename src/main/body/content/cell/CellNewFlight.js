@@ -27,7 +27,7 @@ class CellNewFlight extends Component {
         log("-------gygygy--------");
         return (<div className={css.main}>
             <div className={css.left}>
-                {this.createCell(dataSource.obj||[])}
+                {this.createCell(dataSource.voyages||[])}
             </div>
             <div className={css.right}>{dataSource.rule}</div>
         </div>);
@@ -37,7 +37,7 @@ class CellNewFlight extends Component {
             let i = index;
            return (<div key={i} className={css.cellBg} style={{borderBottomWidth:(i==dataArr.length-1)?"0px":"1px"}}>
                {this.createItemCell(data, i)}
-               {data.data&&data.data.length>1?<CellNewFlightDetail data = {data.data}/>:null}
+               {data.data&&data.data.length>1?<CellNewFlightDetail data = {data.child}/>:null}
            </div>);
         });
     }
@@ -46,7 +46,7 @@ class CellNewFlight extends Component {
         if (!data){
             return null;
         }
-        let obj = data.obj;
+        let obj = data;
         let totalText = obj.flightTime?DateHelp.getValue(obj.flightTime):"";
 
         var itemView = (<div className={css.table}>

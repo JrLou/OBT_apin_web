@@ -24,7 +24,7 @@ class CellTransFlight extends Component {
         return (<div className={css.main}>{this.createCell(data||{},isNoFirst)}</div>);
     }
     createCell(data,isNoFirst){
-        let obj = data.obj;
+        let obj = data;
         let totalText = obj.flightTime?DateHelp.getValue(obj.flightTime):"";
 
         var itemView = (<div style={{width:"100%",overflow:"hidden"}}>
