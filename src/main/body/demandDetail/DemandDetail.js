@@ -52,14 +52,14 @@ class page extends Component {
             return (
                 <div className={less.top}>
 
-                    {this.data.demandStatus === "待出价多程" || this.data.demandStatus === "询价中多程" ? this.getMultiPass(this.data.demandStatus, this.data) : this.getTop(this.data.demandStatus, this.data)}
-                    {this.data.demandStatus === "已确认" ? this.getCellNewFlight(this.data && this.data.palns ? this.data.palns : []) : null}
-                    {this.data.demandStatus === "待出价单程" || this.data.demandStatus === "待出价多程" ? this.getMessage("预计在30分钟内为您处理需求") :
-                        (this.data.demandStatus === "已关闭" ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
-                    {this.data.demandStatus === "已关闭" ? this.getCloseReason() : null}
-                    {this.data.demandStatus === "待出价单程" || this.data.demandStatus === "已关闭" || this.data.demandStatus === "已取消" ? this.getButton(this.data.demandStatus) : null}
-                    {this.data.demandStatus === "已确认" ? <OrderInfoView type={0}/> : null}
-                    {this.data.demandStatus === "询价中多程" || this.data.demandStatus === "询价中单程" ? this.getFlightInfo(this.data && this.data.palns ? this.data.palns : []) : null}
+                    {(this.data.demandStatus === 1 &&this.data.flightType===3)|| (this.data.demandStatus === 2&&this.data.flightType===3) ? this.getMultiPass(this.data.demandStatus, this.data) : this.getTop(this.data.demandStatus, this.data)}
+                    {this.data.demandStatus === 4 ? this.getCellNewFlight(this.data && this.data.palns ? this.data.palns : []) : null}
+                    {this.data.demandStatus === 1 ? this.getMessage("预计在30分钟内为您处理需求") :
+                        (this.data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
+                    {this.data.demandStatus === 5 ? this.getCloseReason() : null}
+                    {(this.data.demandStatus === 1&&this.data.flightType!=3) || this.data.demandStatus === 5 || this.data.demandStatus === 0 ? this.getButton(this.data.demandStatus) : null}
+                    {this.data.demandStatus === 4 ? <OrderInfoView type={0}/> : null}
+                    {this.data.demandStatus === 2 ? this.getFlightInfo(this.data && this.data.palns ? this.data.palns : []) : null}
                 </div>
             );
         }else {
@@ -103,9 +103,9 @@ class page extends Component {
         return (
             <div className={less.buttonBottomLayout}>
                 <div>
-                    <Button className={less.buttonAgin}>{type === "待出价单程" ? "联系爱拼机客服处理需求" : "重新发布需求"}</Button>
+                    <Button className={less.buttonAgin}>{type === 1 ? "联系爱拼机客服处理需求" : "重新发布需求"}</Button>
                     {
-                        type === "已关闭" ? <Button className={less.buttonContact}>联系爱拼机客服</Button> : null
+                        type === 5 ? <Button className={less.buttonContact}>联系爱拼机客服</Button> : null
                     }
                 </div>
             </div>
@@ -127,13 +127,13 @@ class page extends Component {
     }
 
     getDemandButton(type) {
-        if (type === "待出价单程" || type === "待出价多程" || type === "询价中单程") {
+        if (type === 1 || type === 2) {
             return (
                 <div className={less.buttonLayout}>
                     <Button className={less.buttonCancel}>取消需求</Button>
                 </div>
             );
-        } else if (type === "已确认") {
+        } else if (type === 4) {
             return (
                 null
             );
@@ -156,22 +156,22 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>需求状态：</font>
                             <font
-                                className={type === "待出价单程" ? less.mainContentGreenStatus : (type === "已关闭" ? less.mainContentClose : less.mainContent)}>{data && data.demandStatus ? data.demandStatus : "暂无"}</font>
+                                className={(type === 1) ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{data && data.demandStatus ? data.demandStatus : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
                             <font
-                                className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.createdTime ? data.createdTime : "暂无"}</font>
+                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.createdTime ? data.createdTime : "暂无"}</font>
                         </div>
                         {/*<div>*/}
                         {/*<font className={less.mainTitle}>航程类型：</font>*/}
                         {/*<font*/}
-                        {/*className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.vayageType ? data.vayageType : "暂无"}</font>*/}
+                        {/*className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.vayageType ? data.vayageType : "暂无"}</font>*/}
                         {/*</div>*/}
                         {/*<div>*/}
                         {/*<font className={less.mainTitle}>航班人数：</font>*/}
                         {/*<font*/}
-                        {/*className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data.adultCount+data.childCount}人（{data&&data.adultCount?data.adultCount:"0"}成人,{data&&data.childCount?data.childCount:"0"}儿童）</font>*/}
+                        {/*className={type === 5 ? less.mainContentClose : less.mainContent}>{data.adultCount+data.childCount}人（{data&&data.adultCount?data.adultCount:"0"}成人,{data&&data.childCount?data.childCount:"0"}儿童）</font>*/}
                         {/*</div>*/}
                     </div>
                     {this.getDemandButton(type)}
@@ -184,7 +184,7 @@ class page extends Component {
                     <div style={{paddingTop: 17, paddingLeft: 20, marginBottom: 50}}>
                         <font className={less.mainTitle}>备注：</font>
                         <font
-                            className={type === "已关闭" ? less.mainContentClose1 : less.mainContent1}>{data && data.remark ? data.remark : "暂无"}</font>
+                            className={type === 5 ? less.mainContentClose1 : less.mainContent1}>{data && data.remark ? data.remark : "暂无"}</font>
                     </div>
                 </div>
             </div>
@@ -271,20 +271,20 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>需求状态：</font>
                             <font
-                                className={type === "待出价单程" || type === "询价中单程" ? less.mainContentGreenStatus : (type === "已关闭" ? less.mainContentClose : less.mainContent)}>{data && data.flightType ? data.flightType : "暂无"}</font>
+                                className={type === 1 || type === 2 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{data && data.flightType ? data.flightType : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
                             <font
-                                className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.creatTime ? data.creatTime : "暂无"}</font>
+                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.creatTime ? data.creatTime : "暂无"}</font>
                         </div>
                         <div className={less.voyageLayout} style={{marginTop: 0}}>
                             <div className={less.voyageTitle}>航程：</div>
                             {/*<font*/}
-                            {/*className={type === "已关闭" ? less.mainContentCloseBig : less.mainContentBig}>{data && data.vayage ? data.vayage : "暂无"}</font>*/}
+                            {/*className={type === 5 ? less.mainContentCloseBig : less.mainContentBig}>{data && data.vayage ? data.vayage : "暂无"}</font>*/}
                             <div className={less.voyageContentLayout}>
                                 <div className={less.voyageContent}>
-                                    <div className={type === "已关闭" ? less.voyageGray : less.voyage}
+                                    <div className={type === 5 ? less.voyageGray : less.voyage}
                                          style={{paddingLeft: 54, paddingRight: 10}}>{data&&data.cityDep?data.cityDep:"暂无"}
                                     </div>
                                     <div
@@ -296,7 +296,7 @@ class page extends Component {
                                         }}
                                     >
                                     </div>
-                                    <div className={type === "已关闭" ? less.voyageGray : less.voyage}
+                                    <div className={type === 5 ? less.voyageGray : less.voyage}
                                          style={{paddingLeft: 10}}>{data&&data.cityArr?data.cityArr:"暂无"}
                                     </div>
                                 </div>
@@ -308,32 +308,32 @@ class page extends Component {
                         <div style={{marginTop: 0}}>
                             <font className={less.mainTitle}>需求类型：</font>
                             <font
-                                className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.flightType === 1 ? "单程" : data && data.flightType === 2 ? "往返" : "暂无"}</font>
+                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.flightType === 1 ? "单程" : data && data.flightType === 2 ? "往返" : "暂无"}</font>
                         </div>
                         {/*<div>*/}
                         {/*<font className={less.mainTitle}>航程类型：</font>*/}
                         {/*<font*/}
-                        {/*className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.vayageType ? data.vayageType : "暂无"}</font>*/}
+                        {/*className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.vayageType ? data.vayageType : "暂无"}</font>*/}
                         {/*</div>*/}
                         {/*<div>*/}
                         {/*<font className={less.mainTitle}>航班人数：</font>*/}
                         {/*<font*/}
-                        {/*className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data&&data.adultCount&&data.childCount?data.adultCount+data.childCount:""}人{"（"+data&&data.adultCount?data.adultCount+"成人":""}{"，"+data&&data.childCount?data.childCount+"儿童）":""}</font>*/}
+                        {/*className={type === 5 ? less.mainContentClose : less.mainContent}>{data&&data.adultCount&&data.childCount?data.adultCount+data.childCount:""}人{"（"+data&&data.adultCount?data.adultCount+"成人":""}{"，"+data&&data.childCount?data.childCount+"儿童）":""}</font>*/}
                         {/*</div>*/}
                         <div>
                             <font className={less.mainTitle}>出发日期：</font>
                             <font
-                                className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.dateDep ? data.dateDep : "暂无"}</font>
+                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.dateDep ? data.dateDep : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>返程日期：</font>
                             <font
-                                className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.dateRet ? data.dateRet : "暂无"}</font>
+                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.dateRet ? data.dateRet : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>备注：</font>
                             <font
-                                className={type === "已关闭" ? less.mainContentClose1 : less.mainContent1}>{data && data.remark ? data.remark : "暂无"}</font>
+                                className={type === 5 ? less.mainContentClose1 : less.mainContent1}>{data && data.remark ? data.remark : "暂无"}</font>
                         </div>
 
 
