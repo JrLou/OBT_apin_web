@@ -26,7 +26,9 @@
  */
 
 import React, { Component } from 'react';
-import {Button, Input, Modal,} from 'antd';
+import {Button, Modal} from 'antd';
+import TemplatePublist from "../../../publishMsg/TemplatePublist.js";
+
 import css from './MyModalRequire.less';
 class MyModalRequire extends Component {
     constructor(props) {
@@ -42,7 +44,17 @@ class MyModalRequire extends Component {
         this.setState({
             visible:visible,
             title:option.title?option.title:undefined,
-            desc:option.desc?option.desc:undefined
+            desc:option.desc?option.desc:undefined,
+            param:option.desc?option.desc:{}
+        });
+    }
+    hiddenModal(callBack) {
+        this.setState({
+            visible:false,
+        },()=>{
+            if (callBack){
+                callBack();
+            }
         });
     }
 
@@ -59,19 +71,25 @@ class MyModalRequire extends Component {
                    footer={null}>
                 <div className={css.modalTitle}>{this.state.title}</div>
                 <div className={css.modalDesc}>{this.state.desc}</div>
-                <div style={{height:5}}></div>
-                <div className={css.line}></div>
 
-                <div style={{height:"80px",backgroundColor:"lightBlue"}}></div>
+                <TemplatePublist  state= {this.state.param} callBack={(val) => {
+                    this.setState({
+                        visible:false,
+                    },()=>{
+                        if (callBack){
+                            callBack(val);
+                        }
+                    });
+                }}/>
 
 
 
-                <div className={css.bottom}>
-                    <Button type="primary" className={css.commit}
-                            onClick={() => {
-                                this.handleOk(callBack);
-                            }}>提交需求</Button>
-                </div>
+                {/*<div className={css.bottom}>*/}
+                    {/*<Button type="primary" className={css.commit}*/}
+                            {/*onClick={() => {*/}
+                                {/*this.handleOk(callBack);*/}
+                            {/*}}>提交需求</Button>*/}
+                {/*</div>*/}
             </Modal>
         );
     }
@@ -87,27 +105,6 @@ class MyModalRequire extends Component {
     handleCancel(){
         this.setState({
             visible:false,
-        });
-    }
-    recycleNum(value){
-        if (value&value.replace("^[0-9]\d*$",)&parseInt(value)){
-            this.setState({
-                myNum:parseInt(value)<this.state.sit?parseInt(value):this.state.sit,
-            });
-        }else {
-            this.setState({
-                myNum:"",
-            });
-        }
-    }
-    decline(){
-        this.setState({
-            myNum:this.state.myNum>1?this.state.myNum-1:"",
-        });
-    }
-    increase(){
-        this.setState({
-            myNum:(this.state.myNum>=this.state.sit)?this.state.sit:(this.state.myNum?this.state.myNum+1:1),
         });
     }
 }

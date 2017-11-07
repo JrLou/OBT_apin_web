@@ -82,7 +82,7 @@ class page extends Component {
     // }
     lineTypeonChange(e) {//航线选择
         let { lineNum } = this.state;
-        lineNum = e.target.value == 3 ? 2 : 1;
+        lineNum = e.target.value == 3 ? 3 : 1;
         this.setState({
             lineType: e.target.value, lineNum
         });
@@ -119,6 +119,14 @@ class page extends Component {
                             </Col>
                         </Row>
                     }
+                    {this.state.lineType != 3 &&
+                    <Row style={{ marginBottom: 8, fontSize: "14px", color: " #29A6FF" }}>
+                        <Col span={10} >
+                            <span></span>
+                        </Col>
+                    </Row>
+                    }
+
                     <Row style={{ marginBottom: 8 }}>
                         <Col span={10} >出发城市：</Col>
                         <Col span={10} offset={3}>目的城市：</Col>
@@ -137,7 +145,7 @@ class page extends Component {
                                 })(
                                     <AutoInput style={{borderRadius:"2px"}}   defaultValue={this.state.listData[i]==undefined?"":this.state.listData[i].fromCity}
                                         type={"from"}
-                                        placeholder={'中文／拼音／三字码'} /> 
+                                        placeholder={'中文／拼音／三字码'} />
                                     )}
                             </FormItem>
                         </Col>
@@ -200,7 +208,7 @@ class page extends Component {
                         }
                         {this.state.lineType == 3 &&
                             <Col span={11} offset={2}>
-                                <Button type="primary" style={{ float: "right" }} disabled={this.state.lineNum != (i + 1) || i == 0} onClick={() => this.lineDel()}>删除</Button>
+                                <Button type="primary" style={{ float: "right" }} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum==2} onClick={() => this.lineDel()}>删除</Button>
                             </Col>
                         }
                     </Row>

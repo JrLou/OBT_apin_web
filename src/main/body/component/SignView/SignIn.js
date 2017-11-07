@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-07 14:56:40
+ * @Last Modified time: 2017-11-07 16:38:45
  */
 
 import React, { Component } from 'react';
@@ -25,21 +25,21 @@ class SignInForm extends Component {
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, getFieldValue, isFieldTouched } = this.props.form;
 
-        const userNameError = isFieldTouched('userName') && getFieldError('userName');
-        const telError = isFieldTouched('tel') && getFieldError('tel');
+        const accountError = isFieldTouched('account') && getFieldError('account');
+        const mobileError = isFieldTouched('mobile') && getFieldError('mobile');
         const checkImgCodeError = isFieldTouched('checkImgCode') && getFieldError('checkImgCode');
-        const checkCodeError = isFieldTouched('checkCode') && getFieldError('checkCode');
+        const codeError = isFieldTouched('code') && getFieldError('code');
         const passwordError = isFieldTouched('password') && getFieldError('password');
-        const managerError = isFieldTouched('manager') && getFieldError('manager');
+        const bdChargerError = isFieldTouched('bdCharger') && getFieldError('bdCharger');
         return (
             <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <FormItem
                     prefixCls="my-ant-form"
-                    validateStatus={userNameError ? 'error' : ''}
-                    help={userNameError || ''}
+                    validateStatus={accountError ? 'error' : ''}
+                    help={accountError || ''}
                     label="账户名(不可修改)"
                 >
-                    {getFieldDecorator('userName', {
+                    {getFieldDecorator('account', {
                         rules: [{ required: true, message: '请输入账户名' }],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入账户名" />
@@ -47,11 +47,11 @@ class SignInForm extends Component {
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"
-                    validateStatus={telError ? 'error' : ''}
-                    help={telError || ''}
+                    validateStatus={mobileError ? 'error' : ''}
+                    help={mobileError || ''}
                     label="绑定手机"
                 >
-                    {getFieldDecorator('tel', {
+                    {getFieldDecorator('mobile', {
                         rules: [{ required: true, message: '请输入11位手机号' },
                         { pattern: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/, message: '手机号格式不正确！' }],
                     })(
@@ -73,16 +73,16 @@ class SignInForm extends Component {
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"
-                    validateStatus={checkCodeError ? 'error' : ''}
-                    help={checkCodeError || ''}
+                    validateStatus={codeError ? 'error' : ''}
+                    help={codeError || ''}
                     label="验证码"
                 >
-                    {getFieldDecorator('checkCode', {
+                    {getFieldDecorator('code', {
                         rules: [{ required: true, message: '请输入验证码' }],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode error={getFieldError('tel')} />
+                    <CheckCode error={getFieldError('mobile')} />
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"
@@ -99,11 +99,11 @@ class SignInForm extends Component {
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"
-                    validateStatus={managerError ? 'error' : ''}
-                    help={managerError || ''}
+                    validateStatus={bdChargerError ? 'error' : ''}
+                    help={bdChargerError || ''}
                     label="市场经理姓名"
                 >
-                    {getFieldDecorator('manager')(
+                    {getFieldDecorator('bdCharger')(
                         <Input prefixCls="my-ant-input" placeholder="请务必准确输入" />
                     )}
                 </FormItem>

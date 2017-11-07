@@ -5,6 +5,7 @@ import less from "./DemandDetail.less";
 import OrderInfoView from '../component/OrderInfoView/index';
 import CellNewFlight from "../content/cell/CellNewFlight";
 import {HttpTool} from "../../../../lib/utils/index.js";
+import NumTransToTextHelp from '../tool/NumTransToTextHelp.js';
 /**
  * 需求已取消                    0
  * 需求处理中 （单程）       1    1
@@ -48,8 +49,6 @@ class page extends Component {
 
     componentDidMount() {
         this.loadData();
-        this.getUpData();
-
     }
 
     loadData() {
@@ -83,7 +82,7 @@ class page extends Component {
                 {this.state.data.demandStatus === 5 ? this.getCloseReason() : null}
                 {this.state.data.demandStatus === 1  || this.state.data.demandStatus === 5 || this.state.data.demandStatus === 0 ? this.getButton(this.state.data.demandStatus) : null}
                 {this.state.data.demandStatus === 4 ? <OrderInfoView type={0}/> : null}
-                {this.state.data.demandStatus === 2 ? this.data(this.state.data && this.state.data.palns ? this.state.data.palns : []) : null}
+                {this.state.data.demandStatus === 2 ? this.getConfirmButton(this.state.data && this.state.data.plans ? this.state.data.plans : []) : null}
             </div>
         );
     }
@@ -213,7 +212,9 @@ class page extends Component {
     }
 
 
-    getConfirmButton(datas) {
+    getConfirmButton(datas,flightType) {
+        log(datas);
+        log("-------gyw--------");
         return (
             datas.map((data, index) => {
                 return (
@@ -223,11 +224,11 @@ class page extends Component {
                                 <div className={less.line}/>
                             </div> : null
                         }
-                        <div className={less.programmeLayout}>方案{index + 1}</div>
+                        <div className={less.programmeLayout}>方案{NumTransToTextHelp.getValue(index + 1)}</div>
 
                         <div style={{marginTop: 20}} className={less.flightInfoLayout}>
                             <div className={less.flightButtonLeftLayout}>
-                                <CellNewFlight key={index} dataSource={data}/>
+                                <CellNewFlight key={index} dataSource={data} flightType=""/>
                             </div>
                             <div className={less.flightButtonRightLayout}>
                                 <div className={less.flightButtonRightContentLayout}>
@@ -236,7 +237,7 @@ class page extends Component {
                                         <div style={{textAlign: "right"}}>
                                             <font className={less.monetSymbol}>¥</font>
                                             <font
-                                                className={less.money}>{data && data.totalMoney ? data.totalMoney : "0"}</font>
+                                                className={less.money}>{data && data.adultPrice ? data.adultPrice : "0"}</font>
                                             <font className={less.monetSymbol}>起</font>
                                         </div>
                                     </div>

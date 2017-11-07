@@ -25,7 +25,7 @@ class CellNewFlight extends Component {
         }
         return (<div className={css.main}>
             <div className={css.left}>
-                {this.createCell(dataSource.obj||[])}
+                {this.createCell(dataSource.voyages||[])}
             </div>
             <div className={css.right}>{dataSource.rule}</div>
         </div>);
@@ -35,7 +35,7 @@ class CellNewFlight extends Component {
             let i = index;
            return (<div key={i} className={css.cellBg} style={{borderBottomWidth:(i==dataArr.length-1)?"0px":"1px"}}>
                {this.createItemCell(data, i)}
-               {data.data&&data.data.length>1?<CellNewFlightDetail data = {data.data}/>:null}
+               {data.child&&data.child.length>1?<CellNewFlightDetail data = {data.child}/>:null}
            </div>);
         });
     }
@@ -44,26 +44,24 @@ class CellNewFlight extends Component {
         if (!data){
             return null;
         }
-        let obj = data.obj;
-        let totalText = obj.flightTime?DateHelp.getValue(obj.flightTime):"";
 
         var itemView = (<div className={css.table}>
             <div className={css.type_super}>
                 <div className={css.typeText}>
-                    {data.numFlight?("第"+ NumTransToTextHelp.getValue(index+1)+"程"):(data.flightType?"去程":"回程")}
+                    {data.isTransit?("第"+ NumTransToTextHelp.getValue(index+1)+"程"):(data.tripIndex==0?"去程":"回程")}
                 </div>
             </div>
 
             <div className={css.date_super}>
-                <div className={css.date}>{obj.arrDate}</div>
-                <div className={css.week}>{"周五"}</div>
+                <div className={css.date}>{data.arrDate}</div>
+                <div className={css.week}>{NumTransToTextHelp.getWeek(data.week)}</div>
             </div>
 
             <div className={css.flightLine_super}>
                 <div className={css.flightLine}>
                     <div className={css.placeLine}>
-                        <div className={css.placeLineItem}>{obj.depAirport}</div>
-                        <div style={{fontSize:"22px",textAlign:"center"}}>{obj.depTime}</div>
+                        <div className={css.placeLineItem}>{data.depAirport}</div>
+                        <div style={{fontSize:"22px",textAlign:"center"}}>{data.depTime}</div>
                     </div>
 
                     <div className={css.lineBg}>
@@ -79,14 +77,14 @@ class CellNewFlight extends Component {
                         <div className={css.logoCompany_super}>
                             <div className={css.logoBg}>
                                 <img className={css.logo}
-                                     src ={obj.logo?obj.logo:require("../../../../images/logo.png")}/>
+                                     src ={data.logo?data.logo:require("../../../../images/logo.png")}/>
                             </div>
                             <div className={css.logoCompany}>
-                                <div className={css.logoCompanyText}>{obj.compName}</div>
+                                <div className={css.logoCompanyText}>{data.compName}</div>
                             </div>
                         </div>
-                        <div className={css.totalTimeText}>{"约"+totalText}</div>
-                        <div className={css.flightLineNum}>{obj.num}</div>
+                        <div className={css.totalTimeText}>{"约"+data.flightTime}</div>
+                        <div className={css.flightLineNum}>{data.num}</div>
                     </div>
 
 
@@ -102,10 +100,10 @@ class CellNewFlight extends Component {
                     </div>
 
                     <div className={css.placeLine}>
-                        <div className={css.refPlaceLineItem}>{obj.arrAirport}</div>
+                        <div className={css.refPlaceLineItem}>{data.arrAirport}</div>
                         <div style={{textAlign:"center"}}>
-                            <span style={{fontSize:"22px"}}>{obj.arrTime}</span>
-                            <span style={{fontSize:"12px",color:"#FF5841"}}>{obj.tag==1?"+1天":""}</span>
+                            <span style={{fontSize:"22px"}}>{data.arrTime}</span>
+                            <span style={{fontSize:"12px",color:"#FF5841"}}>{data.tag==1?"+1天":""}</span>
                         </div>
                     </div>
                 </div>

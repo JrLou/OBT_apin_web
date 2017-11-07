@@ -23,13 +23,26 @@ class page extends Component {
     constructor(props) {
         super(props);
         this.par = window.app_getPar(this);
-
         this.state = {
             upData:0,
             adultNum:1,
             childNum:0,
             phone:""
         };
+
+        this.requireParam = {
+            lineType:3,
+            lineNum:1,
+            adultCount:"10",
+            childCount:"10",
+            remark:"",
+            phone:"",
+            listData:[{
+                fromCity:"北京",
+                toCity:"杭州",
+                fromDateTime:"2017-11-20",
+                toDateTime:"2017-11-20"
+            }]};
     }
     componentWillReceiveProps(nextProps) {
 
@@ -46,13 +59,13 @@ class page extends Component {
     }
     loadData() {
         var param = {};
-        // this.loadingView.refreshView(true);
+        this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
-
+            this.loadingView.refreshView(false);
         };
         var failure = (code, msg, option) => {
             message.warning(msg);
-            // this.loadingView.refreshView(false);
+            this.loadingView.refreshView(false);
         };
         // HttpTool.request(HttpTool.typeEnum.POST,
         //     APIGYW.flightapi_flightDetail_month_query,
@@ -119,7 +132,34 @@ class page extends Component {
             obj:moreFlightObj,
             flightType:3
         }];
-        this.upView();
+
+        setTimeout(()=>{
+            this.loadingView.refreshView(false);
+            this.upView();
+        },2000);
+    }
+    commit(value){
+        var param = value;
+        alert(JSON.stringify(param));
+        this.loadingView.refreshView(true);
+        var success = (code, msg, json, option) => {
+            this.loadingView.refreshView(false);
+        };
+        var failure = (code, msg, option) => {
+            message.warning(msg);
+            this.loadingView.refreshView(false);
+        };
+        setTimeout(()=>{
+            this.myModalRequire.hidden(()=>{
+                this.loadingView.refreshView(false);
+            });
+        },2000);
+        // HttpTool.request(HttpTool.typeEnum.POST,
+        //     APIGYW.flightapi_flightDetail_month_query,
+        //     success,
+        //     failure,
+        //     param,
+        //     {ipKey:'hlIP'});
     }
 
     addAction(isAdult,isAdd){
@@ -232,7 +272,7 @@ class page extends Component {
                         </div>
                         <div className={css.title}>航班信息</div>
                     </div>
-                    {this.createList(this.listData)}
+                    {this.createList(this.listData||[])}
                 </div>
 
                 <div className={css.title}>订单信息</div>
@@ -378,43 +418,40 @@ class page extends Component {
                 }}
                            isPay={true}
                            callBack={()=>{
-                               this.props.form.validateFields((err, values) => {
-                                   if (!err) {
-                                       console.log('Received values of form: ', values);
-                                       console.log('Received values of form: ', values);
-                                   }
-                               });
+                               // this.props.form.validateFields((err, values) => {
+                               //     if (!err) {
+                               //         console.log('Received values of form: ', values);
+                               //         console.log('Received values of form: ', values);
+                               //     }
+                               // });
 
-                               // this.myModalRequire.showModal(true,
-                               //     {
-                               //         title:"提示",
-                               //         desc:"您下单的人数已超过库存余位,是否提交至客服处理?"
-                               //     });
+                               this.myModalRequire.showModal(true,
+                                   {
+                                       title:"提示",
+                                       desc:"您下单的人数已超过库存余位,是否提交至客服处理?",
+                                       param:this.requireParam,
+                                   });
                            }}/>
 
                 <MyModalRequire ref={(a) => this.myModalRequire = a}
-                                callBack={(myNum)=>{
-                                    // this.commitSit(myNum);
+                                callBack={(value)=>{
+                                    this.commit(value);
                                 }}/>
+                <LoadingView ref={(a)=>this.loadingView = a}/>
             </div>);
         return div;
     }
 
     createList(dataArr){
-        if (!dataArr||dataArr.length<1){
-            return null;
-        }
-        var viewArr = [];
-        for (let i=0;i<dataArr.length;i++){
-            let itemData = dataArr[i];
+        return dataArr.map((data, index)=>{
             let itemDiv = (
-                <div key={i} className={css.flightLineCell}>
-                    <div className={css.schemeDiv}>{"方案 "+(i+1)}</div>
+                <div key={index} className={css.flightLineCell}>
+                    <div className={css.schemeDiv}>{"方案 "+(index+1)}</div>
                     <div className={css.sign}>直营</div>
 
                     <div className={css.tableCell}>
                         <div className={css.left}>
-                            <CellNewFlight dataSource = {itemData}/>
+                            <CellNewFlight dataSource = {data}/>
                         </div>
 
                         <div className={css.right}>
@@ -423,7 +460,7 @@ class page extends Component {
                                     <div className={css.priceText}>{"含税价"}</div>
                                     <div className={css.priceText}>
                                         <span className={css.priceTextColor}>{"¥ "}</span>
-                                        <span className={css.priceTextFont}>{itemData.basePrice||"0"}</span>
+                                        <span className={css.priceTextFont}>{data.basePrice||"0"}</span>
                                         <span >{" 起"}</span>
                                     </div>
                                 </div>
@@ -436,11 +473,9 @@ class page extends Component {
                             </div>
                         </div>
                     </div>
-
                 </div>);
-            viewArr.push(itemDiv);
-        }
-        return viewArr;
+            return itemDiv;
+        });
     }
 }
 const FlightDetail = Form.create()(page);
@@ -448,3 +483,132 @@ page.contextTypes = {
     router: React.PropTypes.object
 };
 module.exports = FlightDetail;
+
+
+// "plans": [
+//     {
+//         "id": "14a38ee6f22346038929395e92basdwv",
+//         "adultPrice": 900,
+//         "childPrice": 700,
+//         "freeBag": 2,
+//         "weightLimit": 20,
+//         "voyages": [
+//             {
+//                 "id": "55bee6dc4ba74392af585feb4f97edrft",
+//                 "isStop": 0,
+//                 "isTransit": 0,
+//                 "tripIndex": 0,
+//                 "flightIndex": 0,
+//                 "week": 2,
+//                 "compName": "杭州来自",
+//                 "logo": "icollll",
+//                 "arrTime": "08:30:00",
+//                 "depTime": "06:30:00",
+//                 "arrAirport": "顶替",
+//                 "depAirport": "错位",
+//                 "flightTime": "2小时 0分钟",
+//                 "num": "DFE234",
+//                 "depDate": "2017-11-06",
+//                 "arrDate": "2017-11-06",
+//                 "child": [
+//                     {
+//                         "id": "55bee6dc4ba74392af585feb4f97edrf1",
+//                         "isStop": 0,
+//                         "isTransit": 1,
+//                         "tripIndex": 0,
+//                         "flightIndex": 1,
+//                         "week": 2,
+//                         "compName": "杭州来自",
+//                         "logo": "icollll",
+//                         "arrTime": "08:30:00",
+//                         "depTime": "12:30:00",
+//                         "arrAirport": "枯井",
+//                         "depAirport": "顶替",
+//                         "flightTime": "20小时 0分钟",
+//                         "num": "WEE234",
+//                         "depDate": "2017-11-06",
+//                         "arrDate": "2017-11-06",
+//                         "child": null
+//                     },
+//                     {
+//                         "id": "55bee6dc4ba74392af585feb4f97edrf2",
+//                         "isStop": 0,
+//                         "isTransit": 1,
+//                         "tripIndex": 0,
+//                         "flightIndex": 2,
+//                         "week": 2,
+//                         "compName": "杭州来自",
+//                         "logo": "icollll",
+//                         "arrTime": "23:30:00",
+//                         "depTime": "21:30:00",
+//                         "arrAirport": "扶贫",
+//                         "depAirport": "枯井",
+//                         "flightTime": "2小时 0分钟",
+//                         "num": "ASD234",
+//                         "depDate": "2017-11-06",
+//                         "arrDate": "2017-11-06",
+//                         "child": null
+//                     }
+//                 ]
+//             },
+//             {
+//                 "id": "55bee6dc4ba74392af585feb4f97e120",
+//                 "isStop": 0,
+//                 "isTransit": 0,
+//                 "tripIndex": 1,
+//                 "flightIndex": 0,
+//                 "week": 7,
+//                 "compName": "杭州来自",
+//                 "logo": "icollll",
+//                 "arrTime": "08:30:00",
+//                 "depTime": "06:30:00",
+//                 "arrAirport": "枯井",
+//                 "depAirport": "扶贫",
+//                 "flightTime": "2小时 0分钟",
+//                 "num": "DFE789",
+//                 "depDate": "2017-11-06",
+//                 "arrDate": "2017-11-06",
+//                 "child": [
+//                     {
+//                         "id": "55bee6dc4ba74392af585feb4f97e121",
+//                         "isStop": 0,
+//                         "isTransit": 1,
+//                         "tripIndex": 1,
+//                         "flightIndex": 1,
+//                         "week": 7,
+//                         "compName": "杭州来自",
+//                         "logo": "icollll",
+//                         "arrTime": "08:30:00",
+//                         "depTime": "06:30:00",
+//                         "arrAirport": "顶替",
+//                         "depAirport": "枯井",
+//                         "flightTime": "2小时 0分钟",
+//                         "num": "RGT789",
+//                         "depDate": "2017-11-06",
+//                         "arrDate": "2017-11-06",
+//                         "child": null
+//                     },
+//                     {
+//                         "id": "55bee6dc4ba74392af585feb4f97e122",
+//                         "isStop": 0,
+//                         "isTransit": 1,
+//                         "tripIndex": 1,
+//                         "flightIndex": 2,
+//                         "week": 7,
+//                         "compName": "杭州来自",
+//                         "logo": "icollll",
+//                         "arrTime": "08:30:00",
+//                         "depTime": "06:30:00",
+//                         "arrAirport": "错位",
+//                         "depAirport": "顶替",
+//                         "flightTime": "2小时 0分钟",
+//                         "num": "FGB789",
+//                         "depDate": "2017-11-06",
+//                         "arrDate": "2017-11-06",
+//                         "child": null
+//                     }
+//                 ]
+//             }
+//         ]
+//     }
+// ]
