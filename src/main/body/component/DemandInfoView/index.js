@@ -19,6 +19,7 @@ class DemandInfoView extends Component {
             upView: 1,
             index: -1,
         };
+
     }
 
     getUpView() {
@@ -27,108 +28,31 @@ class DemandInfoView extends Component {
         });
     }
 
-    componentDidMount() {
-        let go = {
-            arrAirport: "塞班",
-            arrDate: "2017-11-05",
-            arrTime: "15:30",
-            compName: "北京首都航空有限公司",
-            depAirport: "杭州萧山",
-            depDate: "2017-11-05",
-            depTime: "08:10",
-            flightTime: "7:20",
-            flightType: "2",
-            logo: null,
-            num: "JD395",
-            tag: 0
-        };
-        let back = {
-            arrAirport: "杭州萧山",
-            arrDate: "2017-11-09",
-            arrTime: "10:25",
-            compName: "北京首都航空有限公司",
-            depAirport: "塞班",
-            depDate: "2017-11-09",
-            depTime: "07:00",
-            flightTime: "3:25",
-            flightType: "2",
-            logo: null,
-            num: "JD396",
-            tag: 0,
-        };
-        let zhongZhuanObj = [{
-            flightType: true,
-            obj: go
-        }, {
-            flightType: true,
-            obj: go
-        }, {
-            flightType: false,
-            obj: back
-        }];
-
-        let flightTypeGo = [{
-            flightType: true,
-            obj: go,
-            data: zhongZhuanObj
-        }];
-
-
-        let flightTypeGoAndBack = [{
-            flightType: true,
-            obj: go,
-            data: zhongZhuanObj
-        }, {
-            flightType: false,
-            obj: back,
-            data: zhongZhuanObj
-        }];
-
-        let moreFlightObj = [{
-            numFlight: "一",
-            obj: go,
-        }, {
-            numFlight: "二",
-            obj: go,
-        }, {
-            numFlight: "三",
-            obj: back,
-        }];
-
-
-        this.listData = {
-            rule: "行李规行李规则行李规则行李规则行李规则行李规则行李规则行李规则则",
-            obj: flightTypeGo,
-            flightType: 1
-        };
-        this.getUpView();
-    }
-
     render() {
 
         let {data, type} = this.props;
         return (
             <div className={less.top}>
 
-                {type === 7 ? this.getMultiPass(type, data) : this.getTop(type, data)}
-                {type === 5 ? this.getCellNewFlight() : null}
-                {type === 1 ? this.getMessage("预计在30分钟内为您处理需求") :
-                    (type === 3 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
-                {type === 3 ? this.getCloseReason() : null}
-                {type === 1 || type === 3 || type === 4 ? this.getButton(type) : null}
-                {type === 2 || type === 5 ? <OrderInfoView type={0}/> : null}
-                {type === 7 ? this.getFlightInfo() : null}
+                {type === "待出价多程"||type ==="询价中多程" ? this.getMultiPass(type, data) : this.getTop(type, data)}
+                {type === "已确认" ? this.getCellNewFlight() : null}
+                {type === "待出价单程"||type === "待出价多程" ? this.getMessage("预计在30分钟内为您处理需求") :
+                    (type === "已关闭" ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
+                {type === "已关闭" ? this.getCloseReason() : null}
+                {type === "待出价单程" || type === "已关闭" || type === "已取消" ? this.getButton(type) : null}
+                {type === "已确认" ? <OrderInfoView type={0}/> : null}
+                {type === "询价中多程" ||type === "询价中单程"? this.getFlightInfo(data) : null}
             </div>
         );
     }
 
-    getCellNewFlight() {
+    getCellNewFlight(data) {
         return (
             <div className={less.cellNewFlightLayout}>
                 <h2 className={less.title}>航班信息</h2>
                 <div className={less.line}/>
                 <div className={less.cellNewFlight}>
-                    <CellNewFlight dataSource={ this.listData}/>
+                    <CellNewFlight dataSource={data.plans}/>
                 </div>
             </div>
         );
@@ -150,9 +74,9 @@ class DemandInfoView extends Component {
         return (
             <div className={less.buttonBottomLayout}>
                 <div>
-                    <Button className={less.buttonAgin}>{type === 1 ? "联系爱拼机客服处理需求" : "重新发布需求"}</Button>
+                    <Button className={less.buttonAgin}>{type === "待出价单程" ? "联系爱拼机客服处理需求" : "重新发布需求"}</Button>
                     {
-                        type === 3 ? <Button className={less.buttonContact}>联系爱拼机客服</Button> : null
+                        type === "已关闭" ? <Button className={less.buttonContact}>联系爱拼机客服</Button> : null
                     }
                 </div>
             </div>
@@ -174,13 +98,13 @@ class DemandInfoView extends Component {
     }
 
     getDemandButton(type) {
-        if (type === 1 || type === 5 || type === 7 || type === 8) {
+        if (type === "待出价单程" || type === "待出价多程" || type === "询价中单程") {
             return (
                 <div className={less.buttonLayout}>
                     <Button className={less.buttonCancel}>取消需求</Button>
                 </div>
             );
-        } else if (type === 2) {
+        } else if (type === "已确认") {
             return (
                 null
             );
@@ -203,22 +127,22 @@ class DemandInfoView extends Component {
                         <div>
                             <font className={less.mainTitle}>需求状态：</font>
                             <font
-                                className={type === 1 ? less.mainContentGreenStatus : (type === 3 ? less.mainContentClose : less.mainContent)}>{data && data.status ? data.status : "暂无"}</font>
+                                className={type === "待出价单程" ? less.mainContentGreenStatus : (type === "已关闭" ? less.mainContentClose : less.mainContent)}>{data && data.status ? data.status : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
                             <font
-                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.creatTime ? data.creatTime : "暂无"}</font>
+                                className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.creatTime ? data.creatTime : "暂无"}</font>
                         </div>
                         {/*<div>*/}
                         {/*<font className={less.mainTitle}>航程类型：</font>*/}
                         {/*<font*/}
-                        {/*className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.vayageType ? data.vayageType : "暂无"}</font>*/}
+                        {/*className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.vayageType ? data.vayageType : "暂无"}</font>*/}
                         {/*</div>*/}
                         <div>
                             <font className={less.mainTitle}>航班人数：</font>
                             <font
-                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.peopleNum ? data.peopleNum : "暂无"}</font>
+                                className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.peopleNum ? data.peopleNum : "暂无"}</font>
                         </div>
                     </div>
                     {this.getDemandButton(type)}
@@ -231,7 +155,7 @@ class DemandInfoView extends Component {
                     <div style={{paddingTop: 17, paddingLeft: 20, marginBottom: 50}}>
                         <font className={less.mainTitle}>备注：</font>
                         <font
-                            className={type === 3 ? less.mainContentClose1 : less.mainContent1}>{data && data.mark ? data.mark : "暂无"}</font>
+                            className={type === "已关闭" ? less.mainContentClose1 : less.mainContent1}>{data && data.mark ? data.mark : "暂无"}</font>
                     </div>
                 </div>
             </div>
@@ -318,20 +242,20 @@ class DemandInfoView extends Component {
                         <div>
                             <font className={less.mainTitle}>需求状态：</font>
                             <font
-                                className={type === 1 || type === 8 ? less.mainContentGreenStatus : (type === 3 ? less.mainContentClose : less.mainContent)}>{data && data.status ? data.status : "暂无"}</font>
+                                className={type === "待出价单程" || type === "询价中单程" ? less.mainContentGreenStatus : (type === "已关闭" ? less.mainContentClose : less.mainContent)}>{data && data.status ? data.status : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
                             <font
-                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.creatTime ? data.creatTime : "暂无"}</font>
+                                className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.creatTime ? data.creatTime : "暂无"}</font>
                         </div>
                         <div className={less.voyageLayout} style={{marginTop: 0}}>
                             <div className={less.voyageTitle}>航程：</div>
                             {/*<font*/}
-                            {/*className={type === 3 ? less.mainContentCloseBig : less.mainContentBig}>{data && data.vayage ? data.vayage : "暂无"}</font>*/}
+                            {/*className={type === "已关闭" ? less.mainContentCloseBig : less.mainContentBig}>{data && data.vayage ? data.vayage : "暂无"}</font>*/}
                             <div className={less.voyageContentLayout}>
                                 <div className={less.voyageContent}>
-                                    <div className={type === 3 ? less.voyageGray : less.voyage}
+                                    <div className={type === "已关闭" ? less.voyageGray : less.voyage}
                                          style={{paddingLeft: 54, paddingRight: 10}}>杭州
                                     </div>
                                     <div
@@ -343,7 +267,7 @@ class DemandInfoView extends Component {
                                         }}
                                     >
                                     </div>
-                                    <div className={type === 3 ? less.voyageGray : less.voyage}
+                                    <div className={type === "已关闭" ? less.voyageGray : less.voyage}
                                          style={{paddingLeft: 10}}>杭州
                                     </div>
                                 </div>
@@ -355,32 +279,32 @@ class DemandInfoView extends Component {
                         <div style={{marginTop: 0}}>
                             <font className={less.mainTitle}>需求类型：</font>
                             <font
-                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.demandType ? data.demandType : "暂无"}</font>
+                                className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.demandType ? data.demandType : "暂无"}</font>
                         </div>
                         {/*<div>*/}
                         {/*<font className={less.mainTitle}>航程类型：</font>*/}
                         {/*<font*/}
-                        {/*className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.vayageType ? data.vayageType : "暂无"}</font>*/}
+                        {/*className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.vayageType ? data.vayageType : "暂无"}</font>*/}
                         {/*</div>*/}
                         <div>
                             <font className={less.mainTitle}>航班人数：</font>
                             <font
-                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.peopleNum ? data.peopleNum : "暂无"}</font>
+                                className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.peopleNum ? data.peopleNum : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>出发日期：</font>
                             <font
-                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.startTime ? data.startTime : "暂无"}</font>
+                                className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.startTime ? data.startTime : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>返程日期：</font>
                             <font
-                                className={type === 3 ? less.mainContentClose : less.mainContent}>{data && data.returnTime ? data.returnTime : "暂无"}</font>
+                                className={type === "已关闭" ? less.mainContentClose : less.mainContent}>{data && data.returnTime ? data.returnTime : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>备注：</font>
                             <font
-                                className={type === 3 ? less.mainContentClose1 : less.mainContent1}>{data && data.mark ? data.mark : "暂无"}</font>
+                                className={type === "已关闭" ? less.mainContentClose1 : less.mainContent1}>{data && data.mark ? data.mark : "暂无"}</font>
                         </div>
 
 
