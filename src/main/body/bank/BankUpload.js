@@ -35,25 +35,13 @@ class BankUpload extends Component {
          });
       } else {
          this.setState({
-            transferAmount:data.price/100
+            transferAmount: data.price / 100
          });
       }
    }
 
-   setFomrFileds(e, propName) {
-      let v = e.target.value;
-      this.setState({
-         [propName]: v
-      }, () => {
-         //
-      });
-   }
 
    getdefaultView() {
-      const iptProps = {
-         size: "large",
-         className: less.form_control,
-      };
       return (
          <div>
             <div className={less.bankBox}>
@@ -79,62 +67,13 @@ class BankUpload extends Component {
             <div className={less.bankBox}>
                <div className={less.bankBox_top}>付款账户信息</div>
                <div className={less.bankBox_middle}>
-                  <div className={less.container2Son}>
-                     <div className={less.form_group + " " + less.fl}>
-                        <label htmlFor="accountName" className={less.control_label}>账户名：</label>
-                        <br/>
-                        <Input
-                           {...iptProps}
-                           id="accountName"
-                           onChange={(e) => {
-                              this.setFomrFileds(e, "accountName");
-                           }}
-                           prefix={<Icon type="mobile" style={{fontSize: 13}}/>} placeholder={"请输入账户名"}
-                        />
-                     </div>
-                     <div className={less.form_group + " " + less.fl}>
-                        <label htmlFor="cardNum" className={less.control_label}>卡号：</label>
-                        <br/>
-                        <Input
-                           {...iptProps}
-                           id="cardNum"
-                           onChange={(e) => {
-                              this.setFomrFileds(e, "cardNum");
-                           }}
-                           prefix={<Icon type="credit-card" style={{fontSize: 13}}/>} placeholder={"请输入卡号"}
-                        />
-                     </div>
-                  </div>
+                  <InputLayout
+                     ref={(ref) => {
+                        this.inputLayout = ref;
+                     }}
+                     transferAmount={this.state.transferAmount}
+                  />
 
-                  <div className={less.container2Son}>
-                     <div className={less.form_group + " " + less.fl}>
-                        <label htmlFor="bankName" className={less.control_label}>银行：</label>
-                        <br/>
-                        <Input
-                           {...iptProps}
-                           id="bankName"
-                           onChange={(e) => {
-                              this.setFomrFileds(e, "bankName");
-                           }}
-                           prefix={<Icon type="bank" style={{fontSize: 13}}/>} placeholder={"请输入银行名"}
-                        />
-                     </div>
-
-                     <div className={less.form_group + " " + less.fl}>
-                        <label htmlFor="transferAmount" className={less.control_label}>转账金额：</label>
-                        <br/>
-                        <Input
-                           {...iptProps}
-                           id="transferAmount"
-                           defaultValue={this.state.transferAmount + "元"}
-                           disabled={true}
-                           onChange={(e) => {
-                              this.setFomrFileds(e, "transferAmount");
-                           }}
-                           prefix={<Icon type="pay-circle" style={{fontSize: 13}}/>}
-                        />
-                     </div>
-                  </div>
                </div>
             </div>
             <div className={less.bankBox}>
@@ -149,9 +88,67 @@ class BankUpload extends Component {
                <Button
                   type={"primary"}
                   className={less.submitBtn}
-                  onClick={()=>{
-                     //
-                     this.panel.show();
+                  onClick={() => {
+                     //第一步:得到所有数据
+                     // 1填写的所有Form
+                     //2上传了至少一张图
+
+                     let data = this.inputLayout.getData();
+                     if (data.error) {
+                        message.error(data.error);
+                        return;
+                     }
+                     data.urlArr = [];//后台获取的数据一条一条push进去
+                     data.showType = "paying";
+
+                     this.panel.show(true, {
+                        content: "正在提交...",
+                        // title: "支付信息",
+                        showType: "verpay"
+                     }, () => {
+                        this.loadSubmit(data, (code, msg, data) => {
+                           if (code > 0) {
+                              //支付成功
+                              this.panel.show(true, {
+                                 showType: "success",
+                                 content: msg,
+                              }, () => {
+                                 //
+                              });
+                           } else {
+                              //支付失败
+                              const connectUs = <a
+                                 onClick={() => {
+                                    if (window.ysf && window.ysf.open) {
+                                       // window.ysf.open();
+                                       window.ysf.product({
+                                          show: 1, // 1为打开， 其他参数为隐藏（包括非零元素）
+                                          title: "订单支付异常",
+                                          desc: "异常原因:" + (this.state.error || "未知"),
+                                          note: "订单号:" + this.id,
+                                          url: window.location.host,
+                                          success: function () {     // 成功回调
+                                             window.ysf.open();
+                                          },
+                                          error: function () {       // 错误回调
+                                             // handle error
+                                          }
+                                       });
+                                    } else {
+                                       message.warn("");
+                                    }
+                                 }}>
+                                 联系客服
+                              </a>;
+                              this.panel.show(true, {
+                                 showType: "error",
+                                 content: <div>{msg}{connectUs}</div>,
+                              }, () => {
+                                 //
+                              });
+                           }
+                        });
+                     });
                   }}
                >
                   提交
@@ -190,14 +187,14 @@ class BankUpload extends Component {
       );
    }
 
-   //模拟上传的接口
-   loadPayOrder(param, cb) {
+   //模拟提交接口
+   loadSubmit(param, cb) {
+      console.log("传给后台的数据如下");
+      console.log(param);
       setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 1;
+         let code = (Math.random() * 10).toFixed(0) - 5;
          let data = {};
-         data.url = "http://www.baidu.com";
-         data.payPrice = (Math.random() * 10000).toFixed(0);
-         cb(code, "无库存了/或者其他", data);
+         cb(code, code > 0 ? " 凭证上传成功，审核中" : "网络异常，上传失败！如有疑问，", data);
       }, Math.random() * 1000 + 2000);
    }
 
@@ -228,26 +225,43 @@ class UploadCmp extends Component {
          message.warning("凭证必须为图片格式");
          return false;
       }
-      if (file.size >= 1024000 * 2) {
-         message.warning("图片过大，最大允许2M。");
+      if (file.size >= 1024000 * 4) {
+         message.warning("图片过大，最大允许4M。");
          return false;
       }
       return true;
    }
 
+
+   //模拟上传的接口
+   loadUploadImg(param, cb) {
+      setTimeout(() => {
+         let code = (Math.random() * 10).toFixed(0) - 5;
+         let data = {};
+         data.urlArr = [];
+         data.urlArr.push("后台返回的体条url" + (Math.random() * 10).toFixed(0).repeat(4));
+         cb(code, code > 0 ? "开通成功" : "开通失败", data);
+      }, Math.random() * 1000 + 1000);
+   }
+
    beforeUpload(file) {
-      return this.isImageTypeOk(file) ? true : false;
+      if (!this.isImageTypeOk(file)) {
+         return false;
+      }
+      console.log("图片上传....");
 
+      // this.loadUploadImg({}, (code, msg, data) => {
+      //    console.log("code");
+      //    console.log(code);
+      //    if (code < 0) {
+      //       message.error("图片上传失败");
+      //       console.log("图片上传失败");
+      //       return false;
+      //    }
+      // });
 
-      // const isJPG = file.type === 'image/jpeg';
-      // if (!isJPG) {
-      //    message.error('凭证必须为图片格式');
-      // }
-      // const isLt2M = file.size / 1024 / 1024 < 2;
-      // if (!isLt2M) {
-      //    message.error('图片过大，最大允许2M。');
-      // }
-      // return isJPG && isLt2M;
+      //请求接口，如果失败，则取消上传
+
 
       // let r = new FileReader();
       // r.readAsDataURL(file);
@@ -308,6 +322,151 @@ class UploadCmp extends Component {
       );
    }
 }
+
+class InputLayout extends Component {
+   constructor(props) {
+      super(props);
+      this.state = {
+         accountName: "",//账户名
+         cardNum: "",//卡号
+         bankName: "",//银行名
+         transferAmount: this.props.transferAmount,//转账金额
+         error: null,
+         loading: false,
+      };
+   }
+
+   setFomrFileds(e, propName) {
+      let v = e.target.value;
+      this.setState({
+         [propName]: v
+      }, () => {
+         //
+      });
+   }
+
+   isRightCardNum(cardNum) {
+      return cardNum.length >= 12 && cardNum.length <= 24;
+   }
+
+
+   getData() {
+      return {
+         accountName: this.state.accountName,
+         cardNum: this.state.cardNum,
+         bankName: this.state.bankName,
+         transferAmount: this.state.transferAmount,
+         error: !this.state.accountName
+            ?
+            "请填写账户名"
+            : (!this.isRightCardNum(this.state.cardNum)
+                  ?
+                  "请填写正确的卡号"
+                  : (!this.state.bankName ? "请填写银行名" : null)
+            )
+      };
+
+   }
+
+   //模拟获取银行名称接口
+   loadBankName(param, cb) {
+      setTimeout(() => {
+         let code = (Math.random() * 10).toFixed(0) - 1;
+         let data = {bankName: "中国工商银行"};
+         cb(code, "", data);
+      }, Math.random() * 1000 + 500);
+   }
+
+   render() {
+      const iptProps = {
+         size: "large",
+         className: less.form_control,
+      };
+      return (
+         <div>
+            <div className={less.container2Son}>
+               <div className={less.form_group + " " + less.fl}>
+                  <label htmlFor="accountName" className={less.control_label}>账户名：</label>
+                  <br/>
+                  <Input
+                     {...iptProps}
+                     id="accountName"
+                     onChange={(e) => {
+                        this.setFomrFileds(e, "accountName");
+                     }}
+                     prefix={<Icon type="mobile" style={{fontSize: 13}}/>} placeholder={"请输入账户名"}
+                  />
+               </div>
+               <div className={less.form_group + " " + less.fl}>
+                  <label htmlFor="cardNum" className={less.control_label}>卡号：</label>
+                  <br/>
+                  <Input
+                     {...iptProps}
+                     id="cardNum"
+                     onChange={(e) => {
+                        this.setFomrFileds(e, "cardNum");
+                     }}
+                     onBlur={() => {
+                        //请求查询银行的接口
+                        if (this.isRightCardNum(this.state.cardNum)) {
+                           console.log("查询中");
+                           this.loadBankName(this.state.cardNum, (code, msg, data) => {
+                              if (code > 0) {
+                                 this.setState({
+                                    bankName: data.bankName,
+                                    getBankName: true
+                                 }, () => {
+                                    console.log(this.state.bankName);
+                                 });
+                                 return;
+                              }
+                           });
+                        }
+
+                        this.setState({
+                           bankName: "",
+                           getBankName: false
+                        });
+
+                     }}
+                     prefix={<Icon type="credit-card" style={{fontSize: 13}}/>} placeholder={"请输入卡号"}
+                  />
+               </div>
+            </div>
+
+            <div className={less.container2Son}>
+               <div className={less.form_group + " " + less.fl}>
+                  <label htmlFor="bankName" className={less.control_label}>银行：</label>
+                  <br/>
+                  <Input
+                     {...iptProps}
+                     readOnly={this.state.getBankName || this.isRightCardNum(this.state.cardNum)}
+                     value={this.state.bankName}
+                     id="bankName"
+                     onChange={(e) => {
+                        this.setFomrFileds(e, "bankName");
+                     }}
+                     prefix={<Icon type="bank" style={{fontSize: 13}}/>} placeholder={"请输入转账银行"}
+                  />
+               </div>
+
+               <div className={less.form_group + " " + less.fl}>
+                  <label htmlFor="transferAmount" className={less.control_label}>转账金额：</label>
+                  <br/>
+                  <Input
+                     {...iptProps}
+                     id="transferAmount"
+                     value={this.state.transferAmount + "元"}
+                     readOnly={true}
+                     prefix={<Icon type="pay-circle" style={{fontSize: 13}}/>}
+                  />
+               </div>
+            </div>
+         </div>
+      );
+   }
+}
+
 
 BankUpload.contextTypes = {
    router: React.PropTypes.object
