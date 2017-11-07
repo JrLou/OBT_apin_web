@@ -6,6 +6,16 @@ import OrderInfoView from '../component/OrderInfoView/index';
 import CellNewFlight from "../content/cell/CellNewFlight";
 import {HttpTool} from "../../../../lib/utils/index.js";
 /**
+ * 需求已取消                    0
+ * 需求处理中 （单程）       1    1
+ * 需求处理中（多程）        7    1
+ *
+ * 待用户确认 （单程）       8    2
+ * 待用户确认 （多程）       9    2
+ * 处理完成                     4
+ * 需求已关闭                   5
+ *
+ *
  * 待出价      1
  * 询价中      2
  * 待确认      3
@@ -15,6 +25,8 @@ import {HttpTool} from "../../../../lib/utils/index.js";
  * 已取消      0
  * 全部       -1
  */
+
+
 class page extends Component {
     constructor(props) {
         super(props);
@@ -23,7 +35,7 @@ class page extends Component {
             itemNum: 3,
             index: -1,
             upData: 1,
-            data:null,
+            data: null,
         };
 
     }
@@ -42,12 +54,12 @@ class page extends Component {
 
     loadData() {
         let param = {
-            id: "81a366cd6c754cbcbbc978a8b956982b",
+            id: "c374da99311144058a1d8d7382de5d8a",
         };
         let success = (code, msg, json, option) => {
-                this.setState({
-                    data : json,
-                });
+            this.setState({
+                data: json,
+            });
         };
         let failure = (code, msg, option) => {
             this.data = null;
@@ -59,7 +71,7 @@ class page extends Component {
     }
 
     render() {
-        if(!this.state.data) return null;
+        if (!this.state.data) return null;
         return (
             <div className={less.top}>
 
@@ -69,7 +81,7 @@ class page extends Component {
                 {this.state.data.demandStatus === 1 ? this.getMessage("预计在30分钟内为您处理需求") :
                     (this.state.data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
                 {this.state.data.demandStatus === 5 ? this.getCloseReason() : null}
-                {(this.state.data.demandStatus === 1 && this.state.data.flightType != 3) || this.state.data.demandStatus === 5 || this.state.data.demandStatus === 0 ? this.getButton(this.state.data.demandStatus) : null}
+                {this.state.data.demandStatus === 1  || this.state.data.demandStatus === 5 || this.state.data.demandStatus === 0 ? this.getButton(this.state.data.demandStatus) : null}
                 {this.state.data.demandStatus === 4 ? <OrderInfoView type={0}/> : null}
                 {this.state.data.demandStatus === 2 ? this.data(this.state.data && this.state.data.palns ? this.state.data.palns : []) : null}
             </div>
@@ -100,7 +112,7 @@ class page extends Component {
         return (
             <div className={less.messageLayout}>
                 <div className={less.img}>
-                    <img src={require("../../../images/login_check.png")}/>
+                    <img src={require("../../../images/icon_exclamation.png")}/>
                 </div>
                 <div className={less.messageText}>{messge}</div>
             </div>
@@ -155,6 +167,7 @@ class page extends Component {
     }
 
     getMultiPass(type, data) {
+        let status = ["需求已取消", "需求处理中", "待用户确认", "待确认", "处理完成", "需求已关闭"];
         return (
             <div className={less.topMessage}>
                 <h2 className={less.title}>需求信息</h2>
@@ -164,27 +177,27 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>需求状态：</font>
                             <font
-                                className={(type === 1) ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{data && data.demandStatus ? data.demandStatus : "暂无"}</font>
+                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.demandStatus ? (data.demandStatus === -1 ? "全部" : status[data.demandStatus] ) : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
                             <font
                                 className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.createdTime ? data.createdTime : "暂无"}</font>
                         </div>
-                        {/*<div>*/}
-                        {/*<font className={less.mainTitle}>航程类型：</font>*/}
-                        {/*<font*/}
-                        {/*className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.vayageType ? data.vayageType : "暂无"}</font>*/}
-                        {/*</div>*/}
-                        {/*<div>*/}
-                        {/*<font className={less.mainTitle}>航班人数：</font>*/}
-                        {/*<font*/}
-                        {/*className={type === 5 ? less.mainContentClose : less.mainContent}>{data.adultCount+data.childCount}人（{data&&data.adultCount?data.adultCount:"0"}成人,{data&&data.childCount?data.childCount:"0"}儿童）</font>*/}
-                        {/*</div>*/}
+                        <div>
+                        <font className={less.mainTitle}>航程类型：</font>
+                        <font
+                        className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.flightType === 1 ? "单程" : data && data.flightType === 2 ? "往返" :data && data.flightType === 3 ? "多程" : "暂无"}</font>
+                        </div>
+                        <div>
+                            <font className={less.mainTitle}>航班人数：</font>
+                            <font
+                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.totalPeople ? data.totalPeople : "0"}人（{data && data.adultCount ? data.adultCount : "0"}成人,{data && data.childCount ? data.childCount : "0"}儿童）</font>
+                        </div>
                     </div>
                     {this.getDemandButton(type)}
                     <div className={less.tripLayout}>
-                        {this.getTripList()}
+                        {this.getTripList(data)}
                         <div style={{clear: "both"}}/>
                     </div>
 
@@ -256,6 +269,7 @@ class page extends Component {
 
 
     getTop(type, data) {
+        let status = ["需求已取消", "需求处理中", "待用户确认", "待确认", "处理完成", "需求已关闭"];
         if (!data)return null;
         let img = null;
         if (data.flightType === 1) {
@@ -272,12 +286,12 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>需求状态：</font>
                             <font
-                                className={type === 1 || type === 2 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{data && data.flightType ? data.flightType : "暂无"}</font>
+                                className={type === 1 || type === 2 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{data && data.demandStatus ? (data.demandStatus === -1 ? "全部" : status[data.demandStatus] ) : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
                             <font
-                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.creatTime ? data.creatTime : "暂无"}</font>
+                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.createdTime ? data.createdTime : "暂无"}</font>
                         </div>
                         <div className={less.voyageLayout} style={{marginTop: 0}}>
                             <div className={less.voyageTitle}>航程：</div>
@@ -319,11 +333,11 @@ class page extends Component {
                         {/*<font*/}
                         {/*className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.vayageType ? data.vayageType : "暂无"}</font>*/}
                         {/*</div>*/}
-                        {/*<div>*/}
-                        {/*<font className={less.mainTitle}>航班人数：</font>*/}
-                        {/*<font*/}
-                        {/*className={type === 5 ? less.mainContentClose : less.mainContent}>{data&&data.adultCount&&data.childCount?data.adultCount+data.childCount:""}人{"（"+data&&data.adultCount?data.adultCount+"成人":""}{"，"+data&&data.childCount?data.childCount+"儿童）":""}</font>*/}
-                        {/*</div>*/}
+                        <div>
+                            <font className={less.mainTitle}>航班人数：</font>
+                            <font
+                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.totalPeople ? data.totalPeople : "0"}人（{data && data.adultCount ? data.adultCount + "成人" : "0"}{"，" + data && data.childCount ? data.childCount + "儿童）" : "0"}</font>
+                        </div>
                         <div>
                             <font className={less.mainTitle}>出发日期：</font>
                             <font
@@ -349,9 +363,11 @@ class page extends Component {
         );
     }
 
-    getTripList() {
+    getTripList(data) {
+        let voyage=JSON.parse(data.voyage);
+
         let arr = [];
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 7; i++) {
             arr.push(i);
         }
         return (
