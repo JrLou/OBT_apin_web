@@ -20,7 +20,8 @@
   "globals": {
     "module":true,
     "apin":true,
-    "log":true
+    "log":true,
+    "_":true
   },
   "rules": {
     "semi": 2,

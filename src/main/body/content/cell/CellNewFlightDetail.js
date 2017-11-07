@@ -38,8 +38,6 @@ class CellNewFlightDetail extends Component {
     }
     createCell(dataArr){
         return dataArr.map((data, index)=>{
-            log(index==0);
-            log("-------");
             return (<CellTransFlight key={index} data = {data} isNoFirst={index!=0}/>);
         });
     }

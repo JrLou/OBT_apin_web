@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import {Button,Icon} from 'antd';
 import css from './CellTransFlight.less';
 import ClickHelp from '../../tool/ClickHelp.js';
+import DateHelp from '../../tool/DateHelp.js';
 
 class CellTransFlight extends Component {
     constructor(props) {
@@ -24,21 +25,8 @@ class CellTransFlight extends Component {
     }
     createCell(data,isNoFirst){
         let obj = data.obj;
-        let startDate = obj.depDate?obj.depDate.substring(5):"";
-        startDate = startDate.replace("-","月")+"日";
+        let totalText = obj.flightTime?DateHelp.getValue(obj.flightTime):"";
 
-        let totalTime = obj.flightTime?obj.flightTime:"";
-        let timeArr = totalTime.split(":");
-        let totalText = "";
-        if (timeArr[0]&&timeArr[0]>0){
-            totalText = timeArr[0]+"小时";
-        }
-        if (timeArr[1]&&timeArr[1]>0){
-            totalText = totalText + timeArr[1]+"分钟";
-        }
-
-        let endDate = obj.arrDate?obj.arrDate.substring(5):"";
-        endDate = endDate.replace("-","月")+"日";
         var itemView = (<div style={{width:"100%",overflow:"hidden"}}>
                 <div className={css.type}>
                     <div className={css.refTypeLine} style={{borderColor:isNoFirst?"#888D99":"white"}}></div>
