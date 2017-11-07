@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-06 15:41:31
+ * @Last Modified time: 2017-11-07 14:56:40
  */
 
 import React, { Component } from 'react';
@@ -23,7 +23,7 @@ class SignInForm extends Component {
     }
 
     render() {
-        const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+        const { getFieldDecorator, getFieldsError, getFieldError, getFieldValue, isFieldTouched } = this.props.form;
 
         const userNameError = isFieldTouched('userName') && getFieldError('userName');
         const telError = isFieldTouched('tel') && getFieldError('tel');
@@ -52,7 +52,8 @@ class SignInForm extends Component {
                     label="绑定手机"
                 >
                     {getFieldDecorator('tel', {
-                        rules: [{ required: true, message: '请输入11位手机号' }],
+                        rules: [{ required: true, message: '请输入11位手机号' },
+                        { pattern: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/, message: '手机号格式不正确！' }],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入11位手机号" />
                         )}
@@ -81,7 +82,7 @@ class SignInForm extends Component {
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode />
+                    <CheckCode error={getFieldError('tel')} />
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"
@@ -90,7 +91,8 @@ class SignInForm extends Component {
                     label="设置登录密码"
                 >
                     {getFieldDecorator('password', {
-                        rules: [{ required: true, message: '请输入8-16位数字、字母' }],
+                        rules: [{ required: true, message: '请输入8-16位数字、字母' },
+                        { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入8-16位数字、字母" />
                         )}

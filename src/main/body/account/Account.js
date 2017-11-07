@@ -39,29 +39,35 @@ class AccountForm extends Component {
         this.state = {
             isView: true
         };
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.updateInfo = this.updateInfo.bind(this);
     }
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
         const { isView } = this.state;
+
+        const userNameError = isFieldTouched('userName') && getFieldError('userName');
         return (
             <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <Title>账号信息</Title>
                 <FormItem prefixCls="my-ant-form"
                     {...formItemLayout}
                     label="账号名"
+                    validateStatus={userNameError ? 'error' : ''}
+                    help={userNameError || ''}
                 >
                     {
-                        !isView ? getFieldDecorator('name', {
+                        isView ? <div>111</div> : getFieldDecorator('userName', {
                             rules: [{ required: true, message: 'Please select time!' }],
                         })(
                             <Input prefixCls="my-ant-input" />
-                            ) : <div>111</div>}
+                            )}
                 </FormItem>
                 <FormItem prefixCls="my-ant-form"
                     {...formItemLayout}
                     label="登录密码设置"
                 >
-                    {getFieldDecorator('name', {
+                    {isView ? <div>222</div> : getFieldDecorator('pass', {
                         rules: [{ required: true, message: 'Please select time!' }],
                     })(
                         <Input prefixCls="my-ant-input" />
@@ -71,7 +77,7 @@ class AccountForm extends Component {
                     {...formItemLayout}
                     label="绑定手机"
                 >
-                    {getFieldDecorator('name', {
+                    {isView ? <div>18768142232</div> : getFieldDecorator('name', {
                         rules: [{ required: true, message: 'Please select time!' }],
                     })(
                         <Input prefixCls="my-ant-input" />
@@ -82,7 +88,7 @@ class AccountForm extends Component {
                     {...formItemLayout}
                     label="公司名称"
                 >
-                    {getFieldDecorator('name', {
+                    {isView ? <div>222</div> : getFieldDecorator('name', {
                         rules: [{ required: true, message: 'Please select time!' }],
                     })(
                         <Input prefixCls="my-ant-input" />
@@ -92,7 +98,7 @@ class AccountForm extends Component {
                     {...formItemLayout}
                     label="联系人"
                 >
-                    {getFieldDecorator('name', {
+                    {isView ? <div>222</div> : getFieldDecorator('name', {
                         rules: [{ required: true, message: 'Please select time!' }],
                     })(
                         <Input prefixCls="my-ant-input" />
@@ -102,25 +108,50 @@ class AccountForm extends Component {
                     {...formItemLayout}
                     label="地址"
                 >
-                    {getFieldDecorator('name', {
+                    {isView ? <div>222</div> : getFieldDecorator('name', {
                         rules: [{ required: true, message: 'Please select time!' }],
                     })(
                         <Input prefixCls="my-ant-input" />
                         )}
                 </FormItem>
                 <FormItem prefixCls="my-ant-form" {...formTailLayout}>
-                    <Button
-                        prefixCls="my-ant-btn"
-                        size="large"
-                        type="primary"
-                        htmlType="submit"
-                        disabled={hasErrors(getFieldsError())}
-                        onClick={this.props.onOK}
-                    >保存</Button>
+                    {
+                        isView ?
+                            <Button
+                                prefixCls="my-ant-btn"
+                                size="large"
+                                type="primary"
+                                disabled={hasErrors(getFieldsError())}
+                                onClick={this.updateInfo}
+                            >修改</Button>
+                            : <Button
+                                prefixCls="my-ant-btn"
+                                size="large"
+                                disabled={hasErrors(getFieldsError())}
+                                onClick={this.handleSubmit}
+                            >保存</Button>
+                    }
                 </FormItem>
             </Form>
         );
     }
+
+    handleSubmit() {
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log('Received values of form: ', values);
+            }
+        });
+    }
+
+    updateInfo() {
+        this.setState({
+            isView: false
+        }, () => {
+            this.props.form.validateFields();
+        });
+    }
+
 }
 
 const WrappedAccountForm = Form.create()(AccountForm);
