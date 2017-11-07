@@ -19,28 +19,27 @@ class CellNewFlight extends Component {
 
     }
     render() {
-        let {dataSource} = this.props;
+        let {dataSource,flightType} = this.props;
         if (!dataSource){
             return null;
         }
         return (<div className={css.main}>
             <div className={css.left}>
-                {this.createCell(dataSource.voyages||[])}
+                {this.createCell(dataSource.voyages||[],flightType)}
             </div>
-            <div className={css.right}>{dataSource.rule}</div>
+            <div className={css.right}>{"件数:"+dataSource.freeBag + " 重量:"+dataSource.weightLimit}</div>
         </div>);
     }
-    createCell(dataArr){
+    createCell(dataArr,flightType){
         return dataArr.map((data, index)=>{
-            let i = index;
-           return (<div key={i} className={css.cellBg} style={{borderBottomWidth:(i==dataArr.length-1)?"0px":"1px"}}>
-               {this.createItemCell(data, i)}
-               {data.child&&data.child.length>1?<CellNewFlightDetail data = {data.child}/>:null}
+           return (<div key={index} className={css.cellBg} style={{borderBottomWidth:(index==dataArr.length-1)?"0px":"1px"}}>
+               {this.createItemCell(data, index,flightType)}
+               {data.child&&data.child.length>0?<CellNewFlightDetail data = {data.child}/>:null}
            </div>);
         });
     }
 
-    createItemCell(data, index){
+    createItemCell(data,index,flightType){
         if (!data){
             return null;
         }
@@ -48,7 +47,7 @@ class CellNewFlight extends Component {
         var itemView = (<div className={css.table}>
             <div className={css.type_super}>
                 <div className={css.typeText}>
-                    {data.isTransit?("第"+ NumTransToTextHelp.getValue(index+1)+"程"):(data.tripIndex==0?"去程":"回程")}
+                    {flightType==3?("第"+ NumTransToTextHelp.getValue(index+1)+"程"):(data.tripIndex==0?"去程":"回程")}
                 </div>
             </div>
 

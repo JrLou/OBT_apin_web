@@ -17,18 +17,18 @@ class CellTransFlight extends Component {
     }
 
     render() {
-        let {data,isNoFirst} = this.props;
+        let {data,isNoFirst,isLast} = this.props;
         if (!data){
             return null;
         }
-        return (<div className={css.main}>{this.createCell(data||{},isNoFirst)}</div>);
+        return (<div className={css.main}>{this.createCell(data||{},isNoFirst,isLast)}</div>);
     }
-    createCell(data,isNoFirst){
+    createCell(data,isNoFirst,isLast){
         var itemView = (<div style={{width:"100%",overflow:"hidden"}}>
                 <div className={css.type}>
                     <div className={css.refTypeLine} style={{borderColor:isNoFirst?"#888D99":"white"}}></div>
-                    <div className={data.flightType?css.typeImg:css.refTypeImg}></div>
-                    {data.tripIndex==0?<div className={css.typeLine}></div>:null}
+                    <div className={!isLast?css.typeImg:css.refTypeImg}></div>
+                    {!isLast?<div className={css.typeLine}></div>:null}
                 </div>
                 <div className={css.cellLine}>
                     <div className={css.table}>
@@ -76,7 +76,7 @@ class CellTransFlight extends Component {
                     </div>
                 </div>
 
-                {data.flightType?<div className={css.table}>
+                {!isLast?<div className={css.table}>
                     <div className={css.trans}>
                         <div className={css.transLineTop}></div>
                         <div className={css.transImg}></div>

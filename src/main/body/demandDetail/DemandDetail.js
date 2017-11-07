@@ -52,6 +52,9 @@ class page extends Component {
     }
 
     loadData() {
+        // 往返 81a366cd6c754cbcbbc978a8b956982b
+        // 多程 c374da99311144058a1d8d7382de5d8a
+        // 单程 9cb5a2cd48104e3385f330aec6b3d196
         let param = {
             id: "c374da99311144058a1d8d7382de5d8a",
         };
@@ -70,19 +73,23 @@ class page extends Component {
     }
 
     render() {
-        if (!this.state.data) return null;
+        let {data} = this.state;
+        if (!data){
+            return null;
+        }
+
         return (
             <div className={less.top}>
 
-                {(this.state.data.demandStatus === 1 && this.state.data.flightType === 3) || (this.state.data.demandStatus === 2 && this.data.flightType === 3) ?
-                    this.getMultiPass(this.state.data.demandStatus, this.state.data) : this.getTop(this.state.data.demandStatus, this.state.data)}
-                {this.state.data.demandStatus === 4 ? this.getCellNewFlight(this.state.data && this.state.data.palns ? this.state.data.palns : []) : null}
-                {this.state.data.demandStatus === 1 ? this.getMessage("预计在30分钟内为您处理需求") :
-                    (this.state.data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
-                {this.state.data.demandStatus === 5 ? this.getCloseReason() : null}
-                {this.state.data.demandStatus === 1  || this.state.data.demandStatus === 5 || this.state.data.demandStatus === 0 ? this.getButton(this.state.data.demandStatus) : null}
-                {this.state.data.demandStatus === 4 ? <OrderInfoView type={0}/> : null}
-                {this.state.data.demandStatus === 2 ? this.getConfirmButton(this.state.data && this.state.data.plans ? this.state.data.plans : []) : null}
+                {(data.demandStatus === 1 && data.flightType === 3) || (data.demandStatus === 2 && data.flightType === 3) ?
+                    this.getMultiPass(data.demandStatus, data) : this.getTop(data.demandStatus, data)}
+                {data.demandStatus === 4 ? this.getCellNewFlight(data && data.palns ? data.palns : []) : null}
+                {data.demandStatus === 1 ? this.getMessage("预计在30分钟内为您处理需求") :
+                    (data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
+                {data.demandStatus === 5 ? this.getCloseReason() : null}
+                {data.demandStatus === 1  || data.demandStatus === 5 || data.demandStatus === 0 ? this.getButton(data.demandStatus) : null}
+                {data.demandStatus === 4 ? <OrderInfoView type={0}/> : null}
+                {data.demandStatus === 2 ? this.getConfirmButton(data && data.plans ? data.plans : [],data.flightType) : null}
             </div>
         );
     }
@@ -228,7 +235,7 @@ class page extends Component {
 
                         <div style={{marginTop: 20}} className={less.flightInfoLayout}>
                             <div className={less.flightButtonLeftLayout}>
-                                <CellNewFlight key={index} dataSource={data} flightType=""/>
+                                <CellNewFlight key={index} dataSource={data} flightType={flightType}/>
                             </div>
                             <div className={less.flightButtonRightLayout}>
                                 <div className={less.flightButtonRightContentLayout}>
