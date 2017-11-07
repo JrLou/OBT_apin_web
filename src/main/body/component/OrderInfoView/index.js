@@ -266,7 +266,7 @@ class OrderInfoView extends Component {
     render() {
         let {data, type} = this.props;
         return (
-            <div>
+            <div className={css.layout}>
                 <div className={css.title}>订单信息</div>
                 <div className={css.line}/>
                 <div className={css.content}>
