@@ -27,6 +27,20 @@ let NumTransToTextHelp = {
         }else {
             return "一百";
         }
+    },
+
+    getWeek(num){
+        if (!num){
+            return "周日";
+        }
+        num = parseInt(num);
+        let upperCaseNumber = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+        if (num>0&&num<8){
+            return upperCaseNumber[num-1];
+        }else {
+            return "周日";
+        }
     }
+
 };
 module.exports = NumTransToTextHelp;
