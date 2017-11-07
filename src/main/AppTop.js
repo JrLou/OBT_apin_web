@@ -21,7 +21,7 @@ class page extends Component {
     }
 
     componentDidMount(){
-        console.log(this.props.state.id);
+        // console.log(this.props.state.id);
     }
 
     render() {

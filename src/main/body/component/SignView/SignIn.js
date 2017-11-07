@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-07 14:24:15
+ * @Last Modified time: 2017-11-07 14:56:40
  */
 
 import React, { Component } from 'react';
@@ -91,7 +91,8 @@ class SignInForm extends Component {
                     label="设置登录密码"
                 >
                     {getFieldDecorator('password', {
-                        rules: [{ required: true, message: '请输入8-16位数字、字母' }],
+                        rules: [{ required: true, message: '请输入8-16位数字、字母' },
+                        { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入8-16位数字、字母" />
                         )}
