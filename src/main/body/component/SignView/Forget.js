@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-06 16:04:50
+ * @Last Modified time: 2017-11-07 14:56:12
  */
 
 import React, { Component } from 'react';
@@ -40,7 +40,8 @@ class ForgetForm extends Component {
                     label="手机号"
                 >
                     {getFieldDecorator('tel', {
-                        rules: [{ required: true, message: '请输入11位手机号' }],
+                        rules: [{ required: true, message: '请输入11位手机号' },
+                        { pattern: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/, message: '手机号格式不正确！' }],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入11位手机号" />
                         )}
@@ -60,12 +61,26 @@ class ForgetForm extends Component {
                 </FormItem>
                 <FormItem
                 prefixCls="my-ant-form"
+                validateStatus={checkCodeError ? 'error' : ''}
+                help={checkCodeError || ''}
+                label="验证码"
+            >
+                {getFieldDecorator('checkCode', {
+                    rules: [{ required: true, message: '请输入验证码' }],
+                })(
+                    <Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />
+                    )}
+                <CheckCode error={getFieldError('tel')} />
+            </FormItem>
+                <FormItem
+                prefixCls="my-ant-form"
                     validateStatus={passwordError ? 'error' : ''}
                     help={passwordError || ''}
                     label="设定密码"
                 >
                     {getFieldDecorator('password', {
-                        rules: [{ required: true, message: '请输入8-16位数字、字母' }],
+                        rules: [{ required: true, message: '请输入密码!' },
+                        { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
                         <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" />
                         )}
@@ -77,7 +92,8 @@ class ForgetForm extends Component {
                     label="密码确认"
                 >
                     {getFieldDecorator('confirmPsw', {
-                        rules: [{ required: true, message: '请再次输入密码' }],
+                        rules: [{ required: true, message: '请再次输入密码' },
+                        { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
                         <Input prefixCls="my-ant-input" type="password" placeholder="请再次输入密码" />
                         )}

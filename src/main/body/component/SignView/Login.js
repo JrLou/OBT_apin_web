@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-07 13:45:34
+ * @Last Modified time: 2017-11-07 14:45:04
  */
 
 import React, { Component } from 'react';
@@ -136,7 +136,7 @@ class MsgLoginForm extends React.Component {
                     })(
                         <Input prefixCls='my-ant-input' placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode />
+                    <CheckCode error={getFieldError('tel')} />
                 </FormItem>
                 <FormItem prefixCls="my-ant-form">
                     <Button
