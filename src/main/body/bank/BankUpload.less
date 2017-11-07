@@ -1,0 +1,79 @@
+@import "../../../theme.less";
+
+.content {
+   .payOutBox;
+   .bankBox {
+      .payCpmBox;
+      &_top {
+         .top;
+      }
+      &_middle {
+         &:after {
+            .toContainAllSon;
+         }
+         .middle;
+         &_msg {
+            display: inline-block;
+            font-family: "MicrosoftYaHei", Helvetica, Arial, sans-serif;
+            font-size: @font_size_center;
+            color: @font-dark-color;
+            line-height: 1.9rem;
+         }
+         &_titleMsg {
+            width: 90px;
+            display: inline-block;
+         }
+         //第二段
+
+         .container2Son:after {
+            .toContainAllSon;
+         }
+         .container2Son{
+            .form_group {
+               margin-right: 30px;
+               line-height: 30px;
+            }
+            &:first-child .form_group {
+               margin-bottom: 20px;
+            }
+            .form_control {
+               width: 240px;
+            }
+         }
+
+         :global {
+            .forUploadStyle .ant-upload.ant-upload-select-picture-card > .ant-upload {
+               height: 200px;
+               display: flex;
+               align-items: center; /*定义子元素垂直居中*/
+               justify-content: center; /*定义子元素水平居中*/
+               background-color: #DEEEFB;
+            }
+
+            .forUploadStyle .ant-upload.ant-upload-select-picture-card,
+            .forUploadStyle .ant-upload-list-picture-card .ant-upload-list-item {
+               vertical-align: top;
+               float: none;
+               display: inline-block;
+               width: 32.5%;
+               height: auto;
+            }
+
+            .forUploadStyle .ant-upload-list-picture-card .ant-upload-list-item-info:before {
+               background-color: rgba(0, 0, 0, 0.5);
+               left: 0;
+            }
+            .forUploadStyle .ant-upload-list-picture-card .ant-upload-list-item-actions a:first-child {
+               display: none;
+            }
+            .forUploadStyle .ant-upload-list-picture-card .ant-upload-list-item-actions .anticon-eye-o, .forUploadStyle .ant-upload-list-picture-card .ant-upload-list-item-actions .anticon-delete {
+               font-size: 30px;
+            }
+         }
+      }
+   }
+   .submitBtn{
+      .bigOrangeBtn;
+      margin-top: 20px;
+   }
+}

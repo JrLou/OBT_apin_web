@@ -16,8 +16,12 @@ class page extends Component {
         super(props);
         this.state = {
             step: 0,
-            isLogin: true
+            isLogin: false
         };
+    }
+
+    componentDidMount(){
+        console.log(this.props.state.id);
     }
 
     render() {

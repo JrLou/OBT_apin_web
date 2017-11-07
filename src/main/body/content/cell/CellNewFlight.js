@@ -7,6 +7,7 @@ import css from './CellNewFlight.less';
 import ClickHelp from '../../tool/ClickHelp.js';
 import CellNewFlightDetail from './CellNewFlightDetail.js';
 import NumTransToTextHelp from '../../tool/NumTransToTextHelp.js';
+import DateHelp from '../../tool/DateHelp.js';
 
 class CellNewFlight extends Component {
     constructor(props) {
@@ -44,23 +45,8 @@ class CellNewFlight extends Component {
             return null;
         }
         let obj = data.obj;
+        let totalText = obj.flightTime?DateHelp.getValue(obj.flightTime):"";
 
-        let startDate = obj.depDate?obj.depDate.substring(5):"";
-        startDate = startDate.replace("-","月")+"日";
-
-
-        let totalTime = obj.flightTime?obj.flightTime:"";
-        let timeArr = totalTime.split(":");
-        let totalText = "";
-        if (timeArr[0]&&timeArr[0]>0){
-            totalText = timeArr[0]+"小时";
-        }
-        if (timeArr[1]&&timeArr[1]>0){
-            totalText = totalText + timeArr[1]+"分钟";
-        }
-
-        let endDate = obj.arrDate?obj.arrDate.substring(5):"";
-        endDate = endDate.replace("-","月")+"日";
         var itemView = (<div className={css.table}>
             <div className={css.type_super}>
                 <div className={css.typeText}>

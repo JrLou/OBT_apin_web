@@ -1,8 +1,8 @@
 var path = require("path");
 var setting = require("./config/setting.js");
-
-
-
+var CleanWebpackPlugin = require('clean-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+var defaultPlugin = require('./lib/config/webpack/plugins');
 
 //修改ANTD主题
 var json = {};
@@ -85,7 +85,7 @@ var configModule = {
         },
         {
             test: /(.*?(\\|\/)src(\\|\/)).*less$/,
-            loader: "style-loader!css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]!less-loader"
+            loader: ExtractTextPlugin.extract("css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]!less-loader")
         },
         {
             test: /\.(png|jpg|gif)$/,
@@ -112,6 +112,7 @@ module.exports = {
 
 		},
 		release: {
+            useAnalyzer:true,
 			config: {
                 output: {
                     path: path.resolve(__dirname,"./public/project"),
@@ -121,7 +122,53 @@ module.exports = {
                     chunkFilename: "[name].[chunkhash:5].chunk.js",
                     publicPath: "/project/"
                 },
-                module: configModule
+                module: configModule,
+                plugins: [
+                    new ExtractTextPlugin({filename:"styles.css",allChunks:true}),
+                    //删除上次打包目录
+                    new CleanWebpackPlugin(['project'],
+                        {
+                            root:path.join(__dirname, '/public'),//一个根的绝对路径.
+                            verbose: true,
+                            dry: false,
+                            exclude: []////排除不删除的目录，主要用于避免删除公用的文件
+                        }),
+                    defaultPlugin.noEmitError(),
+                    defaultPlugin.definePlugin({
+                        'process.env': {
+                            'NODE_ENV': JSON.stringify('production')
+                        }
+                    }),
+                    defaultPlugin.es3ifyPlugin(), // MUST put before uglify or it not work
+                    // defaultPlugin.uglify({
+                    // 	ie8: true,
+                    // 	output: {
+                    // 		comments: false,  // remove all comments
+                    // 	},
+                    // 	compress: {
+                    // 		warnings: false
+                    // 	}
+                    // }),
+                    defaultPlugin.uglify({
+                        uglifyOptions: {
+                            ie8: true,
+                            output: {
+                                comments: false,  // remove all comments
+                            },
+                            compress: true,
+                            warnings: false
+                        }
+                    }),
+                    defaultPlugin.compressPlugin({ //gzip 压缩
+                        asset: '[path].gz[query]',
+                        algorithm: 'gzip',
+                        test: new RegExp(
+                            '\\.(js|css)$'    //压缩 js 与 css
+                        ),
+                        threshold: 10240,
+                        minRatio: 0.8
+                    })
+                ]
 			}
 
 		},
