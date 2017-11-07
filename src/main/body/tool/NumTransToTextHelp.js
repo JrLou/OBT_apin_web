@@ -2,11 +2,6 @@
  * Created by apin on 2017/11/7.
  */
 let NumTransToTextHelp = {
-
-    /**
-     *
-     * @param e 事件源 (e)=>{}
-     */
     getValue(num){
         if (!num){
             return "零";
