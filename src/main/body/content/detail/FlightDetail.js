@@ -171,7 +171,7 @@ class page extends Component {
             });
         }
     }
-    recycleNum(isAdult,value){
+    onChangeNumVal(isAdult,value){
         if (value && (value!="")&& /^[0-9]*$/.test(value)){
             if (isAdult){
                 let num = parseInt(value);
@@ -197,7 +197,7 @@ class page extends Component {
                 });
             }else {
                 this.setState({
-                    childNum:"0",
+                    childNum:"",
                 },()=>{
                     this.setChildNum("");
                 });
@@ -249,6 +249,9 @@ class page extends Component {
                                     {getFieldDecorator('adultNum', {
                                         rules: [{
                                             required: true,
+                                            message: '人数不能为空',
+                                        },{
+                                            pattern: /^\+?[1-9]\d*$/,
                                             message: '人数必须大于0',
                                         }],
                                         initialValue: adultNum,
@@ -266,7 +269,7 @@ class page extends Component {
                                                                 }}/>}
                                               onChange={(e)=>{
                                                   let value = e.target.value;
-                                                  this.recycleNum(true,value);
+                                                  this.onChangeNumVal(true,value);
                                               }}/>)}
                                 </FormItem>
                                 <div className={css.i_subtitle}>{"¥2333"}</div>
@@ -297,7 +300,7 @@ class page extends Component {
                                                                  }}/>}
                                                onChange={(e)=>{
                                                    let value = e.target.value;
-                                                   this.recycleNum(false,value);
+                                                   this.onChangeNumVal(false,value);
                                                }}/>
                                     )}
                                 </FormItem>
@@ -328,7 +331,6 @@ class page extends Component {
                             <FormItem style={{float:"left"}}>
                                 {getFieldDecorator('name', {
                                     rules: [{
-                                        max:20,
                                         required: true,
                                         message: '姓名不能为空',
                                     },{
@@ -354,7 +356,7 @@ class page extends Component {
                                         message: '请输入正确的11位手机号码'
                                     }],
                                 })(
-                                    <Input max={11} style={{width:"220px"}}
+                                    <Input style={{width:"220px"}}
                                            placeholder={"请输入手机号"}
                                            onChange={(e)=>{
                                                let val = e.target.value;
@@ -378,6 +380,7 @@ class page extends Component {
                            callBack={()=>{
                                this.props.form.validateFields((err, values) => {
                                    if (!err) {
+                                       console.log('Received values of form: ', values);
                                        console.log('Received values of form: ', values);
                                    }
                                });
