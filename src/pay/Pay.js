@@ -1,562 +1,624 @@
 import React, {Component} from 'react';
 
-import {Pagination, Button, Modal,Input, Select, Col, Row} from 'antd';
+import {Button, message} from 'antd';
 import {HttpTool} from "../../lib/utils/index.js";
+
+import PayInfo from './PayInfo';
+import WindowHelp from './WindowHelp.js';
+import Panel from './Panel';
+import WXPay from './WXPay';
+import UnionPay from './UnionPay';
+import BankPay from './BankPay';
+import IntegralInfo from './IntegralInfo';
+import PaySelectLayout from './PaySelectLayout';
+import PayPassWord from './PayPassWord';
+
 //获取模拟数据
 import less from './Pay.less';
 
 class page extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-        //id
-        this.data = {
-            order: {
-                title: "北京=>上海",
-                desc: "5天6晚 2007年12月12号-2009年XXXX",
-                price: 50000,
-            },
-            integral: {
-                all: 456121,
-                use: 50
-            },
-            pay:{}
-        };
-    }
+   constructor(props) {
+      super(props);
+      this.wh = new WindowHelp();
+      this.state = {
+         step: 1,
+         loading: true,
+      };
+      // ?data={"id":1}
+      this.par = window.app_getPar(this);
+      console.log(this.par);
+      this.id = this.par ? this.par.id : null;
 
 
-    render() {
+   }
+
+   componentDidMount() {
+      if (this.un) {
+         return;
+      }
+      this.refresh();
+   }
+
+   componentWillUnmount() {
+      this.un = true;
+   }
+
+   refresh() {
+      this.show(true, () => {
+         this.loadPayInfo({
+             orderId: this.id
+         }, (code, msg, data) => {
+            if (this.un) {
+               return;
+            }
+            this.data = data;
+            this.setState({
+               loading: false,
+               error: code > 0 ? "" : msg,
+            });
+         });
+      });
+
+   }
+
+   show(loading, callBack) {
+      this.setState({
+         loading
+      }, callBack);
+   }
+
+   getLoadingView() {
+      return <div className={less.loading}>正在为您拉取订单信息,请稍候...</div>;
+   }
+
+   getDefaultView() {
+      return (
+         <div className={less.loading}>
+            {this.state.error ? <div className={less.loading}> {this.state.error}</div> : null}
+            <div>订单号异常? <a onClick={() => {
+               if (window.ysf && window.ysf.open) {
+                  // window.ysf.open();
+                  window.ysf.product({
+                     show: 1, // 1为打开， 其他参数为隐藏（包括非零元素）
+                     title: "订单支付异常",
+                     desc: "异常原因:" + (this.state.error || "未知"),
+                     note: "订单号:" + this.id,
+                     url: window.location.host,
+                     success: function () {     // 成功回调
+                        window.ysf.open();
+                     },
+                     error: function () {       // 错误回调
+                        // handle error
+                     }
+                  });
+               } else {
+                  message.warn("");
+               }
+            }}>联系客服</a></div>
+         </div>
+      );
+
+   }
+
+   render() {
+      let contentView = null;
+      if (this.state.loading) {
+         contentView = this.getLoadingView();
+      } else if (this.state.error) {
+         contentView = this.getDefaultView();
+      } else {
+         console.log("==");
+         let stepView = null;
+         if (this.state.step === 1) {
+            stepView = this.getFirstStep();
+         } else {
+            let Com = this.getSecondStep();
+            stepView = <Com
+               ref={(ref) => {
+                  this.stepAction = ref;
+               }
+               }
+               onAction={(type, data, callBack) => {
+                  //打开
+                  if (type === "unionopen") {
+                     //打开开通银联
+                     this.openUnionPayAdd(data);
+                  } else if (type === "unionpay") {
+                     //打开银联支付
+                     this.openPayIng(callBack);
+
+                  } else if (type === "unionpaysuccess") {
+                     //打开银联支付
+                     this.openPaySuccess(callBack);
+
+                  } else if (type === "unionpayerror") {
+                     //打开银联支付
+                     this.openPayError(data, callBack);
+
+                  }
 
 
-        return (
-            <div className={less.content}>
-                <PayInfo
-                    data={this.data.order}
-                    ref={(ref)=>{
-                        this.payInfo = ref;
-                    }}
-                />
-                <PaySelectLayout
-                 data={this.data.pay}
-                />
-                <IntegralInfo
-                    data={this.data.integral}
-                    onPriceChange={(use)=>{
-                        this.payInfo.upDatePrice(use);
-                    }}
-
-                />
-
-                <div className={less.nextLayout}>
-                    <div>
-                        订单含机票 ,民......
-                    </div>
-                    <Button type="primary"
-
-                            onClick={()=>{
-                                // let apinPanel =   this.openInitWindow();
-                                this.panel.show(true,{
-                                    content:"正在下单....",
-                                    title:"支付信息",
-                                    showType:"loading"
-
-                                },()=>{
-                                    let apinPanel =   this.openInitWindow();
-                                        this.loadPayOrder(this.data,(code,msg,data)=>{
-                                            if(code>0){
-                                                //3秒后去开始验证,是否支付成功
-                                                // setTimeout(()=>{this.autoVer(apinPanel);},3000);
-                                                this.panel.show(true,{
-                                                    okText:"我已经支付",
-                                                    cancelText:"还没支付",
-                                                    content:"正在支付....",
-                                                    title:"支付信息",
-                                                    showType:"paying"
-
-                                                },()=>{
-                                                    this.openWindow(apinPanel,data.url);
-                                                });
-                                            }else{
-                                                this.closeWindow(apinPanel);
-                                                this.panel.show(true,{
-                                                    okText:"我知道了",
-                                                    content:msg,
-                                                    title:"支付信息",
-                                                    showType:"error"
-                                                },()=>{
+               }
+               }
+               back={() => {
+                  this.setStep(1);
+               }
+               }/>;
 
 
-                                                });
-                                            }
-                                        });
+         }
+         contentView = (
+            <div>
+               {stepView}
+               <Panel
+                  onAction={(action, showType) => {
+
+                     if (showType === "paying") {
+                        //验证是否支付
+                        this.handVer("pay", action);
+                     } else if (showType === "unioning") {
+                        //验证是否开通
+                        this.handVer("union");
+                     }
+                     else if (action === "ok" && showType === "success") {
+                        //打开订单页
+                        window.app_open(this, "/Order", {
+                           id: this.id
+                        }, "self");
+                     }
+
+                  }}
+                  ref={(ref) => {
+                     this.panel = ref;
+                  }}/>
+               <PayPassWord
+                  onAction={(pw) => {
+                     //调用积分支付//完全用积分支付
+                     this.openPayIng(() => {
+                        this.loadPayIntegral({pw: pw}, (code, msg, data) => {
+                           if (code > 0) {
+                              //
+                              this.openPaySuccess();
+                           } else {
+                              this.openPayError(msg, null);
+                           }
+                        });
+                     });
+
+                  }}
+                  ref={(ref) => {
+                     this.payPassWord = ref;
+                  }}/>
+               <WXPay
+                  ref={(ref) => {
+                     this.wxPay = ref;
+                  }}/>
+            </div>
+         );
+      }
+      return (
+         <div className={less.content}>
+            {contentView}
+         </div>
+      );
+   }
+
+
+   getFirstStep() {
+      return (
+         <div>
+            <PayInfo
+               data={this.data.order}
+               ref={(ref) => {
+                  this.payInfo = ref;
+               }}
+            />
+            <PaySelectLayout
+               defaultshowMore={this.data.pay.defaultshowMore}
+               defaultIndex={this.data.pay.defaultIndex}
+               data={this.data.pay}
+            />
+            <IntegralInfo
+               data={this.data}
+               onPriceChange={(use) => {
+                  if (this.refMoney) {
+                     this.refMoney.upDatePrice(use);
+                  }
+
+               }}
+            />
+
+            <div className={less.nextLayout}>
+               <div>
+                  <span className={less.nextLayout_priceTitle}>需支付：</span>
+                  <span className={less.nextLayout_price}>
+                        <span className={less.nextLayout_price_rmb}>¥</span>
+                      <Money
+                         ref={(ref) => {
+                            this.refMoney = ref;
+                         }}
+                         data={this.data.order}
+                      />
+                        </span>
+               </div>
+
+
+               <p>订单含机票、民航发展基金、燃油费、税费</p>
+               <Button type="primary"
+                       className={less.nextLayout_btn}
+                       onClick={() => {
+                          //1:如果是在线支付,进入银联支付
+                          //2:如果是银行转账,进入银行转账
+                          //3:如果是支付宝/微信支付,进入支付
+                          console.log(this.data);
+                          if (this.data.order.payPrice <= 0) {
+                             //提示输入密码,积分支付
+                             this.payPassWord.show(true);
+                             return;
+                          }
+
+
+                          let downIng = (fun) => {
+                             this.openPayIng(() => {
+                                this.loadPayIntegral({}, (code, msg, data) => {
+                                   if (code > 0) {
+                                      this.panel.show(false, {}, () => {
+                                         fun();
+                                      });
+                                   } else {
+                                      this.openPayError(msg, null, "下单");
+                                   }
+                                });
+                             }, "下单");
+                          };
+                          switch (this.data.pay.type) {
+                             case "ali"://
+                             case "wechat"://
+                                this.openPay(this.data.pay.type);
+                                break;
+                             case "online":
+                                //
+                                downIng(() => {
+                                   this.setStep(2);
                                 });
 
-                            }}
-                    >下一步</Button>
-                </div>
+                                break;
+                             case "bank":
+                                //打开新页面
+                                downIng(() => {
+                                   window.app_open(this, "/Upload", {
+                                      id: this.id,
+                                      price: this.data.order.payPrice,
+                                      payType: this.data.order.PayType
+                                   }, "self");
+                                });
 
-                <Loading ref={(ref)=>{
-                    this.loading = ref;
-                }}/>
-                <Panel
-                    onAction={(action,showType)=>{
+                                break;
+                          }
 
-                        if(showType==="paying"){
-                            this.handVer();
-                        }else if(action ==="ok"&&showType==="success"){
-                           //打开订单页
-                            alert("打开订单页面");
-                        }
-
-                            }}
-                    ref={(ref)=>{
-                    this.panel = ref;
-                }}/>
+                       }}
+               >下一步</Button>
             </div>
-        );
-    }
+         </div>
+      );
+   }
+
+   getSecondStep() {
+      switch (this.data.pay.type) {
+         case "bank":
+            return BankPay;
+         default:
+            return UnionPay;
+      }
+
+   }
+
+   setStep(step) {
+      this.setState({
+         step
+      });
+   }
+
+   openPayIng(callBack, title = "支付") {
+      this.panel.show(true, {
+         content: "正在" + title + "....",
+         // title: "支付信息",
+         showType: "loading"
+
+      }, callBack);
+   }
+
+   openPaySuccess(callBack, title = "支付") {
+      this.panel.show(true, {
+         content: title + "成功",
+         // title: "支付信息",
+         showType: "success"
+
+      }, callBack);
+   }
+
+   openPayError(msg, callBack, title = "支付") {
+      this.panel.show(true, {
+         okText: "我知道了",
+         content: msg,
+         // title: "支付信息",
+         showType: "error"
+
+      }, callBack);
+   }
+
+   openUnionPayAdd(data) {
+      let apinPanel = this.wh.openInitWindow();
+      this.panel.show(true, {
+         okText: "我已经开通",
+         cancelText: "还没开通",
+         content: "确认是否已开通",
+         // title: "银联开通",
+         showType: "unioning"
+
+      }, () => {
+         //3秒后去开始验证,是否支付成功
+         // setTimeout(()=>{this.autoVer(apinPanel,"union");},3000);
+         this.wh.openWindow(apinPanel, data.url);
+      });
+
+   }
+
+   openPay(showType) {
+
+      this.openPayIng(() => {
+         let apinPanel = this.wh.openInitWindow(showType === "wechat" ? this.wxPay : null);
+         this.loadPayOrder(this.data, (code, msg, data) => {
+            if (code > 0) {
+               //3秒后去开始验证,是否支付成功
+               //   setTimeout(()=>{this.autoVer(apinPanel,"pay");},3000);
+               this.panel.show(true, {
+                  okText: "我已经支付",
+                  cancelText: "还没支付",
+                  content: "确认是否已支付",
+                  // title: "支付信息",
+                  showType: "paying"
+               }, () => {
+                  this.wh.openWindow(apinPanel, showType === "wechat" ? data : data.url);
+               });
+            } else {
+               this.wh.closeWindow(apinPanel);
+               this.panel.show(true, {
+                  // okText: "我知道了",
+                  content: msg,
+                  // title: "支付信息",
+                  showType: "error"
+               }, () => {
 
 
-    openInitWindow(){
-        let w = window.screen.width*0.6 ,h = window.screen.height*0.6;
-        this.shareWindow =  window.open('/html/loading.html', 'apinPanel', 'height='+h+', width='+w+', top='+(window.screen.height-h)/2+',left='+(window.screen.width-w)/2+',toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
-
-        return this.shareWindow;
-    }
-
-    openWindow(apinPanel,url){
-        apinPanel.location.href = url;
-    }
-    closeWindow(apinPanel){
-        let panel = apinPanel||this.shareWindow;
-        if(panel){
-            panel.close();
-        }
-    }
-
-    handVer(){
-        //关闭已经存在的窗口
-        this.closeWindow();
-        //验证是否支付
-        this.panel.show(true,{
-            content:"验证支付中",
-            showType:"verpay"
-        },()=>{
-            this.loadPayOrderVer(this.data,(code,msg,data)=>{
-                //验证是否支付成功
-                if(code>0){
-                    //支付成功
-                    //关闭支付窗口
-                    //提示支付成功
-                    this.panel.show(true,{
-                        content:msg,
-                        showType:"success"
-                    },()=>{
+               });
+            }
+         });
+      }, "下单");
+   }
 
 
-                    });
-                }else{
-                    this.panel.show(true,{
-                        okText:"我知道了",
-                        content:msg,
-                        title:"支付信息",
-                        showType:"error"
-                    },()=>{
+   handVer(type, action) {
+      // action为“ok”或者“cancel”当   action==“ok” && 支付失败 提示文案改变
+      //关闭已经存在的窗口
+      this.wh.closeWindow();
+      //验证是否支付
+      this.panel.show(true, {
+         content: type === "pay" ? "验证支付中" : "验证开通中",
+         showType: "verpay"
+      }, () => {
+         this[type === "pay" ? "loadPayOrderVer" : "loadUnionVer"](this.data, (code, msg, data) => {
+            //验证是否支付成功
+            if (code > 0) {
+
+               if (type === "pay") {
+                  //支付成功/提示支付成功/通知用户去订单详情
+                  this.panel.show(true, {
+                     content: msg,
+                     showType: "success"
+                  }, () => {
+                  });
+               } else {
+                  //开通成功/关闭提示/关闭卡号输入
+                  this.panel.show(false);
+                  if (this.stepAction && this.stepAction.onAction) {
+                     this.stepAction.onAction("closeAdd");
+                  }
+               }
+
+            } else {
+               //当   action==“ok” && 支付失败 提示文案改变
+               let connectUsLink = (
+                  <a
+                     onClick={() => {
+                        if (window.ysf && window.ysf.open) {
+                           // window.ysf.open();
+                           window.ysf.product({
+                              show: 1, // 1为打开， 其他参数为隐藏（包括非零元素）
+                              title: "订单支付异常",
+                              desc: "异常原因:" + (this.state.error || "未知"),
+                              note: "订单号:" + this.id,
+                              url: window.location.host,
+                              success: function () {     // 成功回调
+                                 window.ysf.open();
+                              },
+                              error: function () {       // 错误回调
+                                 // handle error
+                              }
+                           });
+                        } else {
+                           message.warn("");
+                        }
+                     }}>
+                     联系客服
+                  </a>
+               );
+               let content = null;
+               content = (
+                  <div>
+                     {/*UI说：长文字的时候，就不提示“支付失败”了*/}
+                     {action === "ok" ?
+                        <div>抱歉，当前未收到银行或第三方平台支付确认，为避免重复支付，请确认您的账户已扣款。如已扣款请&nbsp;{connectUsLink}</div>
+                        :
+                        <div>
+                           {msg}
+                           <br/>
+                           <div>如有疑问，请&nbsp;{connectUsLink}&nbsp;</div>
+                        </div>
+                     }
+                  </div>
+               );
+               this.panel.show(true, {
+                  okText: "我知道了",
+                  content,
+                  // title: type==="pay"?"支付信息":"银联开通",
+                  showType: "error"
+               }, () => {
 
 
-                    });
-                }
+               });
+            }
+
+         });
+
+      });
+
+   }
+
+
+   autoVer(apinPanel, type) {
+      this[type === "pay" ? "loadPayOrderVer" : "loadUnionVer"](this.data, (code, msg, data) => {
+         //验证是否支付成功
+         if (code > 0) {
+            //支付成功
+            //关闭支付窗口
+            this.wh.closeWindow(apinPanel);
+            //提示支付成功
+            this.panel.show(true, {
+               content: msg,
+               showType: "success"
+            }, () => {
+
 
             });
+         } else {
+            setTimeout(() => {
+               this.autoVer(apinPanel);
+            }, 1000);
+         }
 
-        });
+      });
 
-    }
+   }
 
+   loadPayIntegral(param, cb) {
+      setTimeout(() => {
+         let code = (Math.random() * 10).toFixed(0) - 1;
+         let data = {};
+         cb(code, code > 0 ? "下单成功" : "下单失败", data);
+      }, Math.random() * 1000 + 2000);
+   }
 
-    autoVer(apinPanel){
-        this.loadPayOrderVer(this.data,(code,msg,data)=>{
-            //验证是否支付成功
-            if(code>0){
-                //支付成功
-                //关闭支付窗口
-                this.closeWindow(apinPanel);
-                //提示支付成功
-                this.panel.show(true,{
-                    content:msg,
-                    showType:"success"
-                },()=>{
+   loadUnionVer(param, cb) {
+      setTimeout(() => {
+         let code = (Math.random() * 10).toFixed(0) - 1;
+         let data = {};
+         data.url = "http://www.baidu.com";
+         cb(code, code > 0 ? "开通成功" : "开通失败", data);
+      }, Math.random() * 1000 + 2000);
+   }
 
+   loadPayOrderVer(param, cb) {
+      setTimeout(() => {
+         let code = (Math.random() * 10).toFixed(0) - 11;
+         let data = {};
+         data.url = "http://www.baidu.com";
+         cb(code, code > 0 ? "支付成功" : "支付失败", data);
+      }, Math.random() * 1000 + 2000);
+   }
 
-                });
-            }else{
-                setTimeout(()=>{
-                    this.autoVer(apinPanel);
-                },1000);
-            }
+   loadPayOrder(param, cb) {
+      setTimeout(() => {
+         let code = (Math.random() * 10).toFixed(0) - 1;
+         let data = {};
+         data.url = "http://www.baidu.com";
+         data.payPrice = (Math.random() * 10000).toFixed(0);
+         cb(code, "无库存了/或者其他", data);
+      }, Math.random() * 1000 + 2000);
+   }
 
-        });
+   loadPayInfo(param, cb) {
+      if (!param || !param.orderId) {
+         cb(-3, "缺少订单号", null);
+         return;
+      }
+       HttpTool.request(HttpTool.typeEnum.POST, "/v1.0/orders/payInfo", (code, msg, json, option) => {
 
-    }
-    loadPayOrderVer(param,cb){
-        setTimeout(()=>{
-            let code = (Math.random()*10).toFixed(0)-5;
-            let data = {};
-            data.url = "http://www.baidu.com";
-            cb(code,code>0?"支付成功":"支付失败",data);
-        },Math.random()*1000+2000);
-    }
-    loadPayOrder(param,cb){
-        setTimeout(()=>{
-            let code = (Math.random()*10).toFixed(0)-5;
-            let data = {};
-            data.url = "http://www.baidu.com";
-            cb(code,"无库存了/或者其他",data);
-        },Math.random()*1000+2000);
-    }
-}
-class Panel extends Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            loading:false,
-            data:{},
-        };
-    }
-    show(loading,data,callBack){
-        this.setState({
-            loading,
-            data
-        },callBack);
-    }
+          let data =  {
+               order: {
+                   orderNo:json.orderNo,
+                   adultCount:json.adultCount,
+                   payment:json.payment,
+                   childCount:json.childCount,
+                   expiredTime:json.expiredTime,
+                   phone:json.phone,
+                   price: json.amount,
+                   passengersInfo: "2成人/1儿童",
+               },
+               integral: {
+                   all: json.point,
+                       use: 0
+               }
+           };
+           if (code > 0) {
+               if (!data.pay) {
+                   data.pay = {
+                       defaultIndex: 0,
+                       defaultshowMore: false
+                   };
+               }
+           }
+           cb(code, msg, data);
+       }, (code, msg, option) => {
+           cb(code, msg, {pay:{},integral:{},order:{}});
+       }, param);
+   }
 
-
-    getPayingLayout(){
-        let verPay = (action)=>{
-
-            if(this.props.onAction){
-                this.props.onAction(action,this.state.data.showType);
-            }
-        };
-        const ButtonGroup = Button.Group;
-        return (
-          <div>
-              <div >{this.state.data.content}</div>
-              <ButtonGroup>
-                  <Button onClick={()=>{verPay("cancel");}} >{this.state.data.cancelText}</Button>
-                  <Button onClick={()=>{verPay("ok");}} type="primary">{this.state.data.okText}</Button>
-
-              </ButtonGroup>
-          </div>
-        );
-    }
-
-    getErrorLayout(){
-        return (
-           <div>
-               <div style={{color:"red"}}>{this.state.data.content}</div>
-               <Button  onClick={()=>this.show(false)} >我知道了</Button>
-           </div>
-        );
-    }
-    getSuccessLayout(){
-        return (
-           <div>
-               <div style={{color:"green"}}>{this.state.data.content}</div>
-               <Button  onClick={(action)=>{
-                   if(this.props.onAction){
-                       this.props.onAction("ok",this.state.data.showType);
-                   }
-               }} >查看订单</Button>
-           </div>
-        );
-    }
-    getLoadingLayout(){
-        return (
-           <div>
-               <div style={{color:"block"}}>{this.state.data.content}</div>
-           </div>
-        );
-    }
-
-    render(){
-        if( !this.state.loading){
-            return null;
-        }
-        let view = null;
-        switch (this.state.data.showType){
-            case "loading":
-            case "verpay":
-                view = this.getLoadingLayout();
-                break;
-            case "error":
-                view = this.getErrorLayout();
-                break;
-            case "success":
-                view = this.getSuccessLayout();
-                break;
-            case "paying":
-                view = this.getPayingLayout();
-                break;
-        }
-
-        return (
-            <Modal
-                   visible={true}
-                   style={{ top: 300 }}
-                   confirmLoading={false}
-                   maskClosable={false}
-                   closable={false}
-                   footer={null}
-                   {...this.state.data}
-            >
-                {view}
-            </Modal>
-        );
-    }
-}
-class Loading extends Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            loading:false,
-        };
-    }
-    show(loading,callBack){
-        this.setState({
-            loading
-        },callBack);
-    }
-
-    render(){
-        return this.state.loading?(
-            <div className={less.loading}>
-                <div>loading</div>
-            </div>
-        ):null;
-    }
 }
 
-class IntegralInfo extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            upData:0,
-        };
-    }
+class Money extends Component {
+   constructor(props) {
+      super(props);
+      this.state = {
+         use: 0,
+      };
+   }
 
-    componentDidMount() {
-        if(this.props.onPriceChange){
-            this.props.onPriceChange(this.getData().use);
-        }
-    }
+   /**
+    *
+    * @param use 单位 / 分
+    */
+   upDatePrice(use) {
+      this.setState({
+         use: use * 100
+      });
+   }
 
-    getData(){
-        return this.props.data ||{};
-    }
-    render() {
-        let data = this.getData();
+   getData() {
+      return this.props.data || {};
+   }
 
-        return (
-            <div
-                {...this.props}
-            >
-                <div className={less.integralInfo}>
-
-                    <div className={less.integralInfoImg}>
-                        图片
-                    </div>
-                    <div className={less.integralInfoRight}>
-                        <div>积分抵扣</div>
-                       <div>
-                           您目前有{data.all}积分    可抵用付款500元
-                           请输入您要抵用的积分
-                           <input defaultValue={data.use}
-                            onChange={(e)=>{
-                                let v =Number(e.target.value);
-                                if(Number.isInteger(v)) {
-                                    data.use = v;
-
-                                    this.setState({
-                                        upData:this.state.upData+1
-                                    });
-                                }else{
-                                    //请输入数字
-                                }
-                                if(this.props.onPriceChange){
-                                    this.props.onPriceChange(data.use);
-                                }
-                            }}
-                           />
-                           可抵用{(data.use/1000).toFixed(2)}元
-                       </div>
-                    </div>
-
-                </div>
-            </div>
-        );
-    }
-}
-
-class PayInfo extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            use:0,
-        };
-    }
-
-    upDatePrice(use){
-        this.setState({
-            use:use
-        });
-    }
-    getData(){
-        return this.props.data ||{};
-    }
-    render() {
-        let data = this.getData();
-        data.payPrice = data.price-this.state.use;
-        return (
-            <div
-                {...this.props}
-            >
-                <div className={less.payInfo}>
-
-                    <div>
-                        本次需支付金额:￥{((data.payPrice)/100).toFixed(2)}无
-                    </div>
-                    <div>
-                        标题:{data.title}
-                    </div>
-                    <div>
-                        描述:{data.desc}
-                    </div>
-                </div>
-            </div>
-        );
-    }
-}
-
-class PaySelectLayout extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            maxSelect: 3,
-            showMore: false,
-            selectIndex: 0,
-            loading: true
-        };
-    }
-    getData(){
-        return this.props.data ||{};
-    }
-    getPayList() {
-        return [
-            {
-                type: "ali",
-                title: "支付宝",
-                getView: () => {
-                    return <div>支付宝图片</div>;
-                },
-                span: 8,
-            },
-            {
-                type: "wechat",
-                title: "微信支付",
-                getView: () => {
-                    return "微信支付";
-                },
-                span: 8,
-            }, {
-                type: "online",
-                title: "在线支付",
-                getView: () => {
-                    return "在线支付";
-                },
-                span: 8,
-            }, {
-                type: "bank",
-                title: "银行转账",
-                getView: () => {
-                    return "银行转账";
-                },
-                span: 10,
-            }
-        ];
-    }
-
-
-    render() {
-        let payList = this.getPayList();
-        if (!this.state.showMore) {
-            payList = payList.slice(0, this.state.maxSelect);
-        }
-        let data = this.getData();
-        return (
-            <div
-                {...this.props}
-                className={less.payLayout}
-            >
-                <Row>
-
-                    {
-                        payList.map((obj, index) => {
-                            obj.select = this.state.selectIndex === index;
-                            if(obj.select){
-                                data.type = obj.type;
-                            }
-                            return <PayItem
-                                key={index}
-                                {...obj}
-                                onClick={() => {
-                                    //选择当前选项
-                                    this.setState({
-                                        selectIndex: index
-                                    }, () => {
-
-                                    });
-                                    //清空其他选择
-                                }
-                                }
-                            >
-                                {obj.getView()}
-                            </PayItem>;
-                        })
-                    }
-                </Row>
-                <div
-                    className={less.payMore}
-                    onClick={() => {
-                        this.setState({
-                            showMore: !this.state.showMore
-                        });
-                    }}>{"" + (this.state.showMore ? "收起↑" : "更多支付方式↓")}</div>
-            </div>
-        );
-    }
-}
-
-class PayItem extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <Col
-                {...this.props}
-            >
-                <div className={this.props.select ? less.payItemSelect : less.payItem}>
-                    {this.props.children}
-                </div>
-            </Col>
-        );
-    }
+   render() {
+      let data = this.getData();
+      data.payPrice = data.price - this.state.use;
+      return <span {...this.props}>
+       {((data.payPrice) / 100).toFixed(2)}
+      </span>;
+   }
 }
 
 page.contextTypes = {
-    router: React.PropTypes.object
+   router: React.PropTypes.object
 };
 module.exports = page;
 

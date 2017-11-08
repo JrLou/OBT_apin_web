@@ -1,4 +1,10 @@
 @import "../../../../theme.less";
+.layout{
+  background-color: #fff;
+  margin-top: 10px;
+  border: 1px rgba(0, 0, 0, 0.10) solid;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
+}
 .title{
   font-size:16px;
   margin-left: 20px;
@@ -47,20 +53,28 @@
   }
 }
 .messageLayout{
-  width: 200px;
   background-color: #fff7d9;
   vertical-align: middle;
+  padding-right: 10px;
   display: inline-block;
-  overflow: hidden;
   height:26px;
   margin-left:95px ;
   padding-left: 6px;
   margin-bottom: 10px;
   border: 1px #ff9901 solid;
 }
+.img{
+  height: 26px;
+  display: table-cell;
+  vertical-align: middle;
+  padding-top: 3px;
+  img{
+    width: 12px;
+    height: 12px;
+  }
+}
 .messageText{
   padding-left: 5px;
-  height:26px;
   font-size: 12px;
   vertical-align: middle;
   display: table-cell;

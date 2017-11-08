@@ -1,0 +1,178 @@
+import React, {Component} from 'react';
+import less from './UnionPayAdd.less';
+
+import {Button, Form, Input, Icon, Spin, Modal, Radio} from 'antd';
+
+const FormItem = Form.Item;
+const RadioGroup = Radio.Group;
+
+class UnionPayAdd extends Component {
+   constructor(props) {
+      super(props);
+      this.defaultState = {
+         loading: false,
+         upLoad: false,
+         value: 0,
+         inputValue: "",
+      };
+      this.state = this.defaultState;
+      this.showError();
+   }
+
+
+   show(loading, callBack) {
+      this.showError();
+      let s = Object.assign(this.defaultState);
+      s.loading = loading;
+      this.setState(s, callBack);
+   }
+
+   showError(msg) {
+      if (msg) {
+         this.validateStatus = "error";
+         this.help = msg;
+      } else {
+         this.validateStatus = "";
+         this.help = "";
+      }
+
+   }
+
+   render() {
+      if (!this.state.loading) {
+         return null;
+      }
+      const formItemLayout = {
+         labelCol: {
+            xs: {span: 24},
+            sm: {span: 5},
+         },
+         wrapperCol: {
+            xs: {span: 24},
+            sm: {span: 12},
+         },
+      };
+
+      let rg = ["储蓄卡", "信用卡"];
+
+
+      return (
+         <Modal
+            visible={true}
+            title={"添加银联卡"}
+            style={{
+               position: "absolute",
+               margin: "auto",
+               top: 0,
+               bottom: 0,
+               right: 0,
+               left: 0,
+               height: 220
+            }}
+            width={400}
+            confirmLoading={false}
+            footer={null}
+            onCancel={() => {
+               this.show(false);
+            }}
+         >
+            <Spin spinning={this.state.upLoad}>
+               <div className={less.modalContent}>
+                  <RadioGroup onChange={(e) => {
+                     console.log(e.target.value);
+                     this.setState({
+                        value: e.target.value,
+                     });
+                  }} value={this.state.value}>
+                     {
+                        rg.map((v, i) => {
+                           return <Radio className={less.radioItem} key={i} value={i}>{v}</Radio>;
+                        })
+                     }
+                  </RadioGroup>
+                  <FormItem
+                     className={less.cardNumForm}
+                     {...formItemLayout}
+                     label={rg[this.state.value] + "号"}
+                     validateStatus={this.validateStatus}
+                     help={this.help}
+                  >
+                     <Input
+                        size={"large"}
+                        style={{width: "240px"}}
+                        className={less.cardNumIpt}
+                        onChange={(e) => {
+                           let v = e.target.value;
+                           if (v) {
+                              if (/^[0-9]{12,24}$/.test(v)) {
+                                 //成功
+                                 this.showError();
+                              } else {
+                                 this.showError("请输入正确的卡号");
+                              }
+                           } else {
+                              this.showError("请输入卡号");
+                           }
+                           this.setState({
+                              inputValue: v
+                           });
+                        }}
+                        prefix={<Icon type="credit-card" style={{fontSize: 13}}/>}
+                        placeholder={"请输入" + rg[this.state.value] + "卡号"}/>
+                  </FormItem>
+                  <div>
+                     <Icon type={"info-circle"} style={{color: "#f6994a"}}/> 支持百家全国及地方银行
+                  </div>
+                  <div style={{textAlign: "left"}}>
+
+                     <Button
+                        disabled={this.validateStatus === "error" || !this.state.inputValue}
+                        type="primary"
+                        className={less.openCardBtn}
+                        onClick={() => {
+                           //开始上传
+                           this.setState({
+                              upLoad: true
+                           }, () => {
+                              this.loadUnionPayAdd({code: this.state.inputValue}, (code, msg, data) => {
+                                 this.showError(code > 0 ? null : msg);
+                                 this.setState({
+                                    upLoad: false
+                                 }, () => {
+                                    if (code > 0) {
+                                       //打开开通
+                                       if (this.props.onAction) {
+                                          this.props.onAction(data);
+                                       }
+                                    }
+                                 });
+                              });
+                           });
+
+                        }}
+                     >
+                        立即开通
+                     </Button>
+
+                  </div>
+               </div>
+            </Spin>
+         </Modal>
+      );
+   }
+
+   loadUnionPayAdd(param, cb) {
+      setTimeout(() => {
+         let code = (Math.random() * 10).toFixed(0) - 1;
+         let data = {
+            url: "http://taobao.com"
+         };
+         cb(code, code > 0 ? "获取成功" : "卡号已存在", data);
+      }, Math.random() * 1000);
+   }
+}
+
+UnionPayAdd.contextTypes = {
+   router: React.PropTypes.object
+};
+module.exports = UnionPayAdd;

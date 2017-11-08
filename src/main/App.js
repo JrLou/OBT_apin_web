@@ -12,7 +12,10 @@ class page extends Component {
             <div className={less.main}>
                 <div className={less.mainBG} />
                 <div className={less.mainContent}>
-                    <AppTop root={this} pathname={this.props.location.pathname} />
+                    <AppTop
+                        root={this}
+                        {...this.props}
+                        />
                     <div className={less.container}>
                         {this.props.children}
                     </div>

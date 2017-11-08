@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-03 19:29:27
+ * @Last Modified time: 2017-11-07 16:54:06
  */
 
 import React, { Component } from 'react';
@@ -30,32 +30,38 @@ class AccountLoginForm extends React.Component {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
 
         // Only show error after a field is touched.
-        const userNameError = isFieldTouched('userName') && getFieldError('userName');
-        const passwordError = isFieldTouched('password') && getFieldError('password');
+        const accountError = isFieldTouched('account') && getFieldError('account');
+        const signatureError = isFieldTouched('signature') && getFieldError('signature');
         return (
-            <Form onSubmit={this.handleSubmit}>
+            <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <FormItem
-                    validateStatus={userNameError ? 'error' : ''}
-                    help={userNameError || ''}
+                    prefixCls="my-ant-form"
+                    validateStatus={accountError ? 'error' : ''}
+                    help={accountError || ''}
                 >
-                    {getFieldDecorator('userName', {
-                        rules: [{ required: true, message: '请输入用户名!' }],
+                    {getFieldDecorator('account', {
+                        rules: [{ required: true, message: '请输入用户名!' }
+                        ],
                     })(
-                        <Input placeholder="账号/手机号" />
+                        <Input prefixCls='my-ant-input' placeholder="账号/手机号" />
                         )}
                 </FormItem>
                 <FormItem
-                    validateStatus={passwordError ? 'error' : ''}
-                    help={passwordError || ''}
+                    prefixCls="my-ant-form"
+                    validateStatus={signatureError ? 'error' : ''}
+                    help={signatureError || ''}
                 >
-                    {getFieldDecorator('password', {
-                        rules: [{ required: true, message: '请输入密码!' }],
+                    {getFieldDecorator('signature', {
+                        rules: [{ required: true, message: '请输入密码!' },
+                        { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
-                        <Input type="password" placeholder="密码" autoComplete="new-password" />
+                        <Input prefixCls='my-ant-input' type="password" placeholder="请输入8-16位数字、字母" autoComplete="new-password" />
                         )}
                 </FormItem>
-                <FormItem>
+                <FormItem prefixCls="my-ant-form">
                     <Button
+                        prefixCls="my-ant-btn"
+                        size="large"
                         type="primary"
                         htmlType="submit"
                         className={css.btnSubmit}
@@ -66,7 +72,7 @@ class AccountLoginForm extends React.Component {
             </Form>
         );
     }
-    
+
     handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -90,45 +96,51 @@ class MsgLoginForm extends React.Component {
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
 
-        const telError = isFieldTouched('tel') && getFieldError('tel');
+        const accountError = isFieldTouched('account') && getFieldError('account');
         const checkImgCodeError = isFieldTouched('checkImgCode') && getFieldError('checkImgCode');
-        const checkCodeError = isFieldTouched('checkCode') && getFieldError('checkCode');
+        const signatureError = isFieldTouched('signature') && getFieldError('signature');
         return (
-            <Form onSubmit={this.handleSubmit}>
+            <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <FormItem
-                    validateStatus={telError ? 'error' : ''}
-                    help={telError || ''}
+                    prefixCls="my-ant-form"
+                    validateStatus={accountError ? 'error' : ''}
+                    help={accountError || ''}
                 >
-                    {getFieldDecorator('tel', {
-                        rules: [{ required: true, message: '请输入11位手机号' }],
+                    {getFieldDecorator('account', {
+                        rules: [{ required: true, message: '请输入11位手机号' }, {
+                            pattern: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/, message: '手机号格式不正确！'
+                        }],
                     })(
-                        <Input placeholder="请输入11位手机号" />
+                        <Input prefixCls='my-ant-input' placeholder="请输入11位手机号" />
                         )}
                 </FormItem>
                 <FormItem
+                    prefixCls="my-ant-form"
                     validateStatus={checkImgCodeError ? 'error' : ''}
                     help={checkImgCodeError || ''}
                 >
                     {getFieldDecorator('checkImgCode', {
                         rules: [{ required: true, message: '请输入图形验证码' }],
                     })(
-                        <Input placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
+                        <Input prefixCls='my-ant-input' placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
                         )}
-                    <img src="http://placehold.it/98x32" alt="" className={css.checkCodeImg} />
+                    <img src="http://placehold.it/98x36" alt="" className={css.checkCodeImg} />
                 </FormItem>
                 <FormItem
-                    validateStatus={checkCodeError ? 'error' : ''}
-                    help={checkCodeError || ''}
+                    prefixCls="my-ant-form"
+                    validateStatus={signatureError ? 'error' : ''}
+                    help={signatureError || ''}
                 >
-                    {getFieldDecorator('checkCode', {
+                    {getFieldDecorator('signature', {
                         rules: [{ required: true, message: '请输入验证码' }],
                     })(
-                        <Input placeholder="请输入验证码" className={css.checkCodeInput} />
+                        <Input prefixCls='my-ant-input' placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode />
+                    <CheckCode error={getFieldError('tel')} />
                 </FormItem>
-                <FormItem>
+                <FormItem prefixCls="my-ant-form">
                     <Button
+                        prefixCls="my-ant-btn"
                         type="primary"
                         htmlType="submit"
                         className={css.btnSubmit}
@@ -163,19 +175,19 @@ class Login extends React.Component {
     render() {
         const { type } = this.state;
         return (
-            <div>
-                <ul className={css.clearfix}>
-                    <li className={`${css.left} ${type === 0 && css.active}`} onClick={() => this.handleChangeType(0)}>账号密码登录</li>
-                    <li className={`${css.right} ${type === 1 && css.active}`} onClick={() => this.handleChangeType(1)}>验证码登录</li>
+            <div className={css.login}>
+                <ul className={`${css.clearfix} ${css.head}`}>
+                    <li className={`${css.left} ${css.title} ${type === 0 && css.active}`} onClick={() => this.handleChangeType(0)}>账号密码登录</li>
+                    <li className={`${css.right} ${css.title} ${type === 1 && css.active}`} onClick={() => this.handleChangeType(1)}>验证码登录</li>
                 </ul>
                 {
                     type === 0 ?
                         <WrappedAccountLoginForm onOK={this.props.onOK} />
                         : <WrappedMsgLoginForm onOK={this.props.onOK} />
                 }
-                <div className={css.clearfix}>
-                    <div className={css.left} onClick={()=>this.props.handleChangeMode(2)}>忘记密码</div>
-                    <div className={css.right} onClick={()=>this.props.handleChangeMode(1)}>注册账号</div>
+                <div className={`${css.clearfix} ${css.bottom}`}>
+                    <div className={`${css.left} ${css.forget}`} onClick={() => this.props.handleChangeMode(2)}>忘记密码</div>
+                    <div className={css.right} onClick={() => this.props.handleChangeMode(1)}>注册账号</div>
                 </div>
             </div>
         );

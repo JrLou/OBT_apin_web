@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import {Button,Icon} from 'antd';
 import css from './CellTransFlight.less';
 import ClickHelp from '../../tool/ClickHelp.js';
+import DateHelp from '../../tool/DateHelp.js';
 
 class CellTransFlight extends Component {
     constructor(props) {
@@ -16,53 +17,37 @@ class CellTransFlight extends Component {
     }
 
     render() {
-        let {data,isNoFirst} = this.props;
+        let {data,isNoFirst,isLast} = this.props;
         if (!data){
             return null;
         }
-        return (<div className={css.main}>{this.createCell(data||{},isNoFirst)}</div>);
+        return (<div className={css.main}>{this.createCell(data||{},isNoFirst,isLast)}</div>);
     }
-    createCell(data,isNoFirst){
-        let obj = data.obj;
-        let startDate = obj.depDate?obj.depDate.substring(5):"";
-        startDate = startDate.replace("-","月")+"日";
-
-        let totalTime = obj.flightTime?obj.flightTime:"";
-        let timeArr = totalTime.split(":");
-        let totalText = "";
-        if (timeArr[0]&&timeArr[0]>0){
-            totalText = timeArr[0]+"小时";
-        }
-        if (timeArr[1]&&timeArr[1]>0){
-            totalText = totalText + timeArr[1]+"分钟";
-        }
-
-        let endDate = obj.arrDate?obj.arrDate.substring(5):"";
-        endDate = endDate.replace("-","月")+"日";
+    createCell(data,isNoFirst,isLast){
         var itemView = (<div style={{width:"100%",overflow:"hidden"}}>
                 <div className={css.type}>
                     <div className={css.refTypeLine} style={{borderColor:isNoFirst?"#888D99":"white"}}></div>
-                    <div className={data.flightType?css.typeImg:css.refTypeImg}></div>
-                    {data.flightType?<div className={css.typeLine}></div>:null}
+                    <div className={!isLast?css.typeImg:css.refTypeImg}></div>
+                    {!isLast?<div className={css.typeLine}></div>:null}
                 </div>
                 <div className={css.cellLine}>
                     <div className={css.table}>
                         <div className={css.myCell}>
                             <div className={css.floatDiv}>
                                 <div className={css.date_super}>
-                                    <div className={css.date}>{obj.arrDate}</div>
+                                    <div className={css.date}>{data.arrDate}</div>
                                 </div>
                                 <div className={css.placeLine_super}>
-                                    <div className={css.placeLineItem}>{obj.depAirport}</div>
+                                    <div className={css.placeLineItem}>{data.depAirport}</div>
                                 </div>
                                 <div className={css.company_super}>
                                     <div className={css.logoCompany_super}>
                                         <div className={css.logoBg}>
                                             <img className={css.logo}
-                                                 src ={obj.logo?obj.logo:require("../../../../images/logo.png")}/>
+                                                 src ={data.logo?data.logo:require("../../../../images/logo.png")}/>
                                         </div>
                                         <div className={css.logoCompany}>
-                                            <div className={css.logoCompanyText}>{obj.compName}</div>
+                                            <div className={css.logoCompanyText}>{data.compName}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -76,22 +61,22 @@ class CellTransFlight extends Component {
                                     </div>
                                 </div>
                                 <div className={css.placeLine_super}>
-                                    <div className={css.placeLineItem}>{obj.arrAirport}</div>
-                                    {/*<div style={{fontSize:"22px",textAlign:"right"}}>{obj.depTime}</div>*/}
+                                    <div className={css.placeLineItem}>{data.arrAirport}</div>
+                                    {/*<div style={{fontSize:"22px",textAlign:"right"}}>{data.depTime}</div>*/}
                                 </div>
                                 <div className={css.company_super}>
-                                    <div className={css.logoCompanyText}>{obj.num}</div>
+                                    <div className={css.logoCompanyText}>{data.num}</div>
                                 </div>
                             </div>
 
                         </div>
                         <div className={css.totalTime}>
-                            <div className={css.totalTimeText}>{"约"+totalText}</div>
+                            <div className={css.totalTimeText}>{"约"+data.flightTime}</div>
                         </div>
                     </div>
                 </div>
 
-                {data.flightType?<div className={css.table}>
+                {!isLast?<div className={css.table}>
                     <div className={css.trans}>
                         <div className={css.transLineTop}></div>
                         <div className={css.transImg}></div>
@@ -100,7 +85,7 @@ class CellTransFlight extends Component {
                     <div className={css.transText}>
                         <span>{"中转"}</span>
                         <span style={{color:"#29A6FF"}}>{" 上海 "}</span>
-                        <span>{"约"+totalText}</span>
+                        <span>{"约"+data.flightTime}</span>
                     </div>
                 </div>:null}
 
