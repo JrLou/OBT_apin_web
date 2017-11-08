@@ -27,8 +27,7 @@ class page extends Component {
       // ?data={"id":1}
       this.par = window.app_getPar(this);
       console.log(this.par);
-      this.id = this.par ? this.par.id : null;
-
+      this.id = this.par ? this.par.orderId : null;
 
    }
 
@@ -46,7 +45,7 @@ class page extends Component {
    refresh() {
       this.show(true, () => {
          this.loadPayInfo({
-            id: this.id
+            orderId: this.id
          }, (code, msg, data) => {
             if (this.un) {
                return;
@@ -513,7 +512,7 @@ class page extends Component {
 
    loadPayIntegral(param, cb) {
       setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 1;
+         let code = (Math.random() * 10).toFixed(0) - 5;
          let data = {};
          cb(code, code > 0 ? "下单成功" : "下单失败", data);
       }, Math.random() * 1000 + 2000);
@@ -521,7 +520,7 @@ class page extends Component {
 
    loadUnionVer(param, cb) {
       setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 1;
+         let code = (Math.random() * 10).toFixed(0) - 5;
          let data = {};
          data.url = "http://www.baidu.com";
          cb(code, code > 0 ? "开通成功" : "开通失败", data);
@@ -530,7 +529,7 @@ class page extends Component {
 
    loadPayOrderVer(param, cb) {
       setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 11;
+         let code = (Math.random() * 10).toFixed(0) - 5;
          let data = {};
          data.url = "http://www.baidu.com";
          cb(code, code > 0 ? "支付成功" : "支付失败", data);
@@ -539,7 +538,7 @@ class page extends Component {
 
    loadPayOrder(param, cb) {
       setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 1;
+         let code = (Math.random() * 10).toFixed(0) - 2;
          let data = {};
          data.url = "http://www.baidu.com";
          data.payPrice = (Math.random() * 10000).toFixed(0);
@@ -548,14 +547,22 @@ class page extends Component {
    }
 
    loadPayInfo(param, cb) {
-      if (!param || !param.id) {
+      console.log("param");
+      console.log(param);
+      if (!param || !param.orderId) {
          cb(-3, "缺少订单号", null);
          return;
       }
+      HttpTool.request(HttpTool.typeEnum.POST,
+         "/orderapi/v1.0/orders/payInfo" + "?orderId=111",
+         (code, msg, json, option) => {
+
+
+         }, (code, msg, option) => {
+         }, param);
       setTimeout(() => {
          let code = (Math.random() * 10).toFixed(0) - 0;
          let data = {};
-         // code = 10;
          if (code > 0) {
             data = {
                order: {
