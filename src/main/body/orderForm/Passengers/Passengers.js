@@ -15,8 +15,9 @@ import React, {Component} from 'react';
 import css from './Passengers.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APILXD from "../../../../api/APILXD.js";
-import Table from "../../component/Table/index.js";
-import {Button,Checkbox} from 'antd';
+import PassengerAdd from './PassengerAdd.js';
+import {Table,Modal} from 'antd';
+import {Button,Checkbox,message,Spin} from 'antd';
 
 class PassengerMsg extends Component{
     constructor(props){
@@ -24,13 +25,17 @@ class PassengerMsg extends Component{
         this.state = {
             orderState:this.props.orderState,
             orderID:this.props.orderID,
-            defaultData:this.props.defaultData,
+            dataSource:this.props.defaultData?this.props.defaultData:[],
             isPassed:this.props.isPassed?this.props.isPassed:false,     //是否已经确认了乘机人
             checkedMsg:false,       //是否已经勾选'确认乘机人信息'
+            submitConfirm:false,
+
+            passengerMsg:null,      //打开新增／修改乘机人窗口时，传入的数据
+            lineType:1,             //航线类型  1：国内  2：国际
+
+            loading:false,          //加载状态
         };
-
     }
-
 
     componentDidMount(){
 
@@ -40,70 +45,93 @@ class PassengerMsg extends Component{
         //模拟数据
         let columns = [
             {
-                title:'乘机人',
-                dataIndex:'passengerName',
+                title:'序号',
+                dataIndex:'index',
             },{
-                title:'乘机人类型',
-                dataIndex:'passengerType',
+                title:'乘机人',
+                dataIndex:'name',
             },{
                 title:'证件类型',
-                dataIndex:'cardType',
+                dataIndex:'credType',
             },{
                 title:'证件号',
-                dataIndex:'cardNum',
+                dataIndex:'credNum',
             },{
-                title:'出发日期',
-                dataIndex:'date',
+                title:'性别',
+                dataIndex:'gender',
+            },{
+                title:'出生日期',
+                dataIndex:'birth',
             },{
                 title:'国籍',
-                dataIndex:'nationality',
+                dataIndex:'nation',
             },{
-                title:'操作',
+                title:'签发地',
+                dataIndex:'issuePlace',
+            },{
+                title:(this.state.isPassed?<div>票号</div>:<div>操作</div>),
                 dataIndex:'operation',
+                width:'200px',
                 render:(text,record)=>(
-                    <div>
-                        <div
-                            className={css.operation}
-                            onClick={()=>{
-                                alert('修改');
-                            }}
-                        >
-                            修改
+                    this.state.isPassed
+                    ?   <div className={css.waitTicket}>{record.ticket?record.ticket:'等待出票'}</div>
+                    :   <div>
+                            <div
+                                className={css.operationUpDate}
+                                onClick={()=>{
+                                    this.toUpDatePassenger(record);
+                                }}
+                            >
+                                修改
+                            </div>
+                            <div
+                                className={css.operationDelete}
+                                onClick={()=>{
+                                    alert('删除');
+                                }}
+                            >
+                                删除
+                            </div>
                         </div>
-                        <div
-                            className={css.operation}
-                            onClick={()=>{
-                                alert('修改');
-                            }}
-                        >
-                            删除
-                        </div>
-                    </div>
-
                 ),
             },
         ];
         let dataSource = [
             {
-                passengerName:'张三',
-                passengerType:'成人',
-                cardType:'身份证',
-                cardNum:'3303030440201043045',
-                date:'1990-03-23',
-                nationality:'中国',
+                index:1,
+                key:1,
+                name:'张三',
+                credType:'1',
+                credNum:'3303030440201043045',
+                birth:'1990-03-23',
+                nation:'中国',
                 operation:'把识别id传入',
             },
             {
-                passengerName:'张三',
-                passengerType:'成人',
-                cardType:'身份证',
-                cardNum:'3303030440201043045',
-                date:'1990-03-23',
-                nationality:'中国',
+                index:2,
+                key:2,
+                name:'李六',
+                credType:'1',
+                credNum:'3303030440201043045',
+                birth:'1990-03-23',
+                nation:'中国',
                 operation:'把识别id传入',
+                ticket:'123123123,123123123,23424123,235345345,23423423424,2353453455',
+                issuePlace:'中国',
+            },
+            {
+                index:3,
+                key:4,
+                name:'Edd',
+                credType:'2',
+                credNum:'3303030440201043045',
+                gender:0,
+                birth:'1990-03-23',
+                nation:'中国',
+                operation:'把识别id传入',
+                ticket:'123123123,123123123,23424123,235345345,23423423424,2353453455',
             }
         ];
-
 
         if(this.hasKey(this.state.orderState,[1,2])){
             return(
@@ -112,26 +140,97 @@ class PassengerMsg extends Component{
         }else{
             return(
                 <div className={css.passengerList}>
-                    <div className={css.titleBar}>
-                        <div className={css.title}>乘机人信息</div>
-                        <Button type="primary" className={css.btnType01}>添加乘机人</Button>
-                        <Button type="primary" className={css.btnType02}>导入</Button>
-                        <Button type="primary" className={css.btnType02}>下载模版</Button>
-                    </div>
+                    <Spin
+                        spinning={this.state.loading}
+                    >
+                    <PassengerAdd
+                        lineType = {this.props.lineType}        //航线类型
+                        defaultData = {this.state.passengerMsg}     //单个乘机人信息
+                        closeModCB = {()=>{this.setState({passengerMsg:null});}}  //关闭窗口回调
+                        changeSuccCB={(allData)=>{}}                              //新增/修改成功的回调
+                        getFunction = {(changeVisible)=>{this.changeShow = changeVisible;}} //获取打开/关闭窗口的方法
+                    />
+                    {
+                        this.state.isPassed
+                        ?   <div className={css.titleBar}>
+                                <div className={css.title}>乘机人信息</div>
+                                <Button
+                                    type="primary"
+                                    className={css.btnType02}
+                                >
+                                    导出乘机人
+                                </Button>
+                            </div>
+                        :   <div className={css.titleBar}>
+                                <div className={css.title}>乘机人信息</div>
+                                <Button
+                                    type="primary"
+                                    className={css.btnType01}
+                                    onClick={()=>{this.changeShow(true);}}
+                                >
+                                    添加乘机人
+                                </Button>
+                                <Button type="primary" className={css.btnType02}>导入</Button>
+                                <Button type="primary" className={css.btnType02}>下载模版</Button>
+                            </div>
+                    }
                     <div className={css.passengerTable}>
                         <Table
                             columns={columns}
                             dataSource={dataSource}
+                            pagination={false}
                         />
-                        <div className={css.submitBox}>
-                            <Checkbox
-                                onChange={(obj)=>{log(obj);}}
-                            >
-                                确认乘机人信息无误
-                            </Checkbox>
-                            <Button size={'large'} type="primary" className={css.btnType03}>提交乘机人信息</Button>
-                        </div>
+                        {
+                            this.state.isPassed
+                            ?   ''
+                            :   <div className={css.submitBox}>
+                                    <Checkbox
+                                        onChange={(e)=>{
+                                            this.setState({
+                                                checkedMsg:e.target.checked
+                                            });
+                                        }}
+                                    >
+                                        确认乘机人信息无误
+                                    </Checkbox>
+                                    <Button
+                                        size={'large'}
+                                        type="primary"
+                                        className={css.btnType03}
+                                        onClick={()=>{
+                                            this.clickSubmitBtn();
+                                        }}
+                                    >
+                                        提交乘机人信息
+                                    </Button>
+                                    <Modal
+                                        title="提交乘机人信息"
+                                        visible={this.state.submitConfirm}
+                                        onOk={()=>{
+                                            this.setState({
+                                                submitConfirm:false,
+                                            },this.submit());
+                                        }}
+                                        okText={'是'}
+                                        onCancel={()=>{
+                                            this.setState({
+                                                submitConfirm:false,
+                                            });
+                                        }}
+                                    >
+                                        <div className={css.contentTitle}>
+                                            是否确定现在提交乘机人信息？
+                                        </div>
+                                        <div className={css.contentMsg}>
+                                            注：只可提交一次，提交后不可修改。
+                                            您也可在付完尾款/全款后和提交信息人时间截止前提交。
+                                        </div>
+                                    </Modal>
+                                </div>
+                        }
+
                     </div>
+                    </Spin>
                 </div>
             );
         }
@@ -151,6 +250,85 @@ class PassengerMsg extends Component{
             }
         }
         return result;
+    }
+
+    /**
+     * 编辑乘机人，设置默认乘机人信息后打开编辑模态框
+     * @param date
+     */
+    toUpDatePassenger(date){
+        this.setState({
+            passengerMsg:date,
+        },this.changeShow(true));
+    }
+
+    /**
+     * 点击提交按钮
+     */
+    clickSubmitBtn(){
+        if(!this.state.checkedMsg){
+            message.warning('请先选择确认乘机人信息无误');
+        }else{
+            this.setState({
+                submitConfirm:true,
+            });
+        }
+    }
+
+    /**
+     * 提交信息
+     */
+    submit(){
+        let parames = {};
+        let successCB = (code, msg, json, option)=>{
+            this.setState({
+                isPassed:true,
+                loading:false,
+            },message.success('测试-成功'));
+        };
+        let failureCB = (code, msg, option)=>{
+            this.setLoading(false);
+            message.warning('测试-出错');
+        };
+
+        // this.setLoading(true,()=>{
+        //     HttpTool.request(HttpTool.typeEnum.GET,APILXD.XXXXXXXX, successCB, failureCB, parames,
+        //         {
+        //             ipKey: "hlIP"
+        //         });
+        // });
+
+        //模拟接口
+        this.setLoading(true,()=>{
+            log(parames);
+            setTimeout(()=>{
+                let num = Math.random();
+                if(num<0.5){
+                    successCB();
+                }else{
+                    failureCB();
+                }
+            },1000);
+        });
+    }
+
+    /**
+     * 更改请求数据的状态并回调
+     * @param loading
+     * @param cb
+     */
+    setLoading(loading, cb) {
+        this.setState({
+            loading: loading
+        }, cb);
+    }
+
+    /**
+     * 返回加载的状态
+     * @returns {boolean}
+     */
+    isLoading() {
+        return this.state.loading;
     }
 }
 

@@ -30,14 +30,12 @@ class OrderFormDetail extends Component{
         let list = [0,1,2,3,5,7,8,12,13,14,15];
 
         this.state = {
+            returnState:3,          //接口返回的订单状态  （接口返回的状态需要经过转换才赋值给状态机）
             orderState:list[random],       //页面订单状态
             isPassed:false,     //乘机人信息是否已经确认
             orderID:'',         //订单ID
             upDate:0,
         };
-
-        //接口返回的订单状态  （接口返回的状态需要经过转换才赋值给状态机）
-        this.returnState = -1;
     }
 
     componentDidMount(){
@@ -151,7 +149,7 @@ class OrderFormDetail extends Component{
                     </div>
                 </div>
                     {
-                        (this.hasKey(this.state.orderState,[0,3,5,7,8,12,13])||this.hasKey(this.state.orderState,[3,5]))
+                        (this.hasKey(this.state.orderState,[0,3,5,7,8,12,13])||this.hasKey(this.state.returnState,[3,5]))
                         ?   <div className={css.itemContainer}>
                                 <Passengers
                                     orderState={this.state.orderState}
