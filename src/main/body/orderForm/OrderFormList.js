@@ -148,9 +148,19 @@ class OrderFormList extends Component{
             },{
                 title:'航程类型',
                 dataIndex:'flightType',
+                render:(text,recode)=>{
+                    let typeList = ['','单程','往返','多程'];
+                    let num = parseInt(text);
+                    return typeList[num];
+                }
             },{
                 title:'人数(成人／儿童)',
                 dataIndex:'peopleNum',
+                render:(text,recode)=>{
+                    let adultNum = recode.adult?recode.adult:0;
+                    let childNum = recode.child?recode.child:0;
+                    return (''+adultNum+'/'+childNum);
+                }
             },{
                 title:'含税价格',
                 dataIndex:'price',
@@ -160,6 +170,25 @@ class OrderFormList extends Component{
             },{
                 title:'订单状态',
                 dataIndex:'orderStatus',
+                render:(text,record)=>{
+                    let num = parseInt(text);
+                    let state = '';
+                    switch(num){
+                        case 0:state = '订单取消';break;
+                        case 1:state = '等待确认';break;
+                        case 2:state = '待付订金';break;
+                        case 3:state = '待付款';break;
+                        case 5:state = '待付尾款';break;
+                        case 7:state = '已出票';break;
+                        case 8:state = '订单关闭';break;
+                        case 12:state = '已付款(未录乘机人)';break;
+                        case 13:state = '等待出票';break;
+                        case 14:state = '支付审核中';break;
+                        case 15:state = '支付审核失败';break;
+                        default:state = '';
+                    }
+                    return state;
+                }
             },{
                 title:'操作',
                 dataIndex:'operation',
@@ -187,8 +216,10 @@ class OrderFormList extends Component{
                     cityArrive:'杭州',
                 },],
                 dateDep:'2017-09-13',
-                flightType:0,
+                flightType:1,
                 peopleNum:'12/2',
+                adult:3,
+                child:15,
                 price:'¥1200',
                 createDate:'2017-08-23 16:23',
                 orderStatus:'0',
@@ -204,8 +235,9 @@ class OrderFormList extends Component{
                 }],
                 dateDep:'2017-09-13',
                 endDate:'2017-09-13',
-                flightType:1,
+                flightType:2,
                 peopleNum:'12/2',
+                child:'3',
                 price:'¥1200',
                 createDate:'2017-08-23 16:23',
                 orderStatus:'1',
@@ -229,7 +261,8 @@ class OrderFormList extends Component{
                     ],
                 dateDep:'2017-09-13',
                 endDate:'2017-09-13',
-                flightType:2,
+                flightType:3,
+                adult:'8',
                 peopleNum:'12/2',
                 price:'¥1200',
                 createDate:'2017-08-23 16:23',

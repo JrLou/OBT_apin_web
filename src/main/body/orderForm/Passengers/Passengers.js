@@ -54,12 +54,33 @@ class PassengerMsg extends Component{
             },{
                 title:'证件类型',
                 dataIndex:'credType',
+                render:(text,record)=>{
+                    let num = parseInt(text);
+                    let type = '';
+                    switch(num){
+                        case 1:type = '身份证';break;
+                        case 2:type = '护照';break;
+                        case 3:type = '港澳通行证';break;
+                        case 4:type = '台胞证';break;
+                        default:type = '';
+                    }
+                    return type;
+                }
             },{
                 title:'证件号',
                 dataIndex:'credNum',
             },{
                 title:'性别',
                 dataIndex:'gender',
+                render:(text,record)=>{
+                    let gender = '';
+                    if(text == 1){
+                        gender = '男';
+                    }else if(text ==0){
+                        gender = '女';
+                    }
+                    return gender;
+                }
             },{
                 title:'出生日期',
                 dataIndex:'birth',
@@ -107,6 +128,7 @@ class PassengerMsg extends Component{
                 birth:'1990-03-23',
                 nation:'中国',
                 operation:'把识别id传入',
+                gender:1,
             },
             {
                 index:2,
