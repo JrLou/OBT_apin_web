@@ -5,6 +5,7 @@ import React, {Component} from 'react';
 import css from './OrderFormDetail.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
+import {hasKey} from '../tool/LXDHelp.js';
 import TitleBar from './TitleBar/index.js';
 import Passengers from './Passengers/index.js';
 import CellNewFlight from '../content/cell/CellNewFlight.js';
@@ -126,7 +127,7 @@ class OrderFormDetail extends Component{
 
     render(){
         //仅在此处做状态异常判断，如果状态不在此列，说明出现异常，页面不展示
-        if(!(this.hasKey(this.state.orderState,[0,1,2,3,5,7,8,12,13,14,15]))){
+        if(!(hasKey(this.state.orderState,[0,1,2,3,5,7,8,12,13,14,15]))){
             return(
                 <div className={css.noMessage}>订单查询中，请稍后...</div>
             );
@@ -149,7 +150,7 @@ class OrderFormDetail extends Component{
                     </div>
                 </div>
                     {
-                        (this.hasKey(this.state.orderState,[0,3,5,7,8,12,13])||this.hasKey(this.state.returnState,[3,5]))
+                        (hasKey(this.state.orderState,[0,3,5,7,8,12,13])||hasKey(this.state.returnState,[3,5]))
                         ?   <div className={css.itemContainer}>
                                 <Passengers
                                     orderState={this.state.orderState}
@@ -174,7 +175,7 @@ class OrderFormDetail extends Component{
                     </div>
                 </div>
                 {
-                    (this.hasKey(this.state.orderState,[2,3,5]))
+                    (hasKey(this.state.orderState,[2,3,5]))
                     ?<PayBottom
                         param={{
                             orderPrice:"2333",
@@ -199,22 +200,6 @@ class OrderFormDetail extends Component{
      */
     deleteOrderCB(){
         alert('订单删除啦！');
-    }
-
-    /**
-     * 判断数组中是否含有某值
-     * @param key
-     * @param array
-     * @returns {boolean}
-     */
-    hasKey(key,array){
-        let result = false;
-        if(array instanceof Array){
-            if(array.indexOf(key)>=0){
-                result = true;
-            }
-        }
-        return result;
     }
 }
 

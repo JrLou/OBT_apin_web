@@ -15,9 +15,10 @@ import React, {Component} from 'react';
 import css from './Passengers.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APILXD from "../../../../api/APILXD.js";
+import {hasKey} from '../../tool/LXDHelp.js';
 import PassengerAdd from './PassengerAdd.js';
 import {Table,Modal} from 'antd';
-import {Button,Checkbox,message,Spin} from 'antd';
+import {Button,Checkbox,message,Spin,Upload} from 'antd';
 
 class PassengerMsg extends Component{
     constructor(props){
@@ -133,7 +134,7 @@ class PassengerMsg extends Component{
             }
         ];
 
-        if(this.hasKey(this.state.orderState,[1,2])){
+        if(hasKey(this.state.orderState,[1,2])){
             return(
                 <div></div>
             );
@@ -165,13 +166,31 @@ class PassengerMsg extends Component{
                                 <div className={css.title}>乘机人信息</div>
                                 <Button
                                     type="primary"
+                                    className={css.btnType02}
+                                    style={{float:'right'}}
+                                >
+                                    下载模版
+                                </Button>
+                                <Button
+                                    type="primary"
                                     className={css.btnType01}
                                     onClick={()=>{this.changeShow(true);}}
                                 >
                                     添加乘机人
                                 </Button>
-                                <Button type="primary" className={css.btnType02}>导入</Button>
-                                <Button type="primary" className={css.btnType02}>下载模版</Button>
+                                <Upload
+                                    accept={'.xls,.xlsx'}
+                                    action={'请求地址'}
+                                    data={{id:'订单ID'}}
+                                    onChange={(obj)=>{this.upLoadStateChange(obj);}}
+                                >
+                                    <Button
+                                        type="primary"
+                                        className={css.btnType02}
+                                    >
+                                        导入
+                                    </Button>
+                                </Upload>
                             </div>
                     }
                     <div className={css.passengerTable}>
@@ -228,28 +247,11 @@ class PassengerMsg extends Component{
                                     </Modal>
                                 </div>
                         }
-
                     </div>
                     </Spin>
                 </div>
             );
         }
-    }
-
-    /**
-     * 判断数组中是否含有某值
-     * @param key
-     * @param array
-     * @returns {boolean}
-     */
-    hasKey(key,array){
-        let result = false;
-        if(array instanceof Array){
-            if(array.indexOf(key)>=0){
-                result = true;
-            }
-        }
-        return result;
     }
 
     /**
@@ -329,6 +331,13 @@ class PassengerMsg extends Component{
      */
     isLoading() {
         return this.state.loading;
+    }
+
+    /**
+     * 上传文件状态改变
+     */
+    upLoadStateChange(obj){
+        log(obj);
     }
 }
 

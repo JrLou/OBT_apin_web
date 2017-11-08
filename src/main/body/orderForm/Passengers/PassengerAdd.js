@@ -6,6 +6,7 @@ import React, {Component} from 'react';
 import css from './PassengerAdd.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APILXD from "../../../../api/APILXD.js";
+import {removeSpace} from '../../tool/LXDHelp.js';
 import moment from 'moment';
 import {Input,Radio,Modal,DatePicker,Select,Button,message,Spin} from 'antd';
 const RadioGroup = Radio.Group;
@@ -109,7 +110,7 @@ class PassengerAdd extends Component{
                   onBlur={(e)=>{
                       let value = e.target.value;
                       let result = !(!value||value.trim()=='');
-                      this.setData('name',this.removeSpace(value));
+                      this.setData('name',removeSpace(value));
                       this.setTestState('name',{state:result,msg:'请输入姓名'});
                   }}
               />
@@ -163,7 +164,7 @@ class PassengerAdd extends Component{
                     onBlur={(e)=>{
                         let value = e.target.value;
                         let result = !(!value||value.trim()=='');
-                        this.setData('nation',this.removeSpace(value));
+                        this.setData('nation',removeSpace(value));
                         this.setTestState('nation',{state:result,msg:'请输入国籍'});
                     }}
                 />
@@ -291,7 +292,7 @@ class PassengerAdd extends Component{
                     onBlur={(e)=>{
                         let value = e.target.value;
                         let result = !(!value||value.trim()=='');
-                        this.setData('issuePlace',this.removeSpace(value));
+                        this.setData('issuePlace',removeSpace(value));
                         this.setTestState('issuePlace',{state:result,msg:'请输入签发地'});
                     }}
                 />
@@ -436,20 +437,6 @@ class PassengerAdd extends Component{
      */
     isLoading() {
         return this.state.loading;
-    }
-
-
-    /**
-     * 去除字符串前后的空格
-     * @param value
-     * @returns {string}
-     */
-    removeSpace(value){
-        let result = '';
-        if(value){
-            result = value.trim();
-        }
-        return result;
     }
 
     /**

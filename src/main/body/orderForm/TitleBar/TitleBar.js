@@ -10,6 +10,7 @@
 
 import React, {Component} from 'react';
 import css from './TitleBar.less';
+import {hasKey} from '../../tool/LXDHelp.js';
 
 class TitleBar extends Component{
     constructor(props){
@@ -78,7 +79,7 @@ class TitleBar extends Component{
 
     render(){
         let state = this.state.orderState;
-        if(!(this.hasKey(state,[0,1,2,3,5,7,8,12,13,14,15]))){
+        if(!(hasKey(state,[0,1,2,3,5,7,8,12,13,14,15]))){
             return <div></div>;
         }
         return(
@@ -107,22 +108,6 @@ class TitleBar extends Component{
     deleteOrder(){
         log('执行删除操作');
         this.deleteCB();
-    }
-
-    /**
-     * 判断数组中是否含有某值
-     * @param key
-     * @param array
-     * @returns {boolean}
-     */
-    hasKey(key,array){
-        let result = false;
-        if(array instanceof Array){
-            if(array.indexOf(key)>=0){
-                result = true;
-            }
-        }
-        return result;
     }
 }
 
