@@ -45,9 +45,10 @@ window.app_getPar = function (obj) {
 window.app_open = function (obj, path, state, open, callBack) {
     log(obj);
     if (!obj || (!obj.context) || (!obj.context.router) || (!obj.context.router.push)) {
-        alert("打开页面错误,请检查");
+
         if (callBack) {
             callBack("打开页面错误,请检查");
+            throw Error("打开页面错误,请检查");
         }
     }
 
@@ -67,17 +68,17 @@ window.app_open = function (obj, path, state, open, callBack) {
     }
     if (open === "new") {
         window.open(path + get);
-    } else if (open === "self") {
-
-        window.location.href = path + get;
     } else {
-        document.documentElement.scrollTop = document.body.scrollTop = 0;
-        obj.context.router.push(
-            {
-                pathname: path,
-                state: state
-            });
+        window.location.href = path + get;
     }
+    // {
+    //     // document.documentElement.scrollTop = document.body.scrollTop = 0;
+    //     // obj.context.router.push(
+    //     //     {
+    //     //         pathname: path,
+    //     //         state: state
+    //     //     });
+    // }
 };
 
 window.apin = {};

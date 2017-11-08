@@ -5,9 +5,12 @@ import React, {Component} from 'react';
 import css from './OrderFormDetail.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
+import {hasKey} from '../tool/LXDHelp.js';
 import TitleBar from './TitleBar/index.js';
 import Passengers from './Passengers/index.js';
 import CellNewFlight from '../content/cell/CellNewFlight.js';
+import OrderInfoView from '../component/OrderInfoView/index.js';
+import PayBottom from '../content/detail/detailComp/PayBottomForDetail.js';
 
 /**
  * 订单状态说明(页面)：
@@ -23,16 +26,17 @@ import CellNewFlight from '../content/cell/CellNewFlight.js';
 class OrderFormDetail extends Component{
     constructor(props){
         super(props);
+        //模拟随机状态
+        let random = Math.floor(Math.random()*11);
+        let list = [0,1,2,3,5,7,8,12,13,14,15];
 
         this.state = {
-            orderState:5,       //页面订单状态
+            returnState:3,          //接口返回的订单状态  （接口返回的状态需要经过转换才赋值给状态机）
+            orderState:list[random],       //页面订单状态
             isPassed:false,     //乘机人信息是否已经确认
             orderID:'',         //订单ID
             upDate:0,
         };
-
-        //接口返回的订单状态  （接口返回的状态需要经过转换才赋值给状态机）
-        this.returnState = -1;
     }
 
     componentDidMount(){
@@ -106,8 +110,8 @@ class OrderFormDetail extends Component{
         //航班信息所需要的数据
         this.listData = {
             rule:"1.行李规则行李规则行李规则行李规则行李",
-            obj:flightTypeGoAndBack,
-            flightType:2
+            obj:flightTypeGo,
+            flightType:1
         };
 
         this.upView();
@@ -123,7 +127,7 @@ class OrderFormDetail extends Component{
 
     render(){
         //仅在此处做状态异常判断，如果状态不在此列，说明出现异常，页面不展示
-        if(!(this.state.orderState in [0,1,2,3,5,7,8,12,13,14,15])){
+        if(!(hasKey(this.state.orderState,[0,1,2,3,5,7,8,12,13,14,15]))){
             return(
                 <div className={css.noMessage}>订单查询中，请稍后...</div>
             );
@@ -146,7 +150,7 @@ class OrderFormDetail extends Component{
                     </div>
                 </div>
                     {
-                        (this.state.orderState in [0,3,5,7,8,12,13]||this.returnState in [3,5])
+                        (hasKey(this.state.orderState,[0,3,5,7,8,12,13])||hasKey(this.state.returnState,[3,5]))
                         ?   <div className={css.itemContainer}>
                                 <Passengers
                                     orderState={this.state.orderState}
@@ -159,12 +163,34 @@ class OrderFormDetail extends Component{
                         :   <div></div>
                     }
                 <div className={css.itemContainer}>
-                    <div className={css.itemTitle}>订单信息</div>
-                    <div className={css.itemTitle}>支付明细</div>
+                    <div className={css.orderInfoBox}>
+                        <OrderInfoView
+                            type={9}
+                            data={{
+                                orderNo:'12312312313',
+                                message:'请在XXXX之前支付',
+                                createTime:'2017-03-02',
+                            }}
+                        />
+                    </div>
                 </div>
-                <div>
-                    底部操作条
-                </div>
+                {
+                    (hasKey(this.state.orderState,[2,3,5]))
+                    ?<PayBottom
+                        param={{
+                            orderPrice:"2333",
+                            adultPrice:"2333",
+                            childPrice:"2000",
+                            childNum:2,
+                            adultNum:1,
+                            totalPrice:'33333',
+                        }}
+                        payType={this.state.orderState}
+                        timer={3888}
+                    />
+                    :''
+                }
+
             </div>
         );
     }

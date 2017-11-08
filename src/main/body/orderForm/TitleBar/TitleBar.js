@@ -10,6 +10,7 @@
 
 import React, {Component} from 'react';
 import css from './TitleBar.less';
+import {hasKey} from '../../tool/LXDHelp.js';
 
 class TitleBar extends Component{
     constructor(props){
@@ -77,10 +78,10 @@ class TitleBar extends Component{
     }
 
     render(){
-        if(!(this.state.orderState in [0,1,2,3,5,7,8,12,13,14,15])){
+        let state = this.state.orderState;
+        if(!(hasKey(state,[0,1,2,3,5,7,8,12,13,14,15]))){
             return <div></div>;
         }
-        let state = this.state.orderState;
         return(
             <div className={css.stateBar}>
                 <div className={css.stateTitle}>

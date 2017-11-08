@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Menu } from 'antd';
+import {log} from 'debug';
 
 const MenuItem = Menu.Item;
 
@@ -26,38 +27,35 @@ class Menus extends Component {
                 name: '我的积分',
                 path: '/Score'
             }],
-            selectedKey: '/'
+            selectedIndex: '0'
         };
     }
 
-    componentDidMount(){
-        try {
-            const pathname = this.props.location.pathname;
-            this.setState({
-                selectedKey: pathname
-            });
-        } catch (error) {
-            log(error);
-        }
+    componentDidMount() {
+        let par = window.app_getPar(this);
+        this.setState({
+            selectedIndex: String(par.index)
+        });
     }
 
     render() {
-        const { selectedKey, menus } = this.state;
+        const { selectedIndex, menus } = this.state;
 
         return (
 
-            <Menu prefixCls="my-ant-menu" selectedKeys={[selectedKey]} mode="horizontal">
+            <Menu prefixCls="my-ant-menu" selectedKeys={[selectedIndex]} mode="horizontal">
                 {
                     menus.map((menu, index) => {
                         return (
-                            <MenuItem key={menu.path}>
+                            <MenuItem key={index}>
                                 <span style={{ display: 'inline-block', width: '100%', height: '100%' }} onClick={() => {
                                     this.setState({
-                                        selectedKey: menu.path
+                                        selectedKey: index
                                     });
-                                    window.app_open(this.props.root, menu.path, {
-                                        step: menu.path == '/Score' ? 1 : 0
-                                    });
+                                    window.app_open(this, menu.path, {
+                                        index,
+                                        step: menu.path === '/Score' ? 1 : 0
+                                    }, "self");
                                 }}>{menu.name}</span>
                             </MenuItem>
                         );
@@ -68,5 +66,7 @@ class Menus extends Component {
         );
     }
 }
-
+Menus.contextTypes = {
+    router: React.PropTypes.object
+};
 module.exports = Menus;
