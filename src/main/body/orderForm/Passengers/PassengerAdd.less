@@ -1,0 +1,43 @@
+@import "../../../../theme.less";
+.modBody{
+  box-sizing: border-box;
+  padding: @d_spadding_small @d_spadding_center;
+}
+.modTitle{
+  font-size: @font_size_title;
+  color: @font-color;
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+.modContent{
+  overflow: hidden;
+}
+.contentItem{
+  float:left;
+  min-height: 80px;
+  box-sizing: border-box;
+  padding: 0 4%;
+  width: 50%;
+  overflow: hidden;
+}
+.errorMsg{
+  color: @error-color;
+}
+.hideMsg{
+  visibility: hidden;
+}
+.contentOneLine{
+  .contentItem;
+  float: none;
+}
+.hiddenItem{
+  display: none;
+}
+.modFooter{
+  text-align: center;
+}
+.itemTitle{
+  font-size: @font-size-base;
+  color: @font-color;
+  margin-bottom: @d_spadding_cell;
+}
