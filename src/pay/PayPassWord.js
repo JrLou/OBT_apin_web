@@ -1,41 +1,27 @@
 import React, {Component} from 'react';
 import less from './UnionPayAdd.less';
-
-import {Button, Form, Input, Icon, Spin, Modal, Radio} from 'antd';
+import {HttpTool} from "../../lib/utils/index.js";
+import {Button, Form, Input, Icon, Spin,message, Modal, Radio} from 'antd';
 
 const FormItem = Form.Item;
 
 class PayPassWord extends Component {
    constructor(props) {
       super(props);
-      this.defaultState = {
-         loading: false,
-         upLoad: false,
-         value: 0,
-         inputValue: "",
+      this.state = {
+          data:{},
+          loading: false,
       };
-      this.state = this.defaultState;
-      this.showError();
    }
 
 
-   show(loading, callBack) {
-      this.showError();
-      let s = Object.assign(this.defaultState);
-      s.loading = loading;
-      this.setState(s, callBack);
+   show(loading, data,callBack) {
+      this.setState({
+          loading,
+          data,
+      }, callBack);
    }
 
-   showError(msg) {
-      if (msg) {
-         this.validateStatus = "error";
-         this.help = msg;
-      } else {
-         this.validateStatus = "";
-         this.help = "";
-      }
-
-   }
 
    render() {
       if (!this.state.loading) {
@@ -52,12 +38,10 @@ class PayPassWord extends Component {
          },
       };
 
-
-
       return (
          <Modal
             visible={true}
-            title={"添加银联卡"}
+            title={"验证身份信息"}
             style={{
                position: "absolute",
                margin: "auto",
@@ -75,52 +59,31 @@ class PayPassWord extends Component {
             }}
          >
            <div>
-              <FormItem
-                  className={less.cardNumForm}
-                  {...formItemLayout}
-                  label={"登录密码"}
-                  validateStatus={this.validateStatus}
-                  help={this.help}
-              >
-                 <Input
-                     size={"large"}
-                     style={{width: "240px"}}
-                     className={less.cardNumIpt}
-                     onChange={(e) => {
-                         let v = e.target.value;
-                         if (v) {
-                             if (/^[0-9a-zA-Z]{8,16}$/.test(v)) {
-                                 //成功
-                                 this.showError();
-                             } else {
-                                 this.showError("请输入正确的卡号");
-                             }
-                         } else {
-                             this.showError("请输入卡号");
-                         }
-                         this.setState({
-                             inputValue: v
-                         });
-                     }}
-                     prefix={<Icon type="credit-card" style={{fontSize: 13}}/>}
-                     placeholder={"请输入登录密码"}/>
+               <InputLayout
+                   moblie={this.state.data.phone}
+                   ref={(ref) => {
+                   this.inputLayout = ref;
+               }}/>
                  <Button
                      type="primary"
                      className={less.openCardBtn}
                      onClick={() => {
                          //开始上传
-                         this.show(false,()=>{
+                         let data = this.inputLayout.getData();
+                         if (data.error) {
+                             message.error(data.error);
+                             return;
+                         }
+                         this.show(false,null,()=>{
                              if (this.props.onAction) {
-                                 this.props.onAction(this.state.inputValue);
+                                 this.props.onAction(data.moblie,data.code);
                              }
                          });
-
 
                      }}
                  >
                     付款
                  </Button>
-              </FormItem>
            </div>
          </Modal>
       );
@@ -128,6 +91,152 @@ class PayPassWord extends Component {
 
 }
 
+class InputLayout extends Component {
+    constructor(props) {
+        super(props);
+        this.defaultTime = 60;
+        this.state = {
+            moblie:this.props.moblie|| "",
+            code: "",
+            time: 0,
+            loading: false,
+        };
+    }
+    componentWillUnmount() {
+        this.un = true;
+    }
+
+    getData() {
+        return {
+            moblie: this.state.moblie,
+            code: this.state.code,
+            error: this.state.moblie.length !== 11 ? "请填写正确的手机号" : (this.state.code.length !== 6 ? "请填写正确的验证码" : null)
+        };
+
+    }
+
+    loadPhoneCode(param, cb) {
+        HttpTool.request(HttpTool.typeEnum.POST, "/bohl/orderapi/v1.0/orders/code", (code, msg, json, option) => {
+            cb(code,msg,json);
+        }, (code, msg, option) => {
+            cb(code,msg, {});
+        }, param);
+        // setTimeout(() => {
+        //     let code = (Math.random() * 10).toFixed(0) - 5;
+        //     //todo 没有data吧?
+        //     let data = [];
+        //     cb(code, code > 0 ? "获取成功" : "获取失败", data);
+        // }, Math.random() * 1000);
+    }
+
+    autoTime(time) {
+        if (time > 0) {
+            let diff = time - 1;
+            this.setState({
+                time: diff
+            }, () => {
+                setTimeout(() => {
+                    this.autoTime(diff);
+                }, 1000);
+            });
+        } else {
+            if(this.un){
+                return;
+            }
+            this.setState({
+                time: 0
+            });
+        }
+
+    }
+
+    render() {
+
+        return (
+            <div>
+                <div style={{lineHeight: "40px"}}>
+                    <label htmlFor="mobileIpt" className={less.label}>账户手机号：</label>
+                    <Input
+                        id="mobileIpt"
+                        size="large"
+                        disabled={true}
+                        defaultValue={this.state.moblie}
+                        onChange={(e) => {
+                            let v = e.target.value;
+                            this.setState({
+                                moblie: v
+                            }, () => {
+
+                            });
+
+                        }}
+                        style={{width: 130}}
+                        prefix={<Icon type="mobile" style={{fontSize: 13}}/>} placeholder={"请输入账户手机号"}
+                    />
+                </div>
+                <div style={{lineHeight: "40px"}}>
+                    <label htmlFor="codeIpt" className={less.label}>短信验证码：</label>
+                    <Input
+                        id="codeIpt"
+                        size="large"
+                        onChange={(e) => {
+                            let v = e.target.value;
+                            this.setState({
+                                code: v
+                            });
+                        }}
+                        style={{width: 130, marginRight:"15px"}}
+                        prefix={<Icon type="key" style={{fontSize: 13}}/>}
+                        placeholder={"请输入短信验证码"}
+                    />
+                    <Button
+                        size={"large"}
+                        loading={this.state.loading}
+                        type="primary"
+                        disabled={this.state.time > 0 || this.state.moblie.length !== 11}
+                        onClick={() => {
+                            if (this.state.loading || this.state.time > 0) {
+                                return;
+                            }
+                            this.setState({
+                                loading: true
+                            });
+                            this.loadPhoneCode({
+                                phone:this.state.moblie,
+                            }, (code, msg, data) => {
+                                if(code>0){
+                                    message.success(msg);
+                                }else{
+                                    this.setState({
+                                        loading: false
+                                    });
+                                    message.error(msg);
+                                    return;
+                                }
+
+                                this.setState({
+                                    loading: false
+                                }, () => {
+                                    let succ = !!code;
+                                    if (succ) {
+                                        this.autoTime(this.defaultTime);
+                                    } else {
+                                        message.error(msg);
+                                    }
+                                });
+
+                            });
+                        }}
+                    >
+                        {(this.state.time > 0 ? ("(" + this.state.time + "s)") : "") + "发送验证码"}
+
+                    </Button>
+                </div>
+
+            </div>
+        );
+    }
+}
 PayPassWord.contextTypes = {
    router: React.PropTypes.object
 };
