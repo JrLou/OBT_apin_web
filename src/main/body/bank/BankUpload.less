@@ -38,10 +38,14 @@
             }
             .form_control {
                width: 240px;
+
             }
          }
 
          :global {
+            .ant-upload-list-item.ant-upload-list-item-undefined{
+               //display: none!important;//这个是上传的时候的第一个div
+            }
             .forUploadStyle .ant-upload.ant-upload-select-picture-card > .ant-upload {
                height: 200px;
                display: flex;

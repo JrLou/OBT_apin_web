@@ -9,7 +9,7 @@ class BankUpload extends Component {
    constructor(props) {
       super(props);
       this.state = {
-         error: "",
+         errorMsg: "",
       };
    }
 
@@ -18,28 +18,33 @@ class BankUpload extends Component {
    }
 
    //获取url上面传来的数据
-   getData() {
+   getInfo() {
       let msgString = decodeURIComponent(window.location.search).replace('?', '');
-      let dataArr = msgString.split("=");//["data", "{"id":1,"price":39400}"]
+      let dataArr = msgString.split("=");//["data", "{"orderId":1,"price":39400}"]
       let data = {};
       for (let i = 0; i < dataArr.length; i += 2) {
          data[dataArr[i]] = JSON.parse(dataArr[i + 1]);
       }
-      return data.data;
+      return data.data;//{"orderId":1,"price":39400}
    }
 
    loadPayInfo(param, cb) {
-      let data = this.getData();
-      if (!data || !data.id || !data.price) {
+      let data = this.getInfo();
+      console.log("data");
+      console.log(data);
+      if (!data || !data.orderId || !data.price) {
          this.setState({
-            error: "缺少支付信息"
+            errorMsg: "缺少支付信息"
          });
       } else {
          this.setState({
-            transferAmount: data.price / 100
+            price: data.price,
+            orderId: data.orderId,
+            payment: data.payment//todo 定金？尾款？ 需要喜峰哥页面传过来
          });
       }
    }
+
 
    getdefaultView() {
       return (
@@ -71,7 +76,7 @@ class BankUpload extends Component {
                      ref={(ref) => {
                         this.inputLayout = ref;
                      }}
-                     transferAmount={this.state.transferAmount}
+                     price={this.state.price}
                   />
 
                </div>
@@ -80,7 +85,9 @@ class BankUpload extends Component {
                <div className={less.bankBox_top}>上传转账证明</div>
                <div className={less.bankBox_middle}>
                   <div>
-                     <UploadCmp/>
+                     <UploadCmp ref={(ref)=>{
+                        this.uploadCmp = ref;
+                     }}/>
                   </div>
                </div>
             </div>
@@ -89,66 +96,7 @@ class BankUpload extends Component {
                   type={"primary"}
                   className={less.submitBtn}
                   onClick={() => {
-                     //第一步:得到所有数据
-                     // 1填写的所有Form
-                     //2上传了至少一张图
-
-                     let data = this.inputLayout.getData();
-                     if (data.error) {
-                        message.error(data.error);
-                        return;
-                     }
-                     data.urlArr = [];//后台获取的数据一条一条push进去
-                     data.showType = "paying";
-
-                     this.panel.show(true, {
-                        content: "正在提交...",
-                        // title: "支付信息",
-                        showType: "verpay"
-                     }, () => {
-                        this.loadSubmit(data, (code, msg, data) => {
-                           if (code > 0) {
-                              //支付成功
-                              this.panel.show(true, {
-                                 showType: "success",
-                                 content: msg,
-                              }, () => {
-                                 //
-                              });
-                           } else {
-                              //支付失败
-                              const connectUs = <a
-                                 onClick={() => {
-                                    if (window.ysf && window.ysf.open) {
-                                       // window.ysf.open();
-                                       window.ysf.product({
-                                          show: 1, // 1为打开， 其他参数为隐藏（包括非零元素）
-                                          title: "订单支付异常",
-                                          desc: "异常原因:" + (this.state.error || "未知"),
-                                          note: "订单号:" + this.id,
-                                          url: window.location.host,
-                                          success: function () {     // 成功回调
-                                             window.ysf.open();
-                                          },
-                                          error: function () {       // 错误回调
-                                             // handle error
-                                          }
-                                       });
-                                    } else {
-                                       message.warn("");
-                                    }
-                                 }}>
-                                 联系客服
-                              </a>;
-                              this.panel.show(true, {
-                                 showType: "error",
-                                 content: <div>{msg}{connectUs}</div>,
-                              }, () => {
-                                 //
-                              });
-                           }
-                        });
-                     });
+                     this.handleSubmit();
                   }}
                >
                   提交
@@ -167,7 +115,7 @@ class BankUpload extends Component {
                   else if (action === "ok" && showType === "success") {
                      //打开订单页
                      window.app_open(this, "/Order", {
-                        id: this.id
+                        orderId: this.orderId
                      }, "self");
                   }
 
@@ -182,9 +130,95 @@ class BankUpload extends Component {
    getErrorView() {
       return (
          <div>
-            {this.state.error}
+            <h1 style={{color:"red", textAlign: "center"}}>{this.state.errorMsg}</h1>
          </div>
       );
+   }
+
+   getAllData(){
+      let data = this.inputLayout.getData();
+
+      let backUrlArr = this.uploadCmp.backUrl.map((currV)=>{
+         return currV.url;
+      });
+      let stringUrl = backUrlArr.join(",");
+      data.voucherUrl = stringUrl;
+
+      Object.assign(data, this.state);
+      data.payType = 0;//线下支付；
+      console.log("~~~~~~~~~~~~~~~~~~~~~~~~data");
+      console.log(data);
+      return data;
+   }
+
+   handleSubmit(){
+      //第一步:得到所有数据
+      // 1填写的所有Form
+      //2上传了至少一张图
+      let data = this.getAllData();
+      console.log("data");
+      console.log(data);
+      if (data.error) {
+         message.error(data.error);
+         return;
+      }
+
+      if(!data.voucherUrl.length){
+         message.error("请上传图片");
+         return;
+      }
+
+      data.showType = "paying";
+
+
+      this.panel.show(true, {
+         content: "正在提交...",
+         // title: "支付信息",
+         showType: "verpay"
+      }, () => {
+         this.loadSubmit(data, (code, msg, data) => {
+            if (code > 0) {
+               //支付成功
+               this.panel.show(true, {
+                  showType: "success",
+                  content: msg,
+               }, () => {
+                  //
+               });
+            } else {
+               //支付失败
+               const connectUs = <a
+                  onClick={() => {
+                     if (window.ysf && window.ysf.open) {
+                        // window.ysf.open();
+                        window.ysf.product({
+                           show: 1, // 1为打开， 其他参数为隐藏（包括非零元素）
+                           title: "订单支付异常",
+                           desc: "异常原因:" + (this.state.errorMsg || "未知"),
+                           note: "订单号:" + this.orderId,
+                           url: window.location.host,
+                           success: function () {     // 成功回调
+                              window.ysf.open();
+                           },
+                           error: function () {       // 错误回调
+                              // handle error
+                           }
+                        });
+                     } else {
+                        message.warn("");
+                     }
+                  }}>
+                  联系客服
+               </a>;
+               this.panel.show(true, {
+                  showType: "error",
+                  content: <div>{msg}{connectUs}</div>,
+               }, () => {
+                  //
+               });
+            }
+         });
+      });
    }
 
    //模拟提交接口
@@ -196,6 +230,17 @@ class BankUpload extends Component {
          let data = {};
          cb(code, code > 0 ? " 凭证上传成功，审核中" : "网络异常，上传失败！如有疑问，", data);
       }, Math.random() * 1000 + 2000);
+      //todo
+
+
+      HttpTool.request(HttpTool.typeEnum.POST,
+         "/orderapi/v1.0/orders/pay/offline",
+         (code, msg, json, option) => {
+            cb(code, msg, json);
+
+         }, (code, msg, option) => {
+            cb(code, msg);
+         }, param);
    }
 
    render() {
@@ -204,7 +249,7 @@ class BankUpload extends Component {
             {...this.props}
             className={less.content}
          >
-            {this.state.error ? this.getErrorView() : this.getdefaultView()}
+            {this.state.errorMsg ? this.getErrorView() : this.getdefaultView()}
          </div>
       );
    }
@@ -219,6 +264,7 @@ class UploadCmp extends Component {
          fileList: [],
       };
       this._fileList = [];
+      this.backUrl = [];
    }
 
    isImageTypeOk(file) {
@@ -236,21 +282,26 @@ class UploadCmp extends Component {
 
    //模拟上传的接口
    loadUploadImg(param, cb) {
-      setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 5;
-         let data = {};
-         data.urlArr = [];
-         data.urlArr.push("后台返回的体条url" + (Math.random() * 10).toFixed(0).repeat(4));
-         cb(code, code > 0 ? "开通成功" : "开通失败", data);
-      }, Math.random() * 1000 + 1000);
+      // setTimeout(() => {
+      //    let code = (Math.random() * 10).toFixed(0) - 5;
+      //    let data = {};
+      //    data.urlArr = [];
+      //    data.urlArr.push("后台返回的体条url" + (Math.random() * 10).toFixed(0).repeat(4));
+      //    cb(code, code > 0 ? "开通成功" : "开通失败", data);
+      // }, Math.random() * 1000 + 1000);
 
       HttpTool.request(HttpTool.typeEnum.POST,
          "/orderapi/v1.0/orders/voucherUp",
          (code, msg, json, option) => {
-
+            cb(code, msg, json);
 
          }, (code, msg, option) => {
+            cb(code, msg);
          }, param);
+   }
+
+   saveImgUrlArr() {
+
    }
 
    beforeUpload(file) {
@@ -260,55 +311,67 @@ class UploadCmp extends Component {
       }
       console.log("图片上传....");
 
-      // this.loadUploadImg({}, (code, msg, data) => {
-      //    console.log("code");
-      //    console.log(code);
-      //    if (code < 0) {
-      //       message.error("图片上传失败");
-      //       console.log("图片上传失败");
-      //       return false;
-      //    }
-      // });
 
-      // let r = new FileReader();
-      // r.readAsDataURL(file);
-      // r.onload = (e) => {
-      //    let image_base64 = e.target.result;
-      //
-      //    this._fileList.push({
-      //       uid: new Date().getTime(),
-      //       name: file.name,
-      //       status: 'done',
-      //       thumbUrl: image_base64,
-      //    });
-      //
-      //    this.setState({
-      //       fileList: this._fileList,
-      //       pzUrl: image_base64
-      //    }, () => {
-      //       console.log(this.state.fileList);
-      //    });
-      //    console.log("onload的return false");
-      //    return false;
-      // };
-      // console.log("阻止上传的return false");
-      // return false;
-   }
+      let r = new FileReader();
+      r.readAsDataURL(file);
+      r.onload = (e) => {
+         let image_base64 = e.target.result;
 
-   handleCancel() {
-      this.setState({previewVisible: false});
+         this._fileList.push({
+            uid: new Date().getTime(),
+            name: file.name,
+            status: 'done',
+            thumbUrl: image_base64,
+         });
+
+         this.loadUploadImg({pic: this._fileList[this._fileList.length - 1].thumbUrl}, (code, msg, data) => {
+            if (code < 0) {
+               message.error(msg + "图片上传失败");
+               return false;//todo 这个false会不会到beforUpload里来？
+            } else {
+               this.setState({
+                  fileList: this._fileList
+               });
+               let _backurl = {
+                  url: data,
+                  uid: this._fileList[this._fileList.length - 1].uid
+               };
+               this.backUrl.push(_backurl);
+               console.log("完成了setState.fileList的更新视图");
+               console.log("本地存储的后台返回url为：backUrl:");
+               console.log(this.backUrl);
+            }
+         });
+         console.log("onload的return false");
+         return false;
+      };
+      console.log("阻止上传的return false");
+      return false;
    }
 
    handleChange({fileList}) {
-      this.setState({fileList}, () => {
-         console.log("arguments");
-         console.log(arguments);
-      });
+      console.log("onchange");
+      console.log(fileList);
+      // this.setState({fileList}, () => {
+      //    console.log("arguments");
+      //    console.log(arguments);
+      // });
+   }
 
+   onRemove(file) {
+      console.log("删除的file为：");
+      console.log(file);
+      this._fileList = this._fileList.filter((currV, index, arr) => {
+         return currV.uid !== file.uid;
+      });
+      this.setState({fileList:this._fileList});
+      this.backUrl = this.backUrl.filter((currV, index, arr) => {
+         return currV.uid !== file.uid;
+      });
    }
 
    render() {
-      const {previewVisible, previewImage, fileList} = this.state;
+      const {fileList} = this.state;
       const uploadButton = (
          <div>
             <Icon className={less.upload_text1} type="plus"/>
@@ -324,12 +387,10 @@ class UploadCmp extends Component {
                fileList={fileList}
                beforeUpload={this.beforeUpload.bind(this)}
                onChange={this.handleChange.bind(this)}
+               onRemove={this.onRemove.bind(this)}
             >
                {fileList.length >= 6 ? null : uploadButton}
             </Upload>
-            <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel.bind(this)}>
-               <img alt="example" style={{width: '100%'}} src={previewImage}/>
-            </Modal>
          </div>
       );
    }
@@ -340,9 +401,9 @@ class InputLayout extends Component {
       super(props);
       this.state = {
          accountName: "",//账户名
-         cardNum: "",//卡号
-         bankName: "",//银行名
-         transferAmount: this.props.transferAmount,//转账金额
+         account: "",//卡号
+         bank: "",//银行名
+         price: this.props.price,//转账金额
          error: null,
          loading: false,
       };
@@ -357,24 +418,24 @@ class InputLayout extends Component {
       });
    }
 
-   isRightCardNum(cardNum) {
-      return cardNum.length >= 12 && cardNum.length <= 24;
+   isRightCardNum(account) {
+      return account.length >= 12 && account.length <= 24;
    }
 
 
    getData() {
       return {
          accountName: this.state.accountName,
-         cardNum: this.state.cardNum,
-         bankName: this.state.bankName,
-         transferAmount: this.state.transferAmount,
+         account: this.state.account,
+         bank: this.state.bank,
+         price: this.state.price,
          error: !this.state.accountName
             ?
             "请填写账户名"
-            : (!this.isRightCardNum(this.state.cardNum)
+            : (!this.isRightCardNum(this.state.account)
                   ?
                   "请填写正确的卡号"
-                  : (!this.state.bankName ? "请填写银行名" : null)
+                  : (!this.state.bank ? "请填写银行名" : null)
             )
       };
 
@@ -384,7 +445,7 @@ class InputLayout extends Component {
    loadBankName(param, cb) {
       setTimeout(() => {
          let code = (Math.random() * 10).toFixed(0) - 1;
-         let data = {bankName: "中国工商银行"};
+         let data = {bank: "中国工商银行"};
          cb(code, "", data);
       }, Math.random() * 1000 + 500);
    }
@@ -410,25 +471,25 @@ class InputLayout extends Component {
                   />
                </div>
                <div className={less.form_group + " " + less.fl}>
-                  <label htmlFor="cardNum" className={less.control_label}>卡号：</label>
+                  <label htmlFor="account" className={less.control_label}>卡号：</label>
                   <br/>
                   <Input
                      {...iptProps}
-                     id="cardNum"
+                     id="account"
                      onChange={(e) => {
-                        this.setFomrFileds(e, "cardNum");
+                        this.setFomrFileds(e, "account");
                      }}
                      onBlur={() => {
                         //请求查询银行的接口
-                        if (this.isRightCardNum(this.state.cardNum)) {
+                        if (this.isRightCardNum(this.state.account)) {
                            console.log("查询中");
-                           this.loadBankName(this.state.cardNum, (code, msg, data) => {
+                           this.loadBankName(this.state.account, (code, msg, data) => {
                               if (code > 0) {
                                  this.setState({
-                                    bankName: data.bankName,
-                                    getBankName: true
+                                    bank: data.bank,
+                                    getbank: true
                                  }, () => {
-                                    console.log(this.state.bankName);
+                                    console.log(this.state.bank);
                                  });
                                  return;
                               }
@@ -436,8 +497,8 @@ class InputLayout extends Component {
                         }
 
                         this.setState({
-                           bankName: "",
-                           getBankName: false
+                           bank: "",
+                           getbank: false
                         });
 
                      }}
@@ -448,27 +509,27 @@ class InputLayout extends Component {
 
             <div className={less.container2Son}>
                <div className={less.form_group + " " + less.fl}>
-                  <label htmlFor="bankName" className={less.control_label}>银行：</label>
+                  <label htmlFor="bank" className={less.control_label}>银行：</label>
                   <br/>
                   <Input
                      {...iptProps}
-                     readOnly={this.state.getBankName || this.isRightCardNum(this.state.cardNum)}
-                     value={this.state.bankName}
-                     id="bankName"
+                     readOnly={this.state.getbank || this.isRightCardNum(this.state.account)}
+                     value={this.state.bank}
+                     id="bank"
                      onChange={(e) => {
-                        this.setFomrFileds(e, "bankName");
+                        this.setFomrFileds(e, "bank");
                      }}
                      prefix={<Icon type="bank" style={{fontSize: 13}}/>} placeholder={"请输入转账银行"}
                   />
                </div>
 
                <div className={less.form_group + " " + less.fl}>
-                  <label htmlFor="transferAmount" className={less.control_label}>转账金额：</label>
+                  <label htmlFor="price" className={less.control_label}>转账金额：</label>
                   <br/>
                   <Input
                      {...iptProps}
-                     id="transferAmount"
-                     value={this.state.transferAmount + "元"}
+                     id="price"
+                     value={this.state.price/100 + "元"}
                      readOnly={true}
                      prefix={<Icon type="pay-circle" style={{fontSize: 13}}/>}
                   />
