@@ -10,6 +10,7 @@ import LineHeadTitle from "./line/LineHeadTitle.js";
 import MyCalendar from "./line/MyCalendar.js";
 import MyAlert from "./line/MyAlert.js";
 import LoadingView from "../component/LoadingView.js";
+import FlightCompany from "./line/FlightCompany.js";
 
 
 
@@ -214,7 +215,6 @@ class page extends Component {
                 return;
             }
         }
-        this.myLineInfor.refreshView([],this.flightType);
         this.loadingView.refreshView(true);
         var param = {
             "depCity":this.depCity,
@@ -223,17 +223,20 @@ class page extends Component {
             "day":days,
             "depDate":date
         };
+        this.loadingView.refreshView(true);
+        // this.myLineInfor.refreshLineView(this.myLineData,this.flightType,false);
         var success = (code, msg, json, option) => {
-            this.loadingView.refreshView(false,()=>{
-                if (json&&json.length>0){
-                    let y = this.myflightCon?this.myflightCon.offsetTop:0;
-                    let isBigZero = y-150;
-                    if (isBigZero>0){
-                        this.scrollTo(isBigZero);
-                    }
+            this.loadingView.refreshView(false);
+            this.myLineData = json;
+            this.upView();
+            // this.myLineInfor.refreshLineView(json,this.flightType,true);
+            if (json&&json.length>0){
+                let y = this.myflightCon?this.myflightCon.offsetTop:0;
+                let isBigZero = y-150;
+                if (isBigZero>0){
+                    this.scrollTo(isBigZero);
                 }
-                this.myLineInfor.refreshView(json,this.flightType);
-            });
+            }
 
         };
         var failure = (code, msg, option) => {
@@ -306,11 +309,15 @@ class page extends Component {
 
                 <div className={css.thirdContent}
                      ref={(div)=>this.myflightCon = div}>
-                    <LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor}
-                               myData = {this.myData}
-                               callBack={()=>{
-                                   this.myAlert.showView();
-                               }}/>
+                    {(this.myLineData&&this.myLineData.length>0)?(<div className={css.title}>航班信息</div>):null}
+                    {this.createFlightCompany(this.myLineData,this.flightType, this.myData)}
+
+
+                    {/*<LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor}*/}
+                               {/*myData = {this.myData}*/}
+                               {/*callBack={()=>{*/}
+                                   {/*this.myAlert.showView();*/}
+                               {/*}}/>*/}
                 </div>
 
                 <MyAlert ref={(a)=>this.myAlert = a}/>
@@ -333,6 +340,22 @@ class page extends Component {
             }
         }
     }
+    createFlightCompany(dataArr,flightType,myData){
+        if (!dataArr||dataArr.length<1||!myData){
+            return null;
+        }
+        return dataArr.map((data,index)=>{
+            return (<FlightCompany key={index}
+                                   isNewData={true}
+                                   dataItem = {data}
+                                   flightType={flightType==2}
+                                   myData = {myData}
+                                   callBack={()=>{
+                                       this.myAlert.showView();
+                                   }}
+            />);
+        });
+    }
 }
 
 class LineInfor extends Component {
@@ -340,19 +363,27 @@ class LineInfor extends Component {
         super(props);
         this.state = {
             dataSource: [],
-            flightType:true
+            flightType:true,
+            isLoading:false,
+            isAn:false
         };
     }
-    refreshView(dataSource,flightType) {
+    refreshLineView(dataSource,flightType,isAn,callBack) {
         this.setState({
             dataSource:dataSource,
-            flightType:flightType==2
+            flightType:flightType==2,
+            isAn:isAn,
+        },()=>{
+            if (callBack){
+                callBack;
+            }
         });
     }
+
     render() {
         let {dataSource,flightType} = this.state;
         let {myData} = this.props;
-        return (<div>
+        return (<div className={css.lineView}>
             {(dataSource&&dataSource.length>0)?(<div className={css.title}>航班信息</div>):null}
             {this.createCell(dataSource,flightType,myData)}
         </div>);
@@ -367,8 +398,8 @@ class LineInfor extends Component {
             let airlineInfo = (dataItem.airlineInfo&&dataItem.airlineInfo.length>0)?dataItem.airlineInfo:[];
             let airlineInfo_One = airlineInfo[0]?airlineInfo[0]:{};
             let desc = (airlineInfo_One.depDate||"")+" "+(airlineInfo_One.depTime||"")+" --> "+(airlineInfo_One.arrDate||"")+" "+(airlineInfo_One.arrTime||"")+" "+(airlineInfo_One.depAirport||"")+"-->"+(airlineInfo_One.arrAirport||"");
-            var itemView = (<div key={i}>
-                <div className={css.cell}>
+            var itemView = (<div key={i} className={css.cellBg}>
+                <div className={this.state.isAn?css.cell:css.hiddenCell} >
                     <div className={css.left}>
                         <div className={css.table}>
                             {this.createItemCell(airlineInfo,flightType)}
@@ -482,9 +513,7 @@ class LineInfor extends Component {
                             </div>
 
                             <div className={css.totalTime}>
-                                <div className={css.totalTimeText}>
-                                    {totalText}
-                                </div>
+                                <div className={css.totalTimeText}>{totalText}</div>
                                 <img className={css.line} src={require('../../../images/trip_line.png')}/>
                             </div>
                             <div className={css.timeLineItem} style={{textAlign:"left"}}>
