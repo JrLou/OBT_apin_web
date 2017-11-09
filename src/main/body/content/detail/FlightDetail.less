@@ -96,6 +96,7 @@
   composes: itemCenter;
   width: 82%;
   background: @c_bg_white;
+  padding: @d_spadding_big @d_spadding_center;
 }
 
 //右边的样式
@@ -103,32 +104,27 @@
   composes: itemCenter;
   width: 18%;
   background: @c_bg_white;
-}
-
-.priceText{
-  text-align: right;
-  font-size: @font_size_small;
-  color: @c_title_gray;
-}
-.priceTextColor{
-  font-size: 12px;
-  color: @c_text_red;
-}
-.priceTextFont{
-  composes: priceTextColor;
-  font-size: 22px;
-}
-
-.btn{
-  float: right;
-  width: 90px;
-  background-color: @c_text_red;
-  height: 35px;
-  line-height: 35px;
-  border-radius: 2px;
+  border-color: @c_border_gray;
+  border-style: solid;
+  border-width: 0 0 0 1px;
   text-align: center;
+}
+.ruleDiv{
+  cursor: pointer;
+  margin-left: 100%;
+  width: 60px;
+  color: @c_theme_blue;
+  opacity: 0.8;
   font-size: @font_size_small;
-  color: #FFFFFF;
+  letter-spacing: 0;
+  border-width: 0 0 1px 0;
+  border-style: dashed;
+  border-color: @c_border_blue;
+}
+.rule{
+  color: @c_title_black;
+  font-size: @font_size_cell;
+  letter-spacing: 0;
 }
 
 
@@ -185,6 +181,18 @@
   width:200px;
   height: 40px;
   line-height: 40px;
+}
+.priceText{
+  height: 40px;
+  line-height: 40px;
+}
+.priceTextColor{
+  font-size: @font_size_cell;
+  color: @c_text_red;
+}
+.priceTextFont{
+  composes: priceTextColor;
+  font-size: 20px;
 }
 
 

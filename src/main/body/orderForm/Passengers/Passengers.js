@@ -25,11 +25,14 @@ class PassengerMsg extends Component{
         super(props);
         this.state = {
             orderState:this.props.orderState,
-            orderID:this.props.orderID,
+            // orderId:this.props.orderID,
+            orderId:'16b3639900f54a86b9116af77b088d75',
             dataSource:this.props.defaultData?this.props.defaultData:[],
             isPassed:this.props.isPassed?this.props.isPassed:false,     //是否已经确认了乘机人
             checkedMsg:false,       //是否已经勾选'确认乘机人信息'
-            submitConfirm:false,
+            submitConfirm:false,    //确认乘机人询问框
+            deleteConfirm:false,    //删除乘机人询问框
+            deleteMsg:'',          //将要被删除的乘机人的姓名
 
             passengerMsg:null,      //打开新增／修改乘机人窗口时，传入的数据
             lineType:1,             //航线类型  1：国内  2：国际
@@ -109,7 +112,7 @@ class PassengerMsg extends Component{
                             <div
                                 className={css.operationDelete}
                                 onClick={()=>{
-                                    alert('删除');
+                                    this.clickDeleteBtn(record);
                                 }}
                             >
                                 删除
@@ -167,6 +170,7 @@ class PassengerMsg extends Component{
                         spinning={this.state.loading}
                     >
                     <PassengerAdd
+                        orderId = {this.props.orderId}
                         lineType = {this.props.lineType}        //航线类型
                         defaultData = {this.state.passengerMsg}     //单个乘机人信息
                         closeModCB = {()=>{this.setState({passengerMsg:null});}}  //关闭窗口回调
@@ -267,6 +271,25 @@ class PassengerMsg extends Component{
                                             您也可在付完尾款/全款后和提交信息人时间截止前提交。
                                         </div>
                                     </Modal>
+                                    <Modal
+                                        title="删除乘机人"
+                                        visible={this.state.deleteConfirm}
+                                        onOk={()=>{
+                                            this.setState({
+                                                deleteConfirm:false,
+                                            },this.toDeletePassenger());
+                                        }}
+                                        okText={'是'}
+                                        onCancel={()=>{
+                                            this.setState({
+                                                deleteConfirm:false,
+                                            });
+                                        }}
+                                    >
+                                        <div className={css.contentTitle}>
+                                            {`是否确定删除乘机人：${this.state.deleteMsg.name} ？`}
+                                        </div>
+                                    </Modal>
                                 </div>
                         }
                     </div>
@@ -360,6 +383,56 @@ class PassengerMsg extends Component{
      */
     upLoadStateChange(obj){
         log(obj);
+    }
+
+    /**
+     * 点击删除按钮
+     * @param data
+     */
+    clickDeleteBtn(data){
+        this.setState({
+            deleteMsg:data,
+            deleteConfirm:true,
+        });
+    }
+
+    /**
+     * 删除乘客
+     * @param data
+     */
+    toDeletePassenger(){
+        let parames = {};
+        let successCB = (code, msg, json, option)=>{
+
+            this.setLoading(false);
+        };
+
+        let failureCB = (code, msg, option)=>{
+            this.setLoading(false);
+            // message.error(msg);
+            message.error('测试-请求错误的回调');
+        };
+
+        // this.setLoading(true,()=>{
+        //     HttpTool.request(HttpTool.typeEnum.GET,APILXD.XXXXXXXX, successCB, failureCB, parames,
+        //         {
+        //             ipKey: "hlIP"
+        //         });
+        // });
+
+        //模拟接口
+        this.setLoading(true,()=>{
+            log(parames);
+            setTimeout(()=>{
+                let num = Math.random();
+                if(num<0.5){
+                    successCB();
+                }else{
+                    failureCB();
+                }
+            },1000);
+        });
+
     }
 }
 

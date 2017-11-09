@@ -16,6 +16,7 @@ class PassengerAdd extends Component{
     constructor(props) {
         super(props);
         this.state = {
+            orderId:this.props.orderId?this.props.orderId:'',   //订单Id
             lineType:this.props.lineType?this.props.lineType:1,  //1:国内  2：国际
             credType:this.props.lineType?this.props.lineType:1,     //证件类型
             visible:false,  //模态框显示
@@ -484,6 +485,7 @@ class PassengerAdd extends Component{
      */
     submitMsg(isAdd) {
         let parames = this.state.data;
+        parames.orderId = this.state.orderId;
         if(!isAdd){
             //如果是修改,则还需要添加id
         }
@@ -501,25 +503,25 @@ class PassengerAdd extends Component{
             message.error('失败');
         };
 
-        // this.setLoading(true,()=>{
-        //     HttpTool.request(HttpTool.typeEnum.GET,APILXD.XXXXXXXX, successCB, failureCB, parames,
-        //         {
-        //             ipKey: "hlIP"
-        //         });
-        // });
+        this.setLoading(true,()=>{
+            HttpTool.request(HttpTool.typeEnum.POST,APILXD.addPassenger, successCB, failureCB, parames,
+                {
+                    ipKey: "hlIP"
+                });
+        });
 
         //模拟接口
-        this.setLoading(true,()=>{
-            log(parames);
-            setTimeout(()=>{
-                let num = Math.random();
-                if(num<0.5){
-                    successCB();
-                }else{
-                    failureCB();
-                }
-            },1000);
-        });
+        // this.setLoading(true,()=>{
+        //     log(parames);
+        //     setTimeout(()=>{
+        //         let num = Math.random();
+        //         if(num<0.5){
+        //             successCB();
+        //         }else{
+        //             failureCB();
+        //         }
+        //     },1000);
+        // });
     }
 }
 
