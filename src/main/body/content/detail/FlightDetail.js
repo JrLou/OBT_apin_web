@@ -75,6 +75,20 @@ class page extends Component {
         this.data = json;
         this.adultPrice = json&&json.adultPrice?parseInt(json.adultPrice):0;
         this.childPrice = json&&json.childPrice?parseInt(json.childPrice):0;
+
+        let voyage = json&&json.plans?json.plans:{};
+        this.flightType = voyage.flightType;
+
+        //用来显示库存超出的时候 弹出module框添加已知数据
+        this.requireParam = {
+            lineType:this.flightType?this.flightType:1,
+            lineNum:this.flightType?this.flightType:1,
+            adultCount:"0",
+            childCount:"0",
+            remark:"",
+            phone:"",
+            listData:[{}]};
+
         this.upView();
     }
 
@@ -90,11 +104,9 @@ class page extends Component {
                 for(var i in json){
                     param[i] = json[i];
                 }
-                let voyage = this.data&&this.data.plans?this.data.plans:{};
-                if (voyage.flightType){
-                    param.flightType = voyage.flightType;
+                if (this.flightType){
+                    param.flightType = this.flightType;
                 }
-
                 this.loadingView.refreshView(true);
                 var success = (code, msg, json, option) => {
                     this.loadingView.refreshView(false,()=>{
