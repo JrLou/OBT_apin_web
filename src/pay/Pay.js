@@ -86,7 +86,7 @@ class page extends Component {
    getDefaultView() {
       return (
          <div className={less.loading}>
-            {this.state.error ? <div className={less.loading}> {this.state.error}</div> : null}
+            {this.state.error  ? <div className={less.loading}> {this.state.error}</div> : null}
             {this.state.code<=-9999 ? <div className={less.aHref}
                 onClick={()=>{
                     this.openOrder();
@@ -109,6 +109,7 @@ class page extends Component {
                             }
                         });
                     } else {
+
                         message.warn("");
                     }
                 }}>联系客服</a></div>
@@ -128,6 +129,38 @@ class page extends Component {
          contentView = this.getDefaultView();
       } else {
          console.log("==");
+         let headView = (
+             <PayInfo
+                 data={this.data.order}
+                 onAction={(type)=>{
+                     //订单时间结束,
+                     if(type==="end"){
+                         // this.setState({
+                         //     error:"订单超时"
+                         // });
+                         //1:关闭所有的交易弹窗口
+                         //2:显示错误的提示
+                         //停止自动验证
+                         this.handVerState = true;
+                         //关闭如果打开的窗口
+                         this.wh.closeWindow();
+                         //如果输入密码在显示
+                         // this.payPassWord.show(false);
+                         this.panel.show(true, {
+                             okText: "我知道了",
+                             action:"order",
+                             content:this.getConnectUsLink("no","抱歉,由于支付超时,该订单将被关闭.您可重新下单."),
+                             // title: "支付信息",
+                             showType: "warn"
+
+                         });
+                     }
+                 }}
+                 ref={(ref) => {
+                     this.payInfo = ref;
+                 }}
+             />
+         );
          let stepView = null;
          if (this.state.step === 1) {
             stepView = this.getFirstStep();
@@ -138,6 +171,7 @@ class page extends Component {
                   this.stepAction = ref;
                }
                }
+               data={this.data.order}
                onAction={(type, data, callBack) => {
                   //打开
                   if (type === "unionopen") {
@@ -169,6 +203,7 @@ class page extends Component {
          }
          contentView = (
             <div>
+                {headView}
                {stepView}
                <Panel
                   onAction={(action, showType) => {
@@ -180,7 +215,7 @@ class page extends Component {
                         //验证是否开通
                         this.handVer("union");
                      }
-                     else if (action === "ok" && showType === "success") {
+                     else if (action ==="order" ||action === "ok" && showType === "success") {
                         //打开订单页
                         this.openOrder();
                      }
@@ -228,12 +263,6 @@ class page extends Component {
    getFirstStep() {
       return (
          <div>
-            <PayInfo
-               data={this.data.order}
-               ref={(ref) => {
-                  this.payInfo = ref;
-               }}
-            />
             <PaySelectLayout
                defaultshowMore={this.data.pay.defaultshowMore}
                defaultIndex={this.data.pay.defaultIndex}
@@ -255,6 +284,7 @@ class page extends Component {
                   <span className={less.nextLayout_price}>
                         <span className={less.nextLayout_price_rmb}>¥</span>
                       <Money
+                          use={this.data.integral.use}
                          ref={(ref) => {
                             this.refMoney = ref;
                          }}
@@ -284,6 +314,7 @@ class page extends Component {
                                 this.loadPayIntegral({}, (code, msg, data) => {
                                    if (code > 0) {
                                       this.panel.show(false, {}, () => {
+                                          this.data.order.payPrice = data.price;
                                          fun();
                                       });
                                    } else {
@@ -310,7 +341,7 @@ class page extends Component {
                                    window.app_open(this, "/Upload", {
                                       id: this.id,
                                       price: this.data.order.payPrice,
-                                      payType: this.data.order.PayType
+                                       payment: this.data.order.payment
                                    }, "self");
                                 });
 
@@ -396,6 +427,7 @@ class page extends Component {
           this.loadPayIntegral({}, (code, msg, data) => {
               if (code > 0&&data.flag) {
                   //微信支付宝支付
+                  this.data.pay.payPrice = data.price;
                   this.loadPayOrder({
                       orderId:this.id,
                       amount:this.data.pay.payPrice,
@@ -415,7 +447,11 @@ class page extends Component {
                               // title: "支付信息",
                               showType: "paying"
                           }, () => {
-                              this.wh.openWindow(apinPanel, showType === "wechat" ? data: "/apin/pc/v1.0/alipay/pay/"+data.url);
+                              this.wh.openWindow(apinPanel, showType === "wechat" ? {
+                                  url:data.url,
+                                  price:this.data.pay.payPrice
+
+                              }: "/apin/pc/v1.0/alipay/pay/"+data.url);
                           });
                       } else {
                           this.wh.closeWindow(apinPanel);
@@ -475,49 +511,9 @@ class page extends Component {
 
             } else {
                //当   action==“ok” && 支付失败 提示文案改变
-               let connectUsLink = (
-                  <a
-                     onClick={() => {
-                        if (window.ysf && window.ysf.open) {
-                           // window.ysf.open();
-                           window.ysf.product({
-                              show: 1, // 1为打开， 其他参数为隐藏（包括非零元素）
-                              title: "订单支付异常",
-                              desc: "异常原因:" + (this.state.error || "未知"),
-                              note: "订单号:" + this.id,
-                              url: window.location.host,
-                              success: function () {     // 成功回调
-                                 window.ysf.open();
-                              },
-                              error: function () {       // 错误回调
-                                 // handle error
-                              }
-                           });
-                        } else {
-                           message.warn("");
-                        }
-                     }}>
-                     联系客服
-                  </a>
-               );
-               let content = null;
-               content = (
-                  <div>
-                     {/*UI说：长文字的时候，就不提示“支付失败”了*/}
-                     {action === "ok" ?
-                        <div style={{textAlign:"left"}}>抱歉，当前未收到银行或第三方平台支付确认，为避免重复支付，请确认您的账户已扣款。如已扣款请&nbsp;{connectUsLink}</div>
-                        :
-                        <div>
-                           {msg}
-                           <br/>
-                           <div>如有疑问，请&nbsp;{connectUsLink}&nbsp;</div>
-                        </div>
-                     }
-                  </div>
-               );
                this.panel.show(action === "ok" , {
                   okText: "我知道了",
-                  content,
+                  content:this.getConnectUsLink(action,action === "ok"?"抱歉，当前未收到银行或第三方平台支付确认，为避免重复支付，请确认您的账户已扣款。如已扣款请":msg),
                   // title: type==="pay"?"支付信息":"银联开通",
                   showType: "error"
                }, () => {
@@ -531,7 +527,47 @@ class page extends Component {
       });
 
    }
-
+    getConnectUsLink(action,content){
+        let connectUsLink = <a
+            onClick={() => {
+                if (window.ysf && window.ysf.open) {
+                    // window.ysf.open();
+                    window.ysf.product({
+                        show: 1, // 1为打开， 其他参数为隐藏（包括非零元素）
+                        title: "订单支付异常",
+                        desc: "异常原因:" + (content),
+                        note: "订单号:" + this.id,
+                        url: window.location.host,
+                        success: function () {     // 成功回调
+                            window.ysf.open();
+                        },
+                        error: function () {       // 错误回调
+                            // handle error
+                        }
+                    });
+                } else {
+                    message.warn(content);
+                }
+            }}>
+            联系客服
+        </a>;
+        return(
+            <div>
+                {/*UI说：长文字的时候，就不提示“支付失败”了*/}
+                {action === "ok" ?
+                    <div style={{textAlign:"left"}}>{content}&nbsp;
+                        {connectUsLink}
+                    </div>
+                    :
+                    <div>
+                        {content}
+                        <br/>
+                        <div>如有疑问，请&nbsp;{connectUsLink}&nbsp;</div>
+                    </div>
+                }
+            </div>
+        );
+    }
 
    autoVer(apinPanel, type) {
        if(this.handVerState){
@@ -638,9 +674,9 @@ class page extends Component {
                    payment:json.payment,
                    childCount:json.childCount,
                    expiredTime:json.expiredTime,
+                   time:json.time,
                    phone:json.phone,
                    price: json.amount,
-                   passengersInfo: "2成人/1儿童",
                },
                integral: {
                    point: json.point,
@@ -668,7 +704,7 @@ class Money extends Component {
    constructor(props) {
       super(props);
       this.state = {
-         use: 0,
+         use: this.props.use,
       };
    }
 
@@ -681,6 +717,15 @@ class Money extends Component {
          use: use
       });
    }
+    shouldComponentUpdate(nextProps, nextState){
+       if(nextProps.use!==this.state.use){
+           this.upDatePrice(nextProps.use);
+           return false;
+       }else{
+           return true;
+       }
+
+    }
 
    getData() {
       return this.props.data || {};
