@@ -23,6 +23,16 @@
             width: 90px;
             display: inline-block;
          }
+         &_tips{
+            float: right;
+            width: 320px;
+            text-align: justify;
+            .tipsIcon{
+               float: left;
+               margin-left: -20px;
+               color:@c_text_red_light;
+            }
+         }
          //第二段
 
          .container2Son:after {
@@ -38,12 +48,28 @@
             }
             .form_control {
                width: 240px;
-
+            }
+            .control_label{
+               color: @font-color;
             }
          }
 
+         //第三阶段，上传
+         .upload_text{
+            &_line1{
+               font-size: 70px;
+            }
+            &_line2{
+               font-size: @font_size_center;
+            }
+            &_line3{
+               font-size: @font_size_small;
+            }
+
+         }
+
          :global {
-            .ant-upload-list-item.ant-upload-list-item-undefined{
+            .forUploadStyle .ant-upload-list-item.ant-upload-list-item-undefined{
                //display: none!important;//这个是上传的时候的第一个div
             }
             .forUploadStyle .ant-upload.ant-upload-select-picture-card > .ant-upload {

@@ -1,9 +1,11 @@
 import React, {Component} from "react";
-import {Input, Button, Icon, message, Modal, Upload} from 'antd';
+import {Input, Button, Icon, message} from 'antd';
 import {HttpTool} from "../../../../lib/utils/index.js";
 import Panel from '../../../pay/Panel';
 import UploadCmp from './UploadCmp';
 import less from "./BankUpload.less";
+
+//todo 页面需要回显可修改
 
 class BankUpload extends Component {
    constructor(props) {
@@ -30,9 +32,7 @@ class BankUpload extends Component {
 
    loadPayInfo(param, cb) {
       let data = this.getInfo();
-      console.log("data");
-      console.log(data);
-      if (!data || !data.orderId || !data.price) {
+      if (!data || !data.orderId || !data.price || data.payment == undefined) {
          this.setState({
             errorMsg: "缺少支付信息"
          });
@@ -51,6 +51,10 @@ class BankUpload extends Component {
             <div className={less.bankBox}>
                <div className={less.bankBox_top}>收款账户信息</div>
                <div className={less.bankBox_middle}>
+                  <div className={less.bankBox_middle_tips}>
+                     <span className={less.tipsIcon}><Icon type="exclamation-circle"/></span>
+                     <span>建议在周一至周六，9:00~18:00内使用该转账功能。若在此时间之外，有可能导致审核异常，如有疑问，请{this.getConnetUs()}</span>
+                  </div>
                   <div>
                      <p>
                         <span className={less.bankBox_middle_titleMsg}>收款账户：</span>
@@ -71,13 +75,16 @@ class BankUpload extends Component {
             <div className={less.bankBox}>
                <div className={less.bankBox_top}>付款账户信息</div>
                <div className={less.bankBox_middle}>
+                  <div className={less.bankBox_middle_tips}>
+                     <span className={less.tipsIcon}><Icon type="exclamation-circle"/></span>
+                     <span>请优先选择"建行"转账，转账需确保1小时内到账，不然资金到账延时会导致财务审核不通过，敬请谅解！</span>
+                  </div>
                   <InputLayout
                      ref={(ref) => {
                         this.inputLayout = ref;
                      }}
                      amount={this.state.amount}
                   />
-
                </div>
             </div>
             <div className={less.bankBox}>
@@ -134,6 +141,34 @@ class BankUpload extends Component {
       );
    }
 
+   getConnetUs() {
+      return (
+         <a
+            onClick={() => {
+               if (window.ysf && window.ysf.open) {
+                  // window.ysf.open();
+                  window.ysf.product({
+                     show: 1, // 1为打开， 其他参数为隐藏（包括非零元素）
+                     title: "订单支付异常",
+                     desc: "异常原因:" + (this.state.errorMsg || "未知"),
+                     note: "订单号:" + this.orderId,
+                     url: window.location.host,
+                     success: function () {     // 成功回调
+                        window.ysf.open();
+                     },
+                     error: function () {       // 错误回调
+                        // handle error
+                     }
+                  });
+               } else {
+                  message.warn("");
+               }
+            }}>
+            联系客服
+         </a>
+      );
+   }
+
    getAllData() {
       let data = this.inputLayout.getData();
 
@@ -183,34 +218,11 @@ class BankUpload extends Component {
                });
             } else {
                //支付失败
-               const connectUs = <a
-                  onClick={() => {
-                     if (window.ysf && window.ysf.open) {
-                        // window.ysf.open();
-                        window.ysf.product({
-                           show: 1, // 1为打开， 其他参数为隐藏（包括非零元素）
-                           title: "订单支付异常",
-                           desc: "异常原因:" + (this.state.errorMsg || "未知"),
-                           note: "订单号:" + this.orderId,
-                           url: window.location.host,
-                           success: function () {     // 成功回调
-                              window.ysf.open();
-                           },
-                           error: function () {       // 错误回调
-                              // handle error
-                           }
-                        });
-                     } else {
-                        message.warn("");
-                     }
-                  }}>
-                  联系客服
-               </a>;
                this.panel.show(true, {
                   showType: "error",
                   content: <div>
                      <p>{msg}</p>
-                     <p>如有疑问，请{connectUs}</p>
+                     <p>如有疑问，请{this.getConnetUs()}</p>
                   </div>,
                }, () => {
                   //
@@ -250,7 +262,6 @@ class BankUpload extends Component {
       );
    }
 }
-
 
 
 class InputLayout extends Component {
@@ -298,14 +309,14 @@ class InputLayout extends Component {
 
    }
 
-   //模拟获取银行名称接口
-   loadBankName(param, cb) {
-      setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 1;
-         let data = {bank: "中国工商银行"};
-         cb(code, "", data);
-      }, Math.random() * 1000 + 500);
-   }
+   //todo 模拟获取银行名称接口，这个版本不做这个功能了
+   // loadBankName(param, cb) {
+   //    setTimeout(() => {
+   //       let code = (Math.random() * 10).toFixed(0) - 1;
+   //       let data = {bank: "中国工商银行"};
+   //       cb(code, "", data);
+   //    }, Math.random() * 1000 + 500);
+   // }
 
    render() {
       const iptProps = {
@@ -321,6 +332,7 @@ class InputLayout extends Component {
                   <Input
                      {...iptProps}
                      id="accountName"
+                     value={this.state.accountName}
                      onChange={(e) => {
                         this.setFomrFileds(e, "accountName");
                      }}
@@ -334,31 +346,11 @@ class InputLayout extends Component {
                      {...iptProps}
                      id="account"
                      onChange={(e) => {
-                        this.setFomrFileds(e, "account");
-                     }}
-                     onBlur={() => {
-                        //请求查询银行的接口
-                        if (this.isRightCardNum(this.state.account)) {
-                           console.log("查询中");
-                           this.loadBankName(this.state.account, (code, msg, data) => {
-                              if (code > 0) {
-                                 this.setState({
-                                    bank: data.bank,
-                                    getbank: true
-                                 }, () => {
-                                    console.log(this.state.bank);
-                                 });
-                                 return;
-                              }
-                           });
+                        if (Number.isInteger(+e.target.value)) {
+                           this.setFomrFileds(e, "account");
                         }
-
-                        this.setState({
-                           bank: "",
-                           getbank: false
-                        });
-
                      }}
+                     value={this.state.account}
                      prefix={<Icon type="credit-card" style={{fontSize: 13}}/>} placeholder={"请输入卡号"}
                   />
                </div>
@@ -370,7 +362,6 @@ class InputLayout extends Component {
                   <br/>
                   <Input
                      {...iptProps}
-                     readOnly={this.state.getbank || this.isRightCardNum(this.state.account)}
                      value={this.state.bank}
                      id="bank"
                      onChange={(e) => {

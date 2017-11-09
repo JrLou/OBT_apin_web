@@ -58,8 +58,6 @@ class UploadCmp extends Component {
          return false;
       }
       console.log("图片上传....");
-
-
       let r = new FileReader();
       r.readAsDataURL(file);
       r.onload = (e) => {
@@ -75,7 +73,7 @@ class UploadCmp extends Component {
          this.loadUploadImg({pic: this._fileList[this._fileList.length - 1].thumbUrl}, (code, msg, data) => {
             if (code < 0) {
                message.error(msg + "图片上传失败");
-               return false;//todo 这个false会不会到beforUpload里来？
+               return false;// todo 这个false会不会到beforUpload里来？
             } else {
                this.setState({
                   fileList: this._fileList
@@ -97,13 +95,8 @@ class UploadCmp extends Component {
       return false;
    }
 
-   handleChange({fileList}) {
+   handleChange(cbObj) {
       console.log("onchange");
-      console.log(fileList);
-      // this.setState({fileList}, () => {
-      //    console.log("arguments");
-      //    console.log(arguments);
-      // });
    }
 
    onRemove(file) {
@@ -121,10 +114,10 @@ class UploadCmp extends Component {
    render() {
       const {fileList} = this.state;
       const uploadButton = (
-         <div>
-            <Icon className={less.upload_text1} type="plus"/>
-            <div className={less.upload_text2}>点击此处上传转账凭证</div>
-            <div className={less.upload_text3}>最多添加 6 张</div>
+         <div className={less.upload_text}>
+            <Icon className={less.upload_text_line1} type="plus"/>
+            <div className={less.upload_text_line2}>点击此处上传转账凭证</div>
+            <div className={less.upload_text_line3}>最多添加 6 张</div>
          </div>
       );
       return (
