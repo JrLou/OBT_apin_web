@@ -143,9 +143,11 @@ class page extends Component {
                                     validateTrigger: "onChangeValue",
                                     initialValue: this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity
                                 })(
-                                    <AutoInput style={{ borderRadius: "2px" }} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity}
-                                        type={"from"}
-                                        placeholder={'中文／拼音／三字码'} />
+                                    <div>
+                                        <AutoInput style={{ borderRadius: "2px" }} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity}
+                                            type={"from"}
+                                            placeholder={'中文／拼音／三字码'} />
+                                    </div>
                                     )}
                             </FormItem>
                         </Col>
@@ -160,9 +162,11 @@ class page extends Component {
                                     validateTrigger: "onChangeValue",
                                     initialValue: this.state.listData[i] == undefined ? "" : this.state.listData[i].toCity
                                 })(
-                                    <AutoInput style={{ borderRadius: "2px" }} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].toCity}
-                                        type={"from"}
-                                        placeholder={'中文／拼音／三字码'} />
+                                    <div>
+                                        <AutoInput style={{ borderRadius: "2px" }} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].toCity}
+                                            type={"from"}
+                                            placeholder={'中文／拼音／三字码'} />
+                                    </div>
                                     )}
                             </FormItem>
                         </Col>
@@ -288,7 +292,7 @@ class page extends Component {
                             })(
                                 <div style={{ position: "relative" }}>
                                     <span style={{ position: "absolute", zIndex: 1, right: "20px",color:"#cacaca"}}>成人</span>
-                                    <Input style={{ width: 207, height: 34, borderRadius: "2px" }} onChange={(e) => this.handleConfirmNum("adultCount", e)} maxLength="4" />
+                                    <Input style={{ width: 207, height: 34, borderRadius: "2px" }} defaultValue={this.state.adultCount} onChange={(e) => this.handleConfirmNum("adultCount", e)} maxLength="4" />
                                 </div>
                                 )}
                         </FormItem>
@@ -307,13 +311,13 @@ class page extends Component {
                             })(
                                 <div style={{ position: "relative" }}>
                                     <span style={{ position: "absolute", zIndex: 1, right: "20px",color:"#cacaca"}}>儿童(2～12周岁)</span>
-                                    <Input style={{ width: 207, height: 34, borderRadius: "2px" }} maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)}  />
+                                    <Input style={{ width: 207, height: 34, borderRadius: "2px" }} defaultValue={this.state.childCount} maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)}  />
                                 </div>
                                 )}
                         </FormItem>
                     </Col>
                     <Col span={3}>
-                        <div style={{ height: 32, lineHeight: "32px", float: "right" }}>共:{(this.state.adultCount == "" ? 0 : parseInt(this.state.adultCount)) + (this.state.childCount == "" ? 0 : parseInt(this.state.childCount))}人</div>
+                        <div style={{ height: 32, lineHeight: "32px", float: "right" }}>共:{(this.state.adultCount == "" || !/^\d*$/.test(this.state.adultCount) ? 0 : parseInt(this.state.adultCount)) + (this.state.childCount == "" || !/^\d*$/.test(this.state.childCount) ? 0 : parseInt(this.state.childCount))}人</div>
                     </Col>
                 </Row>
 

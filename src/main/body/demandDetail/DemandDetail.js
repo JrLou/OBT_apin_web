@@ -37,7 +37,7 @@ class page extends Component {
             index: -1,
             upData: 1,
             data: null,
-            visible:false,
+            visible: false,
         };
     }
 
@@ -56,7 +56,7 @@ class page extends Component {
         // 多程 c374da99311144058a1d8d7382de5d8a
         // 单程 9cb5a2cd48104e3385f330aec6b3d196
         let param = {
-            id: "32abf9777c2947ab92afacf8342c050e",
+            id: "e7b6fa11676b44a1bbea5b362bf8fd5e",
         };
         let success = (code, msg, json, option) => {
             this.setState({
@@ -71,7 +71,8 @@ class page extends Component {
                 ipKey: "hlIP"
             });
     }
-    cancelDemand(){
+
+    cancelDemand() {
         let param = {
             id: "9d9f42b6b55c4bdda80c3600f0fddc3a",
         };
@@ -88,7 +89,8 @@ class page extends Component {
                 ipKey: "hlIP"
             });
     }
-    deleteDemand(){
+
+    deleteDemand() {
         let param = {
             id: "4c0a82d59ff24262a8e8495c6eff44b0",
         };
@@ -105,9 +107,10 @@ class page extends Component {
                 ipKey: "hlIP"
             });
     }
-    flightDemand(){
+
+    flightDemand() {
         let param = {
-            demandId:"4c0a82d59ff24262a8e8495c6eff44b0",
+            demandId: "4c0a82d59ff24262a8e8495c6eff44b0",
             id: "4c0a82d59ff24262a8e8495c6eff44b0",
         };
         let success = (code, msg, json, option) => {
@@ -123,9 +126,10 @@ class page extends Component {
                 ipKey: "hlIP"
             });
     }
+
     render() {
         let {data} = this.state;
-        if (!data){
+        if (!data) {
             return null;
         }
 
@@ -138,9 +142,9 @@ class page extends Component {
                 {data.demandStatus === 1 ? this.getMessage("预计在30分钟内为您处理需求") :
                     (data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
                 {data.demandStatus === 5 ? this.getCloseReason() : null}
-                {data.demandStatus === 1  || data.demandStatus === 5 || data.demandStatus === 0 ? this.getButton(data.demandStatus) : null}
-                {data.demandStatus === 4 ? <OrderInfoView type={0}/> : null}
-                {data.demandStatus === 2 ? this.getConfirmButton(data && data.plans ? data.plans : [],data.flightType) : null}
+                {data.demandStatus === 1 || data.demandStatus === 5 || data.demandStatus === 0 ? this.getButton(data.demandStatus) : null}
+                {data.demandStatus === 4 ? this.getOrderDetail(data) : null}
+                {data.demandStatus === 2 ? this.getConfirmButton(data && data.plans ? data.plans : [], data.flightType) : null}
             </div>
         );
     }
@@ -200,17 +204,20 @@ class page extends Component {
             </div>
         );
     }
+
     showModal() {
         this.setState({
             visible: true
         });
     }
+
     handleDeleteOk() {
         this.deleteDemand();
         this.setState({
             visible: false
         });
     }
+
     handleFlightOk() {
         this.flightDemand();
         this.setState({
@@ -230,14 +237,15 @@ class page extends Component {
             visible: false
         });
     }
+
     getDemandButton(type) {
         if (type === 1 || type === 2) {
             return (
                 <div className={less.buttonLayout}>
                     <Button className={less.buttonCancel}
-                    onClick={()=>{
-                        this.showModal();
-                    }}
+                            onClick={() => {
+                                this.showModal();
+                            }}
                     >取消需求</Button>
                     <Modal
                         title="提示"
@@ -246,10 +254,10 @@ class page extends Component {
                         onOk={this.handleCancelOk.bind(this)}
                         okText="是"
                         cancelText="否"
-                        style={{width:'100px'}}
+                        style={{width: '100px'}}
                         prefixCls="my-ant-modal"
                     >
-                        <font style={{fontSize:16,color:"#333"}}>是否确定取消此需求</font>
+                        <font style={{fontSize: 16, color: "#333"}}>是否确定取消此需求</font>
 
                     </Modal>
                 </div>
@@ -262,7 +270,7 @@ class page extends Component {
             return (
                 <div className={less.buttonLayout}>
                     <Button className={less.buttonDelete}
-                            onClick={()=>{
+                            onClick={() => {
                                 this.showModal();
                             }}
                     >删除需求</Button>
@@ -273,10 +281,10 @@ class page extends Component {
                         onOk={this.handleDeleteOk.bind(this)}
                         okText="是"
                         cancelText="否"
-                        style={{width:'100px'}}
+                        style={{width: '100px'}}
                         prefixCls="my-ant-modal"
                     >
-                        <font style={{fontSize:16,color:"#333"}}>是否确定删除此需求</font>
+                        <font style={{fontSize: 16, color: "#333"}}>是否确定删除此需求</font>
 
                     </Modal>
                 </div>
@@ -295,7 +303,7 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>需求状态：</font>
                             <font
-                                className={type===1||type===2?less.mainContentGreenStatus:(type === 5 ? less.mainContentClose : less.mainContent)}>{data && data.demandStatus ? (data.demandStatus === -1 ? "全部" : status[data.demandStatus] ) : "暂无"}</font>
+                                className={type === 1 || type === 2 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{data && data.demandStatus ? (data.demandStatus === -1 ? "全部" : status[data.demandStatus] ) : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
@@ -303,9 +311,9 @@ class page extends Component {
                                 className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.createdTime ? data.createdTime : "暂无"}</font>
                         </div>
                         <div>
-                        <font className={less.mainTitle}>航程类型：</font>
-                        <font
-                        className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.flightType === 1 ? "单程" : data && data.flightType === 2 ? "往返" :data && data.flightType === 3 ? "多程" : "暂无"}</font>
+                            <font className={less.mainTitle}>航程类型：</font>
+                            <font
+                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.flightType === 1 ? "单程" : data && data.flightType === 2 ? "往返" : data && data.flightType === 3 ? "多程" : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>航班人数：</font>
@@ -331,7 +339,7 @@ class page extends Component {
     }
 
 
-    getConfirmButton(datas,flightType) {
+    getConfirmButton(datas, flightType) {
         log(datas);
         log("-------gyw--------");
         return (
@@ -383,10 +391,10 @@ class page extends Component {
                                                 onOk={this.handleFlightOk.bind(this)}
                                                 okText="是"
                                                 cancelText="否"
-                                                style={{width:'100px'}}
+                                                style={{width: '100px'}}
                                                 prefixCls="my-ant-modal"
                                             >
-                                                <font style={{fontSize:16,color:"#333"}}>是否确认选择该方案</font>
+                                                <font style={{fontSize: 16, color: "#333"}}>是否确认选择该方案</font>
 
                                             </Modal>
                                         </div>
@@ -498,7 +506,7 @@ class page extends Component {
     }
 
     getTripList(data) {
-        let voyage=JSON.parse(data.voyage).voyage;
+        let voyage = JSON.parse(data.voyage).voyage;
         return (
             voyage.map((data, index) => {
                 return (
@@ -512,7 +520,7 @@ class page extends Component {
     getTripItem(data, index) {
         if (!data)return null;
 
-        let img =  require('../../../images/oneWay.png');
+        let img = require('../../../images/oneWay.png');
 
         return (
             <div key={index}
@@ -545,6 +553,66 @@ class page extends Component {
                 </div>
             </div>
         );
+    }
+
+    getOrderDetail(data) {
+        return (
+            <div className={less.layout}>
+                <div className={less.title}>订单信息</div>
+                <div className={less.lineOrderInfo}/>
+                <div className={less.content}>
+                    <div className={less.mainTextLayout}>
+                        <div style={{paddingTop: 10}}>
+                            <font className={less.mainTitle}>订单号：</font>
+                            <font className={less.mainContent2}>{data && data.orderNo ? data.orderNo : "暂无"}</font>
+                        </div>
+                        <div>
+                            <font className={less.mainTitle}>创建时间：</font>
+                            <font
+                                className={less.mainContent}>{data && data.createdTime ? data.createdTime : "暂无"}</font>
+                        </div>
+                        <div>
+                            <font className={less.mainTitle}>成人价格：</font>
+                            <font className={less.mainContent}>{data && data.adultPrice ? data.adultPrice : "0"}</font>
+                            <font style={{
+                                color: "#333",
+                                fontSize: 12,
+                                marginLeft: 8
+                            }}>x{data && data.adultCount ? data.adultCount : "0"}</font>
+                        </div>
+                        <div>
+                            <font className={less.mainTitle}>儿童价格：</font>
+                            <font
+                                className={less.mainContent}>{data && data.childPrice ? data.childPrice : "0"}</font>
+                            <font style={{
+                                color: "#333",
+                                fontSize: 12,
+                                marginLeft: 8
+                            }}>x{data && data.childCount ? data.childCount : "0"}</font>
+                        </div>
+                    </div>
+                    <div className={less.moneyLayout}>
+                        <font style={{
+                            color: "#999",
+                            fontSize: 12,
+                        }}>参考总价（含税）</font>
+                        <font style={{color: "#ff5841", fontSize: 10, marginLeft: 8}}>¥</font>
+                        <font style={{
+                            color: "#ff5841",
+                            fontSize: 20
+                        }}>{data && data.orderAmount ? data.orderAmount : "0"}</font>
+                    </div>
+                    <div className={less.buttonDetailLayout}>
+                        <Button className={less.detailButton}
+                                onClick={() => {
+
+                                }}
+                        >查看订单详情</Button>
+                    </div>
+                </div>
+            </div>
+        );
+
     }
 
     getTimeShow(value) {
