@@ -26,15 +26,14 @@ class page extends Component {
         this.param = par.data?par.data:{};
         this.isPay = this.param&&this.param.isDirect&&this.param.isDirect?this.param.isDirect:0;
 
+        this.adultPrice = 0;
+        this.childPrice = 0;
         this.state = {
             upData:0,
             adultNum:1,
             childNum:0,
             phone:""
         };
-
-        this.adultPrice = 0;
-        this.childPrice = 0;
 
         //用来显示库存超出的时候 弹出module框添加已知数据
         this.requireParam = {
@@ -92,8 +91,7 @@ class page extends Component {
     payAction(){
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
-                console.log('Received values of form: ', values);
+                console.log('Received values of form------------------: ', values);
                 var param = values;
                 let json = this.param?this.param:{};
                 for(var i in json){
@@ -109,8 +107,8 @@ class page extends Component {
                     this.loadingView.refreshView(false);
                     message.warning(msg);
                 };
-                HttpTool.request(HttpTool.typeEnum.POST, APIGYW.orderapi_orders_create, success, failure, param,
-                    {ipKey:'hlIP'});
+                // HttpTool.request(HttpTool.typeEnum.POST, APIGYW.orderapi_orders_create, success, failure, param, {ipKey:'hlIP'});
+                this.skipView(3);
             }
         });
     }
@@ -147,7 +145,7 @@ class page extends Component {
         var success = (code, msg, json, option) => {
             this.myModalRequire.hiddenModal(()=>{
                 this.loadingView.refreshView(false);
-                window.app_open(this, "/OrderFormList", {
+                window.app_open(this, "/DemandDetail", {
                     data: {}
                 }, "new");
             });
