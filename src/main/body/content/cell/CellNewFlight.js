@@ -2,7 +2,7 @@
  * Created by apin on 2017/10/30.
  */
 import React, { Component } from 'react';
-import {Button,Icon} from 'antd';
+import {Tooltip} from 'antd';
 import css from './CellNewFlight.less';
 import ClickHelp from '../../tool/ClickHelp.js';
 import CellNewFlightDetail from './CellNewFlightDetail.js';
@@ -19,23 +19,42 @@ class CellNewFlight extends Component {
 
     }
     render() {
-        let {dataSource,flightType} = this.props;
+        let {dataSource,flightType,isNoShowRule} = this.props;
         if (!dataSource){
             return null;
         }
         return (<div className={css.main}>
             <div className={css.left}>
-                {this.createCell(dataSource.voyages||[],flightType)}
+                {this.createCell(dataSource.voyages||[],flightType,isNoShowRule)}
             </div>
-            <div className={css.right}>{"件数:"+dataSource.freeBag + " 重量:"+dataSource.weightLimit}</div>
+
+            {isNoShowRule?null:<div className={css.right}>
+                <div className={css.ruleDiv}>
+                    <Tooltip placement="bottom" title={<div>
+                        <div className={css.rule}>
+                            {"免费托运: "+dataSource.freeBag+"件"}
+                        </div>
+                        <div className={css.rule}>
+                            {"每件重量上限: "}
+                            <span style={{color:"#ff6600",fontSize:"14px"}}>{dataSource.weightLimit+"kg"}</span>
+                        </div>
+                    </div>}>行李规则
+                    </Tooltip>
+                </div>
+            </div>}
+
         </div>);
     }
-    createCell(dataArr,flightType){
+    createCell(dataArr,flightType,isNoShowRule){
         return dataArr.map((data, index)=>{
-           return (<div key={index} className={css.cellBg} style={{borderBottomWidth:(index==dataArr.length-1)?"0px":"1px"}}>
-               {this.createItemCell(data, index,flightType)}
-               {data.child&&data.child.length>0?<CellNewFlightDetail data = {data.child}/>:null}
-           </div>);
+            return (<div key={index}
+                         className={css.cellBg}
+                         style={{paddingLeft:isNoShowRule?"8%":"0",
+                             paddingRight:isNoShowRule?"8%":"0",
+                             borderBottomWidth:(index==dataArr.length-1)?"0px":"1px"}}>
+                {this.createItemCell(data, index,flightType)}
+                {data.child&&data.child.length>0?<CellNewFlightDetail data = {data.child}/>:null}
+            </div>);
         });
     }
 
@@ -43,7 +62,6 @@ class CellNewFlight extends Component {
         if (!data){
             return null;
         }
-
         var itemView = (<div className={css.table}>
             <div className={css.type_super}>
                 <div className={css.typeText}>
@@ -59,8 +77,12 @@ class CellNewFlight extends Component {
             <div className={css.flightLine_super}>
                 <div className={css.flightLine}>
                     <div className={css.placeLine}>
-                        <div className={css.placeLineItem}>{data.depAirport}</div>
-                        <div style={{fontSize:"22px",textAlign:"center"}}>{data.depTime}</div>
+                        {data.depAirport&&data.depAirport.length>7?
+                            (<div className={css.placeLineItem}>
+                                <Tooltip placement="bottom" title={data.depAirport}>{data.depAirport}</Tooltip>
+                            </div>):
+                            (<div className={css.placeLineItem}>{data.depAirport}</div>)}
+                        <div className={css.time}>{data.depTime}</div>
                     </div>
 
                     <div className={css.lineBg}>
@@ -99,9 +121,13 @@ class CellNewFlight extends Component {
                     </div>
 
                     <div className={css.placeLine}>
-                        <div className={css.refPlaceLineItem}>{data.arrAirport}</div>
-                        <div style={{textAlign:"center"}}>
-                            <span style={{fontSize:"22px"}}>{data.arrTime}</span>
+                        {data.depAirport&&data.depAirport.length>7?
+                            (<div className={css.refPlaceLineItem}>
+                                <Tooltip placement="bottom" title={data.arrAirport}>{data.arrAirport}</Tooltip>
+                            </div>): (<div className={css.refPlaceLineItem}>{data.arrAirport}</div>)
+                        }
+                        <div className={css.time}>
+                            <span>{data.arrTime}</span>
                             <span style={{fontSize:"12px",color:"#FF5841"}}>{data.tag==1?"+1天":""}</span>
                         </div>
                     </div>

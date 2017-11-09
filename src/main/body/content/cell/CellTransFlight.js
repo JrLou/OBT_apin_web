@@ -2,7 +2,7 @@
  * Created by apin on 2017/11/4.
  */
 import React, { Component } from 'react';
-import {Button,Icon} from 'antd';
+import {Tooltip} from 'antd';
 import css from './CellTransFlight.less';
 import ClickHelp from '../../tool/ClickHelp.js';
 import DateHelp from '../../tool/DateHelp.js';
@@ -38,7 +38,11 @@ class CellTransFlight extends Component {
                                     <div className={css.date}>{data.arrDate}</div>
                                 </div>
                                 <div className={css.placeLine_super}>
-                                    <div className={css.placeLineItem}>{data.depAirport}</div>
+                                    {data.depAirport&&data.depAirport.length>7?
+                                        (<div className={css.placeLineItem}>
+                                            <Tooltip placement="bottomLeft" title={data.depAirport}>{data.depAirport}</Tooltip>
+                                        </div>): (<div className={css.placeLineItem}>{data.depAirport}</div>)
+                                    }
                                 </div>
                                 <div className={css.company_super}>
                                     <div className={css.logoCompany_super}>

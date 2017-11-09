@@ -45,7 +45,7 @@ class MyModalRequire extends Component {
             visible:visible,
             title:option.title?option.title:undefined,
             desc:option.desc?option.desc:undefined,
-            param:option.desc?option.desc:{}
+            param:option.param?option.param:{}
         });
     }
     hiddenModal(callBack) {

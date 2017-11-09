@@ -37,14 +37,14 @@ class OrderFormList extends Component{
         this.flightTypeList = [
             {
                 title:'单程',
-                value:'0',
+                value:'1',
             },
             {
                 title:'往返',
-                value:'1',
+                value:'2',
             },{
                 title:'多程',
-                value:'2',
+                value:'3',
             },
         ];
         //订单状态

@@ -106,7 +106,6 @@ class TitleBar extends Component{
      * 删除订单
      */
     deleteOrder(){
-        log('执行删除操作');
         this.deleteCB();
     }
 }
