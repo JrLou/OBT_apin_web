@@ -427,7 +427,7 @@ class page extends Component {
           this.loadPayIntegral({}, (code, msg, data) => {
               if (code > 0&&data.flag) {
                   //微信支付宝支付
-                  let price = data.price;
+                  this.data.pay.payPrice = data.price;
                   this.loadPayOrder({
                       orderId:this.id,
                       amount:this.data.pay.payPrice,
@@ -449,7 +449,7 @@ class page extends Component {
                           }, () => {
                               this.wh.openWindow(apinPanel, showType === "wechat" ? {
                                   url:data.url,
-                                  price
+                                  price:this.data.pay.payPrice
 
                               }: "/apin/pc/v1.0/alipay/pay/"+data.url);
                           });
