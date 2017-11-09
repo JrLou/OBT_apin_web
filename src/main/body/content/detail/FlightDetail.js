@@ -90,6 +90,11 @@ class page extends Component {
                 for(var i in json){
                     param[i] = json[i];
                 }
+                let voyage = this.data&&this.data.plans?this.data.plans:{};
+                if (voyage.flightType){
+                    param.flightType = voyage.flightType;
+                }
+
                 this.loadingView.refreshView(true);
                 var success = (code, msg, json, option) => {
                     this.loadingView.refreshView(false,()=>{
