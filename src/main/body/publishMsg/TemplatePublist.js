@@ -313,7 +313,7 @@ class page extends Component {
                         </FormItem>
                     </Col>
                     <Col span={3}>
-                        <div style={{ height: 32, lineHeight: "32px", float: "right" }}>共:{(this.state.adultCount == "" ? 0 : parseInt(this.state.adultCount)) + (this.state.childCount == "" ? 0 : parseInt(this.state.childCount))}人</div>
+                        <div style={{ height: 32, lineHeight: "32px", float: "right" }}>共:{(this.state.adultCount == "" || !/^\d*$/.test(this.state.adultCount) ? 0 : parseInt(this.state.adultCount)) + (this.state.childCount == "" || !/^\d*$/.test(this.state.childCount) ? 0 : parseInt(this.state.childCount))}人</div>
                     </Col>
                 </Row>
 
