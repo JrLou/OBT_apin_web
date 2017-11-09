@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {Button, message} from 'antd';
-import {HttpTool} from "../../lib/utils/index.js";
+import {HttpTool,CookieHelp} from "../../lib/utils/index.js";
 
 import PayInfo from './PayInfo';
 import WindowHelp from './WindowHelp.js';
@@ -19,6 +19,9 @@ import less from './Pay.less';
 class page extends Component {
    constructor(props) {
       super(props);
+       CookieHelp.saveUserInfo({
+           Authorization:"eyJ1c2VySWQiOiIyMjIiLCJ1c2VyTmFtZSI6ImFkZCJ9",
+       });
       this.wh = new WindowHelp();
       this.state = {
          step: 1,
@@ -51,10 +54,15 @@ class page extends Component {
             if (this.un) {
                return;
             }
+            if(data&&data.error){
+                msg = data.error;
+                code = -9999;
+            }
             this.data = data;
             this.setState({
                loading: false,
                error: code > 0 ? "" : msg,
+                code:code,
             });
          });
       });
@@ -66,7 +74,11 @@ class page extends Component {
          loading
       }, callBack);
    }
-
+    openOrder(){
+        window.app_open(this, "/Order", {
+            id: this.id
+        }, "self");
+    }
    getLoadingView() {
       return <div className={less.loading}>正在为您拉取订单信息,请稍候...</div>;
    }
@@ -75,26 +87,34 @@ class page extends Component {
       return (
          <div className={less.loading}>
             {this.state.error ? <div className={less.loading}> {this.state.error}</div> : null}
-            <div>订单号异常? <a onClick={() => {
-               if (window.ysf && window.ysf.open) {
-                  // window.ysf.open();
-                  window.ysf.product({
-                     show: 1, // 1为打开， 其他参数为隐藏（包括非零元素）
-                     title: "订单支付异常",
-                     desc: "异常原因:" + (this.state.error || "未知"),
-                     note: "订单号:" + this.id,
-                     url: window.location.host,
-                     success: function () {     // 成功回调
-                        window.ysf.open();
-                     },
-                     error: function () {       // 错误回调
-                        // handle error
-                     }
-                  });
-               } else {
-                  message.warn("");
-               }
-            }}>联系客服</a></div>
+            {this.state.code<=-9999 ? <div className={less.aHref}
+                onClick={()=>{
+                    this.openOrder();
+                }}
+            > 查看订单</div> : (
+                <div>订单号异常? <a onClick={() => {
+                    if (window.ysf && window.ysf.open) {
+                        // window.ysf.open();
+                        window.ysf.product({
+                            show: 1, // 1为打开， 其他参数为隐藏（包括非零元素）
+                            title: "订单支付异常",
+                            desc: "异常原因:" + (this.state.error || "未知"),
+                            note: "订单号:" + this.id,
+                            url: window.location.host,
+                            success: function () {     // 成功回调
+                                window.ysf.open();
+                            },
+                            error: function () {       // 错误回调
+                                // handle error
+                            }
+                        });
+                    } else {
+                        message.warn("");
+                    }
+                }}>联系客服</a></div>
+            )}
+
+
          </div>
       );
 
@@ -162,9 +182,7 @@ class page extends Component {
                      }
                      else if (action === "ok" && showType === "success") {
                         //打开订单页
-                        window.app_open(this, "/Order", {
-                           id: this.id
-                        }, "self");
+                        this.openOrder();
                      }
 
                   }}
@@ -172,10 +190,13 @@ class page extends Component {
                      this.panel = ref;
                   }}/>
                <PayPassWord
-                  onAction={(pw) => {
+                  onAction={(phone,code) => {
                      //调用积分支付//完全用积分支付
                      this.openPayIng(() => {
-                        this.loadPayIntegral({pw: pw}, (code, msg, data) => {
+                        this.loadPayIntegral({
+                            phone:phone,
+                            code: code
+                        }, (code, msg, data) => {
                            if (code > 0) {
                               //
                               this.openPaySuccess();
@@ -253,7 +274,7 @@ class page extends Component {
                           console.log(this.data);
                           if (this.data.order.payPrice <= 0) {
                              //提示输入密码,积分支付
-                             this.payPassWord.show(true);
+                             this.payPassWord.show(true,this.data.order);
                              return;
                           }
 
@@ -358,7 +379,9 @@ class page extends Component {
 
       }, () => {
          //3秒后去开始验证,是否支付成功
-         // setTimeout(()=>{this.autoVer(apinPanel,"union");},3000);
+         setTimeout(()=>{
+             this.handVerState = false;
+             this.autoVer(apinPanel,"union");},1000);
          this.wh.openWindow(apinPanel, data.url);
       });
 
@@ -368,37 +391,57 @@ class page extends Component {
 
       this.openPayIng(() => {
          let apinPanel = this.wh.openInitWindow(showType === "wechat" ? this.wxPay : null);
-         this.loadPayOrder(this.data, (code, msg, data) => {
-            if (code > 0) {
-               //3秒后去开始验证,是否支付成功
-               //   setTimeout(()=>{this.autoVer(apinPanel,"pay");},3000);
-               this.panel.show(true, {
-                  okText: "我已经支付",
-                  cancelText: "还没支付",
-                  content: "确认是否已支付",
-                  // title: "支付信息",
-                  showType: "paying"
-               }, () => {
-                  this.wh.openWindow(apinPanel, showType === "wechat" ? data : data.url);
-               });
-            } else {
-               this.wh.closeWindow(apinPanel);
-               this.panel.show(true, {
-                  // okText: "我知道了",
-                  content: msg,
-                  // title: "支付信息",
-                  showType: "error"
-               }, () => {
+
+         //支付前校验积分
+          this.loadPayIntegral({}, (code, msg, data) => {
+              if (code > 0&&data.flag) {
+                  //微信支付宝支付
+                  this.loadPayOrder({
+                      orderId:this.id,
+                      amount:this.data.pay.payPrice,
+                      payment:this.data.order.payment,
+                      payType:showType === "wechat"?2:1,//	1支付宝 2 微信
+                  }, (code, msg, data) => {
+                      if (code > 0) {
+                          //3秒后去开始验证,是否支付成功
+                          this.handVerState = false;
+                          setTimeout(()=>{
+                                this.autoVer(apinPanel,"pay");
+                                },1000);
+                          this.panel.show(true, {
+                              okText: "我已经支付",
+                              cancelText: "还没支付",
+                              content: "确认是否已支付",
+                              // title: "支付信息",
+                              showType: "paying"
+                          }, () => {
+                              this.wh.openWindow(apinPanel, showType === "wechat" ? data: "/apin/pc/v1.0/alipay/pay/"+data.url);
+                          });
+                      } else {
+                          this.wh.closeWindow(apinPanel);
+                          this.panel.show(true, {
+                              // okText: "我知道了",
+                              content: msg,
+                              // title: "支付信息",
+                              showType: "error"
+                          }, () => {
 
 
-               });
-            }
-         });
+                          });
+                      }
+                  });
+              } else {
+                  this.wh.closeWindow(apinPanel);
+                  this.openPayError(msg, null, "下单");
+              }
+          });
+
       }, "下单");
    }
 
 
    handVer(type, action) {
+       this.handVerState = true;
       // action为“ok”或者“cancel”当   action==“ok” && 支付失败 提示文案改变
       //关闭已经存在的窗口
       this.wh.closeWindow();
@@ -407,14 +450,18 @@ class page extends Component {
          content: type === "pay" ? "验证支付中" : "验证开通中",
          showType: "verpay"
       }, () => {
-         this[type === "pay" ? "loadPayOrderVer" : "loadUnionVer"](this.data, (code, msg, data) => {
+         this[type === "pay" ? "loadPayOrderVer" : "loadUnionVer"]({
+             orderId:this.id,
+             payment:this.data.order.payment,
+             flag:true
+         }, (code, msg, data) => {
             //验证是否支付成功
-            if (code > 0) {
+            if (code > 0&&data.flag) {
 
                if (type === "pay") {
                   //支付成功/提示支付成功/通知用户去订单详情
                   this.panel.show(true, {
-                     content: msg,
+                      content: type === "pay" ? "支付成功":"开通成功",
                      showType: "success"
                   }, () => {
                   });
@@ -458,7 +505,7 @@ class page extends Component {
                   <div>
                      {/*UI说：长文字的时候，就不提示“支付失败”了*/}
                      {action === "ok" ?
-                        <div>抱歉，当前未收到银行或第三方平台支付确认，为避免重复支付，请确认您的账户已扣款。如已扣款请&nbsp;{connectUsLink}</div>
+                        <div style={{textAlign:"left"}}>抱歉，当前未收到银行或第三方平台支付确认，为避免重复支付，请确认您的账户已扣款。如已扣款请&nbsp;{connectUsLink}</div>
                         :
                         <div>
                            {msg}
@@ -468,7 +515,7 @@ class page extends Component {
                      }
                   </div>
                );
-               this.panel.show(true, {
+               this.panel.show(action === "ok" , {
                   okText: "我知道了",
                   content,
                   // title: type==="pay"?"支付信息":"银联开通",
@@ -487,23 +534,30 @@ class page extends Component {
 
 
    autoVer(apinPanel, type) {
-      this[type === "pay" ? "loadPayOrderVer" : "loadUnionVer"](this.data, (code, msg, data) => {
+       if(this.handVerState){
+           return;
+       }
+      this[type === "pay" ? "loadPayOrderVer" : "loadUnionVer"]({
+          orderId:this.id,
+          payment:this.data.order.payment,
+          flag:false
+      }, (code, msg, data) => {
          //验证是否支付成功
-         if (code > 0) {
+         if (code > 0&&data.flag) {
             //支付成功
             //关闭支付窗口
+             this.handVerState = true;
             this.wh.closeWindow(apinPanel);
             //提示支付成功
             this.panel.show(true, {
-               content: msg,
+               content: type === "pay" ? "支付成功":"开通成功",
                showType: "success"
             }, () => {
-
 
             });
          } else {
             setTimeout(() => {
-               this.autoVer(apinPanel);
+               this.autoVer(apinPanel, type);
             }, 1000);
          }
 
@@ -512,11 +566,22 @@ class page extends Component {
    }
 
    loadPayIntegral(param, cb) {
-      setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 1;
-         let data = {};
-         cb(code, code > 0 ? "下单成功" : "下单失败", data);
-      }, Math.random() * 1000 + 2000);
+
+       HttpTool.request(HttpTool.typeEnum.POST, "/bohl/orderapi/v1.0/orders/points/pay", (code, msg, json, option) => {
+           cb(code, msg, json);
+       }, (code, msg, option) => {
+           cb(code, msg, {});
+       }, Object.assign(param||{},{
+           orderId:this.id,
+           payment:this.data.order.payment,
+           point:this.data.integral.use?this.data.integral.use*1000:0,
+       }));
+
+      // setTimeout(() => {
+      //    let code = (Math.random() * 10).toFixed(0) - 1;
+      //    let data = {};
+      //    cb(code, code > 0 ? "验证成功" : "验证失败", data);
+      // }, Math.random() * 10);
    }
 
    loadUnionVer(param, cb) {
@@ -524,27 +589,39 @@ class page extends Component {
          let code = (Math.random() * 10).toFixed(0) - 1;
          let data = {};
          data.url = "http://www.baidu.com";
-         cb(code, code > 0 ? "开通成功" : "开通失败", data);
+         cb(code, code > 0 ? "开通成功00" : "开通失败000", data);
       }, Math.random() * 1000 + 2000);
    }
 
    loadPayOrderVer(param, cb) {
-      setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 11;
-         let data = {};
-         data.url = "http://www.baidu.com";
-         cb(code, code > 0 ? "支付成功" : "支付失败", data);
-      }, Math.random() * 1000 + 2000);
+       console.log("======验证支付中");
+       HttpTool.request(HttpTool.typeEnum.POST, "/bohl/orderapi/v1.0/orders/pay/confirm", (code, msg, json, option) => {
+           cb(code, msg, json);
+       }, (code, msg, option) => {
+           cb(code, msg, {});
+       }, param);
+
+      // setTimeout(() => {
+      //    let code = (Math.random() * 10).toFixed(0) - 11;
+      //    let data = {};
+      //    data.url = "http://www.baidu.com";
+      //    cb(code, code > 0 ? "支付成功" : "支付失败", data);
+      // }, Math.random() * 1000 + 2000);
    }
 
    loadPayOrder(param, cb) {
-      setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 1;
-         let data = {};
-         data.url = "http://www.baidu.com";
-         data.payPrice = (Math.random() * 10000).toFixed(0);
-         cb(code, "无库存了/或者其他", data);
-      }, Math.random() * 1000 + 2000);
+       HttpTool.request(HttpTool.typeEnum.POST, "/bohl/orderapi/v1.0/orders/pay/online", (code, msg, json, option) => {
+           cb(code, msg, json);
+       }, (code, msg, option) => {
+           cb(code, msg, {});
+       }, param);
+      // setTimeout(() => {
+      //    let code = (Math.random() * 10).toFixed(0) - 1;
+      //    let data = {};
+      //    data.url = "http://www.baidu.com";
+      //    data.payPrice = (Math.random() * 10000).toFixed(0);
+      //    cb(code, "无库存了/或者其他", data);
+      // }, Math.random() * 1000 + 2000);
    }
 
    loadPayInfo(param, cb) {
@@ -552,7 +629,7 @@ class page extends Component {
          cb(-3, "缺少订单号", null);
          return;
       }
-       HttpTool.request(HttpTool.typeEnum.POST, "/v1.0/orders/payInfo", (code, msg, json, option) => {
+       HttpTool.request(HttpTool.typeEnum.POST, "/bohl/orderapi/v1.0/orders/payInfo", (code, msg, json, option) => {
 
           let data =  {
                order: {
@@ -566,9 +643,10 @@ class page extends Component {
                    passengersInfo: "2成人/1儿童",
                },
                integral: {
-                   all: json.point,
+                   point: json.point,
                        use: 0
-               }
+               },
+               error:json.msg
            };
            if (code > 0) {
                if (!data.pay) {
@@ -600,7 +678,7 @@ class Money extends Component {
     */
    upDatePrice(use) {
       this.setState({
-         use: use * 100
+         use: use
       });
    }
 
@@ -612,7 +690,7 @@ class Money extends Component {
       let data = this.getData();
       data.payPrice = data.price - this.state.use;
       return <span {...this.props}>
-       {((data.payPrice) / 100).toFixed(2)}
+       {data.payPrice}
       </span>;
    }
 }

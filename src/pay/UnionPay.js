@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import less from './UnionPay.less';
 import {Button, Row, Input, Form, Icon, message} from 'antd';
-
+import {HttpTool} from "../../lib/utils/index.js";
 import Item from './Item';
 import UnionPayAdd from './UnionPayAdd.js';
 
@@ -56,21 +56,29 @@ class UnionPay extends Component {
    }
 
    loadUnionPayList(param, cb) {
-      setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 1;
-         let data = [];
-         code = 11;
-         if (code > 0) {
-            for (let i = 0; i < code; i++) {
-               data.push({
-                  code: "622***" + i.toString().repeat(4),
-                  type: "信用卡",
-                  icon: "./images/zhaoshang.png"
-               });
-            }
-         }
-         cb(code, code > 0 ? "获取成功" : "暂无卡列表/获取失败", data);
-      }, Math.random() * 1000);
+       HttpTool.request(HttpTool.typeEnum.POST, "/pc/v1.0/card/find/cards", (code, msg, json, option) => {
+           cb(code,msg,json);
+       }, (code, msg, option) => {
+           cb(code,msg, {});
+       }, param);
+      // setTimeout(() => {
+      //    let code = (Math.random() * 10).toFixed(0) - 1;
+      //    let data = [];
+      //    code = 11;
+      //    if (code > 0) {
+      //       for (let i = 0; i < code; i++) {
+      //          data.push({
+      //             code: "622***" + i.toString().repeat(4),
+      //             type: "信用卡",
+      //             icon: "./images/zhaoshang.png"
+      //          });
+      //       }
+      //    }
+      //    cb(code, code > 0 ? "获取成功" : "暂无卡列表/获取失败", data);
+      // }, Math.random() * 1000);
+
+
+       // /v1.0/card/getInUsedCards
    }
 
    doUnionPay(param, cb) {
@@ -326,7 +334,9 @@ class InputLayout extends Component {
          cb(code, code > 0 ? "获取成功" : "获取失败", data);
       }, Math.random() * 1000);
    }
-
+    componentWillUnmount() {
+        this.un = true;
+    }
    autoTime(time) {
       if (time > 0) {
          let diff = time - 1;
@@ -338,6 +348,9 @@ class InputLayout extends Component {
             }, 1000);
          });
       } else {
+         if(this.un){
+            return;
+         }
          this.setState({
             time: 0
          });
@@ -409,7 +422,7 @@ class InputLayout extends Component {
                      });
                   }}
                >
-                  {(this.state.time > 0 ? ("(" + this.state.time + "s)") : "") + "获取手机验证码"}
+                  {(this.state.time > 0 ? ("(" + this.state.time + "s)") : "") + "发送验证码"}
 
                </Button>
             </div>

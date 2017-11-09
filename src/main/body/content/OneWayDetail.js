@@ -250,7 +250,7 @@ class page extends Component {
         var div = (
             <div className={css.main}>
                 <div className={css.content}>
-                    <LineHeadTitle dataSource = {this.myData}/>
+                    <LineHeadTitle dataSource = {this.myData} obj={this}/>
                 </div>
                 <div className={css.refContent} style={{overflow:"hidden"}}>
                     {this.flightType==2?<div className={css.myCalendar}
@@ -309,9 +309,12 @@ class page extends Component {
                     <LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor}
                                myData = {this.myData}
                                callBack={(data)=>{
-                                   // this.myAlert.showView();
+                                   // alert(JSON.stringify(data));
+                                   this.myAlert.showView();
                                    window.app_open(this.props.obj, "/FlightDetail", {
-                                       data:data
+                                       data:{
+                                           airlineId:data.airlineId
+                                       }
                                    },"new");
                                }}/>
                 </div>

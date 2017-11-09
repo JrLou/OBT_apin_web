@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-import {Carousel, Input, Button, Row, Col, message} from "antd";
+import {Button, Modal} from "antd";
 import less from "./DemandDetail.less";
 import OrderInfoView from '../component/OrderInfoView/index';
 import CellNewFlight from "../content/cell/CellNewFlight";
@@ -37,8 +37,8 @@ class page extends Component {
             index: -1,
             upData: 1,
             data: null,
+            visible:false,
         };
-
     }
 
     getUpData() {
@@ -56,7 +56,7 @@ class page extends Component {
         // 多程 c374da99311144058a1d8d7382de5d8a
         // 单程 9cb5a2cd48104e3385f330aec6b3d196
         let param = {
-            id: "c374da99311144058a1d8d7382de5d8a",
+            id: "32abf9777c2947ab92afacf8342c050e",
         };
         let success = (code, msg, json, option) => {
             this.setState({
@@ -66,12 +66,63 @@ class page extends Component {
         let failure = (code, msg, option) => {
             this.data = null;
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/read", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/find", success, failure, param,
             {
                 ipKey: "hlIP"
             });
     }
-
+    cancelDemand(){
+        let param = {
+            id: "9d9f42b6b55c4bdda80c3600f0fddc3a",
+        };
+        let success = (code, msg, json, option) => {
+            this.setState({
+                data: json,
+            });
+        };
+        let failure = (code, msg, option) => {
+            this.data = null;
+        };
+        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/cancel", success, failure, param,
+            {
+                ipKey: "hlIP"
+            });
+    }
+    deleteDemand(){
+        let param = {
+            id: "4c0a82d59ff24262a8e8495c6eff44b0",
+        };
+        let success = (code, msg, json, option) => {
+            this.setState({
+                data: json,
+            });
+        };
+        let failure = (code, msg, option) => {
+            this.data = null;
+        };
+        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/remove", success, failure, param,
+            {
+                ipKey: "hlIP"
+            });
+    }
+    flightDemand(){
+        let param = {
+            demandId:"4c0a82d59ff24262a8e8495c6eff44b0",
+            id: "4c0a82d59ff24262a8e8495c6eff44b0",
+        };
+        let success = (code, msg, json, option) => {
+            this.setState({
+                data: json,
+            });
+        };
+        let failure = (code, msg, option) => {
+            this.data = null;
+        };
+        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/plans", success, failure, param,
+            {
+                ipKey: "hlIP"
+            });
+    }
     render() {
         let {data} = this.state;
         if (!data){
@@ -83,7 +134,7 @@ class page extends Component {
 
                 {(data.demandStatus === 1 && data.flightType === 3) || (data.demandStatus === 2 && data.flightType === 3) ?
                     this.getMultiPass(data.demandStatus, data) : this.getTop(data.demandStatus, data)}
-                {data.demandStatus === 4 ? this.getCellNewFlight(data && data.palns ? data.palns : []) : null}
+                {data.demandStatus === 4 ? this.getCellNewFlight(data && data.plans ? data.plans : []) : null}
                 {data.demandStatus === 1 ? this.getMessage("预计在30分钟内为您处理需求") :
                     (data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
                 {data.demandStatus === 5 ? this.getCloseReason() : null}
@@ -107,8 +158,6 @@ class page extends Component {
     }
 
     createViewCell(dataArr) {
-        alert(dataArr.cityArr);
-
         return dataArr.map((data, index) => {
             return (<CellNewFlight key={index} dataSource={data}/>);
         });
@@ -151,12 +200,58 @@ class page extends Component {
             </div>
         );
     }
+    showModal() {
+        this.setState({
+            visible: true
+        });
+    }
+    handleDeleteOk() {
+        this.deleteDemand();
+        this.setState({
+            visible: false
+        });
+    }
+    handleFlightOk() {
+        this.flightDemand();
+        this.setState({
+            visible: false
+        });
+    }
 
+    handleCancelOk() {
+        this.cancelDemand();
+        this.setState({
+            visible: false
+        });
+    }
+
+    handleCancel() {
+        this.setState({
+            visible: false
+        });
+    }
     getDemandButton(type) {
         if (type === 1 || type === 2) {
             return (
                 <div className={less.buttonLayout}>
-                    <Button className={less.buttonCancel}>取消需求</Button>
+                    <Button className={less.buttonCancel}
+                    onClick={()=>{
+                        this.showModal();
+                    }}
+                    >取消需求</Button>
+                    <Modal
+                        title="提示"
+                        visible={this.state.visible}
+                        onCancel={this.handleCancel.bind(this)}
+                        onOk={this.handleCancelOk.bind(this)}
+                        okText="是"
+                        cancelText="否"
+                        style={{width:'100px'}}
+                        prefixCls="my-ant-modal"
+                    >
+                        <font style={{fontSize:16,color:"#333"}}>是否确定取消此需求</font>
+
+                    </Modal>
                 </div>
             );
         } else if (type === 4) {
@@ -166,7 +261,24 @@ class page extends Component {
         } else {
             return (
                 <div className={less.buttonLayout}>
-                    <Button className={less.buttonDelete}>删除需求</Button>
+                    <Button className={less.buttonDelete}
+                            onClick={()=>{
+                                this.showModal();
+                            }}
+                    >删除需求</Button>
+                    <Modal
+                        title="提示"
+                        visible={this.state.visible}
+                        onCancel={this.handleCancel.bind(this)}
+                        onOk={this.handleDeleteOk.bind(this)}
+                        okText="是"
+                        cancelText="否"
+                        style={{width:'100px'}}
+                        prefixCls="my-ant-modal"
+                    >
+                        <font style={{fontSize:16,color:"#333"}}>是否确定删除此需求</font>
+
+                    </Modal>
                 </div>
             );
         }
@@ -183,7 +295,7 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>需求状态：</font>
                             <font
-                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.demandStatus ? (data.demandStatus === -1 ? "全部" : status[data.demandStatus] ) : "暂无"}</font>
+                                className={type===1||type===2?less.mainContentGreenStatus:(type === 5 ? less.mainContentClose : less.mainContent)}>{data && data.demandStatus ? (data.demandStatus === -1 ? "全部" : status[data.demandStatus] ) : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
@@ -253,6 +365,7 @@ class page extends Component {
                                             className={this.state.index === index ? less.confirmFlightButton : less.uncertainFlightButton}
                                             onClick={() => {
                                                 this.setState({index: index});
+                                                this.showModal();
                                             }}>
                                             <div
                                                 className={this.state.index === index ? less.confirmBtnImg : less.uncertainBtnImg}>
@@ -263,6 +376,19 @@ class page extends Component {
                                                 className={this.state.index === index ? less.confirmBtnText : less.uncertainBtnText}>
                                                 确定此航班
                                             </div>
+                                            <Modal
+                                                title="提示"
+                                                visible={this.state.visible}
+                                                onCancel={this.handleCancel.bind(this)}
+                                                onOk={this.handleFlightOk.bind(this)}
+                                                okText="是"
+                                                cancelText="否"
+                                                style={{width:'100px'}}
+                                                prefixCls="my-ant-modal"
+                                            >
+                                                <font style={{fontSize:16,color:"#333"}}>是否确认选择该方案</font>
+
+                                            </Modal>
                                         </div>
                                     </div>
                                 </div>
@@ -294,7 +420,7 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>需求状态：</font>
                             <font
-                                className={type === 1 || type === 2 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{data && data.demandStatus ? (data.demandStatus === -1 ? "全部" : status[data.demandStatus] ) : "暂无"}</font>
+                                className={type === 1 || type === 2 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{data.demandStatus === -1 ? "全部" : status[data.demandStatus]}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
@@ -372,14 +498,9 @@ class page extends Component {
     }
 
     getTripList(data) {
-        let voyage=JSON.parse(data.voyage);
-
-        let arr = [];
-        for (let i = 0; i < 7; i++) {
-            arr.push(i);
-        }
+        let voyage=JSON.parse(data.voyage).voyage;
         return (
-            arr.map((data, index) => {
+            voyage.map((data, index) => {
                 return (
                     this.getTripItem(data, index)
                 );
@@ -391,12 +512,8 @@ class page extends Component {
     getTripItem(data, index) {
         if (!data)return null;
 
-        let img = null;
-        if (data.flightType === 1) {
-            img = require('../../../images/oneWay.png');
-        } else {
-            img = require('../../../images/return.png');
-        }
+        let img =  require('../../../images/oneWay.png');
+
         return (
             <div key={index}
                  className={less.cell}

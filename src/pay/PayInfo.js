@@ -25,7 +25,16 @@ class PayInfo extends Component {
 
    render() {
       let data = this.getData();
-      data.payPrice = data.price - this.state.use;
+
+      let passengersInfo = "";
+      if(data.adultCount){
+          passengersInfo +=(data.adultCount+"/成人");
+      }
+       if(data.childCount){
+           passengersInfo +=(data.childCount+"/儿童");
+       }
+
+
       return (
          <div
             {...this.props}
@@ -35,22 +44,22 @@ class PayInfo extends Component {
                <div className={less.payInfo_middle}>
                   <div className={less.fr + " " + less.payInfo_middle_priceBox}>
                      订单金额：<span className={less.payInfo_middle_priceBox_rmb}>￥</span>
-                     <span className={less.payInfo_middle_priceBox_price}>{((data.payPrice) / 100).toFixed(2)}</span>
+                     <span className={less.payInfo_middle_priceBox_price}>{data.price}</span>
                      <br/>
-                     （请在 <span className={less.payInfo_middle_priceBox_rmb}>00：29：59</span> 内支付）
+                     （请在 <span className={less.payInfo_middle_priceBox_rmb}>{data.expiredTime}</span> 内支付）
                   </div>
                   <div>
                      <p>
                         订单编号：
-                        <span className={less.payInfo_middle_msg}>{data.orderId}</span>
+                        <span className={less.payInfo_middle_msg}>{data.orderNo}</span>
                      </p>
                      <p>
                         订单金额：
-                        <span className={less.payInfo_middle_msg}>￥{((data.payPrice) / 100).toFixed(2)}</span>
+                        <span className={less.payInfo_middle_msg}>￥{data.price}</span>
                      </p>
                      <p>
                         乘机人数：
-                        <span className={less.payInfo_middle_msg}>{data.passengersInfo}</span>
+                        <span className={less.payInfo_middle_msg}>{passengersInfo}</span>
                      </p>
                   </div>
 
