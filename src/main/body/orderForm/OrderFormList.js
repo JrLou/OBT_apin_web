@@ -5,6 +5,7 @@ import React, {Component} from 'react';
 import css from './OrderFormList.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
+import {routeTranslate,getDateFormat,removeSpace} from '../tool/LXDHelp.js';
 import {Table,Input,DatePicker,Select,Button,message} from 'antd';
 import moment from 'moment';
 const Option = Select.Option;
@@ -47,7 +48,7 @@ class OrderFormList extends Component{
             },
         ];
         //订单状态
-        this.flightType = [
+        this.orderStateList = [
             {
                 title:'订单取消',
                 value:'0',
@@ -55,7 +56,35 @@ class OrderFormList extends Component{
             {
                 title:'等待确认',
                 value:'1',
-            }
+            },
+            {
+                title:'待付订金',
+                value:'2',
+            },
+            {
+                title:'待付款',
+                value:'3',
+            },
+            {
+                title:'待付尾款',
+                value:'5',
+            },
+            {
+                title:'已出票',
+                value:'7',
+            },
+            {
+                title:'订单关闭',
+                value:'8',
+            },
+            {
+                title:'已付款(未录乘机人)',
+                value:'12',
+            },
+            {
+                title:'等待出票',
+                value:'13',
+            },
         ];
 
     }
@@ -107,24 +136,8 @@ class OrderFormList extends Component{
                 dataIndex:'route',
                 render:(list,record)=>{
                     let flightType = record.flightType;
-                    let tipList = ['→','⇌','-'];
-
-                    let view = [];
-                    let length = list.length;
-                    for(let key in list){
-                        view.push(
-                            <span key={`cell${key}`}>
-                                {list[key].cityDep}
-                                {tipList[flightType]}
-                                {list[key].cityArrive}
-                                {key<length-1?'，':''}
-                            </span>
-                        );
-                    }
-                    return(<div className={css.routeStyle}>
-                        {view}
-                    </div>);
-
+                    let view = routeTranslate(list,flightType);
+                    return view;
                 },
             },{
                 title:'出发日期',
@@ -135,9 +148,19 @@ class OrderFormList extends Component{
             },{
                 title:'航程类型',
                 dataIndex:'flightType',
+                render:(text,recode)=>{
+                    let typeList = ['','单程','往返','多程'];
+                    let num = parseInt(text);
+                    return typeList[num];
+                }
             },{
                 title:'人数(成人／儿童)',
                 dataIndex:'peopleNum',
+                render:(text,recode)=>{
+                    let adultNum = recode.adult?recode.adult:0;
+                    let childNum = recode.child?recode.child:0;
+                    return (''+adultNum+'/'+childNum);
+                }
             },{
                 title:'含税价格',
                 dataIndex:'price',
@@ -147,6 +170,25 @@ class OrderFormList extends Component{
             },{
                 title:'订单状态',
                 dataIndex:'orderStatus',
+                render:(text,record)=>{
+                    let num = parseInt(text);
+                    let state = '';
+                    switch(num){
+                        case 0:state = '订单取消';break;
+                        case 1:state = '等待确认';break;
+                        case 2:state = '待付订金';break;
+                        case 3:state = '待付款';break;
+                        case 5:state = '待付尾款';break;
+                        case 7:state = '已出票';break;
+                        case 8:state = '订单关闭';break;
+                        case 12:state = '已付款(未录乘机人)';break;
+                        case 13:state = '等待出票';break;
+                        case 14:state = '支付审核中';break;
+                        case 15:state = '支付审核失败';break;
+                        default:state = '';
+                    }
+                    return state;
+                }
             },{
                 title:'操作',
                 dataIndex:'operation',
@@ -174,11 +216,13 @@ class OrderFormList extends Component{
                     cityArrive:'杭州',
                 },],
                 dateDep:'2017-09-13',
-                flightType:0,
+                flightType:1,
                 peopleNum:'12/2',
+                adult:3,
+                child:15,
                 price:'¥1200',
                 createDate:'2017-08-23 16:23',
-                orderStatus:'等待确认',
+                orderStatus:'0',
                 operation:'查看详情',
             },
             {
@@ -191,11 +235,12 @@ class OrderFormList extends Component{
                 }],
                 dateDep:'2017-09-13',
                 endDate:'2017-09-13',
-                flightType:1,
+                flightType:2,
                 peopleNum:'12/2',
+                child:'3',
                 price:'¥1200',
                 createDate:'2017-08-23 16:23',
-                orderStatus:'等待确认',
+                orderStatus:'1',
                 operation:'查看详情',
             },
             {
@@ -216,11 +261,12 @@ class OrderFormList extends Component{
                     ],
                 dateDep:'2017-09-13',
                 endDate:'2017-09-13',
-                flightType:2,
+                flightType:3,
+                adult:'8',
                 peopleNum:'12/2',
                 price:'¥1200',
                 createDate:'2017-08-23 16:23',
-                orderStatus:'已付款（未录乘机人）',
+                orderStatus:'5',
                 operation:'查看详情',
             },
         ];
@@ -236,7 +282,7 @@ class OrderFormList extends Component{
                             className={css.inputStyle}
                             placeholder={'请输入'}
                             onChange={(obj)=>{
-                                let value = this.replaceSpace(obj.target.value);
+                                let value = removeSpace(obj.target.value);
                                 this.changeState('cityDep',value);
                             }}
                         />
@@ -248,7 +294,7 @@ class OrderFormList extends Component{
                             className={css.inputStyle}
                             placeholder={'请输入'}
                             onChange={(obj)=>{
-                                let value = this.replaceSpace(obj.target.value);
+                                let value = removeSpace(obj.target.value);
                                 this.changeState('cityArrive',value);
                             }}
                         />
@@ -304,7 +350,7 @@ class OrderFormList extends Component{
                                 this.changeState('orderStatus',value);
                             }}
                         >
-                            {this.getOptions(this.flightType)}
+                            {this.getOptions(this.orderStateList)}
                         </Select>
                     </div>
                     <div className={css.searchItem01}>
@@ -376,20 +422,6 @@ class OrderFormList extends Component{
         }
     }
 
-
-    /**
-     * 去除字符串前后的空格
-     * @param text
-     * @returns {string}
-     */
-    replaceSpace(text){
-        if(typeof(text) === 'string'){
-            return text.replace(/(^\s+)|(\s+$)/g,'');
-        }else{
-            return '';
-        }
-    }
-
     /**
      * 分页器改变页码
      * @param num
@@ -422,6 +454,8 @@ class OrderFormList extends Component{
         let parames = this.getSearchParames();
 
         let successCB = (code, msg, json, option)=>{
+            //转换数据，更改状态机
+            let newData = this.transformData(json);
             this.setLoading(false);
         };
 
@@ -462,36 +496,18 @@ class OrderFormList extends Component{
         let parames = {
             bdCharger:'',
             customerName:'',
-            orderNo:'',
-            orderStatus:'',
+            orderStatus:state.orderStatus,
             cityDep:state.cityDep,
             cityArrive:state.cityArrive,
             flightType:state.flightType,
             pageNumber:state.pageNumber,
             pageSize:state.pageSize,
         };
-        let dateDepStart = state.startDate?this.getDateFormat(state.startDate.valueOf()):'',
-            dateDepStop = state.endDate?this.getDateFormat(state.endDate.valueOf()):'';
+        let dateDepStart = state.startDate?getDateFormat(state.startDate.valueOf()):'',
+            dateDepStop = state.endDate?getDateFormat(state.endDate.valueOf()):'';
         parames.dateDepStart = dateDepStart;
         parames.dateDepStop = dateDepStop;
         return parames;
-    }
-
-    /**
-     * 从时间对象中解析出特定时间格式字符串
-     * @param time
-     * @returns {string}   eg:20170324
-     */
-    getDateFormat(time){
-        let date = '';
-        if(time){
-            let newDate = new Date(time);
-            let year = newDate.getFullYear();
-            let month = (newDate.getMonth()+1)>9?(newDate.getMonth()+1):'0'+(newDate.getMonth()+1);
-            let day = newDate.getDate()>9?newDate.getDate():'0'+newDate.getDate();
-            date = ''+year+month+day;
-        }
-        return date;
     }
 
     /**
@@ -511,6 +527,19 @@ class OrderFormList extends Component{
      */
     isLoading() {
         return this.state.loading;
+    }
+
+    /**
+     * 对后台传回对数据进行解析，返回格式化对数据
+     * @param data
+     * @returns {Array}
+     */
+    transformData(data){
+        let newData = [];
+        if(data instanceof Array){
+            log(1);
+        }
+        return newData;
     }
 
 }

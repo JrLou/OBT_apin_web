@@ -24,7 +24,7 @@ class IntegralInfo extends Component {
       let {integral,order} = this.getData();
 
 
-      let maxValue =Math.min( Math.floor(integral.all/1000),Math.floor(order.price/100));
+      let maxValue =Math.min( Math.floor(integral.point/1000),Math.floor(order.price));
       return (
          <div
             {...this.props}
@@ -34,7 +34,7 @@ class IntegralInfo extends Component {
                   <div className={less.integralInfo_top}>积分抵扣</div>
                   <div className={less.integralInfo_middle}>
                      <div className={less.integralInfo_middle_line1}>
-                        <span className={less.integralInfo_middle_line1_light}>您目前有{integral.all}积分:</span>
+                        <span className={less.integralInfo_middle_line1_light}>您目前有{integral.point}积分:</span>
                         <span className={less.integralInfo_middle_line1_heavy}>最低1000积分开始抵扣 </span>
                      </div>
                      <div className={less.integralInfo_middle_line2}>
@@ -79,7 +79,7 @@ class IntegralInfo extends Component {
                            }}
                            style={{width: "60"}}
                         />&nbsp;
-                        千积分
+                        (积分单位:千)
                         <span className={less.integralInfo_middle_line2_msg}>
                                     可抵用<span
                            className={less.integralInfo_middle_line2_msg_price}>{integral.use}</span>元

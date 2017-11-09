@@ -12,7 +12,6 @@
   font-size: @font_size_center;
   font-weight: bold;
   float: left;
-  padding: @d_spadding_small;
   color: @font-color;
 }
 .btnType01,.btnType02,.btnType03{
@@ -30,9 +29,38 @@
   margin: @d_spadding_cell auto;
 }
 .passengerTable{
+  clear: both;
   margin-top: @d_spadding_small;
 }
 .submitBox{
   text-align: center;
   margin-top: @d_spadding_small;
+}
+.waitTicket{
+  display: inline-block;
+  vertical-align: middle;
+  word-wrap: break-word
+}
+.operationUpDate{
+  color: @primary-color;
+  cursor: pointer;
+}
+.operationDelete{
+  color: @error-color;
+  cursor: pointer;
+}
+.errorStyle{
+  border-color: @error-color;
+}
+.contentTitle{
+  text-align: center;
+  font-size: @font_size_center;
+  color: @font-color;
+  letter-spacing: 0.24px;
+}
+.contentMsg{
+  margin: 0 @d_spadding_super_big;
+  font-size: @font_size_cell;
+  color: #999;
+  letter-spacing: -1px;
 }

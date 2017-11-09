@@ -18,12 +18,10 @@ class page extends Component {
         this.state = {
         };
     }
-
-
     httpPostAdd(param) {//发送数据
         let success = (code, msg, json, option) => {
             //   console.log(msg);
-            message.success();
+            message.success(msg);
         };
         let failure = (code, msg, option) => {
             //   console.log(msg);

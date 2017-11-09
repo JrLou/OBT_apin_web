@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Input, Button, Icon, message, Modal, Upload} from 'antd';
+import {HttpTool} from "../../../../lib/utils/index.js";
 import Panel from '../../../pay/Panel';
 import less from "./BankUpload.less";
 
@@ -39,7 +40,6 @@ class BankUpload extends Component {
          });
       }
    }
-
 
    getdefaultView() {
       return (
@@ -218,6 +218,7 @@ class UploadCmp extends Component {
          previewImage: '',
          fileList: [],
       };
+      this._fileList = [];
    }
 
    isImageTypeOk(file) {
@@ -242,10 +243,19 @@ class UploadCmp extends Component {
          data.urlArr.push("后台返回的体条url" + (Math.random() * 10).toFixed(0).repeat(4));
          cb(code, code > 0 ? "开通成功" : "开通失败", data);
       }, Math.random() * 1000 + 1000);
+
+      HttpTool.request(HttpTool.typeEnum.POST,
+         "/orderapi/v1.0/orders/voucherUp",
+         (code, msg, json, option) => {
+
+
+         }, (code, msg, option) => {
+         }, param);
    }
 
    beforeUpload(file) {
       if (!this.isImageTypeOk(file)) {
+         console.log("cuowul ");
          return false;
       }
       console.log("图片上传....");
@@ -260,27 +270,29 @@ class UploadCmp extends Component {
       //    }
       // });
 
-      //请求接口，如果失败，则取消上传
-
-
       // let r = new FileReader();
       // r.readAsDataURL(file);
       // r.onload = (e) => {
       //    let image_base64 = e.target.result;
+      //
+      //    this._fileList.push({
+      //       uid: new Date().getTime(),
+      //       name: file.name,
+      //       status: 'done',
+      //       thumbUrl: image_base64,
+      //    });
+      //
       //    this.setState({
-      //       fileList: [{
-      //          uid: new Date().getTime(),
-      //          name: file.name,
-      //          status: 'done',
-      //          thumbUrl: image_base64,
-      //       }],
+      //       fileList: this._fileList,
       //       pzUrl: image_base64
       //    }, () => {
       //       console.log(this.state.fileList);
       //    });
+      //    console.log("onload的return false");
       //    return false;
       // };
-      // return false;//自动上传
+      // console.log("阻止上传的return false");
+      // return false;
    }
 
    handleCancel() {
@@ -307,7 +319,7 @@ class UploadCmp extends Component {
       return (
          <div className="clearfix forUploadStyle">
             <Upload
-               action="//jsonplaceholder.typicode.com/posts/"
+               action="/orderapi/v1.0/orders/voucherUp"
                listType="picture-card"
                fileList={fileList}
                beforeUpload={this.beforeUpload.bind(this)}

@@ -15,6 +15,10 @@
   border-color: @c_text_red;
   display: table;
 }
+.divDisabled{
+  .bottomDiv;
+  border-color: @border-color;
+}
 .bottomDiv_left{
   display: table-cell;
   vertical-align: middle;
@@ -43,9 +47,16 @@
   font-size: 28px;
   color: @c_white;
   text-align: center;
+  cursor:pointer;
 }
 .depositPriceBg{
   width: 100%;
   text-align: right;
   padding-right: @d_spadding_small;
+}
+.btnDisabled{
+  .bottomDiv_right;
+  border-color: @border-color;
+  background-color: @border-color;
+  cursor: not-allowed;
 }
