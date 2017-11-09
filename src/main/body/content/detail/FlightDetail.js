@@ -10,8 +10,6 @@ import css from './FlightDetail.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APIGYW from "../../../../api/APIGYW.js";
 import LoadingView from "../../component/LoadingView.js";
-import StateProgress from "./detailComp/StateProgress.js";
-import CellFlight from "../cell/CellFlight.js";
 import CellNewFlight from "../cell/CellNewFlight.js";
 import PayBottom from "./detailComp/PayBottom.js";
 import MyModalRequire from "./detailComp/MyModalRequire.js";
@@ -26,8 +24,8 @@ class page extends Component {
         this.param = par.data?par.data:{};
         this.isPay = this.param&&this.param.isDirect&&this.param.isDirect?this.param.isDirect:0;
 
-        this.adultPrice = 0;
-        this.childPrice = 0;
+        this.adultPrice = "";
+        this.childPrice = "";
         this.state = {
             upData:0,
             adultNum:1,
@@ -37,18 +35,13 @@ class page extends Component {
 
         //用来显示库存超出的时候 弹出module框添加已知数据
         this.requireParam = {
-            lineType:3,
+            lineType:2,
             lineNum:1,
-            adultCount:"10",
-            childCount:"10",
+            adultCount:"0",
+            childCount:"0",
             remark:"",
             phone:"",
-            listData:[{
-                fromCity:"北京",
-                toCity:"杭州",
-                fromDateTime:"2017-11-20",
-                toDateTime:"2017-11-20"
-            }]};
+            listData:[{}]};
     }
     componentWillReceiveProps(nextProps) {
 
@@ -108,23 +101,30 @@ class page extends Component {
                     message.warning(msg);
                 };
                 // HttpTool.request(HttpTool.typeEnum.POST, APIGYW.orderapi_orders_create, success, failure, param, {ipKey:'hlIP'});
-                this.skipView(3);
+
+                this.loadingView.refreshView(false,()=>{
+                    this.skipView(3);
+                });
             }
         });
     }
     /**
-     * code:    1 跳转订单页
-     *          2 跳转支付页
+     * code:    1 跳转订单页 只传订单id
+     *          2 跳转支付页 只传订单id
      *          3 弹出发布需求窗并跳转需求详情页
      */
     skipView(code){
         if (code==1){
-            window.app_open(this.props.obj, "/FlightDetail", {
-                data:{}
+            window.app_open(this.props.obj, "/OrderFormDetail", {
+                data:{
+                    id:""
+                }
             },"new");
         }else if (code==2){
-            window.app_open(this.props.obj, "/FlightDetail", {
-                data:{}
+            window.app_open(this.props.obj, "/Pay", {
+                data:{
+                    id:""
+                }
             },"new");
         }else {
             this.myModalRequire.showModal(true,
@@ -136,7 +136,7 @@ class page extends Component {
         }
     }
     /**
-     * 点击发布需求回调函数
+     * 点击发布需求回调函数  传参
      */
     commit(value){
         var param = value;
@@ -146,7 +146,7 @@ class page extends Component {
             this.myModalRequire.hiddenModal(()=>{
                 this.loadingView.refreshView(false);
                 window.app_open(this, "/DemandDetail", {
-                    data: {}
+                    data: {id:""}
                 }, "new");
             });
         };
@@ -154,8 +154,13 @@ class page extends Component {
             message.warning(msg);
             this.loadingView.refreshView(false);
         };
-        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demandapi_demands, success, failure, param,
-            {ipKey:'hlIP'});
+        // HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demandapi_demands, success, failure, param,{ipKey:'hlIP'});
+
+        window.app_open(this, "/DemandDetail", {
+            data: {
+                id:""
+            }
+        }, "new");
     }
 
     render() {
@@ -336,7 +341,7 @@ class page extends Component {
         let itemDiv = (
             <div className={css.tableCell}>
                 <div className={css.left}>
-                    <CellNewFlight dataSource = {voyagesObj} flightType={2} isNoShowRule={true}/>
+                    <CellNewFlight dataSource = {voyagesObj} flightType={voyagesObj.flightType?voyagesObj.flightType:1} isNoShowRule={true}/>
                 </div>
 
                 <div className={css.right}>
