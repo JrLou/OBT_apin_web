@@ -106,12 +106,11 @@ class page extends Component {
                     });
                 };
                 var failure = (code, msg, option) => {
-                    message.warning(msg);
                     this.loadingView.refreshView(false);
+                    message.warning(msg);
                 };
                 HttpTool.request(HttpTool.typeEnum.POST, APIGYW.orderapi_orders_create, success, failure, param,
                     {ipKey:'hlIP'});
-
             }
         });
     }
