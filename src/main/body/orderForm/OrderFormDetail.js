@@ -6,6 +6,7 @@ import css from './OrderFormDetail.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
 import {hasKey} from '../tool/LXDHelp.js';
+import {Spin} from 'antd';
 import TitleBar from './TitleBar/index.js';
 import Passengers from './Passengers/index.js';
 import CellNewFlight from '../content/cell/CellNewFlight.js';
@@ -36,6 +37,7 @@ class OrderFormDetail extends Component{
             isPassed:false,     //乘机人信息是否已经确认
             orderID:'',         //订单ID
             upDate:0,
+            loading:false,      //加载状态
         };
     }
 
@@ -134,6 +136,10 @@ class OrderFormDetail extends Component{
         }
         return(
             <div className={css.mainPage}>
+                <Spin
+                    size={'large'}
+                    spinning={this.state.loading}
+                >
                 <TitleBar
                     orderState={this.state.orderState}
                     deadLine={'2017-11-27'}
@@ -190,7 +196,7 @@ class OrderFormDetail extends Component{
                     />
                     :''
                 }
-
+                </Spin>
             </div>
         );
     }
@@ -199,7 +205,51 @@ class OrderFormDetail extends Component{
      * 订单删除以后的回调
      */
     deleteOrderCB(){
-        alert('订单删除啦！');
+        let parames = {};
+        let successCB = (code, msg, json, option)=>{
+            this.setLoading(false);
+        };
+        let failureCB = (code, msg, option)=>{
+            this.setLoading(false);
+        };
+        // this.setLoading(true,()=>{
+        //     HttpTool.request(HttpTool.typeEnum.GET,APILXD.XXXXXXXX, successCB, failureCB, parames,
+        //         {
+        //             ipKey: "hlIP"
+        //         });
+        // });
+
+        //模拟接口
+        this.setLoading(true,()=>{
+            log(parames);
+            setTimeout(()=>{
+                let num = Math.random();
+                if(num<0.5){
+                    successCB();
+                }else{
+                    failureCB();
+                }
+            },1000);
+        });
+    }
+
+    /**
+     * 更改请求数据的状态并回调
+     * @param loading
+     * @param cb
+     */
+    setLoading(loading, cb) {
+        this.setState({
+            loading: loading
+        }, cb);
+    }
+
+    /**
+     * 返回加载的状态
+     * @returns {boolean}
+     */
+    isLoading() {
+        return this.state.loading;
     }
 }
 
