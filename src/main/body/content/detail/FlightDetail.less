@@ -75,34 +75,20 @@
   border-bottom-left-radius: 5px;
   border-top-left-radius: 5px;
 }
-.schemeDiv{
-  background-image: url("../../../../images/scheme_icon.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  width: 63px;
-  height: 29px;
-  line-height: 29px;
-  font-size: @font_size_cell;
-  color: @c_white;
-  text-align: center;
-
-}
 .tableCell{
   composes: table;
-  padding: 0 2% 0 5%;
+  width: 100%;
 }
 .left{
   composes: itemCenter;
-  width: 82%;
+  width: 80%;
   background: @c_bg_white;
-  padding: @d_spadding_big @d_spadding_center;
 }
 
 //右边的样式
 .right{
   composes: itemCenter;
-  width: 18%;
+  width: 20%;
   background: @c_bg_white;
   border-color: @c_border_gray;
   border-style: solid;
@@ -181,10 +167,19 @@
   width:200px;
   height: 40px;
   line-height: 40px;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow: hidden;
+  padding-right: @d_spadding_center;
 }
 .priceText{
+  float: left;
+  max-width: 200px;
   height: 40px;
   line-height: 40px;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow: hidden;
 }
 .priceTextColor{
   font-size: @font_size_cell;

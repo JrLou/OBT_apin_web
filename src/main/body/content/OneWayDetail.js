@@ -309,17 +309,19 @@ class page extends Component {
                     <LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor}
                                myData = {this.myData}
                                callBack={(data)=>{
-                                   // alert(JSON.stringify(data));
-                                   this.myAlert.showView();
+                                   let voyagesArr = data.voyages?data.voyages:[];
+                                   let obj= {
+                                       airlineId:data.airlineId?data.airlineId:"",
+                                       depDate:voyagesArr[0]&&voyagesArr[0].depDate?voyagesArr[0].depDate:"",
+                                       retDate:voyagesArr[1]&&voyagesArr[1].depDate?voyagesArr[1].depDate:"",
+                                       isDirect:data.isDirect,
+                                   };
                                    window.app_open(this.props.obj, "/FlightDetail", {
-                                       data:{
-                                           airlineId:data.airlineId
-                                       }
+                                       step:1,
+                                       data:obj
                                    },"new");
                                }}/>
                 </div>
-
-                <MyAlert ref={(a)=>this.myAlert = a}/>
                 <LoadingView ref={(a)=>this.loadingView = a}/>
             </div>
         );
@@ -370,12 +372,12 @@ class LineInfor extends Component {
         var viewArr = [];
         for (let i=0;i<dataSource.length;i++){
             let dataItem = dataSource[i];
-            let airlineInfo = (dataItem.airlineInfo&&dataItem.airlineInfo.length>0)?dataItem.airlineInfo:[];
+            let airlineInfo = (dataItem.voyages&&dataItem.voyages.length>0)?dataItem.voyages:[];
             let airlineInfo_One = airlineInfo[0]?airlineInfo[0]:{};
             let desc = (airlineInfo_One.depDate||"")+" "+(airlineInfo_One.depTime||"")+" --> "+(airlineInfo_One.arrDate||"")+" "+(airlineInfo_One.arrTime||"")+" "+(airlineInfo_One.depAirport||"")+"-->"+(airlineInfo_One.arrAirport||"");
             var itemView = (<div key={i}>
                 <div className={css.cell}>
-                    <div className={css.sign}>直营</div>
+                    {dataItem.isDirect&&dataItem.isDirect==1?<div className={css.sign}>直营</div>:null}
                     <div className={css.left}>
                         <div className={css.table}>
                             {this.createItemCell(airlineInfo,flightType)}
@@ -448,18 +450,6 @@ class LineInfor extends Component {
             let startDate = dataItem.depDate?dataItem.depDate.substring(5):"";
             startDate = startDate.replace("-","月")+"日";
 
-
-            let totalTime = dataItem.flightTime?dataItem.flightTime:"";
-            let timeArr = totalTime.split(":");
-            let totalText = "";
-            if (timeArr[0]&&timeArr[0]>0){
-                totalText = timeArr[0]+"小时";
-            }
-            if (timeArr[1]&&timeArr[1]>0){
-                totalText = totalText + timeArr[1]+"分钟";
-            }
-
-
             let endDate = dataItem.arrDate?dataItem.arrDate.substring(5):"";
             endDate = endDate.replace("-","月")+"日";
             var itemView = (<div key={i}>
@@ -490,7 +480,7 @@ class LineInfor extends Component {
 
                             <div className={css.totalTime}>
                                 <div className={css.totalTimeText}>
-                                    {totalText}
+                                    {dataItem.flightTime?dataItem.flightTime:""}
                                 </div>
                                 <img className={css.line} src={require('../../../images/trip_line.png')}/>
                             </div>
