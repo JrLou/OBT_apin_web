@@ -60,7 +60,7 @@ class UnionPay extends Component {
            cb(code,msg,json);
        }, (code, msg, option) => {
            cb(code,msg, {});
-       }, param);
+       }, {});
       // setTimeout(() => {
       //    let code = (Math.random() * 10).toFixed(0) - 1;
       //    let data = [];
@@ -166,6 +166,7 @@ class UnionPay extends Component {
                }}>点击开通</a>
             </div>
             <div>
+
                <Button
                   style={{height: 60, width: 200, fontSize: 16, marginBottom: 12, marginTop: 15}}
                   type="primary"
@@ -221,61 +222,74 @@ class UnionPay extends Component {
                            }}
                         ><Icon type="left"/>返回上一级</a>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <Button
-                           type="primary"
-                           className={less.payBtn}
-                           onClick={() => {
-                              //第一步:得到银行卡号
-                              if (this.state.selectIndex < 0) {
-                                 message.error("请选择银行卡");
-                                 return;
-                              }
-                              if (this.state.cardList && this.state.cardList.length > this.state.selectIndex) {
-                                 let card = this.state.cardList[this.state.selectIndex];
-                                 let data = this.inputLayout.getData();
-                                 if (data.error) {
-                                    message.error(data.error);
-                                    return;
-                                 }
-                                 data.card = card.code;
-                                 console.log(card);
 
-                                 if (this.props.onAction) {
-                                    this.props.onAction("unionpay", data, () => {
-                                       //开始支付 10 秒 轮询支付
-                                       let diffTime = new Date().getTime();
-                                       let pay = () => {
-                                          this.doUnionPay(data, (code, msg, data) => {
-                                             if (code > 0) {
-                                                //支付成功
-                                                this.props.onAction("unionpaysuccess");
-                                             } else {
-                                                console.log(msg);
-                                                if ((new Date().getTime() - diffTime) / 1000 > 10) {
-                                                   //不再查询,支付失败了
-                                                   console.log("真的失败了");
-                                                   this.props.onAction("unionpayerror", msg);
-                                                } else {
-                                                   //支付失败,等1秒,再次提交
-                                                   setTimeout(() => {
-                                                      pay();
-                                                   }, 1000);
-                                                }
+                         <div style={{display:"inline-block"}}>
+                             <div>
+                                 <span className={less.nextLayout_priceTitle}>需支付：</span>
+                                 <span className={less.nextLayout_price}>
+                        <span className={less.nextLayout_price_rmb}>¥</span>
+                        <span >{this.props.data.payPrice}</span>
+                        </span>
+                             </div>
 
-                                             }
-                                          });
-                                       };
-                                       pay();
-                                    });
-                                 }
-                              } else {
-                                 message.error("选择银行卡异常");
-                              }
 
-                              //第二步:得到手机号和验证码
-                              //第三步:调用支付
-                           }}
-                        >付款</Button>
+                             <p>订单含机票、民航发展基金、燃油费、税费</p>
+                             <Button
+                                 type="primary"
+                                 className={less.payBtn}
+                                 onClick={() => {
+                                     //第一步:得到银行卡号
+                                     if (this.state.selectIndex < 0) {
+                                         message.error("请选择银行卡");
+                                         return;
+                                     }
+                                     if (this.state.cardList && this.state.cardList.length > this.state.selectIndex) {
+                                         let card = this.state.cardList[this.state.selectIndex];
+                                         let data = this.inputLayout.getData();
+                                         if (data.error) {
+                                             message.error(data.error);
+                                             return;
+                                         }
+                                         data.card = card.code;
+                                         console.log(card);
+
+                                         if (this.props.onAction) {
+                                             this.props.onAction("unionpay", data, () => {
+                                                 //开始支付 10 秒 轮询支付
+                                                 let diffTime = new Date().getTime();
+                                                 let pay = () => {
+                                                     this.doUnionPay(data, (code, msg, data) => {
+                                                         if (code > 0) {
+                                                             //支付成功
+                                                             this.props.onAction("unionpaysuccess");
+                                                         } else {
+                                                             console.log(msg);
+                                                             if ((new Date().getTime() - diffTime) / 1000 > 10) {
+                                                                 //不再查询,支付失败了
+                                                                 console.log("真的失败了");
+                                                                 this.props.onAction("unionpayerror", msg);
+                                                             } else {
+                                                                 //支付失败,等1秒,再次提交
+                                                                 setTimeout(() => {
+                                                                     pay();
+                                                                 }, 1000);
+                                                             }
+
+                                                         }
+                                                     });
+                                                 };
+                                                 pay();
+                                             });
+                                         }
+                                     } else {
+                                         message.error("选择银行卡异常");
+                                     }
+
+                                     //第二步:得到手机号和验证码
+                                     //第三步:调用支付
+                                 }}
+                             >付款</Button>
+                         </div>
                      </div>
                      : null
                }
