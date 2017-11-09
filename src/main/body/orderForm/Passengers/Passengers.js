@@ -25,7 +25,8 @@ class PassengerMsg extends Component{
         super(props);
         this.state = {
             orderState:this.props.orderState,
-            orderID:this.props.orderID,
+            // orderId:this.props.orderID,
+            orderId:'16b3639900f54a86b9116af77b088d75',
             dataSource:this.props.defaultData?this.props.defaultData:[],
             isPassed:this.props.isPassed?this.props.isPassed:false,     //是否已经确认了乘机人
             checkedMsg:false,       //是否已经勾选'确认乘机人信息'
@@ -169,6 +170,7 @@ class PassengerMsg extends Component{
                         spinning={this.state.loading}
                     >
                     <PassengerAdd
+                        orderId = {this.props.orderId}
                         lineType = {this.props.lineType}        //航线类型
                         defaultData = {this.state.passengerMsg}     //单个乘机人信息
                         closeModCB = {()=>{this.setState({passengerMsg:null});}}  //关闭窗口回调
