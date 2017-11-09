@@ -28,7 +28,9 @@ class PayBottom extends Component {
         return (<div className={css.payDiv}>
             <div className={css.bottomDiv}>
                 <div className={css.bottomDiv_left}>
-                    <div className={css.bottomBtn}>{"<返回上一级"}</div>
+                    <div className={css.bottomBtn} onClick={()=>{
+                        window.close();
+                            }}>{"<返回上一级"}</div>
                 </div>
                 <div className={css.bottomDiv_center}>
                     <div className={css.depositPriceBg}>

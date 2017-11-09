@@ -19,7 +19,7 @@ class CellNewFlight extends Component {
 
     }
     render() {
-        let {dataSource,flightType} = this.props;
+        let {dataSource,flightType,isNoShowRule} = this.props;
         if (!dataSource){
             return null;
         }
@@ -28,7 +28,7 @@ class CellNewFlight extends Component {
                 {this.createCell(dataSource.voyages||[],flightType)}
             </div>
 
-            <div className={css.right}>
+            {isNoShowRule?null:<div className={css.right}>
                 <div className={css.ruleDiv}>
                     <Tooltip placement="bottom" title={<div>
                         <div className={css.rule}>
@@ -41,8 +41,8 @@ class CellNewFlight extends Component {
                     </div>}>行李规则
                     </Tooltip>
                 </div>
+            </div>}
 
-            </div>
         </div>);
     }
     createCell(dataArr,flightType){

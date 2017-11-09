@@ -5,7 +5,7 @@
  * Created by lixifeng on 16/10/25.
  */
 import React, {Component} from 'react';
-import {message,Button,Form,Input,Icon} from 'antd';
+import {Tooltip,message,Form,Input,Icon} from 'antd';
 import css from './FlightDetail.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APIGYW from "../../../../api/APIGYW.js";
@@ -30,6 +30,8 @@ class page extends Component {
             phone:""
         };
 
+
+        //用来显示库存超出的时候 弹出module框添加已知数据
         this.requireParam = {
             lineType:3,
             lineNum:1,
@@ -256,8 +258,8 @@ class page extends Component {
     }
     render() {
         let {childNum,adultNum}=this.state;
-        this.totolNum = parseInt(childNum?childNum:0)+parseInt(adultNum?adultNum:0);
-        this.totalPrice = 2300*childNum+2333*adultNum;
+        let totolNum = parseInt(childNum?childNum:0)+parseInt(adultNum?adultNum:0);
+        let totalPrice = 2300*childNum+2333*adultNum;
         const { getFieldDecorator } = this.props.form;
         let div = (
             <div className={css.main}>
@@ -298,12 +300,12 @@ class page extends Component {
                                     })(<Input style={{width:"110px",height:"35px"}}
                                               placeholder={"人数"}
                                               addonBefore={<Icon type="minus"
-                                                                 style={{color:"#FF6600"}}
+                                                                 style={{cursor: "pointer",color:"#FF6600"}}
                                                                  onClick={()=>{
                                                                      this.addAction(true,false);
                                                                  }}/>}
                                               addonAfter={<Icon type="plus"
-                                                                style={{color:"#FF6600"}}
+                                                                style={{cursor: "pointer",color:"#FF6600"}}
                                                                 onClick={()=>{
                                                                     this.addAction(true,true);
                                                                 }}/>}
@@ -329,12 +331,12 @@ class page extends Component {
                                         <Input style={{width:"110px"}}
                                                placeholder={"人数"}
                                                addonBefore={<Icon type="minus"
-                                                                  style={{color:"#FF6600",}}
+                                                                  style={{cursor: "pointer",color:"#FF6600",}}
                                                                   onClick={()=>{
                                                                       this.addAction(false,false);
                                                                   }}/>}
                                                addonAfter={<Icon type="plus"
-                                                                 style={{color:"#FF6600"}}
+                                                                 style={{cursor: "pointer",color:"#FF6600"}}
                                                                  onClick={()=>{
                                                                      this.addAction(false,true);
                                                                  }}/>}
@@ -350,12 +352,12 @@ class page extends Component {
                         <div className={css.refOrderCellItem}>
                             <div className={css.perTotal}>
                                 <span>{"总人数: "}</span>
-                                <span style={{color:"#29A6FF"}}>{this.totolNum}</span>
+                                <span style={{color:"#29A6FF"}}>{totolNum}</span>
                             </div>
                             <div className={css.priceText}>
                                 <span>{"参考价（含税）"}</span>
                                 <span className={css.priceTextColor}>{"¥"}</span>
-                                <span className={css.priceTextFont}>{this.totalPrice}</span>
+                                <span className={css.priceTextFont}>{totalPrice}</span>
                             </div>
                         </div>
                     </div>
@@ -414,7 +416,7 @@ class page extends Component {
                     childPrice:"2000",
                     childNum:childNum,
                     adultNum:adultNum,
-                    totalPrice:this.totalPrice,
+                    totalPrice:totalPrice,
                 }}
                            isPay={true}
                            callBack={()=>{
@@ -451,24 +453,22 @@ class page extends Component {
 
                     <div className={css.tableCell}>
                         <div className={css.left}>
-                            <CellNewFlight dataSource = {data}/>
+                            <CellNewFlight dataSource = {data} flightType={2} isNoShowRule={true}/>
                         </div>
 
                         <div className={css.right}>
-                            <div className={css.table}>
-                                <div className={css.itemCenter} style={{width:"52%"}}>
-                                    <div className={css.priceText}>{"含税价"}</div>
-                                    <div className={css.priceText}>
-                                        <span className={css.priceTextColor}>{"¥ "}</span>
-                                        <span className={css.priceTextFont}>{data.basePrice||"0"}</span>
-                                        <span >{" 起"}</span>
-                                    </div>
-                                </div>
-                                <div className={css.itemCenter} style={{width:"48%"}}>
-                                    <div className={css.btn} style={{cursor: 'pointer'}}
-                                         onClick={() => {
-                                             alert("确定航班");
-                                         }}>{"确定此航班"}</div>
+                            <div className={css.itemCenter} style={{width:"100%"}}>
+                                <div className={css.ruleDiv}>
+                                    <Tooltip placement="bottom" title={<div>
+                                        <div className={css.rule}>
+                                            {"免费托运: "+data.freeBag+"件"}
+                                        </div>
+                                        <div className={css.rule}>
+                                            {"每件重量上限: "}
+                                            <span style={{color:"#ff6600",fontSize:"14px"}}>{data.weightLimit+"kg"}</span>
+                                        </div>
+                                    </div>}>行李规则
+                                    </Tooltip>
                                 </div>
                             </div>
                         </div>
@@ -483,132 +483,3 @@ page.contextTypes = {
     router: React.PropTypes.object
 };
 module.exports = FlightDetail;
-
-
-// "plans": [
-//     {
-//         "id": "14a38ee6f22346038929395e92basdwv",
-//         "adultPrice": 900,
-//         "childPrice": 700,
-//         "freeBag": 2,
-//         "weightLimit": 20,
-//         "voyages": [
-//             {
-//                 "id": "55bee6dc4ba74392af585feb4f97edrft",
-//                 "isStop": 0,
-//                 "isTransit": 0,
-//                 "tripIndex": 0,
-//                 "flightIndex": 0,
-//                 "week": 2,
-//                 "compName": "杭州来自",
-//                 "logo": "icollll",
-//                 "arrTime": "08:30:00",
-//                 "depTime": "06:30:00",
-//                 "arrAirport": "顶替",
-//                 "depAirport": "错位",
-//                 "flightTime": "2小时 0分钟",
-//                 "num": "DFE234",
-//                 "depDate": "2017-11-06",
-//                 "arrDate": "2017-11-06",
-//                 "child": [
-//                     {
-//                         "id": "55bee6dc4ba74392af585feb4f97edrf1",
-//                         "isStop": 0,
-//                         "isTransit": 1,
-//                         "tripIndex": 0,
-//                         "flightIndex": 1,
-//                         "week": 2,
-//                         "compName": "杭州来自",
-//                         "logo": "icollll",
-//                         "arrTime": "08:30:00",
-//                         "depTime": "12:30:00",
-//                         "arrAirport": "枯井",
-//                         "depAirport": "顶替",
-//                         "flightTime": "20小时 0分钟",
-//                         "num": "WEE234",
-//                         "depDate": "2017-11-06",
-//                         "arrDate": "2017-11-06",
-//                         "child": null
-//                     },
-//                     {
-//                         "id": "55bee6dc4ba74392af585feb4f97edrf2",
-//                         "isStop": 0,
-//                         "isTransit": 1,
-//                         "tripIndex": 0,
-//                         "flightIndex": 2,
-//                         "week": 2,
-//                         "compName": "杭州来自",
-//                         "logo": "icollll",
-//                         "arrTime": "23:30:00",
-//                         "depTime": "21:30:00",
-//                         "arrAirport": "扶贫",
-//                         "depAirport": "枯井",
-//                         "flightTime": "2小时 0分钟",
-//                         "num": "ASD234",
-//                         "depDate": "2017-11-06",
-//                         "arrDate": "2017-11-06",
-//                         "child": null
-//                     }
-//                 ]
-//             },
-//             {
-//                 "id": "55bee6dc4ba74392af585feb4f97e120",
-//                 "isStop": 0,
-//                 "isTransit": 0,
-//                 "tripIndex": 1,
-//                 "flightIndex": 0,
-//                 "week": 7,
-//                 "compName": "杭州来自",
-//                 "logo": "icollll",
-//                 "arrTime": "08:30:00",
-//                 "depTime": "06:30:00",
-//                 "arrAirport": "枯井",
-//                 "depAirport": "扶贫",
-//                 "flightTime": "2小时 0分钟",
-//                 "num": "DFE789",
-//                 "depDate": "2017-11-06",
-//                 "arrDate": "2017-11-06",
-//                 "child": [
-//                     {
-//                         "id": "55bee6dc4ba74392af585feb4f97e121",
-//                         "isStop": 0,
-//                         "isTransit": 1,
-//                         "tripIndex": 1,
-//                         "flightIndex": 1,
-//                         "week": 7,
-//                         "compName": "杭州来自",
-//                         "logo": "icollll",
-//                         "arrTime": "08:30:00",
-//                         "depTime": "06:30:00",
-//                         "arrAirport": "顶替",
-//                         "depAirport": "枯井",
-//                         "flightTime": "2小时 0分钟",
-//                         "num": "RGT789",
-//                         "depDate": "2017-11-06",
-//                         "arrDate": "2017-11-06",
-//                         "child": null
-//                     },
-//                     {
-//                         "id": "55bee6dc4ba74392af585feb4f97e122",
-//                         "isStop": 0,
-//                         "isTransit": 1,
-//                         "tripIndex": 1,
-//                         "flightIndex": 2,
-//                         "week": 7,
-//                         "compName": "杭州来自",
-//                         "logo": "icollll",
-//                         "arrTime": "08:30:00",
-//                         "depTime": "06:30:00",
-//                         "arrAirport": "错位",
-//                         "depAirport": "顶替",
-//                         "flightTime": "2小时 0分钟",
-//                         "num": "FGB789",
-//                         "depDate": "2017-11-06",
-//                         "arrDate": "2017-11-06",
-//                         "child": null
-//                     }
-//                 ]
-//             }
-//         ]
-//     }
-// ]
