@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import less from './UnionPay.less';
 import {Button, Row, Input, Form, Icon, message} from 'antd';
 import {HttpTool} from "../../lib/utils/index.js";
+import Api from './Api.js';
 import Item from './Item';
 import UnionPayAdd from './UnionPayAdd.js';
 
@@ -56,7 +57,7 @@ class UnionPay extends Component {
    }
 
    loadUnionPayList(param, cb) {
-       HttpTool.request(HttpTool.typeEnum.POST, "/v1.0/card/find/cards", (code, msg, json, option) => {
+       HttpTool.request(HttpTool.typeEnum.POST, Api.cards, (code, msg, json, option) => {
            cb(code,msg,json);
        }, (code, msg, option) => {
            cb(code,msg, {});
@@ -130,8 +131,8 @@ class UnionPay extends Component {
                                  </div>
                               ) : (
                                  <div>
-                                    <img className={less.bankLogoImg} src={require("./images/zhaoshang.png")} alt="bank_LOGO"/>
-                                    <div>{obj.type}:&nbsp;&nbsp;{obj.code}</div>
+                                    <img className={less.bankLogoImg} src={obj.iconUrl} alt="bank_LOGO"/>
+                                    <div>{obj.bankShortName}:&nbsp;&nbsp;{"*******"+obj.cardLastNo}</div>
                                  </div>
                               )
                            }
@@ -295,10 +296,11 @@ class UnionPay extends Component {
                }
             </div>
             <UnionPayAdd
-               onAction={(data) => {
+                orderId={this.props.orderId}
+               onAction={(data,apinPanel) => {
                   //打开开通
                   if (this.props.onAction) {
-                     this.props.onAction("unionopen", data);
+                     this.props.onAction("unionopen", data,null,apinPanel);
                   }
 
                }}
@@ -341,12 +343,17 @@ class InputLayout extends Component {
    }
 
    loadPhoneCode(param, cb) {
-      setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 5;
-         //todo 没有data吧?
-         let data = [];
-         cb(code, code > 0 ? "获取成功" : "获取失败", data);
-      }, Math.random() * 1000);
+       HttpTool.request(HttpTool.typeEnum.POST,Api.sms, (code, msg, json, option) => {
+           cb(code,msg,json);
+       }, (code, msg, option) => {
+           cb(code,msg, {});
+       }, {});
+      // setTimeout(() => {
+      //    let code = (Math.random() * 10).toFixed(0) - 5;
+      //    //todo 没有data吧?
+      //    let data = [];
+      //    cb(code, code > 0 ? "获取成功" : "获取失败", data);
+      // }, Math.random() * 1000);
    }
     componentWillUnmount() {
         this.un = true;

@@ -5,6 +5,7 @@ import {HttpTool,CookieHelp} from "../../lib/utils/index.js";
 
 import PayInfo from './PayInfo';
 import WindowHelp from './WindowHelp.js';
+import Api from './Api.js';
 import Panel from './Panel';
 import WXPay from './WXPay';
 import UnionPay from './UnionPay';
@@ -32,6 +33,7 @@ class page extends Component {
       this.par = window.app_getPar(this);
       console.log(this.par);
       this.id = this.par ? this.par.id : null;
+
 
 
    }
@@ -173,12 +175,14 @@ class page extends Component {
                   this.stepAction = ref;
                }
                }
+               orderId = {this.id}
                data={this.data.order||{}}
-               onAction={(type, data, callBack) => {
+               onAction={(type, data, callBack,apinPanel) => {
                   //打开
                   if (type === "unionopen") {
                      //打开开通银联
-                     this.openUnionPayAdd(data);
+                      this.cardNo = data.cardNo;
+                     this.openUnionPayAdd(data,apinPanel);
                   } else if (type === "unionpay") {
                      //打开银联支付
                      this.openPayIng(callBack);
@@ -401,8 +405,16 @@ class page extends Component {
       }, callBack);
    }
 
-   openUnionPayAdd(data) {
-      let apinPanel = this.wh.openInitWindow();
+   openUnionPayAdd(data,apinPanel) {
+      if(!apinPanel){
+          this.panel.show(true, {
+              content: "窗口打开错误",
+              // title: "银联开通",
+              showType: "error"
+
+          });
+          return;
+      }
       this.panel.show(true, {
          okText: "我已经开通",
          cancelText: "还没开通",
@@ -412,9 +424,9 @@ class page extends Component {
 
       }, () => {
          //3秒后去开始验证,是否支付成功
-         setTimeout(()=>{
-             this.handVerState = false;
-             this.autoVer(apinPanel,"union");},1000);
+          this.handVerState = false;
+          setTimeout(()=>{
+             this.autoVer(apinPanel,"union",{cardNo:data.cardNo});},1000);
          this.wh.openWindow(apinPanel, data.url);
       });
 
@@ -571,10 +583,11 @@ class page extends Component {
         );
     }
 
-   autoVer(apinPanel, type) {
+   autoVer(apinPanel, type,) {
        if(this.handVerState){
            return;
        }
+
       this[type === "pay" ? "loadPayOrderVer" : "loadUnionVer"]({
           orderId:this.id,
           payment:this.data.order.payment,
@@ -623,12 +636,23 @@ class page extends Component {
    }
 
    loadUnionVer(param, cb) {
-      setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 1;
-         let data = {};
-         data.url = "http://www.baidu.com";
-         cb(code, code > 0 ? "开通成功00" : "开通失败000", data);
-      }, Math.random() * 1000 + 2000);
+       HttpTool.request(HttpTool.typeEnum.POST, Api.isOpen, (code, msg, json, option) => {
+           let data = {
+               flag:!!json
+           };
+           cb(code,msg,data);
+       }, (code, msg, option) => {
+           cb(code,msg, {});
+       }, Object.assign(param||{},{
+           cardNo:this.cardNo
+       }));
+
+       // setTimeout(() => {
+      //    let code = (Math.random() * 10).toFixed(0) - 1;
+      //    let data = {};
+      //    data.url = "http://www.baidu.com";
+      //    cb(code, code > 0 ? "开通成功00" : "开通失败000", data);
+      // }, Math.random() * 1000 + 2000);
    }
 
    loadPayOrderVer(param, cb) {

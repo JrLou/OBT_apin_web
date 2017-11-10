@@ -8,7 +8,7 @@ class WindowHelp {
             return panel;
         }
         let w = window.screen.width*0.6 ,h = window.screen.height*0.6;
-        this.shareWindow =  window.open('/html/loading.html', 'apinPanel', 'height='+h+', width='+w+', top='+(window.screen.height-h)/2+',left='+(window.screen.width-w)/2+',toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
+        this.shareWindow  =  window.open('/html/loading.html', 'apinPanel', 'height='+h+', width='+w+', top='+(window.screen.height-h)/2+',left='+(window.screen.width-w)/2+',toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
 
         return this.shareWindow;
     }
