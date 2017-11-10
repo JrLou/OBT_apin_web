@@ -230,7 +230,7 @@ class PassengerAdd extends Component{
     }
 
     //获得证件号码
-    getCredNum(){
+    getCredNum(isSimple){
         return(
             <div>
                 {this.getItemTitle('证件号码：')}
@@ -239,14 +239,18 @@ class PassengerAdd extends Component{
                     value={this.state.data.credNumber}
                     onChange={(e)=>{
                         let value = e.target.value;
-                        let reg = /^[0-9Xx]*$/;
+                        let regIDCard = /^[0-9Xx]{0,40}$/;
+                        let regOther = /^[0-9a-zA-Z\<\>\-\/]{0,40}$/;
+                        let reg = isSimple?regIDCard:regOther;
                         if(reg.test(value)){
                             this.setData('credNumber',value);
                         }
                     }}
                     onBlur={(e)=>{
                         let value = e.target.value;
-                        let reg = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
+                        let regIDCard = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
+                        let regOther = /^[0-9a-zA-Z\<\>\-\/]{0,40}$/;
+                        let reg = isSimple?regIDCard:regOther;
                         this.setTestState('credNumber',{state:reg.test(value),msg:'请输入正确的证件号'});
                     }}
                 />
@@ -347,9 +351,9 @@ class PassengerAdd extends Component{
     render(){
         log(this.props.defaultData);
         let defaultData = this.props.defaultData;
-        let isSimple = (this.state.credType==1)?true:false;
-        let isAdd = (defaultData?false:true); //false:编辑   true:新增
-        let itemStyle = this.state.data.credType==1?css.hiddenItem:css.contentItem;
+        let isSimple = (this.state.credType==1)?true:false;     //是否使用身份证
+        let isAdd = (defaultData?false:true);                   //false:编辑   true:新增
+        let itemStyle = isSimple?css.hiddenItem:css.contentItem;
         return(
             <Modal
                 width={600}
@@ -364,11 +368,12 @@ class PassengerAdd extends Component{
             >
                 <Spin
                     spinning={this.state.loading}
+                    size={'large'}
                 >
                     <div className={css.modBody}>
                         <div className={css.modTitle}>{isAdd?'新增乘机人':'修改乘机人'}</div>
                         <div className={css.modContent}>
-                            <div className={this.state.data.credType==1?css.contentOneLine:css.contentItem}>
+                            <div className={isSimple?css.contentOneLine:css.contentItem}>
                                 {this.getNameInput()}
                             </div>
                             <div className={itemStyle}>
@@ -384,7 +389,7 @@ class PassengerAdd extends Component{
                                 {this.getCredType()}
                             </div>
                             <div className={css.contentItem}>
-                                {this.getCredNum()}
+                                {this.getCredNum(isSimple)}
                             </div>
                             <div className={itemStyle}>
                                 {this.getExpireTime()}

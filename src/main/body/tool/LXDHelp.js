@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 let LXDHelp = {
     /**
      * 输入航程数组和航程类型，动态拼接航程展示
-     * @param list  Array 航程数组 eg:[{cityDep:'宁波',cityArrive:'杭州'}]
+     * @param list  Array 航程数组 eg:[{cityDep:'宁波',cityArr:'杭州'}]
      * @param type  Number 航程类型  1：单程  2：往返  3：多程
      * @param style Object 自定义外侧div样式(可选)
      * @return {xml}
@@ -24,7 +24,7 @@ let LXDHelp = {
                 <span key={`cell${key}`}>
                                 {list[key].cityDep}
                     {tipList[flightType]}
-                    {list[key].cityArrive}
+                    {list[key].cityArr}
                     {key<length-1?'，':''}
                             </span>
             );

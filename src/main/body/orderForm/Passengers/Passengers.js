@@ -168,6 +168,7 @@ class PassengerMsg extends Component{
             return(
                 <div className={css.passengerList}>
                     <Spin
+                        size={'large'}
                         spinning={this.state.loading}
                     >
                     <PassengerAdd
@@ -240,6 +241,7 @@ class PassengerMsg extends Component{
                                         确认乘机人信息无误
                                     </Checkbox>
                                     <Button
+                                        disabled={!this.state.checkedMsg}
                                         size={'large'}
                                         type="primary"
                                         className={css.btnType03}
