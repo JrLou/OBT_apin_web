@@ -5,8 +5,8 @@ import React, {Component} from 'react';
 import css from './OrderFormDetail.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
-import {hasKey} from '../tool/LXDHelp.js';
-import {Spin} from 'antd';
+import {hasKey,getFlightData} from '../tool/LXDHelp.js';
+import {Spin,message} from 'antd';
 import TitleBar from './TitleBar/index.js';
 import Passengers from './Passengers/index.js';
 import CellNewFlight from '../content/cell/CellNewFlight.js';
@@ -32,142 +32,153 @@ class OrderFormDetail extends Component{
         let list = [0,1,2,3,5,7,8,12,13,14,15];
 
         this.state = {
+            orderId:window.app_getPar(this).orderId,         //订单ID
             returnState:3,          //接口返回的订单状态  （接口返回的状态需要经过转换才赋值给状态机）
             orderState:list[random],       //页面订单状态
             isPassed:false,     //乘机人信息是否已经确认
-            orderID:'',         //订单ID
+            flightData:null,    //航班信息
             upDate:0,
             loading:false,      //加载状态
         };
+
+        if(!this.state.orderId){
+            //没有订单号，直接跳404页面
+            window.app_open(this, "/None", {
+
+            });
+        }
     }
 
     componentDidMount(){
-        //模拟航班数据
-        this.listData =  {
-            "freeBag": 1,
-            "weightLimit": 12,
-            "voyages": [
-                {
-                    "id": "55bee6dc4ba74392af585feb4f97edrft",
-                    "isStop": 0,
-                    "isTransit": 0,
-                    "tripIndex": 0,
-                    "flightIndex": 0,
-                    "week": 2,
-                    "compName": "杭州来自",
-                    "logo": "icollll",
-                    "arrTime": "08:30",
-                    "depTime": "06:30",
-                    "arrAirport": "顶替",
-                    "depAirport": "错位",
-                    "flightTime": "2小时 0分钟",
-                    "num": "DFE234",
-                    "depDate": "2017-11-06",
-                    "arrDate": "2017-11-06",
-                    "child": [
-                        {
-                            "id": "55bee6dc4ba74392af585feb4f97edrf1",
-                            "isStop": 0,
-                            "isTransit": 1,
-                            "tripIndex": 0,
-                            "flightIndex": 1,
-                            "week": 2,
-                            "compName": "杭州来自",
-                            "logo": "icollll",
-                            "arrTime": "08:30",
-                            "depTime": "12:30",
-                            "arrAirport": "枯井",
-                            "depAirport": "顶替",
-                            "flightTime": "20小时 0分钟",
-                            "num": "WEE234",
-                            "depDate": "2017-11-06",
-                            "arrDate": "2017-11-06",
-                            "child": null
-                        },
-                        {
-                            "id": "55bee6dc4ba74392af585feb4f97edrf2",
-                            "isStop": 0,
-                            "isTransit": 1,
-                            "tripIndex": 0,
-                            "flightIndex": 2,
-                            "week": 2,
-                            "compName": "杭州来自",
-                            "logo": "icollll",
-                            "arrTime": "23:30",
-                            "depTime": "21:30",
-                            "arrAirport": "扶贫",
-                            "depAirport": "枯井",
-                            "flightTime": "2小时 0分钟",
-                            "num": "ASD234",
-                            "depDate": "2017-11-06",
-                            "arrDate": "2017-11-06",
-                            "child": null
-                        }
-                    ]
-                },
-                {
-                    "id": "55bee6dc4ba74392af585feb4f97e120",
-                    "isStop": 0,
-                    "isTransit": 0,
-                    "tripIndex": 1,
-                    "flightIndex": 0,
-                    "week": 7,
-                    "compName": "杭州来自",
-                    "logo": "icollll",
-                    "arrTime": "08:30",
-                    "depTime": "06:30",
-                    "arrAirport": "枯井",
-                    "depAirport": "扶贫",
-                    "flightTime": "2小时 0分钟",
-                    "num": "DFE789",
-                    "depDate": "2017-11-06",
-                    "arrDate": "2017-11-06",
-                    "child": [
-                        {
-                            "id": "55bee6dc4ba74392af585feb4f97e121",
-                            "isStop": 0,
-                            "isTransit": 1,
-                            "tripIndex": 1,
-                            "flightIndex": 1,
-                            "week": 7,
-                            "compName": "杭州来自",
-                            "logo": "icollll",
-                            "arrTime": "08:30",
-                            "depTime": "06:30",
-                            "arrAirport": "顶替",
-                            "depAirport": "枯井",
-                            "flightTime": "2小时 0分钟",
-                            "num": "RGT789",
-                            "depDate": "2017-11-06",
-                            "arrDate": "2017-11-06",
-                            "child": null
-                        },
-                        {
-                            "id": "55bee6dc4ba74392af585feb4f97e122",
-                            "isStop": 0,
-                            "isTransit": 1,
-                            "tripIndex": 1,
-                            "flightIndex": 2,
-                            "week": 7,
-                            "compName": "杭州来自",
-                            "logo": "icollll",
-                            "arrTime": "08:30",
-                            "depTime": "06:30",
-                            "arrAirport": "错位",
-                            "depAirport": "顶替",
-                            "flightTime": "2小时 0分钟",
-                            "num": "FGB789",
-                            "depDate": "2017-11-06",
-                            "arrDate": "2017-11-06",
-                            "child": null
-                        }
-                    ]
-                }
-            ],
-            "flightType": 1
-        };
+        //请求数据
+        this.setLoading(true,this.loadFormDetail);
 
-        this.upView();
+        //模拟航班数据
+        // this.listData =  {
+        //     "freeBag": 1,
+        //     "weightLimit": 12,
+        //     "voyages": [
+        //         {
+        //             "id": "55bee6dc4ba74392af585feb4f97edrft",
+        //             "isStop": 0,
+        //             "isTransit": 0,
+        //             "tripIndex": 0,
+        //             "flightIndex": 0,
+        //             "week": 2,
+        //             "compName": "杭州来自",
+        //             "logo": "icollll",
+        //             "arrTime": "08:30",
+        //             "depTime": "06:30",
+        //             "arrAirport": "顶替",
+        //             "depAirport": "错位",
+        //             "flightTime": "2小时 0分钟",
+        //             "num": "DFE234",
+        //             "depDate": "2017-11-06",
+        //             "arrDate": "2017-11-06",
+        //             "child": [
+        //                 {
+        //                     "id": "55bee6dc4ba74392af585feb4f97edrf1",
+        //                     "isStop": 0,
+        //                     "isTransit": 1,
+        //                     "tripIndex": 0,
+        //                     "flightIndex": 1,
+        //                     "week": 2,
+        //                     "compName": "杭州来自",
+        //                     "logo": "icollll",
+        //                     "arrTime": "08:30",
+        //                     "depTime": "12:30",
+        //                     "arrAirport": "枯井",
+        //                     "depAirport": "顶替",
+        //                     "flightTime": "20小时 0分钟",
+        //                     "num": "WEE234",
+        //                     "depDate": "2017-11-06",
+        //                     "arrDate": "2017-11-06",
+        //                     "child": []
+        //                 },
+        //                 {
+        //                     "id": "55bee6dc4ba74392af585feb4f97edrf2",
+        //                     "isStop": 0,
+        //                     "isTransit": 1,
+        //                     "tripIndex": 0,
+        //                     "flightIndex": 2,
+        //                     "week": 2,
+        //                     "compName": "杭州来自",
+        //                     "logo": "icollll",
+        //                     "arrTime": "23:30",
+        //                     "depTime": "21:30",
+        //                     "arrAirport": "扶贫",
+        //                     "depAirport": "枯井",
+        //                     "flightTime": "2小时 0分钟",
+        //                     "num": "ASD234",
+        //                     "depDate": "2017-11-06",
+        //                     "arrDate": "2017-11-06",
+        //                     "child": []
+        //                 }
+        //             ]
+        //         },
+        //         {
+        //             "id": "55bee6dc4ba74392af585feb4f97e120",
+        //             "isStop": 0,
+        //             "isTransit": 0,
+        //             "tripIndex": 1,
+        //             "flightIndex": 0,
+        //             "week": 7,
+        //             "compName": "杭州来自",
+        //             "logo": "icollll",
+        //             "arrTime": "08:30",
+        //             "depTime": "06:30",
+        //             "arrAirport": "枯井",
+        //             "depAirport": "扶贫",
+        //             "flightTime": "2小时 0分钟",
+        //             "num": "DFE789",
+        //             "depDate": "2017-11-06",
+        //             "arrDate": "2017-11-06",
+        //             "child": [
+        //                 {
+        //                     "id": "55bee6dc4ba74392af585feb4f97e121",
+        //                     "isStop": 0,
+        //                     "isTransit": 1,
+        //                     "tripIndex": 1,
+        //                     "flightIndex": 1,
+        //                     "week": 7,
+        //                     "compName": "杭州来自",
+        //                     "logo": "icollll",
+        //                     "arrTime": "08:30",
+        //                     "depTime": "06:30",
+        //                     "arrAirport": "顶替",
+        //                     "depAirport": "枯井",
+        //                     "flightTime": "2小时 0分钟",
+        //                     "num": "RGT789",
+        //                     "depDate": "2017-11-06",
+        //                     "arrDate": "2017-11-06",
+        //                     "child": []
+        //                 },
+        //                 {
+        //                     "id": "55bee6dc4ba74392af585feb4f97e122",
+        //                     "isStop": 0,
+        //                     "isTransit": 1,
+        //                     "tripIndex": 1,
+        //                     "flightIndex": 2,
+        //                     "week": 7,
+        //                     "compName": "杭州来自",
+        //                     "logo": "icollll",
+        //                     "arrTime": "08:30",
+        //                     "depTime": "06:30",
+        //                     "arrAirport": "错位",
+        //                     "depAirport": "顶替",
+        //                     "flightTime": "2小时 0分钟",
+        //                     "num": "FGB789",
+        //                     "depDate": "2017-11-06",
+        //                     "arrDate": "2017-11-06",
+        //                     "child": []
+        //                 }
+        //             ]
+        //         }
+        //     ],
+        //     "flightType": 1
+        // };
+        //
+        // this.upView();
 
     }
 
@@ -195,14 +206,14 @@ class OrderFormDetail extends Component{
                     orderState={this.state.orderState}
                     deadLine={'2017-11-27'}
                     reason={'审核失败的原因'}
-                    orderID={this.state.orderID}
+                    orderId={this.state.orderId}
                     onDelete={()=>{this.deleteOrderCB();}}
                 />
                  <div className={css.itemContainer}>
                     <div className={css.itemTitle}>航班信息</div>
                     <div className={css.itemContent}>
                         <CellNewFlight
-                            dataSource = {this.listData}
+                            dataSource = {this.state.flightData}
                         />
                     </div>
                 </div>
@@ -213,7 +224,7 @@ class OrderFormDetail extends Component{
                                     orderState={this.state.orderState}
                                     returnState={this.returnState}
                                     isPassed={this.state.isPassed}
-                                    orderID={this.state.orderID}
+                                    orderId={this.state.orderId}
                                     defaultData={[]}
                                 />
                             </div>
@@ -281,6 +292,35 @@ class OrderFormDetail extends Component{
                     failureCB();
                 }
             },1000);
+        });
+    }
+
+    /**
+     * 请求订单详情信息
+     */
+    loadFormDetail(){
+        let parames = {
+            orderId:this.state.orderId,
+        };
+        let successCB = (code, msg, json, option)=>{
+            log('===========请求结果=========>>>>>>>>');
+            log(json);
+            this.setLoading(false);
+            message.success(msg);
+            let resultData = getFlightData(json.voyages,json.flightType,json.freeBag,json.weightLimit);
+            this.setState({
+                flightData:resultData,
+            });
+        };
+        let failureCB = (code, msg, option)=>{
+            this.setLoading(false);
+            message.error(msg);
+        };
+        this.setLoading(true,()=>{
+            HttpTool.request(HttpTool.typeEnum.POST,APILXD.lordOrderDetail, successCB, failureCB, parames,
+                {
+                    ipKey: "hlIP"
+                });
         });
     }
 

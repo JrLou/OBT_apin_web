@@ -1,10 +1,11 @@
 import React, {Component} from "react";
 
-import {Button, Modal} from "antd";
+import {Button, Modal,message} from "antd";
 import less from "./DemandDetail.less";
 import OrderInfoView from '../component/OrderInfoView/index';
 import CellNewFlight from "../content/cell/CellNewFlight";
 import {HttpTool} from "../../../../lib/utils/index.js";
+import LoadingView from "../component/LoadingView.js";
 import NumTransToTextHelp from '../tool/NumTransToTextHelp.js';
 /**
  * 需求已取消                    0
@@ -37,7 +38,10 @@ class page extends Component {
             index: -1,
             upData: 1,
             data: null,
-            visible: false,
+            visibleCancle: false,
+            visibleDelete: false,
+            visibleConfirm: false,
+
         };
     }
 
@@ -56,7 +60,7 @@ class page extends Component {
         // 多程 c374da99311144058a1d8d7382de5d8a
         // 单程 9cb5a2cd48104e3385f330aec6b3d196
         let param = {
-            id: "e7b6fa11676b44a1bbea5b362bf8fd5e",
+            id: "9cb5a2cd48104e3385f330aec6b3d196",
         };
         let success = (code, msg, json, option) => {
             this.setState({
@@ -64,6 +68,7 @@ class page extends Component {
             });
         };
         let failure = (code, msg, option) => {
+            message.warning(msg);
             this.data = null;
         };
         HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/find", success, failure, param,
@@ -82,6 +87,7 @@ class page extends Component {
             });
         };
         let failure = (code, msg, option) => {
+            message.warning(msg);
             this.data = null;
         };
         HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/cancel", success, failure, param,
@@ -100,6 +106,7 @@ class page extends Component {
             });
         };
         let failure = (code, msg, option) => {
+            message.warning(msg);
             this.data = null;
         };
         HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/remove", success, failure, param,
@@ -114,11 +121,12 @@ class page extends Component {
             id: "4c0a82d59ff24262a8e8495c6eff44b0",
         };
         let success = (code, msg, json, option) => {
-            this.setState({
-                data: json,
+            window.app_open(this, "/OrderFormDetail", {
+                data: {orderNo:json.orderNo}
             });
         };
         let failure = (code, msg, option) => {
+            message.warning(msg);
             this.data = null;
         };
         HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/plans", success, failure, param,
@@ -130,7 +138,9 @@ class page extends Component {
     render() {
         let {data} = this.state;
         if (!data) {
-            return null;
+            return(<div className={less.top}>
+
+            </div>);
         }
 
         return (
@@ -145,6 +155,7 @@ class page extends Component {
                 {data.demandStatus === 1 || data.demandStatus === 5 || data.demandStatus === 0 ? this.getButton(data.demandStatus) : null}
                 {data.demandStatus === 4 ? this.getOrderDetail(data) : null}
                 {data.demandStatus === 2 ? this.getConfirmButton(data && data.plans ? data.plans : [], data.flightType) : null}
+                <LoadingView ref={(a)=>this.loadingView = a}/>
             </div>
         );
     }
@@ -205,36 +216,48 @@ class page extends Component {
         );
     }
 
-    showModal() {
+    showCancleModal() {
         this.setState({
-            visible: true
+            visibleCancle: true,
+        });
+    }
+    showDeleteModal() {
+        this.setState({
+            visibleDelete: true,
+        });
+    }
+    showConfirmModal() {
+        this.setState({
+            visibleConfirm: true,
         });
     }
 
     handleDeleteOk() {
         this.deleteDemand();
         this.setState({
-            visible: false
+            visibleDelete: false
         });
     }
 
     handleFlightOk() {
         this.flightDemand();
         this.setState({
-            visible: false
+            visibleConfirm: false
         });
     }
 
     handleCancelOk() {
         this.cancelDemand();
         this.setState({
-            visible: false
+            visibleCancle: false
         });
     }
 
     handleCancel() {
         this.setState({
-            visible: false
+            visibleCancle: false,
+            visibleDelete: false,
+            visibleConfirm: false,
         });
     }
 
@@ -244,12 +267,12 @@ class page extends Component {
                 <div className={less.buttonLayout}>
                     <Button className={less.buttonCancel}
                             onClick={() => {
-                                this.showModal();
+                                this.showCancleModal();
                             }}
                     >取消需求</Button>
                     <Modal
                         title="提示"
-                        visible={this.state.visible}
+                        visible={this.state.visibleCancle}
                         onCancel={this.handleCancel.bind(this)}
                         onOk={this.handleCancelOk.bind(this)}
                         okText="是"
@@ -271,12 +294,12 @@ class page extends Component {
                 <div className={less.buttonLayout}>
                     <Button className={less.buttonDelete}
                             onClick={() => {
-                                this.showModal();
+                                this.showDeleteModal();
                             }}
                     >删除需求</Button>
                     <Modal
                         title="提示"
-                        visible={this.state.visible}
+                        visible={this.state.visibleDelete}
                         onCancel={this.handleCancel.bind(this)}
                         onOk={this.handleDeleteOk.bind(this)}
                         okText="是"
@@ -373,7 +396,7 @@ class page extends Component {
                                             className={this.state.index === index ? less.confirmFlightButton : less.uncertainFlightButton}
                                             onClick={() => {
                                                 this.setState({index: index});
-                                                this.showModal();
+                                                this.showConfirmModal();
                                             }}>
                                             <div
                                                 className={this.state.index === index ? less.confirmBtnImg : less.uncertainBtnImg}>
@@ -386,7 +409,7 @@ class page extends Component {
                                             </div>
                                             <Modal
                                                 title="提示"
-                                                visible={this.state.visible}
+                                                visible={this.state.visibleConfirm}
                                                 onCancel={this.handleCancel.bind(this)}
                                                 onOk={this.handleFlightOk.bind(this)}
                                                 okText="是"
@@ -605,7 +628,9 @@ class page extends Component {
                     <div className={less.buttonDetailLayout}>
                         <Button className={less.detailButton}
                                 onClick={() => {
-
+                                    window.app_open(this, "/OrderFormDetail", {
+                                        data: {orderNo:data.orderNo}
+                                    });
                                 }}
                         >查看订单详情</Button>
                     </div>

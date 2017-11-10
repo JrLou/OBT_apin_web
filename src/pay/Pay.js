@@ -20,14 +20,15 @@ class page extends Component {
    constructor(props) {
       super(props);
        CookieHelp.saveUserInfo({
-           Authorization:"eyJ1c2VySWQiOiIyMjIiLCJ1c2VyTmFtZSI6ImFkZCJ9",
+           Authorization:"eyJpZCI6ImQ4NzdkZjRmNGYzMDQ4YzM5NDY0MzY0YmJiYzNjODBhIiwiYWNjb3VudElkIjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ1c2VySWQiOiJmYjM4MWU4YWVhM2M0YmYzYjJjZjMxODNlNzA1MDhhNiIsImRlcHRJZCI6bnVsbCwidXNlck5hbWUiOiJBUk0/Pz8/PyIsInNlY3JldCI6ImY1NDc4NzdiZWVlNzQ3ZDI4MGU4MDQ2MDkwNDY5ZGZiIiwiYXBwSWQiOiI2NGNhZDkyZjE1ZDY0N2MwYjdkZWM4NDAwODFkZjEyNyJ9",
        });
       this.wh = new WindowHelp();
       this.state = {
-         step: 1,
-         loading: true,
+         step: 2,
+         loading: false,
       };
       // ?data={"id":1}
+       this.data = {pay:{},integral:{},order:{}};
       this.par = window.app_getPar(this);
       console.log(this.par);
       this.id = this.par ? this.par.id : null;
@@ -39,7 +40,8 @@ class page extends Component {
       if (this.un) {
          return;
       }
-      this.refresh();
+      // this.refresh();
+
    }
 
    componentWillUnmount() {
@@ -171,7 +173,7 @@ class page extends Component {
                   this.stepAction = ref;
                }
                }
-               data={this.data.order}
+               data={this.data.order||{}}
                onAction={(type, data, callBack) => {
                   //打开
                   if (type === "unionopen") {
