@@ -6,6 +6,7 @@ import css from './OrderFormDetail.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
 import {hasKey} from '../tool/LXDHelp.js';
+import {Spin} from 'antd';
 import TitleBar from './TitleBar/index.js';
 import Passengers from './Passengers/index.js';
 import CellNewFlight from '../content/cell/CellNewFlight.js';
@@ -36,82 +37,134 @@ class OrderFormDetail extends Component{
             isPassed:false,     //乘机人信息是否已经确认
             orderID:'',         //订单ID
             upDate:0,
+            loading:false,      //加载状态
         };
     }
 
     componentDidMount(){
         //模拟航班数据
-        let go = {arrAirport:"塞班",
-            arrDate:"2017-11-05",
-            arrTime:"15:30",
-            compName:"北京首都航空有限公司",
-            depAirport:"杭州萧山",
-            depDate:"2017-11-05",
-            depTime:"08:10",
-            flightTime:"7:20",
-            flightType:"2",
-            logo:null,
-            num:"JD395",
-            tag:0
-        };
-        let back = {
-            arrAirport: "杭州萧山",
-            arrDate: "2017-11-09",
-            arrTime: "10:25",
-            compName: "北京首都航空有限公司",
-            depAirport: "塞班",
-            depDate: "2017-11-09",
-            depTime: "07:00",
-            flightTime: "3:25",
-            flightType: "2",
-            logo: null,
-            num: "JD396",
-            tag: 0,
-        };
-        let zhongZhuanObj=[{
-            flightType:true,
-            obj:go
-        },{
-            flightType:true,
-            obj:go
-        },{
-            flightType:false,
-            obj:back
-        }];
-
-        let flightTypeGo = [{
-            flightType:true,
-            obj:go,
-            data:zhongZhuanObj
-        }];
-
-
-        let flightTypeGoAndBack = [{
-            flightType:true,
-            obj:go,
-            data:zhongZhuanObj
-        },{
-            flightType:false,
-            obj: back,
-            data:zhongZhuanObj
-        }];
-
-        let moreFlightObj = [{
-            numFlight:"一",
-            obj:go,
-        },{
-            numFlight:"二",
-            obj:go,
-        },{
-            numFlight:"三",
-            obj: back,
-        }];
-
-        //航班信息所需要的数据
-        this.listData = {
-            rule:"1.行李规则行李规则行李规则行李规则行李",
-            obj:flightTypeGo,
-            flightType:1
+        this.listData =  {
+            "freeBag": 1,
+            "weightLimit": 12,
+            "voyages": [
+                {
+                    "id": "55bee6dc4ba74392af585feb4f97edrft",
+                    "isStop": 0,
+                    "isTransit": 0,
+                    "tripIndex": 0,
+                    "flightIndex": 0,
+                    "week": 2,
+                    "compName": "杭州来自",
+                    "logo": "icollll",
+                    "arrTime": "08:30",
+                    "depTime": "06:30",
+                    "arrAirport": "顶替",
+                    "depAirport": "错位",
+                    "flightTime": "2小时 0分钟",
+                    "num": "DFE234",
+                    "depDate": "2017-11-06",
+                    "arrDate": "2017-11-06",
+                    "child": [
+                        {
+                            "id": "55bee6dc4ba74392af585feb4f97edrf1",
+                            "isStop": 0,
+                            "isTransit": 1,
+                            "tripIndex": 0,
+                            "flightIndex": 1,
+                            "week": 2,
+                            "compName": "杭州来自",
+                            "logo": "icollll",
+                            "arrTime": "08:30",
+                            "depTime": "12:30",
+                            "arrAirport": "枯井",
+                            "depAirport": "顶替",
+                            "flightTime": "20小时 0分钟",
+                            "num": "WEE234",
+                            "depDate": "2017-11-06",
+                            "arrDate": "2017-11-06",
+                            "child": null
+                        },
+                        {
+                            "id": "55bee6dc4ba74392af585feb4f97edrf2",
+                            "isStop": 0,
+                            "isTransit": 1,
+                            "tripIndex": 0,
+                            "flightIndex": 2,
+                            "week": 2,
+                            "compName": "杭州来自",
+                            "logo": "icollll",
+                            "arrTime": "23:30",
+                            "depTime": "21:30",
+                            "arrAirport": "扶贫",
+                            "depAirport": "枯井",
+                            "flightTime": "2小时 0分钟",
+                            "num": "ASD234",
+                            "depDate": "2017-11-06",
+                            "arrDate": "2017-11-06",
+                            "child": null
+                        }
+                    ]
+                },
+                {
+                    "id": "55bee6dc4ba74392af585feb4f97e120",
+                    "isStop": 0,
+                    "isTransit": 0,
+                    "tripIndex": 1,
+                    "flightIndex": 0,
+                    "week": 7,
+                    "compName": "杭州来自",
+                    "logo": "icollll",
+                    "arrTime": "08:30",
+                    "depTime": "06:30",
+                    "arrAirport": "枯井",
+                    "depAirport": "扶贫",
+                    "flightTime": "2小时 0分钟",
+                    "num": "DFE789",
+                    "depDate": "2017-11-06",
+                    "arrDate": "2017-11-06",
+                    "child": [
+                        {
+                            "id": "55bee6dc4ba74392af585feb4f97e121",
+                            "isStop": 0,
+                            "isTransit": 1,
+                            "tripIndex": 1,
+                            "flightIndex": 1,
+                            "week": 7,
+                            "compName": "杭州来自",
+                            "logo": "icollll",
+                            "arrTime": "08:30",
+                            "depTime": "06:30",
+                            "arrAirport": "顶替",
+                            "depAirport": "枯井",
+                            "flightTime": "2小时 0分钟",
+                            "num": "RGT789",
+                            "depDate": "2017-11-06",
+                            "arrDate": "2017-11-06",
+                            "child": null
+                        },
+                        {
+                            "id": "55bee6dc4ba74392af585feb4f97e122",
+                            "isStop": 0,
+                            "isTransit": 1,
+                            "tripIndex": 1,
+                            "flightIndex": 2,
+                            "week": 7,
+                            "compName": "杭州来自",
+                            "logo": "icollll",
+                            "arrTime": "08:30",
+                            "depTime": "06:30",
+                            "arrAirport": "错位",
+                            "depAirport": "顶替",
+                            "flightTime": "2小时 0分钟",
+                            "num": "FGB789",
+                            "depDate": "2017-11-06",
+                            "arrDate": "2017-11-06",
+                            "child": null
+                        }
+                    ]
+                }
+            ],
+            "flightType": 1
         };
 
         this.upView();
@@ -134,6 +187,10 @@ class OrderFormDetail extends Component{
         }
         return(
             <div className={css.mainPage}>
+                <Spin
+                    size={'large'}
+                    spinning={this.state.loading}
+                >
                 <TitleBar
                     orderState={this.state.orderState}
                     deadLine={'2017-11-27'}
@@ -190,7 +247,7 @@ class OrderFormDetail extends Component{
                     />
                     :''
                 }
-
+                </Spin>
             </div>
         );
     }
@@ -199,7 +256,51 @@ class OrderFormDetail extends Component{
      * 订单删除以后的回调
      */
     deleteOrderCB(){
-        alert('订单删除啦！');
+        let parames = {};
+        let successCB = (code, msg, json, option)=>{
+            this.setLoading(false);
+        };
+        let failureCB = (code, msg, option)=>{
+            this.setLoading(false);
+        };
+        // this.setLoading(true,()=>{
+        //     HttpTool.request(HttpTool.typeEnum.GET,APILXD.XXXXXXXX, successCB, failureCB, parames,
+        //         {
+        //             ipKey: "hlIP"
+        //         });
+        // });
+
+        //模拟接口
+        this.setLoading(true,()=>{
+            log(parames);
+            setTimeout(()=>{
+                let num = Math.random();
+                if(num<0.5){
+                    successCB();
+                }else{
+                    failureCB();
+                }
+            },1000);
+        });
+    }
+
+    /**
+     * 更改请求数据的状态并回调
+     * @param loading
+     * @param cb
+     */
+    setLoading(loading, cb) {
+        this.setState({
+            loading: loading
+        }, cb);
+    }
+
+    /**
+     * 返回加载的状态
+     * @returns {boolean}
+     */
+    isLoading() {
+        return this.state.loading;
     }
 }
 

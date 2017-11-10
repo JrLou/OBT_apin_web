@@ -45,7 +45,7 @@ class MyModalRequire extends Component {
             visible:visible,
             title:option.title?option.title:undefined,
             desc:option.desc?option.desc:undefined,
-            param:option.desc?option.desc:{}
+            param:option.param?option.param:{}
         });
     }
     hiddenModal(callBack) {
@@ -61,7 +61,7 @@ class MyModalRequire extends Component {
     render() {
         var {callBack}=this.props;
         return (
-            <Modal width="500" visible={this.state.visible}
+            <Modal width="550" visible={this.state.visible}
                    onOk={()=>{
                        this.handleOk(callBack);
                    }}
@@ -72,15 +72,18 @@ class MyModalRequire extends Component {
                 <div className={css.modalTitle}>{this.state.title}</div>
                 <div className={css.modalDesc}>{this.state.desc}</div>
 
-                <TemplatePublist  state= {this.state.param} callBack={(val) => {
-                    this.setState({
-                        visible:false,
-                    },()=>{
-                        if (callBack){
-                            callBack(val);
-                        }
-                    });
-                }}/>
+                <div className={css.content}>
+                    <TemplatePublist  state= {this.state.param} callBack={(val) => {
+                        this.setState({
+                            visible:false,
+                        },()=>{
+                            if (callBack){
+                                callBack(val);
+                            }
+                        });
+                    }}/>
+                </div>
+
 
 
 

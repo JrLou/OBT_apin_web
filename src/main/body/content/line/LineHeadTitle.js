@@ -9,7 +9,6 @@ class page extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataSource:props.dataSource,
             isShow:true,
             step:0,
             isClick:"auto",
@@ -18,15 +17,13 @@ class page extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({
-            dataSource:nextProps.dataSource
-        });
+
     }
     componentDidMount() {
 
     }
     render() {
-        let {dataSource} = this.state;
+        let {dataSource} = this.props;
         if (!dataSource ||dataSource.length<1){
             return null;
         }
@@ -108,7 +105,11 @@ class page extends Component {
                         <div className={css.requireAlert_right}>
                             <MyDiv div={
                                 <div className={css.requireBtn} onClick={()=>{
-                                    alert("提交需求");
+                                    window.app_open(this.props.obj, "/PublishMsg", {
+                                        data:{
+                                            airlineId:""
+                                        }
+                                    },"new");
                                 }}>提交需求</div>
                             }/>
                         </div>
