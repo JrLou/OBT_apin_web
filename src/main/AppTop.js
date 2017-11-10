@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { history } from 'react-router';
 import { Button, Menu, Dropdown, Icon } from 'antd';
+import { CookieHelp } from '../../lib/utils/index.js';
 import Menus from './Menu';
 
 import Sign from './body/component/SignView';
@@ -17,10 +18,14 @@ class page extends Component {
         super(props);
         this.par = window.app_getPar(this);
         this.state = {
-            step: this.par?this.par.step:0,
+            step: this.par ? this.par.step : 0,
             isLogin: false
         };
 
+    }
+
+    componentDidMount() {
+        this.checkLogin();
     }
 
     render() {
@@ -35,7 +40,9 @@ class page extends Component {
                     }}>用户中心</a>
                 </Menu.Item>
                 <Menu.Item>
-                    <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">退出登录</a>
+                    <a onClick={() => {
+                        CookieHelp.clearCookie();
+                    }}>退出登录</a>
                 </Menu.Item>
             </Menu>
         );
@@ -99,6 +106,20 @@ class page extends Component {
                 <Sign ref={(modal) => this.modal = modal}></Sign>
             </div>
         );
+    }
+
+    /**
+     * 检测是否已经登录
+     */
+    checkLogin() {
+        const user = CookieHelp.getUserInfo();
+        log("---Apptop-----Authorization");
+        log(user);
+        this.setState({
+            isLogin: !!(user && user.Authorization)
+        }, () => {
+            //回显用户名
+        });
     }
 }
 page.contextTypes = {

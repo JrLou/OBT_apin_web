@@ -244,6 +244,7 @@ class page extends Component {
                             onChange={(value) => {
                                 this.changeState('flightType', value);
                             }}
+                            value={this.state.flightType}
                             allowClear={true}
                         >
                             {this.getOptions(this.flightTypeList)}
@@ -252,6 +253,7 @@ class page extends Component {
                     <div className={css.searchItem01}>
                         <span>需求状态：</span>
                         <Select
+                            value={this.state.demandStatus}
                             className={css.selectStyle}
                             placeholder={'请选择'}
                             onChange={(value) => {

@@ -56,7 +56,7 @@ class UnionPay extends Component {
    }
 
    loadUnionPayList(param, cb) {
-       HttpTool.request(HttpTool.typeEnum.POST, "/pc/v1.0/card/find/cards", (code, msg, json, option) => {
+       HttpTool.request(HttpTool.typeEnum.POST, "/v1.0/card/find/cards", (code, msg, json, option) => {
            cb(code,msg,json);
        }, (code, msg, option) => {
            cb(code,msg, {});
