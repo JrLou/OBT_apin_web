@@ -5,22 +5,26 @@ import Panel from '../../../pay/Panel';
 import UploadCmp from './UploadCmp';
 import less from "./BankUpload.less";
 
-//todo 页面需要回显可修改
 
 class BankUpload extends Component {
    constructor(props) {
       super(props);
       this.state = {
+         loading: true,
          errorMsg: "",
+         is2modify: false,//是否是审核失败时候的《修改上穿页面》
+         inputData: {},//当为《修改上穿页面》时，存储<InputLayout>组件所有需要的数据
+         fileList: [],//当为《修改上穿页面》时，存储<UploadCmp>组件所有需要的数据
       };
+      this.sourceData = [];//记录原始出入的数据，如果相同，则提示用户。
    }
 
    componentWillMount() {
-      this.loadPayInfo();
+      this.getPayInfo();
    }
 
    //获取url上面传来的数据
-   getInfo() {
+   getUrlInfo() {
       let msgString = decodeURIComponent(window.location.search).replace('?', '');
       let dataArr = msgString.split("=");//["data", "{"orderId":1,"price":39400}"]
       let data = {};
@@ -30,17 +34,107 @@ class BankUpload extends Component {
       return data.data;//{"orderId":1,"price":39400}
    }
 
-   loadPayInfo(param, cb) {
-      let data = this.getInfo();
-      if (!data || !data.orderId || !data.price || data.payment == undefined) {
+   loadPayInfo2modify(param, cb) {
+      HttpTool.request(HttpTool.typeEnum.POST,
+         "/orderapi/v1.0/orders/recordQuery",
+         (code, msg, json, option) => {
+            cb(code, msg, json);
+         }, (code, msg) => {
+            cb(code, msg);
+         }, param
+      );
+   }
+
+   mothedStr2fileListArr(urlStr) {
+      return urlStr.split(",").map((currV, i, arr) => {
+         return {
+            uid: i,
+            name: "第" + i + "张",
+            status: 'done',
+            thumbUrl: currV,
+         };
+      });
+   }
+
+   mothedStr2urlArr(urlStr) {
+      return urlStr.split(",").map((currV, i, arr) => {
+         return {
+            uid: i,
+            url: currV,
+         };
+      });
+   }
+
+   getPayInfo(cb) {
+      let urlData = null;
+      try {
+         urlData = this.getUrlInfo();
+      } catch (e) {
          this.setState({
-            errorMsg: "缺少支付信息"
+            errorMsg: "传入的参数格式有误",
+            loading: false
+         });
+         return;
+      }
+
+      //当有id字段的时候，代表这是：修改的页面，这里需要回显页面，所以请求接口
+      if (urlData.id) {
+         if (!urlData.orderId) {
+            this.setState({
+               errorMsg: "缺少订单号",
+               loading: false
+            });
+            return;
+         }
+         this.loadPayInfo2modify({recordId: urlData.id}, (code, msg, data) => {
+            this.sourceData = data;
+            if (code > 0) {
+               if (data === null) {
+                  //打开404页面
+                  window.app_open(this, "/None", {}, "self");
+                  return;
+               }
+               let _inputData = {
+                  accountName: data.accountName,
+                  account: data.account,
+                  bank: data.bank,
+                  amount: data.payAmount,
+               };
+               let _fileList = this.mothedStr2fileListArr(data.voucherUrl);
+               let _urlArr = this.mothedStr2urlArr(data.voucherUrl);
+               this.setState({
+                  payment: data.payment,
+                  errorMsg: "",
+                  orderId: urlData.orderId,
+                  loading: false,
+                  inputData: _inputData,
+                  fileList: _fileList,
+                  urlArr: _urlArr,
+               });
+            } else {
+               this.setState({
+                  errorMsg: msg,
+                  loading: false,
+               });
+            }
+         });
+         return;
+      }
+
+      //当没有id字段时，则是空白的支付页面
+      if (!urlData || !urlData.orderId || !urlData.price || urlData.payment == undefined) {
+         this.setState({
+            errorMsg: "缺少订单信息",
+            loading: false
          });
       } else {
+
          this.setState({
-            amount: data.price,
-            orderId: data.orderId,
-            payment: data.payment//todo 定金？尾款？ 需要喜峰哥页面传过来
+            amount: urlData.price,
+            orderId: urlData.orderId,
+            payment: urlData.payment,//todo 定金？尾款？ 需要喜峰哥页面传过来
+            loading: false,
+            errorMsg: "",
          });
       }
    }
@@ -53,7 +147,7 @@ class BankUpload extends Component {
                <div className={less.bankBox_middle}>
                   <div className={less.bankBox_middle_tips}>
                      <span className={less.tipsIcon}><Icon type="exclamation-circle"/></span>
-                     <span>建议在周一至周六，9:00~18:00内使用该转账功能。若在此时间之外，有可能导致审核异常，如有疑问，请{this.getConnetUs()}</span>
+                     <span>建议在周一至周六，9:00~18:00内使用该转账功能。若在此时间之外，有可能导致审核异常，如有疑问，请&nbsp;{this.getConnetUs()}</span>
                   </div>
                   <div>
                      <p>
@@ -84,6 +178,8 @@ class BankUpload extends Component {
                         this.inputLayout = ref;
                      }}
                      amount={this.state.amount}
+                     data={this.state.inputData}
+
                   />
                </div>
             </div>
@@ -91,9 +187,13 @@ class BankUpload extends Component {
                <div className={less.bankBox_top}>上传转账证明</div>
                <div className={less.bankBox_middle}>
                   <div>
-                     <UploadCmp ref={(ref) => {
-                        this.uploadCmp = ref;
-                     }}/>
+                     <UploadCmp
+                        fileList={this.state.fileList}
+                        urlArr={this.state.urlArr}
+                        ref={(ref) => {
+                           this.uploadCmp = ref;
+                        }}
+                     />
                   </div>
                </div>
             </div>
@@ -108,29 +208,15 @@ class BankUpload extends Component {
                   提交
                </Button>
             </div>
-            <Panel
-               onAction={(action, showType) => {
-
-                  if (showType === "paying") {
-                     //验证是否支付
-                     this.handVer("pay", action);
-                  } else if (showType === "unioning") {
-                     //验证是否开通
-                     this.handVer("union");
-                  }
-                  else if (action === "ok" && showType === "success") {
-                     //打开订单页
-                     window.app_open(this, "/Order", {
-                        orderId: this.orderId
-                     }, "self");
-                  }
-
-               }}
-               ref={(ref) => {
-                  this.panel = ref;
-               }}/>
+            <Panel ref={(ref) => {
+               this.panel = ref;
+            }}/>
          </div>
       );
+   }
+
+   getLoadingView() {
+      return <div className={less.loading}>正在为您拉取订单信息,请稍候...</div>;
    }
 
    getErrorView() {
@@ -172,15 +258,32 @@ class BankUpload extends Component {
    getAllData() {
       let data = this.inputLayout.getData();
 
+      console.log(this.uploadCmp.backUrl);
       let backUrlArr = this.uploadCmp.backUrl.map((currV) => {
          return currV.url;
       });
+      console.log(backUrlArr);
       let stringUrl = backUrlArr.join(",");
       data.voucherUrl = stringUrl;
 
       Object.assign(data, this.state);
       data.payType = 0;//线下支付；
       return data;
+   }
+
+   isUserChange(param){
+      let isChange = false;
+      for(let k in param){
+         if(k == "orderId"){
+            continue;
+         }
+         if(k == "amount"){
+            param["payAmount"] == this.sourceData[k] || (isChange=true);
+         } else {
+            param[k] == this.sourceData[k] || (isChange=true);
+         }
+      }
+      return isChange;
    }
 
    handleSubmit() {
@@ -201,13 +304,31 @@ class BankUpload extends Component {
       }
 
       data.showType = "paying";
+      data.orderId = this.state.orderId;
 
       this.panel.show(true, {
          content: "正在提交...",
          // title: "支付信息",
          showType: "verpay"
       }, () => {
-         this.loadSubmit(data, (code, msg, data) => {
+         let param = {
+            account: data.account,
+            accountName: data.accountName,
+            amount: data.amount,
+            bank: data.bank,
+            orderId: data.orderId,
+            payType: data.payType,
+            payment: data.payment,
+            voucherUrl: data.voucherUrl
+         };
+         //判断用户是否有更改
+         console.log("this.isUserChange(param).toString()");
+         console.log(this.isUserChange(param).toString());
+         if(!this.isUserChange(param)){
+            message.warn("您未做修改，无需提交");
+            return;
+         }
+         this.loadSubmit(param, (code, msg, data) => {
             if (code > 0) {
                //支付成功
                this.panel.show(true, {
@@ -222,7 +343,7 @@ class BankUpload extends Component {
                   showType: "error",
                   content: <div>
                      <p>{msg}</p>
-                     <p>如有疑问，请{this.getConnetUs()}</p>
+                     <p>如有疑问，请&nbsp;{this.getConnetUs()}</p>
                   </div>,
                }, () => {
                   //
@@ -252,12 +373,17 @@ class BankUpload extends Component {
    }
 
    render() {
+      let contentView = null;
+      if (this.state.loading) {
+         contentView = this.getLoadingView();
+      } else if (this.state.errorMsg) {
+         contentView = this.getErrorView();
+      } else {
+         contentView = this.getdefaultView();
+      }
       return (
-         <div
-            {...this.props}
-            className={less.content}
-         >
-            {this.state.errorMsg ? this.getErrorView() : this.getdefaultView()}
+         <div className={less.content}>
+            {contentView}
          </div>
       );
    }
@@ -268,10 +394,10 @@ class InputLayout extends Component {
    constructor(props) {
       super(props);
       this.state = {
-         accountName: "",//账户名
-         account: "",//卡号
-         bank: "",//银行名
-         amount: this.props.amount,//转账金额
+         accountName: this.props.data.accountName || '',//账户名
+         account: this.props.data.account || "",//卡号
+         bank: this.props.data.bank || "",//银行名
+         amount: this.props.data.amount || this.props.amount,//转账金额
          error: null,
          loading: false,
       };
@@ -308,15 +434,6 @@ class InputLayout extends Component {
       };
 
    }
-
-   //todo 模拟获取银行名称接口，这个版本不做这个功能了
-   // loadBankName(param, cb) {
-   //    setTimeout(() => {
-   //       let code = (Math.random() * 10).toFixed(0) - 1;
-   //       let data = {bank: "中国工商银行"};
-   //       cb(code, "", data);
-   //    }, Math.random() * 1000 + 500);
-   // }
 
    render() {
       const iptProps = {
@@ -393,7 +510,3 @@ BankUpload.contextTypes = {
    router: React.PropTypes.object
 };
 module.exports = BankUpload;
-
-
-
-

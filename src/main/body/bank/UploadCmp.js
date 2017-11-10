@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Icon, message, Upload} from 'antd';
+import {Icon, message, Upload, Modal, Spin} from 'antd';
 import {HttpTool} from "../../../../lib/utils/index.js";
 import less from "./BankUpload.less";
 
@@ -9,10 +9,11 @@ class UploadCmp extends Component {
       this.state = {
          previewVisible: false,
          previewImage: '',
-         fileList: [],
+         fileList: this.props.fileList || [],
+         spinLoading: false,
       };
-      this._fileList = [];
-      this.backUrl = [];
+      this._fileList = this.props.fileList || [];
+      this.backUrl = this.props.urlArr || [];
    }
 
    isImageTypeOk(file) {
@@ -20,8 +21,8 @@ class UploadCmp extends Component {
          message.warning("凭证必须为图片格式");
          return false;
       }
-      if (file.size >= 1024000 * 4) {
-         message.warning("图片过大，最大允许4M。");
+      if (file.size >= 1024000 * 2) {
+         message.warning("图片过大，最大允许2M。");
          return false;
       }
       return true;
@@ -49,15 +50,21 @@ class UploadCmp extends Component {
    }
 
    saveImgUrlArr() {
-
+      //
    }
 
    beforeUpload(file) {
       if (!this.isImageTypeOk(file)) {
-         console.log("cuowul ");
          return false;
       }
-      console.log("图片上传....");
+
+      //打开加载图
+      if (this.state.spinLoading) {
+         message.warn("图片正在上传中，请勿重复点击");
+         return false;
+      }
+      this.setState({spinLoading: true});
+
       let r = new FileReader();
       r.readAsDataURL(file);
       r.onload = (e) => {
@@ -70,33 +77,43 @@ class UploadCmp extends Component {
             thumbUrl: image_base64,
          });
 
-         this.loadUploadImg({pic: this._fileList[this._fileList.length - 1].thumbUrl}, (code, msg, data) => {
-            if (code < 0) {
-               message.error(msg + "图片上传失败");
-               return false;// todo 这个false会不会到beforUpload里来？
-            } else {
-               this.setState({
-                  fileList: this._fileList
-               });
-               let _backurl = {
-                  url: data.url,
-                  uid: this._fileList[this._fileList.length - 1].uid
-               };
-               this.backUrl.push(_backurl);
-               console.log("完成了setState.fileList的更新视图");
-               console.log("本地存储的后台返回url为：backUrl:");
-               console.log(this.backUrl);
-            }
-         });
-         console.log("onload的return false");
-         return false;
+         //慢600毫秒再请求，这样不会闪一下，体验好一些
+         setTimeout(() => {
+            this.loadUploadImg({pic: this._fileList[this._fileList.length - 1].thumbUrl}, (code, msg, data) => {
+               if (code < 0) {
+                  message.error(msg + "图片上传失败");
+               } else {
+                  this.setState({
+                     fileList: this._fileList
+                  });
+                  let _backurl = {
+                     url: data.url,
+                     uid: this._fileList[this._fileList.length - 1].uid
+                  };
+                  this.backUrl.push(_backurl);
+               }
+               this.setState({spinLoading: false});
+            });
+         }, 600);
+
+
       };
-      console.log("阻止上传的return false");
       return false;
    }
 
    handleChange(cbObj) {
       console.log("onchange");
+   }
+
+   handleCancel() {
+      this.setState({previewVisible: false});
+   }
+
+   handlePreview(file) {
+      this.setState({
+         previewImage: file.url || file.thumbUrl,
+         previewVisible: true,
+      });
    }
 
    onRemove(file) {
@@ -105,19 +122,28 @@ class UploadCmp extends Component {
       this._fileList = this._fileList.filter((currV, index, arr) => {
          return currV.uid !== file.uid;
       });
-      this.setState({fileList: this._fileList});
-      this.backUrl = this.backUrl.filter((currV, index, arr) => {
-         return currV.uid !== file.uid;
+      this.setState({fileList: this._fileList}, () => {
+         this.backUrl = this.backUrl.filter((currV, index, arr) => {
+            return currV.uid !== file.uid;
+         });
       });
+
    }
 
    render() {
-      const {fileList} = this.state;
+      const {previewVisible, previewImage, fileList} = this.state;
+      const upLoadingView = (<div>
+         <Spin spinning={true}></Spin>
+         <div className={less.upload_text_line2}>上传中</div>
+      </div>);
+      const beforeUploadingView = (<div>
+         <Icon className={less.upload_text_line1} type="plus"/>
+         <div className={less.upload_text_line2}>点击此处上传转账凭证</div>
+         <div className={less.upload_text_line3}>最多添加 6 张</div>
+      </div>);
       const uploadButton = (
          <div className={less.upload_text}>
-            <Icon className={less.upload_text_line1} type="plus"/>
-            <div className={less.upload_text_line2}>点击此处上传转账凭证</div>
-            <div className={less.upload_text_line3}>最多添加 6 张</div>
+            {this.state.spinLoading ? upLoadingView : beforeUploadingView}
          </div>
       );
       return (
@@ -127,11 +153,21 @@ class UploadCmp extends Component {
                listType="picture-card"
                fileList={fileList}
                beforeUpload={this.beforeUpload.bind(this)}
+               disabled={this.state.spinLoading}
+               onPreview={this.handlePreview.bind(this)}
                onChange={this.handleChange.bind(this)}
                onRemove={this.onRemove.bind(this)}
             >
                {fileList.length >= 6 ? null : uploadButton}
             </Upload>
+            <Modal
+               visible={previewVisible}
+               footer={null}
+               onCancel={this.handleCancel.bind(this)}
+               width={"813"}
+            >
+               <img alt="example" style={{width: '100%'}} src={previewImage}/>
+            </Modal>
          </div>
       );
    }

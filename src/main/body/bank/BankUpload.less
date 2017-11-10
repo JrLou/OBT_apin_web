@@ -1,6 +1,12 @@
 @import "../../../theme.less";
 
 .content {
+   .loading {
+      text-align: center;
+      color: #ff5500;
+      line-height: 50px;
+      font-size: 20px;
+   }
    .payOutBox;
    .bankBox {
       .payCpmBox;
@@ -23,14 +29,14 @@
             width: 90px;
             display: inline-block;
          }
-         &_tips{
+         &_tips {
             float: right;
             width: 320px;
             text-align: justify;
-            .tipsIcon{
+            .tipsIcon {
                float: left;
                margin-left: -20px;
-               color:@c_text_red_light;
+               color: @c_text_red_light;
             }
          }
          //第二段
@@ -38,7 +44,7 @@
          .container2Son:after {
             .toContainAllSon;
          }
-         .container2Son{
+         .container2Son {
             .form_group {
                margin-right: 30px;
                line-height: 30px;
@@ -49,27 +55,27 @@
             .form_control {
                width: 240px;
             }
-            .control_label{
+            .control_label {
                color: @font-color;
             }
          }
 
          //第三阶段，上传
-         .upload_text{
-            &_line1{
+         .upload_text {
+            &_line1 {
                font-size: 70px;
             }
-            &_line2{
+            &_line2 {
                font-size: @font_size_center;
             }
-            &_line3{
+            &_line3 {
                font-size: @font_size_small;
             }
 
          }
 
          :global {
-            .forUploadStyle .ant-upload-list-item.ant-upload-list-item-undefined{
+            .forUploadStyle .ant-upload-list-item.ant-upload-list-item-undefined {
                //display: none!important;//这个是上传的时候的第一个div
             }
             .forUploadStyle .ant-upload.ant-upload-select-picture-card > .ant-upload {
@@ -94,16 +100,24 @@
                left: 0;
             }
             .forUploadStyle .ant-upload-list-picture-card .ant-upload-list-item-actions a:first-child {
-               display: none;
+               //display: none;
             }
             .forUploadStyle .ant-upload-list-picture-card .ant-upload-list-item-actions .anticon-eye-o, .forUploadStyle .ant-upload-list-picture-card .ant-upload-list-item-actions .anticon-delete {
                font-size: 30px;
+               padding-right: 30px;
             }
          }
       }
    }
-   .submitBtn{
+   .submitBtn {
       .bigOrangeBtn;
       margin-top: 20px;
    }
 }
+
+:global {
+   div[role=document][style^="width: 813px"] .ant-modal-close span {
+      font-size: 40px;
+   }
+}
+
