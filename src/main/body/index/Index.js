@@ -229,12 +229,14 @@ class page extends Component {
                 <div className={less.topRightContent}>
                     {/*<img className={less.topRightCarousel}*/}
                     {/*src={require("../../../images/banner.png")}/>*/}
-                    <Carousel >
-                        <a href="/html/fanli.html" target='_blank'>
-                            <div className={less.topRightCarousel}
-                                 style={{backgroundImage:"url("+require("../../../images/fanli.jpg")+")"}}
-                            />
-                        </a>
+                    <Carousel autoplay={true} >
+                        <div className={less.topRightCarousel}
+                             style={{backgroundImage:"url("+require("../../../images/b2.jpg")+")"}}
+                        />
+                        <div className={less.topRightCarousel}
+                             style={{backgroundImage:"url("+require("../../../images/b1.jpg")+")"}}
+                        />
+
                     </Carousel>
                 </div>
             </div>
