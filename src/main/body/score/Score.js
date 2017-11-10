@@ -2,10 +2,11 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-04 15:07:27 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-06 10:58:42
+ * @Last Modified time: 2017-11-09 18:26:40
  */
 import React, { Component } from 'react';
 import { Table, Modal } from 'antd';
+import { HttpTool } from '../../../../lib/utils/index.js';
 
 import css from './score.less';
 
@@ -13,38 +14,56 @@ class ScoreList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible: true
+            visible: true,
+            memberPoints: [],
+            remainPoint: 0,
+            usedPoint: 0,
+            loading: true,
+            pageSize: 10,
+            current: 1,
+            total: 0
         };
         this.handleCancel = this.handleCancel.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.getPointsList = this.getPointsList.bind(this);
     }
+
+
+    componentDidMount() {
+        this.getPointsList(1);
+    }
+
     render() {
-        const dataSource = [{
-            key: '1',
-            name: '签到',
-            age: 100,
-            address: '2017年9月21日 13:11:20'
-        }, {
-            key: '2',
-            name: '签到',
-            age: 100,
-            address: '2017年9月21日 13:11:20'
-        }];
+        const { memberPoints } = this.state;
 
         const columns = [{
             title: '来源／用途',
-            dataIndex: 'name',
-            key: 'name',
+            dataIndex: 'origin',
+            key: 'origin',
+            render: (text) => {
+                switch (text) {
+                    case 0:
+                        return '消费抵扣';
+                    case 1:
+                        return '注册';
+                    default:
+                        return '';
+                }
+            }
         }, {
             title: '积分变化',
-            dataIndex: 'age',
-            key: 'age',
+            dataIndex: 'points',
+            key: 'points',
+            render: (text) => {
+                return <div className={css.large}>{text}</div>;
+            }
         }, {
             title: '日期',
-            dataIndex: 'address',
-            key: 'address',
+            dataIndex: 'createdTime',
+            key: 'createdTime',
         }];
 
-        const { visible } = this.state;
+        const { visible, loading, pageSize, current, total } = this.state;
 
         return (
             <div className={css.scoreContainer}>
@@ -60,12 +79,20 @@ class ScoreList extends Component {
                     </div>
                     <div className={css.line}></div>
                 </div>
-                <Table prefixCls="my-ant-table" dataSource={dataSource} columns={columns} className={css.scoreList} />
+                <Table
+                    prefixCls="my-ant-table"
+                    dataSource={memberPoints}
+                    columns={columns}
+                    className={css.scoreList}
+                    onChange={this.handleChange}
+                    pagination={{ pageSize, current, total }}
+                />
                 <Modal title="每周连续登陆积分奖励规则"
                     visible={visible}
                     footer={null}
                     prefixCls="my-ant-modal"
                     onCancel={this.handleCancel}
+                    loading={loading}
                 >
                     <ul className={css.rule}>
                         <li>• 七天为一个记分周期，每天首次登录可获得积分。</li>
@@ -80,10 +107,34 @@ class ScoreList extends Component {
         );
     }
 
+    /**
+     * 获取积分列表
+     */
+    getPointsList(pageNo) {
+        log(pageNo);
+        const { pageSize } = this.state;
+        HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.0/orders/pointsList', (code, message, json, option) => {
+            log(json);
+            const { memberPoints, remainPoint, usedPoint } = json;
+            this.setState({
+                memberPoints, remainPoint, usedPoint, total: option.option, current: pageNo
+            });
+        }, () => {
+        }, {
+                pageSize, pageNo
+            });
+    }
+
+
     handleCancel() {
         this.setState({
             visible: false
         });
+    }
+    handleChange(pagination) {
+        log(pagination);
+        const { current } = pagination;
+        this.getPointsList(current);
     }
 }
 

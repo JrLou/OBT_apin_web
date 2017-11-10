@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-07 14:32:13
+ * @Last Modified time: 2017-11-08 16:06:27
  */
 
 import React, { Component } from 'react';
@@ -18,15 +18,19 @@ class Forget extends Component {
     }
     render() {
         const { time } = this.state;
+        const { error, getCode } = this.props;
         return (
             <Button
                 prefixCls="my-ant-btn"
-                disabled={time > 0 || this.props.error}
+                disabled={time > 0 || error}
                 size="large"
                 type="primary"
                 ghost
                 className={css.checkCodeBtn}
-                onClick={() => this.autoTime(60)}
+                onClick={() => {
+                    getCode();
+                    this.autoTime(10);
+                }}
             >{
                     time === 0 ? '获取验证码' : `${time}s`
                 }</Button>
