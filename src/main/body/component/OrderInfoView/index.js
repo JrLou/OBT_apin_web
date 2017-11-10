@@ -218,7 +218,13 @@ class OrderInfoView extends Component {
                     </div>
                     {
                         type === 10 ? <div className={css.aginButtonLayout}>
-                            <Button className={css.aginButton}>重新上传</Button>
+                            <Button className={css.aginButton}
+                                    onClick={() => {
+                                        window.app_open(this, "/BankUpload", {
+                                           orderId:data.orderId
+                                        });
+                                    }}
+                            >重新上传</Button>
 
                         </div> : null
                     }
