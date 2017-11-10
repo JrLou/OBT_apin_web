@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Form, Button, Input } from 'antd';
+import { Form, Button, Input, Modal } from 'antd';
 import css from './account.less';
 import { formatArgs } from 'debug';
 import { HttpTool, CookieHelp } from '../../../../lib/utils/index.js';
+import Reset from '../component/SignView/Reset';
 
 const FormItem = Form.Item;
 
@@ -39,24 +40,32 @@ class AccountForm extends Component {
         super(props);
         this.state = {
             isView: true, // 是否编辑 true预览模式 | false修改模式
+            visible: false,
+            accountID: '',
             account: '',
             password: '',
             mobile: '',
             companyName: '',
             contactName: '',
             address: '',
-            id:''
+            id: ''
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.updateInfo = this.updateInfo.bind(this);
+        this.updatePsw = this.updatePsw.bind(this);
+        this.handleOk = this.handleOk.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
+        this.updatePsw = this.updatePsw.bind(this);
     }
 
     componentDidMount() {
         HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.1/memberInfo', (code, message, json, option) => {
             log("会员中心用户信息");
-            log(json);
-            const { account, password, mobile, companyName, contactName, address,id } = json;
+            log(option);
+            const { account, password, mobile } = json;
+            const { companyName, contactName, address, id } = option.option;
             this.setState({
+                accountID: json.id,
                 account,
                 password,
                 mobile,
@@ -81,88 +90,94 @@ class AccountForm extends Component {
         const contactNameError = isFieldTouched('contactName') && getFieldError('contactName');
         const addressError = isFieldTouched('address') && getFieldError('address');
         return (
-            <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
+            <div>
                 <Title>账号信息</Title>
-                <FormItem prefixCls="my-ant-form"
-                    {...formItemLayout}
-                    label="账号名"
-                >
-                    <div>{account}</div>
-                </FormItem>
-                <FormItem prefixCls="my-ant-form"
-                    {...formItemLayout}
-                    label="登录密码设置"
-                    validateStatus={passwordError ? 'error' : ''}
-                    help={passwordError || ''}
-                >
-                    {isView ? <div>{password}</div> : getFieldDecorator('password', {
-                        rules: [{
-                            validator: (rule, value, callback) => {
-                                if (value && !/^[0-9A-Za-z]{8,16}$/.test(value)) {
-                                    callback('请输入8-16位数字、字母');
-                                }
-                                callback();
-                            }
-                        }]
-                    })(
-                        <Input type="password" prefixCls="my-ant-input" />
-                        )}
-                </FormItem>
-                <FormItem prefixCls="my-ant-form"
-                    {...formItemLayout}
-                    label="绑定手机"
-                >
-                    <div>{mobile}</div>
-                </FormItem>
+                <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
+                    <FormItem prefixCls="my-ant-form"
+                        {...formItemLayout}
+                        label="账号名"
+                    >
+                        <div>{account}</div>
+                    </FormItem>
+                    <FormItem prefixCls="my-ant-form"
+                        {...formItemLayout}
+                        label="登录密码设置"
+                        validateStatus={passwordError ? 'error' : ''}
+                        help={passwordError || ''}
+                    >
+                        <div>******<span style={{ float: 'right', cursor: 'pointer' }} onClick={() =>
+                            this.setState({
+                                visible: true
+                            })
+                        }>修改</span></div>
+                    </FormItem>
+                    <FormItem prefixCls="my-ant-form"
+                        {...formItemLayout}
+                        label="绑定手机"
+                    >
+                        <div>{mobile}</div>
+                    </FormItem>
+                </Form>
                 <Title>基本信息</Title>
-                <FormItem prefixCls="my-ant-form"
-                    {...formItemLayout}
-                    label="公司名称"
+                <Form>
+                    <FormItem prefixCls="my-ant-form"
+                        {...formItemLayout}
+                        label="公司名称"
+                    >
+                        {isView ? <div>{companyName}</div> : getFieldDecorator('companyName', {
+                            initialValue: companyName
+                        })(
+                            <Input prefixCls="my-ant-input" />
+                            )}
+                    </FormItem>
+                    <FormItem prefixCls="my-ant-form"
+                        {...formItemLayout}
+                        label="联系人"
+                    >
+                        {isView ? <div>{contactName}</div> : getFieldDecorator('contactName', {
+                            initialValue: contactName
+                        })(
+                            <Input prefixCls="my-ant-input" />
+                            )}
+                    </FormItem>
+                    <FormItem prefixCls="my-ant-form"
+                        {...formItemLayout}
+                        label="地址"
+                    >
+                        {isView ? <div>{address}</div> : getFieldDecorator('address', {
+                            initialValue: address
+                        })(
+                            <Input prefixCls="my-ant-input" />
+                            )}
+                    </FormItem>
+                    <FormItem prefixCls="my-ant-form" {...formTailLayout}>
+                        {
+                            isView ?
+                                <Button
+                                    prefixCls="my-ant-btn"
+                                    size="large"
+                                    type="primary"
+                                    onClick={this.updateInfo}
+                                >修改</Button>
+                                : <Button
+                                    prefixCls="my-ant-btn"
+                                    size="large"
+                                    type="primary"
+                                    onClick={this.handleSubmit}
+                                >保存</Button>
+                        }
+                    </FormItem>
+                </Form>
+                <Modal
+                    prefixCls="my-ant-modal"
+                    title="修改密码"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
                 >
-                    {isView ? <div>{companyName}</div> : getFieldDecorator('companyName', {
-                        initialValue: companyName
-                    })(
-                        <Input prefixCls="my-ant-input" />
-                        )}
-                </FormItem>
-                <FormItem prefixCls="my-ant-form"
-                    {...formItemLayout}
-                    label="联系人"
-                >
-                    {isView ? <div>{contactName}</div> : getFieldDecorator('contactName', {
-                        initialValue: contactName
-                    })(
-                        <Input prefixCls="my-ant-input" />
-                        )}
-                </FormItem>
-                <FormItem prefixCls="my-ant-form"
-                    {...formItemLayout}
-                    label="地址"
-                >
-                    {isView ? <div>{address}</div> : getFieldDecorator('address', {
-                        initialValue: address
-                    })(
-                        <Input prefixCls="my-ant-input" />
-                        )}
-                </FormItem>
-                <FormItem prefixCls="my-ant-form" {...formTailLayout}>
-                    {
-                        isView ?
-                            <Button
-                                prefixCls="my-ant-btn"
-                                size="large"
-                                type="primary"
-                                onClick={this.updateInfo}
-                            >修改</Button>
-                            : <Button
-                                prefixCls="my-ant-btn"
-                                size="large"
-                                type="primary"
-                                onClick={this.handleSubmit}
-                            >保存</Button>
-                    }
-                </FormItem>
-            </Form>
+                    <Reset updatePsw={this.updatePsw}></Reset>
+                </Modal>
+            </div>
         );
     }
 
@@ -172,31 +187,57 @@ class AccountForm extends Component {
                 console.log('Received values of form: ', values);
                 const { password, companyName, contactName, address } = values;
                 const { id } = this.state;
-                // if (password) { 
-                //     HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.1/addMember', (code, message, json, option) => {
-                //     }, () => {
-                //     }, {
-                        
-                //         });
-                // }
                 if (companyName != this.state.companyName
                     || contactName != this.state.contactName
                     || address != this.state.address
-                ) { 
+                ) {
                     HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.1/modifyMemberInfo', (code, message, json, option) => {
-                            }, () => {
-                            }, {
-                                address,
-                                companyName,
-                                contactName,
-                                id
-                                });
-                 }
+                        this.setState({
+                            isView: true
+                        });
+                    }, () => {
+                    }, {
+                            address,
+                            companyName,
+                            contactName,
+                            id
+                        });
+                }
 
             }
         });
     }
 
+    handleOk() {
+        this.setState({
+            visible: false,
+        });
+    }
+    handleCancel() {
+        this.setState({
+            visible: false,
+        });
+    }
+
+    /**
+     * 更改密码
+     * @param {*} option 
+     * @param {*} password 
+     */
+    updatePsw(option, password) {
+        const { accountID } = this.state;
+        HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.1/users/sign', (code, message, json, option) => {
+
+        }, () => {
+        }, {
+                id: accountID,
+                option, password
+            });
+    }
+
+    /**
+     * 设置为修改模式
+     */
     updateInfo() {
         this.setState({
             isView: false

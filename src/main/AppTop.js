@@ -21,6 +21,7 @@ class page extends Component {
             step: this.par ? this.par.step : 0,
             isLogin: false
         };
+        this.setLogin = this.setLogin.bind(this);
 
     }
 
@@ -41,6 +42,9 @@ class page extends Component {
                 </Menu.Item>
                 <Menu.Item>
                     <a onClick={() => {
+                        this.setState({
+                            isLogin: false
+                        });
                         CookieHelp.clearCookie();
                     }}>退出登录</a>
                 </Menu.Item>
@@ -108,18 +112,23 @@ class page extends Component {
         );
     }
 
+    setLogin(){
+        this.setState({
+            isLogin: true
+        }, () => {
+            //回显用户名
+        });
+    }
+
     /**
      * 检测是否已经登录
      */
     checkLogin() {
         const user = CookieHelp.getUserInfo();
+        const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
         log("---Apptop-----Authorization");
         log(user);
-        this.setState({
-            isLogin: !!(user && user.Authorization)
-        }, () => {
-            //回显用户名
-        });
+        if(user && user.Authorization && isLogin) this.setLogin();
     }
 }
 page.contextTypes = {

@@ -1,9 +1,10 @@
 /*
  * @Author: 钮宇豪 
- * @Date: 2017-11-03 15:26:13 
+ * @Date: 2017-11-10 16:51:38 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-10 16:32:07
+ * @Last Modified time: 2017-11-10 19:05:07
  */
+
 
 import React, { Component } from 'react';
 import { Form, Input, Button } from 'antd';
@@ -20,7 +21,7 @@ function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
 
-class ForgetForm extends Component {
+class ResetForm extends Component {
     constructor(props) {
         super(props);
         this.getCode = this.getCode.bind(this);
@@ -34,7 +35,6 @@ class ForgetForm extends Component {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
 
         // Only show error after a field is touched.
-        const mobileError = isFieldTouched('mobile') && getFieldError('mobile');
         const optionError = isFieldTouched('option') && getFieldError('option');
         const passwordError = isFieldTouched('password') && getFieldError('password');
         const confirmPswError = isFieldTouched('confirmPsw') && getFieldError('confirmPsw');
@@ -43,29 +43,16 @@ class ForgetForm extends Component {
             <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <FormItem
                     prefixCls="my-ant-form"
-                    validateStatus={mobileError ? 'error' : ''}
-                    help={mobileError || ''}
-                    label="手机号"
-                >
-                    {getFieldDecorator('mobile', {
-                        rules: [{ required: true, message: '请输入11位手机号' },
-                        { pattern: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/, message: '手机号格式不正确！' }],
-                    })(
-                        <Input prefixCls="my-ant-input" placeholder="请输入11位手机号" />
-                        )}
-                </FormItem>
-                <FormItem
-                    prefixCls="my-ant-form"
                     validateStatus={optionError ? 'error' : ''}
                     help={optionError || ''}
-                    label="验证码"
+                    label="旧密码"
                 >
                     {getFieldDecorator('option', {
-                        rules: [{ required: true, message: '请输入验证码' }],
+                        rules: [{ required: true, message: '请输入密码!' },
+                        { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
-                        <Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />
+                        <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" />
                         )}
-                    <CheckCode error={getFieldError('tel')} getCode={() => this.getCode(this.getCodeAction)} />
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"
@@ -97,20 +84,12 @@ class ForgetForm extends Component {
                     <Button
                         prefixCls="my-ant-btn"
                         type="primary"
-                        className={css.btnSubmitSmall}
-                        onClick={() => this.props.handleChangeMode(0)}
-                        style={{ marginRight: '16px' }}
-                        ghost
-                    >返回登录</Button>
-                    <Button
-                        prefixCls="my-ant-btn"
-                        type="primary"
                         htmlType="submit"
                         className={css.btnSubmitSmall}
                         disabled={hasErrors(getFieldsError())}
+                        style={{ width: '100%' }}
                     >提交</Button>
                 </FormItem>
-                <div className={css.textRight}>还没有账号？ <span className={css.toLogin} onClick={() => this.props.handleChangeMode(1)}>立即前往注册</span></div>
             </Form>
         );
     }
@@ -120,17 +99,8 @@ class ForgetForm extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                const { mobile, option, password } = values;
-                HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.1/users/updatePassword', (code, message, json, option) => {
-                    log(message);
-                    log(json);
-                }, () => {
-                }, {
-                        account: mobile,
-                        mobile,
-                        option,
-                        password:md5(password)
-                    });
+                const { option, password } = values;
+                this.props.updatePsw(option, password);
             }
         });
     }
@@ -152,17 +122,14 @@ class ForgetForm extends Component {
                 mobile, picCode, type: 2
             });
     }
-
     getCode(callback) {
         const defaultAccount = 'b3619ef5dc944e4aad02acc7c83b220d';
         const defaultPwd = '4b91884d9290981da047b4c85af35a39';
         const user = CookieHelp.getUserInfo();
 
         if (user) {
-            log("1111");
             callback();
         } else {
-            log("222");
             getLoginCodePromise(defaultAccount, 0).then((data) =>
                 loginPromise(defaultAccount, defaultPwd, data)
             ).then((data) => {
@@ -176,6 +143,6 @@ class ForgetForm extends Component {
     }
 }
 
-const WrappedForgetForm = Form.create()(ForgetForm);
+const WrappedResetForm = Form.create()(ResetForm);
 
-module.exports = WrappedForgetForm;
+module.exports = WrappedResetForm;

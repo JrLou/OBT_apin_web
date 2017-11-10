@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-08 13:36:12 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-09 20:29:56
+ * @Last Modified time: 2017-11-10 14:34:07
  */
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import md5 from 'md5';
@@ -28,9 +28,8 @@ export function loginPromise(account, password, code) {
 /**
  * 获取登录码
  * @param {*} account 
- * @param {*} type 
  */
-export function getLoginCodePromise(account, type) {
+export function getLoginCodePromise(account,option) {
     return new Promise((resolve, reject) => {
         HttpTool.request(HttpTool.typeEnum.POST, "/memberapi/v1.1/tokens/codes", (code, message, json, option) => {
             if (json) {
@@ -38,10 +37,11 @@ export function getLoginCodePromise(account, type) {
             } else {
                 reject(message);
             }
-        }, (error) => {
-            reject(error);
+        }, (code, message) => {
+            reject(message);
         }, {
-                account
+                account,
+                option
             });
     });
 }
@@ -50,22 +50,16 @@ export function getLoginCodePromise(account, type) {
  * @param {*} account 
  * @param {*} type 
  */
-export function validateLogin(key,value) {
+export function validateLogin(key, value) {
     const params = {
         account: '', mobile: '', picCode: ''
     };
     params[key] = value;
     return new Promise((resolve, reject) => {
         HttpTool.request(HttpTool.typeEnum.POST, "/memberapi/v1.1/verifyInfo", (code, message, json, option) => {
-            if (json) {
-                log("sssssssssssss111111111111111111111111111");
-                log(json);
-                resolve(json);
-            } else {
-                reject(message);
-            }
-        }, (error) => {
-            reject(error);
+            resolve(message);
+        }, (code, message) => {
+            reject(message);
         }, params);
     });
 }
