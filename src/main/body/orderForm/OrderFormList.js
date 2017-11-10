@@ -16,7 +16,7 @@ class OrderFormList extends Component{
         //状态机
         this.state = {
             cityDep:'',
-            cityArrive:'',
+            cityArr:'',
             flightType:'',
             orderStatus:'',
             startDate:null,
@@ -25,7 +25,7 @@ class OrderFormList extends Component{
             dataSource:null,        //传入Table组件的数据
 
             pageSize:10,            //每页展示数据数目
-            pageNumber:1,           //列表当前页
+            page:1,           //列表当前页
             total:0,                //总数据
 
             loading: false,         //是否处于加载状态
@@ -157,8 +157,8 @@ class OrderFormList extends Component{
                 title:'人数(成人／儿童)',
                 dataIndex:'peopleNum',
                 render:(text,recode)=>{
-                    let adultNum = recode.adult?recode.adult:0;
-                    let childNum = recode.child?recode.child:0;
+                    let adultNum = recode.adultCount?recode.adultCount:0;
+                    let childNum = recode.childCount?recode.childCount:0;
                     return (''+adultNum+'/'+childNum);
                 }
             },{
@@ -213,13 +213,13 @@ class OrderFormList extends Component{
                 orderNum:'20170923132332333',
                 route:[{
                     cityDep:'宁波',
-                    cityArrive:'杭州',
+                    cityArr:'杭州',
                 },],
                 dateDep:'2017-09-13',
                 flightType:1,
                 peopleNum:'12/2',
-                adult:3,
-                child:15,
+                adultCount:3,
+                childCount:15,
                 price:'¥1200',
                 createDate:'2017-08-23 16:23',
                 orderStatus:'0',
@@ -231,13 +231,13 @@ class OrderFormList extends Component{
                 orderNum:'20170923132332333',
                 route:[{
                     cityDep:'波罗地亚吉卜力岛',
-                    cityArrive:'阿西列宁科克丽缇岛',
+                    cityArr:'阿西列宁科克丽缇岛',
                 }],
                 dateDep:'2017-09-13',
                 endDate:'2017-09-13',
                 flightType:2,
                 peopleNum:'12/2',
-                child:'3',
+                childCount:'3',
                 price:'¥1200',
                 createDate:'2017-08-23 16:23',
                 orderStatus:'1',
@@ -250,19 +250,19 @@ class OrderFormList extends Component{
                 route:[
                         {
                             cityDep:'杭州',
-                            cityArrive:'厦门',
+                            cityArr:'厦门',
                         },{
                             cityDep:'北京',
-                            cityArrive:'天津',
+                            cityArr:'天津',
                         },{
                             cityDep:'宁波',
-                            cityArrive:'广州',
+                            cityArr:'广州',
                         }
                     ],
                 dateDep:'2017-09-13',
                 endDate:'2017-09-13',
                 flightType:3,
-                adult:'8',
+                adultCount:'8',
                 peopleNum:'12/2',
                 price:'¥1200',
                 createDate:'2017-08-23 16:23',
@@ -290,12 +290,12 @@ class OrderFormList extends Component{
                     <div className={css.searchItem01}>
                         <span>目的城市：</span>
                         <Input
-                            value={this.state.cityArrive}
+                            value={this.state.cityArr}
                             className={css.inputStyle}
                             placeholder={'请输入'}
                             onChange={(obj)=>{
                                 let value = removeSpace(obj.target.value);
-                                this.changeState('cityArrive',value);
+                                this.changeState('cityArr',value);
                             }}
                         />
                     </div>
@@ -373,7 +373,7 @@ class OrderFormList extends Component{
                                 size:'large',
                             }}
                             pagination={{
-                                current:this.state.pageNumber,
+                                current:this.state.page,
                                 total:this.state.total,
                                 defaultCurrent:1,
                                 showQuickJumper:true,
@@ -432,7 +432,7 @@ class OrderFormList extends Component{
         }
         let currentNum = pagination.current;
         this.setState({
-            pageNumber:currentNum,
+            page:currentNum,
         },this.loadData());
     }
 
@@ -457,33 +457,33 @@ class OrderFormList extends Component{
             //转换数据，更改状态机
             let newData = this.transformData(json);
             this.setLoading(false);
+            log(newData);
         };
 
         let failureCB = (code, msg, option)=>{
             this.setLoading(false);
-            // message.error(msg);
-            message.error('测试-请求错误的回调');
+            message.error(msg);
         };
 
-        // this.setLoading(true,()=>{
-        //     HttpTool.request(HttpTool.typeEnum.GET,APILXD.XXXXXXXX, successCB, failureCB, parames,
-        //         {
-        //             ipKey: "hlIP"
-        //         });
-        // });
+        this.setLoading(true,()=>{
+            HttpTool.request(HttpTool.typeEnum.POST,APILXD.loadOrderList, successCB, failureCB, parames,
+                {
+                    ipKey: "hlIP"
+                });
+        });
 
         //模拟接口
-        this.setLoading(true,()=>{
-            log(parames);
-            setTimeout(()=>{
-                let num = Math.random();
-                if(num<0.5){
-                    successCB();
-                }else{
-                    failureCB();
-                }
-            },1000);
-        });
+        // this.setLoading(true,()=>{
+        //     log(parames);
+        //     setTimeout(()=>{
+        //         let num = Math.random();
+        //         if(num<0.5){
+        //             successCB();
+        //         }else{
+        //             failureCB();
+        //         }
+        //     },1000);
+        // });
 
     }
 
@@ -494,13 +494,11 @@ class OrderFormList extends Component{
     getSearchParames(){
         let state = this.state;
         let parames = {
-            bdCharger:'',
-            customerName:'',
             orderStatus:state.orderStatus,
             cityDep:state.cityDep,
-            cityArrive:state.cityArrive,
+            cityArr:state.cityArr,
             flightType:state.flightType,
-            pageNumber:state.pageNumber,
+            page:state.page,
             pageSize:state.pageSize,
         };
         let dateDepStart = state.startDate?getDateFormat(state.startDate.valueOf()):'',
@@ -537,7 +535,7 @@ class OrderFormList extends Component{
     transformData(data){
         let newData = [];
         if(data instanceof Array){
-            log(1);
+            log('转换');
         }
         return newData;
     }

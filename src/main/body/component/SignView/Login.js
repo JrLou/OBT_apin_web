@@ -2,13 +2,17 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-07 16:54:06
+ * @Last Modified time: 2017-11-09 20:14:29
  */
 
 import React, { Component } from 'react';
 
 import { Form, Input, Button } from 'antd';
+import md5 from 'md5';
 import CheckCode from './CheckCode';
+import { loginPromise, getLoginCodePromise } from './LoginAction';
+
+import { CookieHelp } from '../../../../../lib/utils/index.js';
 
 import css from './sign.less';
 
@@ -22,6 +26,10 @@ function hasErrors(fieldsError) {
  * 账号密码登录
  */
 class AccountLoginForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
     componentDidMount() {
         this.props.form.validateFields();
     }
@@ -31,7 +39,7 @@ class AccountLoginForm extends React.Component {
 
         // Only show error after a field is touched.
         const accountError = isFieldTouched('account') && getFieldError('account');
-        const signatureError = isFieldTouched('signature') && getFieldError('signature');
+        const passwordError = isFieldTouched('password') && getFieldError('password');
         return (
             <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <FormItem
@@ -48,10 +56,10 @@ class AccountLoginForm extends React.Component {
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"
-                    validateStatus={signatureError ? 'error' : ''}
-                    help={signatureError || ''}
+                    validateStatus={passwordError ? 'error' : ''}
+                    help={passwordError || ''}
                 >
-                    {getFieldDecorator('signature', {
+                    {getFieldDecorator('password', {
                         rules: [{ required: true, message: '请输入密码!' },
                         { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
@@ -66,7 +74,7 @@ class AccountLoginForm extends React.Component {
                         htmlType="submit"
                         className={css.btnSubmit}
                         disabled={hasErrors(getFieldsError())}
-                        onClick={this.props.onOK}
+                        onClick={this.login}
                     >登录</Button>
                 </FormItem>
             </Form>
@@ -78,6 +86,16 @@ class AccountLoginForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
+                let { account, password } = values;
+
+                getLoginCodePromise(account).then((data) =>
+                    loginPromise(account, md5(password), data)
+                ).then((data) => {
+                    data.Authorization = data.accessToken;
+                    CookieHelp.saveUserInfo(data, 122);
+                }).catch((error) => {
+                    log(error);
+                });
             }
         });
     }

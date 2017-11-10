@@ -427,7 +427,7 @@ class LineInfor extends Component {
                                                          this.props.callBack(dataItem);
                                                      }
                                                  }
-                                             }}>{"预订"}</div>
+                                             }}>{dataItem.isDirect&&dataItem.isDirect==1?"购买":"预订"}</div>
                                     </div>
                                 </div>
                             </div>

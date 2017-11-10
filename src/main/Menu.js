@@ -16,7 +16,7 @@ class Menus extends Component {
                 path: '/PublishMsg'
             }, {
                 name: '航班查询',
-                path: '/2'
+                path: '/Search'
             }, {
                 name: '订单管理',
                 path: '/3'
@@ -52,10 +52,14 @@ class Menus extends Component {
                                     this.setState({
                                         selectedKey: index
                                     });
-                                    window.app_open(this, menu.path, {
-                                        index,
-                                        step: menu.path === '/Score' ? 1 : 0
-                                    }, "self");
+                                    let params = {index};
+                                    // 航班查询页面要求参数
+                                    if(menu.path == '/Search'){
+                                        params.data = {
+                                            from:""
+                                        };
+                                    }
+                                    window.app_open(this, menu.path, params, "self");
                                 }}>{menu.name}</span>
                             </MenuItem>
                         );
