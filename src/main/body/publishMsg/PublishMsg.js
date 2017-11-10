@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, DatePicker, TimePicker, Button, Input, Row, Col, Radio, AutoComplete, Icon, message } from 'antd';
 import { HttpTool } from "../../../../lib/utils/index.js";
+import APIGYW from "../../../api/APIGYW.js";
 import AutoInput from "../component/InputAuto";
 import TemplatePublist from "./TemplatePublist";
 
@@ -28,8 +29,8 @@ class page extends Component {
             message.error(msg);
         };
         //  let api ="http://192.168.0.58:6300/demandapi/v1.0/demands";
-        let api = "/demandapi/v1.0/demands";
-        HttpTool.request(HttpTool.typeEnum.POST, api, success, failure, param);
+        // let api = "/demandapi/v1.0/demands";
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demandapi_demands, success, failure, param);
     }
 
     render() {

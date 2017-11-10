@@ -14,7 +14,6 @@
 .left{
   composes: itemCenter;
   width: 75%;
-  background-color: #4ff92e;
 }
 .right{
   composes: itemCenter;
@@ -42,8 +41,8 @@
 //左边的样式
 .cellBg{
   width: 100%;
-  padding-top: @d_spadding_center;
-  padding-bottom: @d_spadding_center;
+  padding-top: @d_spadding_big;
+  padding-bottom: @d_spadding_big;
   border-width: 0 0 1px 0;
   border-style: solid;
   border-color: @c_border_gray;
@@ -100,12 +99,9 @@
   width: 20%;
   color: @c_title_black;
   padding-top: @d_spadding_cell;
-  overflow: hidden;
 }
 .placeLineItem{
-  float: right;
-  width: 100%;
-  max-width: 100px;
+  width: 100px;
   color: @c_title_black;
   text-align: center;
   font-size: @font_size_small;
@@ -115,8 +111,12 @@
 }
 .refPlaceLineItem{
   composes: placeLineItem;
-  float: left;
   text-align: center;
+}
+.time{
+  font-size: 22px;
+  text-align:center;
+  width:100px;
 }
 
 

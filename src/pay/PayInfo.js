@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import less from './PayInfo.less';
+import {TimeHelp} from "../../lib/utils/index.js";
 
 class PayInfo extends Component {
    constructor(props) {
@@ -34,6 +35,30 @@ class PayInfo extends Component {
            passengersInfo +=(data.childCount+"/儿童");
        }
 
+       let showTime = null;
+       let preState = "";
+       if(data.payment===1){
+           preState = "订金";
+       }else if(data.payment===0){
+           preState ="机票款";
+       }else if(data.payment===2){
+           preState ="尾款";
+       }else {
+           preState ="订单金额";
+       }
+       if(data.time){
+           showTime = <Time
+               onAction={()=>{
+                   if(this.props.onAction){
+                       this.props.onAction("end");
+                   }
+               }}
+               time={Math.floor(data.time/1000)}/>;
+       }else {
+           let date = new Date();
+           date.setTime(data.expiredTime);
+           showTime = TimeHelp.format(date,"yyyy年M月d日");
+       }
 
       return (
          <div
@@ -43,10 +68,10 @@ class PayInfo extends Component {
                <div className={less.payInfo_top}>订单信息</div>
                <div className={less.payInfo_middle}>
                   <div className={less.fr + " " + less.payInfo_middle_priceBox}>
-                     订单金额：<span className={less.payInfo_middle_priceBox_rmb}>￥</span>
+                      {preState}：<span className={less.payInfo_middle_priceBox_rmb}>￥</span>
                      <span className={less.payInfo_middle_priceBox_price}>{data.price}</span>
                      <br/>
-                     （请在 <span className={less.payInfo_middle_priceBox_rmb}>{data.expiredTime}</span> 内支付）
+                     （请在 <span className={less.payInfo_middle_priceBox_rmb}>{showTime}</span> {data.payment===1?"内":"前"}支付）
                   </div>
                   <div>
                      <p>
@@ -69,6 +94,48 @@ class PayInfo extends Component {
                </div>
             </div>
          </div>
+      );
+   }
+}
+class Time extends Component{
+   constructor(props){
+      super(props);
+      this.state = {
+         time:this.props.time
+      };
+   }
+    componentWillUnmount() {
+        this.un = true;
+    }
+   autoTime(){
+      setTimeout(()=>{
+          let time = this.state.time -1;
+          if(this.un){
+             return;
+          }
+         this.setState({time},()=>{
+            if(time<1){
+               //通知时间到,不再显示
+                if(this.props.onAction){
+                   this.props.onAction();
+                }
+               return;
+            }
+            this.autoTime();
+         });
+      },1000);
+   }
+
+    componentDidMount() {
+        this.autoTime();
+    }
+   render(){
+      let v = this.state.time;
+      let hh = Math.floor(v/3600);
+      let mm = Math.floor(v%3600/60);
+      let show =(hh?(hh+":"):"") + mm+":" +v%60;
+      return (
+          <span>{show}</span>
       );
    }
 }
