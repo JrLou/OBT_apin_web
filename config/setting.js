@@ -1,6 +1,6 @@
 require("../public/config.js");
 var {router,setIp} = require("../router.js");
-var serviceIP =  "http://10.0.0.182:9008";
+var serviceIP =  "http://192.168.1.1:8082";
 setIp(serviceIP);
 module.exports = {
     port: 3000,
