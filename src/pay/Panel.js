@@ -50,6 +50,31 @@ class Panel extends Component {
             <div>
                <img className={less.infoImg} src={require("./images/pay_err.png")} alt="支付失败"/>
                <div className={less.tips}>{this.state.data.content}</div>
+                <Button
+                    className={less.modalBtn}
+                    type="primary"
+                    onClick={() => {
+                        this.show(false);
+                    }}>{"我知道了"}</Button>
+            </div>
+         </div>
+      );
+   }
+    getWarnLayout() {
+      return (
+         <div className={less.payResultContainer}>
+            <div>
+               <img className={less.infoImg} src={require("./images/pay_timeout.png")} alt="支付失败"/>
+               <div className={less.tips}>{this.state.data.content}</div>
+                <Button
+                    className={less.modalBtn}
+                    type="primary"
+                    onClick={() => {
+
+                        if (this.props.onAction) {
+                            this.props.onAction(this.state.data.action, this.state.data.showType);
+                        }
+                    }}>{"我知道了"}</Button>
             </div>
          </div>
       );
@@ -102,6 +127,9 @@ class Panel extends Component {
          case "success":
             view = this.getSuccessLayout();
             break;
+         case "warn":
+            view = this.getWarnLayout();
+            break;
          case "paying":
          case "unioning":
             view = this.getPayingLayout();
@@ -110,23 +138,23 @@ class Panel extends Component {
 
       //当为“error”时候，设置显示“X”并且点击“X”或“蒙版”均可以关闭模态框
       let errProps = null;
-      if(this.state.data.showType === "error"){
-         errProps = {
-            maskClosable: true,
-            closable: this.state.data.showType === "error" ? true : false,
-            onCancel: () => {
-               //不能删除该方法
-               //这里IDE提示没有引用，但实际是引用了的，
-               this.show(false);
-            }
-         };
-      } else {
-         errProps = {
-            confirmLoading: false,
-            maskClosable: false
-         };
-      }
-
+      // if(this.state.data.showType === "error"){
+      //    errProps = {
+      //       maskClosable: true,
+      //       closable: this.state.data.showType === "error" ? true : false,
+      //       onCancel: () => {
+      //          //不能删除该方法
+      //          //这里IDE提示没有引用，但实际是引用了的，
+      //          this.show(false);
+      //       }
+      //    };
+      // } else {
+      //
+      // }
+       errProps = {
+           confirmLoading: false,
+           maskClosable: false
+       };
       return (
          <Modal
             visible={true}

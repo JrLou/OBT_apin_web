@@ -8,6 +8,7 @@ import less from './App.less';
 class page extends Component {
 
     render() {
+        console.log(window.screen.height);
         return (
             <div className={less.main}>
                 <div className={less.mainBG} />
@@ -16,7 +17,7 @@ class page extends Component {
                         root={this}
                         {...this.props}
                         />
-                    <div className={less.container}>
+                    <div className={less.container} style={{minHeight:document.body.clientHeight-80}}>
                         {this.props.children}
                     </div>
                     <div style={{ padding: "30px" }}>

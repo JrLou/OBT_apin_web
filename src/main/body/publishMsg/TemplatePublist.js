@@ -113,18 +113,18 @@ class page extends Component {
             div.push(
                 <div key={i}>
                     {this.state.lineType == 3 &&
-                        <Row style={{ marginBottom: 8, fontSize: "14px", color: " #29A6FF" }}>
-                            <Col span={10} >
-                                <span>行程{i + 1}</span>
-                            </Col>
-                        </Row>
+                    <Row style={{ marginBottom: 8, fontSize: "14px", color: " #29A6FF" }}>
+                        <Col span={10} >
+                            <span>行程{i + 1}</span>
+                        </Col>
+                    </Row>
                     }
                     {this.state.lineType != 3 &&
-                        <Row style={{ marginBottom: 8, fontSize: "14px", color: " #29A6FF" }}>
-                            <Col span={10} >
-                                <span></span>
-                            </Col>
-                        </Row>
+                    <Row style={{ marginBottom: 8, fontSize: "14px", color: " #29A6FF" }}>
+                        <Col span={10} >
+                            <span></span>
+                        </Col>
+                    </Row>
                     }
 
                     <Row style={{ marginBottom: 8 }}>
@@ -143,12 +143,12 @@ class page extends Component {
                                     validateTrigger: "onChangeValue",
                                     initialValue: this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity
                                 })(
-                                    <div>
-                                        <AutoInput style={{ borderRadius: "2px" }} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity}
-                                            type={"from"}
-                                            placeholder={'中文／拼音／三字码'} />
-                                    </div>
-                                    )}
+
+                                    <AutoInput style={{ borderRadius: "2px" }} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity}
+                                               type={"from"}
+                                               placeholder={'中文／拼音／三字码'} />
+
+                                )}
                             </FormItem>
                         </Col>
                         <Col span={11} offset={2}>
@@ -162,19 +162,19 @@ class page extends Component {
                                     validateTrigger: "onChangeValue",
                                     initialValue: this.state.listData[i] == undefined ? "" : this.state.listData[i].toCity
                                 })(
-                                    <div>
-                                        <AutoInput style={{ borderRadius: "2px" }} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].toCity}
-                                            type={"from"}
-                                            placeholder={'中文／拼音／三字码'} />
-                                    </div>
-                                    )}
+
+                                    <AutoInput style={{ borderRadius: "2px" }} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].toCity}
+                                               type={"from"}
+                                               placeholder={'中文／拼音／三字码'} />
+
+                                )}
                             </FormItem>
                         </Col>
                     </Row>
                     <Row style={{ marginBottom: 8 }}>
                         <Col span={10} >出发日期：</Col>
                         {this.state.lineType == 2 &&
-                            <Col span={10} offset={3}>返回日期：</Col>
+                        <Col span={10} offset={3}>返回日期：</Col>
                         }
                     </Row>
                     <Row >
@@ -187,44 +187,44 @@ class page extends Component {
                                     }],
                                     initialValue: this.state.listData[i] == undefined ? "" : moment(this.state.listData[i].fromDateTime)
                                 })(
-                                    <DatePicker style={{ borderRadius: "2px" }} style={{ minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
+                                    <DatePicker style={{borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
                                         return current && current.valueOf() <= Date.now();
                                     }} />
-                                    )}
+                                )}
                             </FormItem>
                         </Col>
                         {this.state.lineType == 2 &&
-                            <Col span={11} offset={2}>
-                                <FormItem >
-                                    {getFieldDecorator('toDateTime' + i, {
-                                        rules: [{
-                                            required: true,
-                                            message: '请选择时间',
-                                        }],
-                                        initialValue: this.state.listData[i] == undefined ? "" : moment(this.state.listData[i].toDateTime)
-                                    })(
-                                        <DatePicker style={{ borderRadius: "2px" }} style={{ minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
-                                            return current && current.valueOf() <= Date.now();
-                                        }} />
-                                        )}
-                                </FormItem>
-                            </Col>
+                        <Col span={11} offset={2}>
+                            <FormItem >
+                                {getFieldDecorator('toDateTime' + i, {
+                                    rules: [{
+                                        required: true,
+                                        message: '请选择时间',
+                                    }],
+                                    initialValue: this.state.listData[i] == undefined ? "" : moment(this.state.listData[i].toDateTime)
+                                })(
+                                    <DatePicker style={{borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
+                                        return current && current.valueOf() <= Date.now();
+                                    }} />
+                                )}
+                            </FormItem>
+                        </Col>
                         }
                         {this.state.lineType == 3 &&
-                            <Col span={11} offset={2}>
-                                <Button type="primary" style={{ float: "right" }} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum == 2} onClick={() => this.lineDel()}>删除</Button>
-                            </Col>
+                        <Col span={11} offset={2}>
+                            <Button type="primary" style={{ float: "right" }} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum == 2} onClick={() => this.lineDel()}>删除</Button>
+                        </Col>
                         }
                     </Row>
                     {this.state.lineType == 3 && this.state.lineNum == (i + 1) && this.state.lineNum <= 5 &&
-                        <Row style={{ marginBottom: 8, color: " #29A6FF" }}>
-                            <Col span={4} offset={9} style={{ width: "66px" }}>
-                                <div style={{ position: "relative", cursor: "pointer" }} onClick={() => this.lineAdd()}>
-                                    <Icon type="plus-circle-o" />
-                                    <span style={{ float: "right" }}>加一程</span>
-                                </div>
-                            </Col>
-                        </Row>
+                    <Row style={{ marginBottom: 8, color: " #29A6FF" }}>
+                        <Col span={4} offset={9} style={{ width: "66px" }}>
+                            <div style={{ position: "relative", cursor: "pointer" }} onClick={() => this.lineAdd()}>
+                                <Icon type="plus-circle-o" />
+                                <span style={{ float: "right" }}>加一程</span>
+                            </div>
+                        </Col>
+                    </Row>
                     }
                 </div>
             );
@@ -268,7 +268,7 @@ class page extends Component {
                                 <Radio value={2}>往返</Radio>
                                 <Radio value={3}>多程</Radio>
                             </RadioGroup>
-                            )}
+                        )}
                     </FormItem>
                 </Row>
                 {/*航线+时间*/}
@@ -294,7 +294,7 @@ class page extends Component {
                                     <span style={{ position: "absolute", zIndex: 1, right: "20px",color:"#cacaca"}}>成人</span>
                                     <Input style={{ width: 207, height: 34, borderRadius: "2px" }} defaultValue={this.state.adultCount} onChange={(e) => this.handleConfirmNum("adultCount", e)} maxLength="4" />
                                 </div>
-                                )}
+                            )}
                         </FormItem>
                     </Col>
                     <Col span={10} offset={1}>
@@ -313,7 +313,7 @@ class page extends Component {
                                     <span style={{ position: "absolute", zIndex: 1, right: "20px",color:"#cacaca"}}>儿童(2～12周岁)</span>
                                     <Input style={{ width: 207, height: 34, borderRadius: "2px" }} defaultValue={this.state.childCount} maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)}  />
                                 </div>
-                                )}
+                            )}
                         </FormItem>
                     </Col>
                     <Col span={3}>
@@ -335,7 +335,7 @@ class page extends Component {
                                 initialValue: this.state.remark,
                             })(
                                 <Input type="textarea" maxLength="99" style={{ height: 180,resize:"none"}} placeholder="如：价格、时间等" />
-                                )}
+                            )}
                         </FormItem>
 
                     </Col>
@@ -359,7 +359,7 @@ class page extends Component {
                                 <div style={{ width: "100%" }}>
                                     <Input style={{ width: 240, height: 36, borderRadius: "2px" }} placeholder="输入可联系的手机号码" /><span style={{ color: "red", marginLeft: 10 }}>*</span>
                                 </div>
-                                )}
+                            )}
                         </FormItem>
 
                     </Col>

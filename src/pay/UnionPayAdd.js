@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import less from './UnionPayAdd.less';
-
+import {HttpTool} from "../../lib/utils/index.js";
+import Api from  './Api.js';
 import {Button, Form, Input, Icon, Spin, Modal, Radio} from 'antd';
 
 const FormItem = Form.Item;
@@ -134,7 +135,7 @@ class UnionPayAdd extends Component {
                            this.setState({
                               upLoad: true
                            }, () => {
-                              this.loadUnionPayAdd({code: this.state.inputValue}, (code, msg, data) => {
+                              this.loadUnionPayAdd({cardNo: this.state.inputValue}, (code, msg, data) => {
                                  this.showError(code > 0 ? null : msg);
                                  this.setState({
                                     upLoad: false
@@ -162,13 +163,19 @@ class UnionPayAdd extends Component {
    }
 
    loadUnionPayAdd(param, cb) {
-      setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 1;
-         let data = {
-            url: "http://taobao.com"
-         };
-         cb(code, code > 0 ? "获取成功" : "卡号已存在", data);
-      }, Math.random() * 1000);
+       HttpTool.request(HttpTool.typeEnum.POST, Api.isOpen, (code, msg, json, option) => {
+           cb(code,msg,json);
+       }, (code, msg, option) => {
+           cb(code,msg, {});
+       }, param);
+
+      // setTimeout(() => {
+      //    let code = (Math.random() * 10).toFixed(0) - 1;
+      //    let data = {
+      //       url: "http://taobao.com"
+      //    };
+      //    cb(code, code > 0 ? "获取成功" : "卡号已存在", data);
+      // }, Math.random() * 1000);
    }
 }
 

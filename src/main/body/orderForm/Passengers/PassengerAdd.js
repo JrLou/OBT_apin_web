@@ -16,7 +16,6 @@ class PassengerAdd extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            orderId:this.props.orderId?this.props.orderId:'',   //订单Id
             lineType:this.props.lineType?this.props.lineType:1,  //1:国内  2：国际
             credType:this.props.lineType?this.props.lineType:1,     //证件类型
             visible:false,  //模态框显示
@@ -25,8 +24,8 @@ class PassengerAdd extends Component{
             testState:{
                 name:{state:true,msg:`请输入姓名`},
                 nation:{state:true,msg:'请输入国籍'},
-                birth:{state:true,msg:'请选择出生日期'},
-                credNum:{state:true,msg:'请输入正确的证件号码'},
+                birthday:{state:true,msg:'请选择出生日期'},
+                credNumber:{state:true,msg:'请输入正确的证件号码'},
                 expireTime:{state:true,msg:'请选择证件有效期'},
                 issuePlace:{state:true,msg:'请输入签发地'},
             },
@@ -35,6 +34,10 @@ class PassengerAdd extends Component{
                 gender:1,
             }
         };
+
+        //订单Id
+        this.orderId = this.props.orderId?this.props.orderId:'';
+
         if(this.props.getFunction){
             this.props.getFunction(this.changeVisible.bind(this));
         }
@@ -52,11 +55,12 @@ class PassengerAdd extends Component{
             newData.name = defaultData.name?defaultData.name:'';
             newData.gender = (defaultData.gender==0)?0:1;
             newData.nation = defaultData.nation?defaultData.nation:'';
-            newData.birth = defaultData.birth?defaultData.birth:null;
+            newData.birthday = defaultData.birthday?defaultData.birthday:null;
             newData.credType = defaultData.credType?defaultData.credType:1;
-            newData.credNum = defaultData.credNum?defaultData.credNum:'';
+            newData.credNumber = defaultData.credNumber?defaultData.credNumber:'';
             newData.expireTime = defaultData.expireTime?defaultData.expireTime:null;
             newData.issuePlace = defaultData.issuePlace?defaultData.issuePlace:'';
+            newData.id = defaultData.id?defaultData.id:'';
         }else{
             //新增
             newData.gender = 1;
@@ -68,8 +72,8 @@ class PassengerAdd extends Component{
             testState:{
                 name:{state:true,msg:`请输入姓名`},
                 nation:{state:true,msg:'请输入国籍'},
-                birth:{state:true,msg:'请选择出生日期'},
-                credNum:{state:true,msg:'请输入正确的证件号码'},
+                birthday:{state:true,msg:'请选择出生日期'},
+                credNumber:{state:true,msg:'请输入正确的证件号码'},
                 expireTime:{state:true,msg:'请选择证件有效期'},
                 issuePlace:{state:true,msg:'请输入签发地'},
             },
@@ -188,14 +192,14 @@ class PassengerAdd extends Component{
                     style={{width:'100%'}}
                     placeholder={'例：1990-01-01'}
                     format={'YYYY-MM-DD'}
-                    value={this.state.data.birth?moment(this.state.data.birth, 'YYYY-MM-DD'):null}
+                    value={this.state.data.birthday?moment(this.state.data.birthday, 'YYYY-MM-DD'):null}
                     disabledDate={this.disabledTimeForBirth.bind(this)}
                     onChange={(date,dateString)=>{
-                        this.setData('birth',dateString);
+                        this.setData('birthday',dateString);
                     }}
                 />
-                <div className={this.state.testState.birth.state?css.hideMsg:css.errorMsg}>
-                    {this.state.testState.birth.msg}
+                <div className={this.state.testState.birthday.state?css.hideMsg:css.errorMsg}>
+                    {this.state.testState.birthday.msg}
                 </div>
             </div>
         );
@@ -226,28 +230,32 @@ class PassengerAdd extends Component{
     }
 
     //获得证件号码
-    getCredNum(){
+    getCredNum(isSimple){
         return(
             <div>
                 {this.getItemTitle('证件号码：')}
                 <Input
                     placeholder={'证件号码'}
-                    value={this.state.data.credNum}
+                    value={this.state.data.credNumber}
                     onChange={(e)=>{
                         let value = e.target.value;
-                        let reg = /^[0-9Xx]*$/;
+                        let regIDCard = /^[0-9Xx]{0,40}$/;
+                        let regOther = /^[0-9a-zA-Z\<\>\-\/]{0,40}$/;
+                        let reg = isSimple?regIDCard:regOther;
                         if(reg.test(value)){
-                            this.setData('credNum',value);
+                            this.setData('credNumber',value);
                         }
                     }}
                     onBlur={(e)=>{
                         let value = e.target.value;
-                        let reg = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
-                        this.setTestState('credNum',{state:reg.test(value),msg:'请输入正确的证件号'});
+                        let regIDCard = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
+                        let regOther = /^[0-9a-zA-Z\<\>\-\/]{0,40}$/;
+                        let reg = isSimple?regIDCard:regOther;
+                        this.setTestState('credNumber',{state:reg.test(value),msg:'请输入正确的证件号'});
                     }}
                 />
-                <div className={this.state.testState.credNum.state?css.hideMsg:css.errorMsg}>
-                    {this.state.testState.credNum.msg}
+                <div className={this.state.testState.credNumber.state?css.hideMsg:css.errorMsg}>
+                    {this.state.testState.credNumber.msg}
                 </div>
             </div>
         );
@@ -343,9 +351,9 @@ class PassengerAdd extends Component{
     render(){
         log(this.props.defaultData);
         let defaultData = this.props.defaultData;
-        let isSimple = (this.state.credType==1)?true:false;
-        let isAdd = (defaultData?false:true); //false:编辑   true:新增
-        let itemStyle = this.state.data.credType==1?css.hiddenItem:css.contentItem;
+        let isSimple = (this.state.credType==1)?true:false;     //是否使用身份证
+        let isAdd = (defaultData?false:true);                   //false:编辑   true:新增
+        let itemStyle = isSimple?css.hiddenItem:css.contentItem;
         return(
             <Modal
                 width={600}
@@ -360,11 +368,12 @@ class PassengerAdd extends Component{
             >
                 <Spin
                     spinning={this.state.loading}
+                    size={'large'}
                 >
                     <div className={css.modBody}>
                         <div className={css.modTitle}>{isAdd?'新增乘机人':'修改乘机人'}</div>
                         <div className={css.modContent}>
-                            <div className={this.state.data.credType==1?css.contentOneLine:css.contentItem}>
+                            <div className={isSimple?css.contentOneLine:css.contentItem}>
                                 {this.getNameInput()}
                             </div>
                             <div className={itemStyle}>
@@ -380,7 +389,7 @@ class PassengerAdd extends Component{
                                 {this.getCredType()}
                             </div>
                             <div className={css.contentItem}>
-                                {this.getCredNum()}
+                                {this.getCredNum(isSimple)}
                             </div>
                             <div className={itemStyle}>
                                 {this.getExpireTime()}
@@ -452,12 +461,12 @@ class PassengerAdd extends Component{
         let checkedState = false;
         if(this.state.credType==1){
             //身份证类型
-            if(requireData.name&&requireData.credNum&&testMsg.credNum.state){
+            if(requireData.name&&requireData.credNumber&&testMsg.credNumber.state){
                 checkedState = true;
             }
         }else{
             //其它类型
-            if(requireData.name&&requireData.nation&&requireData.birth&&requireData.credNum&&requireData.expireTime&&requireData.issuePlace&&testMsg.credNum.state){
+            if(requireData.name&&requireData.nation&&requireData.birthday&&requireData.credNumber&&requireData.expireTime&&requireData.issuePlace&&testMsg.credNumber.state){
                 checkedState = true;
             }
         }
@@ -484,44 +493,40 @@ class PassengerAdd extends Component{
      * @param isAdd
      */
     submitMsg(isAdd) {
-        let parames = this.state.data;
-        parames.orderId = this.state.orderId;
-        if(!isAdd){
-            //如果是修改,则还需要添加id
+        let newData = this.state.data;
+        let parames = {};
+        if(newData.credType == 1){
+            parames = {
+                orderId:this.orderId,
+                id:newData.id,
+                name:newData.name,
+                credType:newData.credType,
+                credNumber:newData.credNumber,
+            };
+        }else{
+            parames = newData;
+            parames.orderId = this.orderId;
         }
+        let requestAPI = isAdd?APILXD.addPassenger:APILXD.upDataPassenger;
         let successCB = (code, msg, json, option) => {
             this.setLoading(false);
-            message.success('成功');
+            message.success(isAdd?'添加成功':'修改成功');
             this.changeVisible(false);
             if(this.props.changeSuccCB){
-                this.props.changeSuccCB();
+                this.props.changeSuccCB(json);
             }
-
         };
         let failureCB = (code, msg, option) => {
             this.setLoading(false);
-            message.error('失败');
+            message.error(msg);
         };
 
         this.setLoading(true,()=>{
-            HttpTool.request(HttpTool.typeEnum.POST,APILXD.addPassenger, successCB, failureCB, parames,
+            HttpTool.request(HttpTool.typeEnum.POST,requestAPI, successCB, failureCB, parames,
                 {
-                    ipKey: "hlIP"
+                    ipKey: "hlIP", 
                 });
         });
-
-        //模拟接口
-        // this.setLoading(true,()=>{
-        //     log(parames);
-        //     setTimeout(()=>{
-        //         let num = Math.random();
-        //         if(num<0.5){
-        //             successCB();
-        //         }else{
-        //             failureCB();
-        //         }
-        //     },1000);
-        // });
     }
 }
 

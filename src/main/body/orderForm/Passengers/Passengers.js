@@ -25,7 +25,7 @@ class PassengerMsg extends Component{
         super(props);
         this.state = {
             orderState:this.props.orderState,
-            // orderId:this.props.orderID,
+            // orderId:this.props.orderId,
             orderId:'16b3639900f54a86b9116af77b088d75',
             dataSource:this.props.defaultData?this.props.defaultData:[],
             isPassed:this.props.isPassed?this.props.isPassed:false,     //是否已经确认了乘机人
@@ -42,7 +42,8 @@ class PassengerMsg extends Component{
     }
 
     componentDidMount(){
-
+        //加载乘机人列表数据
+        this.setLoading(true,this.loadPassengerList);
     }
 
     render(){
@@ -71,7 +72,7 @@ class PassengerMsg extends Component{
                 }
             },{
                 title:'证件号',
-                dataIndex:'credNum',
+                dataIndex:'credNumber',
             },{
                 title:'性别',
                 dataIndex:'gender',
@@ -86,7 +87,7 @@ class PassengerMsg extends Component{
                 }
             },{
                 title:'出生日期',
-                dataIndex:'birth',
+                dataIndex:'birthday',
             },{
                 title:'国籍',
                 dataIndex:'nation',
@@ -121,43 +122,43 @@ class PassengerMsg extends Component{
                 ),
             },
         ];
-        let dataSource = [
-            {
-                index:1,
-                key:1,
-                name:'张三',
-                credType:'1',
-                credNum:'3303030440201043045',
-                birth:'1990-03-23',
-                nation:'中国',
-                operation:'把识别id传入',
-                gender:1,
-            },
-            {
-                index:2,
-                key:2,
-                name:'李六',
-                credType:'1',
-                credNum:'3303030440201043045',
-                birth:'1990-03-23',
-                nation:'中国',
-                operation:'把识别id传入',
-                ticket:'123123123,123123123,23424123,235345345,23423423424,2353453455',
-                issuePlace:'中国',
-            },
-            {
-                index:3,
-                key:4,
-                name:'Edd',
-                credType:'2',
-                credNum:'3303030440201043045',
-                gender:0,
-                birth:'1990-03-23',
-                nation:'中国',
-                operation:'把识别id传入',
-                ticket:'123123123,123123123,23424123,235345345,23423423424,2353453455',
-            }
-        ];
+        // let dataSource = [
+        //     {
+        //         index:1,
+        //         key:1,
+        //         name:'张三',
+        //         credType:'1',
+        //         credNumber:'3303030440201043045',
+        //         birthday:'1990-03-23',
+        //         nation:'中国',
+        //         operation:'把识别id传入',
+        //         gender:1,
+        //     },
+        //     {
+        //         index:2,
+        //         key:2,
+        //         name:'李六',
+        //         credType:'1',
+        //         credNumber:'3303030440201043045',
+        //         birthday:'1990-03-23',
+        //         nation:'中国',
+        //         operation:'把识别id传入',
+        //         ticket:'123123123,123123123,23424123,235345345,23423423424,2353453455',
+        //         issuePlace:'中国',
+        //     },
+        //     {
+        //         index:3,
+        //         key:4,
+        //         name:'Edd',
+        //         credType:'2',
+        //         credNumber:'3303030440201043045',
+        //         gender:0,
+        //         birthday:'1990-03-23',
+        //         nation:'中国',
+        //         operation:'把识别id传入',
+        //         ticket:'123123123,123123123,23424123,235345345,23423423424,2353453455',
+        //     }
+        // ];
 
         if(hasKey(this.state.orderState,[1,2])){
             return(
@@ -167,14 +168,15 @@ class PassengerMsg extends Component{
             return(
                 <div className={css.passengerList}>
                     <Spin
+                        size={'large'}
                         spinning={this.state.loading}
                     >
                     <PassengerAdd
-                        orderId = {this.props.orderId}
-                        lineType = {this.props.lineType}        //航线类型
+                        orderId = {this.state.orderId}
+                        lineType = {this.state.lineType}        //航线类型
                         defaultData = {this.state.passengerMsg}     //单个乘机人信息
                         closeModCB = {()=>{this.setState({passengerMsg:null});}}  //关闭窗口回调
-                        changeSuccCB={(allData)=>{}}                              //新增/修改成功的回调
+                        changeSuccCB={(allData)=>{this.passengerChange(allData);}}                              //新增/修改成功的回调
                         getFunction = {(changeVisible)=>{this.changeShow = changeVisible;}} //获取打开/关闭窗口的方法
                     />
                     {
@@ -222,7 +224,7 @@ class PassengerMsg extends Component{
                     <div className={css.passengerTable}>
                         <Table
                             columns={columns}
-                            dataSource={dataSource}
+                            dataSource={this.state.dataSource}
                             pagination={false}
                         />
                         {
@@ -239,6 +241,7 @@ class PassengerMsg extends Component{
                                         确认乘机人信息无误
                                     </Checkbox>
                                     <Button
+                                        disabled={!this.state.checkedMsg}
                                         size={'large'}
                                         type="primary"
                                         className={css.btnType03}
@@ -326,37 +329,40 @@ class PassengerMsg extends Component{
      * 提交信息
      */
     submit(){
-        let parames = {};
+        let parames = {
+            //订单ID
+            id:this.state.orderId,
+        };
         let successCB = (code, msg, json, option)=>{
             this.setState({
                 isPassed:true,
                 loading:false,
-            },message.success('测试-成功'));
+            },message.success(msg));
         };
         let failureCB = (code, msg, option)=>{
             this.setLoading(false);
-            message.warning('测试-出错');
+            message.warning(msg);
         };
 
-        // this.setLoading(true,()=>{
-        //     HttpTool.request(HttpTool.typeEnum.GET,APILXD.XXXXXXXX, successCB, failureCB, parames,
-        //         {
-        //             ipKey: "hlIP"
-        //         });
-        // });
+        this.setLoading(true,()=>{
+            HttpTool.request(HttpTool.typeEnum.POST,APILXD.confirmPassenger, successCB, failureCB, parames,
+                {
+                    ipKey: "hlIP"
+                });
+        });
 
         //模拟接口
-        this.setLoading(true,()=>{
-            log(parames);
-            setTimeout(()=>{
-                let num = Math.random();
-                if(num<0.5){
-                    successCB();
-                }else{
-                    failureCB();
-                }
-            },1000);
-        });
+        // this.setLoading(true,()=>{
+        //     log(parames);
+        //     setTimeout(()=>{
+        //         let num = Math.random();
+        //         if(num<0.5){
+        //             successCB();
+        //         }else{
+        //             failureCB();
+        //         }
+        //     },1000);
+        // });
     }
 
     /**
@@ -401,38 +407,69 @@ class PassengerMsg extends Component{
      * @param data
      */
     toDeletePassenger(){
-        let parames = {};
+        let parames = {
+            id:this.state.deleteMsg.id,
+            orderId:this.state.orderId,
+        };
         let successCB = (code, msg, json, option)=>{
-
+            this.passengerChange(json);
+            message.success('删除成功');
             this.setLoading(false);
         };
 
         let failureCB = (code, msg, option)=>{
             this.setLoading(false);
-            // message.error(msg);
-            message.error('测试-请求错误的回调');
+            message.error(msg);
         };
 
-        // this.setLoading(true,()=>{
-        //     HttpTool.request(HttpTool.typeEnum.GET,APILXD.XXXXXXXX, successCB, failureCB, parames,
-        //         {
-        //             ipKey: "hlIP"
-        //         });
-        // });
-
-        //模拟接口
         this.setLoading(true,()=>{
-            log(parames);
-            setTimeout(()=>{
-                let num = Math.random();
-                if(num<0.5){
-                    successCB();
-                }else{
-                    failureCB();
-                }
-            },1000);
+            HttpTool.request(HttpTool.typeEnum.POST,APILXD.deletePassenger, successCB, failureCB, parames,
+                {
+                    ipKey: "hlIP"
+                });
         });
+    }
 
+    /**
+     * 接受新的数据，改变乘机人列表
+     * @param data
+     */
+    passengerChange(data){
+        let newData = [];
+        if(data instanceof Array){
+            newData = data;
+            for(let key in data){
+                newData[key].index = newData[key].key = parseInt(key)+1;
+            }
+        }
+        this.setState({
+            dataSource:newData,
+        });
+    }
+
+    /**
+     * 请求乘机人列表数据
+     */
+    loadPassengerList(){
+        let parames = {
+            orderId:this.state.orderId,
+        };
+        let successCB = (code, msg, json, option)=>{
+            this.passengerChange(json);
+            this.setLoading(false);
+        };
+
+        let failureCB = (code, msg, option)=>{
+            this.setLoading(false);
+            message.error(msg);
+        };
+
+        this.setLoading(true,()=>{
+            HttpTool.request(HttpTool.typeEnum.POST,APILXD.loadPassengerList, successCB, failureCB, parames,
+                {
+                    ipKey: "hlIP"
+                });
+        });
     }
 }
 

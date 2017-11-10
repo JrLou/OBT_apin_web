@@ -25,7 +25,7 @@ class CellNewFlight extends Component {
         }
         return (<div className={css.main}>
             <div className={css.left}>
-                {this.createCell(dataSource.voyages||[],flightType)}
+                {this.createCell(dataSource.voyages||[],flightType,isNoShowRule)}
             </div>
 
             {isNoShowRule?null:<div className={css.right}>
@@ -45,9 +45,13 @@ class CellNewFlight extends Component {
 
         </div>);
     }
-    createCell(dataArr,flightType){
+    createCell(dataArr,flightType,isNoShowRule){
         return dataArr.map((data, index)=>{
-            return (<div key={index} className={css.cellBg} style={{borderBottomWidth:(index==dataArr.length-1)?"0px":"1px"}}>
+            return (<div key={index}
+                         className={css.cellBg}
+                         style={{paddingLeft:isNoShowRule?"8%":"0",
+                             paddingRight:isNoShowRule?"8%":"0",
+                             borderBottomWidth:(index==dataArr.length-1)?"0px":"1px"}}>
                 {this.createItemCell(data, index,flightType)}
                 {data.child&&data.child.length>0?<CellNewFlightDetail data = {data.child}/>:null}
             </div>);
@@ -78,7 +82,7 @@ class CellNewFlight extends Component {
                                 <Tooltip placement="bottom" title={data.depAirport}>{data.depAirport}</Tooltip>
                             </div>):
                             (<div className={css.placeLineItem}>{data.depAirport}</div>)}
-                        <div style={{fontSize:"22px",textAlign:"center"}}>{data.depTime}</div>
+                        <div className={css.time}>{data.depTime}</div>
                     </div>
 
                     <div className={css.lineBg}>
@@ -122,8 +126,8 @@ class CellNewFlight extends Component {
                                 <Tooltip placement="bottom" title={data.arrAirport}>{data.arrAirport}</Tooltip>
                             </div>): (<div className={css.refPlaceLineItem}>{data.arrAirport}</div>)
                         }
-                        <div style={{textAlign:"center"}}>
-                            <span style={{fontSize:"22px"}}>{data.arrTime}</span>
+                        <div className={css.time}>
+                            <span>{data.arrTime}</span>
                             <span style={{fontSize:"12px",color:"#FF5841"}}>{data.tag==1?"+1天":""}</span>
                         </div>
                     </div>

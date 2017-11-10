@@ -25,7 +25,22 @@ let APIGYW = {
     /**
      * 根据城市对与出发日期查询航班 右日期
      */
-    flightapi_flights_query: "/ba/flightapi/v1.0/flights/query"
+    flightapi_flights_query: "/ba/flightapi/v1.0/flights/query",
+
+    /**
+     * 订单详情页
+     */
+    flightapi_orderDetail_query: "/ba/flightapi/v1.0/orderDetail/query",
+
+    /**
+     * 新增订单
+     */
+    orderapi_orders_create: "/orderapi/v1.0/orders/create",
+
+    /**
+     * 提交需求
+     */
+    demandapi_demands: "/demandapi/v1.0/demands"
 
 };
 module.exports = APIGYW;

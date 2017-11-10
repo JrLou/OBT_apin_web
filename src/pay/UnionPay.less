@@ -1,7 +1,6 @@
 @import "../theme.less";
 
 .unionPay {
-
   .payCpmBox;
   &_top {
     .top;
@@ -45,4 +44,30 @@
   color: #ff5500;
   line-height: 30px;
   font-size: 18px;
+}
+
+.nextLayout{
+  text-align: right;
+  color: @font-light-color;
+  &_msg{
+    display: inline-block;
+    padding-left: 23px;
+    font-family: "MicrosoftYaHei", Helvetica, Arial, sans-serif;
+    font-size: @font_size_center;
+
+  }
+  &_priceTitle{
+    font-size: @font-size-base;
+    color: @font-color;
+  }
+  &_price{
+    color:@c_text_red;
+    font-size: @font_size_super_big_x;
+    &_rmb{
+      font-size: @font_size_cell;
+    }
+  }
+  &_btn{
+    .bigOrangeBtn;
+  }
 }
