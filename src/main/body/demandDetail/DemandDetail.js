@@ -7,6 +7,7 @@ import CellNewFlight from "../content/cell/CellNewFlight";
 import {HttpTool} from "../../../../lib/utils/index.js";
 import LoadingView from "../component/LoadingView.js";
 import NumTransToTextHelp from '../tool/NumTransToTextHelp.js';
+import {hasKey,getFlightData} from '../tool/LXDHelp.js';
 /**
  * 需求已取消                    0
  * 需求处理中 （单程）       1    1
@@ -41,6 +42,7 @@ class page extends Component {
             visibleCancle: false,
             visibleDelete: false,
             visibleConfirm: false,
+            flightData:null,
 
         };
     }
@@ -60,7 +62,7 @@ class page extends Component {
         // 多程 c374da99311144058a1d8d7382de5d8a
         // 单程 9cb5a2cd48104e3385f330aec6b3d196
         let param = {
-            id: "9cb5a2cd48104e3385f330aec6b3d196",
+            id: "65a7a041bcab4cd9b32d26178def4759",
         };
         let success = (code, msg, json, option) => {
             this.setState({
@@ -174,7 +176,9 @@ class page extends Component {
 
     createViewCell(dataArr) {
         return dataArr.map((data, index) => {
-            return (<CellNewFlight key={index} dataSource={data}/>);
+            let resultData = getFlightData(data.voyages,dataArr.flightType,data.freeBag,data.weightLimit);
+
+            return (<CellNewFlight key={index} dataSource={resultData}/>);
         });
     }
 
@@ -367,6 +371,8 @@ class page extends Component {
         log("-------gyw--------");
         return (
             datas.map((data, index) => {
+                let resultData = getFlightData(data.voyages,flightType,data.freeBag,data.weightLimit);
+
                 return (
                     <div key={index} className={less.flightItem}>
                         {
@@ -378,7 +384,7 @@ class page extends Component {
 
                         <div style={{marginTop: 20}} className={less.flightInfoLayout}>
                             <div className={less.flightButtonLeftLayout}>
-                                <CellNewFlight key={index} dataSource={data} flightType={flightType}/>
+                                <CellNewFlight key={index} dataSource={resultData} flightType={flightType}/>
                             </div>
                             <div className={less.flightButtonRightLayout}>
                                 <div className={less.flightButtonRightContentLayout}>

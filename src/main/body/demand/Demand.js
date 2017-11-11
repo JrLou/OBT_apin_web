@@ -5,6 +5,7 @@ import React, {Component} from 'react';
 import css from './Demand.less';
 import {HttpTool} from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
+import {routeTranslate,getDateFormat,removeSpace,transformOrderState} from '../tool/LXDHelp.js';
 import {Table, Input, DatePicker, Select, Button, message} from 'antd';
 import moment from 'moment';
 const Option = Select.Option;
@@ -119,26 +120,10 @@ class page extends Component {
             }, {
                 title: '航程',
                 dataIndex: 'voyage',
-                render: (list, record) => {
-                    let flightType = record.flightType;
-                    let tipList = ['→', '⇌', '-'];
-
-                    let view = [];
-                    let length = list.length;
-                    for (let key in list) {
-                        view.push(
-                            <span key={`cell${key}`}>
-                                {list[key].cityDep}
-                                {tipList[flightType]}
-                                {list[key].cityArrive}
-                                {key < length - 1 ? '，' : ''}
-                            </span>
-                        );
-                    }
-                    return (<div className={css.routeStyle}>
-                        {view}
-                    </div>);
-
+                render:(list,record)=>{
+                    let flightType = record.type;
+                    let view = routeTranslate(list,flightType);
+                    return view;
                 },
             }, {
                 title: '出发日期',
@@ -211,11 +196,12 @@ class page extends Component {
                         <DatePicker
                             value={this.state.startDate}
                             className={css.dateStyle}
+                            disabledDate={this.disabledStart.bind(this)}
                             format="YYYY-MM-DD"
-                            onChange={(data) => {
-                                this.changeState('startDate', data);
-                                if(!this.state.endDate||this.state.endDate>this.state.startDate){
-                                    this.changeState('endDate', data);
+                            onChange={(data)=>{
+                                this.changeState('startDate',data);
+                                if(!this.state.endDate){
+                                    this.changeState('endDate',data);
                                 }
                             }}
                         />
@@ -225,8 +211,11 @@ class page extends Component {
                             disabledDate={this.disabledEnd.bind(this)}
                             className={css.dateStyle}
                             format="YYYY-MM-DD"
-                            onChange={(data) => {
-                                this.changeState('endDate', data);
+                            onChange={(data)=>{
+                                this.changeState('endDate',data);
+                                if(!this.state.startDate){
+                                    this.changeState('startDate',data);
+                                }
                             }}
                         />
                     </div>
@@ -418,6 +407,7 @@ class page extends Component {
                         cityArr: data.cityArr,
                         cityDep: data.cityDep,
                         createdTime: data.createdTime,
+                        type:data.flightType,
                         flightType: data.flightType === -1 ? "全部" : flightType[data.flightType - 1],
                         num: data.adultCount ? data.adultCount : "0" + "/" + data.childCount ? data.childCount : "0",
                         orderAmount: data.orderAmount ? "¥" + data.orderAmount : "无",
