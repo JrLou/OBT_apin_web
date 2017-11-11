@@ -5,6 +5,7 @@ import React, {Component} from 'react';
 import css from './Demand.less';
 import {HttpTool} from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
+import {routeTranslate,getDateFormat,removeSpace,transformOrderState} from '../tool/LXDHelp.js';
 import {Table, Input, DatePicker, Select, Button, message} from 'antd';
 import moment from 'moment';
 const Option = Select.Option;
@@ -119,26 +120,10 @@ class page extends Component {
             }, {
                 title: '航程',
                 dataIndex: 'voyage',
-                render: (list, record) => {
-                    let flightType = record.flightType;
-                    let tipList = ['→', '⇌', '-'];
-
-                    let view = [];
-                    let length = list.length;
-                    for (let key in list) {
-                        view.push(
-                            <span key={`cell${key}`}>
-                                {list[key].cityDep}
-                                {tipList[flightType]}
-                                {list[key].cityArrive}
-                                {key < length - 1 ? '，' : ''}
-                            </span>
-                        );
-                    }
-                    return (<div className={css.routeStyle}>
-                        {view}
-                    </div>);
-
+                render:(list,record)=>{
+                    let flightType = record.type;
+                    let view = routeTranslate(list,flightType);
+                    return view;
                 },
             }, {
                 title: '出发日期',
@@ -168,7 +153,7 @@ class page extends Component {
                         className={css.operation}
                         onClick={() => {
                             window.app_open(this, "/DemandDetail", {
-                                data: {}
+                              id:record.id
                             });
                         }}
                     >
@@ -210,14 +195,13 @@ class page extends Component {
                         <span>出发日期：</span>
                         <DatePicker
                             value={this.state.startDate}
-                            disabledDate={this.disabledStart.bind(this)}
-                            placeholder={'请选择'}
                             className={css.dateStyle}
+                            disabledDate={this.disabledStart.bind(this)}
                             format="YYYY-MM-DD"
-                            onChange={(data) => {
-                                this.changeState('startDate', data);
-                                if (!this.state.endDate) {
-                                    this.changeState('endDate', data);
+                            onChange={(data)=>{
+                                this.changeState('startDate',data);
+                                if(!this.state.endDate){
+                                    this.changeState('endDate',data);
                                 }
                             }}
                         />
@@ -225,13 +209,12 @@ class page extends Component {
                         <DatePicker
                             value={this.state.endDate}
                             disabledDate={this.disabledEnd.bind(this)}
-                            placeholder={'请选择'}
                             className={css.dateStyle}
                             format="YYYY-MM-DD"
-                            onChange={(data) => {
-                                this.changeState('endDate', data);
-                                if (!this.state.startDate) {
-                                    this.changeState('startDate', data);
+                            onChange={(data)=>{
+                                this.changeState('endDate',data);
+                                if(!this.state.startDate){
+                                    this.changeState('startDate',data);
                                 }
                             }}
                         />
@@ -245,7 +228,7 @@ class page extends Component {
                                 this.changeState('flightType', value);
                             }}
                             value={this.state.flightType}
-                            allowClear={true}
+
                         >
                             {this.getOptions(this.flightTypeList)}
                         </Select>
@@ -419,11 +402,13 @@ class page extends Component {
                 let demandStatus = ["取消", "待出价", "询价中", "待确认", "已确认", "已关闭"];
                 json.map((data, index) => {
                     datas = {
+                        id:data.id,
                         key: index + 1,
                         voyage: JSON.parse(data.voyage),
                         cityArr: data.cityArr,
                         cityDep: data.cityDep,
                         createdTime: data.createdTime,
+                        type:data.flightType,
                         flightType: data.flightType === -1 ? "全部" : flightType[data.flightType - 1],
                         num: data.adultCount ? data.adultCount : "0" + "/" + data.childCount ? data.childCount : "0",
                         orderAmount: data.orderAmount ? "¥" + data.orderAmount : "无",
@@ -448,7 +433,7 @@ class page extends Component {
         };
 
         this.setLoading(true, () => {
-            HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/query", successCB, failureCB, parames,
+            HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/query", successCB, failureCB, parames,
                 {
                     ipKey: "hlIP"
                 });

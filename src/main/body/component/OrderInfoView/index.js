@@ -221,7 +221,8 @@ class OrderInfoView extends Component {
                             <Button className={css.aginButton}
                                     onClick={() => {
                                         window.app_open(this, "/BankUpload", {
-                                           orderId:data.orderId
+                                            orderId:data.orderId,
+                                           id:data.id,
                                         });
                                     }}
                             >重新上传</Button>
