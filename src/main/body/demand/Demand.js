@@ -402,6 +402,7 @@ class page extends Component {
                 let demandStatus = ["取消", "待出价", "询价中", "待确认", "已确认", "已关闭"];
                 json.map((data, index) => {
                     datas = {
+                        id:data.id,
                         key: index + 1,
                         voyage: JSON.parse(data.voyage),
                         cityArr: data.cityArr,
@@ -432,7 +433,7 @@ class page extends Component {
         };
 
         this.setLoading(true, () => {
-            HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/query", successCB, failureCB, parames,
+            HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/query", successCB, failureCB, parames,
                 {
                     ipKey: "hlIP"
                 });

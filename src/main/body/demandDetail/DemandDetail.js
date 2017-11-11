@@ -33,7 +33,6 @@ import {hasKey,getFlightData} from '../tool/LXDHelp.js';
 class page extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             itemNum: 3,
             index: -1,
@@ -43,7 +42,6 @@ class page extends Component {
             visibleDelete: false,
             visibleConfirm: false,
             flightData:null,
-
         };
         this.id=window.app_getPar(this).id;
 
@@ -63,8 +61,14 @@ class page extends Component {
         // 往返 81a366cd6c754cbcbbc978a8b956982b
         // 多程 c374da99311144058a1d8d7382de5d8a
         // 单程 9cb5a2cd48104e3385f330aec6b3d196
+        if(!this.props.location.query.data){
+            message.error("数据有误!");
+            return ;
+        }
+        let parentId =JSON.parse(this.props.location.query.data).data.id;
         let param = {
-            id: this.id,
+            id: parentId
+            //"65a7a041bcab4cd9b32d26178def4759",
         };
         let success = (code, msg, json, option) => {
             this.setState({
@@ -75,7 +79,7 @@ class page extends Component {
             message.warning(msg);
             this.data = null;
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/find", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/find", success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -83,7 +87,7 @@ class page extends Component {
 
     cancelDemand() {
         let param = {
-            id: this.id,
+            id: "9d9f42b6b55c4bdda80c3600f0fddc3a",
         };
         let success = (code, msg, json, option) => {
             this.setState({
@@ -94,7 +98,7 @@ class page extends Component {
             message.warning(msg);
             this.data = null;
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/cancel", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/cancel", success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -102,7 +106,7 @@ class page extends Component {
 
     deleteDemand() {
         let param = {
-            id: this.id,
+            id: "4c0a82d59ff24262a8e8495c6eff44b0",
         };
         let success = (code, msg, json, option) => {
             this.setState({
@@ -113,7 +117,7 @@ class page extends Component {
             message.warning(msg);
             this.data = null;
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/remove", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/remove", success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -122,7 +126,7 @@ class page extends Component {
     flightDemand() {
         let param = {
             demandId: "4c0a82d59ff24262a8e8495c6eff44b0",
-            id: this.id,
+            id: "4c0a82d59ff24262a8e8495c6eff44b0",
         };
         let success = (code, msg, json, option) => {
             window.app_open(this, "/OrderFormDetail", {
@@ -133,7 +137,7 @@ class page extends Component {
             message.warning(msg);
             this.data = null;
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/plans", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/plans", success, failure, param,
             {
                 ipKey: "hlIP"
             });
