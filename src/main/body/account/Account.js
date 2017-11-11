@@ -63,7 +63,7 @@ class AccountForm extends Component {
             log("会员中心用户信息");
             log(option);
             const { account, password, mobile } = json;
-            const { companyName, contactName, address, id } = option.option;
+            const { companyName, contactName, address, id } = option.option;// option返回是null，这样保错了，后面然后setState也不会运行了
             this.setState({
                 accountID: json.id,
                 account,
@@ -226,7 +226,7 @@ class AccountForm extends Component {
      */
     updatePsw(option, password) {
         const { accountID } = this.state;
-        HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.1/users/sign', (code, message, json, option) => {
+        HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.1/users/updatePassword', (code, message, json, option) => {
 
         }, () => {
         }, {
