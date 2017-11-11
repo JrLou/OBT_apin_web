@@ -2,12 +2,12 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-01 14:09:48 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-06 11:02:21
+ * @Last Modified time: 2017-11-10 20:26:00
  */
 
 import React, { Component } from 'react';
 import { Modal } from 'antd';
-import Froms from './Forms';
+import Forms from './Forms';
 import {log} from 'debug';
 
 class SignUpView extends Component {
@@ -34,7 +34,7 @@ class SignUpView extends Component {
                 style={{width:'100px'}}
                 prefixCls="my-ant-modal"
             >
-                <Froms mode={mode} handleChangeMode={this.handleChangeMode} onOK={this.handleOk}></Froms>
+                <Forms mode={mode} handleChangeMode={this.handleChangeMode} onOK={this.handleOk} setLogin={this.props.setLogin}></Forms>
             </Modal>
         );
     }

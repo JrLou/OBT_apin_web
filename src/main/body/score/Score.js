@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-04 15:07:27 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-09 18:26:40
+ * @Last Modified time: 2017-11-10 14:03:53
  */
 import React, { Component } from 'react';
 import { Table, Modal } from 'antd';
@@ -14,7 +14,7 @@ class ScoreList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible: true,
+            // visible: true,
             memberPoints: [],
             remainPoint: 0,
             usedPoint: 0,
@@ -87,7 +87,7 @@ class ScoreList extends Component {
                     onChange={this.handleChange}
                     pagination={{ pageSize, current, total }}
                 />
-                <Modal title="每周连续登陆积分奖励规则"
+                {/*<Modal title="每周连续登陆积分奖励规则"
                     visible={visible}
                     footer={null}
                     prefixCls="my-ant-modal"
@@ -102,7 +102,7 @@ class ScoreList extends Component {
                         <li>• 积分只能在支付尾款时冲抵。</li>
                     </ul>
                     <div className={css.explain}>本活动最终解释权归爱拼机所有</div>
-                </Modal>
+        </Modal>*/}
             </div>
         );
     }

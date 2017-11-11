@@ -1,0 +1,123 @@
+@import "../../../../theme.less";
+.hidden{
+  display: none;
+}
+.outerBox{
+  box-sizing: border-box;
+}
+.orderBox{
+  overflow: hidden;
+  position: relative;
+}
+.payBox{
+  background-color: #F0F4FB;
+  overflow: hidden;
+}
+.leftMsg{
+  box-sizing: border-box;
+  position: relative;
+  padding: @d_spadding_small;
+  float: left;
+  width: 80%;
+  border-right: 1px solid #EDEDED;
+}
+.boxNoBorder{
+  .leftMsg;
+  border:none;
+}
+.rightMsg{
+  position: absolute;
+  top: 40%;
+  right: 5%;
+  border-left: 1px solid #EDEDED;
+}
+.itemLine{
+  clear: both;
+  padding: @d_spadding_base 0;
+}
+.itemTitle{
+  float: left;
+  width: 90px;
+  font-size: @font-size-base;
+  color: @font-light-color;
+}
+.itemValue{
+  float: left;
+  font-size: @font_size_center;
+  color: @font-color;
+}
+.helpMsg{
+  background: #FFF7D9;
+  border: 1px solid #FF9901;
+  font-size: 12px;
+  color: #4D4D4D;
+  padding: @d_spadding_cell @d_spadding_base;
+}
+.helpIcon{
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background-size: 100% 100%;
+  vertical-align: sub;
+  margin-right: @d_spadding_cell;
+}
+.priceItem{
+  position: absolute;
+  top: 40%;
+  right: 10%;
+}
+.priceTitle{
+  font-size: @font_size_cell;
+  color: @font-light-color;
+  padding-right: @d_spadding_cell;
+}
+.priceTip{
+  font-size: @font_size_cell;
+  color: #FF5841;;
+}
+.priceValue{
+  font-size: @font_size_big;
+  color: #FF5841;;
+}
+.payTitle{
+  float: left;
+  width: 90px;
+  font-size: @font_size_cell;
+  color: @font-color;
+}
+.payValue{
+  float: left;
+  font-size: @font_size_center;
+  color: #FF5841;
+  padding-right: @font_size_big;
+}
+.payType{
+  float: left;
+  font-size: @font_size_cell;
+  color: @font-color;
+}
+.payVoucher{
+  clear: both;
+  padding-top: 20px;
+  margin-left: 90px;
+}
+.voucherImg{
+  width: 100px;
+  height: 60px;
+  cursor: pointer;
+  padding-left: @font_size_center;
+  vertical-align: top;
+}
+.imgShow{
+  display: block;
+  position: relative;
+  left:-10%;
+  width: 600px;
+  height: 400px;
+}
+.itemLinePay{
+  padding: @d_spadding_small;
+}
+.reUpload{
+  float: right;
+}

@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import css from './OrderFormList.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
-import {routeTranslate,getDateFormat,removeSpace} from '../tool/LXDHelp.js';
+import {routeTranslate,getDateFormat,removeSpace,transformOrderState} from '../tool/LXDHelp.js';
 import {Table,Input,DatePicker,Select,Button,message} from 'antd';
 import moment from 'moment';
 const Option = Select.Option;
@@ -20,12 +20,12 @@ class OrderFormList extends Component{
             flightType:'',
             orderStatus:'',
             startDate:null,
-            endDate:null,
+            dateRet:null,
 
             dataSource:null,        //传入Table组件的数据
 
             pageSize:10,            //每页展示数据数目
-            page:1,           //列表当前页
+            page:1,                 //列表当前页
             total:0,                //总数据
 
             loading: false,         //是否处于加载状态
@@ -130,10 +130,10 @@ class OrderFormList extends Component{
                 dataIndex:'key',
             }, {
                 title:'订单号',
-                dataIndex:'orderNum',
+                dataIndex:'orderNo',
             },{
                 title:'航程',
-                dataIndex:'route',
+                dataIndex:'voyages',
                 render:(list,record)=>{
                     let flightType = record.flightType;
                     let view = routeTranslate(list,flightType);
@@ -144,7 +144,7 @@ class OrderFormList extends Component{
                 dataIndex:'dateDep',
             },{
                 title:'返回日期',
-                dataIndex:'endDate',
+                dataIndex:'dateRet',
             },{
                 title:'航程类型',
                 dataIndex:'flightType',
@@ -156,17 +156,15 @@ class OrderFormList extends Component{
             },{
                 title:'人数(成人／儿童)',
                 dataIndex:'peopleNum',
-                render:(text,recode)=>{
-                    let adultNum = recode.adultCount?recode.adultCount:0;
-                    let childNum = recode.childCount?recode.childCount:0;
-                    return (''+adultNum+'/'+childNum);
-                }
             },{
                 title:'含税价格',
-                dataIndex:'price',
+                dataIndex:'orderAmount',
+                render:(text,recode)=>{
+                    return (`¥${text}`);
+                }
             },{
                 title:'订单创建时间',
-                dataIndex:'createDate',
+                dataIndex:'createdTime',
             },{
                 title:'订单状态',
                 dataIndex:'orderStatus',
@@ -197,7 +195,10 @@ class OrderFormList extends Component{
                         className={css.operation}
                         onClick={()=>{
                                 window.app_open(this, "/OrderFormDetail", {
-                                    data:{}
+                                    //传给详情页一个订单id
+                                    // orderId:record.id,
+                                    //开发测试 - 写死的id
+                                    orderId:'10000059f39c5427ca5f749604a09de39',
                                 });
                             }}
                     >
@@ -210,8 +211,8 @@ class OrderFormList extends Component{
             {
                 index:1,
                 key:1,
-                orderNum:'20170923132332333',
-                route:[{
+                orderNo:'20170923132332333',
+                voyages:[{
                     cityDep:'宁波',
                     cityArr:'杭州',
                 },],
@@ -220,7 +221,7 @@ class OrderFormList extends Component{
                 peopleNum:'12/2',
                 adultCount:3,
                 childCount:15,
-                price:'¥1200',
+                orderAmount:'¥1200',
                 createDate:'2017-08-23 16:23',
                 orderStatus:'0',
                 operation:'查看详情',
@@ -228,17 +229,17 @@ class OrderFormList extends Component{
             {
                 index:2,
                 key:2,
-                orderNum:'20170923132332333',
-                route:[{
+                orderNo:'20170923132332333',
+                voyages:[{
                     cityDep:'波罗地亚吉卜力岛',
                     cityArr:'阿西列宁科克丽缇岛',
                 }],
                 dateDep:'2017-09-13',
-                endDate:'2017-09-13',
+                dateRet:'2017-09-13',
                 flightType:2,
                 peopleNum:'12/2',
                 childCount:'3',
-                price:'¥1200',
+                orderAmount:'¥1200',
                 createDate:'2017-08-23 16:23',
                 orderStatus:'1',
                 operation:'查看详情',
@@ -246,8 +247,8 @@ class OrderFormList extends Component{
             {
                 index:3,
                 key:3,
-                orderNum:'20170923132332333',
-                route:[
+                orderNo:'20170923132332333',
+                voyages:[
                         {
                             cityDep:'杭州',
                             cityArr:'厦门',
@@ -260,11 +261,11 @@ class OrderFormList extends Component{
                         }
                     ],
                 dateDep:'2017-09-13',
-                endDate:'2017-09-13',
+                dateRet:'2017-09-13',
                 flightType:3,
                 adultCount:'8',
                 peopleNum:'12/2',
-                price:'¥1200',
+                orderAmount:'¥1200',
                 createDate:'2017-08-23 16:23',
                 orderStatus:'5',
                 operation:'查看详情',
@@ -309,20 +310,20 @@ class OrderFormList extends Component{
                             format="YYYY-MM-DD"
                             onChange={(data)=>{
                                 this.changeState('startDate',data);
-                                if(!this.state.endDate){
-                                    this.changeState('endDate',data);
+                                if(!this.state.dateRet){
+                                    this.changeState('dateRet',data);
                                 }
                             }}
                         />
                         <span>—</span>
                         <DatePicker
-                            value={this.state.endDate}
+                            value={this.state.dateRet}
                             disabledDate={this.disabledEnd.bind(this)}
                             placeholder={'请选择'}
                             className={css.dateStyle}
                             format="YYYY-MM-DD"
                             onChange={(data)=>{
-                                this.changeState('endDate',data);
+                                this.changeState('dateRet',data);
                                 if(!this.state.startDate){
                                     this.changeState('startDate',data);
                                 }
@@ -405,8 +406,8 @@ class OrderFormList extends Component{
         if(!date){
             return true;
         }
-        if(this.state.endDate){
-            return (date.valueOf()>this.state.endDate.valueOf()||date.valueOf()<this.earliest.valueOf());
+        if(this.state.dateRet){
+            return (date.valueOf()>this.state.dateRet.valueOf()||date.valueOf()<this.earliest.valueOf());
         }else{
             return date.valueOf()<this.earliest.valueOf();
         }
@@ -457,7 +458,9 @@ class OrderFormList extends Component{
             //转换数据，更改状态机
             let newData = this.transformData(json);
             this.setLoading(false);
-            log(newData);
+            this.setState({
+                dataSource:newData,
+            });
         };
 
         let failureCB = (code, msg, option)=>{
@@ -502,7 +505,7 @@ class OrderFormList extends Component{
             pageSize:state.pageSize,
         };
         let dateDepStart = state.startDate?getDateFormat(state.startDate.valueOf()):'',
-            dateDepStop = state.endDate?getDateFormat(state.endDate.valueOf()):'';
+            dateDepStop = state.dateRet?getDateFormat(state.dateRet.valueOf()):'';
         parames.dateDepStart = dateDepStart;
         parames.dateDepStop = dateDepStop;
         return parames;
@@ -528,14 +531,21 @@ class OrderFormList extends Component{
     }
 
     /**
-     * 对后台传回对数据进行解析，返回格式化对数据
+     * 对后台传回对数据进行解析，返回格式化数据
      * @param data
      * @returns {Array}
      */
     transformData(data){
-        let newData = [];
+        let newData = data;
         if(data instanceof Array){
-            log('转换');
+            for(let key in data){
+                newData[key].index = newData[key].key = parseInt(key)+1;
+                newData[key].operation = '查看详情';
+                let adultNum = newData[key].adultCount?newData[key].adultCount:0;
+                let childNum = newData[key].childCount?newData[key].childCount:0;
+                newData[key].peopleNum = (''+adultNum+'/'+childNum);
+                newData[key].orderStatus = transformOrderState(newData[key].orderStatus,newData[key].remark);
+            }
         }
         return newData;
     }
