@@ -402,6 +402,7 @@ class page extends Component {
                 let demandStatus = ["取消", "待出价", "询价中", "待确认", "已确认", "已关闭"];
                 json.map((data, index) => {
                     datas = {
+                        id:data.id,
                         key: index + 1,
                         voyage: JSON.parse(data.voyage),
                         cityArr: data.cityArr,

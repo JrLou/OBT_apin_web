@@ -33,7 +33,6 @@ import {hasKey,getFlightData} from '../tool/LXDHelp.js';
 class page extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             itemNum: 3,
             index: -1,
@@ -43,7 +42,6 @@ class page extends Component {
             visibleDelete: false,
             visibleConfirm: false,
             flightData:null,
-
         };
     }
 
@@ -61,8 +59,14 @@ class page extends Component {
         // 往返 81a366cd6c754cbcbbc978a8b956982b
         // 多程 c374da99311144058a1d8d7382de5d8a
         // 单程 9cb5a2cd48104e3385f330aec6b3d196
+        if(!this.props.location.query.data){
+            message.error("数据有误!");
+            return ;
+        }
+        let parentId =JSON.parse(this.props.location.query.data).data.id;
         let param = {
-            id: "65a7a041bcab4cd9b32d26178def4759",
+            id: parentId
+            //"65a7a041bcab4cd9b32d26178def4759",
         };
         let success = (code, msg, json, option) => {
             this.setState({
