@@ -149,7 +149,7 @@ class UploadCmp extends Component {
       return (
          <div className="clearfix forUploadStyle">
             <Upload
-               action="/orderapi/v1.0/orders/voucherUp"
+               action="/Upload"
                listType="picture-card"
                fileList={fileList}
                beforeUpload={this.beforeUpload.bind(this)}
