@@ -107,7 +107,7 @@ class page extends Component {
                         </div>}
 
                 </div>
-                <Sign ref={(modal) => this.modal = modal}></Sign>
+                <Sign ref={(modal) => this.modal = modal} setLogin={this.setLogin}></Sign>
             </div>
         );
     }

@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-10 16:51:38 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-10 19:05:07
+ * @Last Modified time: 2017-11-10 19:57:23
  */
 
 
@@ -75,7 +75,16 @@ class ResetForm extends Component {
                 >
                     {getFieldDecorator('confirmPsw', {
                         rules: [{ required: true, message: '请再次输入密码' },
-                        { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
+                        {
+                            validator: (rule, value, callback) => {
+                                const { getFieldValue } = this.props.form;
+                                if (value && value !== getFieldValue('password')) {
+                                    callback('两次输入不一致！');
+                                }
+
+                                callback();
+                            }
+                        }],
                     })(
                         <Input prefixCls="my-ant-input" type="password" placeholder="请再次输入密码" />
                         )}

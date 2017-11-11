@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-10 15:17:39
+ * @Last Modified time: 2017-11-10 20:26:28
  */
 
 import React, { Component } from 'react';
@@ -102,6 +102,7 @@ class AccountLoginForm extends React.Component {
                     // IS_LOGIN判断是否真的登录
                     CookieHelp.saveCookieInfo('IS_LOGIN', true);
                     this.setState({ loading: false });
+                    this.props.setLogin();
                     this.props.onOK();
                 }).catch((error) => {
                     message.error(error);
@@ -249,8 +250,8 @@ class Login extends React.Component {
                 </ul>
                 {
                     type === 0 ?
-                        <WrappedAccountLoginForm onOK={this.props.onOK} />
-                        : <WrappedMsgLoginForm onOK={this.props.onOK} />
+                        <WrappedAccountLoginForm onOK={this.props.onOK} setLogin={this.props.setLogin} />
+                        : <WrappedMsgLoginForm onOK={this.props.onOK} setLogin={this.props.setLogin} />
                 }
                 <div className={`${css.clearfix} ${css.bottom}`}>
                     <div className={`${css.left} ${css.forget}`} onClick={() => this.props.handleChangeMode(2)}>忘记密码</div>
