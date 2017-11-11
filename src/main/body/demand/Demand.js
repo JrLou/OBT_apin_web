@@ -168,7 +168,7 @@ class page extends Component {
                         className={css.operation}
                         onClick={() => {
                             window.app_open(this, "/DemandDetail", {
-                                data: {}
+                                data: {id:record.id}
                             });
                         }}
                     >
@@ -210,13 +210,11 @@ class page extends Component {
                         <span>出发日期：</span>
                         <DatePicker
                             value={this.state.startDate}
-                            disabledDate={this.disabledStart.bind(this)}
-                            placeholder={'请选择'}
                             className={css.dateStyle}
                             format="YYYY-MM-DD"
                             onChange={(data) => {
                                 this.changeState('startDate', data);
-                                if (!this.state.endDate) {
+                                if(!this.state.endDate||this.state.endDate>this.state.startDate){
                                     this.changeState('endDate', data);
                                 }
                             }}
@@ -225,14 +223,10 @@ class page extends Component {
                         <DatePicker
                             value={this.state.endDate}
                             disabledDate={this.disabledEnd.bind(this)}
-                            placeholder={'请选择'}
                             className={css.dateStyle}
                             format="YYYY-MM-DD"
                             onChange={(data) => {
                                 this.changeState('endDate', data);
-                                if (!this.state.startDate) {
-                                    this.changeState('startDate', data);
-                                }
                             }}
                         />
                     </div>
