@@ -9,9 +9,9 @@ let APILXD = {
     upDataPassenger:'/bo/orderapi/v1.0/orders/passengers/update',       //修改乘客
     confirmPassenger:'/bosj/orderapi/v1.0/orders/confirmpassenger',     //确认乘机人信息
     //订单列表页面
-    loadOrderList:'/boyw/orderapi/v1.0/orders/query',                  //加载订单列表
-    lordOrderDetail:'/boyw/orderapi/v1.0/orders/find',                 //加载订单详情
-    cancelOrder:'/boyw/orderapi/v1.0/orders/cancel',                        //取消订单
-    deleteOrder:'/boyw/orderapi/v1.0/orders/delete',                        //删除订单
+    loadOrderList:'/orderapi/v1.0/orders/query',                  //加载订单列表
+    lordOrderDetail:'/orderapi/v1.0/orders/find',                 //加载订单详情
+    cancelOrder:'/orderapi/v1.0/orders/cancel',                        //取消订单
+    deleteOrder:'/orderapi/v1.0/orders/delete',                        //删除订单
 };
 module.exports = APILXD;
