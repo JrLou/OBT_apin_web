@@ -45,6 +45,8 @@ class page extends Component {
             flightData:null,
 
         };
+        this.id=window.app_getPar(this).id;
+
     }
 
     getUpData() {
@@ -62,7 +64,7 @@ class page extends Component {
         // 多程 c374da99311144058a1d8d7382de5d8a
         // 单程 9cb5a2cd48104e3385f330aec6b3d196
         let param = {
-            id: "65a7a041bcab4cd9b32d26178def4759",
+            id: this.id,
         };
         let success = (code, msg, json, option) => {
             this.setState({
@@ -81,7 +83,7 @@ class page extends Component {
 
     cancelDemand() {
         let param = {
-            id: "9d9f42b6b55c4bdda80c3600f0fddc3a",
+            id: this.id,
         };
         let success = (code, msg, json, option) => {
             this.setState({
@@ -100,7 +102,7 @@ class page extends Component {
 
     deleteDemand() {
         let param = {
-            id: "4c0a82d59ff24262a8e8495c6eff44b0",
+            id: this.id,
         };
         let success = (code, msg, json, option) => {
             this.setState({
@@ -120,7 +122,7 @@ class page extends Component {
     flightDemand() {
         let param = {
             demandId: "4c0a82d59ff24262a8e8495c6eff44b0",
-            id: "4c0a82d59ff24262a8e8495c6eff44b0",
+            id: this.id,
         };
         let success = (code, msg, json, option) => {
             window.app_open(this, "/OrderFormDetail", {

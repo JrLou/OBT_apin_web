@@ -153,7 +153,7 @@ class page extends Component {
                         className={css.operation}
                         onClick={() => {
                             window.app_open(this, "/DemandDetail", {
-                                data: {id:record.id}
+                              id:record.id
                             });
                         }}
                     >
@@ -228,7 +228,7 @@ class page extends Component {
                                 this.changeState('flightType', value);
                             }}
                             value={this.state.flightType}
-                            allowClear={true}
+
                         >
                             {this.getOptions(this.flightTypeList)}
                         </Select>
