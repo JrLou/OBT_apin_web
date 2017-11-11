@@ -73,7 +73,7 @@ class page extends Component {
             message.warning(msg);
             this.data = null;
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/find", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/find", success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -92,7 +92,7 @@ class page extends Component {
             message.warning(msg);
             this.data = null;
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/cancel", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/cancel", success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -111,7 +111,7 @@ class page extends Component {
             message.warning(msg);
             this.data = null;
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/remove", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/remove", success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -131,7 +131,7 @@ class page extends Component {
             message.warning(msg);
             this.data = null;
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/plans", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/plans", success, failure, param,
             {
                 ipKey: "hlIP"
             });

@@ -432,7 +432,7 @@ class page extends Component {
         };
 
         this.setLoading(true, () => {
-            HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/query", successCB, failureCB, parames,
+            HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/query", successCB, failureCB, parames,
                 {
                     ipKey: "hlIP"
                 });
