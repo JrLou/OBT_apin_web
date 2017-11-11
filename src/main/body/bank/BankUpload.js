@@ -271,16 +271,16 @@ class BankUpload extends Component {
       return data;
    }
 
-   isUserChange(param){
+   isUserChange(param) {
       let isChange = false;
-      for(let k in param){
-         if(k == "orderId"){
+      for (let k in param) {
+         if (k == "orderId") {
             continue;
          }
-         if(k == "amount"){
-            param["payAmount"] == this.sourceData[k] || (isChange=true);
+         if (k == "amount") {
+            param["payAmount"] == this.sourceData[k] || (isChange = true);
          } else {
-            param[k] == this.sourceData[k] || (isChange=true);
+            param[k] == this.sourceData[k] || (isChange = true);
          }
       }
       return isChange;
@@ -305,29 +305,27 @@ class BankUpload extends Component {
 
       data.showType = "paying";
       data.orderId = this.state.orderId;
+      let param = {
+         account: data.account,
+         accountName: data.accountName,
+         amount: data.amount,
+         bank: data.bank,
+         orderId: data.orderId,
+         payType: data.payType,
+         payment: data.payment,
+         voucherUrl: data.voucherUrl
+      };
+      //判断用户是否有更改
+      if (!this.isUserChange(param)) {
+         message.warn("您未做修改，无需提交");
+         return;
+      }
 
       this.panel.show(true, {
          content: "正在提交...",
          // title: "支付信息",
          showType: "verpay"
       }, () => {
-         let param = {
-            account: data.account,
-            accountName: data.accountName,
-            amount: data.amount,
-            bank: data.bank,
-            orderId: data.orderId,
-            payType: data.payType,
-            payment: data.payment,
-            voucherUrl: data.voucherUrl
-         };
-         //判断用户是否有更改
-         console.log("this.isUserChange(param).toString()");
-         console.log(this.isUserChange(param).toString());
-         if(!this.isUserChange(param)){
-            message.warn("您未做修改，无需提交");
-            return;
-         }
          this.loadSubmit(param, (code, msg, data) => {
             if (code > 0) {
                //支付成功
