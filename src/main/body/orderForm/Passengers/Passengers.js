@@ -223,12 +223,13 @@ class PassengerMsg extends Component{
                     }
                     <div className={css.passengerTable}>
                         <Table
+                            prefixCls={'my-ant-table'}
                             columns={columns}
                             dataSource={this.state.dataSource}
                             pagination={false}
                         />
                         {
-                            this.state.isPassed
+                            this.state.isPassed&&this.state.dataSource.length>0
                             ?   ''
                             :   <div className={css.submitBox}>
                                     <Checkbox

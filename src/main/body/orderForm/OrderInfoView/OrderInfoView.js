@@ -7,7 +7,7 @@ import css from './OrderInfoView.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APILXD from "../../../../api/APILXD.js";
 import {hasKey} from '../../tool/LXDHelp.js';
-import {Button,message,Modal,Spin} from 'antd';
+import {Button,message,Modal,Spin,Icon} from 'antd';
 
 /**
  * 订单状态说明(页面)：
@@ -35,7 +35,7 @@ class OrderInfoView extends Component{
 
     render(){
         let {orderMsg, payMsg} = this.props;
-        if(!orderMsg||!payMsg){
+        if(!orderMsg){
             return <div></div>;
         }
         return (
@@ -49,13 +49,18 @@ class OrderInfoView extends Component{
                             <div className={css.itemTitle}>订单状态：</div>
                             <div className={css.itemValue}>
                                 {this.state.orderStateName}
-                                <div className={hasKey(this.state.orderState,[2,3,5])?css.helpMsg:css.hidden}>
+                                <div className={
+                                    (hasKey(this.state.orderState,[2,3,5]) && orderMsg.expiredTime)
+                                        ?css.helpMsg
+                                        :css.hidden
+                                }
+                                >
                                     <span
                                         style={{backgroundImage:`url(${require("../../../../images/orderForm/alert.png")})`}}
                                         className={css.helpIcon}
                                     ></span>
                                     {
-                                        this.state.orderState == 3
+                                        (this.state.orderState == 3)
                                         ?`请在${orderMsg.expiredTime}之前支付款`
                                         :`请在${orderMsg.expiredTime}之前支付尾款`
                                     }
@@ -103,7 +108,7 @@ class OrderInfoView extends Component{
                         </Button>
                     </div>
                 </div>
-                <div className={css.payBox}>
+                <div className={payMsg?css.payBox:css.hidden}>
                     {this.getPayView(payMsg)}
                     {
                         hasKey(this.state.orderState,[0,8])
@@ -112,23 +117,50 @@ class OrderInfoView extends Component{
                                 {
                                     this.state.orderState == 0
                                     ?'用户取消订单'
-                                    :'关闭原因（再讨论）'
+                                    :orderMsg.closeReason
                                 }
-                                {`(关闭时间：XXXXXXXX)`}
+                                {`(关闭时间：${orderMsg.closetime})`}
                             </div>
                         :   ''
                     }
                 </div>
                 <Modal
                     visible={this.state.imgShow}
+                    closable={false}
                     footer={null}
+                    width={0}
                     onCancel={()=>{
                         this.setState({
-                           imgShow:false,
+                            imgShow:false,
                         });
                     }}
                 >
-                    <img src={this.state.imgUrl} className={css.imgShow}/>
+                    <div>
+                        <img
+                            src={this.state.imgUrl}
+                            onError={()=>{
+                                //添加默认的图片
+                                this.state.imgUrl = require('../../../../images/default.png');
+                            }}
+                            className={css.imgShow}
+                        />
+                        <div
+                            className={css.closeImgBtn}
+                            onClick={()=>{
+                                this.setState({
+                                    imgShow:false,
+                                });
+                            }}
+                        ><Icon
+                            style={{
+                                fontSize:'35px',
+                                cursor:'pointer',
+                                backgroundColor:'#fff',
+                                borderRadius:'50%',
+                            }}
+                            type="close-circle-o"
+                        /></div>
+                    </div>
                 </Modal>
                 <Modal
                     title={'提示'}
@@ -192,28 +224,24 @@ class OrderInfoView extends Component{
         }
 
         //是否有积分支付
-        let scorePay = null;
+        let scorePay = parseInt(data.pointsAmount);
         let otherPay = null;
         let payName = '';
-        for(let key in data.records){
-            let payType = parseInt(data.records[key].payType);
-            switch(payType){
-                case 0:otherPay = data.records[key];
-                        payName = '线下支付';
-                        break;
-                case 1:otherPay = data.records[key];
-                        payName = '支付宝';
-                        break;
-                case 2:otherPay = data.records[key];
-                        payName = '微信';
-                        break;
-                case 3:otherPay = data.records[key];
-                        payName = '银联';
-                        break;
-                case 4:scorePay = data.records[key];
-                        break;
-                default:break;
-            }
+        let payType = parseInt(data.records[0].payType);
+        switch(payType){
+            case 0:otherPay = data.records[0];
+                    payName = '线下支付';
+                    break;
+            case 1:otherPay = data.records[0];
+                    payName = '支付宝';
+                    break;
+            case 2:otherPay = data.records[0];
+                    payName = '微信';
+                    break;
+            case 3:otherPay = data.records[0];
+                    payName = '银联';
+                    break;
+            default:break;
         }
 
         let voucherUrl = otherPay.voucherUrl?otherPay.voucherUrl:'';
@@ -227,7 +255,7 @@ class OrderInfoView extends Component{
                 <div className={css.payValue}>
                     {`¥${data.amount}`}
                     <span>&nbsp;&nbsp;</span>
-                    {scorePay?`积分抵扣(¥${scorePay.payAmount})`:''}
+                    {scorePay>0?`积分抵扣(¥${scorePay})`:''}
                 </div>
                 {
                     data.payStatus == 1
@@ -250,7 +278,10 @@ class OrderInfoView extends Component{
                                 ?   <div className={css.reUpload}>
                                         <Button
                                             onClick={()=>{
-                                                window.app_open();
+                                                window.app_open(this,'/UpLoad',{
+                                                    orderId:data.orderId,
+                                                    id:data.id,
+                                                });
                                             }}
                                         >
                                             重新上传
