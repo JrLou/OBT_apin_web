@@ -11,6 +11,7 @@
 import React, {Component} from 'react';
 import css from './TitleBar.less';
 import {hasKey} from '../../tool/LXDHelp.js';
+import {Modal,Spin} from 'antd';
 
 class TitleBar extends Component{
     constructor(props){
@@ -21,6 +22,8 @@ class TitleBar extends Component{
             orderID:this.props.orderID,
             deadLine:this.props.deadLine?this.props.deadLine:'',
             reason:this.props.reason?this.props.reason:'',
+
+            confirmModal:false,     //删除订单询问框
         };
 
         if(this.props.onDelete instanceof Function){
@@ -98,6 +101,22 @@ class TitleBar extends Component{
                             :''
                     }
                 </div>
+                <Modal
+                    title={'提示'}
+                    visible={this.state.confirmModal}
+                    onOk={()=>{
+                        this.setState({
+                            confirmModal:false,
+                        },this.deleteCB);
+                    }}
+                    onCancel={()=>{
+                        this.setState({
+                            confirmModal:false,
+                        });
+                    }}
+                >
+                    <div>是否删除此订单</div>
+                </Modal>
             </div>
         );
     }
@@ -106,7 +125,9 @@ class TitleBar extends Component{
      * 删除订单
      */
     deleteOrder(){
-        this.deleteCB();
+        this.setState({
+            confirmModal:true,
+        });
     }
 }
 

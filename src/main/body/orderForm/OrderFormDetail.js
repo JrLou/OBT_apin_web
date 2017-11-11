@@ -35,13 +35,14 @@ class OrderFormDetail extends Component{
             orderId:window.app_getPar(this).orderId,         //订单ID
             returnState:3,          //接口返回的订单状态  （接口返回的状态需要经过转换才赋值给状态机）
             // orderState:list[random],       //页面订单状态
-            orderState:8,       //页面订单状态
+            orderState:0,       //页面订单状态
             isPassed:false,     //乘机人信息是否已经确认
             flightData:null,    //航班信息
             orderMsg:null,      //订单信息
             payMsg:null,        //支付明细
             upDate:0,
             loading:false,      //加载状态
+            confirmModal:false, //询问框
         };
 
         if(!this.state.orderId){
@@ -58,6 +59,7 @@ class OrderFormDetail extends Component{
 
         //模拟数据
         let orderMsg = {
+            orderId:'10000059f39c5427ca5f749604a09de39',
             orderNo:'123123123123132',
             adultCount:3,
             adultPrice:3450,
@@ -75,7 +77,7 @@ class OrderFormDetail extends Component{
                 payment:1,
                 records:[
                     {
-                        auditStatus:1,
+                        auditStatus:2,
                         payAmount:3333,
                         payTime:'2017-03-230',
                         payType:0,
@@ -195,34 +197,27 @@ class OrderFormDetail extends Component{
     }
 
     /**
-     * 订单删除以后的回调
+     * 订单删除
      */
     deleteOrderCB(){
-        let parames = {};
+        let parames = {
+            id:this.state.orderId,
+        };
         let successCB = (code, msg, json, option)=>{
             this.setLoading(false);
+            message.success(msg);
+            //刷新页面
+            window.location.reload();
         };
         let failureCB = (code, msg, option)=>{
             this.setLoading(false);
+            message.error(msg);
         };
-        // this.setLoading(true,()=>{
-        //     HttpTool.request(HttpTool.typeEnum.GET,APILXD.XXXXXXXX, successCB, failureCB, parames,
-        //         {
-        //             ipKey: "hlIP"
-        //         });
-        // });
-
-        //模拟接口
         this.setLoading(true,()=>{
-            log(parames);
-            setTimeout(()=>{
-                let num = Math.random();
-                if(num<0.5){
-                    successCB();
-                }else{
-                    failureCB();
-                }
-            },1000);
+            HttpTool.request(HttpTool.typeEnum.POST,APILXD.deleteOrder, successCB, failureCB, parames,
+                {
+                    ipKey: "hlIP"
+                });
         });
     }
 

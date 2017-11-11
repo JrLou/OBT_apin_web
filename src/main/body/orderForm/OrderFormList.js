@@ -198,7 +198,7 @@ class OrderFormList extends Component{
                                     //传给详情页一个订单id
                                     // orderId:record.id,
                                     //开发测试 - 写死的id
-                                    orderId:'81a366cd6c754cbcbbc978a8b956982b',
+                                    orderId:'10000059f39c5427ca5f749604a09de39',
                                 });
                             }}
                     >

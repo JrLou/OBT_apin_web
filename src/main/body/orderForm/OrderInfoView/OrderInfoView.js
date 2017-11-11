@@ -7,7 +7,7 @@ import css from './OrderInfoView.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APILXD from "../../../../api/APILXD.js";
 import {hasKey} from '../../tool/LXDHelp.js';
-import {Button,message,Modal} from 'antd';
+import {Button,message,Modal,Spin} from 'antd';
 
 /**
  * 订单状态说明(页面)：
@@ -19,10 +19,12 @@ class OrderInfoView extends Component{
     constructor(props){
         super(props);
         this.state = {
-            orderState:props.orderState,
+            orderState:this.props.orderState,
             orderStateName:'',
-            imgShow:false,
+            imgShow:false,          //查看图片模态框
             imgUrl:'',
+            confirmModal:false,     //取消订单询问框
+            loading:false,          //加载状态
         };
     }
 
@@ -37,9 +39,12 @@ class OrderInfoView extends Component{
             return <div></div>;
         }
         return (
+            <Spin
+                spinning={this.state.loading}
+            >
             <div className={css.outerBox}>
                 <div className={css.orderBox}>
-                    <div className={css.leftMsg}>
+                    <div className={hasKey(this.state.orderState,[1,2,3,5,14,15])?css.leftMsg:css.boxNoBorder}>
                         <div className={css.itemLine}>
                             <div className={css.itemTitle}>订单状态：</div>
                             <div className={css.itemValue}>
@@ -87,6 +92,12 @@ class OrderInfoView extends Component{
                     </div>
                     <div className={hasKey(this.state.orderState,[1,2,3,5,14,15])?css.rightMsg:css.hidden}>
                         <Button
+                            onClick={()=>{
+                                //订单取消
+                                this.setState({
+                                    confirmModal:true,
+                                });
+                            }}
                         >
                             取消订单
                         </Button>
@@ -119,7 +130,33 @@ class OrderInfoView extends Component{
                 >
                     <img src={this.state.imgUrl} className={css.imgShow}/>
                 </Modal>
+                <Modal
+                    title={'提示'}
+                    visible={this.state.confirmModal}
+                    onOk={()=>{
+                        this.setState({
+                            confirmModal:false,
+                        },()=>{this.cancelOrder(orderMsg.orderId);});
+                    }}
+                    onCancel={()=>{
+                        this.setState({
+                            confirmModal:false,
+                        });
+                    }}
+                >
+                    {
+                        this.state.orderState == 5
+                            ?   (<div>
+                                    <div>是否确定要取消此行程订单？</div>
+                                    <div>订单取消后将不退还订金</div>
+                                </div>)
+                            :   (<div>
+                                    是否确定取消此订单？
+                                </div>)
+                    }
+                </Modal>
             </div>
+            </Spin>
         );
     }
 
@@ -208,6 +245,19 @@ class OrderInfoView extends Component{
                     ?   <div className={css.payVoucher}>
                             <span>支付凭证</span>
                             {this.getPayVoucher(voucherUrl)}
+                            {
+                                otherPay.auditStatus == 2
+                                ?   <div className={css.reUpload}>
+                                        <Button
+                                            onClick={()=>{
+                                                window.app_open();
+                                            }}
+                                        >
+                                            重新上传
+                                        </Button>
+                                    </div>
+                                :   ''
+                            }
                         </div>
                     :''
                 }
@@ -284,6 +334,54 @@ class OrderInfoView extends Component{
         this.setState({
             orderStateName:title,
         });
+    }
+
+    /**
+     * 取消订单
+     * @param id
+     */
+    cancelOrder(id){
+        let parames = {
+            id:id,
+            orderStatus:0,
+            remark:'',
+        };
+        let successCB = (code, msg, json, option)=>{
+            this.setLoading(false);
+            message.success(msg);
+            //刷新页面
+            window.location.reload();
+        };
+        let failureCB = (code, msg, option)=>{
+            this.setLoading(false);
+            message.error(msg);
+        };
+        this.setLoading(true,()=>{
+            HttpTool.request(HttpTool.typeEnum.POST,APILXD.cancelOrder, successCB, failureCB, parames,
+                {
+                    ipKey: "hlIP"
+                });
+        });
+    }
+
+
+    /**
+     * 更改请求数据的状态并回调
+     * @param loading
+     * @param cb
+     */
+    setLoading(loading, cb) {
+        this.setState({
+            loading: loading
+        }, cb);
+    }
+
+    /**
+     * 返回加载的状态
+     * @returns {boolean}
+     */
+    isLoading() {
+        return this.state.loading;
     }
 }
 
