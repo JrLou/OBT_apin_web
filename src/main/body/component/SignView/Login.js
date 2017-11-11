@@ -2,12 +2,12 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-09 20:14:29
+ * @Last Modified time: 2017-11-10 20:26:28
  */
 
 import React, { Component } from 'react';
 
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button,message } from 'antd';
 import md5 from 'md5';
 import CheckCode from './CheckCode';
 import { loginPromise, getLoginCodePromise } from './LoginAction';
@@ -28,6 +28,9 @@ function hasErrors(fieldsError) {
 class AccountLoginForm extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            loading: false
+        };
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentDidMount() {
@@ -87,14 +90,23 @@ class AccountLoginForm extends React.Component {
             if (!err) {
                 console.log('Received values of form: ', values);
                 let { account, password } = values;
+                this.setState({ loading: true });
 
-                getLoginCodePromise(account).then((data) =>
+                getLoginCodePromise(account,0).then((data) =>
                     loginPromise(account, md5(password), data)
                 ).then((data) => {
                     data.Authorization = data.accessToken;
-                    CookieHelp.saveUserInfo(data, 122);
+                    // 保存登录token
+                    CookieHelp.saveUserInfo(data);
+                    // 获取注册验证码也会带掉登录接口 保存APIN_USER token
+                    // IS_LOGIN判断是否真的登录
+                    CookieHelp.saveCookieInfo('IS_LOGIN', true);
+                    this.setState({ loading: false });
+                    this.props.setLogin();
+                    this.props.onOK();
                 }).catch((error) => {
-                    log(error);
+                    message.error(error);
+                    this.setState({ loading: false });
                 });
             }
         });
@@ -107,6 +119,15 @@ const WrappedAccountLoginForm = Form.create()(AccountLoginForm);
  * 验证码登录
  */
 class MsgLoginForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isShowPic: false
+        };
+        this.getCode = this.getCode.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
     componentDidMount() {
         this.props.form.validateFields();
     }
@@ -116,7 +137,9 @@ class MsgLoginForm extends React.Component {
 
         const accountError = isFieldTouched('account') && getFieldError('account');
         const checkImgCodeError = isFieldTouched('checkImgCode') && getFieldError('checkImgCode');
-        const signatureError = isFieldTouched('signature') && getFieldError('signature');
+        const passwordError = isFieldTouched('password') && getFieldError('password');
+
+        const { isShowPic } = this.state;
         return (
             <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <FormItem
@@ -132,29 +155,31 @@ class MsgLoginForm extends React.Component {
                         <Input prefixCls='my-ant-input' placeholder="请输入11位手机号" />
                         )}
                 </FormItem>
+                {
+                    isShowPic && <FormItem
+                        prefixCls="my-ant-form"
+                        validateStatus={checkImgCodeError ? 'error' : ''}
+                        help={checkImgCodeError || ''}
+                    >
+                        {getFieldDecorator('checkImgCode', {
+                            rules: [{ required: true, message: '请输入图形验证码' }],
+                        })(
+                            <Input prefixCls='my-ant-input' placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
+                            )}
+                        <img src="http://placehold.it/98x36" alt="" className={css.checkCodeImg} />
+                    </FormItem>
+                }
                 <FormItem
                     prefixCls="my-ant-form"
-                    validateStatus={checkImgCodeError ? 'error' : ''}
-                    help={checkImgCodeError || ''}
+                    validateStatus={passwordError ? 'error' : ''}
+                    help={passwordError || ''}
                 >
-                    {getFieldDecorator('checkImgCode', {
-                        rules: [{ required: true, message: '请输入图形验证码' }],
-                    })(
-                        <Input prefixCls='my-ant-input' placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
-                        )}
-                    <img src="http://placehold.it/98x36" alt="" className={css.checkCodeImg} />
-                </FormItem>
-                <FormItem
-                    prefixCls="my-ant-form"
-                    validateStatus={signatureError ? 'error' : ''}
-                    help={signatureError || ''}
-                >
-                    {getFieldDecorator('signature', {
+                    {getFieldDecorator('password', {
                         rules: [{ required: true, message: '请输入验证码' }],
                     })(
                         <Input prefixCls='my-ant-input' placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode error={getFieldError('tel')} />
+                    <CheckCode error={getFieldError('account')} getCode={this.getCode} />
                 </FormItem>
                 <FormItem prefixCls="my-ant-form">
                     <Button
@@ -170,11 +195,36 @@ class MsgLoginForm extends React.Component {
         );
     }
 
+    // 获取登录码
+    getCode() {
+        const { getFieldValue } = this.props.form;
+        const account = getFieldValue('account');
+        getLoginCodePromise(account,1).then((data) => {
+            log(data);
+            this.data = data;
+            CookieHelp.saveCookieInfo('LOGIN_CODE',data);
+        });
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
+                const {account,password} = values;
+                const code = this.data || CookieHelp.getCookieInfo('LOGIN_CODE');
+                loginPromise(account,md5(password),code).then((data)=>{
+                    data.Authorization = data.accessToken;
+                    // 保存登录token
+                    CookieHelp.saveUserInfo(data);
+                    // 获取注册验证码也会带掉登录接口 保存APIN_USER token
+                    // IS_LOGIN判断是否真的登录
+                    CookieHelp.saveCookieInfo('IS_LOGIN', true);
+                    this.props.onOK();
+                }).catch((error) => {
+                    message.error(error);
+                    this.setState({ loading: false });
+                });
             }
         });
     }
@@ -200,8 +250,8 @@ class Login extends React.Component {
                 </ul>
                 {
                     type === 0 ?
-                        <WrappedAccountLoginForm onOK={this.props.onOK} />
-                        : <WrappedMsgLoginForm onOK={this.props.onOK} />
+                        <WrappedAccountLoginForm onOK={this.props.onOK} setLogin={this.props.setLogin} />
+                        : <WrappedMsgLoginForm onOK={this.props.onOK} setLogin={this.props.setLogin} />
                 }
                 <div className={`${css.clearfix} ${css.bottom}`}>
                     <div className={`${css.left} ${css.forget}`} onClick={() => this.props.handleChangeMode(2)}>忘记密码</div>

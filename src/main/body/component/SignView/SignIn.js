@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-09 21:57:03
+ * @Last Modified time: 2017-11-10 14:34:15
  */
 
 import React, { Component } from 'react';
@@ -31,6 +31,7 @@ class SignInForm extends Component {
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.getCode = this.getCode.bind(this);
+        this.getCodeAction = this.getCodeAction.bind(this);
         this.accessToken = '';
     }
     componentDidMount() {
@@ -60,9 +61,11 @@ class SignInForm extends Component {
                         rules: [{ required: true, message: '请输入账户名' },
                         {
                             validator: (rule, value, callback) => {
-                                validateLogin('account', value)
-                                .then((data) => callback(data))
-                                .catch((data) => callback(data));
+                                this.getCode(() => {
+                                    validateLogin('account', value)
+                                        .then((data) => callback())
+                                        .catch((data) => callback(data));
+                                });
                             }
                         }
                         ],
@@ -78,7 +81,16 @@ class SignInForm extends Component {
                 >
                     {getFieldDecorator('mobile', {
                         rules: [{ required: true, message: '请输入11位手机号' },
-                        { pattern: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/, message: '手机号格式不正确！' }],
+                        { pattern: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/, message: '手机号格式不正确！' },
+                        {
+                            validator: (rule, value, callback) => {
+                                this.getCode(() => {
+                                    validateLogin('mobile', value)
+                                        .then((data) => callback())
+                                        .catch((data) => callback(data));
+                                });
+                            }
+                        }],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入11位手机号" />
                         )}
@@ -90,7 +102,16 @@ class SignInForm extends Component {
                     label="验证码"
                 >
                     {getFieldDecorator('picCode', {
-                        rules: [{ required: true, message: '请输入图形验证码' }],
+                        rules: [{ required: true, message: '请输入图形验证码' },
+                        {
+                            validator: (rule, value, callback) => {
+                                this.getCode(() => {
+                                    validateLogin('picCode', value)
+                                        .then((data) => callback())
+                                        .catch((data) => callback(data));
+                                });
+                            }
+                        }],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
                         )}
@@ -107,7 +128,7 @@ class SignInForm extends Component {
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode error={getFieldError('mobile')} getCode={this.getCode} time={10} />
+                    <CheckCode error={getFieldError('mobile')} getCode={() => this.getCode(this.getCodeAction)} time={10} />
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"
@@ -178,10 +199,13 @@ class SignInForm extends Component {
         const mobile = getFieldValue('mobile');
         const picCode = getFieldValue('picCode') || '';
         HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
-            this.setState({
-                isShowPic: true,
-                picCode: 'data:image/jpg;base64,' + json
-            });
+            // 测试
+            if (json.length > 4) {
+                this.setState({
+                    isShowPic: true,
+                    picCode: 'data:image/jpg;base64,' + json
+                });
+            }
         }, (code, message, json, option) => {
         }, {
                 account, mobile, picCode, type: 1
@@ -191,26 +215,20 @@ class SignInForm extends Component {
     /**
      * 获取初始token
      */
-    getCode() {
+    getCode(callback) {
         const defaultAccount = 'b3619ef5dc944e4aad02acc7c83b220d';
         const defaultPwd = '4b91884d9290981da047b4c85af35a39';
-        const user = CookieHelp.getCookieInfo('APIN_INIT_USER');
-
-        log("ssssssssssssss");
-        log(user);
-        // log(user.Authorization);
-        log(typeof(user));
+        const user = CookieHelp.getUserInfo();
 
         if (user) {
-            this.getCodeAction();
+            callback();
         } else {
-            getLoginCodePromise(defaultAccount).then((data) =>
+            getLoginCodePromise(defaultAccount, 0).then((data) =>
                 loginPromise(defaultAccount, defaultPwd, data)
             ).then((data) => {
-                log(data);
                 data.Authorization = data.accessToken;
-                CookieHelp.saveCookieInfo('APIN_INIT_USER',data);
-                this.getCodeAction();
+                CookieHelp.saveUserInfo(data);
+                callback();
             }).catch((error) => {
                 log(error);
             });
