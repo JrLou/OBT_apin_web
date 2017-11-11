@@ -21,15 +21,15 @@ class page extends Component {
    constructor(props) {
       super(props);
        CookieHelp.saveUserInfo({
-           Authorization:"eyJpZCI6ImQ4NzdkZjRmNGYzMDQ4YzM5NDY0MzY0YmJiYzNjODBhIiwiYWNjb3VudElkIjoiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAiLCJ1c2VySWQiOiJmYjM4MWU4YWVhM2M0YmYzYjJjZjMxODNlNzA1MDhhNiIsImRlcHRJZCI6bnVsbCwidXNlck5hbWUiOiJBUk0/Pz8/PyIsInNlY3JldCI6ImY1NDc4NzdiZWVlNzQ3ZDI4MGU4MDQ2MDkwNDY5ZGZiIiwiYXBwSWQiOiI2NGNhZDkyZjE1ZDY0N2MwYjdkZWM4NDAwODFkZjEyNyJ9",
+           Authorization:"eyJ1c2VySWQiOiIyMjIiLCJ1c2VyTmFtZSI6ImFkZCJ9",
        });
       this.wh = new WindowHelp();
       this.state = {
-         step: 2,
-         loading: false,
+         step: 1,
+         loading: true,
       };
       // ?data={"id":1}
-       this.data = {pay:{},integral:{},order:{}};
+      //  this.data = {pay:{},integral:{},order:{}};
       this.par = window.app_getPar(this);
       console.log(this.par);
       this.id = this.par ? this.par.id : null;
@@ -42,7 +42,7 @@ class page extends Component {
       if (this.un) {
          return;
       }
-      // this.refresh();
+      this.refresh();
 
    }
 
@@ -182,6 +182,7 @@ class page extends Component {
                   if (type === "unionopen") {
                      //打开开通银联
                       this.cardNo = data.cardNo;
+                      this.wh.setPanel(apinPanel);
                      this.openUnionPayAdd(data,apinPanel);
                   } else if (type === "unionpay") {
                      //打开银联支付
@@ -191,7 +192,26 @@ class page extends Component {
                      //打开银联支付
                      this.openPaySuccess(callBack);
 
-                  } else if (type === "unionpayerror") {
+                  } else if (type === "unionpayver") {
+                      //打开银联支付
+                      //开始支付 10 秒 轮询支付
+                      // let diffTime = new Date().getTime();
+                      // if ((new Date().getTime() - diffTime) / 1000 > 10){
+                      //
+                      // }
+                      this.handVerState = false;
+                      this.autoVer(null,"pay");
+                      setTimeout(()=>{
+                          //支付成功,不再验证
+                          if( this.payState){
+                              return;
+                          }
+                          //支付时间到
+                          this.handVer("pay", "ok");
+                      },1000*10);
+
+
+                  }else if (type === "unionpayerror") {
                      //打开银联支付
                      this.openPayError(data, callBack);
 
@@ -313,7 +333,6 @@ class page extends Component {
                              this.payPassWord.show(true,this.data.order);
                              return;
                           }
-
 
                           let downIng = (fun) => {
                              this.openPayIng(() => {
@@ -446,6 +465,7 @@ class page extends Component {
                       orderId:this.id,
                       amount:this.data.pay.payPrice,
                       payment:this.data.order.payment,
+                        url: window.location.origin+"/html/paysuccess.html",
                       payType:showType === "wechat"?2:1,//	1支付宝 2 微信
                   }, (code, msg, data) => {
                       if (code > 0) {
@@ -489,6 +509,29 @@ class page extends Component {
       }, "下单");
    }
 
+   showSuccess(type){
+       //支付成功
+       //关闭支付窗口
+       this.handVerState = true;
+       this.wh.closeWindow();
+       if (type === "pay") {
+           this.payState = true;
+           //支付成功/提示支付成功/通知用户去订单详情
+           this.panel.show(true, {
+               content: "支付成功",
+               showType: "success"
+           }, () => {
+
+           });
+       } else {
+           //开通成功/关闭提示/关闭卡号输入
+           this.panel.show(false);
+           if (this.stepAction && this.stepAction.onAction) {
+               this.stepAction.onAction("closeAdd");
+           }
+       }
+
+   }
 
    handVer(type, action) {
        this.handVerState = true;
@@ -508,20 +551,7 @@ class page extends Component {
             //验证是否支付成功
             if (code > 0&&data.flag) {
 
-               if (type === "pay") {
-                  //支付成功/提示支付成功/通知用户去订单详情
-                  this.panel.show(true, {
-                      content: type === "pay" ? "支付成功":"开通成功",
-                     showType: "success"
-                  }, () => {
-                  });
-               } else {
-                  //开通成功/关闭提示/关闭卡号输入
-                  this.panel.show(false);
-                  if (this.stepAction && this.stepAction.onAction) {
-                     this.stepAction.onAction("closeAdd");
-                  }
-               }
+                this.showSuccess(type);
 
             } else {
                //当   action==“ok” && 支付失败 提示文案改变
@@ -595,17 +625,10 @@ class page extends Component {
       }, (code, msg, data) => {
          //验证是否支付成功
          if (code > 0&&data.flag) {
-            //支付成功
-            //关闭支付窗口
-             this.handVerState = true;
-            this.wh.closeWindow(apinPanel);
-            //提示支付成功
-            this.panel.show(true, {
-               content: type === "pay" ? "支付成功":"开通成功",
-               showType: "success"
-            }, () => {
 
-            });
+            //提示支付成功
+             this.showSuccess(type);
+
          } else {
             setTimeout(() => {
                this.autoVer(apinPanel, type);
@@ -618,7 +641,7 @@ class page extends Component {
 
    loadPayIntegral(param, cb) {
 
-       HttpTool.request(HttpTool.typeEnum.POST, "/bohl/orderapi/v1.0/orders/points/pay", (code, msg, json, option) => {
+       HttpTool.request(HttpTool.typeEnum.POST, Api.pay, (code, msg, json, option) => {
            cb(code, msg, json);
        }, (code, msg, option) => {
            cb(code, msg, {});
@@ -657,7 +680,7 @@ class page extends Component {
 
    loadPayOrderVer(param, cb) {
        console.log("======验证支付中");
-       HttpTool.request(HttpTool.typeEnum.POST, "/bohl/orderapi/v1.0/orders/pay/confirm", (code, msg, json, option) => {
+       HttpTool.request(HttpTool.typeEnum.POST, Api.confirm, (code, msg, json, option) => {
            cb(code, msg, json);
        }, (code, msg, option) => {
            cb(code, msg, {});
@@ -672,7 +695,7 @@ class page extends Component {
    }
 
    loadPayOrder(param, cb) {
-       HttpTool.request(HttpTool.typeEnum.POST, "/bohl/orderapi/v1.0/orders/pay/online", (code, msg, json, option) => {
+       HttpTool.request(HttpTool.typeEnum.POST,Api.online, (code, msg, json, option) => {
            cb(code, msg, json);
        }, (code, msg, option) => {
            cb(code, msg, {});
@@ -691,7 +714,7 @@ class page extends Component {
          cb(-3, "缺少订单号", null);
          return;
       }
-       HttpTool.request(HttpTool.typeEnum.POST, "/bohl/orderapi/v1.0/orders/payInfo", (code, msg, json, option) => {
+       HttpTool.request(HttpTool.typeEnum.POST,Api.payInfo, (code, msg, json, option) => {
 
           let data =  {
                order: {
@@ -743,15 +766,15 @@ class Money extends Component {
          use: use
       });
    }
-    shouldComponentUpdate(nextProps, nextState){
-       if(nextProps.use!==this.state.use){
-           this.upDatePrice(nextProps.use);
-           return false;
-       }else{
-           return true;
-       }
-
-    }
+    // shouldComponentUpdate(nextProps, nextState){
+    //    if(nextProps.use!==this.state.use){
+    //        this.upDatePrice(nextProps.use);
+    //        return false;
+    //    }else{
+    //        return true;
+    //    }
+    //
+    // }
 
    getData() {
       return this.props.data || {};

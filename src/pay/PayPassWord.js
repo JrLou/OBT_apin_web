@@ -130,6 +130,9 @@ class InputLayout extends Component {
     }
 
     autoTime(time) {
+        if(this.un){
+            return;
+        }
         if (time > 0) {
             let diff = time - 1;
             this.setState({

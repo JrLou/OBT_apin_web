@@ -146,9 +146,10 @@ class UnionPayAdd extends Component {
                                      if(!data){
                                         //
                                         //  alert("开始");
+                                        //
                                          this.loadUnionPayOpen({
                                              cardNo: this.state.inputValue,
-                                             frontUrl:"www.apin.com",
+                                             frontUrl:window.location.origin+"/html/paysuccess.html",
                                              orderId:this.props.orderId,
                                          },(code, msg, data)=>{
 
@@ -167,17 +168,26 @@ class UnionPayAdd extends Component {
                                             }else{
                                                if(code===-400){
                                                   //银行卡号错误
+                                                   this.wh.closeWindow();
                                                    this.showError("请输入正确的银行卡号");
                                                    this.setState({upLoad:false});
                                                }
                                             }
                                          });
                                      }else{
-
+                                         this.wh.closeWindow();
                                          this.showError("您已开通此卡");
+                                         this.setState({
+                                             upLoad: false
+                                         });
+
                                      }
                                  }else{
-                                     this.showError("您已开通此卡");
+                                     this.wh.closeWindow();
+                                     this.showError(msg);
+                                     this.setState({
+                                         upLoad: false
+                                     });
                                  }
 
                               });

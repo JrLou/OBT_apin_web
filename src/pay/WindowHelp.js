@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import less from './Pay.less';
 
 class WindowHelp {
+    setPanel(panel){
+        this.shareWindow = panel;
+    }
     openInitWindow(panel){
         if(panel){
             this.shareWindow = panel;
@@ -24,6 +27,7 @@ class WindowHelp {
     }
     closeWindow(apinPanel){
         let panel = apinPanel||this.shareWindow;
+
         if(panel){
             if(panel.location){
                 panel.close();
