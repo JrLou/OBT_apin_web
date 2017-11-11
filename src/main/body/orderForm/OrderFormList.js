@@ -196,9 +196,9 @@ class OrderFormList extends Component{
                         onClick={()=>{
                                 window.app_open(this, "/OrderFormDetail", {
                                     //传给详情页一个订单id
-                                    // orderId:record.id,
+                                    orderId:record.id,
                                     //开发测试 - 写死的id
-                                    orderId:'81a366cd6c754cbcbbc978a8b956982b',
+                                    // orderId:'10000059f39c5427ca5f749604a09de39',
                                 });
                             }}
                     >
@@ -207,70 +207,70 @@ class OrderFormList extends Component{
                 ),
             },
         ];
-        let dataSource = [
-            {
-                index:1,
-                key:1,
-                orderNo:'20170923132332333',
-                voyages:[{
-                    cityDep:'宁波',
-                    cityArr:'杭州',
-                },],
-                dateDep:'2017-09-13',
-                flightType:1,
-                peopleNum:'12/2',
-                adultCount:3,
-                childCount:15,
-                orderAmount:'¥1200',
-                createDate:'2017-08-23 16:23',
-                orderStatus:'0',
-                operation:'查看详情',
-            },
-            {
-                index:2,
-                key:2,
-                orderNo:'20170923132332333',
-                voyages:[{
-                    cityDep:'波罗地亚吉卜力岛',
-                    cityArr:'阿西列宁科克丽缇岛',
-                }],
-                dateDep:'2017-09-13',
-                dateRet:'2017-09-13',
-                flightType:2,
-                peopleNum:'12/2',
-                childCount:'3',
-                orderAmount:'¥1200',
-                createDate:'2017-08-23 16:23',
-                orderStatus:'1',
-                operation:'查看详情',
-            },
-            {
-                index:3,
-                key:3,
-                orderNo:'20170923132332333',
-                voyages:[
-                        {
-                            cityDep:'杭州',
-                            cityArr:'厦门',
-                        },{
-                            cityDep:'北京',
-                            cityArr:'天津',
-                        },{
-                            cityDep:'宁波',
-                            cityArr:'广州',
-                        }
-                    ],
-                dateDep:'2017-09-13',
-                dateRet:'2017-09-13',
-                flightType:3,
-                adultCount:'8',
-                peopleNum:'12/2',
-                orderAmount:'¥1200',
-                createDate:'2017-08-23 16:23',
-                orderStatus:'5',
-                operation:'查看详情',
-            },
-        ];
+        // let dataSource = [
+        //     {
+        //         index:1,
+        //         key:1,
+        //         orderNo:'20170923132332333',
+        //         voyages:[{
+        //             cityDep:'宁波',
+        //             cityArr:'杭州',
+        //         },],
+        //         dateDep:'2017-09-13',
+        //         flightType:1,
+        //         peopleNum:'12/2',
+        //         adultCount:3,
+        //         childCount:15,
+        //         orderAmount:'¥1200',
+        //         createDate:'2017-08-23 16:23',
+        //         orderStatus:'0',
+        //         operation:'查看详情',
+        //     },
+        //     {
+        //         index:2,
+        //         key:2,
+        //         orderNo:'20170923132332333',
+        //         voyages:[{
+        //             cityDep:'波罗地亚吉卜力岛',
+        //             cityArr:'阿西列宁科克丽缇岛',
+        //         }],
+        //         dateDep:'2017-09-13',
+        //         dateRet:'2017-09-13',
+        //         flightType:2,
+        //         peopleNum:'12/2',
+        //         childCount:'3',
+        //         orderAmount:'¥1200',
+        //         createDate:'2017-08-23 16:23',
+        //         orderStatus:'1',
+        //         operation:'查看详情',
+        //     },
+        //     {
+        //         index:3,
+        //         key:3,
+        //         orderNo:'20170923132332333',
+        //         voyages:[
+        //                 {
+        //                     cityDep:'杭州',
+        //                     cityArr:'厦门',
+        //                 },{
+        //                     cityDep:'北京',
+        //                     cityArr:'天津',
+        //                 },{
+        //                     cityDep:'宁波',
+        //                     cityArr:'广州',
+        //                 }
+        //             ],
+        //         dateDep:'2017-09-13',
+        //         dateRet:'2017-09-13',
+        //         flightType:3,
+        //         adultCount:'8',
+        //         peopleNum:'12/2',
+        //         orderAmount:'¥1200',
+        //         createDate:'2017-08-23 16:23',
+        //         orderStatus:'5',
+        //         operation:'查看详情',
+        //     },
+        // ];
 
 
         return(
@@ -367,8 +367,9 @@ class OrderFormList extends Component{
                 </div>
                 <div className={css.resultContainer}>
                         <Table
+                            prefixCls={'my-ant-table'}
                             columns={columns}
-                            dataSource={dataSource}
+                            dataSource={this.state.dataSource}
                             loading={{
                                 spinning:this.state.loading,
                                 size:'large',
@@ -460,6 +461,7 @@ class OrderFormList extends Component{
             this.setLoading(false);
             this.setState({
                 dataSource:newData,
+                total:parseInt(option.total?option.total:0),
             });
         };
 
@@ -474,20 +476,6 @@ class OrderFormList extends Component{
                     ipKey: "hlIP"
                 });
         });
-
-        //模拟接口
-        // this.setLoading(true,()=>{
-        //     log(parames);
-        //     setTimeout(()=>{
-        //         let num = Math.random();
-        //         if(num<0.5){
-        //             successCB();
-        //         }else{
-        //             failureCB();
-        //         }
-        //     },1000);
-        // });
-
     }
 
     /**
@@ -544,7 +532,7 @@ class OrderFormList extends Component{
                 let adultNum = newData[key].adultCount?newData[key].adultCount:0;
                 let childNum = newData[key].childCount?newData[key].childCount:0;
                 newData[key].peopleNum = (''+adultNum+'/'+childNum);
-                newData[key].orderStatus = transformOrderState(newData[key].orderStatus,newData[key].remark);
+                newData[key].orderStatus = transformOrderState(newData[key].orderStatus,newData[key].extraCode);
             }
         }
         return newData;

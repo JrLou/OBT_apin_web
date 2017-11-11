@@ -40,7 +40,8 @@ let APIGYW = {
     /**
      * 提交需求
      */
-    demandapi_demands: "/demandapi/v1.0/demands"
+    //demandapi_demands: "/demandapi/v1.0/demands"
+    demandapi_demands: "/demandapi/v1.0/demands/create"
 
 };
 module.exports = APIGYW;

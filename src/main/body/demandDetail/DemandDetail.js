@@ -7,6 +7,7 @@ import CellNewFlight from "../content/cell/CellNewFlight";
 import {HttpTool} from "../../../../lib/utils/index.js";
 import LoadingView from "../component/LoadingView.js";
 import NumTransToTextHelp from '../tool/NumTransToTextHelp.js';
+import {hasKey,getFlightData} from '../tool/LXDHelp.js';
 /**
  * 需求已取消                    0
  * 需求处理中 （单程）       1    1
@@ -32,7 +33,6 @@ import NumTransToTextHelp from '../tool/NumTransToTextHelp.js';
 class page extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             itemNum: 3,
             index: -1,
@@ -41,8 +41,10 @@ class page extends Component {
             visibleCancle: false,
             visibleDelete: false,
             visibleConfirm: false,
-
+            flightData:null,
         };
+        this.id=window.app_getPar(this).id;
+
     }
 
     getUpData() {
@@ -59,8 +61,14 @@ class page extends Component {
         // 往返 81a366cd6c754cbcbbc978a8b956982b
         // 多程 c374da99311144058a1d8d7382de5d8a
         // 单程 9cb5a2cd48104e3385f330aec6b3d196
+        if(!this.props.location.query.data){
+            message.error("数据有误!");
+            return ;
+        }
+        let parentId =JSON.parse(this.props.location.query.data).data.id;
         let param = {
-            id: "9cb5a2cd48104e3385f330aec6b3d196",
+            id: parentId
+            //"65a7a041bcab4cd9b32d26178def4759",
         };
         let success = (code, msg, json, option) => {
             this.setState({
@@ -71,7 +79,7 @@ class page extends Component {
             message.warning(msg);
             this.data = null;
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/find", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/find", success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -90,7 +98,7 @@ class page extends Component {
             message.warning(msg);
             this.data = null;
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/cancel", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/cancel", success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -109,7 +117,7 @@ class page extends Component {
             message.warning(msg);
             this.data = null;
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/remove", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/remove", success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -129,7 +137,7 @@ class page extends Component {
             message.warning(msg);
             this.data = null;
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/boyw/demandapi/v1.0/demands/plans", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/plans", success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -174,7 +182,9 @@ class page extends Component {
 
     createViewCell(dataArr) {
         return dataArr.map((data, index) => {
-            return (<CellNewFlight key={index} dataSource={data}/>);
+            let resultData = getFlightData(data.voyages,dataArr.flightType,data.freeBag,data.weightLimit);
+
+            return (<CellNewFlight key={index} dataSource={resultData}/>);
         });
     }
 
@@ -367,6 +377,8 @@ class page extends Component {
         log("-------gyw--------");
         return (
             datas.map((data, index) => {
+                let resultData = getFlightData(data.voyages,flightType,data.freeBag,data.weightLimit);
+
                 return (
                     <div key={index} className={less.flightItem}>
                         {
@@ -378,7 +390,7 @@ class page extends Component {
 
                         <div style={{marginTop: 20}} className={less.flightInfoLayout}>
                             <div className={less.flightButtonLeftLayout}>
-                                <CellNewFlight key={index} dataSource={data} flightType={flightType}/>
+                                <CellNewFlight key={index} dataSource={resultData} flightType={flightType}/>
                             </div>
                             <div className={less.flightButtonRightLayout}>
                                 <div className={less.flightButtonRightContentLayout}>

@@ -11,5 +11,7 @@ let APILXD = {
     //订单列表页面
     loadOrderList:'/boyw/orderapi/v1.0/orders/query',                  //加载订单列表
     lordOrderDetail:'/boyw/orderapi/v1.0/orders/find',                 //加载订单详情
+    cancelOrder:'/boyw/orderapi/v1.0/orders/cancel',                        //取消订单
+    deleteOrder:'/boyw/orderapi/v1.0/orders/delete',                        //删除订单
 };
 module.exports = APILXD;
