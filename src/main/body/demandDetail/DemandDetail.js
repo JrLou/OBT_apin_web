@@ -126,14 +126,14 @@ class page extends Component {
         };
         let success = (code, msg, json, option) => {
             window.app_open(this, "/OrderFormDetail", {
-                orderId:json.orderNo
+                orderId:this.parentId
             });
         };
         let failure = (code, msg, option) => {
             message.warning(msg);
             this.loadData();
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/plans", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/plans/confirm", success, failure, param,
             {
                 ipKey: "hlIP"
             });
