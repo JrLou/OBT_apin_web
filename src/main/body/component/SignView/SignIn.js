@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-10 14:34:15
+ * @Last Modified time: 2017-11-13 10:42:06
  */
 
 import React, { Component } from 'react';
@@ -175,7 +175,7 @@ class SignInForm extends Component {
             if (!err) {
                 console.log('Received values of form: ', values);
                 const { account, bdCharger, code, mobile, password } = values;
-                HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.1/addMember', (code, message, json, option) => {
+                HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/addMember', (code, message, json, option) => {
                 }, () => {
                 }, {
                         account,
@@ -198,7 +198,7 @@ class SignInForm extends Component {
         const account = getFieldValue('account');
         const mobile = getFieldValue('mobile');
         const picCode = getFieldValue('picCode') || '';
-        HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
+        HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
             // 测试
             if (json.length > 4) {
                 this.setState({

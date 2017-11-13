@@ -63,13 +63,10 @@ class page extends Component {
             demandStatus:  this.flightTypeList[3].value,
             startDate: null,
             endDate: null,
-
             dataSource: null,        //传入Table组件的数据
-
             pageSize: 10,            //每页展示数据数目
             pageNumber: 1,           //列表当前页
             total: 0,                //总数据
-
             loading: false,         //是否处于加载状态
         };
     }
@@ -142,7 +139,7 @@ class page extends Component {
                 dataIndex: 'demandStatus',
                 render:(list,record)=>{
                   return(
-                      <font style={{color:record.status===3?"#ff6603":""}}>
+                      <font style={{color:record.status===3?"#ff9a00":""}}>
                           {record.demandStatus}
                       </font>
                       );
@@ -291,7 +288,6 @@ class page extends Component {
                     <Table
                         prefixCls={'my-ant-table'}
                         columns={columns}
-                        style={{}}
                         dataSource={this.state.dataSource}
                         loading={{
                             spinning: this.state.loading,
@@ -395,7 +391,6 @@ class page extends Component {
      */
     loadData() {
         let parames = this.getSearchParames();
-        log("000"+this.state.pageNumber);
         let successCB = (code, msg, json, option) => {
             this.setLoading(false);
             let arr = [];
@@ -427,7 +422,6 @@ class page extends Component {
                     };
                     arr.push(datas);
                 });
-                log(json);
                 this.setState({
                     total:option.option.total,
                     dataSource: arr
@@ -448,19 +442,6 @@ class page extends Component {
                     ipKey: "hlIP"
                 });
         });
-
-        // //模拟接口
-        // this.setLoading(true,()=>{
-        //     log(parames);
-        //     setTimeout(()=>{
-        //         let num = Math.random();
-        //         if(num<0.5){
-        //             successCB();
-        //         }else{
-        //             failureCB();
-        //         }
-        //     },1000);
-        // });
 
     }
 

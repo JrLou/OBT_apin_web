@@ -249,6 +249,7 @@ class page extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         let { lineType } = this.state;
+        let styleBotton = {};
         return (
             <div className={less.content}>
                 <div style={{ margin: "20px 0px" }}>
