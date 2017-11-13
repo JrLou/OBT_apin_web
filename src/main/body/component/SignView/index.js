@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-01 14:09:48 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-10 20:26:00
+ * @Last Modified time: 2017-11-13 13:12:02
  */
 
 import React, { Component } from 'react';
@@ -23,6 +23,11 @@ class SignUpView extends Component {
         this.handleCancel = this.handleCancel.bind(this);
         this.handleChangeMode = this.handleChangeMode.bind(this);
     }
+
+    componentDidMount(){
+        this.props.showModal(this.showModal);
+    }
+
     render() {
         const { visible, confirmLoading, title, mode } = this.state;
         return (

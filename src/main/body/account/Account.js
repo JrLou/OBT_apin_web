@@ -182,6 +182,7 @@ class AccountForm extends Component {
     }
 
     handleSubmit() {
+        
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
