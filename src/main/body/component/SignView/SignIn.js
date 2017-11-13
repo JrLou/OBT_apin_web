@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-13 15:43:55
+ * @Last Modified time: 2017-11-13 15:45:08
  */
 
 import React, { Component } from 'react';
@@ -83,15 +83,16 @@ class SignInForm extends Component {
                     {getFieldDecorator('mobile', {
                         rules: [{ required: true, message: '请输入11位手机号' },
                         { pattern: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/, message: '手机号格式不正确！' },
-                        {
-                            validator: (rule, value, callback) => {
-                                this.getCode(() => {
-                                    validateLogin('mobile', value)
-                                        .then((data) => callback())
-                                        .catch((data) => callback(data));
-                                });
-                            }
-                        }],
+                        // {
+                        //     validator: (rule, value, callback) => {
+                        //         this.getCode(() => {
+                        //             validateLogin('mobile', value)
+                        //                 .then((data) => callback())
+                        //                 .catch((data) => callback(data));
+                        //         });
+                        //     }
+                        // }
+                    ],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入11位手机号" />
                         )}
@@ -104,15 +105,16 @@ class SignInForm extends Component {
                 >
                     {getFieldDecorator('picCode', {
                         rules: [{ required: true, message: '请输入图形验证码' },
-                        {
-                            validator: (rule, value, callback) => {
-                                this.getCode(() => {
-                                    validateLogin('picCode', value)
-                                        .then((data) => callback())
-                                        .catch((data) => callback(data));
-                                });
-                            }
-                        }],
+                        // {
+                        //     validator: (rule, value, callback) => {
+                        //         this.getCode(() => {
+                        //             validateLogin('picCode', value)
+                        //                 .then((data) => callback())
+                        //                 .catch((data) => callback(data));
+                        //         });
+                        //     }
+                        // }
+                    ],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
                         )}
