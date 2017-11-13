@@ -79,7 +79,7 @@ class page extends Component {
       }, callBack);
    }
     openOrder(){
-        window.app_open(this, "/Order", {
+        window.app_open(this, "/OrderFormDetail", {
             id: this.id
         }, "self");
     }
