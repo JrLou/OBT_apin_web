@@ -3,8 +3,9 @@
  */
 import React, { Component } from 'react';
 import { history } from 'react-router';
-import { Button, Menu, Dropdown, Icon } from 'antd';
+import { Button, Menu, Dropdown, Icon, message } from 'antd';
 import { CookieHelp } from '../../lib/utils/index.js';
+import { AccoutInfoPromise } from './body/component/SignView/LoginAction';
 import Menus from './Menu';
 
 import Sign from './body/component/SignView';
@@ -19,34 +20,29 @@ class page extends Component {
         this.par = window.app_getPar(this);
         this.state = {
             step: this.par ? this.par.step : 0,
-            isLogin: false
+            isLogin: false,
+            account:''
         };
         this.setLogin = this.setLogin.bind(this);
-
+        this.logout = this.logout.bind(this);
     }
 
     componentDidMount() {
         this.checkLogin();
+        window.modal = this.modal;
     }
 
     render() {
-        let { step, isLogin } = this.state;
+        let { step, isLogin,account } = this.state;
         const menu = (
             <Menu>
                 <Menu.Item>
                     <a onClick={() => {
-                        window.app_open(this.props.root, '/Account', {
-                            id: '112122323'
-                        });
+                        window.app_open(this.props.root, '/Account', null);
                     }}>用户中心</a>
                 </Menu.Item>
                 <Menu.Item>
-                    <a onClick={() => {
-                        this.setState({
-                            isLogin: false
-                        });
-                        CookieHelp.clearCookie();
-                    }}>退出登录</a>
+                    <a onClick={this.logout}>退出登录</a>
                 </Menu.Item>
             </Menu>
         );
@@ -62,7 +58,7 @@ class page extends Component {
                         src={require('../images/index_logo.png')}
                     />
 
-                    {!step && <Menus {...this.props} />}
+                    {!step && isLogin && <Menus {...this.props} />}
                     {step ?
                         <div className={`${less.right} ${less.step}`}>
                             <Steps step={step}></Steps>
@@ -85,7 +81,7 @@ class page extends Component {
                                     isLogin && <Dropdown overlay={menu}>
                                         <span>
                                             Hi,
-                                        <a className="ant-dropdown-link" href="#">对对对<Icon type="down" /></a>
+                                        <a className="ant-dropdown-link" href="#">{account}<Icon type="down" /></a>
                                         </span>
                                     </Dropdown>
                                 }
@@ -100,18 +96,45 @@ class page extends Component {
                         </div>}
 
                 </div>
-                <Sign ref={(modal) => this.modal = modal} setLogin={this.setLogin}></Sign>
+                <Sign ref={(modal) => this.modal = modal} setLogin={this.setLogin} showModal={this.props.showModal}></Sign>
             </div>
         );
     }
 
-    setLogin(){
+    /**
+     * 设置登录状态
+     */
+    setLogin() {
         this.setState({
             isLogin: true
         }, () => {
             //回显用户名
+            AccoutInfoPromise()
+                .then((res) => {
+                    const { account } = res.json;
+                    this.setState({
+                        account
+                    });
+
+                })
+                .catch(error => {
+                    message.error(error);
+                });
         });
     }
+
+    /**
+     * 设置登出状态
+     */
+    logout() {
+        CookieHelp.clearCookie();
+        this.setState({
+            isLogin: false
+        }, () => {
+            this.checkLogin();
+        });
+    }
+
 
     /**
      * 检测是否已经登录
@@ -119,10 +142,15 @@ class page extends Component {
     checkLogin() {
         const user = CookieHelp.getUserInfo();
         const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
-        log("---Apptop-----Authorization");
-        log(user);
-        if(user && user.Authorization && isLogin) this.setLogin();
+        if (user && user.Authorization && isLogin) this.setLogin();
+
+        const pathname = window.location.pathname;
+        // 未登录并且不在首页，则跳转到首页
+        if (!isLogin && pathname !== '/' && pathname !== '/Search') {
+            window.app_open(this, '/', null, "self");
+        }
     }
+
 }
 page.contextTypes = {
     router: React.PropTypes.object

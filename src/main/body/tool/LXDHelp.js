@@ -99,15 +99,17 @@ let LXDHelp = {
      * @param remark
      * @returns {Number}
      */
-    transformOrderState(state,remark){
+    transformOrderState(state,extraCode){
         let returnState = parseInt(state);
-        let returnRemark = parseInt(remark);
-        if(LXDHelp.hasKey(returnState,[2,3,5,6])){
+        let returnRemark = parseInt(extraCode);
+        if(LXDHelp.hasKey(returnState,[2,3,4,5,6])){
             switch(returnRemark){
                 case 0:returnState = 14;break;
                 case 1:returnState = 15;break;
                 case 2:returnState = 12;break;
                 case 3:returnState = 13;break;
+                case 5:returnState = 3;break;
+                case 6:returnState = 2;break;
                 default:break;
             }
         }

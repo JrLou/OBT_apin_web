@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-10 16:51:38 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-10 19:57:23
+ * @Last Modified time: 2017-11-13 10:43:33
  */
 
 
@@ -118,7 +118,7 @@ class ResetForm extends Component {
         const { getFieldValue } = this.props.form;
         const mobile = getFieldValue('mobile');
         const picCode = getFieldValue('picCode') || '';
-        HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
+        HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
             // 测试
             if (json.length > 4) {
                 this.setState({

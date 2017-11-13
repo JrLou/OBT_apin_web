@@ -2,15 +2,15 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-10 20:26:28
+ * @Last Modified time: 2017-11-13 18:49:12
  */
 
 import React, { Component } from 'react';
 
-import { Form, Input, Button,message } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import md5 from 'md5';
 import CheckCode from './CheckCode';
-import { loginPromise, getLoginCodePromise } from './LoginAction';
+import { loginPromise, getLoginCodePromise, defaultLoginPromise } from './LoginAction';
 
 import { CookieHelp } from '../../../../../lib/utils/index.js';
 
@@ -88,20 +88,12 @@ class AccountLoginForm extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
                 let { account, password } = values;
                 this.setState({ loading: true });
-
-                getLoginCodePromise(account,0).then((data) =>
-                    loginPromise(account, md5(password), data)
+                getLoginCodePromise(account, 0).then((data) => {
+                    return loginPromise(account, md5(password), data);
+                }
                 ).then((data) => {
-                    data.Authorization = data.accessToken;
-                    // 保存登录token
-                    CookieHelp.saveUserInfo(data);
-                    // 获取注册验证码也会带掉登录接口 保存APIN_USER token
-                    // IS_LOGIN判断是否真的登录
-                    CookieHelp.saveCookieInfo('IS_LOGIN', true);
-                    this.setState({ loading: false });
                     this.props.setLogin();
                     this.props.onOK();
                 }).catch((error) => {
@@ -199,10 +191,8 @@ class MsgLoginForm extends React.Component {
     getCode() {
         const { getFieldValue } = this.props.form;
         const account = getFieldValue('account');
-        getLoginCodePromise(account,1).then((data) => {
-            log(data);
+        getLoginCodePromise(account, 1).then((data) => {
             this.data = data;
-            CookieHelp.saveCookieInfo('LOGIN_CODE',data);
         });
     }
 
@@ -210,16 +200,9 @@ class MsgLoginForm extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
-                const {account,password} = values;
-                const code = this.data || CookieHelp.getCookieInfo('LOGIN_CODE');
-                loginPromise(account,md5(password),code).then((data)=>{
-                    data.Authorization = data.accessToken;
-                    // 保存登录token
-                    CookieHelp.saveUserInfo(data);
-                    // 获取注册验证码也会带掉登录接口 保存APIN_USER token
-                    // IS_LOGIN判断是否真的登录
-                    CookieHelp.saveCookieInfo('IS_LOGIN', true);
+                const { account, password } = values;
+                const code = this.data;
+                loginPromise(account, md5(password), code).then((data) => {
                     this.props.onOK();
                 }).catch((error) => {
                     message.error(error);

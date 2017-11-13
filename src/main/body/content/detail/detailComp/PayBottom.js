@@ -29,12 +29,12 @@ class PayBottom extends Component {
             <div className={css.bottomDiv}>
                 <div className={css.bottomDiv_left}>
                     <div className={css.bottomBtn} onClick={()=>{
-                        window.close();
+                        window.history.go(-1);
                             }}>{"<返回上一级"}</div>
                 </div>
                 <div className={css.bottomDiv_center}>
                     <div className={css.depositPriceBg}>
-                        <span style={{fontSize:"14px",color:"#333"}}>订金</span>
+                        <span style={{fontSize:"14px",color:"#333"}}>押金</span>
                         <span style={{fontSize:"14px",color:"red"}}>￥</span>
                         <span style={{fontSize:"20px",color:"red"}}>{param.orderPrice}</span>
                     </div>

@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 import css from './OrderFormDetail.less';
-import { HttpTool } from '../../../../lib/utils/index.js';
+import { HttpTool,CookieHelp } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
 import {hasKey,getFlightData} from '../tool/LXDHelp.js';
 import {Spin,message} from 'antd';
@@ -15,11 +15,11 @@ import PayBottom from '../content/detail/detailComp/PayBottomForDetail.js';
 
 /**
  * 订单状态说明(页面)：
- * 0：订单取消 1：等待确认 2：待付订金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
+ * 0：订单取消 1：等待确认 2：待付押金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
  * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中 15：支付审核失败
  *
  * 接口可能返回的值：
- * 0：订单取消 1：等待确认 2：待付订金 3：待付全款 5：待付尾款 7：已出票 8：已关闭
+ * 0：订单取消 1：等待确认 2：待付押金 3：待付全款 5：待付尾款 7：已出票 8：已关闭
  */
 
 
@@ -27,15 +27,20 @@ import PayBottom from '../content/detail/detailComp/PayBottomForDetail.js';
 class OrderFormDetail extends Component{
     constructor(props){
         super(props);
+        CookieHelp.saveUserInfo({
+            Authorization:"eyJpZCI6IjAzN2E2MmI1M2M5ZjQ0MDZhZTQzMjA3NTVmNGY2ZmZiIiwiYXBwSWQiOiIyZWY4ZDkwMmMxMmY0NTRmOWFjZGJiMDQ4NGY4YzA1YSIsImFjY291bnRJZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIsInVzZXJJZCI6IjY2ZTUzZTFkMmFjMDQwMGNiMTFjYjc5ZTFlOTU5YWU3IiwiZGVwdElkIjpudWxsLCJ1c2VyTmFtZSI6Iui2hee6p+euoeeQhuWRmCIsInNlY3JldCI6IjU0MDBiYjQ3NDBmZjNjOWEyYWI1ZWNiN2UxOWJkZTY4In0=",
+        });
         //模拟随机状态
         // let random = Math.floor(Math.random()*11);
         // let list = [0,1,2,3,5,7,8,12,13,14,15];
 
         this.state = {
-            orderId:window.app_getPar(this).id,         //订单ID
+            // orderId:window.app_getPar(this).id,         //订单ID
+            orderId:'16b3639900f54a86b9116af77b088d75',         //订单ID
             returnState:'',          //接口返回的订单状态  （接口返回的状态需要经过转换才赋值给状态机）
             orderState:'',       //页面订单状态
             isPassed:false,     //乘机人信息是否已经确认
+            airlineSigns:1,     //航线类型   1：国内   2：国际
 
             titleData:null,     //头部导航信息
             flightData:null,    //航班信息
@@ -45,7 +50,6 @@ class OrderFormDetail extends Component{
 
             upDate:0,
             loading:false,      //加载状态
-            confirmModal:false, //询问框
         };
 
         if(!this.state.orderId){
@@ -168,6 +172,7 @@ class OrderFormDetail extends Component{
                                     returnState={this.returnState}
                                     isPassed={this.state.isPassed}
                                     orderId={this.state.orderId}
+                                    airlineSigns={this.state.airlineSigns}
                                     defaultData={[]}
                                 />
                             </div>
@@ -240,6 +245,7 @@ class OrderFormDetail extends Component{
             let payMsg = json.pays?json.pays:[];
             let bottomData = this.getBottomData(json);
             let orderState = this.getOrderState(json);
+            let airlineSigns = json.airlineSigns?json.airlineSigns:1;
 
             this.setLoading(false);
             this.setState({
@@ -250,6 +256,7 @@ class OrderFormDetail extends Component{
                 bottomData:bottomData,
                 orderState:orderState,
                 returnState:json.orderStatus,
+                airlineSigns:airlineSigns,
             });
         };
         let failureCB = (code, msg, option)=>{
@@ -313,6 +320,14 @@ class OrderFormDetail extends Component{
                         state = 15;
                     }else{
                         state = 3;
+                    }
+                    break;
+            case 4:if(extraCode==5){
+                        state = 3;
+                    }else if(extraCode ==6){
+                        state = 2;
+                    }else{
+                        state = 4;
                     }
                     break;
             case 5:if(extraCode==0){
