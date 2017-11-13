@@ -2,13 +2,13 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-01 14:09:48 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-13 13:12:02
+ * @Last Modified time: 2017-11-13 13:32:52
  */
 
 import React, { Component } from 'react';
 import { Modal } from 'antd';
 import Forms from './Forms';
-import {log} from 'debug';
+import { log } from 'debug';
 
 class SignUpView extends Component {
     constructor(props) {
@@ -24,7 +24,7 @@ class SignUpView extends Component {
         this.handleChangeMode = this.handleChangeMode.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.showModal(this.showModal);
     }
 
@@ -36,7 +36,7 @@ class SignUpView extends Component {
                 visible={visible}
                 onCancel={this.handleCancel}
                 footer={null}
-                style={{width:'100px'}}
+                style={{ width: '100px' }}
                 prefixCls="my-ant-modal"
             >
                 <Forms mode={mode} handleChangeMode={this.handleChangeMode} onOK={this.handleOk} setLogin={this.props.setLogin}></Forms>
@@ -48,7 +48,7 @@ class SignUpView extends Component {
      * 修改弹框展示内容
      * @param {0-2} mode 
      */
-    handleChangeMode(mode){
+    handleChangeMode(mode) {
         this.setState({
             mode
         });
@@ -58,7 +58,7 @@ class SignUpView extends Component {
      * 打开模态框
      * @param {0-2} mode 
      */
-    showModal(mode) {
+    showModal(mode, callback) {
         this.setState({
             mode,
             visible: true
