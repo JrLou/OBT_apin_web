@@ -2,15 +2,15 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-13 18:40:45
+ * @Last Modified time: 2017-11-13 18:49:12
  */
 
 import React, { Component } from 'react';
 
-import { Form, Input, Button,message } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import md5 from 'md5';
 import CheckCode from './CheckCode';
-import { loginPromise, getLoginCodePromise,defaultLoginPromise } from './LoginAction';
+import { loginPromise, getLoginCodePromise, defaultLoginPromise } from './LoginAction';
 
 import { CookieHelp } from '../../../../../lib/utils/index.js';
 
@@ -90,9 +90,12 @@ class AccountLoginForm extends React.Component {
             if (!err) {
                 let { account, password } = values;
                 this.setState({ loading: true });
-                getLoginCodePromise(account,0).then((data) =>
-                    loginPromise(account, md5(password), data)
+                getLoginCodePromise(account, 0).then((data) => {
+                    return loginPromise(account, md5(password), data);
+                }
                 ).then((data) => {
+                    this.props.setLogin();
+                    this.props.onOK();
                 }).catch((error) => {
                     message.error(error);
                     this.setState({ loading: false });
@@ -188,7 +191,7 @@ class MsgLoginForm extends React.Component {
     getCode() {
         const { getFieldValue } = this.props.form;
         const account = getFieldValue('account');
-        getLoginCodePromise(account,1).then((data) => {
+        getLoginCodePromise(account, 1).then((data) => {
             this.data = data;
         });
     }
@@ -197,9 +200,9 @@ class MsgLoginForm extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                const {account,password} = values;
+                const { account, password } = values;
                 const code = this.data;
-                loginPromise(account,md5(password),code).then((data)=>{
+                loginPromise(account, md5(password), code).then((data) => {
                     this.props.onOK();
                 }).catch((error) => {
                     message.error(error);
