@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-10 20:26:28
+ * @Last Modified time: 2017-11-13 15:06:24
  */
 
 import React, { Component } from 'react';
@@ -88,19 +88,11 @@ class AccountLoginForm extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
                 let { account, password } = values;
                 this.setState({ loading: true });
-
                 getLoginCodePromise(account,0).then((data) =>
                     loginPromise(account, md5(password), data)
                 ).then((data) => {
-                    data.Authorization = data.accessToken;
-                    // 保存登录token
-                    CookieHelp.saveUserInfo(data);
-                    // 获取注册验证码也会带掉登录接口 保存APIN_USER token
-                    // IS_LOGIN判断是否真的登录
-                    CookieHelp.saveCookieInfo('IS_LOGIN', true);
                     this.setState({ loading: false });
                     this.props.setLogin();
                     this.props.onOK();

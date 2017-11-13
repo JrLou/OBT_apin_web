@@ -28,6 +28,13 @@ class page extends Component {
             this.state = this.props.state;
         }
         console.log(JSON.stringify(this.props));
+        this.marginBottomRow = 8;
+        this.marginBottomFormItem = 24;
+        if (this.props.styleObj) {
+            this.marginBottomRow = this.props.styleObj.marginBottomRow;
+            this.marginBottomFormItem = this.props.styleObj.marginBottomFormItem;
+            this.postHeight =this.props.styleObj.postHeight;
+        }
     }
     check() {//拼接数据
         this.props.form.validateFields((err, values) => {
@@ -113,27 +120,27 @@ class page extends Component {
             div.push(
                 <div key={i}>
                     {this.state.lineType == 3 &&
-                    <Row style={{ marginBottom: 8, fontSize: "14px", color: " #29A6FF" }}>
-                        <Col span={10} >
-                            <span>行程{i + 1}</span>
-                        </Col>
-                    </Row>
+                        <Row style={{ marginBottom: this.marginBottomRow, fontSize: "14px", color: " #29A6FF" }}>
+                            <Col span={10} >
+                                <span>行程{i + 1}</span>
+                            </Col>
+                        </Row>
                     }
                     {this.state.lineType != 3 &&
-                    <Row style={{ marginBottom: 8, fontSize: "14px", color: " #29A6FF" }}>
-                        <Col span={10} >
-                            <span></span>
-                        </Col>
-                    </Row>
+                        <Row style={{ marginBottom: this.marginBottomRow, fontSize: "14px", color: " #29A6FF" }}>
+                            <Col span={10} >
+                                <span></span>
+                            </Col>
+                        </Row>
                     }
 
-                    <Row style={{ marginBottom: 8 }}>
+                    <Row style={{ marginBottom: this.marginBottomRow }}>
                         <Col span={10} >出发城市：</Col>
                         <Col span={10} offset={3}>目的城市：</Col>
                     </Row>
                     <Row >
                         <Col span={11} >
-                            <FormItem >
+                            <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                                 {getFieldDecorator('fromCity' + i, {
                                     rules: [{
                                         required: true,
@@ -145,14 +152,14 @@ class page extends Component {
                                 })(
 
                                     <AutoInput style={{ borderRadius: "2px" }} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity}
-                                               type={"from"}
-                                               placeholder={'中文／拼音／三字码'} />
+                                        type={"from"}
+                                        placeholder={'中文／拼音／三字码'} />
 
-                                )}
+                                    )}
                             </FormItem>
                         </Col>
                         <Col span={11} offset={2}>
-                            <FormItem >
+                            <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                                 {getFieldDecorator('toCity' + i, {
                                     rules: [{
                                         required: true,
@@ -164,22 +171,22 @@ class page extends Component {
                                 })(
 
                                     <AutoInput style={{ borderRadius: "2px" }} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].toCity}
-                                               type={"from"}
-                                               placeholder={'中文／拼音／三字码'} />
+                                        type={"from"}
+                                        placeholder={'中文／拼音／三字码'} />
 
-                                )}
+                                    )}
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row style={{ marginBottom: 8 }}>
+                    <Row style={{ marginBottom: this.marginBottomRow }}>
                         <Col span={10} >出发日期：</Col>
                         {this.state.lineType == 2 &&
-                        <Col span={10} offset={3}>返回日期：</Col>
+                            <Col span={10} offset={3}>返回日期：</Col>
                         }
                     </Row>
                     <Row >
                         <Col span={11} >
-                            <FormItem >
+                            <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                                 {getFieldDecorator('fromDateTime' + i, {
                                     rules: [{
                                         required: true,
@@ -187,44 +194,44 @@ class page extends Component {
                                     }],
                                     initialValue: this.state.listData[i] == undefined ? "" : moment(this.state.listData[i].fromDateTime)
                                 })(
-                                    <DatePicker style={{borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
+                                    <DatePicker style={{ borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
                                         return current && current.valueOf() <= Date.now();
                                     }} />
-                                )}
+                                    )}
                             </FormItem>
                         </Col>
                         {this.state.lineType == 2 &&
-                        <Col span={11} offset={2}>
-                            <FormItem >
-                                {getFieldDecorator('toDateTime' + i, {
-                                    rules: [{
-                                        required: true,
-                                        message: '请选择时间',
-                                    }],
-                                    initialValue: this.state.listData[i] == undefined ? "" : moment(this.state.listData[i].toDateTime)
-                                })(
-                                    <DatePicker style={{borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
-                                        return current && current.valueOf() <= Date.now();
-                                    }} />
-                                )}
-                            </FormItem>
-                        </Col>
+                            <Col span={11} offset={2}>
+                                <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
+                                    {getFieldDecorator('toDateTime' + i, {
+                                        rules: [{
+                                            required: true,
+                                            message: '请选择时间',
+                                        }],
+                                        initialValue: this.state.listData[i] == undefined ? "" : moment(this.state.listData[i].toDateTime)
+                                    })(
+                                        <DatePicker style={{ borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
+                                            return current && current.valueOf() <= Date.now();
+                                        }} />
+                                        )}
+                                </FormItem>
+                            </Col>
                         }
                         {this.state.lineType == 3 &&
-                        <Col span={11} offset={2}>
-                            <Button type="primary" style={{ float: "right" }} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum == 2} onClick={() => this.lineDel()}>删除</Button>
-                        </Col>
+                            <Col span={11} offset={2}>
+                                <Button type="primary" style={{ float: "right" }} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum == 2} onClick={() => this.lineDel()}>删除</Button>
+                            </Col>
                         }
                     </Row>
                     {this.state.lineType == 3 && this.state.lineNum == (i + 1) && this.state.lineNum <= 5 &&
-                    <Row style={{ marginBottom: 8, color: " #29A6FF" }}>
-                        <Col span={4} offset={9} style={{ width: "66px" }}>
-                            <div style={{ position: "relative", cursor: "pointer" }} onClick={() => this.lineAdd()}>
-                                <Icon type="plus-circle-o" />
-                                <span style={{ float: "right" }}>加一程</span>
-                            </div>
-                        </Col>
-                    </Row>
+                        <Row style={{ marginBottom: this.marginBottomRow, color: " #29A6FF" }}>
+                            <Col span={4} offset={9} style={{ width: "66px" }}>
+                                <div style={{ position: "relative", cursor: "pointer" }} onClick={() => this.lineAdd()}>
+                                    <Icon type="plus-circle-o" />
+                                    <span style={{ float: "right" }}>加一程</span>
+                                </div>
+                            </Col>
+                        </Row>
                     }
                 </div>
             );
@@ -249,124 +256,125 @@ class page extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         let { lineType } = this.state;
+        let bottomSumbit = { textAlign: "center", paddingBottom: 40, paddingTop: 20 };
         return (
-            <div className={less.content}>
+            <div className={less.content} >
                 <div style={{ margin: "20px 0px" }}>
                     <hr size='1' style={{ color: "#CBD3E5", borderStyle: "dotted" }}></hr>
                 </div>
-                {/**多选择*/}
-                <Row style={{ marginBottom: 8 }}>
-                    <Col span={4}>航程类型：</Col>
-                </Row>
-                <Row >
-                    <FormItem >
-                        {getFieldDecorator('flightType', {//lineType
-                            initialValue: this.state.lineType,
-                        })(
-                            <RadioGroup onChange={(e) => this.lineTypeonChange(e)}>
-                                <Radio value={1}>单程</Radio>
-                                <Radio value={2}>往返</Radio>
-                                <Radio value={3}>多程</Radio>
-                            </RadioGroup>
-                        )}
-                    </FormItem>
-                </Row>
-                {/*航线+时间*/}
-                {this.lineDetails()}
-                {/**出行人数*/}
-                <Row style={{ marginBottom: 8 }}>
-                    <Col span={4}>出行人数：</Col>
-                </Row>
-                <Row >
-                    <Col span={10} >
-                        <FormItem >
-                            {getFieldDecorator('adultCount', {//adultCount
-                                rules: [{
-                                    required: true,
-                                    message: '请输入成人人数',
-                                }, {
-                                    pattern: /^[0-9]*$/,
-                                    message: '请输入正确的数字'
-                                }],
-                                initialValue: this.state.adultCount,
+                <div className={less.innerbox} style={{overflow:"auto",height:this.postHeight,overflowX:"hidden"}}>
+                    {/**多选择*/}
+                    <Row style={{ marginBottom: this.marginBottomRow}}>
+                        <Col span={4}>航程类型：</Col>
+                    </Row>
+                    <Row >
+                        <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
+                            {getFieldDecorator('flightType', {//lineType
+                                initialValue: this.state.lineType,
                             })(
-                                <div style={{ position: "relative" }}>
-                                    <span style={{ position: "absolute", zIndex: 1, right: "20px",color:"#cacaca"}}>成人</span>
-                                    <Input style={{ width: 207, height: 34, borderRadius: "2px" }} defaultValue={this.state.adultCount} onChange={(e) => this.handleConfirmNum("adultCount", e)} maxLength="4" />
-                                </div>
-                            )}
+                                <RadioGroup onChange={(e) => this.lineTypeonChange(e)}>
+                                    <Radio value={1}>单程</Radio>
+                                    <Radio value={2}>往返</Radio>
+                                    <Radio value={3}>多程</Radio>
+                                </RadioGroup>
+                                )}
                         </FormItem>
-                    </Col>
-                    <Col span={10} offset={1}>
-                        <FormItem >
-                            {getFieldDecorator('childCount', {//childCount
-                                rules: [{
-                                    required: true,
-                                    message: '请输入儿童人数',
-                                }, {
-                                    pattern: /^[0-9]*$/,
-                                    message: '请输入正确的数字'
-                                }],
-                                initialValue: this.state.childCount,
-                            })(
-                                <div style={{ position: "relative" }}>
-                                    <span style={{ position: "absolute", zIndex: 1, right: "20px",color:"#cacaca"}}>儿童(2～12周岁)</span>
-                                    <Input style={{ width: 207, height: 34, borderRadius: "2px" }} defaultValue={this.state.childCount} maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)}  />
-                                </div>
-                            )}
-                        </FormItem>
-                    </Col>
-                    <Col span={3}>
-                        <div style={{ height: 32, lineHeight: "32px", float: "right" }}>共:{(this.state.adultCount == "" || !/^\d*$/.test(this.state.adultCount) ? 0 : parseInt(this.state.adultCount)) + (this.state.childCount == "" || !/^\d*$/.test(this.state.childCount) ? 0 : parseInt(this.state.childCount))}人</div>
-                    </Col>
-                </Row>
+                    </Row>
+                    {/*航线+时间*/}
+                    {this.lineDetails()}
+                    {/**出行人数*/}
+                    <Row style={{ marginBottom: this.marginBottomRow }}>
+                        <Col span={4}>出行人数：</Col>
+                    </Row>
+                    <Row >
+                        <Col span={10} >
+                            <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
+                                {getFieldDecorator('adultCount', {//adultCount
+                                    rules: [{
+                                        required: true,
+                                        message: '请输入成人人数',
+                                    }, {
+                                        pattern: /^[0-9]*$/,
+                                        message: '请输入正确的数字'
+                                    }],
+                                    initialValue: this.state.adultCount,
+                                })(
+                                    <div style={{ position: "relative" }}>
+                                        <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" }}>成人</span>
+                                        <Input style={{ width: 207, height: 34, borderRadius: "2px" }} defaultValue={this.state.adultCount} onChange={(e) => this.handleConfirmNum("adultCount", e)} maxLength="4" />
+                                    </div>
+                                    )}
+                            </FormItem>
+                        </Col>
+                        <Col span={10} offset={1}>
+                            <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
+                                {getFieldDecorator('childCount', {//childCount
+                                    rules: [{
+                                        required: true,
+                                        message: '请输入儿童人数',
+                                    }, {
+                                        pattern: /^[0-9]*$/,
+                                        message: '请输入正确的数字'
+                                    }],
+                                    initialValue: this.state.childCount,
+                                })(
+                                    <div style={{ position: "relative" }}>
+                                        <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" }}>儿童(2～12周岁)</span>
+                                        <Input style={{ width: 207, height: 34, borderRadius: "2px" }} defaultValue={this.state.childCount} maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)} />
+                                    </div>
+                                    )}
+                            </FormItem>
+                        </Col>
+                        <Col span={3}>
+                            <div style={{ height: 32, lineHeight: "32px", float: "right" }}>共:{(this.state.adultCount == "" || !/^\d*$/.test(this.state.adultCount) ? 0 : parseInt(this.state.adultCount)) + (this.state.childCount == "" || !/^\d*$/.test(this.state.childCount) ? 0 : parseInt(this.state.childCount))}人</div>
+                        </Col>
+                    </Row>
 
-                <Row style={{ marginBottom: 8 }}>
-                    <Col span={4}>备注：</Col>
-                </Row>
-                <Row>
-                    <Col >
-                        <FormItem >
-                            {getFieldDecorator('remark', {//annotation
-                                rules: [{
-                                    required: true,
-                                    message: '请输入备注',
-                                }],
-                                initialValue: this.state.remark,
-                            })(
-                                <Input type="textarea" maxLength="99" style={{ height: 180,resize:"none"}} placeholder="如：价格、时间等" />
-                            )}
-                        </FormItem>
+                    <Row style={{ marginBottom: this.marginBottomRow }}>
+                        <Col span={4}>备注：</Col>
+                    </Row>
+                    <Row>
+                        <Col >
+                            <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
+                                {getFieldDecorator('remark', {//annotation
+                                    rules: [{
+                                        required: true,
+                                        message: '请输入备注',
+                                    }],
+                                    initialValue: this.state.remark,
+                                })(
+                                    <Input type="textarea" maxLength="99" style={{ height: 180, resize: "none", borderRadius: 2 }} placeholder="如：价格、时间等" />
+                                    )}
+                            </FormItem>
 
-                    </Col>
-                </Row>
-                <Row style={{ marginBottom: 8 }}>
-                    <Col span={4}>联系电话：</Col>
-                </Row>
-                <Row>
-                    <Col >
-                        <FormItem>
-                            {getFieldDecorator('phone', {
-                                rules: [{
-                                    required: true,
-                                    message: '请输入联系电话',
-                                }, {
-                                    pattern: /^1[3|5|7|8|][0-9]{9}$/,
-                                    message: '请输入正确的11位手机号码'
-                                }],
-                                initialValue: this.state.phone,
-                            })(
-                                <div style={{ width: "100%" }}>
-                                    <Input style={{ width: 240, height: 36, borderRadius: "2px" }} placeholder="输入可联系的手机号码" /><span style={{ color: "red", marginLeft: 10 }}>*</span>
-                                </div>
-                            )}
-                        </FormItem>
+                        </Col>
+                    </Row>
+                    <Row style={{ marginBottom: this.marginBottomRow }}>
+                        <Col span={4}>联系电话：</Col>
+                    </Row>
+                    <Row>
+                        <Col >
+                            <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
+                                {getFieldDecorator('phone', {
+                                    rules: [{
+                                        required: true,
+                                        message: '请输入联系电话',
+                                    }, {
+                                        pattern: /^1[3|5|7|8|][0-9]{9}$/,
+                                        message: '请输入正确的11位手机号码'
+                                    }],
+                                    initialValue: this.state.phone,
+                                })(
+                                    <div style={{ width: "100%" }}>
+                                        <Input style={{ width: 240, height: 36, borderRadius: "2px" }} placeholder="输入可联系的手机号码" /><span style={{ color: "red", marginLeft: 10 }}>*</span>
+                                    </div>
+                                    )}
+                            </FormItem>
 
-                    </Col>
-                </Row>
-
-
-                <Row style={{ textAlign: "center", paddingBottom: 26 }}>
+                        </Col>
+                    </Row>
+                </div>
+                <Row style={bottomSumbit}>
                     <Button type="primary" style={{ width: 170, height: 36, borderRadius: "2px", fontSize: 16 }} onClick={() => this.check()}>提交需求</Button>
                 </Row>
             </div >

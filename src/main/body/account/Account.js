@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Form, Button, Input, Modal } from 'antd';
+import { Form, Button, Input, Modal, message } from 'antd';
 import css from './account.less';
 import { formatArgs } from 'debug';
 import { HttpTool, CookieHelp } from '../../../../lib/utils/index.js';
 import Reset from '../component/SignView/Reset';
+import md5 from 'md5';
 
 const FormItem = Form.Item;
 
@@ -55,7 +56,6 @@ class AccountForm extends Component {
         this.updatePsw = this.updatePsw.bind(this);
         this.handleOk = this.handleOk.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
-        this.updatePsw = this.updatePsw.bind(this);
     }
 
     componentDidMount() {
@@ -127,7 +127,7 @@ class AccountForm extends Component {
                         {isView ? <div>{companyName}</div> : getFieldDecorator('companyName', {
                             initialValue: companyName
                         })(
-                            <Input prefixCls="my-ant-input" />
+                            <Input prefixCls="my-ant-input" onChange={(value) => this.handleChange('companyName', value)} />
                             )}
                     </FormItem>
                     <FormItem prefixCls="my-ant-form"
@@ -137,7 +137,7 @@ class AccountForm extends Component {
                         {isView ? <div>{contactName}</div> : getFieldDecorator('contactName', {
                             initialValue: contactName
                         })(
-                            <Input prefixCls="my-ant-input" />
+                            <Input prefixCls="my-ant-input" onChange={(value) => this.handleChange('contactName', value)} />
                             )}
                     </FormItem>
                     <FormItem prefixCls="my-ant-form"
@@ -147,7 +147,7 @@ class AccountForm extends Component {
                         {isView ? <div>{address}</div> : getFieldDecorator('address', {
                             initialValue: address
                         })(
-                            <Input prefixCls="my-ant-input" />
+                            <Input prefixCls="my-ant-input" onChange={(value) => this.handleChange('address', value)} />
                             )}
                     </FormItem>
                     <FormItem prefixCls="my-ant-form" {...formTailLayout}>
@@ -184,14 +184,14 @@ class AccountForm extends Component {
     handleSubmit() {
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
                 const { password, companyName, contactName, address } = values;
                 const { id } = this.state;
                 if (companyName != this.state.companyName
                     || contactName != this.state.contactName
                     || address != this.state.address
                 ) {
-                    HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/modifyMemberInfo', (code, message, json, option) => {
+                    HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/modifyMemberInfo', (code, msg, json, option) => {
+                        message.success("修改成功");
                         this.setState({
                             isView: true
                         });
@@ -205,6 +205,12 @@ class AccountForm extends Component {
                 }
 
             }
+        });
+    }
+
+    handleChange(key, value) {
+        this.setState({
+            [key]: value
         });
     }
 
@@ -226,12 +232,16 @@ class AccountForm extends Component {
      */
     updatePsw(option, password) {
         const { accountID } = this.state;
-        HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/users/updatePassword', (code, message, json, option) => {
-
+        HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/users/updatePassword', (code, msg, json, option) => {
+            this.setState({
+                visible: false,
+            });
+            message.success("修改成功");
         }, () => {
         }, {
                 id: accountID,
-                option, password
+                option: md5(option),
+                password: md5(password)
             });
     }
 

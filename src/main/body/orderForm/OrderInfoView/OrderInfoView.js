@@ -211,6 +211,7 @@ class OrderInfoView extends Component{
      * @param data
      */
     getPayItemDetail(data){
+        if(!data){return;}
         let payment = parseInt(data.payment);
         let paymentName = '';
         switch(payment){
@@ -227,24 +228,27 @@ class OrderInfoView extends Component{
         let scorePay = parseInt(data.pointsAmount);
         let otherPay = null;
         let payName = '';
-        let payType = parseInt(data.records[0].payType);
-        switch(payType){
-            case 0:otherPay = data.records[0];
-                    payName = '线下支付';
-                    break;
-            case 1:otherPay = data.records[0];
-                    payName = '支付宝';
-                    break;
-            case 2:otherPay = data.records[0];
-                    payName = '微信';
-                    break;
-            case 3:otherPay = data.records[0];
-                    payName = '银联';
-                    break;
-            default:break;
-        }
+        let voucherUrl = '';
+        if(data.records.length>0){
+            let payType = parseInt(data.records[0].payType);
+            switch(payType){
+                case 0:otherPay = data.records[0];
+                        payName = '线下支付';
+                        break;
+                case 1:otherPay = data.records[0];
+                        payName = '支付宝';
+                        break;
+                case 2:otherPay = data.records[0];
+                        payName = '微信';
+                        break;
+                case 3:otherPay = data.records[0];
+                        payName = '银联';
+                        break;
+                default:break;
+            }
 
-        let voucherUrl = otherPay.voucherUrl?otherPay.voucherUrl:'';
+            voucherUrl = otherPay.voucherUrl?otherPay.voucherUrl:'';
+        }
 
         return(
             <div className={css.itemLinePay}>

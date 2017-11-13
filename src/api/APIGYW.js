@@ -41,28 +41,28 @@ let APIGYW = {
      * 提交需求
      */
     //demandapi_demands: "/demandapi/v1.0/demands"
-    demandapi_demands: "/demandapi/v1.0/demands/create",
+    demandapi_demands: "/bo/demandapi/v1.0/demands/create",
 
     /**
      * 需求列表
      */
-    demand_list:"/demandapi/v1.0/demands/query",
+    demand_list:"/bo/demandapi/v1.0/demands/query",
 
     /**
      * 需求详情
      */
-    demand_detail: "/demandapi/v1.0/demands/find",
+    demand_detail: "/bo/demandapi/v1.0/demands/find",
     /**
      * 需求取消
      */
-    demand_cancel: "/demandapi/v1.0/demands/cancel",
+    demand_cancel: "/bo/demandapi/v1.0/demands/cancel",
     /**
      * 需求删除
      */
-    demand_remove: "/demandapi/v1.0/demands/remove",
+    demand_remove: "/bo/demandapi/v1.0/demands/remove",
     /**
      * 需求确认
      */
-    demand_confirm: "/demandapi/v1.0/demands/confirm",
+    demand_confirm: "/bo/demandapi/v1.0/demands/confirm",
 };
 module.exports = APIGYW;
