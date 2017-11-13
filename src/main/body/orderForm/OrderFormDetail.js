@@ -158,6 +158,7 @@ class OrderFormDetail extends Component{
                     <div className={css.itemContent}>
                         <CellNewFlight
                             dataSource = {this.state.flightData}
+                            isNoShowRule={false}
                         />
                     </div>
                 </div>

@@ -596,7 +596,11 @@ class PassengerMsg extends Component{
 
         return(
             <div>
-                <div className={css.resultTitle}>{`文件中总共有数据：${result.totalCount}条`}</div>
+                {
+                    result.totalCount
+                    ?<div className={css.resultTitle}>{`文件中总共有数据：${result.totalCount}条`}</div>
+                    :''
+                }
                 <div className={css.resultItem}>
                         <span style={{color:'#87d068',fontSize:'16px'}}>导入成功：</span>
                         {`${result.successCount?result.successCount:0}人`}
@@ -627,7 +631,7 @@ class PassengerMsg extends Component{
                 }
                 {
                     result.reason
-                    ?<div className={css.resultReason}>{`导入信息：${result.reason}`}</div>
+                    ?<div className={css.resultReason}>{`返回信息：${result.reason}`}</div>
                     :''
                 }
             </div>
