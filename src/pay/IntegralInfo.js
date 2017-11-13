@@ -23,6 +23,9 @@ class IntegralInfo extends Component {
    render() {
       let {integral,order} = this.getData();
 
+      if(order.payment===1){
+          return null;
+      }
 
       let maxValue =Math.min( Math.floor(integral.point/1000),Math.floor(order.price));
       return (
