@@ -132,8 +132,10 @@ class page extends Component {
         const user = CookieHelp.getUserInfo();
         const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
         if (user && user.Authorization && isLogin) this.setLogin();
+
+        const pathname = window.location.pathname;
         // 未登录并且不在首页，则跳转到首页
-        if (!isLogin && window.location.pathname !== '/') {
+        if (!isLogin && (pathname !== '/' || pathname !== '/Search')) {
             window.app_open(this, '/', null, "self");
         }
     }
