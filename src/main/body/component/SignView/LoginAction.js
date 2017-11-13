@@ -2,9 +2,9 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-08 13:36:12 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-13 10:37:20
+ * @Last Modified time: 2017-11-13 14:51:16
  */
-import { HttpTool } from '../../../../../lib/utils/index.js';
+import { HttpTool,CookieHelp } from '../../../../../lib/utils/index.js';
 import md5 from 'md5';
 import { message } from 'antd';
 
@@ -12,12 +12,18 @@ export function loginPromise(account, password, code) {
     return new Promise((resolve, reject) => {
         HttpTool.request(HttpTool.typeEnum.POST, "/bm/memberapi/v1.1/tokens", (code, message, json, option) => {
             if (json.accessToken) {
+                json.Authorization = json.accessToken;
+                // 保存登录token
+                CookieHelp.saveUserInfo(json);
+                // 获取注册验证码也会带掉登录接口 保存APIN_USER token
+                // IS_LOGIN判断是否真的登录
+                CookieHelp.saveCookieInfo('IS_LOGIN', true);
                 resolve(json);
             } else {
                 reject(message);
             }
-        }, (error) => {
-            reject(error);
+        }, (code, message) => {
+            reject(message);
         }, {
                 account,
                 option: md5(md5(account + password) + code)
