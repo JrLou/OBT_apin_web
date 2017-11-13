@@ -196,7 +196,7 @@ class OrderFormList extends Component{
                         onClick={()=>{
                                 window.app_open(this, "/OrderFormDetail", {
                                     //传给详情页一个订单id
-                                    orderId:record.id,
+                                    id:record.id,
                                     //开发测试 - 写死的id
                                     // orderId:'10000059f39c5427ca5f749604a09de39',
                                 });
@@ -435,7 +435,7 @@ class OrderFormList extends Component{
         let currentNum = pagination.current;
         this.setState({
             page:currentNum,
-        },this.loadData());
+        },this.loadData);
     }
 
     /**

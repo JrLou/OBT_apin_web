@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-04 15:07:27 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-10 14:03:53
+ * @Last Modified time: 2017-11-13 10:45:59
  */
 import React, { Component } from 'react';
 import { Table, Modal } from 'antd';
@@ -113,7 +113,7 @@ class ScoreList extends Component {
     getPointsList(pageNo) {
         log(pageNo);
         const { pageSize } = this.state;
-        HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.0/orders/pointsList', (code, message, json, option) => {
+        HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.0/orders/pointsList', (code, message, json, option) => {
             log(json);
             const { memberPoints, remainPoint, usedPoint } = json;
             this.setState({

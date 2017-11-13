@@ -38,13 +38,13 @@ class PayInfo extends Component {
        let showTime = null;
        let preState = "";
        if(data.payment===1){
-           preState = "订金";
+           preState = "押金";
        }else if(data.payment===0){
-           preState ="机票款";
+           preState ="全款";
        }else if(data.payment===2){
            preState ="尾款";
        }else {
-           preState ="订单金额";
+           preState ="押单金额";
        }
        if(data.time){
            showTime = <Time
