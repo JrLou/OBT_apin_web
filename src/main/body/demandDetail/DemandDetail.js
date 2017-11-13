@@ -384,8 +384,6 @@ class page extends Component {
 
 
     getConfirmButton(datas, flightType) {
-        log(datas);
-        log("-------gyw--------");
         return (
             datas.map((data, index) => {
                 let resultData = getFlightData(data.voyages,flightType,data.freeBag,data.weightLimit);
