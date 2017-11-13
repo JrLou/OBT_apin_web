@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 import css from './OrderFormList.less';
-import { HttpTool } from '../../../../lib/utils/index.js';
+import { HttpTool,CookieHelp } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
 import {routeTranslate,getDateFormat,removeSpace,transformOrderState} from '../tool/LXDHelp.js';
 import {Table,Input,DatePicker,Select,Button,message} from 'antd';
@@ -13,6 +13,9 @@ const Option = Select.Option;
 class OrderFormList extends Component{
     constructor(props) {
         super(props);
+        CookieHelp.saveUserInfo({
+            Authorization:"eyJpZCI6IjAzN2E2MmI1M2M5ZjQ0MDZhZTQzMjA3NTVmNGY2ZmZiIiwiYXBwSWQiOiIyZWY4ZDkwMmMxMmY0NTRmOWFjZGJiMDQ4NGY4YzA1YSIsImFjY291bnRJZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIsInVzZXJJZCI6IjY2ZTUzZTFkMmFjMDQwMGNiMTFjYjc5ZTFlOTU5YWU3IiwiZGVwdElkIjpudWxsLCJ1c2VyTmFtZSI6Iui2hee6p+euoeeQhuWRmCIsInNlY3JldCI6IjU0MDBiYjQ3NDBmZjNjOWEyYWI1ZWNiN2UxOWJkZTY4In0=",
+        });
         //状态机
         this.state = {
             cityDep:'',
@@ -58,7 +61,7 @@ class OrderFormList extends Component{
                 value:'1',
             },
             {
-                title:'待付订金',
+                title:'待付押金',
                 value:'2',
             },
             {
@@ -174,7 +177,7 @@ class OrderFormList extends Component{
                     switch(num){
                         case 0:state = '订单取消';break;
                         case 1:state = '等待确认';break;
-                        case 2:state = '待付订金';break;
+                        case 2:state = '待付押金';break;
                         case 3:state = '待付款';break;
                         case 5:state = '待付尾款';break;
                         case 7:state = '已出票';break;
