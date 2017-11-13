@@ -40,7 +40,7 @@ class UploadCmp extends Component {
       // }, Math.random() * 1000 + 1000);
 
       HttpTool.request(HttpTool.typeEnum.POST,
-         "/orderapi/v1.0/orders/voucherUp",
+         "/bohl/orderapi/v1.0/orders/voucherUp",
          (code, msg, json, option) => {
             cb(code, msg, json);
 
@@ -57,52 +57,57 @@ class UploadCmp extends Component {
       if (!this.isImageTypeOk(file)) {
          return false;
       }
-
-      //打开加载图
-      if (this.state.spinLoading) {
-         message.warn("图片正在上传中，请勿重复点击");
-         return false;
-      }
-      this.setState({spinLoading: true});
-
-      let r = new FileReader();
-      r.readAsDataURL(file);
-      r.onload = (e) => {
-         let image_base64 = e.target.result;
-
-         this._fileList.push({
-            uid: new Date().getTime(),
-            name: file.name,
-            status: 'done',
-            thumbUrl: image_base64,
-         });
-
-         //慢600毫秒再请求，这样不会闪一下，体验好一些
-         setTimeout(() => {
-            this.loadUploadImg({pic: this._fileList[this._fileList.length - 1].thumbUrl}, (code, msg, data) => {
-               if (code < 0) {
-                  message.error(msg + "图片上传失败");
-               } else {
-                  this.setState({
-                     fileList: this._fileList
-                  });
-                  let _backurl = {
-                     url: data.url,
-                     uid: this._fileList[this._fileList.length - 1].uid
-                  };
-                  this.backUrl.push(_backurl);
-               }
-               this.setState({spinLoading: false});
-            });
-         }, 600);
-
-
-      };
-      return false;
+      //
+      // //打开加载图
+      // if (this.state.spinLoading) {
+      //    message.warn("图片正在上传中，请勿重复点击");
+      //    return false;
+      // }
+      // this.setState({spinLoading: true});
+      //
+      // let r = new FileReader();
+      // r.readAsDataURL(file);
+      // r.onload = (e) => {
+      //    let image_base64 = e.target.result;
+      //
+      //    this._fileList.push({
+      //       uid: new Date().getTime(),
+      //       name: file.name,
+      //       status: 'done',
+      //       thumbUrl: image_base64,
+      //    });
+      //
+      //    //慢600毫秒再请求，这样不会闪一下，体验好一些
+      //    setTimeout(() => {
+      //       this.loadUploadImg({pic: this._fileList[this._fileList.length - 1].thumbUrl}, (code, msg, data) => {
+      //          if (code < 0) {
+      //             message.error(msg + "图片上传失败");
+      //          } else {
+      //             this.setState({
+      //                fileList: this._fileList
+      //             });
+      //             let _backurl = {
+      //                url: data.url,
+      //                uid: this._fileList[this._fileList.length - 1].uid
+      //             };
+      //             this.backUrl.push(_backurl);
+      //          }
+      //          this.setState({spinLoading: false});
+      //       });
+      //    }, 600);
+      //
+      //
+      // };
+      // return false;
    }
 
-   handleChange(cbObj) {
-      console.log("onchange");
+   handleChange(file,fileList) {
+      console.log("handleChange");
+      console.log(arguments);
+      console.log("file");
+      console.log(file);
+      console.log("fileList");
+      console.log(fileList);
    }
 
    handleCancel() {
