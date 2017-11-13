@@ -14,22 +14,7 @@ class page extends Component {
     constructor(props) {
         super(props);
         //状态机
-        this.state = {
-            cityDep: '',
-            cityArrive: '',
-            flightType: '',
-            demandStatus: '',
-            startDate: null,
-            endDate: null,
 
-            dataSource: null,        //传入Table组件的数据
-
-            pageSize: 10,            //每页展示数据数目
-            pageNumber: 1,           //列表当前页
-            total: 0,                //总数据
-
-            loading: false,         //是否处于加载状态
-        };
 
         this.earliest = new Date(2015, 0, 1);
 
@@ -74,7 +59,22 @@ class page extends Component {
                 value: '-1',
             }
         ];
+        this.state = {
+            cityDep: '',
+            cityArrive: '',
+            flightType: this.flightType[6].value,
+            demandStatus:  this.flightTypeList[3].value,
+            startDate: null,
+            endDate: null,
 
+            dataSource: null,        //传入Table组件的数据
+
+            pageSize: 10,            //每页展示数据数目
+            pageNumber: 1,           //列表当前页
+            total: 0,                //总数据
+
+            loading: false,         //是否处于加载状态
+        };
     }
 
 
@@ -227,6 +227,7 @@ class page extends Component {
                             onChange={(value) => {
                                 this.changeState('flightType', value);
                             }}
+
                             value={this.state.flightType}
 
                         >
@@ -262,8 +263,8 @@ class page extends Component {
                                   this.setState({
                                       cityDep: '',
                                       cityArrive: '',
-                                      flightType: '',
-                                      demandStatus: '',
+                                      flightType: this.flightType[6].value,
+                                      demandStatus:  this.flightTypeList[3].value,
                                       startDate: null,
                                       endDate: null,
                                   });
@@ -388,7 +389,7 @@ class page extends Component {
      */
     loadData() {
         let parames = this.getSearchParames();
-
+        log("000"+this.state.pageNumber);
         let successCB = (code, msg, json, option) => {
             this.setLoading(false);
             let arr = [];
@@ -400,6 +401,7 @@ class page extends Component {
             } else {
                 let flightType = ["单程", "往返", "多程"];
                 let demandStatus = ["取消", "待出价", "询价中", "待确认", "已确认", "已关闭"];
+
                 json.map((data, index) => {
                     datas = {
                         id:data.id,
@@ -418,8 +420,9 @@ class page extends Component {
                     };
                     arr.push(datas);
                 });
-
+                log(json);
                 this.setState({
+                    total:option.option.total,
                     dataSource: arr
                 });
             }
