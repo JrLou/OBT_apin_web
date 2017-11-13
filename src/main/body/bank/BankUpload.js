@@ -36,7 +36,7 @@ class BankUpload extends Component {
 
    loadPayInfo2modify(param, cb) {
       HttpTool.request(HttpTool.typeEnum.POST,
-         "/orderapi/v1.0/orders/recordQuery",
+         "/bohl/orderapi/v1.0/orders/recordQuery",
          (code, msg, json, option) => {
             cb(code, msg, json);
          }, (code, msg) => {
@@ -362,7 +362,7 @@ class BankUpload extends Component {
       // }, Math.random() * 1000 + 2000);
 
       HttpTool.request(HttpTool.typeEnum.POST,
-         "/orderapi/v1.0/orders/pay/offline",
+         "/bohl/orderapi/v1.0/orders/pay/offline",
          (code, msg, json, option) => {
             cb(code, msg, json);
          }, (code, msg, option) => {
