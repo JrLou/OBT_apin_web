@@ -73,25 +73,28 @@ class MyModalRequire extends Component {
                 <div className={css.modalDesc}>{this.state.desc}</div>
 
                 <div className={css.content}>
-                    <TemplatePublist  state= {this.state.param} callBack={(val) => {
-                        this.setState({
-                            visible:false,
-                        },()=>{
-                            if (callBack){
-                                callBack(val);
-                            }
-                        });
-                    }}/>
+                    <TemplatePublist
+                        state= {this.state.param}
+                        styleObj={{marginBottomRow:8,marginBottomFormItem:8}}
+                        callBack={(val) => {
+                            this.setState({
+                                visible:false,
+                            },()=>{
+                                if (callBack){
+                                    callBack(val);
+                                }
+                            });
+                        }}/>
                 </div>
 
 
 
 
                 {/*<div className={css.bottom}>*/}
-                    {/*<Button type="primary" className={css.commit}*/}
-                            {/*onClick={() => {*/}
-                                {/*this.handleOk(callBack);*/}
-                            {/*}}>提交需求</Button>*/}
+                {/*<Button type="primary" className={css.commit}*/}
+                {/*onClick={() => {*/}
+                {/*this.handleOk(callBack);*/}
+                {/*}}>提交需求</Button>*/}
                 {/*</div>*/}
             </Modal>
         );

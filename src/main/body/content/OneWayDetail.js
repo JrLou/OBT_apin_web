@@ -10,7 +10,7 @@ import LineHeadTitle from "./line/LineHeadTitle.js";
 import MyCalendar from "./line/MyCalendar.js";
 import MyAlert from "./line/MyAlert.js";
 import LoadingView from "../component/LoadingView.js";
-
+import {CookieHelp } from '../../../../lib/utils/index.js';
 
 
 import Scroll from 'react-scroll/modules/index'; // Imports all Mixins
@@ -94,10 +94,7 @@ class page extends Component {
             message.warning(msg);
             // this.loadingView.refreshView(false);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_month_query,success, failure, param,
-            {
-                ipKey:'hlIP'
-            });
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_month_query,success, failure, param);
     }
 
     //右日历的headMonth
@@ -124,10 +121,7 @@ class page extends Component {
         var failure = (code, msg, option) => {
             message.warning(msg);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_retFlight_month_query,success, failure, param,
-            {
-                ipKey:'hlIP'
-            });
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_retFlight_month_query,success, failure, param);
     }
 
     //左边日历每天的数据
@@ -163,10 +157,7 @@ class page extends Component {
         var failure = (code, msg, option) => {
             this.loadingView.refreshView(false);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_day_query,success, failure, param,
-            {
-                ipKey:'hlIP'
-            });
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_day_query,success, failure, param);
     }
 
     //右日历每天的数据
@@ -196,10 +187,7 @@ class page extends Component {
             message.warning(msg);
             this.loadingView.refreshView(false);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param,
-            {
-                ipKey:'hlIP'
-            });
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param);
     }
 
     loadTripData(date,days) {
@@ -240,10 +228,7 @@ class page extends Component {
             message.warning(msg);
             this.loadingView.refreshView(false);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_query,success, failure, param,
-            {
-                ipKey:'hlIP'
-            });
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_query,success, failure, param,);
     }
 
     render() {
@@ -316,10 +301,21 @@ class page extends Component {
                                        retDate:voyagesArr[1]&&voyagesArr[1].depDate?voyagesArr[1].depDate:"",
                                        isDirect:data.isDirect,
                                    };
-                                   window.app_open(this.props.obj, "/FlightDetail", {
-                                       step:1,
-                                       data:obj
-                                   },"new");
+
+                                   const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
+                                   if (isLogin){
+                                       window.app_open(this.props.obj, "/FlightDetail", {
+                                           step:1,
+                                           data:obj
+                                       },"self");
+                                   }else {
+                                       window.modal.showModal(0,()=>{
+                                           window.app_open(this.props.obj, "/FlightDetail", {
+                                               step:1,
+                                               data:obj
+                                           },"new");
+                                       });
+                                   }
                                }}/>
                 </div>
                 <LoadingView ref={(a)=>this.loadingView = a}/>
@@ -375,8 +371,8 @@ class LineInfor extends Component {
             let airlineInfo = (dataItem.voyages&&dataItem.voyages.length>0)?dataItem.voyages:[];
             let airlineInfo_One = airlineInfo[0]?airlineInfo[0]:{};
             let desc = (airlineInfo_One.depDate||"")+" "+(airlineInfo_One.depTime||"")+" --> "+(airlineInfo_One.arrDate||"")+" "+(airlineInfo_One.arrTime||"")+" "+(airlineInfo_One.depAirport||"")+"-->"+(airlineInfo_One.arrAirport||"");
-            var itemView = (<div key={i}>
-                <div className={css.cell}>
+            var itemView = (
+                <div key={i} className={css.cell}>
                     {dataItem.isDirect&&dataItem.isDirect==1?<div className={css.sign}>直营</div>:null}
                     <div className={css.left}>
                         <div className={css.table}>
@@ -433,8 +429,7 @@ class LineInfor extends Component {
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>);
+                </div>);
             viewArr.push(itemView);
         }
         return viewArr;
