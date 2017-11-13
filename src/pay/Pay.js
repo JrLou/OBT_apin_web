@@ -20,9 +20,9 @@ import less from './Pay.less';
 class page extends Component {
    constructor(props) {
       super(props);
-       CookieHelp.saveUserInfo({
-           Authorization:"eyJ1c2VySWQiOiIyMjIiLCJ1c2VyTmFtZSI6ImFkZCJ9",
-       });
+       // CookieHelp.saveUserInfo({
+       //     Authorization:"eyJ1c2VySWQiOiIyMjIiLCJ1c2VyTmFtZSI6ImFkZCJ9",
+       // });
       this.wh = new WindowHelp();
       this.state = {
          step: 1,
