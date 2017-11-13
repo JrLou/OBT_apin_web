@@ -37,22 +37,19 @@ class page extends Component {
         //需求状态
         this.flightType = [
             {
-                title: '取消',
+                title: '需求已取消',
                 value: '0',
             }, {
-                title: '待出价',
+                title: '需求处理中',
                 value: '1',
-            }, {
-                title: '询价中',
-                value: '2',
-            }, {
-                title: '待确认',
+            },{
+                title: '待用户确认',
                 value: '3',
             }, {
-                title: '已确认',
+                title: '处理完成',
                 value: '4',
             }, {
-                title: '已关闭',
+                title: '需求关闭',
                 value: '5',
             }, {
                 title: '全部',
@@ -62,7 +59,7 @@ class page extends Component {
         this.state = {
             cityDep: '',
             cityArrive: '',
-            flightType: this.flightType[6].value,
+            flightType: this.flightType[5].value,
             demandStatus:  this.flightTypeList[3].value,
             startDate: null,
             endDate: null,
@@ -143,6 +140,13 @@ class page extends Component {
             }, {
                 title: '需求状态',
                 dataIndex: 'demandStatus',
+                render:(list,record)=>{
+                  return(
+                      <font style={{color:record.status===3?"#ff6603":""}}>
+                          {record.demandStatus}
+                      </font>
+                      );
+                },
             }, {
                 title: '创建时间',
                 dataIndex: 'createdTime',
@@ -263,7 +267,7 @@ class page extends Component {
                                   this.setState({
                                       cityDep: '',
                                       cityArrive: '',
-                                      flightType: this.flightType[6].value,
+                                      flightType: this.flightType[5].value,
                                       demandStatus:  this.flightTypeList[3].value,
                                       startDate: null,
                                       endDate: null,
@@ -285,6 +289,7 @@ class page extends Component {
                         发布需求
                     </Button>
                     <Table
+                        prefixCls={'my-ant-table'}
                         columns={columns}
                         style={{}}
                         dataSource={this.state.dataSource}
@@ -370,7 +375,8 @@ class page extends Component {
         let currentNum = pagination.current;
         this.setState({
             pageNumber: currentNum,
-        }, this.loadData());
+        }, this.loadData);
+
     }
 
     /**
@@ -400,7 +406,7 @@ class page extends Component {
                 });
             } else {
                 let flightType = ["单程", "往返", "多程"];
-                let demandStatus = ["取消", "待出价", "询价中", "待确认", "已确认", "已关闭"];
+                let demandStatus = ["需求已取消", "需求处理中", "需求处理中", "待用户确认", "处理完成", "需求关闭"];
 
                 json.map((data, index) => {
                     datas = {
@@ -412,8 +418,9 @@ class page extends Component {
                         createdTime: data.createdTime,
                         type:data.flightType,
                         flightType: data.flightType === -1 ? "全部" : flightType[data.flightType - 1],
-                        num: data.adultCount ? data.adultCount : "0" + "/" + data.childCount ? data.childCount : "0",
+                        num:data.adultCount + "/" +  data.childCount ,
                         orderAmount: data.orderAmount ? "¥" + data.orderAmount : "无",
+                        status: data.demandStatus,
                         demandStatus: data.demandStatus === -1 ? "全部" : demandStatus[data.demandStatus],
                         dateRet: data.dateRet ? data.dateRet : "无",
                         dateDep: data.dateDep ? data.dateDep : "无",
