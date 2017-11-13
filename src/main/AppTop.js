@@ -22,11 +22,12 @@ class page extends Component {
             isLogin: false
         };
         this.setLogin = this.setLogin.bind(this);
-
+        this.logout = this.logout.bind(this);
     }
 
     componentDidMount() {
         this.checkLogin();
+        window.modal = this.modal;
     }
 
     render() {
@@ -41,12 +42,7 @@ class page extends Component {
                     }}>用户中心</a>
                 </Menu.Item>
                 <Menu.Item>
-                    <a onClick={() => {
-                        this.setState({
-                            isLogin: false
-                        });
-                        CookieHelp.clearCookie();
-                    }}>退出登录</a>
+                    <a onClick={this.logout}>退出登录</a>
                 </Menu.Item>
             </Menu>
         );
@@ -62,7 +58,7 @@ class page extends Component {
                         src={require('../images/index_logo.png')}
                     />
 
-                    {!step && <Menus {...this.props} />}
+                    {!step && isLogin && <Menus {...this.props} />}
                     {step ?
                         <div className={`${less.right} ${less.step}`}>
                             <Steps step={step}></Steps>
@@ -100,12 +96,15 @@ class page extends Component {
                         </div>}
 
                 </div>
-                <Sign ref={(modal) => this.modal = modal} setLogin={this.setLogin}></Sign>
+                <Sign ref={(modal) => this.modal = modal} setLogin={this.setLogin} showModal={this.props.showModal}></Sign>
             </div>
         );
     }
 
-    setLogin(){
+    /**
+     * 设置登录状态
+     */
+    setLogin() {
         this.setState({
             isLogin: true
         }, () => {
@@ -114,15 +113,33 @@ class page extends Component {
     }
 
     /**
+     * 设置登出状态
+     */
+    logout() {
+        CookieHelp.clearCookie();
+        this.setState({
+            isLogin: false
+        }, () => {
+            this.checkLogin();
+        });
+    }
+
+
+    /**
      * 检测是否已经登录
      */
     checkLogin() {
         const user = CookieHelp.getUserInfo();
         const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
-        log("---Apptop-----Authorization");
-        log(user);
-        if(user && user.Authorization && isLogin) this.setLogin();
+        if (user && user.Authorization && isLogin) this.setLogin();
+
+        const pathname = window.location.pathname;
+        // 未登录并且不在首页，则跳转到首页
+        if (!isLogin && pathname !== '/' && pathname !== '/Search') {
+            window.app_open(this, '/', null, "self");
+        }
     }
+
 }
 page.contextTypes = {
     router: React.PropTypes.object

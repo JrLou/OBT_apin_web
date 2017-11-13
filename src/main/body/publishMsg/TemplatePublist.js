@@ -28,6 +28,12 @@ class page extends Component {
             this.state = this.props.state;
         }
         console.log(JSON.stringify(this.props));
+        this.marginBottomRow=8;
+        this.marginBottomFormItem=24;
+        if(this.props.styleObj){
+            this.marginBottomRow     =this.props.styleObj.marginBottomRow;
+            this.marginBottomFormItem=this.props.styleObj.marginBottomFormItem;
+        }
     }
     check() {//拼接数据
         this.props.form.validateFields((err, values) => {
@@ -113,27 +119,27 @@ class page extends Component {
             div.push(
                 <div key={i}>
                     {this.state.lineType == 3 &&
-                    <Row style={{ marginBottom: 8, fontSize: "14px", color: " #29A6FF" }}>
+                    <Row style={{ marginBottom: this.marginBottomRow, fontSize: "14px", color: " #29A6FF" }}>
                         <Col span={10} >
                             <span>行程{i + 1}</span>
                         </Col>
                     </Row>
                     }
                     {this.state.lineType != 3 &&
-                    <Row style={{ marginBottom: 8, fontSize: "14px", color: " #29A6FF" }}>
+                    <Row style={{ marginBottom: this.marginBottomRow, fontSize: "14px", color: " #29A6FF" }}>
                         <Col span={10} >
                             <span></span>
                         </Col>
                     </Row>
                     }
 
-                    <Row style={{ marginBottom: 8 }}>
+                    <Row style={{ marginBottom: this.marginBottomRow }}>
                         <Col span={10} >出发城市：</Col>
                         <Col span={10} offset={3}>目的城市：</Col>
                     </Row>
                     <Row >
                         <Col span={11} >
-                            <FormItem >
+                            <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                                 {getFieldDecorator('fromCity' + i, {
                                     rules: [{
                                         required: true,
@@ -152,7 +158,7 @@ class page extends Component {
                             </FormItem>
                         </Col>
                         <Col span={11} offset={2}>
-                            <FormItem >
+                            <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                                 {getFieldDecorator('toCity' + i, {
                                     rules: [{
                                         required: true,
@@ -171,7 +177,7 @@ class page extends Component {
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row style={{ marginBottom: 8 }}>
+                    <Row style={{ marginBottom: this.marginBottomRow }}>
                         <Col span={10} >出发日期：</Col>
                         {this.state.lineType == 2 &&
                         <Col span={10} offset={3}>返回日期：</Col>
@@ -179,7 +185,7 @@ class page extends Component {
                     </Row>
                     <Row >
                         <Col span={11} >
-                            <FormItem >
+                            <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                                 {getFieldDecorator('fromDateTime' + i, {
                                     rules: [{
                                         required: true,
@@ -195,7 +201,7 @@ class page extends Component {
                         </Col>
                         {this.state.lineType == 2 &&
                         <Col span={11} offset={2}>
-                            <FormItem >
+                            <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                                 {getFieldDecorator('toDateTime' + i, {
                                     rules: [{
                                         required: true,
@@ -217,7 +223,7 @@ class page extends Component {
                         }
                     </Row>
                     {this.state.lineType == 3 && this.state.lineNum == (i + 1) && this.state.lineNum <= 5 &&
-                    <Row style={{ marginBottom: 8, color: " #29A6FF" }}>
+                    <Row style={{ marginBottom: this.marginBottomRow, color: " #29A6FF" }}>
                         <Col span={4} offset={9} style={{ width: "66px" }}>
                             <div style={{ position: "relative", cursor: "pointer" }} onClick={() => this.lineAdd()}>
                                 <Icon type="plus-circle-o" />
@@ -249,17 +255,18 @@ class page extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         let { lineType } = this.state;
+        let bottomSumbit={textAlign: "center", paddingBottom: 40,paddingTop:20};
         return (
             <div className={less.content}>
                 <div style={{ margin: "20px 0px" }}>
                     <hr size='1' style={{ color: "#CBD3E5", borderStyle: "dotted" }}></hr>
                 </div>
                 {/**多选择*/}
-                <Row style={{ marginBottom: 8 }}>
+                <Row style={{ marginBottom: this.marginBottomRow }}>
                     <Col span={4}>航程类型：</Col>
                 </Row>
                 <Row >
-                    <FormItem >
+                    <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                         {getFieldDecorator('flightType', {//lineType
                             initialValue: this.state.lineType,
                         })(
@@ -274,12 +281,12 @@ class page extends Component {
                 {/*航线+时间*/}
                 {this.lineDetails()}
                 {/**出行人数*/}
-                <Row style={{ marginBottom: 8 }}>
+                <Row style={{ marginBottom: this.marginBottomRow }}>
                     <Col span={4}>出行人数：</Col>
                 </Row>
                 <Row >
                     <Col span={10} >
-                        <FormItem >
+                        <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                             {getFieldDecorator('adultCount', {//adultCount
                                 rules: [{
                                     required: true,
@@ -298,7 +305,7 @@ class page extends Component {
                         </FormItem>
                     </Col>
                     <Col span={10} offset={1}>
-                        <FormItem >
+                        <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                             {getFieldDecorator('childCount', {//childCount
                                 rules: [{
                                     required: true,
@@ -321,12 +328,12 @@ class page extends Component {
                     </Col>
                 </Row>
 
-                <Row style={{ marginBottom: 8 }}>
+                <Row style={{ marginBottom: this.marginBottomRow }}>
                     <Col span={4}>备注：</Col>
                 </Row>
                 <Row>
                     <Col >
-                        <FormItem >
+                        <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                             {getFieldDecorator('remark', {//annotation
                                 rules: [{
                                     required: true,
@@ -334,18 +341,18 @@ class page extends Component {
                                 }],
                                 initialValue: this.state.remark,
                             })(
-                                <Input type="textarea" maxLength="99" style={{ height: 180,resize:"none"}} placeholder="如：价格、时间等" />
+                                <Input type="textarea" maxLength="99" style={{ height: 180,resize:"none",borderRadius:2}} placeholder="如：价格、时间等" />
                             )}
                         </FormItem>
 
                     </Col>
                 </Row>
-                <Row style={{ marginBottom: 8 }}>
+                <Row style={{ marginBottom: this.marginBottomRow }}>
                     <Col span={4}>联系电话：</Col>
                 </Row>
                 <Row>
                     <Col >
-                        <FormItem>
+                        <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                             {getFieldDecorator('phone', {
                                 rules: [{
                                     required: true,
@@ -364,9 +371,7 @@ class page extends Component {
 
                     </Col>
                 </Row>
-
-
-                <Row style={{ textAlign: "center", paddingBottom: 26 }}>
+                <Row style={bottomSumbit}>
                     <Button type="primary" style={{ width: 170, height: 36, borderRadius: "2px", fontSize: 16 }} onClick={() => this.check()}>提交需求</Button>
                 </Row>
             </div >
