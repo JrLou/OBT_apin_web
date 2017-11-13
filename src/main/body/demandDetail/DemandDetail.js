@@ -140,8 +140,7 @@ class page extends Component {
         return (
             <div className={less.top}>
 
-                {((data.demandStatus === 1||data.demandStatus === 2) && data.flightType === 3) || (data.demandStatus === 3 && data.flightType === 3) ?
-                    this.getMultiPass(data.demandStatus, data) : this.getTop(data.demandStatus, data)}
+                {data.flightType === 3?this.getMultiPass(data.demandStatus, data) : this.getTop(data.demandStatus, data)}
                 {data.demandStatus === 4 ? this.getCellNewFlight(data && data.plans ? data.plans : []) : null}
                 {data.demandStatus === 1||data.demandStatus === 2 ? this.getMessage("预计在30分钟内为您处理需求") :
                     (data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
@@ -580,7 +579,7 @@ class page extends Component {
                         </div>
                     </div>
                     <div className={less.bottomRight}>
-                        <div className={less.date}>{"行程" + index}</div>
+                        <div className={less.date}>{"行程" + (index+1)}</div>
                         <div className={less.date} style={{marginTop: 5}}>{this.getTimeShow("2-10")}</div>
                     </div>
                 </div>
