@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Button, Menu } from 'antd';
-import {log} from 'debug';
 
 const MenuItem = Menu.Item;
 
@@ -33,9 +32,11 @@ class Menus extends Component {
 
     componentDidMount() {
         let par = window.app_getPar(this);
+
         this.setState({
             selectedIndex: String(par.index)
         });
+
     }
 
     render() {
@@ -52,11 +53,11 @@ class Menus extends Component {
                                     this.setState({
                                         selectedKey: index
                                     });
-                                    let params = {index};
+                                    let params = { index };
                                     // 航班查询页面要求参数
-                                    if(menu.path == '/Search'){
+                                    if (menu.path == '/Search') {
                                         params.data = {
-                                            from:""
+                                            from: ""
                                         };
                                     }
                                     window.app_open(this, menu.path, params, "self");
