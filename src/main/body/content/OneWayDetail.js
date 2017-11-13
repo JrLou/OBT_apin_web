@@ -10,7 +10,7 @@ import LineHeadTitle from "./line/LineHeadTitle.js";
 import MyCalendar from "./line/MyCalendar.js";
 import MyAlert from "./line/MyAlert.js";
 import LoadingView from "../component/LoadingView.js";
-
+import {CookieHelp } from '../../../../lib/utils/index.js';
 
 
 import Scroll from 'react-scroll/modules/index'; // Imports all Mixins
@@ -301,10 +301,16 @@ class page extends Component {
                                        retDate:voyagesArr[1]&&voyagesArr[1].depDate?voyagesArr[1].depDate:"",
                                        isDirect:data.isDirect,
                                    };
-                                   window.app_open(this.props.obj, "/FlightDetail", {
-                                       step:1,
-                                       data:obj
-                                   },"self");
+
+                                   const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
+                                   if (isLogin){
+                                       window.modal.showModal(0,()=>{
+                                           window.app_open(this.props.obj, "/FlightDetail", {
+                                               step:1,
+                                               data:obj
+                                           },"self");
+                                       });
+                                   }
                                }}/>
                 </div>
                 <LoadingView ref={(a)=>this.loadingView = a}/>
