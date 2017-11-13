@@ -3,6 +3,7 @@ import { Form, Button, Input, Modal, message } from 'antd';
 import css from './account.less';
 import { formatArgs } from 'debug';
 import { HttpTool, CookieHelp } from '../../../../lib/utils/index.js';
+import { AccoutInfoPromise } from '../component/SignView/LoginAction';
 import Reset from '../component/SignView/Reset';
 import md5 from 'md5';
 
@@ -59,23 +60,25 @@ class AccountForm extends Component {
     }
 
     componentDidMount() {
-        HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/memberInfo', (code, message, json, option) => {
-            log("会员中心用户信息");
-            log(option);
-            const { account, password, mobile } = json;
-            const { companyName, contactName, address, id } = option.option;// option返回是null，这样保错了，后面然后setState也不会运行了
-            this.setState({
-                accountID: json.id,
-                account,
-                password,
-                mobile,
-                companyName,
-                contactName,
-                address,
-                id
-            });
-        }, () => {
-        }, {
+        AccoutInfoPromise()
+            .then((res) => {
+                const { json, option } = res;
+                const { account, password, mobile } = json;
+                const { companyName, contactName, address, id } = option.option;// option返回是null，这样保错了，后面然后setState也不会运行了
+                this.setState({
+                    accountID: json.id,
+                    account,
+                    password,
+                    mobile,
+                    companyName,
+                    contactName,
+                    address,
+                    id
+                });
+
+            })
+            .catch(error => {
+                message.error(error);
             });
     }
 

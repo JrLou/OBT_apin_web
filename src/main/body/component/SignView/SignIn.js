@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-13 16:37:12
+ * @Last Modified time: 2017-11-13 17:29:44
  */
 
 import React, { Component } from 'react';
@@ -234,7 +234,7 @@ class SignInForm extends Component {
         if (user) {
             callback();
         } else {
-            defaultLoginPromise(callback);
+            defaultLoginPromise(0, callback);
         }
     }
 }
