@@ -147,17 +147,19 @@ class page extends Component {
     commit(value){
         var param = value;
         this.loadingView.refreshView(true);
-
         let success = (code, msg, json, option) => {
             console.log(json);
             console.log("------------葛艳威1 ：");
             console.log(code);
             console.log("------------葛艳威2 ：");
             message.success(msg);
-            this.loadingView.refreshView(false);
-            window.app_open(this, "/DemandDetail", {
-                data: {id:""}
-            }, "new");
+            this.loadingView.refreshView(false,()=>{
+                if (json&&json.id){
+                    window.app_open(this, "/DemandDetail", {
+                        data: {id:json.id}
+                    }, "new");
+                }
+            });
         };
         let failure = (code, msg, option) => {
             message.error(msg);
@@ -374,12 +376,19 @@ class page extends Component {
         if (!childNum){
             childNum = 0;
         }
+
         let num_Int = parseInt(isAdult?adultNum:childNum);
         if (isAdd){
             num_Int++;
         }else {
             num_Int--;
         }
+
+        let value = num_Int.toString();
+        if (value.length>4){
+            num_Int = parseInt(isAdult?adultNum:childNum);
+        }
+
         num_Int = num_Int<=0?"0":num_Int;
         if (isAdult){
             this.setState({
@@ -417,6 +426,9 @@ class page extends Component {
     }
     onChangeNumVal(isAdult,value){
         if (value && (value!="")&& /^[0-9]*$/.test(value)){
+            if (value.length>4){
+                value = value.substring(0,4);
+            }
             if (isAdult){
                 let num = parseInt(value);
                 this.setState({

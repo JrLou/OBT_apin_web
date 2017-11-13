@@ -73,7 +73,7 @@ class MyModalRequire extends Component {
                 <div className={css.modalDesc}>{this.state.desc}</div>
 
                 <div className={css.content}>
-                    <TemplatePublist  state= {this.state.param} callBack={(val) => {
+                    <TemplatePublist  state= {this.state.param} styleObj={{marginBottomRow:8,marginBottomFormItem:8}}  callBack={(val) => {
                         this.setState({
                             visible:false,
                         },()=>{
