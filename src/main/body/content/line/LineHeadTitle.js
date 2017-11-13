@@ -108,11 +108,13 @@ class page extends Component {
                                 <div className={css.requireBtn} onClick={()=>{
                                     const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
                                     if (isLogin){
+                                        window.app_open(this.props.obj, "/PublishMsg", {
+                                            data:{}
+                                        },"new");
+                                    }else {
                                         window.modal.showModal(0,()=>{
                                             window.app_open(this.props.obj, "/PublishMsg", {
-                                                data:{
-                                                    airlineId:""
-                                                }
+                                                data:{}
                                             },"new");
                                         });
                                     }

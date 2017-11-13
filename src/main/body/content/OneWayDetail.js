@@ -304,11 +304,16 @@ class page extends Component {
 
                                    const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
                                    if (isLogin){
+                                       window.app_open(this.props.obj, "/FlightDetail", {
+                                           step:1,
+                                           data:obj
+                                       },"self");
+                                   }else {
                                        window.modal.showModal(0,()=>{
                                            window.app_open(this.props.obj, "/FlightDetail", {
                                                step:1,
                                                data:obj
-                                           },"self");
+                                           },"new");
                                        });
                                    }
                                }}/>
@@ -366,8 +371,8 @@ class LineInfor extends Component {
             let airlineInfo = (dataItem.voyages&&dataItem.voyages.length>0)?dataItem.voyages:[];
             let airlineInfo_One = airlineInfo[0]?airlineInfo[0]:{};
             let desc = (airlineInfo_One.depDate||"")+" "+(airlineInfo_One.depTime||"")+" --> "+(airlineInfo_One.arrDate||"")+" "+(airlineInfo_One.arrTime||"")+" "+(airlineInfo_One.depAirport||"")+"-->"+(airlineInfo_One.arrAirport||"");
-            var itemView = (<div key={i}>
-                <div className={css.cell}>
+            var itemView = (
+                <div key={i} className={css.cell}>
                     {dataItem.isDirect&&dataItem.isDirect==1?<div className={css.sign}>直营</div>:null}
                     <div className={css.left}>
                         <div className={css.table}>
@@ -424,8 +429,7 @@ class LineInfor extends Component {
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>);
+                </div>);
             viewArr.push(itemView);
         }
         return viewArr;
