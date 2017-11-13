@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-13 15:06:24
+ * @Last Modified time: 2017-11-13 16:20:06
  */
 
 import React, { Component } from 'react';
@@ -192,7 +192,6 @@ class MsgLoginForm extends React.Component {
         const { getFieldValue } = this.props.form;
         const account = getFieldValue('account');
         getLoginCodePromise(account,1).then((data) => {
-            log(data);
             this.data = data;
             CookieHelp.saveCookieInfo('LOGIN_CODE',data);
         });
@@ -206,12 +205,6 @@ class MsgLoginForm extends React.Component {
                 const {account,password} = values;
                 const code = this.data || CookieHelp.getCookieInfo('LOGIN_CODE');
                 loginPromise(account,md5(password),code).then((data)=>{
-                    data.Authorization = data.accessToken;
-                    // 保存登录token
-                    CookieHelp.saveUserInfo(data);
-                    // 获取注册验证码也会带掉登录接口 保存APIN_USER token
-                    // IS_LOGIN判断是否真的登录
-                    CookieHelp.saveCookieInfo('IS_LOGIN', true);
                     this.props.onOK();
                 }).catch((error) => {
                     message.error(error);

@@ -366,7 +366,7 @@ class page extends Component {
                                     initialValue: this.state.phone,
                                 })(
                                     <div style={{ width: "100%" }}>
-                                        <Input style={{ width: 240, height: 36, borderRadius: "2px" }} placeholder="输入可联系的手机号码" /><span style={{ color: "red", marginLeft: 10 }}>*</span>
+                                        <Input style={{ width: 240, height: 36, borderRadius: "2px" }} placeholder="输入可联系的手机号码" /><span style={{fontSize:"22px", color: "red", marginLeft: 10 }}>*</span>
                                     </div>
                                     )}
                             </FormItem>
