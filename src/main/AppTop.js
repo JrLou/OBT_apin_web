@@ -3,8 +3,9 @@
  */
 import React, { Component } from 'react';
 import { history } from 'react-router';
-import { Button, Menu, Dropdown, Icon } from 'antd';
+import { Button, Menu, Dropdown, Icon, message } from 'antd';
 import { CookieHelp } from '../../lib/utils/index.js';
+import { AccoutInfoPromise } from './body/component/SignView/LoginAction';
 import Menus from './Menu';
 
 import Sign from './body/component/SignView';
@@ -19,7 +20,8 @@ class page extends Component {
         this.par = window.app_getPar(this);
         this.state = {
             step: this.par ? this.par.step : 0,
-            isLogin: false
+            isLogin: false,
+            account:''
         };
         this.setLogin = this.setLogin.bind(this);
         this.logout = this.logout.bind(this);
@@ -31,14 +33,12 @@ class page extends Component {
     }
 
     render() {
-        let { step, isLogin } = this.state;
+        let { step, isLogin,account } = this.state;
         const menu = (
             <Menu>
                 <Menu.Item>
                     <a onClick={() => {
-                        window.app_open(this.props.root, '/Account', {
-                            id: '112122323'
-                        });
+                        window.app_open(this.props.root, '/Account', null);
                     }}>用户中心</a>
                 </Menu.Item>
                 <Menu.Item>
@@ -81,7 +81,7 @@ class page extends Component {
                                     isLogin && <Dropdown overlay={menu}>
                                         <span>
                                             Hi,
-                                        <a className="ant-dropdown-link" href="#">对对对<Icon type="down" /></a>
+                                        <a className="ant-dropdown-link" href="#">{account}<Icon type="down" /></a>
                                         </span>
                                     </Dropdown>
                                 }
@@ -109,6 +109,17 @@ class page extends Component {
             isLogin: true
         }, () => {
             //回显用户名
+            AccoutInfoPromise()
+                .then((res) => {
+                    const { account } = res.json;
+                    this.setState({
+                        account
+                    });
+
+                })
+                .catch(error => {
+                    message.error(error);
+                });
         });
     }
 

@@ -7,6 +7,7 @@ import {HttpTool} from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
 import {routeTranslate,getDateFormat,removeSpace,transformOrderState} from '../tool/LXDHelp.js';
 import {Table, Input, DatePicker, Select, Button, message} from 'antd';
+import APIGYW from '../../../api/APIGYW';
 import moment from 'moment';
 const Option = Select.Option;
 
@@ -437,7 +438,7 @@ class page extends Component {
         };
 
         this.setLoading(true, () => {
-            HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/query", successCB, failureCB, parames,
+            HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_list, successCB, failureCB, parames,
                 {
                     ipKey: "hlIP"
                 });
