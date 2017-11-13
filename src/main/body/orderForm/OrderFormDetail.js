@@ -32,7 +32,7 @@ class OrderFormDetail extends Component{
         // let list = [0,1,2,3,5,7,8,12,13,14,15];
 
         this.state = {
-            orderId:window.app_getPar(this).orderId,         //订单ID
+            orderId:window.app_getPar(this).id,         //订单ID
             returnState:'',          //接口返回的订单状态  （接口返回的状态需要经过转换才赋值给状态机）
             orderState:'',       //页面订单状态
             isPassed:false,     //乘机人信息是否已经确认
