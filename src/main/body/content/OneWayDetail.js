@@ -94,10 +94,7 @@ class page extends Component {
             message.warning(msg);
             // this.loadingView.refreshView(false);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_month_query,success, failure, param,
-            {
-                ipKey:'hlIP'
-            });
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_month_query,success, failure, param);
     }
 
     //右日历的headMonth
@@ -124,10 +121,7 @@ class page extends Component {
         var failure = (code, msg, option) => {
             message.warning(msg);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_retFlight_month_query,success, failure, param,
-            {
-                ipKey:'hlIP'
-            });
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_retFlight_month_query,success, failure, param);
     }
 
     //左边日历每天的数据
@@ -163,10 +157,7 @@ class page extends Component {
         var failure = (code, msg, option) => {
             this.loadingView.refreshView(false);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_day_query,success, failure, param,
-            {
-                ipKey:'hlIP'
-            });
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_day_query,success, failure, param);
     }
 
     //右日历每天的数据
@@ -196,10 +187,7 @@ class page extends Component {
             message.warning(msg);
             this.loadingView.refreshView(false);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param,
-            {
-                ipKey:'hlIP'
-            });
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param);
     }
 
     loadTripData(date,days) {
@@ -240,10 +228,7 @@ class page extends Component {
             message.warning(msg);
             this.loadingView.refreshView(false);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_query,success, failure, param,
-            {
-                ipKey:'hlIP'
-            });
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_query,success, failure, param,);
     }
 
     render() {
@@ -319,7 +304,7 @@ class page extends Component {
                                    window.app_open(this.props.obj, "/FlightDetail", {
                                        step:1,
                                        data:obj
-                                   },"new");
+                                   },"self");
                                }}/>
                 </div>
                 <LoadingView ref={(a)=>this.loadingView = a}/>

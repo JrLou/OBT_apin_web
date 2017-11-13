@@ -32,16 +32,6 @@ class page extends Component {
             childNum:0,
             phone:""
         };
-
-        //用来显示库存超出的时候 弹出module框添加已知数据
-        this.requireParam = {
-            lineType:2,
-            lineNum:1,
-            adultCount:"0",
-            childCount:"0",
-            remark:"",
-            phone:"",
-            listData:[{}]};
     }
     componentWillReceiveProps(nextProps) {
 
@@ -68,8 +58,7 @@ class page extends Component {
             message.warning(msg);
             this.loadingView.refreshView(false);
         };
-        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.flightapi_orderDetail_query, success, failure, param,
-            {ipKey:'hlIP'});
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.flightapi_orderDetail_query, success, failure, param,);
     }
     setData(json){
         this.data = json;
@@ -159,25 +148,22 @@ class page extends Component {
         var param = value;
         this.loadingView.refreshView(true);
 
-        var success = (code, msg, json, option) => {
-            this.myModalRequire.hiddenModal(()=>{
-                this.loadingView.refreshView(false);
-                window.app_open(this, "/DemandDetail", {
-                    data: {id:""}
-                }, "new");
-            });
+        let success = (code, msg, json, option) => {
+            console.log(json);
+            console.log("------------葛艳威1 ：");
+            console.log(code);
+            console.log("------------葛艳威2 ：");
+            message.success(msg);
+            this.loadingView.refreshView(false);
+            window.app_open(this, "/DemandDetail", {
+                data: {id:""}
+            }, "new");
         };
-        var failure = (code, msg, option) => {
-            message.warning(msg);
+        let failure = (code, msg, option) => {
+            message.error(msg);
             this.loadingView.refreshView(false);
         };
-        // HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demandapi_demands, success, failure, param,{ipKey:'hlIP'});
-
-        window.app_open(this, "/DemandDetail", {
-            data: {
-                id:""
-            }
-        }, "new");
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demandapi_demands, success, failure, param);
     }
 
     render() {

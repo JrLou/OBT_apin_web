@@ -466,10 +466,7 @@ class PassengerMsg extends Component{
         };
 
         this.setLoading(true,()=>{
-            HttpTool.request(HttpTool.typeEnum.POST,APILXD.loadPassengerList, successCB, failureCB, parames,
-                {
-                    ipKey: "hlIP"
-                });
+            HttpTool.request(HttpTool.typeEnum.POST,APILXD.loadPassengerList, successCB, failureCB, parames);
         });
     }
 }
