@@ -3,7 +3,7 @@ import less from './UnionPayAdd.less';
 import {HttpTool} from "../../lib/utils/index.js";
 import Api from  './Api.js';
 import {Button, Form, Input, Icon, Spin, Modal, Radio} from 'antd';
-
+import WindowHelp from './WindowHelp.js';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 
@@ -16,6 +16,7 @@ class UnionPayAdd extends Component {
          value: 0,
          inputValue: "",
       };
+       this.wh = new WindowHelp();
       this.state = this.defaultState;
       this.showError();
    }
@@ -135,18 +136,60 @@ class UnionPayAdd extends Component {
                            this.setState({
                               upLoad: true
                            }, () => {
-                              this.loadUnionPayAdd({cardNo: this.state.inputValue}, (code, msg, data) => {
+                              //打开
+                               let apinPanel = this.wh.openInitWindow();
+                               let cardNo = this.state.inputValue;
+                              this.loadUnionPayAdd({cardNo: cardNo}, (code, msg, data) => {
                                  this.showError(code > 0 ? null : msg);
-                                 this.setState({
-                                    upLoad: false
-                                 }, () => {
-                                    if (code > 0) {
-                                       //打开开通
-                                       if (this.props.onAction) {
-                                          this.props.onAction(data);
-                                       }
-                                    }
-                                 });
+                                 if(code>0){
+                                    //去开卡
+                                     if(!data){
+                                        //
+                                        //  alert("开始");
+                                        //
+                                         this.loadUnionPayOpen({
+                                             cardNo: this.state.inputValue,
+                                             frontUrl:window.location.origin+"/html/paysuccess.html",
+                                             orderId:this.props.orderId,
+                                         },(code, msg, data)=>{
+
+                                            if(code>0){
+                                                this.setState({
+                                                   upLoad: false
+                                                }, () => {
+                                                    //打开开通
+                                                    if (this.props.onAction) {
+                                                        this.props.onAction({
+                                                            url:"/apin"+Api.opencard+data.id,
+                                                            cardNo:cardNo
+                                                        },apinPanel);
+                                                    }
+                                                });
+                                            }else{
+                                               if(code===-400){
+                                                  //银行卡号错误
+                                                   this.wh.closeWindow();
+                                                   this.showError("请输入正确的银行卡号");
+                                                   this.setState({upLoad:false});
+                                               }
+                                            }
+                                         });
+                                     }else{
+                                         this.wh.closeWindow();
+                                         this.showError("您已开通此卡");
+                                         this.setState({
+                                             upLoad: false
+                                         });
+
+                                     }
+                                 }else{
+                                     this.wh.closeWindow();
+                                     this.showError(msg);
+                                     this.setState({
+                                         upLoad: false
+                                     });
+                                 }
+
                               });
                            });
 
@@ -161,7 +204,14 @@ class UnionPayAdd extends Component {
          </Modal>
       );
    }
+    loadUnionPayOpen(param, cb) {
+        HttpTool.request(HttpTool.typeEnum.POST, Api.openCardFrontToken, (code, msg, json, option) => {
+            cb(code,msg,json);
+        }, (code, msg, option) => {
+            cb(code,msg, {});
+        }, param);
 
+    }
    loadUnionPayAdd(param, cb) {
        HttpTool.request(HttpTool.typeEnum.POST, Api.isOpen, (code, msg, json, option) => {
            cb(code,msg,json);

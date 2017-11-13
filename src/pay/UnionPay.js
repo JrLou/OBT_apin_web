@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import less from './UnionPay.less';
 import {Button, Row, Input, Form, Icon, message} from 'antd';
 import {HttpTool} from "../../lib/utils/index.js";
+import Api from './Api.js';
 import Item from './Item';
 import UnionPayAdd from './UnionPayAdd.js';
 
@@ -12,7 +13,7 @@ class UnionPay extends Component {
          loading: true,
          error: "",
          cardList: [],
-         selectIndex: 0
+         selectIndex: 0,
       };
    }
 
@@ -56,7 +57,7 @@ class UnionPay extends Component {
    }
 
    loadUnionPayList(param, cb) {
-       HttpTool.request(HttpTool.typeEnum.POST, "/v1.0/card/find/cards", (code, msg, json, option) => {
+       HttpTool.request(HttpTool.typeEnum.POST, Api.cards, (code, msg, json, option) => {
            cb(code,msg,json);
        }, (code, msg, option) => {
            cb(code,msg, {});
@@ -82,12 +83,17 @@ class UnionPay extends Component {
    }
 
    doUnionPay(param, cb) {
-      setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 5;
-         let data = {};
-         // code = 10;
-         cb(code, code > 0 ? "支付成功" : "支付状态未知", data);
-      }, Math.random() * 1000);
+       HttpTool.request(HttpTool.typeEnum.POST, Api.unionPay, (code, msg, json, option) => {
+           cb(code,msg,json);
+       }, (code, msg, option) => {
+           cb(code,msg, {});
+       }, param);
+      // setTimeout(() => {
+      //    let code = (Math.random() * 10).toFixed(0) - 5;
+      //    let data = {};
+      //    // code = 10;
+      //    cb(code, code > 0 ? "支付成功" : "支付状态未知", data);
+      // }, Math.random() * 1000);
    }
 
 
@@ -103,10 +109,12 @@ class UnionPay extends Component {
             <div>
                {data.map((obj, index) => {
                   let last = data.length === index + 1;
+
+                    let select = this.state.selectIndex === index;
                   return (
                      <Item
                         key={index}
-                        select={this.state.selectIndex === index}
+                        select={select}
                         onClick={() => {
                            //选择当前选项
                            if (last) {
@@ -114,9 +122,8 @@ class UnionPay extends Component {
                               return;
                            }
                            this.setState({
-                              selectIndex: index
+                              selectIndex: index,
                            }, () => {
-
                            });
                            //清空其他选择
                         }
@@ -130,8 +137,8 @@ class UnionPay extends Component {
                                  </div>
                               ) : (
                                  <div>
-                                    <img className={less.bankLogoImg} src={require("./images/zhaoshang.png")} alt="bank_LOGO"/>
-                                    <div>{obj.type}:&nbsp;&nbsp;{obj.code}</div>
+                                    <img className={less.bankLogoImg} src={obj.iconUrl} alt="bank_LOGO"/>
+                                    <div>{obj.bankShortName}:&nbsp;&nbsp;{"*******"+obj.cardLastNo}</div>
                                  </div>
                               )
                            }
@@ -141,11 +148,19 @@ class UnionPay extends Component {
                   );
                })}
             </div>
-            <InputLayout ref={(ref) => {
+            <InputLayout
+                data={this.getSelectData(data[this.state.selectIndex])}
+                ref={(ref) => {
                this.inputLayout = ref;
             }}/>
          </div>
       );
+   }
+   getSelectData(data){
+       data.orderId = this.props.orderId;
+       data.amount = this.props.data.payPrice;
+       data.payment = this.props.data.payment;
+       return data;
    }
 
    openAddCard() {
@@ -254,31 +269,20 @@ class UnionPay extends Component {
                                          console.log(card);
 
                                          if (this.props.onAction) {
-                                             this.props.onAction("unionpay", data, () => {
-                                                 //开始支付 10 秒 轮询支付
-                                                 let diffTime = new Date().getTime();
-                                                 let pay = () => {
-                                                     this.doUnionPay(data, (code, msg, data) => {
-                                                         if (code > 0) {
-                                                             //支付成功
-                                                             this.props.onAction("unionpaysuccess");
-                                                         } else {
-                                                             console.log(msg);
-                                                             if ((new Date().getTime() - diffTime) / 1000 > 10) {
-                                                                 //不再查询,支付失败了
-                                                                 console.log("真的失败了");
-                                                                 this.props.onAction("unionpayerror", msg);
-                                                             } else {
-                                                                 //支付失败,等1秒,再次提交
-                                                                 setTimeout(() => {
-                                                                     pay();
-                                                                 }, 1000);
-                                                             }
+                                             this.props.onAction("unionpay", null, () => {
 
-                                                         }
-                                                     });
-                                                 };
-                                                 pay();
+                                                     this.doUnionPay(data, (code, msg, data) => {
+                                                     if (code > 0) {
+                                                         //支付已经付,支验证是否支付成功
+                                                         this.props.onAction("unionpayver",null,()=>{
+
+                                                         });
+                                                     } else {
+                                                         this.props.onAction("unionpayerror", msg);
+
+                                                     }
+                                                 });
+
                                              });
                                          }
                                      } else {
@@ -295,10 +299,11 @@ class UnionPay extends Component {
                }
             </div>
             <UnionPayAdd
-               onAction={(data) => {
+                orderId={this.props.orderId}
+               onAction={(data,apinPanel) => {
                   //打开开通
                   if (this.props.onAction) {
-                     this.props.onAction("unionopen", data);
+                     this.props.onAction("unionopen", data,null,apinPanel);
                   }
 
                }}
@@ -322,7 +327,7 @@ class UnionPay extends Component {
 class InputLayout extends Component {
    constructor(props) {
       super(props);
-      this.defaultTime = 5;
+      this.defaultTime = 60;
       this.state = {
          moblie: "",
          code: "",
@@ -330,23 +335,40 @@ class InputLayout extends Component {
          loading: false,
       };
    }
+   // setShowData(data){
+   //     this.data = data;
+   //     this.setState({
+   //         moblie:this.data.phoneNo
+   //     });
+   // }
 
    getData() {
-      return {
-         moblie: this.state.moblie,
-         code: this.state.code,
-         error: this.state.moblie.length !== 11 ? "请填写正确的手机号" : (this.state.code.length !== 6 ? "请填写正确的验证码" : null)
-      };
+       let error = "";
+       if(!this.payId){
+           error = "请发送验证码到预留手机号";
+       }else {
+           error = this.state.moblie.length !== 11 ? "请填写正确的手机号" : (this.state.code.length !== 6 ? "请填写正确的验证码" : null);
+       }
+      return Object.assign(this.getParamData(this.props.data),{
+          checkMsg: this.state.code,
+          payId:this.payId,
+          error: error
+      });
 
    }
 
    loadPhoneCode(param, cb) {
-      setTimeout(() => {
-         let code = (Math.random() * 10).toFixed(0) - 5;
-         //todo 没有data吧?
-         let data = [];
-         cb(code, code > 0 ? "获取成功" : "获取失败", data);
-      }, Math.random() * 1000);
+       HttpTool.request(HttpTool.typeEnum.POST,Api.sms, (code, msg, json, option) => {
+           cb(code,msg,json);
+       }, (code, msg, option) => {
+           cb(code,msg, {});
+       }, param);
+      // setTimeout(() => {
+      //    let code = (Math.random() * 10).toFixed(0) - 5;
+      //    //todo 没有data吧?
+      //    let data = [];
+      //    cb(code, code > 0 ? "获取成功" : "获取失败", data);
+      // }, Math.random() * 1000);
    }
     componentWillUnmount() {
         this.un = true;
@@ -372,19 +394,34 @@ class InputLayout extends Component {
 
    }
 
+
+   getParamData(data){
+       return {
+           amount:data.amount,
+           cardNo:data.cardNo,
+           orderId:data.orderId,
+           payment:data.payment,
+           phone:data.phoneNo
+       };
+   }
+
    render() {
 
+       let data = this.props.data ||{};
+       this.state.moblie = data.phoneNo;
       return (
          <div>
             <div style={{lineHeight: "40px"}}>
                <label htmlFor="mobileIpt" className={less.label}>银行卡预留手机号：</label>
                <Input
+                   disabled={true}
                   id="mobileIpt"
                   size="large"
+                   defaultValue={this.state.moblie}
                   onChange={(e) => {
                      let v = e.target.value;
                      this.setState({
-                        moblie: v
+                         moblie:v
                      }, () => {
 
                      });
@@ -421,16 +458,17 @@ class InputLayout extends Component {
                      this.setState({
                         loading: true
                      });
-                     this.loadPhoneCode({}, (code, msg, data) => {
+                     //
+                     this.loadPhoneCode(this.getParamData(data), (code, msg, data) => {
                         this.setState({
                            loading: false
                         }, () => {
-                           let succ = !!code;
-                           if (succ) {
-                              this.autoTime(this.defaultTime);
-                           } else {
-                              message.error(msg);
-                           }
+                            if(code>0){
+                                this.payId = data.payId;
+                                this.autoTime(this.defaultTime);
+                            }else{
+                                message.error(msg);
+                            }
                         });
 
                      });
