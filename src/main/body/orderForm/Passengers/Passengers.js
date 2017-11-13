@@ -4,11 +4,11 @@
 
 /**
  * 订单状态说明  orderState
- * 0：订单取消 1：等待确认 2：待付订金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
+ * 0：订单取消 1：等待确认 2：待付押金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
  * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中 15：支付审核失败
  *
  * 接口可能返回的值： returnState
- * 0：订单取消 1：等待确认 2：待付订金 3：待付全款 5：待付尾款 7：已出票 8：已关闭
+ * 0：订单取消 1：等待确认 2：待付押金 3：待付全款 5：待付尾款 7：已出票 8：已关闭
  */
 
 import React, {Component} from 'react';
@@ -32,10 +32,12 @@ class PassengerMsg extends Component{
             checkedMsg:false,       //是否已经勾选'确认乘机人信息'
             submitConfirm:false,    //确认乘机人询问框
             deleteConfirm:false,    //删除乘机人询问框
+            importResultMod:false,     //导入乘机人结果提示框
+            importResultMsg:null,       //导入结果展示数据
             deleteMsg:'',          //将要被删除的乘机人的姓名
 
             passengerMsg:null,      //打开新增／修改乘机人窗口时，传入的数据
-            lineType:1,             //航线类型  1：国内  2：国际
+            airlineSigns:this.props.airlineSigns,  //航线类型  1：国内  2：国际
 
             loading:false,          //加载状态
         };
@@ -173,7 +175,7 @@ class PassengerMsg extends Component{
                     >
                     <PassengerAdd
                         orderId = {this.state.orderId}
-                        lineType = {this.state.lineType}        //航线类型
+                        airlineSigns = {this.state.airlineSigns}        //航线类型
                         defaultData = {this.state.passengerMsg}     //单个乘机人信息
                         closeModCB = {()=>{this.setState({passengerMsg:null});}}  //关闭窗口回调
                         changeSuccCB={(allData)=>{this.passengerChange(allData);}}                              //新增/修改成功的回调
@@ -186,6 +188,9 @@ class PassengerMsg extends Component{
                                 <Button
                                     type="primary"
                                     className={css.btnType02}
+                                    onClick={()=>{
+                                        this.exportPassenger();
+                                    }}
                                 >
                                     导出乘机人
                                 </Button>
@@ -196,6 +201,15 @@ class PassengerMsg extends Component{
                                     type="primary"
                                     className={css.btnType02}
                                     style={{float:'right'}}
+                                    onClick={()=>{
+                                        if(this.state.airlineSigns == 1){
+                                            //国内
+                                            window.location.href = '';
+                                        }else{
+                                            //国际
+                                            window.location.href = '';
+                                        }
+                                    }}
                                 >
                                     下载模版
                                 </Button>
@@ -208,8 +222,7 @@ class PassengerMsg extends Component{
                                 </Button>
                                 <Upload
                                     accept={'.xls,.xlsx'}
-                                    action={'请求地址'}
-                                    data={{id:'订单ID'}}
+                                    action={'/upload'}
                                     onChange={(obj)=>{this.upLoadStateChange(obj);}}
                                 >
                                     <Button
@@ -292,6 +305,34 @@ class PassengerMsg extends Component{
                                     >
                                         <div className={css.contentTitle}>
                                             {`是否确定删除乘机人：${this.state.deleteMsg.name} ？`}
+                                        </div>
+                                    </Modal>
+                                    <Modal
+                                        title="导入乘机人结果"
+                                        visible={this.state.importResultMod}
+                                        footer={null}
+                                        maskClosable={false}
+                                        onCancel={()=>{
+                                            this.setState({
+                                                importResultMsg:null,
+                                                importResultMod:false,
+                                            });
+                                        }}
+                                    >
+                                        <div>
+                                            {this.getResultView()}
+                                        </div>
+                                        <div>
+                                            <Button
+                                                onClick={()=>{
+                                                    this.setState({
+                                                        importResultMsg:null,
+                                                        importResultMod:false,
+                                                    });
+                                                }}
+                                            >
+                                                确定
+                                            </Button>
                                         </div>
                                     </Modal>
                                 </div>
@@ -386,10 +427,16 @@ class PassengerMsg extends Component{
     }
 
     /**
-     * 上传文件状态改变
+     * 上传文件到七牛 状态改变
      */
     upLoadStateChange(obj){
-        log(obj);
+        if(obj&&obj.file&&obj.file.status=='done'){
+            //导入乘机人
+            if(obj.file.response.code == 200){
+                let url = obj.file.response.data.url;
+                this.importPassenger(url);
+            }
+        }
     }
 
     /**
@@ -471,6 +518,115 @@ class PassengerMsg extends Component{
                     ipKey: "hlIP"
                 });
         });
+    }
+
+    /**
+     * 导出乘机人
+     */
+    exportPassenger(){
+        let parames = {
+            orderId:this.state.orderId,
+        };
+        let successCB = (code, msg, json, option)=>{
+            window.location.href = json.fileUrl;
+            this.setLoading(false);
+        };
+
+        let failureCB = (code, msg, option)=>{
+            this.setLoading(false);
+            message.error(msg);
+        };
+
+        this.setLoading(true,()=>{
+            HttpTool.request(HttpTool.typeEnum.POST,APILXD.exportPassenger, successCB, failureCB, parames,
+                {
+                    ipKey: "hlIP"
+                });
+        });
+    }
+
+    /**
+     * 导入乘机人
+     * @param file
+     */
+    importPassenger(url){
+        let parames = {
+            orderId:this.state.orderId,
+            file:url,
+        };
+        let successCB = (code, msg, json, option)=>{
+            this.setState({
+                importResultMsg:json,
+                importResultMod:true,
+            });
+            this.setLoading(false);
+        };
+
+        let failureCB = (code, msg, option)=>{
+            this.setLoading(false);
+            message.error(msg);
+        };
+
+        this.setLoading(true,()=>{
+            HttpTool.request(HttpTool.typeEnum.POST,APILXD.importPassenger, successCB, failureCB, parames,
+                {
+                    ipKey: "hlIP"
+                });
+        });
+    }
+
+    /**
+     * 展示导入结果
+     * @return {XML}
+     */
+    getResultView(){
+        let result = this.state.importResultMsg;
+        if(!result){
+            return (<div></div>);
+        }
+
+        let getNumber = (list)=>{
+            let numberList = [];
+            if(list instanceof Array){
+                for(let key in list){
+                    numberList.push(<span>{list[key]}</span>);
+                }
+            }
+
+            return numberList;
+        };
+
+        return(
+            <div>
+                {
+                    result.successCount
+                    ?<div>{`导入成功${result.successCount}人`}</div>
+                    :''
+                }
+                {
+                    result.failCount
+                    ?<div>
+                            {`导入失败${result.failCount}人`}
+                            <div>
+                                失败的记录行号：
+                                {getNumber(result.failRowNumber)}
+                            </div>
+                    </div>
+                    :''
+                }
+                {
+                    result.repeatCount
+                    ?<div>
+                            {`导入重复${result.repeatCount}人`}
+                            <div>
+                                重复的记录行号：
+                                {getNumber(result.repeatRowNumber)}
+                            </div>
+                    </div>
+                    :''
+                }
+            </div>
+        );
     }
 }
 
