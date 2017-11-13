@@ -409,8 +409,18 @@ class InputLayout extends Component {
       return account.length >= 12 && account.length <= 24;
    }
 
+   formatDataState(){//删除首尾的空格
+      let _state = JSON.parse( JSON.stringify(this.state) );
+      for(let k in _state){
+         if(typeof _state[k] === "string"){
+            _state[k] = _state[k].trim();
+         }
+      }
+      this.state = _state;
+   }
 
    getData() {
+      this.formatDataState();
       return {
          accountName: this.state.accountName,
          account: this.state.account,
@@ -425,7 +435,6 @@ class InputLayout extends Component {
                   : (!this.state.bank ? "请填写银行名" : null)
             )
       };
-
    }
 
    render() {
