@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-13 10:42:06
+ * @Last Modified time: 2017-11-13 15:43:55
  */
 
 import React, { Component } from 'react';
@@ -33,6 +33,7 @@ class SignInForm extends Component {
         this.getCode = this.getCode.bind(this);
         this.getCodeAction = this.getCodeAction.bind(this);
         this.accessToken = '';
+        this.data = '';
     }
     componentDidMount() {
         this.props.form.validateFields();
@@ -59,15 +60,15 @@ class SignInForm extends Component {
                 >
                     {getFieldDecorator('account', {
                         rules: [{ required: true, message: '请输入账户名' },
-                        {
-                            validator: (rule, value, callback) => {
-                                this.getCode(() => {
-                                    validateLogin('account', value)
-                                        .then((data) => callback())
-                                        .catch((data) => callback(data));
-                                });
-                            }
-                        }
+                        // {
+                        //     validator: (rule, value, callback) => {
+                        //         this.getCode(() => {
+                        //             validateLogin('account', value)
+                        //                 .then((data) => callback())
+                        //                 .catch((data) => callback(data));
+                        //         });
+                        //     }
+                        // }
                         ],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入账户名" />
@@ -140,7 +141,7 @@ class SignInForm extends Component {
                         rules: [{ required: true, message: '请输入8-16位数字、字母' },
                         { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
-                        <Input prefixCls="my-ant-input" placeholder="请输入8-16位数字、字母" />
+                        <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" autoComplete="new-password" />
                         )}
                 </FormItem>
                 <FormItem
@@ -173,9 +174,10 @@ class SignInForm extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
                 const { account, bdCharger, code, mobile, password } = values;
                 HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/addMember', (code, message, json, option) => {
+                    log(this.data);
+                    loginPromise(account, md5(password), this.data).then().catch();
                 }, () => {
                 }, {
                         account,
@@ -223,9 +225,11 @@ class SignInForm extends Component {
         if (user) {
             callback();
         } else {
-            getLoginCodePromise(defaultAccount, 0).then((data) =>
-                loginPromise(defaultAccount, defaultPwd, data)
-            ).then((data) => {
+            getLoginCodePromise(defaultAccount, 0).then((data) =>{
+                // 登录码 保存起来注册完直接登录
+                this.data = data;
+                return loginPromise(defaultAccount, defaultPwd, data);
+            }).then((data) => {
                 data.Authorization = data.accessToken;
                 CookieHelp.saveUserInfo(data);
                 callback();
