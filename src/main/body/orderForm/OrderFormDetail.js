@@ -36,7 +36,7 @@ class OrderFormDetail extends Component{
 
         this.state = {
             // orderId:window.app_getPar(this).id,         //订单ID
-            orderId:'10000059f39c5427ca5f749604a09de39',         //订单ID
+            orderId:'16b3639900f54a86b9116af77b088d75',         //订单ID
             returnState:'',          //接口返回的订单状态  （接口返回的状态需要经过转换才赋值给状态机）
             orderState:'',       //页面订单状态
             isPassed:false,     //乘机人信息是否已经确认
@@ -50,7 +50,6 @@ class OrderFormDetail extends Component{
 
             upDate:0,
             loading:false,      //加载状态
-            confirmModal:false, //询问框
         };
 
         if(!this.state.orderId){

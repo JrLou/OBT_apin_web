@@ -163,6 +163,7 @@ class OrderInfoView extends Component{
                     </div>
                 </Modal>
                 <Modal
+                    prefixCls={'my-ant-modal'}
                     title={'提示'}
                     visible={this.state.confirmModal}
                     onOk={()=>{
@@ -178,11 +179,11 @@ class OrderInfoView extends Component{
                 >
                     {
                         this.state.orderState == 5
-                            ?   (<div>
+                            ?   (<div className={css.messageBox}>
                                     <div>是否确定要取消此行程订单？</div>
                                     <div>订单取消后将不退还订金</div>
                                 </div>)
-                            :   (<div>
+                            :   (<div className={css.messageBox}>
                                     是否确定取消此订单？
                                 </div>)
                     }

@@ -46,6 +46,19 @@ class PassengerMsg extends Component{
     componentDidMount(){
         //加载乘机人列表数据
         this.setLoading(true,this.loadPassengerList);
+        //模拟导入成功的窗口
+        // this.setState({
+        //     importResultMod:true,
+        //     importResultMsg:{
+        //         successCount:10,
+        //         failCount:3,
+        //         failRowNumber:[1,2,3],
+        //         repeatCount:4,
+        //         repeatRowNumber:[6,7,8,9],
+        //         totalCount:13,
+        //         reason:'XXXXXXXX',
+        //     },
+        // });
     }
 
     render(){
@@ -124,43 +137,6 @@ class PassengerMsg extends Component{
                 ),
             },
         ];
-        // let dataSource = [
-        //     {
-        //         index:1,
-        //         key:1,
-        //         name:'张三',
-        //         credType:'1',
-        //         credNumber:'3303030440201043045',
-        //         birthday:'1990-03-23',
-        //         nation:'中国',
-        //         operation:'把识别id传入',
-        //         gender:1,
-        //     },
-        //     {
-        //         index:2,
-        //         key:2,
-        //         name:'李六',
-        //         credType:'1',
-        //         credNumber:'3303030440201043045',
-        //         birthday:'1990-03-23',
-        //         nation:'中国',
-        //         operation:'把识别id传入',
-        //         ticket:'123123123,123123123,23424123,235345345,23423423424,2353453455',
-        //         issuePlace:'中国',
-        //     },
-        //     {
-        //         index:3,
-        //         key:4,
-        //         name:'Edd',
-        //         credType:'2',
-        //         credNumber:'3303030440201043045',
-        //         gender:0,
-        //         birthday:'1990-03-23',
-        //         nation:'中国',
-        //         operation:'把识别id传入',
-        //         ticket:'123123123,123123123,23424123,235345345,23423423424,2353453455',
-        //     }
-        // ];
 
         if(hasKey(this.state.orderState,[1,2])){
             return(
@@ -204,10 +180,10 @@ class PassengerMsg extends Component{
                                     onClick={()=>{
                                         if(this.state.airlineSigns == 1){
                                             //国内
-                                            window.location.href = '';
+                                            window.location.href = 'http://10.0.0.200:8080/wenjian/guonei.xlsx';
                                         }else{
                                             //国际
-                                            window.location.href = '';
+                                            window.location.href = 'http://10.0.0.200:8080/wenjian/guoji.xlsx';
                                         }
                                     }}
                                 >
@@ -266,6 +242,7 @@ class PassengerMsg extends Component{
                                         提交乘机人信息
                                     </Button>
                                     <Modal
+                                        prefixCls={'my-ant-modal'}
                                         title="提交乘机人信息"
                                         visible={this.state.submitConfirm}
                                         onOk={()=>{
@@ -289,6 +266,7 @@ class PassengerMsg extends Component{
                                         </div>
                                     </Modal>
                                     <Modal
+                                        prefixCls={'my-ant-modal'}
                                         title="删除乘机人"
                                         visible={this.state.deleteConfirm}
                                         onOk={()=>{
@@ -308,6 +286,7 @@ class PassengerMsg extends Component{
                                         </div>
                                     </Modal>
                                     <Modal
+                                        prefixCls={'my-ant-modal'}
                                         title="导入乘机人结果"
                                         visible={this.state.importResultMod}
                                         footer={null}
@@ -317,18 +296,21 @@ class PassengerMsg extends Component{
                                                 importResultMsg:null,
                                                 importResultMod:false,
                                             });
+                                            this.setLoading(true,this.loadPassengerList);
                                         }}
                                     >
                                         <div>
                                             {this.getResultView()}
                                         </div>
-                                        <div>
+                                        <div className={css.btnBox}>
                                             <Button
+                                                type={'primary'}
                                                 onClick={()=>{
                                                     this.setState({
                                                         importResultMsg:null,
                                                         importResultMod:false,
                                                     });
+                                                    this.setLoading(true,this.loadPassengerList);
                                                 }}
                                             >
                                                 确定
@@ -433,8 +415,8 @@ class PassengerMsg extends Component{
         if(obj&&obj.file&&obj.file.status=='done'){
             //导入乘机人
             if(obj.file.response.code == 200){
-                let url = obj.file.response.data.url;
-                this.importPassenger(url);
+                let filename = obj.file.response.data.filename;
+                this.importPassenger(filename);
             }
         }
     }
@@ -549,14 +531,16 @@ class PassengerMsg extends Component{
      * 导入乘机人
      * @param file
      */
-    importPassenger(url){
+    importPassenger(filename){
         let parames = {
             orderId:this.state.orderId,
-            file:url,
+            fileName:filename,
         };
         let successCB = (code, msg, json, option)=>{
+            let newData = json;
+            newData.reason = msg;
             this.setState({
-                importResultMsg:json,
+                importResultMsg:newData,
                 importResultMod:true,
             });
             this.setLoading(false);
@@ -585,11 +569,11 @@ class PassengerMsg extends Component{
             return (<div></div>);
         }
 
-        let getNumber = (list)=>{
+        let getNumber = (list,type)=>{
             let numberList = [];
             if(list instanceof Array){
                 for(let key in list){
-                    numberList.push(<span>{list[key]}</span>);
+                    numberList.push(<span className={type==1?css.failureNum:css.warningNum}>{list[key]}</span>);
                 }
             }
 
@@ -598,31 +582,42 @@ class PassengerMsg extends Component{
 
         return(
             <div>
+                <div className={css.resultTitle}>{`文件中总共有数据：${result.totalCount}条`}</div>
                 {
                     result.successCount
-                    ?<div>{`导入成功${result.successCount}人`}</div>
+                    ?<div className={css.resultItem}>
+                            <span style={{color:'#87d068',fontSize:'16px'}}>导入成功：</span>
+                            {`${result.successCount}人`}
+                    </div>
                     :''
                 }
                 {
                     result.failCount
-                    ?<div>
-                            {`导入失败${result.failCount}人`}
+                    ?<div className={css.resultItem}>
+                            <span style={{color:'#f50',fontSize:'16px'}}>导入失败：</span>
+                            {`${result.failCount}人`}
                             <div>
                                 失败的记录行号：
-                                {getNumber(result.failRowNumber)}
+                                {getNumber(result.failRowNumber,1)}
                             </div>
                     </div>
                     :''
                 }
                 {
                     result.repeatCount
-                    ?<div>
-                            {`导入重复${result.repeatCount}人`}
+                    ?<div className={css.resultItem}>
+                            <span style={{color:'#fa0',fontSize:'16px'}}>导入重复：</span>
+                            {`${result.repeatCount}人`}
                             <div>
                                 重复的记录行号：
-                                {getNumber(result.repeatRowNumber)}
+                                {getNumber(result.repeatRowNumber,2)}
                             </div>
                     </div>
+                    :''
+                }
+                {
+                    result.reason
+                    ?<div className={css.resultReason}>{`错误信息：${result.reason}`}</div>
                     :''
                 }
             </div>
