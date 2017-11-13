@@ -435,7 +435,7 @@ class OrderFormList extends Component{
         let currentNum = pagination.current;
         this.setState({
             page:currentNum,
-        },this.loadData());
+        },this.loadData);
     }
 
     /**
