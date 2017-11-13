@@ -5,10 +5,10 @@ import less from "./DemandDetail.less";
 import OrderInfoView from '../component/OrderInfoView/index';
 import CellNewFlight from "../content/cell/CellNewFlight";
 import {HttpTool} from "../../../../lib/utils/index.js";
-import LoadingView from "../component/LoadingView.js";
 import NumTransToTextHelp from '../tool/NumTransToTextHelp.js';
 import {hasKey,getFlightData} from '../tool/LXDHelp.js';
 import MyAlert from "../content/line/MyAlert";
+import APIGYW from '../../../api/APIGYW';
 /**
  * 需求已取消                    0
  * 需求处理中 （单程）       1    1
@@ -37,7 +37,6 @@ class page extends Component {
         this.state = {
             itemNum: 3,
             index: -1,
-            upData: 1,
             data: null,
             visibleCancle: false,
             visibleDelete: false,
@@ -45,13 +44,12 @@ class page extends Component {
             flightData:null,
             demandId:-1
         };
-        this.parentId =JSON.parse(this.props.location.query.data).id;
-    }
-
-    getUpData() {
-        this.setState({
-            upData: this.state.upData + 1
-        });
+        if(this.props.location.query.data){
+            this.parentId =JSON.parse(this.props.location.query.data).id;
+        }else {
+            message.error("数据有误!");
+            this.parentId = null;
+        }
     }
 
     componentDidMount() {
@@ -59,16 +57,9 @@ class page extends Component {
     }
 
     loadData() {
-        // 往返 81a366cd6c754cbcbbc978a8b956982b
-        // 多程 c374da99311144058a1d8d7382de5d8a
-        // 单程 9cb5a2cd48104e3385f330aec6b3d196
-        if(!this.props.location.query.data){
-            message.error("数据有误!");
-            return ;
-        }
+
         let param = {
             id: this.parentId
-            //"65a7a041bcab4cd9b32d26178def4759",
         };
         let success = (code, msg, json, option) => {
             this.setState({
@@ -77,9 +68,11 @@ class page extends Component {
         };
         let failure = (code, msg, option) => {
             message.warning(msg);
-            this.data = null;
+            this.setState({
+                data: null,
+            });
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/find", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.demand_detail, success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -94,9 +87,8 @@ class page extends Component {
         };
         let failure = (code, msg, option) => {
             message.warning(msg);
-            this.loadData();
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/cancel", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_cancel, success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -111,9 +103,8 @@ class page extends Component {
         };
         let failure = (code, msg, option) => {
             message.warning(msg);
-            this.loadData();
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/remove", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_remove, success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -131,9 +122,8 @@ class page extends Component {
         };
         let failure = (code, msg, option) => {
             message.warning(msg);
-            this.loadData();
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/demandapi/v1.0/demands/plans/confirm", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_confirm, success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -159,7 +149,6 @@ class page extends Component {
                 {data.demandStatus === 1||data.demandStatus === 2 || data.demandStatus === 5 || data.demandStatus === 0 ? this.getButton(data.demandStatus) : null}
                 {data.demandStatus === 4 ? this.getOrderDetail(data) : null}
                 {data.demandStatus === 3 ? this.getConfirmButton(data && data.plans ? data.plans : [], data.flightType) : null}
-                <LoadingView ref={(a)=>this.loadingView = a}/>
             </div>
         );
     }
