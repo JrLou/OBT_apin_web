@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import {message,Button,Icon} from 'antd';
 import css from './LineHeadTitle.less';
 import MyDiv from '../../component/MyDiv.js';
+import {CookieHelp } from '../../../../../lib/utils/index.js';
 class page extends Component {
     constructor(props) {
         super(props);
@@ -105,11 +106,18 @@ class page extends Component {
                         <div className={css.requireAlert_right}>
                             <MyDiv div={
                                 <div className={css.requireBtn} onClick={()=>{
-                                    window.app_open(this.props.obj, "/PublishMsg", {
-                                        data:{
-                                            airlineId:""
-                                        }
-                                    },"new");
+                                    const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
+                                    if (isLogin){
+                                        window.app_open(this.props.obj, "/PublishMsg", {
+                                            data:{}
+                                        },"new");
+                                    }else {
+                                        window.modal.showModal(0,()=>{
+                                            window.app_open(this.props.obj, "/PublishMsg", {
+                                                data:{}
+                                            },"new");
+                                        });
+                                    }
                                 }}>提交需求</div>
                             }/>
                         </div>

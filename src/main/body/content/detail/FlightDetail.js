@@ -32,16 +32,6 @@ class page extends Component {
             childNum:0,
             phone:""
         };
-
-        //用来显示库存超出的时候 弹出module框添加已知数据
-        this.requireParam = {
-            lineType:2,
-            lineNum:1,
-            adultCount:"0",
-            childCount:"0",
-            remark:"",
-            phone:"",
-            listData:[{}]};
     }
     componentWillReceiveProps(nextProps) {
 
@@ -68,8 +58,7 @@ class page extends Component {
             message.warning(msg);
             this.loadingView.refreshView(false);
         };
-        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.flightapi_orderDetail_query, success, failure, param,
-            {ipKey:'hlIP'});
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.flightapi_orderDetail_query, success, failure, param,);
     }
     setData(json){
         this.data = json;
@@ -82,13 +71,12 @@ class page extends Component {
         //用来显示库存超出的时候 弹出module框添加已知数据
         this.requireParam = {
             lineType:this.flightType?this.flightType:1,
-            lineNum:this.flightType?this.flightType:1,
+            lineNum:1,
             adultCount:"0",
             childCount:"0",
             remark:"",
             phone:"",
             listData:[{}]};
-
         this.upView();
     }
 
@@ -136,13 +124,13 @@ class page extends Component {
                 data:{
                     id:""
                 }
-            },"new");
+            },"self");
         }else if (code==2){
             window.app_open(this.props.obj, "/Pay", {
                 data:{
                     id:""
                 }
-            },"new");
+            },"self");
         }else {
             this.myModalRequire.showModal(true,
                 {
@@ -157,27 +145,23 @@ class page extends Component {
      */
     commit(value){
         var param = value;
+        param.source = "Web";
         this.loadingView.refreshView(true);
-
-        var success = (code, msg, json, option) => {
-            this.myModalRequire.hiddenModal(()=>{
-                this.loadingView.refreshView(false);
-                window.app_open(this, "/DemandDetail", {
-                    data: {id:""}
-                }, "new");
+        let success = (code, msg, json, option) => {
+            message.success(msg);
+            this.loadingView.refreshView(false,()=>{
+                if (json&&json.id){
+                    window.app_open(this, "/DemandDetail", {
+                        data: {id:json.id}
+                    }, "self");
+                }
             });
         };
-        var failure = (code, msg, option) => {
-            message.warning(msg);
+        let failure = (code, msg, option) => {
+            message.error(msg);
             this.loadingView.refreshView(false);
         };
-        // HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demandapi_demands, success, failure, param,{ipKey:'hlIP'});
-
-        window.app_open(this, "/DemandDetail", {
-            data: {
-                id:""
-            }
-        }, "new");
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demandapi_demands, success, failure, param);
     }
 
     render() {
@@ -215,8 +199,12 @@ class page extends Component {
                                             required: true,
                                             message: '人数不能为空',
                                         },{
+                                            pattern: /^.{1,4}$/,
+                                            message: '人数不能超过4位数',
+                                        },{
                                             pattern: /^\+?[1-9]\d*$/,
                                             message: '人数必须大于0',
+
                                         }],
                                         initialValue: adultNum,
                                     })(<Input style={{width:"110px",height:"35px"}}
@@ -247,6 +235,9 @@ class page extends Component {
                                         rules: [{
                                             required: false,
                                             message: '人数必须大于0',
+                                        },{
+                                            pattern: /^.{1,4}$/,
+                                            message: '人数不能超过4位数',
                                         }],
                                         initialValue: childNum
                                     })(
@@ -298,10 +289,11 @@ class page extends Component {
                                         required: true,
                                         message: '姓名不能为空',
                                     },{
-                                        pattern: /^[a-zA-Z\u4e00-\u9fa5]{2,20}$/,
-                                        message: '输入汉字与英文长度2-20'
+                                        pattern: /^[\u4e00-\u9fa5]{2,4}$|^[a-zA-Z]{2,20}$/,
+                                        message: '请输入姓名(汉字2-4个字符或英文2-20个字符)'
                                     }],
                                 })(<Input style={{width:"220px"}}
+                                          maxLength={20}
                                           placeholder={"请输入姓名"}/>)
                                 }
                             </FormItem>
@@ -322,10 +314,8 @@ class page extends Component {
                                 })(
                                     <Input style={{width:"220px"}}
                                            placeholder={"请输入手机号"}
-                                           onChange={(e)=>{
-                                               let val = e.target.value;
-                                               this.verPhone(val);
-                                           }}/>
+                                           maxLength={11}
+                                           />
                                 )}
                             </FormItem>
                         </div>
@@ -388,12 +378,19 @@ class page extends Component {
         if (!childNum){
             childNum = 0;
         }
+
         let num_Int = parseInt(isAdult?adultNum:childNum);
         if (isAdd){
             num_Int++;
         }else {
             num_Int--;
         }
+
+        let value = num_Int.toString();
+        if (value.length>=5){
+            num_Int = parseInt(isAdult?adultNum:childNum);
+        }
+
         num_Int = num_Int<=0?"0":num_Int;
         if (isAdult){
             this.setState({
@@ -411,6 +408,9 @@ class page extends Component {
     }
 
     verPhone(value){
+        if(value>=11){
+            value = value.substring(0,11);
+        }
         if (value && (value!="")&& /^[0-9]*$/.test(value)){
             this.setState({
                 phone:value
@@ -431,6 +431,9 @@ class page extends Component {
     }
     onChangeNumVal(isAdult,value){
         if (value && (value!="")&& /^[0-9]*$/.test(value)){
+            if (value.length>=5){
+                value = value.substring(0,4);
+            }
             if (isAdult){
                 let num = parseInt(value);
                 this.setState({
