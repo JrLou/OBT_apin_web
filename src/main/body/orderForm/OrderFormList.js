@@ -13,9 +13,6 @@ const Option = Select.Option;
 class OrderFormList extends Component{
     constructor(props) {
         super(props);
-        CookieHelp.saveUserInfo({
-            Authorization:"eyJpZCI6IjAzN2E2MmI1M2M5ZjQ0MDZhZTQzMjA3NTVmNGY2ZmZiIiwiYXBwSWQiOiIyZWY4ZDkwMmMxMmY0NTRmOWFjZGJiMDQ4NGY4YzA1YSIsImFjY291bnRJZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIsInVzZXJJZCI6IjY2ZTUzZTFkMmFjMDQwMGNiMTFjYjc5ZTFlOTU5YWU3IiwiZGVwdElkIjpudWxsLCJ1c2VyTmFtZSI6Iui2hee6p+euoeeQhuWRmCIsInNlY3JldCI6IjU0MDBiYjQ3NDBmZjNjOWEyYWI1ZWNiN2UxOWJkZTY4In0=",
-        });
         //状态机
         this.state = {
             cityDep:'',

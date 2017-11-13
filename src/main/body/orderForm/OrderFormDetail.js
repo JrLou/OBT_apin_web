@@ -27,16 +27,13 @@ import PayBottom from '../content/detail/detailComp/PayBottomForDetail.js';
 class OrderFormDetail extends Component{
     constructor(props){
         super(props);
-        CookieHelp.saveUserInfo({
-            Authorization:"eyJpZCI6IjAzN2E2MmI1M2M5ZjQ0MDZhZTQzMjA3NTVmNGY2ZmZiIiwiYXBwSWQiOiIyZWY4ZDkwMmMxMmY0NTRmOWFjZGJiMDQ4NGY4YzA1YSIsImFjY291bnRJZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIsInVzZXJJZCI6IjY2ZTUzZTFkMmFjMDQwMGNiMTFjYjc5ZTFlOTU5YWU3IiwiZGVwdElkIjpudWxsLCJ1c2VyTmFtZSI6Iui2hee6p+euoeeQhuWRmCIsInNlY3JldCI6IjU0MDBiYjQ3NDBmZjNjOWEyYWI1ZWNiN2UxOWJkZTY4In0=",
-        });
         //模拟随机状态
         // let random = Math.floor(Math.random()*11);
         // let list = [0,1,2,3,5,7,8,12,13,14,15];
 
         this.state = {
-            // orderId:window.app_getPar(this).id,         //订单ID
-            orderId:'16b3639900f54a86b9116af77b088d75',         //订单ID
+            orderId:window.app_getPar(this).id,         //订单ID
+            // orderId:'16b3639900f54a86b9116af77b088d75',         //订单ID
             returnState:'',          //接口返回的订单状态  （接口返回的状态需要经过转换才赋值给状态机）
             orderState:'',       //页面订单状态
             isPassed:false,     //乘机人信息是否已经确认
@@ -380,7 +377,7 @@ class OrderFormDetail extends Component{
     getTitleData(data){
         let titleData = {
             deadLine:data.expiredTime,
-            reason:data.remark,
+            reason:data.failReason,
         };
         return titleData;
     }
