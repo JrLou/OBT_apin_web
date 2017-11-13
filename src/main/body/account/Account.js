@@ -59,7 +59,7 @@ class AccountForm extends Component {
     }
 
     componentDidMount() {
-        HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.1/memberInfo', (code, message, json, option) => {
+        HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/memberInfo', (code, message, json, option) => {
             log("会员中心用户信息");
             log(option);
             const { account, password, mobile } = json;
@@ -191,7 +191,7 @@ class AccountForm extends Component {
                     || contactName != this.state.contactName
                     || address != this.state.address
                 ) {
-                    HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.1/modifyMemberInfo', (code, message, json, option) => {
+                    HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/modifyMemberInfo', (code, message, json, option) => {
                         this.setState({
                             isView: true
                         });
@@ -226,7 +226,7 @@ class AccountForm extends Component {
      */
     updatePsw(option, password) {
         const { accountID } = this.state;
-        HttpTool.request(HttpTool.typeEnum.POST, '/memberapi/v1.1/users/updatePassword', (code, message, json, option) => {
+        HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/users/updatePassword', (code, message, json, option) => {
 
         }, () => {
         }, {
