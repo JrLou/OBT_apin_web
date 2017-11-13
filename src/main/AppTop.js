@@ -135,7 +135,7 @@ class page extends Component {
 
         const pathname = window.location.pathname;
         // 未登录并且不在首页，则跳转到首页
-        if (!isLogin && (pathname !== '/' || pathname !== '/Search')) {
+        if (!isLogin && pathname !== '/' && pathname !== '/Search') {
             window.app_open(this, '/', null, "self");
         }
     }
