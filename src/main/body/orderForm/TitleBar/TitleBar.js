@@ -11,7 +11,7 @@
 import React, {Component} from 'react';
 import css from './TitleBar.less';
 import {hasKey} from '../../tool/LXDHelp.js';
-import {Modal,Spin} from 'antd';
+import {Modal} from 'antd';
 
 class TitleBar extends Component{
     constructor(props){
@@ -20,8 +20,8 @@ class TitleBar extends Component{
         this.state={
             orderState:this.props.orderState,
             orderID:this.props.orderID,
-            deadLine:this.props.deadLine?this.props.deadLine:'',
-            reason:this.props.reason?this.props.reason:'',
+            deadLine:this.props.titleData.deadLine?this.props.titleData.deadLine:'',
+            reason:this.props.titleData.reason?this.props.titleData.reason:'',
 
             confirmModal:false,     //删除订单询问框
         };
@@ -54,17 +54,17 @@ class TitleBar extends Component{
             case 2:title='待付订金...';
                     break;
             case 3:title='待付款...';
-                    msg=`请在${date} 18点之前支付`;
+                    msg=date?`请在 ${date} 18点之前支付`:'';
                     break;
             case 5:title='待付尾款...';
-                    msg=`请在${date} 18点之前支付尾款`;
+                    msg=date?`请在 ${date} 18点之前支付尾款`:'';
                     break;
             case 7:title='已出票';
                     break;
             case 8:title='订单关闭';
                     break;
             case 12:title='已付款（未录乘机人）';
-                    msg=`您还没有录入齐全乘机人信息，请在${date} 18点之前录入`;
+                    msg=date?`您还没有录入齐全乘机人信息，请在 ${date} 18点之前录入`:'';
                     break;
             case 13:title='等待出票...';
                     msg=`爱拼机正在为您出票中，请耐心等待`;
@@ -72,7 +72,7 @@ class TitleBar extends Component{
             case 14:title='支付审核中...';
                     break;
             case 15:title='支付审核失败';
-                    msg=`审核不通过原因：${this.state.reason}；重新提交截止时间${date}`;
+                    msg=`审核不通过原因：${this.state.reason}；重新提交截止时间 ${date}`;
                 break;
             default:break;
         }

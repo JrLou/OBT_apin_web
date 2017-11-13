@@ -10,9 +10,13 @@ class PayBottom extends Component {
         this.state = {
             payType:this.props.payType?this.props.payType:'', //支付类型：2：待付订金 3：待付全款 5：待付尾款
             overTime:false,
-            timer:this.props.timer?this.props.timer:0,
+            countDown:this.props.param.countDown?this.props.param.countDown:0,
             timerStr:'00:00:00',
         };
+
+        if(this.props.btnAction instanceof Function){
+            this.callBack = this.props.btnAction;
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -20,9 +24,9 @@ class PayBottom extends Component {
     }
 
     componentDidMount(){
-        if(this.state.timer&&(this.state.payType==2||this.state.payType==3)){
+        if(this.state.countDown&&(this.state.payType==2||this.state.payType==3)){
             //启动倒计时
-            this.getTimeOut(this.state.timer);
+            this.getTimeOut(this.state.countDown);
         }
     }
 
@@ -37,20 +41,21 @@ class PayBottom extends Component {
                     break;
             default:break;
         }
-        // orderPrice:"2333",
-        //     adultPrice:"2333",
-        //     childPrice:"2000",
-        //     childNum:this.childNum,
-        //     adultNum:this.adultNum,
-        //     totalPrice:this.totalPrice,
+
         let {param,isPay,callBack} = this.props;
-        let str = param?"(成人¥"+param.adultPrice+"*"+param.adultNum+"+"+"儿童¥" +param.childPrice+
-            "*"+param.childNum+"=价格(含税)"+"¥"+param.totalPrice+")":"";
+        let str = param?"(成人¥"+param.adultPrice+"*"+param.adultCount+"+"+"儿童¥" +param.childPrice+
+            "*"+param.childCount+"=价格(含税)"+"¥"+param.totalPrice+")":"";
 
         return (<div className={css.payDiv}>
             <div className={this.state.overTime?css.divDisabled:css.bottomDiv}>
                 <div className={css.bottomDiv_left}>
-                    <div className={css.bottomBtn}>{"<返回上一级"}</div>
+                    <div className={css.bottomBtn}
+                        onClick={()=>{
+                            window.app_open(this,'/OrderFormList',{});
+                        }}
+                    >
+                        {"<返回上一级"}
+                    </div>
                 </div>
                 <div className={css.bottomDiv_center}>
                     <div className={css.depositPriceBg}>
@@ -66,16 +71,20 @@ class PayBottom extends Component {
                         }
                     </div>
                 </div>
-                <div className={this.state.overTime?css.btnDisabled:css.bottomDiv_right} onClick={()=>{
-                    if(this.state.overTime){return;}
-                    if (callBack){
-                        callBack();
+                <div
+                    className={this.state.overTime?css.btnDisabled:css.bottomDiv_right}
+                    onClick={()=>{
+                        if(this.state.overTime){return;}
+                        if (this.callBack){
+                            this.callBack();
                     }
                 }}>
                     <div>{this.state.payType?'去支付':(isPay?"立即支付":"提交订单")}</div>
                     {
                         (this.state.payType==2||this.state.payType==3)
-                        ?<div style={{fontSize:"12px"}}>{this.state.timerStr}</div>
+                        ?<div style={{fontSize:"12px"}}>
+                                {this.state.countDown>0?this.state.timerStr:''}
+                        </div>
                         :
                             (this.state.payType==5)
                             ?''

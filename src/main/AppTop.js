@@ -92,13 +92,6 @@ class page extends Component {
 
                             </div>
                             <div className={less.rightItem}
-                                title="开发测试：打开订单列表"
-                                onClick={() => {
-                                    // window.open("http://mvp.apin.com");
-                                    window.app_open(this, "/OrderFormList", {
-                                        data: {}
-                                    }, "new");
-                                }}
                             >
                                 <font style={{ fontSize: 12, color: "#666" }}>客服电话  9:00~21:00</font>
                                 <br />

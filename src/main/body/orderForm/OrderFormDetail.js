@@ -28,18 +28,21 @@ class OrderFormDetail extends Component{
     constructor(props){
         super(props);
         //模拟随机状态
-        let random = Math.floor(Math.random()*11);
-        let list = [0,1,2,3,5,7,8,12,13,14,15];
+        // let random = Math.floor(Math.random()*11);
+        // let list = [0,1,2,3,5,7,8,12,13,14,15];
 
         this.state = {
             orderId:window.app_getPar(this).orderId,         //订单ID
-            returnState:3,          //接口返回的订单状态  （接口返回的状态需要经过转换才赋值给状态机）
-            // orderState:list[random],       //页面订单状态
-            orderState:0,       //页面订单状态
+            returnState:'',          //接口返回的订单状态  （接口返回的状态需要经过转换才赋值给状态机）
+            orderState:'',       //页面订单状态
             isPassed:false,     //乘机人信息是否已经确认
+
+            titleData:null,     //头部导航信息
             flightData:null,    //航班信息
             orderMsg:null,      //订单信息
             payMsg:null,        //支付明细
+            bottomData:null,    //底部浮动支付信息
+
             upDate:0,
             loading:false,      //加载状态
             confirmModal:false, //询问框
@@ -58,63 +61,65 @@ class OrderFormDetail extends Component{
         this.setLoading(true,this.loadFormDetail);
 
         //模拟数据
-        let orderMsg = {
-            orderId:'10000059f39c5427ca5f749604a09de39',
-            orderNo:'123123123123132',
-            adultCount:3,
-            adultPrice:3450,
-            childCount:7,
-            childPrice:1200,
-            createdTime:'2017-03-24 14:29',
-            expiredTime:'2017-04-10 18:00',
-            orderAmount:'12333',
-        };
-        let payMsg = [
-            {
-                amount:783,
-                expiredTime:'2017-04-10',
-                payStatus:1,
-                payment:1,
-                records:[
-                    {
-                        auditStatus:2,
-                        payAmount:3333,
-                        payTime:'2017-03-230',
-                        payType:0,
-                        remark:'',
-                        voucherUrl:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1510342176710&di=9f2237f38d03b8d8e1fa31f69093d35f&imgtype=0&src=http%3A%2F%2Fwww.myexception.cn%2Fimg%2F2015%2F07%2F07%2F210245743.png,https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1510342176710&di=20c575c39bd83ef538b99bd64e72d2c5&imgtype=0&src=http%3A%2F%2Fimages.cnitblog.com%2Fblog%2F685350%2F201411%2F011904149566976.jpg',
-                    }
-                ],
-            },
-            {
-                amount:4783,
-                expiredTime:'2017-04-10',
-                payStatus:1,
-                payment:2,
-                records:[
-                    {
-                        auditStatus:1,
-                        payAmount:3333,
-                        payTime:'2017-03-230',
-                        payType:1,
-                        remark:'',
-                        voucherUrl:'',
-                    },
-                    {
-                        auditStatus:1,
-                        payAmount:33,
-                        payTime:'2017-03-230',
-                        payType:4,
-                        remark:'',
-                        voucherUrl:'',
-                    }
-                ],
-            }
-        ];
-        this.setState({
-            orderMsg:orderMsg,
-            payMsg:payMsg,
-        });
+        // let orderMsg = {
+        //     orderId:'10000059f39c5427ca5f749604a09de39',
+        //     orderNo:'123123123123132',
+        //     adultCount:3,
+        //     adultPrice:3450,
+        //     childCount:7,
+        //     childPrice:1200,
+        //     createdTime:'2017-03-24 14:29',
+        //     expiredTime:'2017-04-10 18:00',
+        //     orderAmount:'12333',
+        // };
+        // let payMsg = [
+        //     {
+        //         amount:783,
+        //         expiredTime:'2017-04-10',
+        //         payStatus:1,
+        //         orderId:'1231231231',
+        //         id:'3232323233',
+        //         payment:1,
+        //         records:[
+        //             {
+        //                 auditStatus:2,
+        //                 payAmount:3333,
+        //                 payTime:'2017-03-230',
+        //                 payType:0,
+        //                 remark:'',
+        //                 voucherUrl:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1510342176710&di=9f2237f38d03b8d8e1fa31f69093d35f&imgtype=0&src=http%3A%2F%2Fwww.myexception.cn%2Fimg%2F2015%2F07%2F07%2F210245743.png,https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1510342176710&di=20c575c39bd83ef538b99bd64e72d2c5&imgtype=0&src=http%3A%2F%2Fimages.cnitblog.com%2Fblog%2F685350%2F201411%2F011904149566976.jpg',
+        //             }
+        //         ],
+        //     },
+        //     {
+        //         amount:4783,
+        //         expiredTime:'2017-04-10',
+        //         payStatus:1,
+        //         payment:2,
+        //         records:[
+        //             {
+        //                 auditStatus:1,
+        //                 payAmount:3333,
+        //                 payTime:'2017-03-230',
+        //                 payType:1,
+        //                 remark:'',
+        //                 voucherUrl:'',
+        //             },
+        //             {
+        //                 auditStatus:1,
+        //                 payAmount:33,
+        //                 payTime:'2017-03-230',
+        //                 payType:4,
+        //                 remark:'',
+        //                 voucherUrl:'',
+        //             }
+        //         ],
+        //     }
+        // ];
+        // this.setState({
+        //     orderMsg:orderMsg,
+        //     payMsg:payMsg,
+        // });
 
 
     }
@@ -130,7 +135,9 @@ class OrderFormDetail extends Component{
         //仅在此处做状态异常判断，如果状态不在此列，说明出现异常，页面不展示
         if(!(hasKey(this.state.orderState,[0,1,2,3,5,7,8,12,13,14,15]))){
             return(
-                <div className={css.noMessage}>订单查询中，请稍后...</div>
+                <div className={css.noMessage}>
+                    <Spin size={'large'}></Spin>
+                </div>
             );
         }
         return(
@@ -140,10 +147,9 @@ class OrderFormDetail extends Component{
                     spinning={this.state.loading}
                 >
                 <TitleBar
-                    orderState={this.state.orderState}
-                    deadLine={'2017-11-27'}
-                    reason={'审核失败的原因'}
                     orderId={this.state.orderId}
+                    orderState={this.state.orderState}
+                    titleData={this.state.titleData}
                     onDelete={()=>{this.deleteOrderCB();}}
                 />
                  <div className={css.itemContainer}>
@@ -178,16 +184,9 @@ class OrderFormDetail extends Component{
                 {
                     (hasKey(this.state.orderState,[2,3,5]))
                     ?<PayBottom
-                        param={{
-                            orderPrice:"2333",
-                            adultPrice:"2333",
-                            childPrice:"2000",
-                            childNum:2,
-                            adultNum:1,
-                            totalPrice:'33333',
-                        }}
                         payType={this.state.orderState}
-                        timer={3888}
+                        param={this.state.bottomData}
+                        btnAction={this.openPayPage.bind(this)}
                     />
                     :''
                 }
@@ -229,17 +228,36 @@ class OrderFormDetail extends Component{
             orderId:this.state.orderId,
         };
         let successCB = (code, msg, json, option)=>{
-            log('===========请求结果=========>>>>>>>>');
+            log('=========请求订单详情结果>>>>>>>>>>>>>>>');
             log(json);
-            this.setLoading(false);
-            message.success(msg);
+            if(!json){
+                //如果信息为空，则跳转到404
+                window.app_open(this,'/None',{});
+            }
             let resultData = getFlightData(json.voyages,json.flightType,json.freeBag,json.weightLimit);
+            let titleData = this.getTitleData(json);
+            let orderMsg = this.getOrderMsg(json);
+            let payMsg = json.pays?json.pays:[];
+            let bottomData = this.getBottomData(json);
+            let orderState = this.getOrderState(json);
+
+            this.setLoading(false);
             this.setState({
+                titleData:titleData,
                 flightData:resultData,
+                orderMsg:orderMsg,
+                payMsg:payMsg,
+                bottomData:bottomData,
+                orderState:orderState,
+                returnState:json.orderStatus,
             });
         };
         let failureCB = (code, msg, option)=>{
             this.setLoading(false);
+            if(code == -500){
+                //服务端错误
+                window.app_open(this,'/None',{});
+            }
             message.error(msg);
         };
         this.setLoading(true,()=>{
@@ -267,6 +285,114 @@ class OrderFormDetail extends Component{
      */
     isLoading() {
         return this.state.loading;
+    }
+
+    /**
+     * 根据后端返回到orderStatus和extraCode判断页面状态
+     * @param data
+     * @return state
+     */
+    getOrderState(data){
+        let returnState = parseInt(data.orderStatus);
+        let extraCode = parseInt(data.extraCode);
+        let state = '';
+        switch(returnState){
+            case 0:state = 0;break;
+            case 1:state = 1;break;
+            case 2:if(extraCode==0){
+                        state = 14;
+                    }else if(extraCode ==1){
+                        state = 15;
+                    }else{
+                        state = 2;
+                    }
+                    break;
+            case 3:if(extraCode==0){
+                        state = 14;
+                    }else if(extraCode ==1){
+                        state = 15;
+                    }else{
+                        state = 3;
+                    }
+                    break;
+            case 5:if(extraCode==0){
+                        state = 14;
+                    }else if(extraCode ==1){
+                        state = 15;
+                    }else{
+                        state = 5;
+                    }
+                    break;
+            case 6:if(extraCode==2){
+                        state = 12;
+                    }else if(extraCode ==3){
+                        state = 13;
+                    }
+                    break;
+            case 7:state = 7;break;
+            case 8:state = 8;break;
+        }
+        return state;
+    }
+
+    /**
+     * 从详情信息中得到订单信息
+     * @param data
+     * @returns orderMsg
+     */
+    getOrderMsg(data){
+        let orderMsg = {
+            orderId:data.id,
+            orderNo:data.orderNo,
+            adultCount:data.adultCount,
+            adultPrice:data.adultPrice,
+            childCount:data.childCount,
+            childPrice:data.childPrice,
+            createdTime:data.createdTime,
+            expiredTime:data.expiredTime,
+            orderAmount:data.orderAmount,
+            closeReason:data.remark,
+            closetime:data.closetime,
+        };
+        return orderMsg;
+    }
+
+    /**
+     * 从详情信息中得到头部信息
+     * @param data
+     * @returns titleData
+     */
+    getTitleData(data){
+        let titleData = {
+            deadLine:data.expiredTime,
+            reason:data.remark,
+        };
+        return titleData;
+    }
+
+    /**
+     * 从详情信息中得到头部信息
+     * @param data
+     * @returns bottomData
+     */
+    getBottomData(data){
+        let bottomData = {
+            orderPrice:data.orderAmount,
+            totalPrice:data.orderAmount,
+            adultPrice:data.adultPrice,
+            childPrice:data.childPrice,
+            childCount:data.childCount,
+            adultCount:data.adultCount,
+            countDown:data.countDown,
+        };
+        return bottomData;
+    }
+
+    /**
+     * 打开支付页面
+     */
+    openPayPage(){
+        window.app_open(this,'/Pay',{id:this.state.orderId});
     }
 }
 
