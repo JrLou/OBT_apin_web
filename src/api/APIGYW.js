@@ -63,6 +63,6 @@ let APIGYW = {
     /**
      * 需求确认
      */
-    demand_confirm: "/bo/demandapi/v1.0/demands/confirm",
+    demand_confirm: "/bo/demandapi/v1.0/demands/plans/confirm",
 };
 module.exports = APIGYW;

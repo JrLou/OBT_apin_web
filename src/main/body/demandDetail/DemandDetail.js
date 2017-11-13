@@ -335,7 +335,7 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>需求状态：</font>
                             <font
-                                className={type === 1 ||type === 2|| type === 3 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{data && data.demandStatus ? (data.demandStatus === -1 ? "全部" : status[data.demandStatus] ) : "暂无"}</font>
+                                className={type === 1 ||type === 2|| type === 3 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{type === -1 ? "全部" : status[type]}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
