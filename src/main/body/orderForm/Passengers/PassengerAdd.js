@@ -16,8 +16,8 @@ class PassengerAdd extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            airlineSigns:this.props.airlineSigns?this.props.airlineSigns:1,  //1:国内  2：国际
-            credType:this.props.airlineSigns?this.props.airlineSigns:1,     //证件类型
+            lineType:this.props.lineType?this.props.lineType:1,  //1:国内  2：国际
+            credType:this.props.lineType?this.props.lineType:1,     //证件类型
             visible:false,  //模态框显示
             loading:false,   //是否处于加载中
 
@@ -64,7 +64,7 @@ class PassengerAdd extends Component{
         }else{
             //新增
             newData.gender = 1;
-            newData.credType = nextProps.airlineSigns?nextProps.airlineSigns:1;
+            newData.credType = nextProps.lineType?nextProps.lineType:1;
         }
         this.setState({
             data:newData,

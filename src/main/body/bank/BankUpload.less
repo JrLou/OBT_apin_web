@@ -5,7 +5,7 @@
       text-align: center;
       color: #ff5500;
       line-height: 50px;
-      font-size: 20px;
+      font-size: @font_size_big;
    }
    .payOutBox;
    .bankBox {
@@ -77,13 +77,14 @@
          :global {
             .forUploadStyle .ant-upload-list-item.ant-upload-list-item-undefined {
                //display: none!important;//这个是上传的时候的第一个div
+
             }
             .forUploadStyle .ant-upload.ant-upload-select-picture-card > .ant-upload {
                height: 200px;
                display: flex;
                align-items: center; /*定义子元素垂直居中*/
                justify-content: center; /*定义子元素水平居中*/
-               background-color: #DEEEFB;
+               background-color: @upload_color;
             }
 
             .forUploadStyle .ant-upload.ant-upload-select-picture-card,

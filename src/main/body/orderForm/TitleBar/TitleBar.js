@@ -102,6 +102,7 @@ class TitleBar extends Component{
                     }
                 </div>
                 <Modal
+                    prefixCls={'my-ant-modal'}
                     title={'提示'}
                     visible={this.state.confirmModal}
                     onOk={()=>{

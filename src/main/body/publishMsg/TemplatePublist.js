@@ -355,7 +355,7 @@ class page extends Component {
                     <Row>
                         <Col >
                             <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
-                                {getFieldDecorator('phone', {
+                                {getFieldDecorator('mobile', {
                                     rules: [{
                                         required: true,
                                         message: '请输入联系电话',
