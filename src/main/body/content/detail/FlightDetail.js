@@ -30,7 +30,6 @@ class page extends Component {
             upData:0,
             adultNum:1,
             childNum:0,
-            phone:""
         };
     }
     componentWillReceiveProps(nextProps) {
@@ -46,11 +45,17 @@ class page extends Component {
     componentDidMount() {
         this.loadData();
     }
+
+    /**
+     * 进入界面 初次请求数据
+     */
     loadData() {
         var param = this.param;
         this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
             this.loadingView.refreshView(false,()=>{
+                log(json);
+                log("----------gyw----------");
                 this.setData(json);
             });
         };
@@ -60,10 +65,15 @@ class page extends Component {
         };
         HttpTool.request(HttpTool.typeEnum.POST, APIGYW.flightapi_orderDetail_query, success, failure, param,);
     }
+
+    /**
+     *  请求接口后初始化数据
+     */
     setData(json){
         this.data = json;
         this.adultPrice = json&&json.adultPrice?parseInt(json.adultPrice):0;
         this.childPrice = json&&json.childPrice?parseInt(json.childPrice):0;
+        this.depositAmount = json&&json.depositAmount?parseInt(json.depositAmount):0;
 
         let voyage = json&&json.plans?json.plans:{};
         this.flightType = voyage.flightType;
@@ -72,8 +82,8 @@ class page extends Component {
         this.requireParam = {
             lineType:this.flightType?this.flightType:1,
             lineNum:1,
-            adultCount:"0",
-            childCount:"0",
+            adultCount:this.state.adultNum,
+            childCount:this.state.childNum,
             remark:"",
             phone:"",
             listData:[{}]};
@@ -86,52 +96,55 @@ class page extends Component {
     payAction(){
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form------------------: ', values);
                 var param = values;
-                let json = this.param?this.param:{};
-                for(var i in json){
-                    param[i] = json[i];
-                }
-                if (this.flightType){
-                    param.flightType = this.flightType;
+                let jsonParam = this.param?this.param:{};
+                param.source = "Web";
+                for(var i in jsonParam){
+                    param[i] = jsonParam[i];
                 }
                 this.loadingView.refreshView(true);
                 var success = (code, msg, json, option) => {
                     this.loadingView.refreshView(false,()=>{
-                        this.skipView(code);
+                        if (json){
+                            this.skipView(json);
+                        }else {
+                            message(msg);
+                        }
                     });
                 };
                 var failure = (code, msg, option) => {
                     this.loadingView.refreshView(false);
                     message.warning(msg);
                 };
-                // HttpTool.request(HttpTool.typeEnum.POST, APIGYW.orderapi_orders_create, success, failure, param, {ipKey:'hlIP'});
-
-                this.loadingView.refreshView(false,()=>{
-                    this.skipView(3);
-                });
+                HttpTool.request(HttpTool.typeEnum.POST, APIGYW.orderapi_orders_create, success, failure, param);
             }
         });
     }
     /**
-     * code:    1 跳转订单页 只传订单id
-     *          2 跳转支付页 只传订单id
-     *          3 弹出发布需求窗并跳转需求详情页
+     * json {
+     *          id:
+     *          code:
+     *    }    code  1 跳转订单页 只传订单id
+     *               2 跳转支付页 只传订单id
+     *               3 弹出发布需求窗并跳转需求详情页
      */
-    skipView(code){
+    skipView(json){
+        let code = json.flag?json.flag:0;
+        let id = json.id?json.id:"";
         if (code==1){
-            window.app_open(this.props.obj, "/OrderFormDetail", {
-                data:{
-                    id:""
-                }
-            },"self");
+            window.app_open(this.props.obj, "/OrderFormDetail", {id:id},"self");
         }else if (code==2){
-            window.app_open(this.props.obj, "/Pay", {
-                data:{
-                    id:""
-                }
-            },"self");
+            window.app_open(this.props.obj, "/Pay", {id:id},"self");
         }else {
+            //用来显示库存超出的时候 弹出module框添加已知数据
+            this.requireParam = {
+                lineType:this.flightType?this.flightType:1,
+                lineNum:1,
+                adultCount:this.state.adultNum,
+                childCount:this.state.childNum,
+                remark:"",
+                listData:[{}]
+            };
             this.myModalRequire.showModal(true,
                 {
                     title:"提示",
@@ -148,7 +161,6 @@ class page extends Component {
         param.source = "Web";
         this.loadingView.refreshView(true);
         let success = (code, msg, json, option) => {
-            message.success(msg);
             this.loadingView.refreshView(false,()=>{
                 if (json&&json.id){
                     window.app_open(this, "/DemandDetail", {
@@ -194,7 +206,7 @@ class page extends Component {
                             <div className={css.i_cell}>
                                 <div className={css.i_title}>{"成人(12岁以上):"}</div>
                                 <FormItem style={{float:"left"}}>
-                                    {getFieldDecorator('adultNum', {
+                                    {getFieldDecorator('adultCount', {
                                         rules: [{
                                             required: true,
                                             message: '人数不能为空',
@@ -231,7 +243,7 @@ class page extends Component {
                             <div className={css.i_cell}>
                                 <div className={css.i_title}>{"儿童(2-12岁):"}</div>
                                 <FormItem style={{float:"left"}}>
-                                    {getFieldDecorator('childNum', {
+                                    {getFieldDecorator('childCount', {
                                         rules: [{
                                             required: false,
                                             message: '人数必须大于0',
@@ -284,7 +296,7 @@ class page extends Component {
                         <div className={css.i_cell}>
                             <div className={css.i_title}>{"姓名:"}</div>
                             <FormItem style={{float:"left"}}>
-                                {getFieldDecorator('name', {
+                                {getFieldDecorator('customerName', {
                                     rules: [{
                                         required: true,
                                         message: '姓名不能为空',
@@ -293,7 +305,7 @@ class page extends Component {
                                         message: '请输入姓名(汉字2-4个字符或英文2-20个字符)'
                                     }],
                                 })(<Input style={{width:"220px"}}
-                                          maxLength={20}
+                                          maxLength="20"
                                           placeholder={"请输入姓名"}/>)
                                 }
                             </FormItem>
@@ -303,19 +315,18 @@ class page extends Component {
                         <div className={css.i_cell}>
                             <div className={css.i_title}>{"手机号码:"}</div>
                             <FormItem style={{float:"left"}}>
-                                {getFieldDecorator('phone', {
+                                {getFieldDecorator('mobile', {
                                     rules: [{
                                         required: true,
                                         message: '手机号不能为空',
                                     },{
-                                        pattern: /^1[3|5|7|8|][0-9]{9}$/,
+                                        pattern: /^1\d{10}$/,
                                         message: '请输入正确的11位手机号码'
                                     }],
                                 })(
                                     <Input style={{width:"220px"}}
                                            placeholder={"请输入手机号"}
-                                           maxLength={11}
-                                           />
+                                           maxLength="11"/>
                                 )}
                             </FormItem>
                         </div>
@@ -324,7 +335,7 @@ class page extends Component {
 
                 <PayBottom
                     param={{
-                        orderPrice:"2333",
+                        orderPrice:this.depositAmount,
                         adultPrice:this.adultPrice,
                         childPrice:this.childPrice,
                         childNum:childNum,
@@ -412,20 +423,12 @@ class page extends Component {
             value = value.substring(0,11);
         }
         if (value && (value!="")&& /^[0-9]*$/.test(value)){
-            this.setState({
+            this.props.form.setFieldsValue({
                 phone:value
-            },()=>{
-                this.props.form.setFieldsValue({
-                    phone:value
-                });
             });
         }else {
-            this.setState({
+            this.props.form.setFieldsValue({
                 phone:""
-            },()=>{
-                this.props.form.setFieldsValue({
-                    phone:""
-                });
             });
         }
     }
@@ -467,12 +470,12 @@ class page extends Component {
     }
     setAdultNum(value){
         this.props.form.setFieldsValue({
-            adultNum:value
+            adultCount:value
         });
     }
     setChildNum(value){
         this.props.form.setFieldsValue({
-            childNum:value
+            childCount:value
         });
     }
 }

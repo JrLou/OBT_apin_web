@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-13 18:49:12
+ * @Last Modified time: 2017-11-14 11:07:27
  */
 
 import React, { Component } from 'react';
@@ -94,6 +94,9 @@ class AccountLoginForm extends React.Component {
                     return loginPromise(account, md5(password), data);
                 }
                 ).then((data) => {
+                    // 获取注册验证码也会调登录接口 保存APIN_USER token
+                    // IS_LOGIN判断是否真的登录
+                    CookieHelp.saveCookieInfo('IS_LOGIN', true);
                     this.props.setLogin();
                     this.props.onOK();
                 }).catch((error) => {
@@ -203,6 +206,10 @@ class MsgLoginForm extends React.Component {
                 const { account, password } = values;
                 const code = this.data;
                 loginPromise(account, md5(password), code).then((data) => {
+                    // 获取注册验证码也会调登录接口 保存APIN_USER token
+                    // IS_LOGIN判断是否真的登录
+                    CookieHelp.saveCookieInfo('IS_LOGIN', true);
+                    this.props.setLogin();
                     this.props.onOK();
                 }).catch((error) => {
                     message.error(error);
