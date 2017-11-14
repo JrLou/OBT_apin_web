@@ -88,7 +88,7 @@ class PayBottom extends Component {
                     {
                         (this.state.payType==2||this.state.payType==3||this.state.payType==5)
                         ?<div style={{fontSize:"12px"}}>
-                                {this.state.countDown>=0&&this.state.countDown<=86400000?this.state.timerStr:''}
+                                {this.state.countDown&&this.state.countDown>=0&&this.state.countDown<=86400000?this.state.timerStr:''}
                         </div>
                         :<div style={{fontSize:"12px"}}>{"( 提交订单30分钟内,即可确认资源信息 )"}</div>
                     }

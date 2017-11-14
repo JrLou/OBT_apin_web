@@ -24,7 +24,8 @@ class PassengerMsg extends Component{
     constructor(props){
         super(props);
         this.state = {
-            orderState:this.props.orderState,
+            returnState:this.props.returnState,     //接口返回的订单状态
+            orderState:this.props.orderState,       //页面订单状态
             orderId:this.props.orderId,
             // orderId:'16b3639900f54a86b9116af77b088d75',
             dataSource:this.props.defaultData?this.props.defaultData:[],
@@ -218,9 +219,9 @@ class PassengerMsg extends Component{
                             pagination={false}
                         />
                         {
-                            this.state.isPassed&&this.state.dataSource.length>0
-                            ?   ''
-                            :   <div className={css.submitBox}>
+                            //提交按钮显示前提：状态未确认，且列表内容大于1，且订单状态处于3，5，12，14，15（之前已区分待付订金，这里不用再判断）
+                            (!this.state.isPassed)&&(this.state.dataSource.length>0)&&(hasKey(this.state.orderState,[3,5,12,14,15]))
+                            ?   <div className={css.submitBox}>
                                     <Checkbox
                                         onChange={(e)=>{
                                             this.setState({
@@ -265,60 +266,61 @@ class PassengerMsg extends Component{
                                             您也可在付完尾款/全款后和提交信息人时间截止前提交。
                                         </div>
                                     </Modal>
-                                    <Modal
-                                        prefixCls={'my-ant-modal'}
-                                        title="删除乘机人"
-                                        visible={this.state.deleteConfirm}
-                                        onOk={()=>{
-                                            this.setState({
-                                                deleteConfirm:false,
-                                            },this.toDeletePassenger());
-                                        }}
-                                        okText={'是'}
-                                        onCancel={()=>{
-                                            this.setState({
-                                                deleteConfirm:false,
-                                            });
-                                        }}
-                                    >
-                                        <div className={css.contentTitle}>
-                                            {`是否确定删除乘机人：${this.state.deleteMsg.name} ？`}
-                                        </div>
-                                    </Modal>
-                                    <Modal
-                                        prefixCls={'my-ant-modal'}
-                                        title="导入乘机人结果"
-                                        visible={this.state.importResultMod}
-                                        footer={null}
-                                        maskClosable={false}
-                                        onCancel={()=>{
-                                            this.setState({
-                                                importResultMsg:null,
-                                                importResultMod:false,
-                                            });
-                                            this.setLoading(true,this.loadPassengerList);
-                                        }}
-                                    >
-                                        <div>
-                                            {this.getResultView()}
-                                        </div>
-                                        <div className={css.btnBox}>
-                                            <Button
-                                                type={'primary'}
-                                                onClick={()=>{
-                                                    this.setState({
-                                                        importResultMsg:null,
-                                                        importResultMod:false,
-                                                    });
-                                                    this.setLoading(true,this.loadPassengerList);
-                                                }}
-                                            >
-                                                确定
-                                            </Button>
-                                        </div>
-                                    </Modal>
                                 </div>
+                            :   ''
                         }
+                        <Modal
+                            prefixCls={'my-ant-modal'}
+                            title="导入乘机人结果"
+                            visible={this.state.importResultMod}
+                            footer={null}
+                            maskClosable={false}
+                            onCancel={()=>{
+                                this.setState({
+                                    importResultMsg:null,
+                                    importResultMod:false,
+                                });
+                                this.setLoading(true,this.loadPassengerList);
+                            }}
+                        >
+                            <div>
+                                {this.getResultView()}
+                            </div>
+                            <div className={css.btnBox}>
+                                <Button
+                                    type={'primary'}
+                                    onClick={()=>{
+                                        this.setState({
+                                            importResultMsg:null,
+                                            importResultMod:false,
+                                        });
+                                        this.setLoading(true,this.loadPassengerList);
+                                    }}
+                                >
+                                    确定
+                                </Button>
+                            </div>
+                        </Modal>
+                        <Modal
+                            prefixCls={'my-ant-modal'}
+                            title="删除乘机人"
+                            visible={this.state.deleteConfirm}
+                            onOk={()=>{
+                                this.setState({
+                                    deleteConfirm:false,
+                                },this.toDeletePassenger());
+                            }}
+                            okText={'是'}
+                            onCancel={()=>{
+                                this.setState({
+                                    deleteConfirm:false,
+                                });
+                            }}
+                        >
+                            <div className={css.contentTitle}>
+                                {`是否确定删除乘机人：${this.state.deleteMsg.name} ？`}
+                            </div>
+                        </Modal>
                     </div>
                     </Spin>
                 </div>
