@@ -10,7 +10,7 @@ class PayBottom extends Component {
         this.state = {
             payType:this.props.payType?this.props.payType:'', //支付类型：2：待付押金 3：待付全款 5：待付尾款
             overTime:false,
-            countDown:this.props.param.countDown?this.props.param.countDown:0,
+            countDown:this.props.param.countDown,
             timerStr:'00:00:00',
         };
 
@@ -24,7 +24,12 @@ class PayBottom extends Component {
     }
 
     componentDidMount() {
-        if (this.state.countDown && (this.state.payType == 2 || this.state.payType == 3)) {
+        if(this.state.countDown == 0){
+            this.setState({
+                overTime:true,
+                timerStr:'已超时',
+            });
+        }else if(this.state.countDown && (this.state.payType == 2 || this.state.payType == 3)) {
             //启动倒计时
             this.getTimeOut(this.state.countDown);
         }
@@ -81,14 +86,11 @@ class PayBottom extends Component {
                 }}>
                     <div>{this.state.payType?'去支付':(isPay?"立即支付":"提交订单")}</div>
                     {
-                        (this.state.payType==2||this.state.payType==3)
+                        (this.state.payType==2||this.state.payType==3||this.state.payType==5)
                         ?<div style={{fontSize:"12px"}}>
-                                {this.state.countDown>0&&this.state.countDown<=86400000?this.state.timerStr:''}
+                                {this.state.countDown>=0&&this.state.countDown<=86400000?this.state.timerStr:''}
                         </div>
-                        :
-                            (this.state.payType==5)
-                            ?''
-                            :<div style={{fontSize:"12px"}}>{"( 提交订单30分钟内,即可确认资源信息 )"}</div>
+                        :<div style={{fontSize:"12px"}}>{"( 提交订单30分钟内,即可确认资源信息 )"}</div>
                     }
                 </div>
             </div>
