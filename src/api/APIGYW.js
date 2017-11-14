@@ -35,7 +35,7 @@ let APIGYW = {
     /**
      * 新增订单
      */
-    orderapi_orders_create: "/orderapi/v1.0/orders/create",
+    orderapi_orders_create: "/bo/orderapi/v1.0/orders/create",
 
     /**
      * 提交需求

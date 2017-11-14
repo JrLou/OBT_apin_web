@@ -36,7 +36,7 @@ class BankUpload extends Component {
 
    loadPayInfo2modify(param, cb) {
       HttpTool.request(HttpTool.typeEnum.POST,
-         "/bohl/orderapi/v1.0/orders/recordQuery",
+         "/bo/orderapi/v1.0/orders/recordQuery",
          (code, msg, json, option) => {
             cb(code, msg, json);
          }, (code, msg) => {
@@ -129,7 +129,6 @@ class BankUpload extends Component {
             loading: false
          });
       } else {
-
          this.setState({
             amount: urlData.price,
             orderId: urlData.orderId,
@@ -357,7 +356,7 @@ class BankUpload extends Component {
       // }, Math.random() * 1000 + 2000);
 
       HttpTool.request(HttpTool.typeEnum.POST,
-         "/bohl/orderapi/v1.0/orders/pay/offline",
+         "/bo/orderapi/v1.0/orders/pay/offline",
          (code, msg, json, option) => {
             cb(code, msg, json);
          }, (code, msg, option) => {
@@ -398,6 +397,9 @@ class InputLayout extends Component {
 
    setFomrFileds(e, propName) {
       let v = e.target.value;
+      if(v.length >= 64 || (propName == "account" && v.length >= 24)){//后台设置的最大长度就是64
+         return;
+      }
       this.setState({
          [propName]: v
       }, () => {
