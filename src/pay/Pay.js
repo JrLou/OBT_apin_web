@@ -364,7 +364,7 @@ class page extends Component {
                                 //打开新页面
                                 downIng(() => {
                                    window.app_open(this, "/Upload", {
-                                      id: this.id,
+                                      orderId: this.id,
                                       price: this.data.order.payPrice,
                                        payment: this.data.order.payment
                                    }, "self");
@@ -599,7 +599,7 @@ class page extends Component {
             <div>
                 {/*UI说：长文字的时候，就不提示“支付失败”了*/}
                 {action === "ok" ?
-                    <div style={{textAlign:"left"}}>{content}&nbsp;
+                    <div>{content}&nbsp;
                         {connectUsLink}
                     </div>
                     :
