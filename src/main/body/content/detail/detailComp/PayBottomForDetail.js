@@ -8,7 +8,7 @@ class PayBottom extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            payType:this.props.payType?this.props.payType:'', //支付类型：2：待付订金 3：待付全款 5：待付尾款
+            payType:this.props.payType?this.props.payType:'', //支付类型：2：待付押金 3：待付全款 5：待付尾款
             overTime:false,
             countDown:this.props.param.countDown?this.props.param.countDown:0,
             timerStr:'00:00:00',
@@ -31,9 +31,9 @@ class PayBottom extends Component {
     }
 
     render() {
-        let payName = '订金';
+        let payName = '押金';
         switch (this.state.payType){
-            case 2:payName = '支付订金';
+            case 2:payName = '支付押金';
                     break;
             case 3:payName = '总金额';
                     break;
@@ -51,7 +51,7 @@ class PayBottom extends Component {
                 <div className={css.bottomDiv_left}>
                     <div className={css.bottomBtn}
                         onClick={()=>{
-                            window.app_open(this,'/OrderFormList',{});
+                            window.history.go(-1);
                         }}
                     >
                         {"<返回上一级"}
@@ -67,7 +67,7 @@ class PayBottom extends Component {
                         {
                             (this.state.payType==2||this.state.payType==5)
                             ?''
-                            :<span style={{fontSize:"12px",color:"#888D99"}}>{str}</span>
+                            :<span style={{fontSize:"12px",color:"#999"}}>{str}</span>
                         }
                     </div>
                 </div>
@@ -83,7 +83,7 @@ class PayBottom extends Component {
                     {
                         (this.state.payType==2||this.state.payType==3)
                         ?<div style={{fontSize:"12px"}}>
-                                {this.state.countDown>0?this.state.timerStr:''}
+                                {this.state.countDown>0&&this.state.countDown<=86400000?this.state.timerStr:''}
                         </div>
                         :
                             (this.state.payType==5)

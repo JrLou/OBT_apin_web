@@ -7,7 +7,6 @@ import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
 import {routeTranslate,getDateFormat,removeSpace,transformOrderState} from '../tool/LXDHelp.js';
 import {Table,Input,DatePicker,Select,Button,message} from 'antd';
-import moment from 'moment';
 const Option = Select.Option;
 
 class OrderFormList extends Component{
@@ -58,7 +57,7 @@ class OrderFormList extends Component{
                 value:'1',
             },
             {
-                title:'待付订金',
+                title:'待付押金',
                 value:'2',
             },
             {
@@ -174,7 +173,7 @@ class OrderFormList extends Component{
                     switch(num){
                         case 0:state = '订单取消';break;
                         case 1:state = '等待确认';break;
-                        case 2:state = '待付订金';break;
+                        case 2:state = '待付押金';break;
                         case 3:state = '待付款';break;
                         case 5:state = '待付尾款';break;
                         case 7:state = '已出票';break;
@@ -461,7 +460,7 @@ class OrderFormList extends Component{
             this.setLoading(false);
             this.setState({
                 dataSource:newData,
-                total:parseInt(option.total?option.total:0),
+                total:parseInt(option.option.total?option.option.total:0),
             });
         };
 

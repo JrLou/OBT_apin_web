@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Icon, message, Upload, Modal, Spin} from 'antd';
+const Dragger = Upload.Dragger;
 import {HttpTool} from "../../../../lib/utils/index.js";
 import less from "./BankUpload.less";
 
@@ -12,7 +13,6 @@ class UploadCmp extends Component {
          fileList: this.props.fileList || [],
          spinLoading: false,
       };
-      this._fileList = this.props.fileList || [];
       this.backUrl = this.props.urlArr || [];
    }
 
@@ -28,86 +28,42 @@ class UploadCmp extends Component {
       return true;
    }
 
-
-   //模拟上传的接口
-   loadUploadImg(param, cb) {
-      // setTimeout(() => {
-      //    let code = (Math.random() * 10).toFixed(0) - 5;
-      //    let data = {};
-      //    data.urlArr = [];
-      //    data.urlArr.push("后台返回的体条url" + (Math.random() * 10).toFixed(0).repeat(4));
-      //    cb(code, code > 0 ? "开通成功" : "开通失败", data);
-      // }, Math.random() * 1000 + 1000);
-
-      HttpTool.request(HttpTool.typeEnum.POST,
-         "/bohl/orderapi/v1.0/orders/voucherUp",
-         (code, msg, json, option) => {
-            cb(code, msg, json);
-
-         }, (code, msg, option) => {
-            cb(code, msg);
-         }, param);
-   }
-
-   saveImgUrlArr() {
-      //
-   }
-
    beforeUpload(file) {
       if (!this.isImageTypeOk(file)) {
+         this.setState({spinLoading: false});
          return false;
       }
-      //
-      // //打开加载图
-      // if (this.state.spinLoading) {
-      //    message.warn("图片正在上传中，请勿重复点击");
-      //    return false;
-      // }
-      // this.setState({spinLoading: true});
-      //
-      // let r = new FileReader();
-      // r.readAsDataURL(file);
-      // r.onload = (e) => {
-      //    let image_base64 = e.target.result;
-      //
-      //    this._fileList.push({
-      //       uid: new Date().getTime(),
-      //       name: file.name,
-      //       status: 'done',
-      //       thumbUrl: image_base64,
-      //    });
-      //
-      //    //慢600毫秒再请求，这样不会闪一下，体验好一些
-      //    setTimeout(() => {
-      //       this.loadUploadImg({pic: this._fileList[this._fileList.length - 1].thumbUrl}, (code, msg, data) => {
-      //          if (code < 0) {
-      //             message.error(msg + "图片上传失败");
-      //          } else {
-      //             this.setState({
-      //                fileList: this._fileList
-      //             });
-      //             let _backurl = {
-      //                url: data.url,
-      //                uid: this._fileList[this._fileList.length - 1].uid
-      //             };
-      //             this.backUrl.push(_backurl);
-      //          }
-      //          this.setState({spinLoading: false});
-      //       });
-      //    }, 600);
-      //
-      //
-      // };
-      // return false;
    }
 
-   handleChange(file,fileList) {
-      console.log("handleChange");
-      console.log(arguments);
-      console.log("file");
-      console.log(file);
-      console.log("fileList");
-      console.log(fileList);
+   handleChange(obj) {//这里的逻辑较为confusion
+      let {fileList, file} = obj;
+      if (file.status) {//确保当file为“加载中”的对象时，不更新视图和数据
+         this.setState({spinLoading: true});
+         let _fileList = JSON.parse(JSON.stringify(fileList));
+         if (file.status == 'done') {
+            let data = file.response.data;
+            let currFile = {
+               uid: new Date().getTime(),
+               name: data.filename,
+               status: 'done',
+               url: data.url,
+               thumbUrl: data.url,
+            };
+            let _backurl = {
+               url: currFile.url,
+               uid: currFile.uid
+            };
+            this.backUrl.push(_backurl);
+            _fileList.pop();//清除antd自动添加的那个“加载中”的对象
+            _fileList.push(currFile);
+            setTimeout(() => {//去除闪屏问题
+               this.setState({fileList: _fileList});
+               this.setState({spinLoading: false});
+            }, 500);
+         } else {
+            this.setState({fileList: _fileList});//antd中说明，这种受控组件每次都要setState否则就只有调用一次
+         }
+      }
    }
 
    handleCancel() {
@@ -121,18 +77,22 @@ class UploadCmp extends Component {
       });
    }
 
+   deepClone(obj) {
+      return JSON.parse(JSON.stringify(obj));
+   }
+
    onRemove(file) {
       console.log("删除的file为：");
       console.log(file);
-      this._fileList = this._fileList.filter((currV, index, arr) => {
+      let _fileList = this.deepClone(this.state.fileList);
+      _fileList = _fileList.filter((currV, index, arr) => {
          return currV.uid !== file.uid;
       });
-      this.setState({fileList: this._fileList}, () => {
+      this.setState({fileList: _fileList}, () => {
          this.backUrl = this.backUrl.filter((currV, index, arr) => {
             return currV.uid !== file.uid;
          });
       });
-
    }
 
    render() {
@@ -151,13 +111,15 @@ class UploadCmp extends Component {
             {this.state.spinLoading ? upLoadingView : beforeUploadingView}
          </div>
       );
+      const isIE9or8 = navigator.userAgent.indexOf("MSIE 9.0") >= 0 || navigator.userAgent.indexOf("MSIE 8.0") >= 0;
       return (
          <div className="clearfix forUploadStyle">
             <Upload
+               accept=".jpg,.png,"
                action="/Upload"
                listType="picture-card"
                fileList={fileList}
-               beforeUpload={this.beforeUpload.bind(this)}
+               beforeUpload={isIE9or8 ? null : this.beforeUpload.bind(this)}
                disabled={this.state.spinLoading}
                onPreview={this.handlePreview.bind(this)}
                onChange={this.handleChange.bind(this)}

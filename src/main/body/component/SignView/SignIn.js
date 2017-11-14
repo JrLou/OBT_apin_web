@@ -2,16 +2,16 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-13 10:42:06
+ * @Last Modified time: 2017-11-13 17:29:44
  */
 
 import React, { Component } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import md5 from 'md5';
 
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
 import CheckCode from './CheckCode';
-import { loginPromise, getLoginCodePromise, validateLogin } from './LoginAction';
+import { validateLoginPromise, defaultLoginPromise, loginPromise, getLoginCodePromise } from './LoginAction';
 
 import css from './sign.less';
 import { log } from 'debug';
@@ -33,6 +33,7 @@ class SignInForm extends Component {
         this.getCode = this.getCode.bind(this);
         this.getCodeAction = this.getCodeAction.bind(this);
         this.accessToken = '';
+        this.data = '';
     }
     componentDidMount() {
         this.props.form.validateFields();
@@ -59,15 +60,15 @@ class SignInForm extends Component {
                 >
                     {getFieldDecorator('account', {
                         rules: [{ required: true, message: '请输入账户名' },
-                        {
-                            validator: (rule, value, callback) => {
-                                this.getCode(() => {
-                                    validateLogin('account', value)
-                                        .then((data) => callback())
-                                        .catch((data) => callback(data));
-                                });
-                            }
-                        }
+                            // {
+                            //     validator: (rule, value, callback) => {
+                            //         this.getCode(() => {
+                            //             validateLoginPromise('account', value)
+                            //                 .then((data) => callback())
+                            //                 .catch((data) => callback(data));
+                            //         });
+                            //     }
+                            // }
                         ],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入账户名" />
@@ -82,15 +83,16 @@ class SignInForm extends Component {
                     {getFieldDecorator('mobile', {
                         rules: [{ required: true, message: '请输入11位手机号' },
                         { pattern: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/, message: '手机号格式不正确！' },
-                        {
-                            validator: (rule, value, callback) => {
-                                this.getCode(() => {
-                                    validateLogin('mobile', value)
-                                        .then((data) => callback())
-                                        .catch((data) => callback(data));
-                                });
-                            }
-                        }],
+                            // {
+                            //     validator: (rule, value, callback) => {
+                            //         this.getCode(() => {
+                            //             validateLoginPromise('mobile', value)
+                            //                 .then((data) => callback())
+                            //                 .catch((data) => callback(data));
+                            //         });
+                            //     }
+                            // }
+                        ],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入11位手机号" />
                         )}
@@ -103,15 +105,16 @@ class SignInForm extends Component {
                 >
                     {getFieldDecorator('picCode', {
                         rules: [{ required: true, message: '请输入图形验证码' },
-                        {
-                            validator: (rule, value, callback) => {
-                                this.getCode(() => {
-                                    validateLogin('picCode', value)
-                                        .then((data) => callback())
-                                        .catch((data) => callback(data));
-                                });
-                            }
-                        }],
+                            // {
+                            //     validator: (rule, value, callback) => {
+                            //         this.getCode(() => {
+                            //             validateLoginPromise('picCode', value)
+                            //                 .then((data) => callback())
+                            //                 .catch((data) => callback(data));
+                            //         });
+                            //     }
+                            // }
+                        ],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
                         )}
@@ -140,7 +143,7 @@ class SignInForm extends Component {
                         rules: [{ required: true, message: '请输入8-16位数字、字母' },
                         { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
-                        <Input prefixCls="my-ant-input" placeholder="请输入8-16位数字、字母" />
+                        <Input prefixCls="my-ant-input" placeholder="请输入8-16位数字、字母" autoComplete="new-password" />
                         )}
                 </FormItem>
                 <FormItem
@@ -173,9 +176,19 @@ class SignInForm extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
                 const { account, bdCharger, code, mobile, password } = values;
+                log("1111111111");
+                log(password);
+                log(md5(password));
                 HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/addMember', (code, message, json, option) => {
+                    getLoginCodePromise(account, 0).then((data) => {
+                        loginPromise(account, md5(password), data).then((data) => {
+                            this.props.setLogin();
+                            this.props.onOK();
+                        }).catch((error) => {
+                            message.error(error);
+                        });
+                    });
                 }, () => {
                 }, {
                         account,
@@ -216,22 +229,12 @@ class SignInForm extends Component {
      * 获取初始token
      */
     getCode(callback) {
-        const defaultAccount = 'b3619ef5dc944e4aad02acc7c83b220d';
-        const defaultPwd = '4b91884d9290981da047b4c85af35a39';
         const user = CookieHelp.getUserInfo();
 
         if (user) {
             callback();
         } else {
-            getLoginCodePromise(defaultAccount, 0).then((data) =>
-                loginPromise(defaultAccount, defaultPwd, data)
-            ).then((data) => {
-                data.Authorization = data.accessToken;
-                CookieHelp.saveUserInfo(data);
-                callback();
-            }).catch((error) => {
-                log(error);
-            });
+            defaultLoginPromise(0, callback);
         }
     }
 }
