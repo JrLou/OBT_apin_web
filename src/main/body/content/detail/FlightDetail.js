@@ -78,6 +78,14 @@ class page extends Component {
         let voyage = json&&json.plans?json.plans:{};
         this.flightType = voyage.flightType;
 
+        let member = json.member?json.member:{};
+        this.props.form.setFieldsValue({
+            mobile:member.contactPhone?member.contactPhone:""
+        });
+        this.props.form.setFieldsValue({
+            customerName:member.contactName?member.contactName:""
+        });
+
         //用来显示库存超出的时候 弹出module框添加已知数据
         this.requireParam = {
             lineType:this.flightType?this.flightType:1,
