@@ -62,11 +62,15 @@ class page extends Component {
             id: this.parentId
         };
         let success = (code, msg, json, option) => {
+
             this.setState({
                 data: json,
             });
         };
         let failure = (code, msg, option) => {
+            if(code===-400){
+                window.app_open(this, "/Demand", {});
+            }
             message.warning(msg);
             this.setState({
                 data: null,
