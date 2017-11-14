@@ -161,6 +161,17 @@ let LXDHelp = {
         }
 
         return formatData;
+    },
+
+    /**
+     * 传入时间字符串，将秒数去掉
+     * @param timeString
+     */
+    sliceTimeString(timeString){
+        if(!timeString){
+            return'';
+        }
+        return timeString.slice(0,-3);
     }
 };
 module.exports = LXDHelp;
