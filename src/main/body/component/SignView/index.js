@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-01 14:09:48 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-13 13:32:52
+ * @Last Modified time: 2017-11-14 15:22:22
  */
 
 import React, { Component } from 'react';
@@ -16,7 +16,8 @@ class SignUpView extends Component {
         this.state = {
             visible: false,
             mode: 0, // 弹框类型 对应title索引
-            title: ['登录账号', '账户注册', '忘记密码']
+            title: ['登录账号', '账户注册', '忘记密码'],
+            callback: null
         };
         this.showModal = this.showModal.bind(this);
         this.handleOk = this.handleOk.bind(this);
@@ -24,12 +25,8 @@ class SignUpView extends Component {
         this.handleChangeMode = this.handleChangeMode.bind(this);
     }
 
-    componentDidMount() {
-        this.props.showModal(this.showModal);
-    }
-
     render() {
-        const { visible, confirmLoading, title, mode } = this.state;
+        const { visible, confirmLoading, title, mode, callback } = this.state;
         return (
             <Modal
                 title={title[mode]}
@@ -39,14 +36,20 @@ class SignUpView extends Component {
                 style={{ width: '100px' }}
                 prefixCls="my-ant-modal"
             >
-                <Forms mode={mode} handleChangeMode={this.handleChangeMode} onOK={this.handleOk} setLogin={this.props.setLogin}></Forms>
+                <Forms
+                    mode={mode}
+                    handleChangeMode={this.handleChangeMode}
+                    onOK={this.handleOk}
+                    setLogin={this.props.setLogin}
+                    callback={callback}
+                ></Forms>
             </Modal>
         );
     }
 
     /**
      * 修改弹框展示内容
-     * @param {0-2} mode 
+     * @param {*} mode 
      */
     handleChangeMode(mode) {
         this.setState({
@@ -56,12 +59,13 @@ class SignUpView extends Component {
 
     /**
      * 打开模态框
-     * @param {0-2} mode 
+     * @param {*} mode 
      */
     showModal(mode, callback) {
         this.setState({
             mode,
-            visible: true
+            visible: true,
+            callback
         });
     }
 
