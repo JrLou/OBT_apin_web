@@ -48,7 +48,7 @@ class PayBottom extends Component {
                     }
                 }}>
                     <div>{isPay?"立即支付":"提交订单"}</div>
-                    <div style={{fontSize:"12px"}}>{"( 提交订单30分钟内,即可确认资源信息 )"}</div>
+                    {isPay?null:<div style={{fontSize:"12px"}}>{"( 提交订单30分钟内,即可确认资源信息 )"}</div>}
                 </div>
             </div>
         </div>);
