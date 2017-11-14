@@ -33,7 +33,7 @@ class page extends Component {
         if (this.props.styleObj) {
             this.marginBottomRow = this.props.styleObj.marginBottomRow;
             this.marginBottomFormItem = this.props.styleObj.marginBottomFormItem;
-            this.postHeight =this.props.styleObj.postHeight;
+            this.postHeight = this.props.styleObj.postHeight;
         }
     }
     check() {//拼接数据
@@ -74,19 +74,7 @@ class page extends Component {
             }
         });
     }
-    // httpPostAdd(param) {//发送数据
-    //     let success = (code, msg, json, option) => {
-    //         //   console.log(msg);
-    //         message.success();
-    //     };
-    //     let failure = (code, msg, option) => {
-    //         //   console.log(msg);
-    //         message.error(msg);
-    //     };
-    //     //  let api ="http://192.168.0.58:6300/demandapi/v1.0/demands";
-    //     let api = "/demandapi/v1.0/demands";
-    //     HttpTool.request(HttpTool.typeEnum.POST, api, success, failure, param);
-    // }
+ 
     lineTypeonChange(e) {//航线选择
         let { lineNum } = this.state;
         lineNum = e.target.value == 3 ? 3 : 1;
@@ -114,7 +102,7 @@ class page extends Component {
     }
     lineDetails() {//航线信息
         let { lineNum, listData } = this.state;
-        const { getFieldDecorator } = this.props.form;
+        const { getFieldDecorator,getFieldValue} = this.props.form;
         let div = [];
         for (let i = 0; i < lineNum; i++) {
             div.push(
@@ -195,7 +183,14 @@ class page extends Component {
                                     initialValue: this.state.listData[i] == undefined ? "" : moment(this.state.listData[i].fromDateTime)
                                 })(
                                     <DatePicker style={{ borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
-                                        return current && current.valueOf() <= Date.now();
+                                        let dateend=getFieldValue("toDateTime"+i);
+                                        if(dateend){
+                                            dateend=moment(dateend);
+                                            return current &&  (current.valueOf() <= Date.now() || current.valueOf() > dateend);
+                                        }else{
+                                            dateend="";
+                                            return current &&  current.valueOf() <= Date.now();
+                                        }
                                     }} />
                                     )}
                             </FormItem>
@@ -211,7 +206,13 @@ class page extends Component {
                                         initialValue: this.state.listData[i] == undefined ? "" : moment(this.state.listData[i].toDateTime)
                                     })(
                                         <DatePicker style={{ borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
-                                            return current && current.valueOf() <= Date.now();
+                                            let datestart=getFieldValue("fromDateTime"+i);
+                                            if(datestart){
+                                                datestart=moment(datestart);
+                                            }else{
+                                                datestart="";
+                                            }
+                                            return current && current.valueOf() <= (datestart== "" ? Date.now():datestart);
                                         }} />
                                         )}
                                 </FormItem>
@@ -262,9 +263,9 @@ class page extends Component {
                 <div style={{ margin: "20px 0px" }}>
                     <hr size='1' style={{ color: "#CBD3E5", borderStyle: "dotted" }}></hr>
                 </div>
-                <div className={less.innerbox} style={{overflow:"auto",height:this.postHeight,overflowX:"hidden"}}>
+                <div className={less.innerbox} style={{ overflow: "auto", height: this.postHeight, overflowX: "hidden" }}>
                     {/**多选择*/}
-                    <Row style={{ marginBottom: this.marginBottomRow}}>
+                    <Row style={{ marginBottom: this.marginBottomRow }}>
                         <Col span={4}>航程类型：</Col>
                     </Row>
                     <Row >
@@ -343,7 +344,7 @@ class page extends Component {
                                     }],
                                     initialValue: this.state.remark,
                                 })(
-                                    <Input type="textarea" maxLength="99" style={{ height: 180, resize: "none", borderRadius: 2 }} placeholder="如：价格、时间等" />
+                                    <Input type="textarea" maxLength="200" style={{ height: 180, resize: "none", borderRadius: 2 }} placeholder="如：价格、时间等" />
                                     )}
                             </FormItem>
 
@@ -366,7 +367,7 @@ class page extends Component {
                                     initialValue: this.state.phone,
                                 })(
                                     <div style={{ width: "100%" }}>
-                                        <Input style={{ width: 240, height: 36, borderRadius: "2px" }} placeholder="输入可联系的手机号码" /><span style={{fontSize:"22px", color: "red", marginLeft: 10 }}>*</span>
+                                        <Input style={{ width: 240, height: 36, borderRadius: "2px" }} placeholder="输入可联系的手机号码" /><span style={{ fontSize: "22px", color: "red", marginLeft: 10 }}>*</span>
                                     </div>
                                     )}
                             </FormItem>

@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 
-import {Button, Modal,message} from "antd";
+import {Button, Modal, message} from "antd";
 import less from "./DemandDetail.less";
 import OrderInfoView from '../component/OrderInfoView/index';
 import CellNewFlight from "../content/cell/CellNewFlight";
 import {HttpTool} from "../../../../lib/utils/index.js";
 import NumTransToTextHelp from '../tool/NumTransToTextHelp.js';
-import {hasKey,getFlightData} from '../tool/LXDHelp.js';
+import {hasKey, getFlightData} from '../tool/LXDHelp.js';
 import APIGYW from '../../../api/APIGYW';
 /**
  * 需求已取消                    0
@@ -40,12 +40,12 @@ class page extends Component {
             visibleCancle: false,
             visibleDelete: false,
             visibleConfirm: false,
-            flightData:null,
-            demandId:-1
+            flightData: null,
+            demandId: -1
         };
-        if(this.props.location.query.data){
-            this.parentId =JSON.parse(this.props.location.query.data).id;
-        }else {
+        if (this.props.location.query.data) {
+            this.parentId = JSON.parse(this.props.location.query.data).id;
+        } else {
             message.error("数据有误!");
             this.parentId = null;
         }
@@ -67,7 +67,7 @@ class page extends Component {
             });
         };
         let failure = (code, msg, option) => {
-            if(code===-400){
+            if (code === -400) {
                 window.app_open(this, "/Demand", {});
             }
             message.warning(msg);
@@ -75,7 +75,7 @@ class page extends Component {
                 data: null,
             });
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.demand_detail, success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_detail, success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -83,7 +83,7 @@ class page extends Component {
 
     cancelDemand() {
         let param = {
-            id:this.parentId,
+            id: this.parentId,
         };
         let success = (code, msg, json, option) => {
             message.success("取消成功");
@@ -100,9 +100,10 @@ class page extends Component {
 
     deleteDemand() {
         let param = {
-            id:this.parentId,
+            id: this.parentId,
         };
         let success = (code, msg, json, option) => {
+            message.success("删除成功");
             window.app_open(this, "/Demand", {});
         };
         let failure = (code, msg, option) => {
@@ -115,22 +116,17 @@ class page extends Component {
     }
 
     confirmDemand() {
-        // let param = {
-        //     demandId: this.state.demandId,
-        //     id: this.parentId,
-        // };
-        // 调换了ID，sumweal
         let param = {
             demandId: this.parentId,
             id: this.state.demandId,
         };
 
         let success = (code, msg, json, option) => {
-            if(code == 200){
+            if (code == 200) {
                 window.app_open(this, "/OrderFormDetail", {
-                    id:this.parentId
+                    id: this.parentId
                 });
-            }else{
+            } else {
                 message.error(msg);
             }
         };
@@ -146,7 +142,7 @@ class page extends Component {
     render() {
         let {data} = this.state;
         if (!data) {
-            return(<div className={less.top}>
+            return (<div className={less.top}>
 
             </div>);
         }
@@ -154,19 +150,19 @@ class page extends Component {
         return (
             <div className={less.top}>
 
-                {data.flightType === 3?this.getMultiPass(data.demandStatus, data) : this.getTop(data.demandStatus, data)}
+                {data.flightType === 3 ? this.getMultiPass(data.demandStatus, data) : this.getTop(data.demandStatus, data)}
                 {data.demandStatus === 4 ? this.getCellNewFlight(data && data.plans ? data.plans : []) : null}
-                {data.demandStatus === 1||data.demandStatus === 2 ? this.getMessage("预计在30分钟内为您处理需求") :
+                {data.demandStatus === 1 || data.demandStatus === 2 ? this.getMessage("预计在30分钟内为您处理需求") :
                     (data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
-                {data.demandStatus === 5 ? this.getCloseReason() : null}
-                {data.demandStatus === 1||data.demandStatus === 2 || data.demandStatus === 5 || data.demandStatus === 0 ? this.getButton(data.demandStatus) : null}
+                {data.demandStatus === 5 ? this.getCloseReason(data) : null}
+                {data.demandStatus === 1 || data.demandStatus === 2 || data.demandStatus === 5 || data.demandStatus === 0 ? this.getButton(data.demandStatus, data) : null}
                 {data.demandStatus === 4 ? this.getOrderDetail(data) : null}
                 {data.demandStatus === 3 ? this.getConfirmButton(data && data.plans ? data.plans : [], data.flightType) : null}
             </div>
         );
     }
 
-    getCellNewFlight(data) {
+    getCellNewFlight(data = {}) {
         return (
             <div className={less.cellNewFlightLayout}>
                 <h2 className={less.title}>航班信息</h2>
@@ -180,7 +176,7 @@ class page extends Component {
 
     createViewCell(dataArr) {
         return dataArr.map((data, index) => {
-            let resultData = getFlightData(data.voyages,dataArr.flightType,data.freeBag,data.weightLimit);
+            let resultData = getFlightData(data.voyages, dataArr.flightType, data.freeBag, data.weightLimit);
 
             return (<CellNewFlight key={index} dataSource={resultData}/>);
         });
@@ -197,55 +193,35 @@ class page extends Component {
         );
     }
 
-    getButton(type) {
+    getButton(type, data = {}) {
+        let status = ["需求已取消", "需求处理中", "需求处理中", "待用户确认", "处理完成", "需求已关闭"];
+        if (type < -1 || type > 5) {
+            status = 5;
+        }
         return (
             <div className={less.buttonBottomLayout}>
                 <div>
                     <Button className={less.buttonAgin}
-                            onClick={()=>{
-                                if(type===1||type === 2){
+                            onClick={() => {
+                                if (type === 1 || type === 2) {
 
-                                    if( window.ysf&& window.ysf.open ){
-                                        // window.ysf.open();
-                                        window.ysf.product({
-                                            show : 1, // 1为打开， 其他参数为隐藏（包括非零元素）
-                                            title :"3333",
-                                            url : window.location.href,
-                                            success: function(){     // 成功回调
-                                                window.ysf.open();
-                                            },
-                                            error: function(){       // 错误回调
-                                                // handle error
-                                            }
-                                        });
+                                    if (window.ysf && window.ysf.open) {
+                                        window.ysf.open();
                                     }
 
-                                }else {
+                                } else {
                                     window.app_open(this, "/PublishMsg", {});
                                 }
                             }}
 
-                    >{type === 1||type === 2 ? "联系爱拼机客服处理需求" : "重新发布需求"}</Button>
+                    >{type === 1 || type === 2 ? "联系爱拼机客服处理需求" : "重新发布需求"}</Button>
                     {
                         type === 5 ? <Button className={less.buttonContact}
-                                             onClick={()=>{
-                                                 if( window.ysf&& window.ysf.open ){
-                                                     // window.ysf.open();
-                                                     window.ysf.product({
-                                                         show : 1, // 1为打开， 其他参数为隐藏（包括非零元素）
-                                                         title :"333",
-                                                         desc : "1111",
-                                                         picture : "2222",
-                                                         note : "参考价（含税）￥0",
-                                                         url : window.location.href,
-                                                         success: function(){     // 成功回调
-                                                             window.ysf.open();
-                                                         },
-                                                         error: function(){       // 错误回调
-                                                             // handle error
-                                                         }
-                                                     });
+                                             onClick={() => {
+                                                 if (window.ysf && window.ysf.open) {
+                                                     window.ysf.open();
                                                  }
+
                                              }}
                         >联系爱拼机客服</Button> : null
                     }
@@ -254,15 +230,13 @@ class page extends Component {
         );
     }
 
-    getCloseReason() {
+    getCloseReason(data = {}) {
         return (
             <div className={less.closeMessageLayout}>
                 <h2 className={less.title}>关闭原因</h2>
                 <div className={less.line}/>
                 <div className={less.closeMessage}>
-                    用户操作不规范，填写的信息有误
-                    <br/>
-                    需要较大的改动
+                    {data && data.reply ? data.reply : "暂无"}
                 </div>
             </div>
         );
@@ -273,15 +247,17 @@ class page extends Component {
             visibleCancle: true,
         });
     }
+
     showDeleteModal() {
         this.setState({
             visibleDelete: true,
         });
     }
+
     showConfirmModal(demandId) {
         this.setState({
             visibleConfirm: true,
-            demandId:demandId,
+            demandId: demandId,
         });
     }
 
@@ -315,7 +291,7 @@ class page extends Component {
     }
 
     getDemandButton(type) {
-        if (type === 1||type === 2 || type === 3) {
+        if (type === 1 || type === 2 || type === 3) {
             return (
                 <div className={less.buttonLayout}>
                     <Button className={less.buttonCancel}
@@ -368,8 +344,11 @@ class page extends Component {
         }
     }
 
-    getMultiPass(type, data) {
+    getMultiPass(type, data = {}) {
         let status = ["需求已取消", "需求处理中", "需求处理中", "待用户确认", "处理完成", "需求已关闭"];
+        if (type < -1 || type > 5) {
+            status = 5;
+        }
         return (
             <div className={less.topMessage}>
                 <h2 className={less.title}>需求信息</h2>
@@ -379,7 +358,7 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>需求状态：</font>
                             <font
-                                className={type === 1 ||type === 2|| type === 3 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{type === -1 ? "全部" : status[type]}</font>
+                                className={type === 1 || type === 2 || type === 3 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{type === -1 ? "全部" : status[type]}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
@@ -415,10 +394,10 @@ class page extends Component {
     }
 
 
-    getConfirmButton(datas, flightType) {
+    getConfirmButton(datas = {}, flightType) {
         return (
             datas.map((data, index) => {
-                let resultData = getFlightData(data.voyages,flightType,data.freeBag,data.weightLimit);
+                let resultData = getFlightData(data.voyages, flightType, data.freeBag, data.weightLimit);
 
                 return (
                     <div key={index} className={less.flightItem}>
@@ -486,8 +465,11 @@ class page extends Component {
     }
 
 
-    getTop(type, data) {
+    getTop(type, data = {}) {
         let status = ["需求已取消", "需求处理中", "需求处理中", "待用户确认", "处理完成", "需求已关闭"];
+        if (type < -1 || type > 5) {
+            status = 5;
+        }
         if (!data)return null;
         let img = null;
         if (data.flightType === 1) {
@@ -504,7 +486,7 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>需求状态：</font>
                             <font
-                                className={type === 1 ||type === 2|| type === 3 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{data.demandStatus === -1 ? "全部" : status[data.demandStatus]}</font>
+                                className={type === 1 || type === 2 || type === 3 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{data.demandStatus === -1 ? "全部" : status[data.demandStatus]}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
@@ -581,7 +563,7 @@ class page extends Component {
         );
     }
 
-    getTripList(data) {
+    getTripList(data = {}) {
         let voyage = JSON.parse(data.voyage).voyage;
         return (
             voyage.map((data, index) => {
@@ -593,14 +575,14 @@ class page extends Component {
         );
     }
 
-    getTripItem(data, index) {
+    getTripItem(data = {}, index) {
         if (!data)return null;
 
         let img = require('../../../images/oneWay.png');
 
         return (
             <div key={index}
-                 className={less.cell}
+                 className={less.cells}
             >
                 <div className={less.bottom}>
                     <div className={less.bottomLeft}>
@@ -623,15 +605,15 @@ class page extends Component {
                         </div>
                     </div>
                     <div className={less.bottomRight}>
-                        <div className={less.date}>{"行程" + (index+1)}</div>
-                        <div className={less.date} style={{marginTop: 5}}>{this.getTimeShow("2-10")}</div>
+                        <div className={less.date}>{"行程" + (index + 1)}</div>
+                        <div className={less.date} style={{marginTop: 5}}>{this.getTimeShow(data.dateDep)}</div>
                     </div>
                 </div>
             </div>
         );
     }
 
-    getOrderDetail(data) {
+    getOrderDetail(data = {}) {
         return (
             <div className={less.layout}>
                 <div className={less.title}>订单信息</div>
@@ -682,7 +664,7 @@ class page extends Component {
                         <Button className={less.detailButton}
                                 onClick={() => {
                                     window.app_open(this, "/OrderFormDetail", {
-                                        id:this.parentId
+                                        id: this.parentId
                                     });
                                 }}
                         >查看订单详情</Button>
@@ -693,14 +675,14 @@ class page extends Component {
 
     }
 
-    getTimeShow(value) {
+    getTimeShow(value = {}) {
         if (!value) {
             return value;
         }
         let arr = value.split("-");
         if (arr) {
-            if (arr.length < 3) {
-                let p = ["月", "日"];
+            if (arr.length < 4) {
+                let p = ["年", "月", "日"];
                 let time = "";
                 for (let i = 0; i < arr.length; i++) {
                     time += (arr[i] + p[i]);

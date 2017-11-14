@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import css from './OrderFormDetail.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
-import {hasKey,getFlightData} from '../tool/LXDHelp.js';
+import {hasKey,getFlightData,transformOrderState} from '../tool/LXDHelp.js';
 import {Spin,message} from 'antd';
 import TitleBar from './TitleBar/index.js';
 import Passengers from './Passengers/index.js';
@@ -155,7 +155,7 @@ class OrderFormDetail extends Component{
                 />
                  <div className={css.itemContainer}>
                     <div className={css.itemTitle}>航班信息</div>
-                    <div className={css.itemContent}>
+                    <div className={css.itemContentBigPadding}>
                         <CellNewFlight
                             dataSource = {this.state.flightData}
                             isNoShowRule={false}
@@ -303,51 +303,51 @@ class OrderFormDetail extends Component{
     getOrderState(data){
         let returnState = parseInt(data.orderStatus);
         let extraCode = parseInt(data.extraCode);
-        let state = '';
-        switch(returnState){
-            case 0:state = 0;break;
-            case 1:state = 1;break;
-            case 2:if(extraCode==0){
-                        state = 14;
-                    }else if(extraCode ==1){
-                        state = 15;
-                    }else{
-                        state = 2;
-                    }
-                    break;
-            case 3:if(extraCode==0){
-                        state = 14;
-                    }else if(extraCode ==1){
-                        state = 15;
-                    }else{
-                        state = 3;
-                    }
-                    break;
-            case 4:if(extraCode==5){
-                        state = 3;
-                    }else if(extraCode ==6){
-                        state = 2;
-                    }else{
-                        state = 4;
-                    }
-                    break;
-            case 5:if(extraCode==0){
-                        state = 14;
-                    }else if(extraCode ==1){
-                        state = 15;
-                    }else{
-                        state = 5;
-                    }
-                    break;
-            case 6:if(extraCode==2){
-                        state = 12;
-                    }else if(extraCode ==3){
-                        state = 13;
-                    }
-                    break;
-            case 7:state = 7;break;
-            case 8:state = 8;break;
-        }
+        let state = transformOrderState(returnState,extraCode);
+        // switch(returnState){
+        //     case 0:state = 0;break;
+        //     case 1:state = 1;break;
+        //     case 2:if(extraCode==0){
+        //                 state = 14;
+        //             }else if(extraCode ==1){
+        //                 state = 15;
+        //             }else{
+        //                 state = 2;
+        //             }
+        //             break;
+        //     case 3:if(extraCode==0){
+        //                 state = 14;
+        //             }else if(extraCode ==1){
+        //                 state = 15;
+        //             }else{
+        //                 state = 3;
+        //             }
+        //             break;
+        //     case 4:if(extraCode==5){
+        //                 state = 3;
+        //             }else if(extraCode ==6){
+        //                 state = 2;
+        //             }else{
+        //                 state = 4;
+        //             }
+        //             break;
+        //     case 5:if(extraCode==0){
+        //                 state = 14;
+        //             }else if(extraCode ==1){
+        //                 state = 15;
+        //             }else{
+        //                 state = 5;
+        //             }
+        //             break;
+        //     case 6:if(extraCode==2){
+        //                 state = 12;
+        //             }else if(extraCode ==3){
+        //                 state = 13;
+        //             }
+        //             break;
+        //     case 7:state = 7;break;
+        //     case 8:state = 8;break;
+        // }
         return state;
     }
 
