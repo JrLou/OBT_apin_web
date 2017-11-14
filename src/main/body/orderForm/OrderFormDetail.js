@@ -184,6 +184,7 @@ class OrderFormDetail extends Component{
                             payMsg={this.state.payMsg}
                         />
                 </div>
+                <div id='payMark'></div>
                 {
                     (hasKey(this.state.orderState,[2,3,5]))
                     ?<PayBottom

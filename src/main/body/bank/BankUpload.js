@@ -36,7 +36,7 @@ class BankUpload extends Component {
 
    loadPayInfo2modify(param, cb) {
       HttpTool.request(HttpTool.typeEnum.POST,
-         "/bohl/orderapi/v1.0/orders/recordQuery",
+         "/bo/orderapi/v1.0/orders/recordQuery",
          (code, msg, json, option) => {
             cb(code, msg, json);
          }, (code, msg) => {
@@ -129,7 +129,6 @@ class BankUpload extends Component {
             loading: false
          });
       } else {
-
          this.setState({
             amount: urlData.price,
             orderId: urlData.orderId,
@@ -209,11 +208,24 @@ class BankUpload extends Component {
                   提交
                </Button>
             </div>
-            <Panel ref={(ref) => {
-               this.panel = ref;
-            }}/>
+            <Panel
+               onAction={(action, showType) => {
+                  if (action === "order" || action === "ok" && showType === "success") {
+                     //打开订单页
+                     this.openOrder();
+                  }
+               }}
+               ref={(ref) => {
+                  this.panel = ref;
+               }}/>
          </div>
       );
+   }
+
+   openOrder() {
+      window.app_open(this, "/OrderFormDetail", {
+         id: this.getUrlInfo().orderId
+      }, "self");
    }
 
    getLoadingView() {
@@ -288,7 +300,7 @@ class BankUpload extends Component {
    handleSubmit() {
       //第一步:得到所有数据
       // 1填写的所有Form
-      //2上传了至少一张图请
+      //2上传了至少一张图
       let data = this.getAllData();
       if (data.error) {
          message.error(data.error);
@@ -328,7 +340,7 @@ class BankUpload extends Component {
                //支付成功
                this.panel.show(true, {
                   showType: "success",
-                  content: "支付成功",
+                  content: "凭证上传成功，审核中",
                }, () => {
                   //
                });
@@ -357,7 +369,7 @@ class BankUpload extends Component {
       // }, Math.random() * 1000 + 2000);
 
       HttpTool.request(HttpTool.typeEnum.POST,
-         "/bohl/orderapi/v1.0/orders/pay/offline",
+         "/bo/orderapi/v1.0/orders/pay/offline",
          (code, msg, json, option) => {
             cb(code, msg, json);
          }, (code, msg, option) => {
@@ -398,6 +410,9 @@ class InputLayout extends Component {
 
    setFomrFileds(e, propName) {
       let v = e.target.value;
+      if (v.length >= 64 || (propName == "account" && v.length >= 24)) {//后台设置的最大长度就是64
+         return;
+      }
       this.setState({
          [propName]: v
       }, () => {
@@ -409,10 +424,10 @@ class InputLayout extends Component {
       return account.length >= 12 && account.length <= 24;
    }
 
-   formatDataState(){//删除首尾的空格
-      let _state = JSON.parse( JSON.stringify(this.state) );
-      for(let k in _state){
-         if(typeof _state[k] === "string"){
+   formatDataState() {//删除首尾的空格
+      let _state = JSON.parse(JSON.stringify(this.state));
+      for (let k in _state) {
+         if (typeof _state[k] === "string") {
             _state[k] = _state[k].trim();
          }
       }
