@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-14 10:37:24
+ * @Last Modified time: 2017-11-14 14:37:53
  */
 
 import React, { Component } from 'react';
@@ -234,6 +234,8 @@ class SignInForm extends Component {
      */
     getCode(callback) {
         const user = CookieHelp.getUserInfo();
+        log(user);
+        log(CookieHelp.userCookieKey);
 
         if (user) {
             callback();

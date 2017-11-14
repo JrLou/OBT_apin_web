@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-04 15:07:27 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-13 10:45:59
+ * @Last Modified time: 2017-11-14 11:39:57
  */
 import React, { Component } from 'react';
 import { Table, Modal } from 'antd';
@@ -63,7 +63,7 @@ class ScoreList extends Component {
             key: 'createdTime',
         }];
 
-        const { visible, loading, pageSize, current, total } = this.state;
+        const { visible, loading, pageSize, current, total, remainPoint, usedPoint } = this.state;
 
         return (
             <div className={css.scoreContainer}>
@@ -71,11 +71,11 @@ class ScoreList extends Component {
                 <div className={css.scoreHead}>
                     <div className={css.scoreDes}>
                         <p className={css.title}>当前总积分</p>
-                        <p className={`${css.scoreNum} ${css.scoreTotal}`}>1200</p>
+                        <p className={`${css.scoreNum} ${css.scoreTotal}`}>{remainPoint}</p>
                     </div>
                     <div className={css.scoreDes}>
                         <p className={css.title}>积分已抵扣</p>
-                        <p className={`${css.scoreNum} ${css.scoreConsume}`}>￥300</p>
+                        <p className={`${css.scoreNum} ${css.scoreConsume}`}>￥{usedPoint}</p>
                     </div>
                     <div className={css.line}></div>
                 </div>

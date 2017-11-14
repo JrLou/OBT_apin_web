@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-10 16:51:38 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-13 10:43:33
+ * @Last Modified time: 2017-11-14 14:20:25
  */
 
 
@@ -134,21 +134,23 @@ class ResetForm extends Component {
     getCode(callback) {
         const defaultAccount = 'b3619ef5dc944e4aad02acc7c83b220d';
         const defaultPwd = '4b91884d9290981da047b4c85af35a39';
+
         const user = CookieHelp.getUserInfo();
 
-        if (user) {
-            callback();
-        } else {
-            getLoginCodePromise(defaultAccount, 0).then((data) =>
-                loginPromise(defaultAccount, defaultPwd, data)
-            ).then((data) => {
-                data.Authorization = data.accessToken;
-                CookieHelp.saveUserInfo(data);
-                callback();
-            }).catch((error) => {
-                log(error);
-            });
-        }
+
+        // if (user) {
+        //     callback();
+        // } else {
+        //     getLoginCodePromise(defaultAccount, 0).then((data) =>
+        //         loginPromise(defaultAccount, defaultPwd, data)
+        //     ).then((data) => {
+        //         data.Authorization = data.accessToken;
+        //         CookieHelp.saveUserInfo(data);
+        //         callback();
+        //     }).catch((error) => {
+        //         log(error);
+        //     });
+        // }
     }
 }
 

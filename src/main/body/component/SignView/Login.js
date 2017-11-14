@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-14 11:07:27
+ * @Last Modified time: 2017-11-14 15:32:29
  */
 
 import React, { Component } from 'react';
@@ -98,6 +98,9 @@ class AccountLoginForm extends React.Component {
                     // IS_LOGIN判断是否真的登录
                     CookieHelp.saveCookieInfo('IS_LOGIN', true);
                     this.props.setLogin();
+                    if (this.props.callback && typeof (this.props.callback) === 'function') {
+                        this.props.callback();
+                    }
                     this.props.onOK();
                 }).catch((error) => {
                     message.error(error);
@@ -210,6 +213,9 @@ class MsgLoginForm extends React.Component {
                     // IS_LOGIN判断是否真的登录
                     CookieHelp.saveCookieInfo('IS_LOGIN', true);
                     this.props.setLogin();
+                    if (this.props.callback && typeof (this.props.callback) === 'function') {
+                        this.props.callback();
+                    }
                     this.props.onOK();
                 }).catch((error) => {
                     message.error(error);
@@ -240,8 +246,8 @@ class Login extends React.Component {
                 </ul>
                 {
                     type === 0 ?
-                        <WrappedAccountLoginForm onOK={this.props.onOK} setLogin={this.props.setLogin} />
-                        : <WrappedMsgLoginForm onOK={this.props.onOK} setLogin={this.props.setLogin} />
+                        <WrappedAccountLoginForm {...this.props} />
+                        : <WrappedMsgLoginForm {...this.props} />
                 }
                 <div className={`${css.clearfix} ${css.bottom}`}>
                     <div className={`${css.left} ${css.forget}`} onClick={() => this.props.handleChangeMode(2)}>忘记密码</div>
