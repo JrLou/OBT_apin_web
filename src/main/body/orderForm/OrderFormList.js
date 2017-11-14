@@ -3,19 +3,15 @@
  */
 import React, {Component} from 'react';
 import css from './OrderFormList.less';
-import { HttpTool,CookieHelp } from '../../../../lib/utils/index.js';
+import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
 import {routeTranslate,getDateFormat,removeSpace,transformOrderState} from '../tool/LXDHelp.js';
 import {Table,Input,DatePicker,Select,Button,message} from 'antd';
-import moment from 'moment';
 const Option = Select.Option;
 
 class OrderFormList extends Component{
     constructor(props) {
         super(props);
-        CookieHelp.saveUserInfo({
-            Authorization:"eyJpZCI6IjAzN2E2MmI1M2M5ZjQ0MDZhZTQzMjA3NTVmNGY2ZmZiIiwiYXBwSWQiOiIyZWY4ZDkwMmMxMmY0NTRmOWFjZGJiMDQ4NGY4YzA1YSIsImFjY291bnRJZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIsInVzZXJJZCI6IjY2ZTUzZTFkMmFjMDQwMGNiMTFjYjc5ZTFlOTU5YWU3IiwiZGVwdElkIjpudWxsLCJ1c2VyTmFtZSI6Iui2hee6p+euoeeQhuWRmCIsInNlY3JldCI6IjU0MDBiYjQ3NDBmZjNjOWEyYWI1ZWNiN2UxOWJkZTY4In0=",
-        });
         //状态机
         this.state = {
             cityDep:'',
@@ -464,7 +460,7 @@ class OrderFormList extends Component{
             this.setLoading(false);
             this.setState({
                 dataSource:newData,
-                total:parseInt(option.total?option.total:0),
+                total:parseInt(option.option.total?option.option.total:0),
             });
         };
 

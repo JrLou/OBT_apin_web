@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-08 13:36:12 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-13 16:13:23
+ * @Last Modified time: 2017-11-13 17:29:50
  */
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
 import md5 from 'md5';
@@ -79,8 +79,12 @@ export function validateLoginPromise(key, value) {
     });
 }
 
-export function defaultLoginPromise(callback) {
-    getLoginCodePromise(defaultAccount, 0).then((data) =>
+/**
+ * 使用默认账号登录
+ * @param {*} callback 
+ */
+export function defaultLoginPromise(type,callback) {
+    getLoginCodePromise(defaultAccount, type).then((data) =>
         loginPromise(defaultAccount, defaultPwd, data)
     ).then((data) => {
         data.Authorization = data.accessToken;
@@ -88,5 +92,19 @@ export function defaultLoginPromise(callback) {
         if (callback && typeof (callback) === 'function') callback();
     }).catch((error) => {
         log(error);
+    });
+}
+
+/**
+ * 获取用户信息
+ */
+
+export function AccoutInfoPromise(callback) {
+    return new Promise((resolve, reject) => {
+        HttpTool.request(HttpTool.typeEnum.POST, "/bm/memberapi/v1.1/memberInfo", (code, message, json, option) => {
+            resolve({ json, option });
+        }, (code, message) => {
+            reject(message);
+        }, {});
     });
 }

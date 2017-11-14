@@ -115,14 +115,24 @@ class page extends Component {
     }
 
     flightDemand() {
+        // let param = {
+        //     demandId: this.state.demandId,
+        //     id: this.parentId,
+        // };
+        // 调换了ID，sumweal
         let param = {
-            demandId: this.state.demandId,
-            id: this.parentId,
+            demandId: this.parentId,
+            id: this.state.demandId,
         };
+
         let success = (code, msg, json, option) => {
-            window.app_open(this, "/OrderFormDetail", {
-                orderId:this.parentId
-            });
+            if(code == 200){
+                window.app_open(this, "/OrderFormDetail", {
+                    orderId:this.parentId
+                });
+            }else{
+                message.error(msg);
+            }
         };
         let failure = (code, msg, option) => {
             message.warning(msg);

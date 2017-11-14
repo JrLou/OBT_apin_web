@@ -51,6 +51,7 @@ class BankUpload extends Component {
             uid: i,
             name: "第" + i + "张",
             status: 'done',
+            url: currV,
             thumbUrl: currV,
          };
       });
@@ -258,11 +259,9 @@ class BankUpload extends Component {
    getAllData() {
       let data = this.inputLayout.getData();
 
-      console.log(this.uploadCmp.backUrl);
       let backUrlArr = this.uploadCmp.backUrl.map((currV) => {
          return currV.url;
       });
-      console.log(backUrlArr);
       let stringUrl = backUrlArr.join(",");
       data.voucherUrl = stringUrl;
 
@@ -289,10 +288,8 @@ class BankUpload extends Component {
    handleSubmit() {
       //第一步:得到所有数据
       // 1填写的所有Form
-      //2上传了至少一张图
+      //2上传了至少一张图请
       let data = this.getAllData();
-      console.log("data");
-      console.log(data);
       if (data.error) {
          message.error(data.error);
          return;
@@ -317,7 +314,7 @@ class BankUpload extends Component {
       };
       //判断用户是否有更改
       if (!this.isUserChange(param)) {
-         message.warn("您未做修改，无需提交");
+         message.warn("您未做任何修改，无需提交");
          return;
       }
 
@@ -353,8 +350,6 @@ class BankUpload extends Component {
 
    //提交接口
    loadSubmit(param, cb) {
-      console.log("传给后台的数据如下");
-      console.log(param);
       // setTimeout(() => {
       //    let code = (Math.random() * 10).toFixed(0) - 5;
       //    let data = {};
@@ -414,8 +409,18 @@ class InputLayout extends Component {
       return account.length >= 12 && account.length <= 24;
    }
 
+   formatDataState(){//删除首尾的空格
+      let _state = JSON.parse( JSON.stringify(this.state) );
+      for(let k in _state){
+         if(typeof _state[k] === "string"){
+            _state[k] = _state[k].trim();
+         }
+      }
+      this.state = _state;
+   }
 
    getData() {
+      this.formatDataState();
       return {
          accountName: this.state.accountName,
          account: this.state.account,
@@ -430,7 +435,6 @@ class InputLayout extends Component {
                   : (!this.state.bank ? "请填写银行名" : null)
             )
       };
-
    }
 
    render() {
