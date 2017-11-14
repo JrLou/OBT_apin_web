@@ -577,7 +577,12 @@ class PassengerMsg extends Component{
             let numberList = [];
             if(list instanceof Array){
                 for(let key in list){
-                    numberList.push(<span key={`span${key}`} className={type==1?css.failureNum:css.warningNum}>{list[key]}</span>);
+                    numberList.push(<span
+                                        key={`span${key}`}
+                                        className={type==1?css.failureNum:(type==2?css.defaultNum:css.warningNum)}
+                                    >
+                                        {list[key]}
+                                    </span>);
                 }
             }
 
@@ -622,7 +627,7 @@ class PassengerMsg extends Component{
                 {
                     result.repeatCount
                     ?<div className={css.resultItem}>
-                            <span style={{color:'#fa0',fontSize:'16px'}}>导入重复：</span>
+                            <span style={{color:'#333',fontSize:'16px'}}>导入重复：</span>
                             {`${result.repeatCount}人`}
                             <div>
                                 重复的记录行号：
@@ -630,6 +635,18 @@ class PassengerMsg extends Component{
                             </div>
                     </div>
                     :''
+                }
+                {
+                    result.dbExistCount
+                        ?<div className={css.resultItem}>
+                            <span style={{color:'#fa0',fontSize:'16px'}}>已存在：</span>
+                            {`${result.dbExistCount}人`}
+                            <div>
+                                已存在的记录行号：
+                                {getNumber(result.dbExistRowNumber,3)}
+                            </div>
+                        </div>
+                        :''
                 }
                 {
                     result.reason
