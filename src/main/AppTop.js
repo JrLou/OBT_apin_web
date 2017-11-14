@@ -67,7 +67,9 @@ class page extends Component {
                             <div className={less.rightItem} style={isLogin ? { marginRight: '44px' } : { marginRight: '30px' }}>
                                 {
                                     !isLogin && <Button type="primary" className={less.login}
-                                        onClick={() => window.modal.showModal(0)}
+                                        onClick={() => window.modal.showModal(0,()=>{
+                                            window.app_open(this, '/', null, "new");
+                                        })}
                                     >登录</Button>
                                 }
                                 {

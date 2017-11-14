@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-14 13:50:51
+ * @Last Modified time: 2017-11-14 19:59:51
  */
 
 import React, { Component } from 'react';
@@ -23,6 +23,10 @@ function hasErrors(fieldsError) {
 class ForgetForm extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            isShowPic: false,// 是否显示图形验证码
+            picCode: ''//图片base64
+        };
         this.getCode = this.getCode.bind(this);
         this.getCodeAction = this.getCodeAction.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -32,10 +36,12 @@ class ForgetForm extends Component {
     }
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+        const { isShowPic, picCode } = this.state;        
 
         // Only show error after a field is touched.
         const mobileError = isFieldTouched('mobile') && getFieldError('mobile');
         const optionError = isFieldTouched('option') && getFieldError('option');
+        const picCodeError = isFieldTouched('picCode') && getFieldError('picCode');
         const passwordError = isFieldTouched('password') && getFieldError('password');
         const confirmPswError = isFieldTouched('confirmPsw') && getFieldError('confirmPsw');
 
@@ -54,6 +60,20 @@ class ForgetForm extends Component {
                         <Input prefixCls="my-ant-input" placeholder="请输入11位手机号" />
                         )}
                 </FormItem>
+                {
+                    isShowPic && <FormItem
+                        prefixCls="my-ant-form"
+                        validateStatus={picCodeError ? 'error' : ''}
+                        help={picCodeError || ''}
+                    >
+                        {getFieldDecorator('picCode', {
+                            rules: [{ required: true, message: '请输入图形验证码' }],
+                        })(
+                            <Input prefixCls='my-ant-input' placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
+                            )}
+                            <img src={picCode} alt="" className={css.checkCodeImg} />
+                    </FormItem>
+                }
                 <FormItem
                     prefixCls="my-ant-form"
                     validateStatus={optionError ? 'error' : ''}
@@ -155,6 +175,10 @@ class ForgetForm extends Component {
                 this.setState({
                     isShowPic: true,
                     picCode: 'data:image/jpg;base64,' + json
+                });
+            } else {
+                this.setState({
+                    isShowPic: false
                 });
             }
         }, (code, message, json, option) => {

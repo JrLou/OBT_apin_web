@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-14 14:37:53
+ * @Last Modified time: 2017-11-14 21:41:33
  */
 
 import React, { Component } from 'react';
@@ -64,7 +64,7 @@ class SignInForm extends Component {
                         {
                             validator: (rule, value, callback) => {
                                 this.getCode(() => {
-                                    validateLoginPromise('account', value)
+                                    validateLoginPromise({ account: value })
                                         .then((data) => callback())
                                         .catch((data) => callback(data));
                                 });
@@ -88,7 +88,7 @@ class SignInForm extends Component {
                         {
                             validator: (rule, value, callback) => {
                                 this.getCode(() => {
-                                    validateLoginPromise('mobile', value)
+                                    validateLoginPromise({ mobile: value })
                                         .then((data) => callback())
                                         .catch((data) => callback(data));
                                 });
@@ -110,8 +110,9 @@ class SignInForm extends Component {
                         rules: [{ required: true, message: '请输入图形验证码' },
                         {
                             validator: (rule, value, callback) => {
+                                const mobile = getFieldValue('mobile');
                                 this.getCode(() => {
-                                    validateLoginPromise('picCode', value)
+                                    validateLoginPromise({ picCode: value, mobile })
                                         .then((data) => callback())
                                         .catch((data) => callback(data));
                                 });
@@ -192,7 +193,7 @@ class SignInForm extends Component {
                             message.error(error);
                         });
                     });
-                }, (code,message) => {
+                }, (code, message) => {
                     message.error(message);
                 }, {
                         account,
@@ -222,8 +223,13 @@ class SignInForm extends Component {
                     isShowPic: true,
                     picCode: 'data:image/jpg;base64,' + json
                 });
+            } else {
+                this.setState({
+                    isShowPic: false
+                });
             }
-        }, (code, message, json, option) => {
+        }, (code, msg, json, option) => {
+            message.error(msg);
         }, {
                 account, mobile, picCode, type: 1
             });
@@ -234,8 +240,6 @@ class SignInForm extends Component {
      */
     getCode(callback) {
         const user = CookieHelp.getUserInfo();
-        log(user);
-        log(CookieHelp.userCookieKey);
 
         if (user) {
             callback();

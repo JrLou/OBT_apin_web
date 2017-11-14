@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-01 14:09:48 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-14 15:22:22
+ * @Last Modified time: 2017-11-14 23:42:10
  */
 
 import React, { Component } from 'react';
@@ -35,13 +35,17 @@ class SignUpView extends Component {
                 footer={null}
                 style={{ width: '100px' }}
                 prefixCls="my-ant-modal"
+                afterClose={() => {
+                    if (this.loginCallback)
+                        return callback();
+                }}
             >
                 <Forms
                     mode={mode}
                     handleChangeMode={this.handleChangeMode}
                     onOK={this.handleOk}
                     setLogin={this.props.setLogin}
-                    callback={callback}
+                    callback={(e) => this.loginCallback = e}
                 ></Forms>
             </Modal>
         );
