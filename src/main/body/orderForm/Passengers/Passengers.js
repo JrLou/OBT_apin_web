@@ -25,8 +25,8 @@ class PassengerMsg extends Component{
         super(props);
         this.state = {
             orderState:this.props.orderState,
-            // orderId:this.props.orderId,
-            orderId:'16b3639900f54a86b9116af77b088d75',
+            orderId:this.props.orderId,
+            // orderId:'16b3639900f54a86b9116af77b088d75',
             dataSource:this.props.defaultData?this.props.defaultData:[],
             isPassed:this.props.isPassed?this.props.isPassed:false,     //是否已经确认了乘机人
             checkedMsg:false,       //是否已经勾选'确认乘机人信息'
@@ -507,7 +507,7 @@ class PassengerMsg extends Component{
             orderId:this.state.orderId,
         };
         let successCB = (code, msg, json, option)=>{
-            window.location.href = json.fileUrl;
+            window.location.href = json;
             this.setLoading(false);
         };
 
@@ -544,8 +544,13 @@ class PassengerMsg extends Component{
         };
 
         let failureCB = (code, msg, option)=>{
+            let newData = {};
+            newData.reason = msg;
+            this.setState({
+                importResultMsg:newData,
+                importResultMod:true,
+            });
             this.setLoading(false);
-            message.error(msg);
         };
 
         this.setLoading(true,()=>{
@@ -570,24 +575,36 @@ class PassengerMsg extends Component{
             let numberList = [];
             if(list instanceof Array){
                 for(let key in list){
-                    numberList.push(<span className={type==1?css.failureNum:css.warningNum}>{list[key]}</span>);
+                    numberList.push(<span key={`span${key}`} className={type==1?css.failureNum:css.warningNum}>{list[key]}</span>);
                 }
             }
 
             return numberList;
         };
 
+        if(result.length==1){
+            //条数为1，说明json为空，reason接收的是导入错误的信息
+            result(<div>
+                <div className={css.resultTitle}>导入错误</div>
+                {
+                    result.reason
+                        ?<div className={css.resultReason}>{`错误信息：${result.reason}`}</div>
+                        :''
+                }
+            </div>);
+        }
+
         return(
             <div>
-                <div className={css.resultTitle}>{`文件中总共有数据：${result.totalCount}条`}</div>
                 {
-                    result.successCount
-                    ?<div className={css.resultItem}>
-                            <span style={{color:'#87d068',fontSize:'16px'}}>导入成功：</span>
-                            {`${result.successCount}人`}
-                    </div>
+                    result.totalCount
+                    ?<div className={css.resultTitle}>{`文件中总共有数据：${result.totalCount}条`}</div>
                     :''
                 }
+                <div className={css.resultItem}>
+                        <span style={{color:'#87d068',fontSize:'16px'}}>导入成功：</span>
+                        {`${result.successCount?result.successCount:0}人`}
+                </div>
                 {
                     result.failCount
                     ?<div className={css.resultItem}>
@@ -614,7 +631,7 @@ class PassengerMsg extends Component{
                 }
                 {
                     result.reason
-                    ?<div className={css.resultReason}>{`错误信息：${result.reason}`}</div>
+                    ?<div className={css.resultReason}>{`返回信息：${result.reason}`}</div>
                     :''
                 }
             </div>

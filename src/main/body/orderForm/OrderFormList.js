@@ -3,11 +3,10 @@
  */
 import React, {Component} from 'react';
 import css from './OrderFormList.less';
-import { HttpTool,CookieHelp } from '../../../../lib/utils/index.js';
+import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
 import {routeTranslate,getDateFormat,removeSpace,transformOrderState} from '../tool/LXDHelp.js';
 import {Table,Input,DatePicker,Select,Button,message} from 'antd';
-import moment from 'moment';
 const Option = Select.Option;
 
 class OrderFormList extends Component{
@@ -461,7 +460,7 @@ class OrderFormList extends Component{
             this.setLoading(false);
             this.setState({
                 dataSource:newData,
-                total:parseInt(option.total?option.total:0),
+                total:parseInt(option.option.total?option.option.total:0),
             });
         };
 

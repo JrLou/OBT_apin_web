@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 import css from './OrderFormDetail.less';
-import { HttpTool,CookieHelp } from '../../../../lib/utils/index.js';
+import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
 import {hasKey,getFlightData} from '../tool/LXDHelp.js';
 import {Spin,message} from 'antd';
@@ -158,6 +158,7 @@ class OrderFormDetail extends Component{
                     <div className={css.itemContent}>
                         <CellNewFlight
                             dataSource = {this.state.flightData}
+                            isNoShowRule={false}
                         />
                     </div>
                 </div>
@@ -254,6 +255,7 @@ class OrderFormDetail extends Component{
                 orderState:orderState,
                 returnState:json.orderStatus,
                 airlineSigns:airlineSigns,
+                isPassed:json.passed?json.passed:false,
             });
         };
         let failureCB = (code, msg, option)=>{
