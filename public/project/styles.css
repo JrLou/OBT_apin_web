@@ -5496,6 +5496,10 @@ active {
 .src-main-body-orderForm-OrderFormDetail---itemContent---1VGfo {
   padding: 15px;
 }
+.src-main-body-orderForm-OrderFormDetail---itemContentBigPadding---AZK8m {
+  padding: 15px;
+  padding-left: 35px;
+}
 .src-main-body-orderForm-OrderFormDetail---noMessage---1bKLC {
   font-size: 24px;
   text-align: center;
@@ -5710,6 +5714,8 @@ active {
 .src-main-body-orderForm-Passengers-Passengers---btnType01---1Nc5K,
 .src-main-body-orderForm-Passengers-Passengers---btnType02---1_jER,
 .src-main-body-orderForm-Passengers-Passengers---btnType03---2t1Ae {
+  height: 24px;
+  width: 80px;
   border-radius: 2px;
   margin: 0 5px;
 }
@@ -5721,6 +5727,9 @@ active {
 }
 .src-main-body-orderForm-Passengers-Passengers---btnType03---2t1Ae {
   display: block;
+  height: 38px;
+  width: 169px;
+  border-radius: 2px;
   margin: 5px auto;
 }
 .src-main-body-orderForm-Passengers-Passengers---passengerTable---2ra62 {
@@ -6126,6 +6135,12 @@ active {
   font-size: 16px;
   color: #333;
   letter-spacing: 0.24px;
+}
+.src-main-body-orderForm-OrderInfoView-OrderInfoView---cancleBtnStyle---2CarO {
+  height: 36px;
+  width: 110px;
+  border: 1px solid #E6E6E6;
+  border-radius: 2px;
 }
 .src-main-body-orderForm-PayBottom-PayBottom---maintheme---3s03j {
   position: absolute;
@@ -8407,14 +8422,13 @@ div[role=document][style^="width: 813px"] .ant-modal-close span {
   margin-left: 20px;
   margin-right: 20px;
 }
-.src-main-body-demandDetail-DemandDetail---cell---2c1BT {
+.src-main-body-demandDetail-DemandDetail---cells---1u1IN {
   border: 1px #e6e6e6 solid;
   width: 20%;
   background: #f5f5f5;
   float: left;
   transition: transform 0.25s ease;
   z-index: 1;
-  cursor: pointer;
 }
 .src-main-body-demandDetail-DemandDetail---text---2GewE {
   float: left;
