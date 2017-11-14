@@ -7,7 +7,6 @@ import CellNewFlight from "../content/cell/CellNewFlight";
 import {HttpTool} from "../../../../lib/utils/index.js";
 import NumTransToTextHelp from '../tool/NumTransToTextHelp.js';
 import {hasKey,getFlightData} from '../tool/LXDHelp.js';
-import MyAlert from "../content/line/MyAlert";
 import APIGYW from '../../../api/APIGYW';
 /**
  * 需求已取消                    0
@@ -87,6 +86,7 @@ class page extends Component {
             id:this.parentId,
         };
         let success = (code, msg, json, option) => {
+            message.success("取消成功");
             this.loadData();
         };
         let failure = (code, msg, option) => {
@@ -114,7 +114,7 @@ class page extends Component {
             });
     }
 
-    flightDemand() {
+    confirmDemand() {
         // let param = {
         //     demandId: this.state.demandId,
         //     id: this.parentId,
@@ -128,7 +128,7 @@ class page extends Component {
         let success = (code, msg, json, option) => {
             if(code == 200){
                 window.app_open(this, "/OrderFormDetail", {
-                    orderId:this.parentId
+                    id:this.parentId
                 });
             }else{
                 message.error(msg);
@@ -204,7 +204,22 @@ class page extends Component {
                     <Button className={less.buttonAgin}
                             onClick={()=>{
                                 if(type===1||type === 2){
-                                    this.myAlert.showView(true);
+
+                                    if( window.ysf&& window.ysf.open ){
+                                        // window.ysf.open();
+                                        window.ysf.product({
+                                            show : 1, // 1为打开， 其他参数为隐藏（包括非零元素）
+                                            title :"3333",
+                                            url : window.location.href,
+                                            success: function(){     // 成功回调
+                                                window.ysf.open();
+                                            },
+                                            error: function(){       // 错误回调
+                                                // handle error
+                                            }
+                                        });
+                                    }
+
                                 }else {
                                     window.app_open(this, "/PublishMsg", {});
                                 }
@@ -214,12 +229,27 @@ class page extends Component {
                     {
                         type === 5 ? <Button className={less.buttonContact}
                                              onClick={()=>{
-                                                 this.myAlert.showView(true);
+                                                 if( window.ysf&& window.ysf.open ){
+                                                     // window.ysf.open();
+                                                     window.ysf.product({
+                                                         show : 1, // 1为打开， 其他参数为隐藏（包括非零元素）
+                                                         title :"333",
+                                                         desc : "1111",
+                                                         picture : "2222",
+                                                         note : "参考价（含税）￥0",
+                                                         url : window.location.href,
+                                                         success: function(){     // 成功回调
+                                                             window.ysf.open();
+                                                         },
+                                                         error: function(){       // 错误回调
+                                                             // handle error
+                                                         }
+                                                     });
+                                                 }
                                              }}
                         >联系爱拼机客服</Button> : null
                     }
                 </div>
-                <MyAlert data={"客服电话"} ref={(a)=>this.myAlert = a}/>
             </div>
         );
     }
@@ -263,7 +293,7 @@ class page extends Component {
     }
 
     handleFlightOk() {
-        this.flightDemand();
+        this.confirmDemand();
         this.setState({
             visibleConfirm: false
         });
@@ -652,7 +682,7 @@ class page extends Component {
                         <Button className={less.detailButton}
                                 onClick={() => {
                                     window.app_open(this, "/OrderFormDetail", {
-                                        data: {orderId:data.orderNo}
+                                        id:this.parentId
                                     });
                                 }}
                         >查看订单详情</Button>
