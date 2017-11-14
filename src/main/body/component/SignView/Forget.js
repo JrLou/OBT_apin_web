@@ -2,15 +2,15 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-13 10:43:27
+ * @Last Modified time: 2017-11-14 13:47:16
  */
 
 import React, { Component } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import md5 from 'md5';
 import CheckCode from './CheckCode';
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
-import { loginPromise, getLoginCodePromise } from './LoginAction';
+import { loginPromise, getLoginCodePromise, defaultLoginPromise } from './LoginAction';
 
 import css from './sign.less';
 
@@ -88,7 +88,17 @@ class ForgetForm extends Component {
                 >
                     {getFieldDecorator('confirmPsw', {
                         rules: [{ required: true, message: '请再次输入密码' },
-                        { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
+                        { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' },
+                        {
+                            validator: (rule, value, callback) => {
+                                const { getFieldValue } = this.props.form;
+                                if (value && value !== getFieldValue('password')) {
+                                    callback('两次输入不一致！');
+                                }
+
+                                callback();
+                            }
+                        }],
                     })(
                         <Input prefixCls="my-ant-input" type="password" placeholder="请再次输入密码" />
                         )}
@@ -119,17 +129,17 @@ class ForgetForm extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
                 const { mobile, option, password } = values;
-                HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/users/updatePassword', (code, message, json, option) => {
-                    log(message);
-                    log(json);
-                }, () => {
+                HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/users/resetPassword', (code, message, json, option) => {
+                    message.success('修改成功');
+                    this.props.onOK();
+                }, (code, msg) => {
+                    message.error(msg);
                 }, {
                         account: mobile,
                         mobile,
                         option,
-                        password:md5(password)
+                        password: md5(password)
                     });
             }
         });
@@ -154,24 +164,12 @@ class ForgetForm extends Component {
     }
 
     getCode(callback) {
-        const defaultAccount = 'b3619ef5dc944e4aad02acc7c83b220d';
-        const defaultPwd = '4b91884d9290981da047b4c85af35a39';
         const user = CookieHelp.getUserInfo();
 
         if (user) {
-            log("1111");
             callback();
         } else {
-            log("222");
-            getLoginCodePromise(defaultAccount, 0).then((data) =>
-                loginPromise(defaultAccount, defaultPwd, data)
-            ).then((data) => {
-                data.Authorization = data.accessToken;
-                CookieHelp.saveUserInfo(data);
-                callback();
-            }).catch((error) => {
-                log(error);
-            });
+            defaultLoginPromise(0, () => callback());
         }
     }
 }
