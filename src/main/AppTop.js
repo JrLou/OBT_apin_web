@@ -58,7 +58,7 @@ class page extends Component {
                         src={require('../images/index_logo.png')}
                     />
 
-                    {!step && isLogin && <Menus {...this.props} />}
+                    {!step && isLogin && <Menus />}
                     {step ?
                         <div className={`${less.right} ${less.step}`}>
                             <Steps step={step}></Steps>
