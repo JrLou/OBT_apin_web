@@ -10,7 +10,8 @@ import LineHeadTitle from "./line/LineHeadTitle.js";
 import MyCalendar from "./line/MyCalendar.js";
 import MyAlert from "./line/MyAlert.js";
 import LoadingView from "../component/LoadingView.js";
-import {CookieHelp } from '../../../../lib/utils/index.js';
+import FlightCompany from "./line/FlightCompany.js";
+
 
 
 import Scroll from 'react-scroll/modules/index'; // Imports all Mixins
@@ -94,7 +95,10 @@ class page extends Component {
             message.warning(msg);
             // this.loadingView.refreshView(false);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_month_query,success, failure, param);
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_month_query,success, failure, param,
+            {
+                ipKey:'hlIP'
+            });
     }
 
     //右日历的headMonth
@@ -121,7 +125,10 @@ class page extends Component {
         var failure = (code, msg, option) => {
             message.warning(msg);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_retFlight_month_query,success, failure, param);
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_retFlight_month_query,success, failure, param,
+            {
+                ipKey:'hlIP'
+            });
     }
 
     //左边日历每天的数据
@@ -157,7 +164,10 @@ class page extends Component {
         var failure = (code, msg, option) => {
             this.loadingView.refreshView(false);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_day_query,success, failure, param);
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_day_query,success, failure, param,
+            {
+                ipKey:'hlIP'
+            });
     }
 
     //右日历每天的数据
@@ -187,7 +197,10 @@ class page extends Component {
             message.warning(msg);
             this.loadingView.refreshView(false);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param);
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param,
+            {
+                ipKey:'hlIP'
+            });
     }
 
     loadTripData(date,days) {
@@ -202,7 +215,6 @@ class page extends Component {
                 return;
             }
         }
-        this.myLineInfor.refreshView([],this.flightType);
         this.loadingView.refreshView(true);
         var param = {
             "depCity":this.depCity,
@@ -211,31 +223,37 @@ class page extends Component {
             "day":days,
             "depDate":date
         };
+        this.loadingView.refreshView(true);
+        // this.myLineInfor.refreshLineView(this.myLineData,this.flightType,false);
         var success = (code, msg, json, option) => {
-            this.loadingView.refreshView(false,()=>{
-                if (json&&json.length>0){
-                    let y = this.myflightCon?this.myflightCon.offsetTop:0;
-                    let isBigZero = y-150;
-                    if (isBigZero>0){
-                        this.scrollTo(isBigZero);
-                    }
+            this.loadingView.refreshView(false);
+            this.myLineData = json;
+            this.upView();
+            // this.myLineInfor.refreshLineView(json,this.flightType,true);
+            if (json&&json.length>0){
+                let y = this.myflightCon?this.myflightCon.offsetTop:0;
+                let isBigZero = y-150;
+                if (isBigZero>0){
+                    this.scrollTo(isBigZero);
                 }
-                this.myLineInfor.refreshView(json,this.flightType);
-            });
+            }
 
         };
         var failure = (code, msg, option) => {
             message.warning(msg);
             this.loadingView.refreshView(false);
         };
-        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_query,success, failure, param,);
+        HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flightDetail_query,success, failure, param,
+            {
+                ipKey:'hlIP'
+            });
     }
 
     render() {
         var div = (
             <div className={css.main}>
                 <div className={css.content}>
-                    <LineHeadTitle dataSource = {this.myData} obj={this}/>
+                    <LineHeadTitle dataSource = {this.myData}/>
                 </div>
                 <div className={css.refContent} style={{overflow:"hidden"}}>
                     {this.flightType==2?<div className={css.myCalendar}
@@ -291,33 +309,18 @@ class page extends Component {
 
                 <div className={css.thirdContent}
                      ref={(div)=>this.myflightCon = div}>
-                    <LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor}
-                               myData = {this.myData}
-                               callBack={(data)=>{
-                                   let voyagesArr = data.voyages?data.voyages:[];
-                                   let obj= {
-                                       airlineId:data.airlineId?data.airlineId:"",
-                                       depDate:voyagesArr[0]&&voyagesArr[0].depDate?voyagesArr[0].depDate:"",
-                                       retDate:voyagesArr[1]&&voyagesArr[1].depDate?voyagesArr[1].depDate:"",
-                                       isDirect:data.isDirect,
-                                   };
+                    {(this.myLineData&&this.myLineData.length>0)?(<div className={css.title}>航班信息</div>):null}
+                    {this.createFlightCompany(this.myLineData,this.flightType, this.myData)}
 
-                                   const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
-                                   if (isLogin){
-                                       window.app_open(this.props.obj, "/FlightDetail", {
-                                           step:1,
-                                           data:obj
-                                       },"self");
-                                   }else {
-                                       window.modal.showModal(0,()=>{
-                                           window.app_open(this.props.obj, "/FlightDetail", {
-                                               step:1,
-                                               data:obj
-                                           },"new");
-                                       });
-                                   }
-                               }}/>
+
+                    {/*<LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor}*/}
+                               {/*myData = {this.myData}*/}
+                               {/*callBack={()=>{*/}
+                                   {/*this.myAlert.showView();*/}
+                               {/*}}/>*/}
                 </div>
+
+                <MyAlert ref={(a)=>this.myAlert = a}/>
                 <LoadingView ref={(a)=>this.loadingView = a}/>
             </div>
         );
@@ -337,6 +340,22 @@ class page extends Component {
             }
         }
     }
+    createFlightCompany(dataArr,flightType,myData){
+        if (!dataArr||dataArr.length<1||!myData){
+            return null;
+        }
+        return dataArr.map((data,index)=>{
+            return (<FlightCompany key={index}
+                                   isNewData={true}
+                                   dataItem = {data}
+                                   flightType={flightType==2}
+                                   myData = {myData}
+                                   callBack={()=>{
+                                       this.myAlert.showView();
+                                   }}
+            />);
+        });
+    }
 }
 
 class LineInfor extends Component {
@@ -344,19 +363,27 @@ class LineInfor extends Component {
         super(props);
         this.state = {
             dataSource: [],
-            flightType:true
+            flightType:true,
+            isLoading:false,
+            isAn:false
         };
     }
-    refreshView(dataSource,flightType) {
+    refreshLineView(dataSource,flightType,isAn,callBack) {
         this.setState({
             dataSource:dataSource,
-            flightType:flightType==2
+            flightType:flightType==2,
+            isAn:isAn,
+        },()=>{
+            if (callBack){
+                callBack;
+            }
         });
     }
+
     render() {
         let {dataSource,flightType} = this.state;
         let {myData} = this.props;
-        return (<div>
+        return (<div className={css.lineView}>
             {(dataSource&&dataSource.length>0)?(<div className={css.title}>航班信息</div>):null}
             {this.createCell(dataSource,flightType,myData)}
         </div>);
@@ -368,12 +395,11 @@ class LineInfor extends Component {
         var viewArr = [];
         for (let i=0;i<dataSource.length;i++){
             let dataItem = dataSource[i];
-            let airlineInfo = (dataItem.voyages&&dataItem.voyages.length>0)?dataItem.voyages:[];
+            let airlineInfo = (dataItem.airlineInfo&&dataItem.airlineInfo.length>0)?dataItem.airlineInfo:[];
             let airlineInfo_One = airlineInfo[0]?airlineInfo[0]:{};
             let desc = (airlineInfo_One.depDate||"")+" "+(airlineInfo_One.depTime||"")+" --> "+(airlineInfo_One.arrDate||"")+" "+(airlineInfo_One.arrTime||"")+" "+(airlineInfo_One.depAirport||"")+"-->"+(airlineInfo_One.arrAirport||"");
-            var itemView = (
-                <div key={i} className={css.cell}>
-                    {dataItem.isDirect&&dataItem.isDirect==1?<div className={css.sign}>直营</div>:null}
+            var itemView = (<div key={i} className={css.cellBg}>
+                <div className={this.state.isAn?css.cell:css.hiddenCell} >
                     <div className={css.left}>
                         <div className={css.table}>
                             {this.createItemCell(airlineInfo,flightType)}
@@ -402,7 +428,7 @@ class LineInfor extends Component {
                                     <div className={css.table}>
                                         <div className={css.btn} style={{cursor: 'pointer'}}
                                              onClick={() => {
-                                                 if( window.ysf&& window.ysf.open &&(1==0)){
+                                                 if( window.ysf&& window.ysf.open){
                                                      // window.ysf.open();
                                                      window.ysf.product({
                                                          show : 1, // 1为打开， 其他参数为隐藏（包括非零元素）
@@ -420,16 +446,17 @@ class LineInfor extends Component {
                                                      });
                                                  }else{
                                                      if (this.props.callBack){
-                                                         this.props.callBack(dataItem);
+                                                         this.props.callBack();
                                                      }
                                                  }
-                                             }}>{dataItem.isDirect&&dataItem.isDirect==1?"购买":"预订"}</div>
+                                             }}>{"预订"}</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>);
+                </div>
+            </div>);
             viewArr.push(itemView);
         }
         return viewArr;
@@ -444,6 +471,18 @@ class LineInfor extends Component {
             let dataItem = data[i];
             let startDate = dataItem.depDate?dataItem.depDate.substring(5):"";
             startDate = startDate.replace("-","月")+"日";
+
+
+            let totalTime = dataItem.flightTime?dataItem.flightTime:"";
+            let timeArr = totalTime.split(":");
+            let totalText = "";
+            if (timeArr[0]&&timeArr[0]>0){
+                totalText = timeArr[0]+"小时";
+            }
+            if (timeArr[1]&&timeArr[1]>0){
+                totalText = totalText + timeArr[1]+"分钟";
+            }
+
 
             let endDate = dataItem.arrDate?dataItem.arrDate.substring(5):"";
             endDate = endDate.replace("-","月")+"日";
@@ -474,9 +513,7 @@ class LineInfor extends Component {
                             </div>
 
                             <div className={css.totalTime}>
-                                <div className={css.totalTimeText}>
-                                    {dataItem.flightTime?dataItem.flightTime:""}
-                                </div>
+                                <div className={css.totalTimeText}>{totalText}</div>
                                 <img className={css.line} src={require('../../../images/trip_line.png')}/>
                             </div>
                             <div className={css.timeLineItem} style={{textAlign:"left"}}>
