@@ -29,6 +29,12 @@ function getUrlSearch(str) {
     return query;
 }
 
+if(window.location.hostname.indexOf("apin.com")>=0){
+    window.console.log =  function (e) {
+        //清除所有日志
+    };
+}
+
 window.log = function (obj) {
     /* eslint-disable no-console */
     console.log(obj);
