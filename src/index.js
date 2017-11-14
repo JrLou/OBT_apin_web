@@ -6,6 +6,10 @@ import moment from 'moment';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
+
+import { CookieHelp } from '../lib/utils/index';
+
+CookieHelp.userCookieKey = 'APIN_USER_MVP_1.8';
 //重写日志系统
 function getUrlSearch(str) {
     var query = {};

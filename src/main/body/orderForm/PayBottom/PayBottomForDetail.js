@@ -23,12 +23,13 @@ class PayBottom extends Component {
 
     }
 
-    componentDidMount(){
-        if(this.state.countDown&&(this.state.payType==2||this.state.payType==3)){
+    componentDidMount() {
+        if (this.state.countDown && (this.state.payType == 2 || this.state.payType == 3)) {
             //启动倒计时
             this.getTimeOut(this.state.countDown);
         }
     }
+
 
     render() {
         let payName = '押金';
@@ -46,7 +47,7 @@ class PayBottom extends Component {
         let str = param?"(成人¥"+param.adultPrice+"*"+param.adultCount+"+"+"儿童¥" +param.childPrice+
             "*"+param.childCount+"=价格(含税)"+"¥"+param.totalPrice+")":"";
 
-        return (<div className={css.payDiv}>
+        return (<div className={css.payDivFix}>
             <div className={this.state.overTime?css.divDisabled:css.bottomDiv}>
                 <div className={css.bottomDiv_left}>
                     <div className={css.bottomBtn}
@@ -60,8 +61,7 @@ class PayBottom extends Component {
                 <div className={css.bottomDiv_center}>
                     <div className={css.depositPriceBg}>
                         <span style={{fontSize:"14px",color:"#333"}}>{payName}</span>
-                        <span style={{fontSize:"14px",color:"red"}}>￥</span>
-                        <span style={{fontSize:"20px",color:"red"}}>{param.orderPrice}</span>
+                        <span className={css.priceStyle}>{`￥${param.orderPrice}`}</span>
                     </div>
                     <div className={css.depositPriceBg}>
                         {

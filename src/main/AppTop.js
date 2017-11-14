@@ -21,7 +21,7 @@ class page extends Component {
         this.state = {
             step: this.par ? this.par.step : 0,
             isLogin: false,
-            account:''
+            account: ''
         };
         this.setLogin = this.setLogin.bind(this);
         this.logout = this.logout.bind(this);
@@ -33,7 +33,7 @@ class page extends Component {
     }
 
     render() {
-        let { step, isLogin,account } = this.state;
+        let { step, isLogin, account } = this.state;
         const menu = (
             <Menu>
                 <Menu.Item>
@@ -51,14 +51,13 @@ class page extends Component {
                 <div className={less.headContent}>
                     <img
                         onClick={() => {
-                            log(this.props.root);
                             window.app_open(this.props.root, "/", null, "self");
                         }}
                         className={less.left}
                         src={require('../images/index_logo.png')}
                     />
 
-                    {!step && isLogin && <Menus {...this.props} />}
+                    {!step && isLogin && <Menus />}
                     {step ?
                         <div className={`${less.right} ${less.step}`}>
                             <Steps step={step}></Steps>
@@ -68,7 +67,7 @@ class page extends Component {
                             <div className={less.rightItem} style={isLogin ? { marginRight: '44px' } : { marginRight: '30px' }}>
                                 {
                                     !isLogin && <Button type="primary" className={less.login}
-                                        onClick={() => this.modal.showModal(0)}
+                                        onClick={() => window.modal.showModal(0)}
                                     >登录</Button>
                                 }
                                 {
@@ -96,7 +95,7 @@ class page extends Component {
                         </div>}
 
                 </div>
-                <Sign ref={(modal) => this.modal = modal} setLogin={this.setLogin} showModal={this.props.showModal}></Sign>
+                <Sign ref={(modal) => this.modal = modal} setLogin={this.setLogin}></Sign>
             </div>
         );
     }

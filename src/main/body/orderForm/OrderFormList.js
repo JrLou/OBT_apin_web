@@ -159,7 +159,11 @@ class OrderFormList extends Component{
                 title:'含税价格',
                 dataIndex:'orderAmount',
                 render:(text,recode)=>{
-                    return (`¥${text}`);
+                    if(text){
+                        return (`¥${text}`);
+                    }else{
+                        return '';
+                    }
                 }
             },{
                 title:'订单创建时间',
