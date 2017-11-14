@@ -103,6 +103,7 @@ class page extends Component {
             id: this.parentId,
         };
         let success = (code, msg, json, option) => {
+            message.success("删除成功");
             window.app_open(this, "/Demand", {});
         };
         let failure = (code, msg, option) => {
@@ -115,11 +116,6 @@ class page extends Component {
     }
 
     confirmDemand() {
-        // let param = {
-        //     demandId: this.state.demandId,
-        //     id: this.parentId,
-        // };
-        // 调换了ID，sumweal
         let param = {
             demandId: this.parentId,
             id: this.state.demandId,
@@ -158,7 +154,7 @@ class page extends Component {
                 {data.demandStatus === 4 ? this.getCellNewFlight(data && data.plans ? data.plans : []) : null}
                 {data.demandStatus === 1 || data.demandStatus === 2 ? this.getMessage("预计在30分钟内为您处理需求") :
                     (data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
-                {data.demandStatus === 5 ? this.getCloseReason() : null}
+                {data.demandStatus === 5 ? this.getCloseReason(data) : null}
                 {data.demandStatus === 1 || data.demandStatus === 2 || data.demandStatus === 5 || data.demandStatus === 0 ? this.getButton(data.demandStatus, data) : null}
                 {data.demandStatus === 4 ? this.getOrderDetail(data) : null}
                 {data.demandStatus === 3 ? this.getConfirmButton(data && data.plans ? data.plans : [], data.flightType) : null}
@@ -209,19 +205,9 @@ class page extends Component {
                             onClick={() => {
                                 if (type === 1 || type === 2) {
 
-                                    // if (window.ysf && window.ysf.open) {
-                                    //     // window.ysf.open();
-                                    //     window.ysf.product({
-                                    //         show: 1, // 1为打开， 其他参数为隐藏（包括非零元素）
-                                    //         url: window.location.origin,
-                                    //         success: function () {     // 成功回调
-                                    //             window.ysf.open();
-                                    //         },
-                                    //         error: function () {       // 错误回调
-                                    //             // handle error
-                                    //         }
-                                    //     });
-                                    // }
+                                    if (window.ysf && window.ysf.open) {
+                                        window.ysf.open();
+                                    }
 
                                 } else {
                                     window.app_open(this, "/PublishMsg", {});
@@ -232,20 +218,9 @@ class page extends Component {
                     {
                         type === 5 ? <Button className={less.buttonContact}
                                              onClick={() => {
-                                                 // if (window.ysf && window.ysf.open) {
-                                                 //     // window.ysf.open();
-                                                 //     window.ysf.product({
-                                                 //         show: 1, // 1为打开， 其他参数为隐藏（包括非零元素）
-                                                 //
-                                                 //         url: window.location.origin,
-                                                 //         success: function () {     // 成功回调
-                                                 //             window.ysf.open();
-                                                 //         },
-                                                 //         error: function () {       // 错误回调
-                                                 //             // handle error
-                                                 //         }
-                                                 //     });
-                                                 // }
+                                                 if (window.ysf && window.ysf.open) {
+                                                     window.ysf.open();
+                                                 }
 
                                              }}
                         >联系爱拼机客服</Button> : null
@@ -255,15 +230,13 @@ class page extends Component {
         );
     }
 
-    getCloseReason() {
+    getCloseReason(data = {}) {
         return (
             <div className={less.closeMessageLayout}>
                 <h2 className={less.title}>关闭原因</h2>
                 <div className={less.line}/>
                 <div className={less.closeMessage}>
-                    用户操作不规范，填写的信息有误
-                    <br/>
-                    需要较大的改动
+                    {data && data.reply ? data.reply : "暂无"}
                 </div>
             </div>
         );
@@ -373,8 +346,8 @@ class page extends Component {
 
     getMultiPass(type, data = {}) {
         let status = ["需求已取消", "需求处理中", "需求处理中", "待用户确认", "处理完成", "需求已关闭"];
-        if(type<-1||type>5){
-            status=5;
+        if (type < -1 || type > 5) {
+            status = 5;
         }
         return (
             <div className={less.topMessage}>
@@ -494,8 +467,8 @@ class page extends Component {
 
     getTop(type, data = {}) {
         let status = ["需求已取消", "需求处理中", "需求处理中", "待用户确认", "处理完成", "需求已关闭"];
-        if(type<-1||type>5){
-            status=5;
+        if (type < -1 || type > 5) {
+            status = 5;
         }
         if (!data)return null;
         let img = null;
@@ -609,7 +582,7 @@ class page extends Component {
 
         return (
             <div key={index}
-                 className={less.cell}
+                 className={less.cells}
             >
                 <div className={less.bottom}>
                     <div className={less.bottomLeft}>
@@ -702,14 +675,14 @@ class page extends Component {
 
     }
 
-    getTimeShow(value={}) {
+    getTimeShow(value = {}) {
         if (!value) {
             return value;
         }
         let arr = value.split("-");
         if (arr) {
             if (arr.length < 4) {
-                let p = ["年","月", "日"];
+                let p = ["年", "月", "日"];
                 let time = "";
                 for (let i = 0; i < arr.length; i++) {
                     time += (arr[i] + p[i]);
