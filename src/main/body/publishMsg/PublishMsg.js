@@ -23,6 +23,8 @@ class page extends Component {
         let success = (code, msg, json, option) => {
             //   console.log(msg);
             message.success(msg);
+            //跳转到---
+            window.app_open(this, "/Demand",{});
         };
         let failure = (code, msg, option) => {
             //   console.log(msg);
@@ -45,7 +47,7 @@ class page extends Component {
                         <div style={{ color: "#333", fontSize: 20, marginLeft: 22 }}>需求信息</div>
                     </div>
                     {/** state={{lineType:3,lineNum:1,adultCount:"10",childCount:"10",remark:"",phone:"",listData:[{fromCity:"北京",toCity:"杭州",fromDateTime:"2017-11-20",toDateTime:"2017-11-20"}]}}*/}
-                    <TemplatePublist  callBack={(e) => {
+                    <TemplatePublist state={{lineType:2,lineNum:1,adultCount:"",childCount:"",remark:"",phone:"",listData:[]}}  callBack={(e) => {
                         this.httpPostAdd(e);
                     }} />
                 </div>
