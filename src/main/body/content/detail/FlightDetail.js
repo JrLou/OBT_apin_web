@@ -424,11 +424,12 @@ class page extends Component {
         }
         if (value && (value!="")&& /^[0-9]*$/.test(value)){
             this.props.form.setFieldsValue({
-                phone:value
+                mobile:value
             });
         }else {
+            alert(1);
             this.props.form.setFieldsValue({
-                phone:""
+                mobile:""
             });
         }
     }
