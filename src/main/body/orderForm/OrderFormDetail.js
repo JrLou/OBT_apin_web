@@ -11,7 +11,7 @@ import TitleBar from './TitleBar/index.js';
 import Passengers from './Passengers/index.js';
 import CellNewFlight from '../content/cell/CellNewFlight.js';
 import OrderInfoView from './OrderInfoView/index.js';
-import PayBottom from '../content/detail/detailComp/PayBottomForDetail.js';
+import PayBottom from './PayBottom/PayBottomForDetail.js';
 
 /**
  * 订单状态说明(页面)：

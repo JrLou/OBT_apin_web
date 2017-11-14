@@ -615,7 +615,7 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
                             <font
-                                className={less.mainContent}>{data && data.createdTime ? data.createdTime : "暂无"}</font>
+                                className={less.mainContent}>{data && data.orderCreatedTime ? data.orderCreatedTime : "暂无"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>成人价格：</font>
@@ -652,7 +652,7 @@ class page extends Component {
                         <Button className={less.detailButton}
                                 onClick={() => {
                                     window.app_open(this, "/OrderFormDetail", {
-                                        data: {orderNo:data.orderNo}
+                                        data: {orderId:data.orderNo}
                                     });
                                 }}
                         >查看订单详情</Button>

@@ -26,17 +26,8 @@ class Menus extends Component {
                 name: '我的积分',
                 path: '/Score'
             }],
-            selectedIndex: '0'
+            selectedIndex: window.location.pathname
         };
-    }
-
-    componentDidMount() {
-        let par = window.app_getPar(this);
-
-        this.setState({
-            selectedIndex: String(par.index)
-        });
-
     }
 
     render() {
@@ -46,14 +37,14 @@ class Menus extends Component {
 
             <Menu prefixCls="my-ant-menu" selectedKeys={[selectedIndex]} mode="horizontal">
                 {
-                    menus.map((menu, index) => {
+                    menus.map((menu) => {
                         return (
-                            <MenuItem key={index}>
+                            <MenuItem key={menu.path}>
                                 <span style={{ display: 'inline-block', width: '100%', height: '100%' }} onClick={() => {
                                     this.setState({
-                                        selectedKey: index
+                                        selectedKey: menu.path
                                     });
-                                    let params = { index };
+                                    let params = {};
                                     // 航班查询页面要求参数
                                     if (menu.path == '/Search') {
                                         params.data = {
