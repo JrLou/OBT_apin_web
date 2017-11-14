@@ -414,7 +414,7 @@ class InputLayout extends Component {
             <div style={{lineHeight: "40px"}}>
                <label htmlFor="mobileIpt" className={less.label}>银行卡预留手机号：</label>
                <Input
-                  readOnly={true}
+                  disabled={true}
                   id="mobileIpt"
                   size="large"
                   defaultValue={this.state.moblie.substring(0,3) + "****" + this.state.moblie.substring(7)}

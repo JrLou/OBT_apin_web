@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import less from './UnionPayAdd.less';
 import {HttpTool} from "../../lib/utils/index.js";
 import {Button, Form, Input, Icon, Spin,message, Modal, Radio} from 'antd';
-
+import Api from './Api.js';
 const FormItem = Form.Item;
 
 class PayPassWord extends Component {
@@ -116,7 +116,7 @@ class InputLayout extends Component {
     }
 
     loadPhoneCode(param, cb) {
-        HttpTool.request(HttpTool.typeEnum.POST, "/bohl/orderapi/v1.0/orders/code", (code, msg, json, option) => {
+        HttpTool.request(HttpTool.typeEnum.POST, Api.code, (code, msg, json, option) => {
             cb(code,msg,json);
         }, (code, msg, option) => {
             cb(code,msg, {});

@@ -511,8 +511,8 @@ class InputLayout extends Component {
                   <Input
                      {...iptProps}
                      id="amount"
-                     value={this.state.amount / 100 + "元"}
-                     readOnly={true}
+                     value={this.state.amount + "元"}
+                     disabled={true}
                      prefix={<Icon type="pay-circle" style={{fontSize: 13}}/>}
                   />
                </div>

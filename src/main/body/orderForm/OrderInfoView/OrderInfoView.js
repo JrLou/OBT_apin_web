@@ -6,7 +6,7 @@ import React, {Component} from 'react';
 import css from './OrderInfoView.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APILXD from "../../../../api/APILXD.js";
-import {hasKey} from '../../tool/LXDHelp.js';
+import {hasKey,sliceTimeString} from '../../tool/LXDHelp.js';
 import {Button,message,Modal,Spin,Icon} from 'antd';
 
 /**
@@ -61,8 +61,8 @@ class OrderInfoView extends Component{
                                     ></span>
                                     {
                                         (this.state.orderState == 3)
-                                        ?`请在${orderMsg.expiredTime}之前支付款`
-                                        :`请在${orderMsg.expiredTime}之前支付尾款`
+                                        ?`请在${sliceTimeString(orderMsg.expiredTime)}之前支付款`
+                                        :`请在${sliceTimeString(orderMsg.expiredTime)}之前支付尾款`
                                     }
                                 </div>
                             </div>
@@ -97,6 +97,7 @@ class OrderInfoView extends Component{
                     </div>
                     <div className={hasKey(this.state.orderState,[1,2,3,5,14,15])?css.rightMsg:css.hidden}>
                         <Button
+                            className={css.cancleBtnStyle}
                             onClick={()=>{
                                 //订单取消
                                 this.setState({
@@ -254,7 +255,6 @@ class OrderInfoView extends Component{
             }
 
             voucherUrl = otherPay.voucherUrl?otherPay.voucherUrl:'';
-        }
 
         return(
             <div className={css.itemLinePay}>
@@ -268,14 +268,14 @@ class OrderInfoView extends Component{
                     {scorePay>0?`积分抵扣(¥${scorePay})`:''}
                 </div>
                 {
-                    data.payStatus == 1
+                    payName
                     ?   (<div className={css.payType}>
                             {`(支付方式：${payName}`}
                             <span>&nbsp;&nbsp;</span>
                             {`支付时间：${otherPay.payTime})`}
                         </div>)
                     :   (<div className={css.payType}>
-                            {data.exexpiredTime?`支付截止日期：${data.exexpiredTime}`:''}
+                            {data.exexpiredTime?`支付截止日期：${sliceTimeString(data.exexpiredTime)}`:''}
                         </div>)
                 }
                 {
@@ -305,6 +305,9 @@ class OrderInfoView extends Component{
 
             </div>
         );
+        }else{
+            return (<div></div>);
+        }
     }
 
     /**

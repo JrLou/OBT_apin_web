@@ -94,9 +94,9 @@ let LXDHelp = {
     },
 
     /**
-     * 根据后端返回的订单状态和remark辅助字段，返回前端页面需要的订单状态
+     * 根据后端返回的订单状态和extraCode辅助字段，返回前端页面需要的订单状态
      * @param state
-     * @param remark
+     * @param extraCode
      * @returns {Number}
      */
     transformOrderState(state,extraCode){
@@ -104,12 +104,12 @@ let LXDHelp = {
         let returnRemark = parseInt(extraCode);
         if(LXDHelp.hasKey(returnState,[2,3,4,5,6])){
             switch(returnRemark){
-                case 0:returnState = 14;break;
-                case 1:returnState = 15;break;
-                case 2:returnState = 12;break;
-                case 3:returnState = 13;break;
-                case 5:returnState = 3;break;
-                case 6:returnState = 2;break;
+                case 0:returnState = 14;break;  //state = 2,3,5
+                case 1:returnState = 15;break;  //state = 2,3,5
+                case 2:returnState = 12;break;  //state = 6
+                case 3:returnState = 13;break;  //state = 6
+                case 5:returnState = 3;break;   //state = 4
+                case 6:returnState = 2;break;   //state = 4
                 default:break;
             }
         }
@@ -161,6 +161,17 @@ let LXDHelp = {
         }
 
         return formatData;
+    },
+
+    /**
+     * 传入时间字符串，将秒数去掉
+     * @param timeString
+     */
+    sliceTimeString(timeString){
+        if(!timeString){
+            return'';
+        }
+        return timeString.slice(0,-3);
     }
 };
 module.exports = LXDHelp;

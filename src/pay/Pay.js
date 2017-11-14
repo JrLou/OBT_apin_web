@@ -435,8 +435,8 @@ class page extends Component {
           return;
       }
       this.panel.show(true, {
-         okText: "我已经开通",
-         cancelText: "还没开通",
+         okText: "我已开通",
+         cancelText: "还未开通，重新开通",
          content: "确认是否已开通",
          // title: "银联开通",
          showType: "unioning"
@@ -475,8 +475,8 @@ class page extends Component {
                                 this.autoVer(apinPanel,"pay");
                                 },1000);
                           this.panel.show(true, {
-                              okText: "我已经支付",
-                              cancelText: "还没支付",
+                              okText: "我已支付",
+                              cancelText: "还未支付，重新支付",
                               content: "确认是否已支付",
                               // title: "支付信息",
                               showType: "paying"
@@ -599,7 +599,7 @@ class page extends Component {
             <div>
                 {/*UI说：长文字的时候，就不提示“支付失败”了*/}
                 {action === "ok" ?
-                    <div style={{textAlign:"left"}}>{content}&nbsp;
+                    <div>{content}&nbsp;
                         {connectUsLink}
                     </div>
                     :
