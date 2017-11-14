@@ -414,10 +414,10 @@ class InputLayout extends Component {
             <div style={{lineHeight: "40px"}}>
                <label htmlFor="mobileIpt" className={less.label}>银行卡预留手机号：</label>
                <Input
-                   disabled={true}
+                  readOnly={true}
                   id="mobileIpt"
                   size="large"
-                   defaultValue={this.state.moblie}
+                  defaultValue={this.state.moblie.substring(0,3) + "****" + this.state.moblie.substring(7)}
                   onChange={(e) => {
                      let v = e.target.value;
                      this.setState({
@@ -466,8 +466,9 @@ class InputLayout extends Component {
                             if(code>0){
                                 this.payId = data.payId;
                                 this.autoTime(this.defaultTime);
+                                this.setState({getCodeTips: "succ"});
                             }else{
-                                message.error(msg);
+                                this.setState({getCodeTips: msg});
                             }
                         });
 
@@ -477,6 +478,17 @@ class InputLayout extends Component {
                   {(this.state.time > 0 ? ("(" + this.state.time + "s)") : "") + "发送验证码"}
 
                </Button>
+            </div>
+            <div className={less.helpBlock + " " + (this.state.getCodeTips === "succ" ? less.codeSucc : less.codeErr)}>
+               {this.state.getCodeTips == undefined || this.state.loading ?
+                  null
+                  :
+                  (this.state.getCodeTips === "succ" ?
+                     <span><Icon type="check-circle-o" />&nbsp;验证码发送成功，请注意查收</span>
+                     :
+                     <span><Icon type="close-circle-o" />&nbsp;验证码发送失败，{this.state.getCodeTips}</span>
+                  )
+               }
             </div>
 
          </div>

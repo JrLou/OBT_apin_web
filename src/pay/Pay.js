@@ -364,7 +364,7 @@ class page extends Component {
                                 //打开新页面
                                 downIng(() => {
                                    window.app_open(this, "/Upload", {
-                                      id: this.id,
+                                      orderId: this.id,
                                       price: this.data.order.payPrice,
                                        payment: this.data.order.payment
                                    }, "self");
