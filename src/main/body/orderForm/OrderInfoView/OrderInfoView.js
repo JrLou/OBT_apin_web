@@ -255,7 +255,6 @@ class OrderInfoView extends Component{
             }
 
             voucherUrl = otherPay.voucherUrl?otherPay.voucherUrl:'';
-        }
 
         return(
             <div className={css.itemLinePay}>
@@ -269,7 +268,7 @@ class OrderInfoView extends Component{
                     {scorePay>0?`积分抵扣(¥${scorePay})`:''}
                 </div>
                 {
-                    data.payStatus == 1
+                    payName
                     ?   (<div className={css.payType}>
                             {`(支付方式：${payName}`}
                             <span>&nbsp;&nbsp;</span>
@@ -306,6 +305,9 @@ class OrderInfoView extends Component{
 
             </div>
         );
+        }else{
+            return (<div></div>);
+        }
     }
 
     /**
