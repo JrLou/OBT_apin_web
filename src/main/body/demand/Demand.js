@@ -433,8 +433,7 @@ class page extends Component {
 
         let failureCB = (code, msg, option) => {
             this.setLoading(false);
-            // message.error(msg);
-            message.error('测试-请求错误的回调');
+            message.error(msg);
         };
 
         this.setLoading(true, () => {
@@ -479,7 +478,7 @@ class page extends Component {
             let year = newDate.getFullYear();
             let month = (newDate.getMonth() + 1) > 9 ? (newDate.getMonth() + 1) : '0' + (newDate.getMonth() + 1);
             let day = newDate.getDate() > 9 ? newDate.getDate() : '0' + newDate.getDate();
-            date = '' + year + month + day;
+            date =year +"-"+ month +"-"+ day;
         }
         return date;
     }
