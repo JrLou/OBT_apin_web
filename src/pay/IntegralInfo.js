@@ -81,12 +81,11 @@ class IntegralInfo extends Component {
                               }
                            }}
                            style={{width: "60"}}
-                        />&nbsp;
-                        (积分单位:千)
+                        />
+
                         <span className={less.integralInfo_middle_line2_msg}>
-                                    可抵用<span
-                           className={less.integralInfo_middle_line2_msg_price}>{integral.use}</span>元
-                                </span>
+                           &nbsp;&nbsp;(积分单位: 千 )&nbsp;&nbsp;&nbsp;&nbsp;可抵用<span className={less.integralInfo_middle_line2_msg_price}>{integral.use}</span>元
+                        </span>
                      </div>
 
                   </div>
