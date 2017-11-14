@@ -159,7 +159,7 @@ class PassengerMsg extends Component{
                         getFunction = {(changeVisible)=>{this.changeShow = changeVisible;}} //获取打开/关闭窗口的方法
                     />
                     {
-                        this.state.isPassed
+                        (this.state.isPassed ||hasKey(this.state.orderState,[0,7,8]))
                         ?   <div className={css.titleBar}>
                                 <div className={css.title}>乘机人信息</div>
                                 <Button

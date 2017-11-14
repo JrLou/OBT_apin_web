@@ -155,7 +155,7 @@ class OrderFormDetail extends Component{
                 />
                  <div className={css.itemContainer}>
                     <div className={css.itemTitle}>航班信息</div>
-                    <div className={css.itemContent}>
+                    <div className={css.itemContentBigPadding}>
                         <CellNewFlight
                             dataSource = {this.state.flightData}
                             isNoShowRule={false}

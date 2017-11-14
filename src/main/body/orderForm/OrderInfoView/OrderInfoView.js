@@ -97,6 +97,7 @@ class OrderInfoView extends Component{
                     </div>
                     <div className={hasKey(this.state.orderState,[1,2,3,5,14,15])?css.rightMsg:css.hidden}>
                         <Button
+                            className={css.cancleBtnStyle}
                             onClick={()=>{
                                 //订单取消
                                 this.setState({
