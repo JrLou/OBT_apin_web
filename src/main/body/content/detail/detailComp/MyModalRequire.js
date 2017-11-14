@@ -61,7 +61,7 @@ class MyModalRequire extends Component {
     render() {
         var {callBack}=this.props;
         return (
-            <Modal width="550" visible={this.state.visible}
+            <Modal width="580" visible={this.state.visible}
                    onOk={()=>{
                        this.handleOk(callBack);
                    }}

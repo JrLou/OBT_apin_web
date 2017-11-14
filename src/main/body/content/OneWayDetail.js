@@ -11,7 +11,7 @@ import MyCalendar from "./line/MyCalendar.js";
 import MyAlert from "./line/MyAlert.js";
 import LoadingView from "../component/LoadingView.js";
 import {CookieHelp } from '../../../../lib/utils/index.js';
-
+import CellFlightCom from "./line/CellFlightCom.js";
 
 import Scroll from 'react-scroll/modules/index'; // Imports all Mixins
 
@@ -202,7 +202,6 @@ class page extends Component {
                 return;
             }
         }
-        this.myLineInfor.refreshView([],this.flightType);
         this.loadingView.refreshView(true);
         var param = {
             "depCity":this.depCity,
@@ -213,6 +212,10 @@ class page extends Component {
         };
         var success = (code, msg, json, option) => {
             this.loadingView.refreshView(false,()=>{
+                this.loadingView.refreshView(false);
+                this.myLineData = json;
+                this.upView();
+
                 if (json&&json.length>0){
                     let y = this.myflightCon?this.myflightCon.offsetTop:0;
                     let isBigZero = y-150;
@@ -220,7 +223,6 @@ class page extends Component {
                         this.scrollTo(isBigZero);
                     }
                 }
-                this.myLineInfor.refreshView(json,this.flightType);
             });
 
         };
@@ -291,32 +293,8 @@ class page extends Component {
 
                 <div className={css.thirdContent}
                      ref={(div)=>this.myflightCon = div}>
-                    <LineInfor ref={(lineInfor)=>this.myLineInfor = lineInfor}
-                               myData = {this.myData}
-                               callBack={(data)=>{
-                                   let voyagesArr = data.voyages?data.voyages:[];
-                                   let obj= {
-                                       airlineId:data.airlineId?data.airlineId:"",
-                                       depDate:voyagesArr[0]&&voyagesArr[0].depDate?voyagesArr[0].depDate:"",
-                                       retDate:voyagesArr[1]&&voyagesArr[1].depDate?voyagesArr[1].depDate:"",
-                                       isDirect:data.isDirect,
-                                   };
-
-                                   const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
-                                   if (isLogin){
-                                       window.app_open(this.props.obj, "/FlightDetail", {
-                                           step:1,
-                                           data:obj
-                                       },"self");
-                                   }else {
-                                       window.modal.showModal(0,()=>{
-                                           window.app_open(this.props.obj, "/FlightDetail", {
-                                               step:1,
-                                               data:obj
-                                           },"new");
-                                       });
-                                   }
-                               }}/>
+                    {(this.myLineData&&this.myLineData.length>0)?(<div className={css.title}>航班信息</div>):null}
+                    {this.createFlightCompany(this.myLineData,this.flightType)}
                 </div>
                 <LoadingView ref={(a)=>this.loadingView = a}/>
             </div>
@@ -337,169 +315,42 @@ class page extends Component {
             }
         }
     }
-}
+    createFlightCompany(dataArr,flightType){
+        if (!dataArr||dataArr.length<1){
+            return null;
+        }
+        return dataArr.map((data,index)=>{
+            return (<CellFlightCom key={index}
+                                   isNewData={true}
+                                   dataItem = {data}
+                                   flightType={flightType==2}
+                                   callBack={(data)=>{
+                                       let voyagesArr = data.voyages?data.voyages:[];
+                                       let obj= {
+                                           airlineId:data.airlineId?data.airlineId:"",
+                                           depDate:voyagesArr[0]&&voyagesArr[0].depDate?voyagesArr[0].depDate:"",
+                                           retDate:voyagesArr[1]&&voyagesArr[1].depDate?voyagesArr[1].depDate:"",
+                                           isDirect:data.isDirect,
+                                       };
 
-class LineInfor extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            dataSource: [],
-            flightType:true
-        };
-    }
-    refreshView(dataSource,flightType) {
-        this.setState({
-            dataSource:dataSource,
-            flightType:flightType==2
+                                       const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
+                                       if (isLogin){
+                                           window.app_open(this.props.obj, "/FlightDetail", {
+                                               step:1,
+                                               data:obj
+                                           },"self");
+                                       }else {
+                                           window.modal.showModal(0,()=>{
+                                               window.app_open(this.props.obj, "/FlightDetail", {
+                                                   step:1,
+                                                   data:obj
+                                               },"new");
+                                           });
+                                       }
+                                   }}/>);
         });
     }
-    render() {
-        let {dataSource,flightType} = this.state;
-        let {myData} = this.props;
-        return (<div>
-            {(dataSource&&dataSource.length>0)?(<div className={css.title}>航班信息</div>):null}
-            {this.createCell(dataSource,flightType,myData)}
-        </div>);
-    }
-    createCell(dataSource,flightType,myData){
-        if (!dataSource||dataSource.length<1||!myData){
-            return null;
-        }
-        var viewArr = [];
-        for (let i=0;i<dataSource.length;i++){
-            let dataItem = dataSource[i];
-            let airlineInfo = (dataItem.voyages&&dataItem.voyages.length>0)?dataItem.voyages:[];
-            let airlineInfo_One = airlineInfo[0]?airlineInfo[0]:{};
-            let desc = (airlineInfo_One.depDate||"")+" "+(airlineInfo_One.depTime||"")+" --> "+(airlineInfo_One.arrDate||"")+" "+(airlineInfo_One.arrTime||"")+" "+(airlineInfo_One.depAirport||"")+"-->"+(airlineInfo_One.arrAirport||"");
-            var itemView = (
-                <div key={i} className={css.cell}>
-                    {dataItem.isDirect&&dataItem.isDirect==1?<div className={css.sign}>直营</div>:null}
-                    <div className={css.left}>
-                        <div className={css.table}>
-                            {this.createItemCell(airlineInfo,flightType)}
-                        </div>
-                    </div>
-                    <div className={css.right}>
-                        <div className={css.rightCenter}>
-                            <div className={css.table}>
-                                <div className={css.daysText}>
-                                    <span>{dataItem.days+"天"}</span>
-                                    <span>{" | 已售"+dataItem.soldCount}</span>
-                                    <span>{" 余位"}</span>
-                                    <span style={{color:"#2db7f5"}}>{dataItem.remainCount}</span>
-                                </div>
-                                <div className={css.shuiText}>
-                                    <div className={css.shuiTextTop}>
-                                        {dataItem.flightType==2?"往返含税":"单程含税"}
-                                    </div>
-                                    <div className={css.priceText}>
-                                        <span className={css.priceTextColor}>{"¥ "}</span>
-                                        <span className={css.priceTextFont}>{dataItem.basePrice||"0"}</span>
-                                        <span >{" 起"}</span>
-                                    </div>
-                                </div>
-                                <div className={css.itemCenter}>
-                                    <div className={css.table}>
-                                        <div className={css.btn} style={{cursor: 'pointer'}}
-                                             onClick={() => {
-                                                 if( window.ysf&& window.ysf.open &&(1==0)){
-                                                     // window.ysf.open();
-                                                     window.ysf.product({
-                                                         show : 1, // 1为打开， 其他参数为隐藏（包括非零元素）
-                                                         title : (myData.depCity?(myData.depCity+" —— "):"")+(myData.arrCity?myData.arrCity:""),
-                                                         desc : desc,
-                                                         picture : myData.arrCityImgUrl,
-                                                         note : "参考价（含税）￥"+(dataItem.basePrice||"0"),
-                                                         url : window.location.href,
-                                                         success: function(){     // 成功回调
-                                                             window.ysf.open();
-                                                         },
-                                                         error: function(){       // 错误回调
-                                                             // handle error
-                                                         }
-                                                     });
-                                                 }else{
-                                                     if (this.props.callBack){
-                                                         this.props.callBack(dataItem);
-                                                     }
-                                                 }
-                                             }}>{dataItem.isDirect&&dataItem.isDirect==1?"购买":"预订"}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>);
-            viewArr.push(itemView);
-        }
-        return viewArr;
-    }
-
-    createItemCell(data,flightType){
-        if (!data||data.length<1){
-            return null;
-        }
-        var viewArr = [];
-        for (let i=0;i<data.length;i++){
-            let dataItem = data[i];
-            let startDate = dataItem.depDate?dataItem.depDate.substring(5):"";
-            startDate = startDate.replace("-","月")+"日";
-
-            let endDate = dataItem.arrDate?dataItem.arrDate.substring(5):"";
-            endDate = endDate.replace("-","月")+"日";
-            var itemView = (<div key={i}>
-                <div className={css.cellLine} style={{borderBottomWidth:(flightType&&i==0)?"1px":"0px"}}>
-                    {flightType?<div className={css.type}>
-                        <div className={css.typeText}>
-                            {i==0?"去":"返"}
-                        </div>
-                    </div>:null}
-
-                    <div className={css.type}>
-                        <img className={css.logo}
-                             src ={dataItem.logo?dataItem.logo:require("../../../images/logo.png")}
-                        />
-                    </div>
-
-                    <div className={css.logoCompany_super}>
-                        <div className={css.logoCompany}>{dataItem.compName}</div>
-                        <div className={css.lineNum}>{dataItem.num}</div>
-                    </div>
-
-                    <div className={css.itemCenter}>
-                        <div className={css.timeLine}>
-                            <div className={css.timeLineItem}>
-                                <span className={css.fontBase}>{startDate+" "}</span>
-                                <span style={{fontSize:"24px",textAlign:"right"}}>{dataItem.depTime}</span>
-                            </div>
-
-                            <div className={css.totalTime}>
-                                <div className={css.totalTimeText}>
-                                    {dataItem.flightTime?dataItem.flightTime:""}
-                                </div>
-                                <img className={css.line} src={require('../../../images/trip_line.png')}/>
-                            </div>
-                            <div className={css.timeLineItem} style={{textAlign:"left"}}>
-                                {/*<span className={css.fontBase}>{endDate+" "}</span>*/}
-                                <span style={{fontSize:"24px"}}>{dataItem.arrTime}</span>
-                                <span style={{fontSize:"12px",color:"#FF5841"}}>{dataItem.tag==1?"+1天":""}</span>
-                            </div>
-                        </div>
-                        <div className={css.timeLine}>
-                            <div className={css.placeLineItem}>{dataItem.depAirport}</div>
-                            <div className={css.space}></div>
-                            <div className={css.refPlaceLineItem}>{dataItem.arrAirport}</div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>);
-            viewArr.push(itemView);
-        }
-        return viewArr;
-    }
 }
-
 page.contextTypes = {
     router: React.PropTypes.object
 };

@@ -78,6 +78,14 @@ class page extends Component {
         let voyage = json&&json.plans?json.plans:{};
         this.flightType = voyage.flightType;
 
+        let member = json.member?json.member:{};
+        this.props.form.setFieldsValue({
+            mobile:member.contactPhone?member.contactPhone:""
+        });
+        this.props.form.setFieldsValue({
+            customerName:member.contactName?member.contactName:""
+        });
+
         //用来显示库存超出的时候 弹出module框添加已知数据
         this.requireParam = {
             lineType:this.flightType?this.flightType:1,
@@ -132,9 +140,9 @@ class page extends Component {
         let code = json.flag?json.flag:0;
         let id = json.id?json.id:"";
         if (code==1){
-            window.app_open(this.props.obj, "/OrderFormDetail", {id:id},"self");
+            window.app_open(this, "/OrderFormDetail", {id:id},"self");
         }else if (code==2){
-            window.app_open(this.props.obj, "/Pay", {id:id},"self");
+            window.app_open(this, "/Pay", {id:id},"self");
         }else {
             //用来显示库存超出的时候 弹出module框添加已知数据
             this.requireParam = {
