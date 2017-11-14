@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-14 13:47:16
+ * @Last Modified time: 2017-11-14 13:50:51
  */
 
 import React, { Component } from 'react';
@@ -132,7 +132,7 @@ class ForgetForm extends Component {
                 const { mobile, option, password } = values;
                 HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/users/resetPassword', (code, message, json, option) => {
                     message.success('修改成功');
-                    this.props.onOK();
+                    this.props.handleChangeMode(0);
                 }, (code, msg) => {
                     message.error(msg);
                 }, {
