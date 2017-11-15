@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-15 13:23:57
+ * @Last Modified time: 2017-11-15 22:28:26
  */
 
 import React, { Component } from 'react';
@@ -14,7 +14,6 @@ import CheckCode from './CheckCode';
 import { validateLoginPromise, defaultLoginPromise, loginPromise, getLoginCodePromise } from './LoginAction';
 
 import css from './sign.less';
-import { log } from 'debug';
 
 const FormItem = Form.Item;
 
@@ -123,7 +122,7 @@ class SignInForm extends Component {
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
                         )}
-                    <img src={picCode} alt="" className={css.checkCodeImg} />
+                    <img src={picCode} alt="" style={{ cursor: 'pointer' }} className={css.checkCodeImg} onClick={() => this.getCode(() => this.getCodeAction(true))} />
                 </FormItem>}
                 <FormItem
                     prefixCls="my-ant-form"
@@ -212,14 +211,14 @@ class SignInForm extends Component {
     /**
      * 获取注册验证码
      */
-    getCodeAction() {
+    getCodeAction(isSendPic) {
         const { getFieldValue } = this.props.form;
         const account = getFieldValue('account');
         const mobile = getFieldValue('mobile');
         const picCode = getFieldValue('picCode') || '';
         HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
             // 测试
-            if (json.length > 4) {
+            if (json && json.length > 4) {
                 this.setState({
                     isShowPic: true,
                     picCode: 'data:image/jpg;base64,' + json
@@ -232,7 +231,7 @@ class SignInForm extends Component {
         }, (code, msg, json, option) => {
             message.error(msg);
         }, {
-                account, mobile, picCode, type: 1
+                account, mobile, picCode: isSendPic ? "" : picCode, type: 1
             });
     }
 
