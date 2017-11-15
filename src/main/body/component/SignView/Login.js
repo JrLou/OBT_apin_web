@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-15 11:50:01
+ * @Last Modified time: 2017-11-15 13:25:00
  */
 
 import React, { Component } from 'react';
@@ -147,9 +147,9 @@ class MsgLoginForm extends React.Component {
                     help={mobileError || ''}
                 >
                     {getFieldDecorator('mobile', {
-                        rules: [{ required: true, message: '请输入11位手机号' }, {
-                            pattern: /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/, message: '手机号格式不正确！'
-                        }],
+                        rules: [{ required: true, message: '请输入11位手机号' }, 
+                            { pattern: /^(1)\d{10}$/, message: '手机号格式不正确！' }
+                        ],
                     })(
                         <Input prefixCls='my-ant-input' placeholder="请输入11位手机号" />
                         )}
