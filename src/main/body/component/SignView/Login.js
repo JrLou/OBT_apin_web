@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-15 11:30:43
+ * @Last Modified time: 2017-11-15 11:50:01
  */
 
 import React, { Component } from 'react';
@@ -98,7 +98,8 @@ class AccountLoginForm extends React.Component {
                     // IS_LOGIN判断是否真的登录
                     CookieHelp.saveCookieInfo('IS_LOGIN', true);
                     this.props.setLogin();
-                    this.props.callback(1);
+                    if (this.props.callback && typeof (this.props.callback) === 'function')
+                        this.props.callback(1);
                     this.props.onOK();
                 }).catch((error) => {
                     message.error(error);
@@ -244,7 +245,8 @@ class MsgLoginForm extends React.Component {
                     // IS_LOGIN判断是否真的登录
                     CookieHelp.saveCookieInfo('IS_LOGIN', true);
                     this.props.setLogin();
-                    this.props.callback(1);
+                    if (this.props.callback && typeof (this.props.callback) === 'function')
+                        this.props.callback(1);
                     this.props.onOK();
                 }).catch((error) => {
                     message.error(error);
