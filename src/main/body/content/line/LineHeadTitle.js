@@ -110,21 +110,15 @@ class page extends Component {
 
                                     let obj = {
                                         lineType:dataSource.flightType,
-                                        listData:[{fromCity:dataSource.depCity,toCity:dataSource.arrCity}]
+                                        toCity:dataSource.depCity,
+                                        fromCity:dataSource.arrCity,
+                                        isMult:false
                                     };
                                     if (isLogin){
-                                        window.app_open(this.props.obj, "/PublishMsg", {
-                                            data:obj
-                                        },"new");
+                                        window.app_open(this.props.obj, "/PublishMsg", obj,"new");
                                     }else {
                                         window.modal.showModal(0,()=>{
-                                            window.app_open(this.props.obj, "/PublishMsg",
-                                                {
-                                                    lineType:dataSource.flightType,
-                                                    toCity:dataSource.depCity,
-                                                    fromCity:dataSource.arrCity,
-                                                    isMult:false
-                                                }, "new");
+                                            window.app_open(this.props.obj, "/PublishMsg", obj, "new");
                                         });
                                     }
                                 }}>提交需求</div>

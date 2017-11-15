@@ -72,7 +72,8 @@ class page extends Component {
         this.adultPrice = json&&json.adultPrice?parseInt(json.adultPrice):0;
         this.childPrice = json&&json.childPrice?parseInt(json.childPrice):0;
         this.depositAmount = json&&json.depositAmount?parseInt(json.depositAmount):0;
-
+        this.cityArr = json&&json.cityArr?json.cityArr:"";
+        this.cityDep = json&&json.cityDep?json.cityDep:"";
         let voyage = json&&json.plans?json.plans:{};
         this.flightType = voyage.flightType;
 
@@ -83,7 +84,6 @@ class page extends Component {
         this.props.form.setFieldsValue({
             customerName:member.contactName?member.contactName:""
         });
-
         //用来显示库存超出的时候 弹出module框添加已知数据
         this.requireParam = {
             lineType:this.flightType?this.flightType:1,
@@ -149,7 +149,8 @@ class page extends Component {
                 adultCount:this.state.adultNum,
                 childCount:this.state.childNum,
                 remark:"",
-                listData:[{}]
+                isMult:this.flightType&&(this.flightType<3),
+                listData:[{fromCity:this.cityArr,toCity:this.cityDep}]
             };
             this.myModalRequire.showModal(true,
                 {

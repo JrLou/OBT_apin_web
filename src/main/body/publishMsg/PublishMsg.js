@@ -18,10 +18,6 @@ class page extends Component {
         super(props);
         this.state = {
         };
-        let par = window.app_getPar(this);
-        this.param = par.data?par.data:{};
-
-        alert(JSON.stringify(this.param));
     }
     httpPostAdd(param) {//发送数据
         let success = (code, msg, json, option) => {
