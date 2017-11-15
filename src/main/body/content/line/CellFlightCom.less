@@ -23,7 +23,7 @@
   transition:1s;
   transform: scale(1) translateX(0px);
 
-  padding:@d_spadding_small;
+  padding:@d_spadding_base @d_spadding_small;
   border-width: 1px;
   border-style: solid;
   border-color: @c_border_blue;
@@ -117,7 +117,7 @@
 //左边的样式
 .cellLine{
   composes: table;
-  padding: @d_spadding_cell;
+  padding: @d_spadding_base @d_spadding_cell;
   border-width: 0 0 1px 0;
   border-style: dashed;
   border-color: #C2C6CC;
@@ -182,15 +182,12 @@
   position: relative;
 }
 .totalTimeText{
-  height: 18px;
-  line-height: 18px;
   font-size: @font_size_cell;
   color: @c_title_black;
+  height: 8px;
+  line-height: 8px;
 }
 .line{
-  position: absolute;
-  bottom: 1px;
-  left: 0px;
   width: 100%;
   background-size: cover;
 }

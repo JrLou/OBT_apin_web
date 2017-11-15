@@ -105,7 +105,10 @@ class CellNewFlight extends Component {
                             </div>
                         </div>
                         <div className={css.totalTimeText}>{"约"+data.flightTime}</div>
-                        <div className={css.flightLineNum}>{data.num}</div>
+                        <div className={css.flightLineNum}>
+                            <span>{data.num}</span>
+                            {data.isStop==1?<span style={{fontSize:"12px",color:"#FF5841"}}>{" 经停"}</span>:null}
+                        </div>
                     </div>
 
 

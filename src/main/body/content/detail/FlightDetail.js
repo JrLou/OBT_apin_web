@@ -54,8 +54,6 @@ class page extends Component {
         this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
             this.loadingView.refreshView(false,()=>{
-                log(json);
-                log("----------gyw----------");
                 this.setData(json);
             });
         };
@@ -374,15 +372,19 @@ class page extends Component {
                     <div className={css.itemCenter} style={{width:"100%"}}>
                         <div className={css.ruleDiv}>
                             <Tooltip placement="bottom" title={<div>
-                                <div className={css.rule}>
+                                {voyagesObj.freeBag?<div className={css.rule}>
                                     {"免费托运: "+voyagesObj.freeBag+"件"}
-                                </div>
-                                <div className={css.rule}>
+                                </div>:null}
+
+                                {voyagesObj.weightLimit?<div className={css.rule}>
                                     {"每件重量上限: "}
                                     <span style={{color:"#ff6600",fontSize:"14px"}}>{voyagesObj.weightLimit+"kg"}</span>
-                                </div>
-                            </div>}>行李规则
-                            </Tooltip>
+                                </div>:null}
+
+                                {!voyagesObj.weightLimit&&!voyagesObj.freeBag?<div className={css.rule}>
+                                    {"暂无行李规则"}
+                                </div>:null}
+                            </div>}>行李规则</Tooltip>
                         </div>
                     </div>
                 </div>
@@ -410,14 +412,16 @@ class page extends Component {
             num_Int = parseInt(isAdult?adultNum:childNum);
         }
 
-        num_Int = num_Int<=0?"0":num_Int;
+
         if (isAdult){
+            num_Int = num_Int<=0?"1":num_Int;
             this.setState({
                 adultNum:num_Int
             },()=>{
                 this.setAdultNum(num_Int);
             });
         }else {
+            num_Int = num_Int<=0?"1":num_Int;
             this.setState({
                 childNum:num_Int
             },()=>{
