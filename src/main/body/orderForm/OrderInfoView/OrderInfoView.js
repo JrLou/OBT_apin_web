@@ -120,6 +120,7 @@ class OrderInfoView extends Component{
                                     ?'用户取消订单'
                                     :orderMsg.closeReason
                                 }
+                                <span style={{paddingLeft:'15px'}}></span>
                                 {
                                     orderMsg.closetime
                                     ?`(关闭时间：${orderMsg.closetime})`
