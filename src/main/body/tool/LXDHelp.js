@@ -2,6 +2,7 @@
  * Created by louxudong on 2017/11/7.
  */
 import React, {Component} from 'react';
+import {Popover} from 'antd';
 let LXDHelp = {
     /**
      * 输入航程数组和航程类型，动态拼接航程展示
@@ -41,9 +42,12 @@ let LXDHelp = {
                             overflow:'hidden',
                         };
         return(
-            <div style={divStyle}>
-                {view}
-            </div>
+            <Popover content={view}>
+                <div style={divStyle}>
+                    {view}
+                </div>
+            </Popover>
+
         );
    },
 

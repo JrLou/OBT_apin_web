@@ -11,7 +11,7 @@ import {Button,message,Modal,Spin,Icon} from 'antd';
 
 /**
  * 订单状态说明(页面)：
- * 0：订单取消 1：等待确认 2：待付订金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
+ * 0：订单取消 1：等待确认 2：待付押金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
  * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中 15：支付审核失败
  */
 
@@ -231,10 +231,10 @@ class OrderInfoView extends Component{
         let paymentName = '';
         switch(payment){
             case 0:paymentName = '支付全款:';break;
-            case 1:paymentName = '支付订金:';break;
+            case 1:paymentName = '支付押金:';break;
             case 2:paymentName = '支付尾款:';break;
             case 3:paymentName = '退回全款:';break;
-            case 4:paymentName = '退回订金:';break;
+            case 4:paymentName = '退回押金:';break;
             case 5:paymentName = '退回尾款:';break;
             default:break;
         }
@@ -367,7 +367,7 @@ class OrderInfoView extends Component{
                 break;
             case 1:title='等待确认';
                 break;
-            case 2:title='待付订金';
+            case 2:title='待付押金';
                 break;
             case 3:title='待付款';
                 break;

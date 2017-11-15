@@ -50,7 +50,7 @@ class PayBottom extends Component {
 
         let {param,isPay,callBack} = this.props;
         let str = param?"(成人¥"+param.adultPrice+"*"+param.adultCount+"+"+"儿童¥" +param.childPrice+
-            "*"+param.childCount+"=价格(含税)"+"¥"+param.totalPrice+")":"";
+            "*"+param.childCount+"=价格(含税)"+"¥"+param.payAmount+")":"";
 
         return (<div className={css.payDivFix}>
             <div className={this.state.overTime?css.divDisabled:css.bottomDiv}>
@@ -66,7 +66,7 @@ class PayBottom extends Component {
                 <div className={css.bottomDiv_center}>
                     <div className={css.depositPriceBg}>
                         <span style={{fontSize:"14px",color:"#333"}}>{payName}</span>
-                        <span className={css.priceStyle}>{`￥${param.orderPrice}`}</span>
+                        <span className={css.priceStyle}>{param.payAmount?`￥${param.payAmount}`:''}</span>
                     </div>
                     <div className={css.depositPriceBg}>
                         {

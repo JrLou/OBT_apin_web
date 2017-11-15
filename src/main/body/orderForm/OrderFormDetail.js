@@ -163,7 +163,7 @@ class OrderFormDetail extends Component{
                     </div>
                 </div>
                     {
-                        //因为待付订金状态不能录入乘机人，待付订金的审核中和审核失败也不能。需要接口返回的真实状态辅助判断（区分页面的2，3，5）
+                        //因为待付押金状态不能录入乘机人，待付押金的审核中和审核失败也不能。需要接口返回的真实状态辅助判断（区分页面的2，3，5）
                         (hasKey(this.state.orderState,[0,3,5,7,8,12,13])||hasKey(this.state.returnState,[3,5]))
                         ?   <div className={css.itemContainer}>
                                 <Passengers
@@ -394,7 +394,7 @@ class OrderFormDetail extends Component{
     getBottomData(data){
         let bottomData = {
             orderPrice:data.orderAmount,
-            totalPrice:data.orderAmount,
+            payAmount:data.payAmount,
             adultPrice:data.adultPrice,
             childPrice:data.childPrice,
             childCount:data.childCount,
