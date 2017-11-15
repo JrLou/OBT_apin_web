@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-01 14:09:48 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-14 23:42:10
+ * @Last Modified time: 2017-11-15 12:20:38
  */
 
 import React, { Component } from 'react';
@@ -36,7 +36,7 @@ class SignUpView extends Component {
                 style={{ width: '100px' }}
                 prefixCls="my-ant-modal"
                 afterClose={() => {
-                    if (this.loginCallback)
+                    if (this.loginCallback && callback && typeof (callback) === 'function')
                         return callback();
                 }}
             >
