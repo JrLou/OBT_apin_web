@@ -27,7 +27,7 @@
   width: calc(100% - 98px);
 }
 .src-main-body-component-SignView-sign---checkCodeImg---nOa32 {
-  width: 90px;
+  width: 98px;
   height: 36px;
   vertical-align: bottom;
 }
@@ -2715,7 +2715,7 @@ active {
   width: 100%;
   transition: 1s;
   transform: scale(1) translateX(0px);
-  padding: 15px;
+  padding: 10px 15px;
   border-width: 1px;
   border-style: solid;
   border-color: #29A6FF;
@@ -2792,7 +2792,7 @@ active {
   color: #FFFFFF;
 }
 .src-main-body-content-line-CellFlightCom---cellLine---gUh1B {
-  padding: 5px;
+  padding: 10px 5px;
   border-width: 0 0 1px 0;
   border-style: dashed;
   border-color: #C2C6CC;
@@ -2848,15 +2848,12 @@ active {
   position: relative;
 }
 .src-main-body-content-line-CellFlightCom---totalTimeText---1Td4Q {
-  height: 18px;
-  line-height: 18px;
   font-size: 12px;
   color: #333;
+  height: 8px;
+  line-height: 8px;
 }
 .src-main-body-content-line-CellFlightCom---line---3XU2Z {
-  position: absolute;
-  bottom: 1px;
-  left: 0px;
   width: 100%;
   background-size: cover;
 }
@@ -5498,7 +5495,7 @@ active {
 }
 .src-main-body-orderForm-OrderFormDetail---itemContentBigPadding---AZK8m {
   padding: 15px;
-  padding-left: 35px;
+  padding-left: 70px;
 }
 .src-main-body-orderForm-OrderFormDetail---noMessage---1bKLC {
   font-size: 24px;
@@ -5716,6 +5713,8 @@ active {
 .src-main-body-orderForm-Passengers-Passengers---btnType03---2t1Ae {
   height: 24px;
   width: 80px;
+  text-align: center;
+  padding: 0;
   border-radius: 2px;
   margin: 0 5px;
 }
@@ -5748,10 +5747,20 @@ active {
 .src-main-body-orderForm-Passengers-Passengers---operationUpDate---21P6N {
   color: #00A0E9;
   cursor: pointer;
+  display: inline-block;
+  margin: 0 5px;
+}
+.src-main-body-orderForm-Passengers-Passengers---operationUpDate---21P6N:hover {
+  font-weight: bold;
 }
 .src-main-body-orderForm-Passengers-Passengers---operationDelete---1U1GH {
   color: #f50;
   cursor: pointer;
+  display: inline-block;
+  margin: 0 5px;
+}
+.src-main-body-orderForm-Passengers-Passengers---operationDelete---1U1GH:hover {
+  font-weight: bold;
 }
 .src-main-body-orderForm-Passengers-Passengers---errorStyle---1J8f9 {
   border-color: #f50;
@@ -6011,6 +6020,7 @@ active {
 }
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---payBox---196YB {
   background-color: #F0F4FB;
+  padding-bottom: 10px;
   overflow: hidden;
 }
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---leftMsg---lQ1ol {
@@ -6018,7 +6028,7 @@ active {
   position: relative;
   padding: 15px;
   float: left;
-  width: 80%;
+  width: 85%;
   border-right: 1px solid #EDEDED;
 }
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---boxNoBorder----djZa {
@@ -6026,14 +6036,14 @@ active {
   position: relative;
   padding: 15px;
   float: left;
-  width: 80%;
+  width: 85%;
   border-right: 1px solid #EDEDED;
   border: none;
 }
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---rightMsg----kh5a {
   position: absolute;
   top: 40%;
-  right: 5%;
+  right: 2.5%;
   border-left: 1px solid #EDEDED;
 }
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---itemLine---3sGN8 {
@@ -6069,7 +6079,7 @@ active {
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---priceItem---2D5M1 {
   position: absolute;
   top: 40%;
-  right: 10%;
+  right: 5%;
 }
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---priceTitle---3KKqF {
   font-size: 12px;
@@ -6100,6 +6110,7 @@ active {
   float: left;
   font-size: 12px;
   color: #333;
+  padding-top: 3px;
 }
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---payVoucher---250VE {
   clear: both;
@@ -6125,6 +6136,7 @@ active {
 }
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---reUpload---7zglM {
   float: right;
+  padding-right: 1.5%;
 }
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---closeImgBtn---3FdKe {
   position: absolute;
