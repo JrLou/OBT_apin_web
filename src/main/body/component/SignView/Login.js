@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-15 13:30:37
+ * @Last Modified time: 2017-11-15 13:55:41
  */
 
 import React, { Component } from 'react';
@@ -197,7 +197,7 @@ class MsgLoginForm extends React.Component {
     /**
      * 获取登录验证码
      */
-    // getCodeAction() {
+    getCodeAction() {
     //     const { getFieldValue } = this.props.form;
     //     const mobile = getFieldValue('mobile');
     //     const picCode = getFieldValue('picCode') || '';
@@ -218,7 +218,7 @@ class MsgLoginForm extends React.Component {
     //     }, {
     //             mobile, picCode, type: 1
     //         });
-    // }
+    }
 
     // 获取登录码
     getCode(callback) {
