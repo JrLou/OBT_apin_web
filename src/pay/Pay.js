@@ -782,7 +782,7 @@ class Money extends Component {
 
    render() {
       let data = this.getData();
-      data.payPrice = data.price - this.state.use;
+      data.payPrice = (data.price*100 - this.state.use*100)/100;
       return <span {...this.props}>
        {data.payPrice}
       </span>;
