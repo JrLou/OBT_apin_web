@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-14 21:41:33
+ * @Last Modified time: 2017-11-15 11:35:09
  */
 
 import React, { Component } from 'react';
@@ -61,6 +61,7 @@ class SignInForm extends Component {
                     {getFieldDecorator('account', {
                         validateTrigger: 'onBlur',
                         rules: [{ required: true, message: '请输入账户名' },
+                        { pattern: /^[0-9A-Za-z]{6,20}$/, message: '请输入6-20位数字、字母' },
                         {
                             validator: (rule, value, callback) => {
                                 this.getCode(() => {

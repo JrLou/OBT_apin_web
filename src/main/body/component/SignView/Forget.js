@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-14 19:59:51
+ * @Last Modified time: 2017-11-15 11:26:59
  */
 
 import React, { Component } from 'react';
@@ -183,7 +183,7 @@ class ForgetForm extends Component {
             }
         }, (code, message, json, option) => {
         }, {
-                mobile, picCode, type: 2
+                mobile, picCode, type: 1
             });
     }
 
@@ -193,7 +193,7 @@ class ForgetForm extends Component {
         if (user) {
             callback();
         } else {
-            defaultLoginPromise(0, () => callback());
+            defaultLoginPromise(1, () => callback());
         }
     }
 }

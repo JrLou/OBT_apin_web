@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-14 23:39:07
+ * @Last Modified time: 2017-11-15 11:30:43
  */
 
 import React, { Component } from 'react';
@@ -12,7 +12,7 @@ import md5 from 'md5';
 import CheckCode from './CheckCode';
 import { loginPromise, getLoginCodePromise, defaultLoginPromise } from './LoginAction';
 
-import { CookieHelp,HttpTool } from '../../../../../lib/utils/index.js';
+import { CookieHelp, HttpTool } from '../../../../../lib/utils/index.js';
 
 import css from './sign.less';
 
@@ -118,7 +118,8 @@ class MsgLoginForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isShowPic: false
+            isShowPic: false,// 是否显示图形验证码
+            picCode: ''//图片base64
         };
         this.getCode = this.getCode.bind(this);
         this.getCodeAction = this.getCodeAction.bind(this);
@@ -133,10 +134,10 @@ class MsgLoginForm extends React.Component {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
 
         const mobileError = isFieldTouched('mobile') && getFieldError('mobile');
-        const checkImgCodeError = isFieldTouched('checkImgCode') && getFieldError('checkImgCode');
+        const picCodeError = isFieldTouched('picCode') && getFieldError('picCode');
         const passwordError = isFieldTouched('password') && getFieldError('password');
 
-        const { isShowPic } = this.state;
+        const { isShowPic, picCode } = this.state;
         return (
             <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <FormItem
@@ -155,15 +156,15 @@ class MsgLoginForm extends React.Component {
                 {
                     isShowPic && <FormItem
                         prefixCls="my-ant-form"
-                        validateStatus={checkImgCodeError ? 'error' : ''}
-                        help={checkImgCodeError || ''}
+                        validateStatus={picCodeError ? 'error' : ''}
+                        help={picCodeError || ''}
                     >
-                        {getFieldDecorator('checkImgCode', {
+                        {getFieldDecorator('picCode', {
                             rules: [{ required: true, message: '请输入图形验证码' }],
                         })(
                             <Input prefixCls='my-ant-input' placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
                             )}
-                        <img src="http://placehold.it/98x36" alt="" className={css.checkCodeImg} />
+                        <img src={picCode} alt="" className={css.checkCodeImg} />
                     </FormItem>
                 }
                 <FormItem
@@ -176,7 +177,7 @@ class MsgLoginForm extends React.Component {
                     })(
                         <Input prefixCls='my-ant-input' placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode error={getFieldError('account')} getCode={()=>this.getCode(this.getCodeAction)} />
+                    <CheckCode error={getFieldError('account')} getCode={() => this.getCode(this.getCodeAction)} />
                 </FormItem>
                 <FormItem prefixCls="my-ant-form">
                     <Button
@@ -199,36 +200,31 @@ class MsgLoginForm extends React.Component {
         const { getFieldValue } = this.props.form;
         const mobile = getFieldValue('mobile');
         const picCode = getFieldValue('picCode') || '';
-        // HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
-        //     // 测试
-        //     if (json.length > 4) {
-        //         this.setState({
-        //             isShowPic: true,
-        //             picCode: 'data:image/jpg;base64,' + json
-        //         });
-        //     } else {
-        //         this.setState({
-        //             isShowPic: false
-        //         });
-        //     }
-        // }, (code, msg, json, option) => {
-        //     message.error(msg);
-        // }, {
-        //         mobile, picCode, type: 1
-        //     });
+        HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
+            // 测试
+            if (json.length > 4) {
+                this.setState({
+                    isShowPic: true,
+                    picCode: 'data:image/jpg;base64,' + json
+                });
+            } else {
+                this.setState({
+                    isShowPic: false
+                });
+            }
+        }, (code, msg, json, option) => {
+            message.error(msg);
+        }, {
+                mobile, picCode, type: 1
+            });
     }
 
     // 获取登录码
     getCode(callback) {
-        // const { getFieldValue } = this.props.form;
-        // const account = getFieldValue('account');
-        // getLoginCodePromise(account, 1).then((data) => {
-        //     this.data = data;
-        // });
 
         const user = CookieHelp.getUserInfo();
         log(user);
-        
+
         if (user) {
             callback();
         } else {
