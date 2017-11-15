@@ -154,7 +154,7 @@ class AccountForm extends Component {
                             <Input prefixCls="my-ant-input" onChange={(value) => this.handleChange('contactName', value)} />
                             )}
                     </FormItem>
-                    {<FormItem prefixCls="my-ant-form"
+                    {!isView && <FormItem prefixCls="my-ant-form"
                         {...formItemLayout}
                         label="省"
                     >
@@ -164,7 +164,7 @@ class AccountForm extends Component {
                             }} placeholder="Please select" />
                         )}
                     </FormItem>}
-                    {<FormItem prefixCls="my-ant-form"
+                    {!isView && <FormItem prefixCls="my-ant-form"
                         {...formItemLayout}
                         label="市"
                     >
@@ -174,7 +174,7 @@ class AccountForm extends Component {
                             }} placeholder="Please select" />
                         )}
                     </FormItem>}
-                    {<FormItem prefixCls="my-ant-form"
+                    {!isView && <FormItem prefixCls="my-ant-form"
                         {...formItemLayout}
                         label="区"
                     >
