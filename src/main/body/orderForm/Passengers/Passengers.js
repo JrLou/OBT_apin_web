@@ -126,6 +126,7 @@ class PassengerMsg extends Component{
                             >
                                 修改
                             </div>
+                            <span>/</span>
                             <div
                                 className={css.operationDelete}
                                 onClick={()=>{
@@ -181,10 +182,10 @@ class PassengerMsg extends Component{
                                     onClick={()=>{
                                         if(this.state.airlineSigns == 1){
                                             //国内
-                                            window.location.href = 'http://10.0.0.200:8080/wenjian/guonei.xlsx';
+                                            window.location.href = 'http://oqum3uti8.bkt.clouddn.com/guonei.xlsx';
                                         }else{
                                             //国际
-                                            window.location.href = 'http://10.0.0.200:8080/wenjian/guoji.xlsx';
+                                            window.location.href = 'http://oqum3uti8.bkt.clouddn.com/guoji.xlsx';
                                         }
                                     }}
                                 >
@@ -617,7 +618,7 @@ class PassengerMsg extends Component{
                     ?<div className={css.resultItem}>
                             <span style={{color:'#f50',fontSize:'16px'}}>导入失败：</span>
                             {`${result.failCount}人`}
-                            <div>
+                            <div className={css.numberList}>
                                 失败的记录行号：
                                 {getNumber(result.failRowNumber,1)}
                             </div>
@@ -629,7 +630,7 @@ class PassengerMsg extends Component{
                     ?<div className={css.resultItem}>
                             <span style={{color:'#333',fontSize:'16px'}}>导入重复：</span>
                             {`${result.repeatCount}人`}
-                            <div>
+                            <div className={css.numberList}>
                                 重复的记录行号：
                                 {getNumber(result.repeatRowNumber,2)}
                             </div>
@@ -641,7 +642,7 @@ class PassengerMsg extends Component{
                         ?<div className={css.resultItem}>
                             <span style={{color:'#fa0',fontSize:'16px'}}>已存在：</span>
                             {`${result.dbExistCount}人`}
-                            <div>
+                            <div className={css.numberList}>
                                 已存在的记录行号：
                                 {getNumber(result.dbExistRowNumber,3)}
                             </div>

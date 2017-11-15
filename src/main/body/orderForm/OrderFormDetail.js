@@ -61,68 +61,22 @@ class OrderFormDetail extends Component{
         //请求数据
         this.setLoading(true,this.loadFormDetail);
 
-        //模拟数据
-        // let orderMsg = {
-        //     orderId:'10000059f39c5427ca5f749604a09de39',
-        //     orderNo:'123123123123132',
-        //     adultCount:3,
-        //     adultPrice:3450,
-        //     childCount:7,
-        //     childPrice:1200,
-        //     createdTime:'2017-03-24 14:29',
-        //     expiredTime:'2017-04-10 18:00',
-        //     orderAmount:'12333',
+        //启动页面滚动监听
+        setTimeout(()=>{this.listenScroll();},1000);
+        // this.listenScroll();
+    }
+
+    listenScroll(){
+        // let markDiv = document.getElementById('markDiv');
+        // let rootDiv = document.getElementById('root');
+        // log('启动监听---------------------');
+        // log(markDiv);
+        // //监听页面滚动
+        // window.onscroll = ()=>{
+        //     let rootDivHeight = window.getComputedStyle(rootDiv,'').height;
+        //     let markDivTop = markDiv.offsetTop;
+        //     log(markDivTop);
         // };
-        // let payMsg = [
-        //     {
-        //         amount:783,
-        //         expiredTime:'2017-04-10',
-        //         payStatus:1,
-        //         orderId:'1231231231',
-        //         id:'3232323233',
-        //         payment:1,
-        //         records:[
-        //             {
-        //                 auditStatus:2,
-        //                 payAmount:3333,
-        //                 payTime:'2017-03-230',
-        //                 payType:0,
-        //                 remark:'',
-        //                 voucherUrl:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1510342176710&di=9f2237f38d03b8d8e1fa31f69093d35f&imgtype=0&src=http%3A%2F%2Fwww.myexception.cn%2Fimg%2F2015%2F07%2F07%2F210245743.png,https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1510342176710&di=20c575c39bd83ef538b99bd64e72d2c5&imgtype=0&src=http%3A%2F%2Fimages.cnitblog.com%2Fblog%2F685350%2F201411%2F011904149566976.jpg',
-        //             }
-        //         ],
-        //     },
-        //     {
-        //         amount:4783,
-        //         expiredTime:'2017-04-10',
-        //         payStatus:1,
-        //         payment:2,
-        //         records:[
-        //             {
-        //                 auditStatus:1,
-        //                 payAmount:3333,
-        //                 payTime:'2017-03-230',
-        //                 payType:1,
-        //                 remark:'',
-        //                 voucherUrl:'',
-        //             },
-        //             {
-        //                 auditStatus:1,
-        //                 payAmount:33,
-        //                 payTime:'2017-03-230',
-        //                 payType:4,
-        //                 remark:'',
-        //                 voucherUrl:'',
-        //             }
-        //         ],
-        //     }
-        // ];
-        // this.setState({
-        //     orderMsg:orderMsg,
-        //     payMsg:payMsg,
-        // });
-
-
     }
 
     //更新状态机
@@ -163,7 +117,7 @@ class OrderFormDetail extends Component{
                     </div>
                 </div>
                     {
-                        //因为待付订金状态不能录入乘机人，待付订金的审核中和审核失败也不能。需要接口返回的真实状态辅助判断（区分页面的2，3，5）
+                        //因为待付押金状态不能录入乘机人，待付押金的审核中和审核失败也不能。需要接口返回的真实状态辅助判断（区分页面的2，3，5）
                         (hasKey(this.state.orderState,[0,3,5,7,8,12,13])||hasKey(this.state.returnState,[3,5]))
                         ?   <div className={css.itemContainer}>
                                 <Passengers
@@ -185,7 +139,7 @@ class OrderFormDetail extends Component{
                             payMsg={this.state.payMsg}
                         />
                 </div>
-                <div id='payMark'></div>
+                <div id={'markDiv'}></div>
                 {
                     (hasKey(this.state.orderState,[2,3,5]))
                     ?<PayBottom
@@ -211,7 +165,7 @@ class OrderFormDetail extends Component{
             this.setLoading(false);
             message.success(msg);
             //刷新页面
-            window.location.reload();
+            window.app_open(this,'/OrderFormList',{});
         };
         let failureCB = (code, msg, option)=>{
             this.setLoading(false);
@@ -304,50 +258,7 @@ class OrderFormDetail extends Component{
         let returnState = parseInt(data.orderStatus);
         let extraCode = parseInt(data.extraCode);
         let state = transformOrderState(returnState,extraCode);
-        // switch(returnState){
-        //     case 0:state = 0;break;
-        //     case 1:state = 1;break;
-        //     case 2:if(extraCode==0){
-        //                 state = 14;
-        //             }else if(extraCode ==1){
-        //                 state = 15;
-        //             }else{
-        //                 state = 2;
-        //             }
-        //             break;
-        //     case 3:if(extraCode==0){
-        //                 state = 14;
-        //             }else if(extraCode ==1){
-        //                 state = 15;
-        //             }else{
-        //                 state = 3;
-        //             }
-        //             break;
-        //     case 4:if(extraCode==5){
-        //                 state = 3;
-        //             }else if(extraCode ==6){
-        //                 state = 2;
-        //             }else{
-        //                 state = 4;
-        //             }
-        //             break;
-        //     case 5:if(extraCode==0){
-        //                 state = 14;
-        //             }else if(extraCode ==1){
-        //                 state = 15;
-        //             }else{
-        //                 state = 5;
-        //             }
-        //             break;
-        //     case 6:if(extraCode==2){
-        //                 state = 12;
-        //             }else if(extraCode ==3){
-        //                 state = 13;
-        //             }
-        //             break;
-        //     case 7:state = 7;break;
-        //     case 8:state = 8;break;
-        // }
+
         return state;
     }
 
@@ -394,7 +305,7 @@ class OrderFormDetail extends Component{
     getBottomData(data){
         let bottomData = {
             orderPrice:data.orderAmount,
-            totalPrice:data.orderAmount,
+            payAmount:data.payAmount,
             adultPrice:data.adultPrice,
             childPrice:data.childPrice,
             childCount:data.childCount,

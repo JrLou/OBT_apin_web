@@ -11,7 +11,7 @@ import {Button,message,Modal,Spin,Icon} from 'antd';
 
 /**
  * 订单状态说明(页面)：
- * 0：订单取消 1：等待确认 2：待付订金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
+ * 0：订单取消 1：等待确认 2：待付押金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
  * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中 15：支付审核失败
  */
 
@@ -120,6 +120,7 @@ class OrderInfoView extends Component{
                                     ?'用户取消订单'
                                     :orderMsg.closeReason
                                 }
+                                <span style={{paddingLeft:'15px'}}></span>
                                 {
                                     orderMsg.closetime
                                     ?`(关闭时间：${orderMsg.closetime})`
@@ -142,6 +143,13 @@ class OrderInfoView extends Component{
                     }}
                 >
                     <div>
+                        <Spin
+                            size={'large'}
+                            style={{
+                                position:'absolute',
+                                top:'40%',
+                            }}
+                        ></Spin>
                         <img
                             src={this.state.imgUrl}
                             onError={()=>{
@@ -155,6 +163,7 @@ class OrderInfoView extends Component{
                             onClick={()=>{
                                 this.setState({
                                     imgShow:false,
+                                    imgUrl:'',
                                 });
                             }}
                         ><Icon
@@ -218,43 +227,92 @@ class OrderInfoView extends Component{
      * @param data
      */
     getPayItemDetail(data){
+        //data为pays中的一条
         if(!data){return;}
         let payment = parseInt(data.payment);
         let paymentName = '';
         switch(payment){
             case 0:paymentName = '支付全款:';break;
-            case 1:paymentName = '支付订金:';break;
+            case 1:paymentName = '支付押金:';break;
             case 2:paymentName = '支付尾款:';break;
             case 3:paymentName = '退回全款:';break;
-            case 4:paymentName = '退回订金:';break;
+            case 4:paymentName = '退回押金:';break;
             case 5:paymentName = '退回尾款:';break;
             default:break;
         }
 
         //是否有积分支付
         let scorePay = parseInt(data.pointsAmount);
-        let otherPay = null;
-        let payName = '';
-        let voucherUrl = '';
-        if(data.records.length>0){
-            let payType = parseInt(data.records[0].payType);
-            switch(payType){
-                case 0:otherPay = data.records[0];
-                        payName = '线下支付';
-                        break;
-                case 1:otherPay = data.records[0];
-                        payName = '支付宝';
-                        break;
-                case 2:otherPay = data.records[0];
-                        payName = '微信';
-                        break;
-                case 3:otherPay = data.records[0];
-                        payName = '银联';
-                        break;
-                default:break;
+
+        let recordView = [];
+        for(let key in data.records){
+            if (data.records[key].payType == 4){
+                //积分支付不用单条展示
+                continue;
             }
 
-            voucherUrl = otherPay.voucherUrl?otherPay.voucherUrl:'';
+            let payType = parseInt(data.records[key].payType);
+            let payName = '';
+            switch(payType) {
+                case 0:
+                    payName = '线下支付';
+                    break;
+                case 1:
+                    payName = '支付宝';
+                    break;
+                case 2:
+                    payName = '微信';
+                    break;
+                case 3:
+                    payName = '银联';
+                    break;
+                case 4:
+                    break;       //积分支付
+                default:
+                    break;
+            }
+            //凭证URL
+            let voucherUrl = (data.records[key]&&data.records[key].voucherUrl)?data.records[key].voucherUrl:'';
+
+            recordView.push(
+                <div key={`record${key}`} className={css.recordBox}>
+                    {
+                        payName
+                            ?   (<div className={css.payType}>
+                                {`(支付方式：${payName}`}
+                                <span>&nbsp;&nbsp;</span>
+                                {`支付时间：${data.records[key].payTime})`}
+                            </div>)
+                            :   ''
+                    }
+                    {
+                        voucherUrl
+                            ?   <div className={css.payVoucher}>
+                                <span>支付凭证</span>
+                                {this.getPayVoucher(voucherUrl)}
+                                {
+                                    data.records[key].auditStatus == 2
+                                        ?   <div className={css.reUpload}>
+                                            <Button
+                                                className={css.cancleBtnStyle}
+                                                onClick={()=>{
+                                                    window.app_open(this,'/UpLoad',{
+                                                        orderId:data.orderId,
+                                                        id:data.records[key].id,
+                                                    });
+                                                }}
+                                            >
+                                                重新上传
+                                            </Button>
+                                        </div>
+                                        :   ''
+                                }
+                            </div>
+                            :''
+                    }
+                </div>
+            );
+        }
 
         return(
             <div className={css.itemLinePay}>
@@ -268,47 +326,15 @@ class OrderInfoView extends Component{
                     {scorePay>0?`积分抵扣(¥${scorePay})`:''}
                 </div>
                 {
-                    payName
-                    ?   (<div className={css.payType}>
-                            {`(支付方式：${payName}`}
-                            <span>&nbsp;&nbsp;</span>
-                            {`支付时间：${otherPay.payTime})`}
+                    data.records.length == 0
+                    ?(<div className={css.payType}>
+                            {data.expiredTime?`支付截止日期：${sliceTimeString(data.expiredTime)}`:''}
                         </div>)
-                    :   (<div className={css.payType}>
-                            {data.exexpiredTime?`支付截止日期：${sliceTimeString(data.exexpiredTime)}`:''}
-                        </div>)
-                }
-                {
-                    voucherUrl
-                    ?   <div className={css.payVoucher}>
-                            <span>支付凭证</span>
-                            {this.getPayVoucher(voucherUrl)}
-                            {
-                                otherPay.auditStatus == 2
-                                ?   <div className={css.reUpload}>
-                                        <Button
-                                            className={css.cancleBtnStyle}
-                                            onClick={()=>{
-                                                window.app_open(this,'/UpLoad',{
-                                                    orderId:data.orderId,
-                                                    id:data.id,
-                                                });
-                                            }}
-                                        >
-                                            重新上传
-                                        </Button>
-                                    </div>
-                                :   ''
-                            }
-                        </div>
-                    :''
-                }
+                    : recordView
 
+                }
             </div>
         );
-        }else{
-            return (<div></div>);
-        }
     }
 
     /**
@@ -356,7 +382,7 @@ class OrderInfoView extends Component{
                 break;
             case 1:title='等待确认';
                 break;
-            case 2:title='待付订金';
+            case 2:title='待付押金';
                 break;
             case 3:title='待付款';
                 break;
