@@ -109,22 +109,11 @@ input[type="checkbox"] {
 }
 
 .@{form-prefix-cls}-explain {
-    background-color: #FEE8E8;
-    color: #F94A32;
-    display: inline-block;
-    height: 22px;
-    line-height: 22px;
-    padding: 0 10px;
+    display: block;
     position: relative;
-    padding-left: 20px;
     &::before {
-        display: block;
-        content: '';
-    }
-    &::after {
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 5px;
         display: inline-block;
         width: 22px;
         height: 22px;
@@ -138,6 +127,14 @@ input[type="checkbox"] {
         vertical-align: top;
         margin-right: 5px;
         transform: scale(0.5, 0.5);
+    }
+    span{
+      height: 22px;
+      line-height: 22px;
+      padding-left: 20px;
+      display: inline-block;
+      background-color: #FEE8E8;
+      color: #F94A32;
     }
 }
 
