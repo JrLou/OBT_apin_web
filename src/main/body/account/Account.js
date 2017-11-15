@@ -108,7 +108,7 @@ class AccountForm extends Component {
                         validateStatus={passwordError ? 'error' : ''}
                         help={passwordError || ''}
                     >
-                        <div>******<span style={{ float: 'right', cursor: 'pointer' }} onClick={() =>
+                        <div>******<span style={{ float: 'right', cursor: 'pointer',color:'#29A6FF' }} onClick={() =>
                             this.setState({
                                 visible: true
                             })
@@ -177,6 +177,7 @@ class AccountForm extends Component {
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
+                    footer={null}
                 >
                     <Reset updatePsw={this.updatePsw}></Reset>
                 </Modal>

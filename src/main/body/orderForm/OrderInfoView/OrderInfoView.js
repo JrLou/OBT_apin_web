@@ -142,6 +142,13 @@ class OrderInfoView extends Component{
                     }}
                 >
                     <div>
+                        <Spin
+                            size={'large'}
+                            style={{
+                                position:'absolute',
+                                top:'40%',
+                            }}
+                        ></Spin>
                         <img
                             src={this.state.imgUrl}
                             onError={()=>{
@@ -155,6 +162,7 @@ class OrderInfoView extends Component{
                             onClick={()=>{
                                 this.setState({
                                     imgShow:false,
+                                    imgUrl:'',
                                 });
                             }}
                         ><Icon
@@ -237,25 +245,27 @@ class OrderInfoView extends Component{
         let payName = '';
         let voucherUrl = '';
         if(data.records.length>0){
-            let payType = parseInt(data.records[0].payType);
-            switch(payType){
-                case 0:otherPay = data.records[0];
-                        payName = '线下支付';
-                        break;
-                case 1:otherPay = data.records[0];
-                        payName = '支付宝';
-                        break;
-                case 2:otherPay = data.records[0];
-                        payName = '微信';
-                        break;
-                case 3:otherPay = data.records[0];
-                        payName = '银联';
-                        break;
-                default:break;
-            }
+            for(let key in data.records){
+                let payType = parseInt(data.records[key].payType);
+                switch(payType){
+                    case 0:otherPay = data.records[key];
+                            payName = '线下支付';
+                            break;
+                    case 1:otherPay = data.records[key];
+                            payName = '支付宝';
+                            break;
+                    case 2:otherPay = data.records[key];
+                            payName = '微信';
+                            break;
+                    case 3:otherPay = data.records[key];
+                            payName = '银联';
+                            break;
+                    case 4:break;       //积分支付
+                    default:break;
+                }
 
-            voucherUrl = otherPay.voucherUrl?otherPay.voucherUrl:'';
-        }
+                voucherUrl = (otherPay&&otherPay.voucherUrl)?otherPay.voucherUrl:'';
+            }
 
         return(
             <div className={css.itemLinePay}>
@@ -269,7 +279,7 @@ class OrderInfoView extends Component{
                     {scorePay>0?`积分抵扣(¥${scorePay})`:''}
                 </div>
                 {
-                    data.payStatus == 1
+                    payName
                     ?   (<div className={css.payType}>
                             {`(支付方式：${payName}`}
                             <span>&nbsp;&nbsp;</span>
@@ -288,6 +298,7 @@ class OrderInfoView extends Component{
                                 otherPay.auditStatus == 2
                                 ?   <div className={css.reUpload}>
                                         <Button
+                                            className={css.cancleBtnStyle}
                                             onClick={()=>{
                                                 window.app_open(this,'/UpLoad',{
                                                     orderId:data.orderId,
@@ -306,6 +317,9 @@ class OrderInfoView extends Component{
 
             </div>
         );
+        }else{
+            return (<div></div>);
+        }
     }
 
     /**

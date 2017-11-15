@@ -22,8 +22,8 @@ class PayBottom extends Component {
         //     adultNum:this.adultNum,
         //     totalPrice:this.totalPrice,
         let {param,isPay,callBack} = this.props;
-        let str = param?"(成人¥"+param.adultPrice+"*"+param.adultNum+"+"+"儿童¥" +param.childPrice+
-        "*"+param.childNum+"=价格(含税)"+"¥"+param.totalPrice+")":"";
+        let str = param?"(成人¥"+param.adultPrice+"*"+(param.adultNum?param.adultNum:0)+(param.childNum!=0?("+"+"儿童¥" +param.childPrice+
+                "*"+param.childNum):"")+"=价格(含税)"+"¥"+param.totalPrice+")":"";
 
         return (<div className={css.payDiv}>
             <div className={css.bottomDiv}>
@@ -34,9 +34,9 @@ class PayBottom extends Component {
                 </div>
                 <div className={css.bottomDiv_center}>
                     <div className={css.depositPriceBg}>
-                        <span style={{fontSize:"14px",color:"#333"}}>押金</span>
+                        <span style={{fontSize:"14px",color:"#333"}}>{param.orderPrice==0?"全款":"押金"}</span>
                         <span style={{fontSize:"14px",color:"red"}}>￥</span>
-                        <span style={{fontSize:"20px",color:"red"}}>{param.orderPrice}</span>
+                        <span style={{fontSize:"20px",color:"red"}}>{param.orderPrice==0?param.totalPrice:(param.orderPrice?param.orderPrice:0)}</span>
                     </div>
                     <div className={css.depositPriceBg}>
                             <span style={{fontSize:"12px",color:"#888D99"}}>{str}</span>

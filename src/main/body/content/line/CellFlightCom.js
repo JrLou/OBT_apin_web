@@ -90,24 +90,9 @@ class CellFlightCom extends Component {
         for (let i=0;i<data.length;i++){
             let dataItem = data[i];
             let startDate = dataItem.depDate?dataItem.depDate.substring(5):"";
-            startDate = startDate.replace("-","月")+"日";
-
-
-            let totalTime = dataItem.flightTime?dataItem.flightTime:"";
-            let timeArr = totalTime.split(":");
-            let totalText = "";
-            if (timeArr[0]&&timeArr[0]>0){
-                totalText = timeArr[0]+"小时";
-            }
-            if (timeArr[1]&&timeArr[1]>0){
-                totalText = totalText + timeArr[1]+"分钟";
-            }
-
-
-            let endDate = dataItem.arrDate?dataItem.arrDate.substring(5):"";
+            startDate = startDate.replace("-","月")+"日";let endDate = dataItem.arrDate?dataItem.arrDate.substring(5):"";
             endDate = endDate.replace("-","月")+"日";
-            var itemView = (<div key={i}>
-                <div className={css.cellLine} style={{borderBottomWidth:(flightType&&i==0)?"1px":"0px"}}>
+            var itemView = (<div key={i} className={css.cellLine} style={{borderBottomWidth:(flightType&&i==0)?"1px":"0px"}}>
                     {flightType?<div className={css.type}>
                         <div className={css.typeText}>
                             {i==0?"去":"返"}
@@ -135,6 +120,7 @@ class CellFlightCom extends Component {
                             <div className={css.totalTime}>
                                 <div className={css.totalTimeText}>{dataItem.flightTime?dataItem.flightTime:""}</div>
                                 <img className={css.line} src={require('../../../../images/trip_line.png')}/>
+                                {dataItem.isStop==1?<div className={css.totalTimeText} style={{marginTop:2,color:"#FF5841"}}>{"经停"}</div>:null}
                             </div>
                             <div className={css.timeLineItem} style={{textAlign:"left"}}>
                                 {/*<span className={css.fontBase}>{endDate+" "}</span>*/}
@@ -149,8 +135,7 @@ class CellFlightCom extends Component {
                         </div>
                     </div>
 
-                </div>
-            </div>);
+                </div>);
             viewArr.push(itemView);
         }
         return viewArr;

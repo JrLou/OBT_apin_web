@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-08 13:36:12 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-14 09:58:11
+ * @Last Modified time: 2017-11-14 17:30:46
  */
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
 import md5 from 'md5';
@@ -62,11 +62,11 @@ export function getLoginCodePromise(account, option) {
  * @param {*} account 
  * @param {*} type 
  */
-export function validateLoginPromise(key, value) {
-    const params = {
+export function validateLoginPromise(entry) {
+    let params = {
         account: '', mobile: '', picCode: ''
     };
-    params[key] = value;
+    params = Object.assign({},params,entry);
     return new Promise((resolve, reject) => {
         HttpTool.request(HttpTool.typeEnum.POST, "/bm/memberapi/v1.1/verifyInfo", (code, message, json, option) => {
             resolve(message);
