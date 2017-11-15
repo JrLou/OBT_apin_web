@@ -99,6 +99,7 @@ export function defaultLoginPromise(type,callback) {
 export function AccoutInfoPromise(callback) {
     return new Promise((resolve, reject) => {
         HttpTool.request(HttpTool.typeEnum.POST, "/bm/memberapi/v1.1/memberInfo", (code, message, json, option) => {
+            CookieHelp.saveCookieInfo("phone",json.mobile);
             resolve({ json, option });
         }, (code, message) => {
             reject(message);

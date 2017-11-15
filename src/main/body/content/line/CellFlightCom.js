@@ -71,7 +71,7 @@ class CellFlightCom extends Component {
                                              if (this.props.callBack){
                                                  this.props.callBack(dataItem);
                                              }
-                                         }}>{dataItem.isDirect&&dataItem.isDirect==1?"购买":"预订"}</div>
+                                         }}>{"预订"}</div>
                                 </div>
                             </div>
                         </div>
