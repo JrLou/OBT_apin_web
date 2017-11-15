@@ -187,6 +187,7 @@ class page extends Component {
         let totolNum = parseInt(childNum?childNum:0)+parseInt(adultNum?adultNum:0);
 
         let totalPrice = this.childPrice*childNum+this.adultPrice*adultNum;
+        let depositAmount =this.depositAmount*(childNum+adultNum);
         const { getFieldDecorator } = this.props.form;
         let div = (
             <div className={css.main}>
@@ -211,7 +212,7 @@ class page extends Component {
                         <div className={css.orderCellItem}>
                             <div className={css.i_cell}>
                                 <div className={css.i_title}>{"成人(12岁以上):"}</div>
-                                <FormItem style={{float:"left"}}>
+                                <FormItem prefixCls="my-ant-form" style={{float:"left"}}>
                                     {getFieldDecorator('adultCount', {
                                         rules: [{
                                             required: true,
@@ -242,13 +243,16 @@ class page extends Component {
                                                   this.onChangeNumVal(true,value);
                                               }}/>)}
                                 </FormItem>
-                                <div className={css.i_subtitle}>{this.adultPrice}</div>
+                                <div className={css.i_subtitle}>
+                                    <span style={{fontSize:"12px"}}>{"¥"}</span>
+                                    {this.adultPrice+".00"}
+                                </div>
                             </div>
 
 
                             <div className={css.i_cell}>
                                 <div className={css.i_title}>{"儿童(2-12岁):"}</div>
-                                <FormItem style={{float:"left"}}>
+                                <FormItem prefixCls="my-ant-form" style={{float:"left"}}>
                                     {getFieldDecorator('childCount', {
                                         rules: [{
                                             required: false,
@@ -277,7 +281,10 @@ class page extends Component {
                                                }}/>
                                     )}
                                 </FormItem>
-                                <div className={css.i_subtitle}>{this.childPrice}</div>
+                                <div className={css.i_subtitle}>
+                                    <span style={{fontSize:"12px"}}>{"¥"}</span>
+                                    {this.childPrice+".00"}
+                                    </div>
                             </div>
                         </div>
                         <div className={css.refOrderCellItem}>
@@ -301,7 +308,7 @@ class page extends Component {
                     <div className={css.orderCellItem}>
                         <div className={css.i_cell}>
                             <div className={css.i_title}>{"姓名:"}</div>
-                            <FormItem style={{float:"left"}}>
+                            <FormItem prefixCls="my-ant-form" style={{float:"left"}}>
                                 {getFieldDecorator('customerName', {
                                     rules: [{
                                         required: true,
@@ -320,7 +327,7 @@ class page extends Component {
 
                         <div className={css.i_cell}>
                             <div className={css.i_title}>{"手机号码:"}</div>
-                            <FormItem style={{float:"left"}}>
+                            <FormItem prefixCls="my-ant-form" style={{float:"left"}}>
                                 {getFieldDecorator('mobile', {
                                     rules: [{
                                         required: true,
@@ -341,7 +348,7 @@ class page extends Component {
 
                 <PayBottom
                     param={{
-                        orderPrice:this.depositAmount,
+                        orderPrice:depositAmount,
                         adultPrice:this.adultPrice,
                         childPrice:this.childPrice,
                         childNum:childNum,
@@ -421,7 +428,7 @@ class page extends Component {
                 this.setAdultNum(num_Int);
             });
         }else {
-            num_Int = num_Int<=0?"1":num_Int;
+            num_Int = num_Int<=0?"0":num_Int;
             this.setState({
                 childNum:num_Int
             },()=>{
