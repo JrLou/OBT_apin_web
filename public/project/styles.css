@@ -4017,7 +4017,7 @@ active {
 }
 .src-main-body-content-detail-detailComp-PayBottom---payDiv---LfkhR {
   position: fixed;
-  bottom: 25px;
+  bottom: 110px;
 }
 .src-main-body-content-detail-detailComp-PayBottom---bottomDiv---1e_sE {
   background-color: #FFFFF4;
@@ -5806,6 +5806,10 @@ active {
   color: #999;
   font-size: 12px;
   margin: 20px 15px;
+}
+.src-main-body-orderForm-Passengers-Passengers---numberList---2mepV {
+  word-wrap: break-word;
+  word-break: normal;
 }
 .src-main-body-orderForm-Passengers-PassengerAdd---maintheme---2TZ4m {
   position: absolute;
