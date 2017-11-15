@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, DatePicker, TimePicker, Button, Input, Row, Col, Radio, AutoComplete, Icon, message } from 'antd';
-import { HttpTool } from "../../../../lib/utils/index.js";
+import { HttpTool ,CookieHelp} from "../../../../lib/utils/index.js";
 import AutoInput from "../component/InputAuto";
 import TemplatePublist from "./TemplatePublist";
 
@@ -257,6 +257,7 @@ class page extends Component {
         const { getFieldDecorator } = this.props.form;
         let { lineType } = this.state;
         let bottomSumbit = { textAlign: "center", paddingBottom: 40, paddingTop: 20 };
+        let phoneCookie =CookieHelp.getCookieInfo("phone")==undefined?"":CookieHelp.getCookieInfo("phone");
         return (
             <div className={less.content} >
                 <div style={{ margin: "20px 0px" }}>
@@ -296,7 +297,7 @@ class page extends Component {
                                         required: true,
                                         message: '请输入成人人数',
                                     }, {
-                                        pattern: /^[0-9]*$/,
+                                        pattern: /^[1-9]*$/,
                                         message: '请输入正确的数字'
                                     }],
                                     initialValue: this.state.adultCount,
@@ -312,9 +313,6 @@ class page extends Component {
                             <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                                 {getFieldDecorator('childCount', {//childCount
                                     rules: [{
-                                        required: true,
-                                        message: '请输入儿童人数',
-                                    }, {
                                         pattern: /^[0-9]*$/,
                                         message: '请输入正确的数字'
                                     }],
@@ -333,19 +331,16 @@ class page extends Component {
                     </Row>
 
                     <Row style={{ marginBottom: this.marginBottomRow }}>
-                        <Col span={4}>备注：</Col>
+                        <Col span={4}>备注(选填)：</Col>
                     </Row>
                     <Row>
                         <Col >
                             <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                                 {getFieldDecorator('remark', {//annotation
-                                    rules: [{
-                                        required: true,
-                                        message: '请输入备注',
-                                    }],
+                                    rules: [],
                                     initialValue: this.state.remark,
                                 })(
-                                    <Input type="textarea" maxLength="200" style={{ height: 180, resize: "none", borderRadius: 2 }} placeholder="如：价格、时间等" />
+                                    <Input type="textarea" maxLength="100" style={{ height: 180, resize: "none", borderRadius: 2 }} placeholder="如：价格、时间等" />
                                     )}
                             </FormItem>
 
@@ -362,13 +357,14 @@ class page extends Component {
                                         required: true,
                                         message: '请输入联系电话',
                                     }, {
-                                        pattern: /^1[3|5|7|8|][0-9]{9}$/,
+                                        pattern: /^1[0-9]{10}$/,
                                         message: '请输入正确的11位手机号码'
                                     }],
-                                    initialValue: this.state.phone,
+                                    initialValue: phoneCookie,
                                 })(
                                     <div style={{ width: "100%" }}>
-                                        <Input style={{ width: 240, height: 36, borderRadius: "2px" }} placeholder="输入可联系的手机号码" /><span style={{ fontSize: "22px", color: "red", marginLeft: 10 }}>*</span>
+                                        <Input style={{ width: 240, height: 36, borderRadius: "2px" }} defaultValue={phoneCookie} placeholder="输入可联系的手机号码" />
+                                        {/* <span style={{ fontSize: "22px", color: "red", marginLeft: 10 }}>*</span> */}
                                     </div>
                                     )}
                             </FormItem>
