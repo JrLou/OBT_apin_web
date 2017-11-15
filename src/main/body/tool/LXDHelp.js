@@ -20,19 +20,31 @@ let LXDHelp = {
 
         let view = [];
         let length = list.length;
-        for(let key in list){
+        if(type == 1 || type ==2){
+            //单程 或 往返
             view.push(
-                <span key={`cell${key}`}>
-                    {list[key].cityDep||list[key].cityNameDep}
+                <span>
+                    {list[0].cityDep||list[0].cityNameDep}
                     {tipList[flightType]}
-                    {list[key].cityArr||list[key].cityNameArr}
-                    {key<length-1?'，':''}
+                    {list[0].cityArr||list[0].cityNameArr}
                 </span>
             );
+        }else{
+            for(let key in list){
+                view.push(
+                    <span key={`cell${key}`}>
+                    {list[key].cityDep||list[key].cityNameDep}
+                        {tipList[flightType]}
+                        {list[key].cityArr||list[key].cityNameArr}
+                        {key<length-1?'，':''}
+                </span>
+                );
+            }
         }
 
+
         //样式
-        let divStyle = style
+        let divStyle =  style
                         ?style
                         :{
                             display: 'inline-block',
