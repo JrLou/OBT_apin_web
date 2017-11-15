@@ -72,7 +72,8 @@ class page extends Component {
         this.adultPrice = json&&json.adultPrice?parseInt(json.adultPrice):0;
         this.childPrice = json&&json.childPrice?parseInt(json.childPrice):0;
         this.depositAmount = json&&json.depositAmount?parseInt(json.depositAmount):0;
-
+        this.cityArr = json&&json.cityArr?json.cityArr:"";
+        this.cityDep = json&&json.cityDep?json.cityDep:"";
         let voyage = json&&json.plans?json.plans:{};
         this.flightType = voyage.flightType;
 
@@ -83,7 +84,6 @@ class page extends Component {
         this.props.form.setFieldsValue({
             customerName:member.contactName?member.contactName:""
         });
-
         //用来显示库存超出的时候 弹出module框添加已知数据
         this.requireParam = {
             lineType:this.flightType?this.flightType:1,
@@ -149,7 +149,8 @@ class page extends Component {
                 adultCount:this.state.adultNum,
                 childCount:this.state.childNum,
                 remark:"",
-                listData:[{}]
+                isMult:this.flightType&&(this.flightType<3),
+                listData:[{fromCity:this.cityArr,toCity:this.cityDep}]
             };
             this.myModalRequire.showModal(true,
                 {
@@ -188,7 +189,11 @@ class page extends Component {
 
         let totalPrice = this.childPrice*childNum+this.adultPrice*adultNum;
         let depositAmount =this.depositAmount*(childNum+adultNum);
-        const { getFieldDecorator } = this.props.form;
+        const {getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+        const adultCountError = getFieldError('adultCount');
+        const childCountError = getFieldError('childCount');
+        const mobileError = getFieldError('mobile');
+        const customerNameError = getFieldError('customerName');
         let div = (
             <div className={css.main}>
                 {this.data?<div className={css.refContent}>
@@ -212,7 +217,10 @@ class page extends Component {
                         <div className={css.orderCellItem}>
                             <div className={css.i_cell}>
                                 <div className={css.i_title}>{"成人(12岁以上):"}</div>
-                                <FormItem prefixCls="my-ant-form" style={{float:"left"}}>
+                                <FormItem prefixCls="my-ant-form"
+                                          validateStatus={adultCountError ? 'error' : ''}
+                                          help={adultCountError || ''}
+                                          style={{float:"left"}}>
                                     {getFieldDecorator('adultCount', {
                                         rules: [{
                                             required: true,
@@ -252,7 +260,10 @@ class page extends Component {
 
                             <div className={css.i_cell}>
                                 <div className={css.i_title}>{"儿童(2-12岁):"}</div>
-                                <FormItem prefixCls="my-ant-form" style={{float:"left"}}>
+                                <FormItem
+                                    validateStatus={childCountError ? 'error' : ''}
+                                    help={childCountError || ''}
+                                    prefixCls="my-ant-form" style={{float:"left"}}>
                                     {getFieldDecorator('childCount', {
                                         rules: [{
                                             required: false,
@@ -308,14 +319,17 @@ class page extends Component {
                     <div className={css.orderCellItem}>
                         <div className={css.i_cell}>
                             <div className={css.i_title}>{"姓名:"}</div>
-                            <FormItem prefixCls="my-ant-form" style={{float:"left"}}>
+                            <FormItem prefixCls="my-ant-form"
+                                      validateStatus={customerNameError ? 'error' : ''}
+                                      help={customerNameError || ''}
+                                      style={{float:"left"}}>
                                 {getFieldDecorator('customerName', {
                                     rules: [{
                                         required: true,
                                         message: '姓名不能为空',
                                     },{
                                         pattern: /^[\u4e00-\u9fa5]{2,4}$|^[a-zA-Z]{2,20}$/,
-                                        message: '请输入姓名(汉字2-4个字符或英文2-20个字符)'
+                                        message: '请输入姓名(汉字2-4个字或英文2-20个字符)'
                                     }],
                                 })(<Input style={{width:"220px"}}
                                           maxLength="20"
@@ -327,7 +341,10 @@ class page extends Component {
 
                         <div className={css.i_cell}>
                             <div className={css.i_title}>{"手机号码:"}</div>
-                            <FormItem prefixCls="my-ant-form" style={{float:"left"}}>
+                            <FormItem prefixCls="my-ant-form"
+                                      validateStatus={mobileError ? 'error' : ''}
+                                      help={mobileError || ''}
+                                      style={{float:"left"}}>
                                 {getFieldDecorator('mobile', {
                                     rules: [{
                                         required: true,

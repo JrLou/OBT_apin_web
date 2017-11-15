@@ -18,7 +18,6 @@ class page extends Component {
         super(props);
         this.state = {
         };
-        
     }
     httpPostAdd(param) {//发送数据
         let success = (code, msg, json, option) => {

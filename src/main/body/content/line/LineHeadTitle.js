@@ -109,19 +109,16 @@ class page extends Component {
                                     const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
 
                                     let obj = {
-                                        flightType:dataSource.flightType,
-                                        depCity:dataSource.depCity,
-                                        arrCity:dataSource.arrCity,
+                                        lineType:dataSource.flightType,
+                                        toCity:dataSource.depCity,
+                                        fromCity:dataSource.arrCity,
+                                        isMult:false
                                     };
                                     if (isLogin){
-                                        window.app_open(this.props.obj, "/PublishMsg", {
-                                            data:obj
-                                        },"new");
+                                        window.app_open(this.props.obj, "/PublishMsg", obj,"new");
                                     }else {
                                         window.modal.showModal(0,()=>{
-                                            window.app_open(this.props.obj, "/PublishMsg", {
-                                                data:obj
-                                            },"new");
+                                            window.app_open(this.props.obj, "/PublishMsg", obj, "new");
                                         });
                                     }
                                 }}>提交需求</div>
