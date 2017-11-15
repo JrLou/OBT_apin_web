@@ -43,12 +43,21 @@ class page extends Component {
         const { getFieldDecorator } = this.props.form;
         let {data}=this.props.location.query;
         let lineType=2;
-        if(data.lineType!=undefined && [1,2,3].indexOf(data.lineType)>-1){
-            lineType=data.lineType;
+        data=JSON.parse(data);
+        if(data.lineType!=undefined && ["1","2","3"].indexOf(data.lineType)>-1){
+            lineType=parseInt(data.lineType);
         }
-        let listData=[];
-        if(data.listData!=undefined && listData.length > 0){
-            listData=data.listData;
+        let toCity="";
+        if(data.toCity!=undefined){
+            toCity=data.toCity;
+        }
+        let fromCity="";
+        if(data.fromCity!=undefined){
+            fromCity=data.fromCity;
+        }
+        let isMult=false;
+        if(data.fromCity!=undefined){
+            isMult=data.isMult;
         }
         return (
             <div className={less.content}>
@@ -58,16 +67,14 @@ class page extends Component {
                         <div style={{ width: 6, height: 20, position: "absolute", backgroundColor: "#29A6FF", marginTop: 8 }}></div>
                         <div style={{ color: "#333", fontSize: 20, marginLeft: 22 }}>需求信息</div>
                     </div>
-                    {/** state={{lineType:3,lineNum:1,adultCount:"10",childCount:"10",remark:"",phone:"",listData:[{fromCity:"北京",toCity:"杭州",fromDateTime:"2017-11-20",toDateTime:"2017-11-20"}]}}*/}
-                    <TemplatePublist state={{lineType:lineType,lineNum:1,adultCount:"",childCount:"",remark:"",phone:"",listData:listData}}  callBack={(e) => {
+                    <TemplatePublist state={{lineType:lineType,lineNum:1,adultCount:"",isMult:isMult,childCount:"",remark:"",phone:"",listData:[{fromCity:fromCity,toCity:toCity}]}}  callBack={(e) => {
                         this.httpPostAdd(e);
                     }} />
                 </div>
-                {/* <Button  onClick={() => {
-                            window.app_open(this, "/PublishMsg", {newDate:{lineType:"1",fromcicty:"杭州",tocicty:"北京"}});
-                        }}> 
+                 {/* <Button  onClick={() => {
+                            window.app_open(this, "/PublishMsg", {lineType:"2",toCity:"杭州",fromCity:"北京",isMult:false});}}> 
                     调整
-                </Button> */}
+                </Button>  */}
             </div >
         );
     }

@@ -23,6 +23,7 @@ class page extends Component {
             remark: "",
             phone: "",
             listData: [],
+            isMult:false
         };
         if (this.props.state) {
             this.state = this.props.state;
@@ -178,7 +179,7 @@ class page extends Component {
                                         required: true,
                                         message: '请选择时间',
                                     }],
-                                    initialValue: this.state.listData[i] == undefined ? "" : moment(this.state.listData[i].fromDateTime)
+                                    initialValue: this.state.listData[i] == undefined ? "" :(this.state.listData[i].fromDateTime==undefined?"": moment(this.state.listData[i].fromDateTime))
                                 })(
                                     <DatePicker style={{ borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
                                         let dateend=getFieldValue("toDateTime"+i);
@@ -201,7 +202,7 @@ class page extends Component {
                                             required: true,
                                             message: '请选择时间',
                                         }],
-                                        initialValue: this.state.listData[i] == undefined ? "" : moment(this.state.listData[i].toDateTime)
+                                        initialValue: this.state.listData[i] == undefined ? "" :(this.state.listData[i].toDateTime==undefined?"": moment(this.state.listData[i].toDateTime))
                                     })(
                                         <DatePicker style={{ borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
                                             let datestart=getFieldValue("fromDateTime"+i);
@@ -274,7 +275,9 @@ class page extends Component {
                                 <RadioGroup onChange={(e) => this.lineTypeonChange(e)}>
                                     <Radio value={1}>单程</Radio>
                                     <Radio value={2}>往返</Radio>
-                                    <Radio value={3}>多程</Radio>
+                                    {!this.state.isMult && 
+                                        <Radio value={3}>多程</Radio>
+                                    }
                                 </RadioGroup>
                                 )}
                         </FormItem>
