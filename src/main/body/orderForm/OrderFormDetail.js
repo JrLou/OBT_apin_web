@@ -211,7 +211,7 @@ class OrderFormDetail extends Component{
             this.setLoading(false);
             message.success(msg);
             //刷新页面
-            window.location.reload();
+            window.app_open(this,'/OrderFormList',{});
         };
         let failureCB = (code, msg, option)=>{
             this.setLoading(false);
