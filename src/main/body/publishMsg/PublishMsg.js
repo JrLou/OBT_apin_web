@@ -18,6 +18,7 @@ class page extends Component {
         super(props);
         this.state = {
         };
+        
     }
     httpPostAdd(param) {//发送数据
         let success = (code, msg, json, option) => {
@@ -37,7 +38,15 @@ class page extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        let { lineType } = this.state;
+        let {data}=this.props.location.query;
+        let lineType=2;
+        if(data.lineType!=undefined && [1,2,3].indexOf(data.lineType)>-1){
+            lineType=data.lineType;
+        }
+        let listData=[];
+        if(data.listData!=undefined && listData.length > 0){
+            listData=data.listData;
+        }
         return (
             <div className={less.content}>
                 <div style={{ paddingTop: 10, width: 520, margin: "auto" }}>
@@ -47,10 +56,15 @@ class page extends Component {
                         <div style={{ color: "#333", fontSize: 20, marginLeft: 22 }}>需求信息</div>
                     </div>
                     {/** state={{lineType:3,lineNum:1,adultCount:"10",childCount:"10",remark:"",phone:"",listData:[{fromCity:"北京",toCity:"杭州",fromDateTime:"2017-11-20",toDateTime:"2017-11-20"}]}}*/}
-                    <TemplatePublist state={{lineType:2,lineNum:1,adultCount:"",childCount:"",remark:"",phone:"",listData:[]}}  callBack={(e) => {
+                    <TemplatePublist state={{lineType:lineType,lineNum:1,adultCount:"",childCount:"",remark:"",phone:"",listData:listData}}  callBack={(e) => {
                         this.httpPostAdd(e);
                     }} />
                 </div>
+                {/* <Button  onClick={() => {
+                            window.app_open(this, "/PublishMsg", {newDate:{lineType:"1",fromcicty:"杭州",tocicty:"北京"}});
+                        }}> 
+                    调整
+                </Button> */}
             </div >
         );
     }

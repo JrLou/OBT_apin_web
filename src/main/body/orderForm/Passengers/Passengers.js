@@ -126,6 +126,7 @@ class PassengerMsg extends Component{
                             >
                                 修改
                             </div>
+                            <span>/</span>
                             <div
                                 className={css.operationDelete}
                                 onClick={()=>{

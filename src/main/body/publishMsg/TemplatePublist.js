@@ -142,7 +142,6 @@ class page extends Component {
                                     <AutoInput style={{ borderRadius: "2px" }} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity}
                                         type={"from"}
                                         placeholder={'中文／拼音／三字码'} />
-
                                     )}
                             </FormItem>
                         </Col>
@@ -159,9 +158,8 @@ class page extends Component {
                                 })(
 
                                     <AutoInput style={{ borderRadius: "2px" }} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].toCity}
-                                        type={"from"}
+                                        type={"to"}
                                         placeholder={'中文／拼音／三字码'} />
-
                                     )}
                             </FormItem>
                         </Col>

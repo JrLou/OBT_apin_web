@@ -17,6 +17,8 @@
 .btnType01,.btnType02,.btnType03{
   height: 24px;
   width:80px;
+  text-align: center;
+  padding: 0;
   border-radius: 2px;
   margin: 0 @d_spadding_cell;
 }
@@ -49,10 +51,20 @@
 .operationUpDate{
   color: @primary-color;
   cursor: pointer;
+  display: inline-block;
+  margin: 0 @d_spadding_cell;
+  &:hover{
+    font-weight: bold;
+  }
 }
 .operationDelete{
   color: @error-color;
   cursor: pointer;
+  display: inline-block;
+  margin: 0 @d_spadding_cell;
+  &:hover{
+    font-weight: bold;
+  }
 }
 .errorStyle{
   border-color: @error-color;
