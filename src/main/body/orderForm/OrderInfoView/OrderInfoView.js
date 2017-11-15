@@ -216,7 +216,7 @@ class OrderInfoView extends Component{
         let viewArray = [];
         if(payMsg instanceof Array){
             for(let key in payMsg){
-                viewArray.push(<div key={`item${key}`}>{this.getPayItemDetail(payMsg[key])}</div>);
+                viewArray.push(<div key={`item${key}`} className={css.payMsgBox}>{this.getPayItemDetail(payMsg[key])}</div>);
             }
         }
         return viewArray;
