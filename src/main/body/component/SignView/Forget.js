@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-15 13:25:11
+ * @Last Modified time: 2017-11-15 13:35:08
  */
 
 import React, { Component } from 'react';
@@ -184,18 +184,22 @@ class ForgetForm extends Component {
             }
         }, (code, message, json, option) => {
         }, {
-                mobile, picCode, type: 1
+                mobile, picCode, type: 2
             });
     }
 
     getCode(callback) {
-        const user = CookieHelp.getUserInfo();
+        // const user = CookieHelp.getUserInfo();
 
-        if (user) {
-            callback();
-        } else {
-            defaultLoginPromise(1, () => callback());
-        }
+        // if (user) {
+        //     callback();
+        // } else {
+        //     defaultLoginPromise(1, () => callback());
+        // }
+
+        callback();
+
+
     }
 }
 
