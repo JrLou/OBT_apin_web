@@ -13,6 +13,10 @@ function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
 
+function getValue(objStr) {
+    return new Function("return " + objStr)();
+}
+
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -64,7 +68,8 @@ class AccountForm extends Component {
             area: {},
             province: [],
             city: [],
-            zone: []
+            zone: [],
+            showAddr: {}
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.updateInfo = this.updateInfo.bind(this);
@@ -78,7 +83,18 @@ class AccountForm extends Component {
             .then((res) => {
                 const { json, option } = res;
                 const { account, password, mobile } = json;
-                const { companyName, contactName, address, id } = option.option;// option返回是null，这样保错了，后面然后setState也不会运行了
+                let { companyName, contactName, id, address } = option.option;// option返回是null，这样保错了，后面然后setState也不会运行了
+                let { showAddr } = this.state;
+
+                let resAddr = getValue(address);
+                log("=======================================");
+                log(resAddr);
+                if (resAddr.province && resAddr.province.length > 0) { showAddr.province = this.getArea(resAddr.province); }
+                if (resAddr.city && resAddr.city.length > 0) showAddr.city = this.getArea(resAddr.city);
+                if (resAddr.zone && resAddr.zone.length > 0) showAddr.zone = this.getArea(resAddr.zone);
+
+
+
                 this.setState({
                     accountID: json.id,
                     account,
@@ -87,8 +103,39 @@ class AccountForm extends Component {
                     companyName,
                     contactName,
                     address,
-                    id
+                    id,
+                    showAddr
                 });
+                // try {
+                //     let { address } = option.option;
+                //     log("address");
+                //     log(address);
+                //     address = JSON.parse(address);
+                //     log("address22");
+                //     log(address);
+                //     let { province, city, zone } = address;
+                //     let showAddr = {
+                //         address: address.address, province, city, zone
+                //     };
+                //     log(showAddr);
+                //     this.setState({
+                //         showAddr
+                //     }, () => {
+                //         log(this.state);
+                //     });
+                // } catch (error) {
+                //     log();
+                // }
+                //     this.setState({
+                //         accountID: json.id,
+                //         account,
+                //         password,
+                //         mobile,
+                //         companyName,
+                //         contactName,
+                //         address,
+                //         id
+                //     });
 
             })
             .catch(error => {
@@ -98,7 +145,7 @@ class AccountForm extends Component {
 
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
-        const { isView, account, password, mobile, companyName, contactName, address, area, province, city, zone } = this.state;
+        const { isView, account, password, mobile, companyName, contactName, address, area, province, city, zone, showAddr } = this.state;
 
         const accountError = isFieldTouched('account') && getFieldError('account');
         const passwordError = isFieldTouched('password') && getFieldError('password');
@@ -158,36 +205,42 @@ class AccountForm extends Component {
                         {...formItemLayout}
                         label="省"
                     >
-                        {getFieldDecorator('province')(
+                        {getFieldDecorator('province', {
+                            initialValue: showAddr.province
+                        })(
                             <Cascader options={province} onChange={(value) => {
                                 this.getArea(value[0], 'city');
                             }} placeholder="Please select" />
-                        )}
+                            )}
                     </FormItem>}
                     {!isView && <FormItem prefixCls="my-ant-form"
                         {...formItemLayout}
                         label="市"
                     >
-                        {getFieldDecorator('city')(
+                        {getFieldDecorator('city', {
+                            initialValue: showAddr.city
+                        })(
                             <Cascader options={city} onChange={(value) => {
                                 this.getArea(value[0], 'zone');
                             }} placeholder="Please select" />
-                        )}
+                            )}
                     </FormItem>}
                     {!isView && <FormItem prefixCls="my-ant-form"
                         {...formItemLayout}
                         label="区"
                     >
-                        {getFieldDecorator('zone')(
+                        {getFieldDecorator('zone', {
+                            initialValue: showAddr.zone
+                        })(
                             <Cascader options={zone} placeholder="Please select" />
-                        )}
+                            )}
                     </FormItem>}
                     <FormItem prefixCls="my-ant-form"
                         {...formItemLayout}
                         label="地址"
                     >
                         {isView ? <div>{address}</div> : getFieldDecorator('address', {
-                            initialValue: address
+                            initialValue: showAddr.address
                         })(
                             <Input prefixCls="my-ant-input" onChange={(value) => this.handleChange('address', value)} />
                             )}
@@ -226,28 +279,27 @@ class AccountForm extends Component {
 
     handleSubmit() {
         this.props.form.validateFields((err, values) => {
-            log(values);
             if (!err) {
                 let { password, companyName, contactName, address, province, city, zone } = values;
                 const { id } = this.state;
                 const saveAddr = JSON.stringify({ address, province, city, zone });
-                if (companyName != this.state.companyName
-                    || contactName != this.state.contactName
-                    || address != this.state.address
-                ) {
-                    HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/modifyMemberInfo', (code, msg, json, option) => {
-                        message.success("修改成功");
-                        this.setState({
-                            isView: true
-                        });
-                    }, () => {
-                    }, {
-                            address: saveAddr,
-                            companyName,
-                            contactName,
-                            id
-                        });
-                }
+                // if (companyName != this.state.companyName
+                //     || contactName != this.state.contactName
+                //     || address != this.state.address
+                // ) {
+                HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/modifyMemberInfo', (code, msg, json, option) => {
+                    message.success("修改成功");
+                    this.setState({
+                        isView: true
+                    });
+                }, () => {
+                }, {
+                        address: saveAddr,
+                        companyName,
+                        contactName,
+                        id
+                    });
+                // }
 
             }
         });
@@ -290,17 +342,21 @@ class AccountForm extends Component {
             });
     }
 
-    getArea(id, key) {
-        // HttpTool.request(HttpTool.typeEnum.POST, '/ac/area/byPid/query', (code, msg, json, option) => {
-        HttpTool.request(HttpTool.typeEnum.POST, '/area/byPid/query', (code, msg, json, option) => {
+    getArea(id, key, showKey) {
+        HttpTool.request(HttpTool.typeEnum.POST, '/bc/area/byPid/query', (code, msg, json, option) => {
+            // HttpTool.request(HttpTool.typeEnum.POST, '/area/byPid/query', (code, msg, json, option) => {
             let res = json.map(item => {
                 item.value = item.id;
                 item.label = item.name;
                 return item;
             });
-            this.setState({
-                [key]: res
-            });
+            if (key) {
+                this.setState({
+                    [key]: res
+                });
+            }
+            // if (showKey) {
+            // }
         }, (code, msg) => {
             message.error(msg);
         }, {
