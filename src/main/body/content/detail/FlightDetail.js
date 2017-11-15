@@ -243,7 +243,10 @@ class page extends Component {
                                                   this.onChangeNumVal(true,value);
                                               }}/>)}
                                 </FormItem>
-                                <div className={css.i_subtitle}>{this.adultPrice}</div>
+                                <div className={css.i_subtitle}>
+                                    <span style={{fontSize:"12px"}}>{"¥"}</span>
+                                    {this.adultPrice+".00"}
+                                </div>
                             </div>
 
 
@@ -278,7 +281,10 @@ class page extends Component {
                                                }}/>
                                     )}
                                 </FormItem>
-                                <div className={css.i_subtitle}>{this.childPrice}</div>
+                                <div className={css.i_subtitle}>
+                                    <span style={{fontSize:"12px"}}>{"¥"}</span>
+                                    {this.childPrice+".00"}
+                                    </div>
                             </div>
                         </div>
                         <div className={css.refOrderCellItem}>
