@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-10 16:51:38 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-14 14:20:25
+ * @Last Modified time: 2017-11-14 18:53:09
  */
 
 
@@ -24,8 +24,6 @@ function hasErrors(fieldsError) {
 class ResetForm extends Component {
     constructor(props) {
         super(props);
-        this.getCode = this.getCode.bind(this);
-        this.getCodeAction = this.getCodeAction.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentDidMount() {
@@ -114,44 +112,6 @@ class ResetForm extends Component {
         });
     }
 
-    getCodeAction() {
-        const { getFieldValue } = this.props.form;
-        const mobile = getFieldValue('mobile');
-        const picCode = getFieldValue('picCode') || '';
-        HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
-            // 测试
-            if (json.length > 4) {
-                this.setState({
-                    isShowPic: true,
-                    picCode: 'data:image/jpg;base64,' + json
-                });
-            }
-        }, (code, message, json, option) => {
-        }, {
-                mobile, picCode, type: 2
-            });
-    }
-    getCode(callback) {
-        const defaultAccount = 'b3619ef5dc944e4aad02acc7c83b220d';
-        const defaultPwd = '4b91884d9290981da047b4c85af35a39';
-
-        const user = CookieHelp.getUserInfo();
-
-
-        // if (user) {
-        //     callback();
-        // } else {
-        //     getLoginCodePromise(defaultAccount, 0).then((data) =>
-        //         loginPromise(defaultAccount, defaultPwd, data)
-        //     ).then((data) => {
-        //         data.Authorization = data.accessToken;
-        //         CookieHelp.saveUserInfo(data);
-        //         callback();
-        //     }).catch((error) => {
-        //         log(error);
-        //     });
-        // }
-    }
 }
 
 const WrappedResetForm = Form.create()(ResetForm);

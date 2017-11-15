@@ -95,21 +95,30 @@ let LXDHelp = {
 
     /**
      * 根据后端返回的订单状态和extraCode辅助字段，返回前端页面需要的订单状态
-     * @param state
+     * @param state（即orderStatus）
      * @param extraCode
      * @returns {Number}
+     *
+     *extraCode: 0订金审核中；1全款审核中；2待付订金；3待付全款；4审核失败；5尾款审核中；6未录入乘机人；7等待出票；8确认中；
+     当orderStatus 为4的时候，extraCode存在 0,1,2,3的情况；orderstatus为2,3,的情况，extraCode存在4,；orderstaus为5的时候，extraCode存在4,5两种情况；orderstaus为6的时候，extraCode存在6，7两种情况；orderstaus为1的时候，extraCode存在8的情况；
+     *
+     *  * 最终得到的订单状态说明(页面需要展示的状态)：
+     * 0：订单取消 1：等待确认 2：待付押金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
+     * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中 15：支付审核失败
      */
     transformOrderState(state,extraCode){
         let returnState = parseInt(state);
         let returnRemark = parseInt(extraCode);
         if(LXDHelp.hasKey(returnState,[2,3,4,5,6])){
             switch(returnRemark){
-                case 0:returnState = 14;break;  //state = 2,3,5
-                case 1:returnState = 15;break;  //state = 2,3,5
-                case 2:returnState = 12;break;  //state = 6
-                case 3:returnState = 13;break;  //state = 6
-                case 5:returnState = 3;break;   //state = 4
-                case 6:returnState = 2;break;   //state = 4
+                case 0:returnState = 14;break;  //state = 4
+                case 1:returnState = 14;break;  //state = 4
+                case 2:returnState = 2;break;  //state = 4
+                case 3:returnState = 3;break;  //state = 4
+                case 4:returnState = 15;break;  //state = 2,3,5
+                case 5:returnState = 14;break;   //state = 5
+                case 6:returnState = 12;break;   //state = 6
+                case 7:returnState = 13;break;   //state = 6
                 default:break;
             }
         }

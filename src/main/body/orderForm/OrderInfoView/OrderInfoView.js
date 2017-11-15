@@ -287,6 +287,7 @@ class OrderInfoView extends Component{
                                 otherPay.auditStatus == 2
                                 ?   <div className={css.reUpload}>
                                         <Button
+                                            className={css.cancleBtnStyle}
                                             onClick={()=>{
                                                 window.app_open(this,'/UpLoad',{
                                                     orderId:data.orderId,
