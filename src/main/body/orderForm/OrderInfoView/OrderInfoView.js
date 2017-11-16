@@ -276,13 +276,18 @@ class OrderInfoView extends Component{
 
             recordView.push(
                 <div key={`record${key}`} className={css.recordBox}>
+                    <div className={key==0?css.payValue:css.hidden}>
+                        {`¥${data.amount}`}
+                        <span>&nbsp;&nbsp;</span>
+                        {scorePay>0?`积分抵扣(¥${scorePay})`:''}
+                    </div>
                     {
                         payName
                             ?   (<div className={css.payType}>
-                                {`(支付方式：${payName}`}
-                                <span>&nbsp;&nbsp;</span>
-                                {`支付时间：${data.records[key].payTime})`}
-                            </div>)
+                                    {`(支付方式：${payName}`}
+                                    <span>&nbsp;&nbsp;</span>
+                                    {`支付时间：${data.records[key].payTime})`}
+                                </div>)
                             :   ''
                     }
                     {
@@ -294,7 +299,7 @@ class OrderInfoView extends Component{
                                     data.records[key].auditStatus == 2
                                         ?   <div className={css.reUpload}>
                                             <Button
-                                                className={css.cancleBtnStyle}
+                                                className={css.reUploadBtnStyle}
                                                 onClick={()=>{
                                                     window.app_open(this,'/UpLoad',{
                                                         orderId:data.orderId,
@@ -320,15 +325,17 @@ class OrderInfoView extends Component{
                     {data.payStatus == 1?'':'待'}
                     {paymentName}
                 </div>
-                <div className={css.payValue}>
-                    {`¥${data.amount}`}
-                    <span>&nbsp;&nbsp;</span>
-                    {scorePay>0?`积分抵扣(¥${scorePay})`:''}
-                </div>
                 {
                     data.records.length == 0
-                    ?(<div className={css.payType}>
-                            {data.expiredTime?`支付截止日期：${sliceTimeString(data.expiredTime)}`:''}
+                    ?(<div className={css.recordBox}>
+                            <div className={css.payValue}>
+                                {`¥${data.amount}`}
+                                <span>&nbsp;&nbsp;</span>
+                                {scorePay>0?`积分抵扣(¥${scorePay})`:''}
+                            </div>
+                            <div className={css.payType}>
+                                {data.expiredTime?`支付截止日期：${sliceTimeString(data.expiredTime)}`:''}
+                            </div>
                         </div>)
                     : recordView
 
