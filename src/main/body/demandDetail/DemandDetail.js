@@ -194,64 +194,62 @@ class page extends Component {
     getButton(type) {
         return (
             <div className={less.buttonBottomLayout}>
-                <div>
-                    <Button className={less.buttonAgin}
-                            onClick={() => {
-                                if (type === 1 || type === 2) {
+                <Button className={less.buttonAgin}
+                        onClick={() => {
+                            if (type === 1 || type === 2) {
 
-                                    if (window.ysf && window.ysf.open) {
-                                        window.ysf.open();
-                                    }
+                                if (window.ysf && window.ysf.open) {
+                                    window.ysf.open();
+                                }
 
-                                } else {
-                                    let {data} = this.state;
-                                    let voyage = [];
-                                    let voyageObject = {};
-                                    if (data.voyage && JSON.parse(data.voyage).voyage) {
-                                        let voyageList=JSON.parse(data.voyage).voyage;
-                                        voyageList.map((data, index) => {
-                                            voyageObject = {
-                                                fromCity: data.cityDep,
-                                                toCity: data.cityArr,
-                                                toDateTime:"",
-                                                fromDateTime:data.dateDep,
-                                            };
-                                            voyage.push(voyageObject);
-                                        });
-                                    }
-                                    if(data.flightType===1||data.flightType===2){
+                            } else {
+                                let {data} = this.state;
+                                let voyage = [];
+                                let voyageObject = {};
+                                if (data.voyage && JSON.parse(data.voyage).voyage) {
+                                    let voyageList = JSON.parse(data.voyage).voyage;
+                                    voyageList.map((data, index) => {
                                         voyageObject = {
                                             fromCity: data.cityDep,
                                             toCity: data.cityArr,
-                                            toDateTime:data.dateRet,
-                                            fromDateTime:data.dateDep,
+                                            toDateTime: "",
+                                            fromDateTime: data.dateDep,
                                         };
                                         voyage.push(voyageObject);
-                                    }
-                                    let datas = {
-                                        lineType: data.flightType+"",
-                                        adultCount: data.adultCount,
-                                        childCount: data.childCount,
-                                        isMult: false,
-                                        listData: voyage,
-                                    };
-                                    CookieHelp.saveCookieInfo("publishMsgCookie", datas);
-                                    window.app_open(this, "/PublishMsg", {});
+                                    });
                                 }
-                            }}
+                                if (data.flightType === 1 || data.flightType === 2) {
+                                    voyageObject = {
+                                        fromCity: data.cityDep,
+                                        toCity: data.cityArr,
+                                        toDateTime: data.dateRet,
+                                        fromDateTime: data.dateDep,
+                                    };
+                                    voyage.push(voyageObject);
+                                }
+                                let datas = {
+                                    lineType: data.flightType + "",
+                                    adultCount: data.adultCount,
+                                    childCount: data.childCount,
+                                    isMult: false,
+                                    listData: voyage,
+                                };
+                                CookieHelp.saveCookieInfo("publishMsgCookie", datas);
+                                window.app_open(this, "/PublishMsg", {});
+                            }
+                        }}
 
-                    >{type === 1 || type === 2 ? "联系爱拼机客服处理需求" : "重新发布需求"}</Button>
-                    {
-                        type === 5 ? <Button className={less.buttonContact}
-                                             onClick={() => {
-                                                 if (window.ysf && window.ysf.open) {
-                                                     window.ysf.open();
-                                                 }
+                >{type === 1 || type === 2 ? "联系爱拼机客服处理需求" : "重新发布需求"}</Button>
+                {
+                    type === 5 ? <Button className={less.buttonContact}
+                                         onClick={() => {
+                                             if (window.ysf && window.ysf.open) {
+                                                 window.ysf.open();
+                                             }
 
-                                             }}
-                        >联系爱拼机客服</Button> : null
-                    }
-                </div>
+                                         }}
+                    >联系爱拼机客服</Button> : null
+                }
             </div>
         );
     }
@@ -410,10 +408,10 @@ class page extends Component {
                     </div>
 
 
-                    <div style={{paddingTop: 17, paddingLeft: 20, marginBottom: 50}}>
-                        <font className={less.mainTitle}>备注：</font>
-                        <font
-                            className={type === 5 ? less.mainContentClose1 : less.mainContent1}>{data && data.remark ? data.remark : "暂无"}</font>
+                    <div className={less.remarkLayout} style={{marginLeft:20,marginTop:15}}>
+                        <div className={less.remarkTitle}>备注：</div>
+                        <div className={type === 5 ?less.remarkContentClose:less.remarkContent}>{data && data.remark ? data.remark : "暂无"}</div>
+
                     </div>
                 </div>
             </div>
@@ -575,10 +573,10 @@ class page extends Component {
                             <font
                                 className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.dateRet ? data.dateRet : "暂无"}</font>
                         </div>
-                        <div>
-                            <font className={less.mainTitle}>备注：</font>
-                            <font
-                                className={type === 5 ? less.mainContentClose1 : less.mainContent1}>{data && data.remark ? data.remark : "暂无"}</font>
+                        <div className={less.remarkLayout}>
+                            <div className={less.remarkTitle}>备注：</div>
+                            <div className={type === 5 ?less.remarkContentClose:less.remarkContent}>{data && data.remark ? data.remark : "暂无"}</div>
+
                         </div>
 
 
