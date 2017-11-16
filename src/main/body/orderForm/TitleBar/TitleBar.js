@@ -21,6 +21,7 @@ class TitleBar extends Component{
             orderState:this.props.orderState,
             orderID:this.props.orderID,
             deadLine:this.props.titleData.deadLine?this.props.titleData.deadLine:'',
+            ticketDate:this.props.titleData.ticketDate?this.props.titleData.ticketDate:'',
             reason:this.props.titleData.reason?this.props.titleData.reason:'',
 
             confirmModal:false,     //删除订单询问框
@@ -45,6 +46,7 @@ class TitleBar extends Component{
         let msg = '';
         let title = '';
         let date = this.state.deadLine;
+        let ticketDate = this.state.ticketDate;
         switch(state){
             case 0:title='订单取消';
                     break;
@@ -64,7 +66,7 @@ class TitleBar extends Component{
             case 8:title='订单关闭';
                     break;
             case 12:title='已付款（未录乘机人）';
-                    msg=date?`您还没有录入齐全乘机人信息，请在 ${sliceTimeString(date)} 之前录入`:'';
+                    msg=ticketDate?`您还没有录入齐全乘机人信息，请在 ${sliceTimeString(ticketDate)} 之前录入`:'';
                     break;
             case 13:title='等待出票...';
                     msg=`爱拼机正在为您出票中，请耐心等待`;

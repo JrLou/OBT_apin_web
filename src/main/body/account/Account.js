@@ -87,14 +87,7 @@ class AccountForm extends Component {
             .then((res) => {
                 const { json, option } = res;
                 const { account, password, mobile } = json;
-                let { companyName, contactName, id, address } = option.option;// option返回是null，这样保错了，后面然后setState也不会运行了
-
-
-                let resAddr = getValue(address);
-                if (resAddr.province) { this.handleChange('showProvince', resAddr.province); }
-                if (resAddr.city) { this.handleChange('showCity', resAddr.city); }
-                if (resAddr.zone) { this.handleChange('showZone', resAddr.zone); }
-                if (resAddr.address) { this.handleChange('showAddr', resAddr.address); }
+                let { companyName, contactName, id, province, city, county, address } = option.option;// option返回是null，这样保错了，后面然后setState也不会运行了
 
                 this.setState({
                     accountID: json.id,
@@ -103,6 +96,9 @@ class AccountForm extends Component {
                     mobile,
                     companyName,
                     contactName,
+                    showProvince: province,
+                    showCity: city,
+                    showZone: county,
                     address,
                     id
                 });
@@ -225,7 +221,7 @@ class AccountForm extends Component {
                     >
                         <Dropdown overlay={provinceMenu}>
                             <a className="ant-dropdown-link" href="#">
-                                {showProvince}
+                                {showProvince || '省'}
                             </a>
                         </Dropdown>
 
@@ -236,7 +232,7 @@ class AccountForm extends Component {
                     >
                         <Dropdown overlay={cityMenu}>
                             <a className="ant-dropdown-link" href="#">
-                                {showCity}
+                                {showCity || '市'}
                             </a>
                         </Dropdown>
                     </FormItem>}
@@ -246,7 +242,7 @@ class AccountForm extends Component {
                     >
                         <Dropdown overlay={zoneMenu}>
                             <a className="ant-dropdown-link" href="#">
-                                {showZone}
+                                {showZone || '市'}
                             </a>
                         </Dropdown>
                     </FormItem>}
@@ -254,11 +250,10 @@ class AccountForm extends Component {
                         {...formItemLayout}
                         label="地址"
                     >
-                        {isView ? <div>{
-                            `${showProvince}${showCity}${showZone}${showAddr}`
-                        }
+                        {isView ? <div>{showProvince}{showCity}{showZone}{address}
+
                         </div> : getFieldDecorator('address', {
-                            initialValue: showAddr
+                            initialValue: address
                         })(
                                 <Input prefixCls="my-ant-input" onChange={(value) => this.handleChange('address', value)} />
                                 )}
@@ -309,12 +304,6 @@ class AccountForm extends Component {
             if (!err) {
                 let { password, companyName, contactName, address } = values;
                 const { id, showProvince, showCity, showZone } = this.state;
-                const saveAddr = JSON.stringify({
-                    address,
-                    province: showProvince,
-                    city: showCity,
-                    zone: showZone
-                });
                 // if (companyName != this.state.companyName
                 //     || contactName != this.state.contactName
                 //     || address != this.state.address
@@ -327,7 +316,10 @@ class AccountForm extends Component {
                 }, (code, msg) => {
                     message.error(msg);
                 }, {
-                        address: saveAddr,
+                        province: showProvince,
+                        city: showCity,
+                        county: showZone,
+                        address,
                         companyName,
                         contactName,
                         id
