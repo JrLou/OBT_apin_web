@@ -211,9 +211,9 @@ class page extends Component {
                                         let voyageList=JSON.parse(data.voyage).voyage;
                                         voyageList.map((data, index) => {
                                             voyageObject = {
-                                                fromCity: data.cityArr,
-                                                toCity: data.cityDep,
-                                                toDateTime:null,
+                                                fromCity: data.cityDep,
+                                                toCity: data.cityArr,
+                                                toDateTime:"",
                                                 fromDateTime:data.dateDep,
                                             };
                                             voyage.push(voyageObject);
@@ -221,15 +221,15 @@ class page extends Component {
                                     }
                                     if(data.flightType===1||data.flightType===2){
                                         voyageObject = {
-                                            fromCity: data.cityArr,
-                                            toCity: data.cityDep,
+                                            fromCity: data.cityDep,
+                                            toCity: data.cityArr,
                                             toDateTime:data.dateRet,
                                             fromDateTime:data.dateDep,
                                         };
                                         voyage.push(voyageObject);
                                     }
                                     let datas = {
-                                        lineType: parseInt(data.flightType),
+                                        lineType: data.flightType+"",
                                         adultCount: data.adultCount,
                                         childCount: data.childCount,
                                         isMult: false,
