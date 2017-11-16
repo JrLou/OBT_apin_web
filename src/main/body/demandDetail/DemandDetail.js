@@ -232,7 +232,7 @@ class page extends Component {
                                         lineType: data.flightType,
                                         adultCount: data.adultCount,
                                         childCount: data.childCount,
-                                        isMult: data.flightType === 3 ? true : false,
+                                        isMult: false,
                                         listData: voyage,
                                     };
                                     CookieHelp.saveCookieInfo("publishMsgCookie", datas);
