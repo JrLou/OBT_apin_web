@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {Button, Modal, message} from "antd";
 import less from "./DemandDetail.less";
 import CellNewFlight from "../content/cell/CellNewFlight";
-import {HttpTool} from "../../../../lib/utils/index.js";
+import {HttpTool, CookieHelp} from "../../../../lib/utils/index.js";
 import NumTransToTextHelp from '../tool/NumTransToTextHelp.js';
 import {getFlightData} from '../tool/LXDHelp.js';
 import APIGYW from '../../../api/APIGYW';
@@ -73,10 +73,10 @@ class page extends Component {
                 data: null,
             });
         };
-            HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_detail, success, failure, param,
-                {
-                    ipKey: "hlIP"
-                });
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_detail, success, failure, param,
+            {
+                ipKey: "hlIP"
+            });
     }
 
     cancelDemand() {
@@ -90,10 +90,10 @@ class page extends Component {
         let failure = (code, msg, option) => {
             message.warning(msg);
         };
-            HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_cancel, success, failure, param,
-                {
-                    ipKey: "hlIP"
-                });
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_cancel, success, failure, param,
+            {
+                ipKey: "hlIP"
+            });
     }
 
     deleteDemand() {
@@ -107,10 +107,10 @@ class page extends Component {
         let failure = (code, msg, option) => {
             message.warning(msg);
         };
-            HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_remove, success, failure, param,
-                {
-                    ipKey: "hlIP"
-                });
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_remove, success, failure, param,
+            {
+                ipKey: "hlIP"
+            });
     }
 
     confirmDemand() {
@@ -131,10 +131,10 @@ class page extends Component {
         let failure = (code, msg, option) => {
             message.warning(msg);
         };
-            HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_confirm, success, failure, param,
-                {
-                    ipKey: "hlIP"
-                });
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_confirm, success, failure, param,
+            {
+                ipKey: "hlIP"
+            });
     }
 
     render() {
@@ -153,7 +153,7 @@ class page extends Component {
                 {data.demandStatus === 1 || data.demandStatus === 2 ? this.getMessage("预计在30分钟内为您处理需求") :
                     (data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
                 {data.demandStatus === 5 ? this.getCloseReason(data) : null}
-                {data.demandStatus === 1 || data.demandStatus === 2 || data.demandStatus === 5 || data.demandStatus === 0 ? this.getButton(data.demandStatus, data) : null}
+                {data.demandStatus === 1 || data.demandStatus === 2 || data.demandStatus === 5 || data.demandStatus === 0 ? this.getButton(data.demandStatus) : null}
                 {data.demandStatus === 4 ? this.getOrderDetail(data) : null}
                 {data.demandStatus === 3 ? this.getConfirmButton(data && data.plans ? data.plans : [], data.flightType) : null}
             </div>
@@ -191,7 +191,7 @@ class page extends Component {
         );
     }
 
-    getButton(type, data = {}) {
+    getButton(type) {
         return (
             <div className={less.buttonBottomLayout}>
                 <div>
@@ -204,16 +204,39 @@ class page extends Component {
                                     }
 
                                 } else {
-                                    window.app_open(this, "/PublishMsg", {
-                                        flightType:data.flightType,
-                                        cityArr:data.cityArr,
-                                        cityDep:data.cityDep,
-                                        adultCount:data.adultCount,
-                                        childCount:data.childCount,
-                                        dataDep:data.dataDep,
-                                        dataArr:data.dataArr,
-                                        voyage:JSON.parse(data.voyage),
-                                    });
+                                    let {data} = this.state;
+                                    let voyage = [];
+                                    let voyageObject = {};
+                                    if (data.voyage && JSON.parse(data.voyage).voyage) {
+                                        let voyageList=JSON.parse(data.voyage).voyage;
+                                        voyageList.map((data, index) => {
+                                            voyageObject = {
+                                                fromCity: data.cityDep,
+                                                toCity: data.cityArr,
+                                                toDateTime:"",
+                                                fromDateTime:data.dateDep,
+                                            };
+                                            voyage.push(voyageObject);
+                                        });
+                                    }
+                                    if(data.flightType===1||data.flightType===2){
+                                        voyageObject = {
+                                            fromCity: data.cityDep,
+                                            toCity: data.cityArr,
+                                            toDateTime:data.dateRet,
+                                            fromDateTime:data.dateDep,
+                                        };
+                                        voyage.push(voyageObject);
+                                    }
+                                    let datas = {
+                                        lineType: data.flightType+"",
+                                        adultCount: data.adultCount,
+                                        childCount: data.childCount,
+                                        isMult: false,
+                                        listData: voyage,
+                                    };
+                                    CookieHelp.saveCookieInfo("publishMsgCookie", datas);
+                                    window.app_open(this, "/PublishMsg", {});
                                 }
                             }}
 
@@ -540,7 +563,7 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>航班人数：</font>
                             <font
-                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.totalPeople ? data.totalPeople : "0"}人（{data && data.adultCount ? data.adultCount : "0"}成人，{"，" + data && data.childCount ? data.childCount: "0"}儿童）</font>
+                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.totalPeople ? data.totalPeople : "0"}人（{data && data.adultCount ? data.adultCount : "0"}成人，{"，" + data && data.childCount ? data.childCount : "0"}儿童）</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>出发日期：</font>

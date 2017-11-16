@@ -178,7 +178,7 @@ class MsgLoginForm extends React.Component {
                     })(
                         <Input prefixCls='my-ant-input' placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode error={getFieldError('account')} getCode={() => this.getCode(this.getCodeAction)} />
+                    <CheckCode ref="code" error={getFieldError('account')} getCode={() => this.getCode(this.getCodeAction)} />
                 </FormItem>
                 <FormItem prefixCls="my-ant-form">
                     <Button
