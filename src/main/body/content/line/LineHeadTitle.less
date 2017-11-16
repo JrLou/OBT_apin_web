@@ -19,8 +19,8 @@
 .left{
   display: table-cell;
   vertical-align: middle;
-  width: 280px;
-  height: 210px;
+  width: 346px;
+  height: 260px;
 }
 .img{
   width: 100%;
@@ -32,7 +32,6 @@
 .right{
   display: table-cell;
   vertical-align: middle;
-  padding-left: @d_spadding_small;
   padding-right: 0;
 }
 .title{
@@ -40,7 +39,7 @@
   border-style: dashed;
   border-color: #CBD3E5;
   width: 100%;
-  padding: @d_spadding_small 0;
+  padding: @d_spadding_center;
 }
 .titleHead{
   display: inline;
@@ -59,15 +58,17 @@
 }
 
 .rightLine{
+  padding-left: @d_spadding_center;
   overflow: hidden;
-  margin-top: @d_spadding_base;
-  margin-bottom: @d_spadding_base;
+  margin-bottom: @d_spadding_big;
+  height: 20px;
+  line-height: 20px;
 }
 .lineLeft{
   display: inline-block;
   width: 70px;
   font-size: @font-size-base;
-  color: #888D99;
+  color: @c_title_gray;
 }
 .lineRight{
   display: inline-block;
