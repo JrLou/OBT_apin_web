@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Menu } from 'antd';
+import { HttpTool,CookieHelp} from "../../lib/utils/index.js";
 
 const MenuItem = Menu.Item;
 
@@ -50,6 +51,9 @@ class Menus extends Component {
                                         params.data = {
                                             from: ""
                                         };
+                                    }
+                                    if (menu.path == '/PublishMsg') {
+                                        CookieHelp.saveCookieInfo("publishMsgCookie","");
                                     }
                                     window.app_open(this, menu.path, params, "self");
                                 }}>{menu.name}</span>

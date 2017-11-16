@@ -39,7 +39,7 @@ class page extends Component {
         }
         let lineType=2;
         data=JSON.parse(testdate);
-        if(data.lineType!=undefined && ["1","2","3"].indexOf(data.lineType)>-1){
+        if(data.lineType!=undefined && ["1","2","3"].indexOf(data.lineType+"")>-1){
             lineType=parseInt(data.lineType);
         }
         let toCity=data.toCity==undefined?"":data.toCity;
@@ -52,7 +52,7 @@ class page extends Component {
         let lineNum =listData.length;
         return (
             <div className={less.content}>
-                <div style={{ paddingTop: 10, width: 520, margin: "auto" }}>
+            <div style={{ paddingTop: 10, width: 520, margin: "auto" }}>
                     {/**标题*/}
                     <div style={{ position: "relative" }}>
                         <div style={{ width: 6, height: 20, position: "absolute", backgroundColor: "#29A6FF", marginTop: 8 }}></div>
