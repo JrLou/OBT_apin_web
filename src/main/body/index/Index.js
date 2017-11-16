@@ -7,7 +7,7 @@ import RecommendView from "../component/RecommendView";
 import SpecialView from "../component/SpecialView";
 import SearchLayout from "../component/SearchLayout";
 import SearchHelp from "../search/SearchHelp.js";
-import {HttpTool} from "../../../../lib/utils/index.js";
+import {HttpTool,CookieHelp} from "../../../../lib/utils/index.js";
 import routes from "../../../vm/routes.js";
 
 import Scroll from "react-scroll/modules/index"; // Imports all Mixins
@@ -170,7 +170,7 @@ class page extends Component {
 
             var param = {
                 pageIndex: this.page,
-                pageSize:25
+                pageSize: 25
             };
             var success = (code, msg, json, option) => {
                 log(json);
@@ -232,7 +232,7 @@ class page extends Component {
                     <Carousel >
                         <a href="/html/fanli.html" target='_blank'>
                             <div className={less.topRightCarousel}
-                                 style={{backgroundImage:"url("+require("../../../images/fanli.jpg")+")"}}
+                                 style={{backgroundImage: "url(" + require("../../../images/fanli.jpg") + ")"}}
                             />
                         </a>
                     </Carousel>
@@ -247,6 +247,26 @@ class page extends Component {
             return (
                 <div className={less.center}>
                     <div className={less.centerTitleLayout}>
+                        <div className={less.centerTitleLeftLayout}>
+                            <div className={less.centerTitleLeftText}
+                                 onClick={() => {
+                                     const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
+                                     if (isLogin) {
+                                         window.app_open(this, "/PublishMsg", {});
+                                     } else {
+                                         window.modal.showModal(0, () => {
+                                             window.app_open(this, "/", {});
+                                         });
+                                     }
+                                 }}
+                            >
+                                <font className={less.goLeftText}>三人可成团</font>
+                                <div className={less.goText}>
+                                    GO
+                                </div>
+                            </div>
+
+                        </div>
                         <div className={less.centerIcon}/>
                         <div className={less.centerTitle}>精品特价航线</div>
 
@@ -288,7 +308,7 @@ class page extends Component {
     render() {
 
         return (
-            <div    className={less.main}>
+            <div className={less.main}>
                 <div
                     className={less.mainContent}
                 >
@@ -314,7 +334,7 @@ class page extends Component {
                             {/*轮播部分*/}
                             {this.getSwitchLayout()}
                         </div>
-                        <div style={{clear:"both"}}/>
+                        <div style={{clear: "both"}}/>
                     </div>
                     {/*精品特价航线*/}
                     {this.getRecommendLayout()}
@@ -330,14 +350,15 @@ class page extends Component {
                         <br/>
                     </div>
                     {this.state.loading ? <div className={less.more}>
-                            加载中...</div> :
+                        加载中...</div> :
                         <div className={less.more}
                              onClick={() => {
                                  this.getNetData();
                              }}
                         >
                             {this.isLastPage ? "没有更多航线啦" : <div style={{
-                                cursor: "pointer"}}>下拉加载更多</div>}</div>}
+                                cursor: "pointer"
+                            }}>下拉加载更多</div>}</div>}
 
 
                 </div>

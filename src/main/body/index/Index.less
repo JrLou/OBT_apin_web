@@ -1,46 +1,53 @@
 @import "../../../theme.less";
 
 @topHeight: 42px;
-.main{
+.main {
 }
-.mainContent{
+
+.mainContent {
   max-width: @d_screen_width;
   margin: auto;
 }
-@left : 31.66%;
-.headLeft{
+
+@left: 31.66%;
+.headLeft {
   float: left;
   width: 31.65%;
   position: relative;
 }
-.headRight{
+
+.headRight {
   float: left;
   width: 100-@left;
   position: relative;
 }
-.topRight{
+
+.topRight {
   position: absolute;
   width: 100%;
   height: 0;
   padding-bottom: 39.8%;
 }
-.topRightContent{
+
+.topRightContent {
   background-color: #00A3FF;
   position: absolute;
   left: 15px;
   right: 0;
   bottom: 0;
   top: 0;
-  div{
+  div {
     height: 100%;
   }
 }
-.topRightCarouselTest{
+
+.topRightCarouselTest {
   background-color: #00ff23;
   height: 100%;
   width: 100%;
 }
-.topRightCarousel{
+
+.topRightCarousel {
   width: 100%;
   height: 100%;
   text-align: center;
@@ -49,6 +56,7 @@
   background-position: center;
 
 }
+
 .topLeft {
   width: 100%;
   background-color: #29A6FF;
@@ -56,8 +64,6 @@
   padding: 2px;
   box-sizing: border-box;
 }
-
-
 
 .topLeftBorder {
 
@@ -95,37 +101,82 @@
   height: 100%;
   background-color: #4ff92e;
 }
-.center{
+
+.center {
   margin-top: @d_spadding_cell*2;
   padding: @d_spadding_cell;
   background-color: #ffffff;
-  border: 1px rgba(0,0,0,0.10) solid;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+  border: 1px rgba(0, 0, 0, 0.10) solid;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
 }
-.centerTitleLayout{
+
+.centerTitleLayout {
   padding: @d_spadding_cell*5;
   text-align: center;
   vertical-align: middle;
   position: relative;
 }
-.centerIcon{
-   display: inline-block;
-   width: 18px;
-   height: 18px;
-   vertical-align: middle;
-   background-image: url("../../../images/boutique.png");
-   background-repeat: no-repeat;
-   background-size: cover;
-   background-position: center;
- }
-.centerTitle{
+
+.centerIcon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  background-image: url("../../../images/boutique.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.centerTitle {
   display: inline-block;
   font-size: 18px;
   margin-left: @d_spadding_cell;
   color: #000000;
   vertical-align: middle;
 }
-.centerTitleMoreLayout{
+
+.centerTitleLeftLayout {
+  width: 134px;
+  color: #fff;
+  position: absolute;
+  height: 40px;
+  left: -5px;
+  margin: auto;
+  vertical-align: middle;
+  top: 0;
+  padding-top: 6px;
+  bottom: 0;
+}
+
+.centerTitleLeftText {
+  height: 28px;
+  background-image: url("../../../images/bg_mian.png");
+  border-bottom-right-radius: 14px;
+  border-top-right-radius: 14px;
+  cursor: pointer;
+}
+
+.goLeftText{
+  font-size: 14px;
+  vertical-align: middle;
+  float: left;
+  margin-left: 10px;
+  margin-top: 4px;
+  margin-right: 10px;
+}
+.goText {
+  height: 16px;
+  float: left;
+  border-radius: 8px;
+  margin-top: 6px;
+  width: 30px;
+  font-size: 12px;
+  background-color: #fff;
+  color: #33A6FE;
+}
+
+.centerTitleMoreLayout {
   position: absolute;
   height: 40px;
   right: @d_spadding_cell;
@@ -133,15 +184,17 @@
   top: 0;
   bottom: 0;
 }
-.centerTitleMore{
+
+.centerTitleMore {
   composes: centerTitle;
   font-size: 14px;
   margin-left: 0;
-  color:#666;
+  color: #666;
   line-height: 40px;
   vertical-align: middle;
 }
-.centerIconMore{
+
+.centerIconMore {
   composes: centerIcon;
   width: 12px;
   height: 12px;
@@ -149,7 +202,8 @@
   margin-left: 3px;
   background-image: url("../../../images/more.png");
 }
-.more{
+
+.more {
   width: 100%;
   text-align: center;
   padding: 30px;
@@ -161,20 +215,21 @@ body {
   margin: 0 !important;
   padding: 0 !important;
 }
+
 element {
-  height:1000px;
+  height: 1000px;
   background-color: #ededed;
   font-size: 45px;
-  border-top:1px solid #000;
-  padding-top:55px;
-  padding-left:10px;
+  border-top: 1px solid #000;
+  padding-top: 55px;
+  padding-left: 10px;
 }
 
 active {
-  color:red !important;
+  color: red !important;
 }
 
-.bottomIcon{
+.bottomIcon {
   display: inline-block;
   width: 23px;
   height: 17px;

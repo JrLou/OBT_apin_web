@@ -35,9 +35,9 @@ class page extends Component {
     render() {
         let { step, isLogin, account } = this.state;
         const menu = (
-            <Menu>
-                <Menu.Item>
-                    <a onClick={() => {
+            <Menu className={less.dropMenu}>
+                <Menu.Item className={less.dropItem}>
+                    <a className={less.center} onClick={() => {
                         window.app_open(this.props.root, '/Account', null);
                     }}>用户中心</a>
                 </Menu.Item>
@@ -77,12 +77,17 @@ class page extends Component {
                                     >注册</Button>
                                 }
                                 {
-                                    isLogin && <Dropdown overlay={menu}>
-                                        <span>
-                                            Hi,
-                                        <a className="ant-dropdown-link" href="#">{account}<Icon type="down" /></a>
-                                        </span>
-                                    </Dropdown>
+                                    isLogin && <div className={less.drop}>
+                                        Hi,
+                                    <Dropdown overlay={menu}>
+                                            <span>
+                                                <a className="ant-dropdown-link" href="#">
+                                                    <span className={less.name}>{account}</span>
+                                                    <Icon type="up" />
+                                                </a>
+                                            </span>
+                                        </Dropdown>
+                                    </div>
                                 }
 
                             </div>
