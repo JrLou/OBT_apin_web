@@ -52,6 +52,7 @@ let LXDHelp = {
                             whiteSpace: 'nowrap',
                             textOverflow:'ellipsis',
                             overflow:'hidden',
+                            verticalAlign:'middle',
                         };
         return(
             <Popover content={view}>

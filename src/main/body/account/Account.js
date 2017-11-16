@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Input, Modal, message, Cascader, Dropdown, Menu } from 'antd';
+import { Form, Button, Input, Modal, message, Cascader, Dropdown, Menu, Icon } from 'antd';
 import css from './account.less';
 import { formatArgs } from 'debug';
 import { HttpTool, CookieHelp } from '../../../../lib/utils/index.js';
@@ -87,14 +87,7 @@ class AccountForm extends Component {
             .then((res) => {
                 const { json, option } = res;
                 const { account, password, mobile } = json;
-                let { companyName, contactName, id, address } = option.option;// option返回是null，这样保错了，后面然后setState也不会运行了
-
-
-                let resAddr = getValue(address);
-                if (resAddr.province) { this.handleChange('showProvince', resAddr.province); }
-                if (resAddr.city) { this.handleChange('showCity', resAddr.city); }
-                if (resAddr.zone) { this.handleChange('showZone', resAddr.zone); }
-                if (resAddr.address) { this.handleChange('showAddr', resAddr.address); }
+                let { companyName, contactName, id, province, city, county, address } = option.option;// option返回是null，这样保错了，后面然后setState也不会运行了
 
                 this.setState({
                     accountID: json.id,
@@ -103,6 +96,9 @@ class AccountForm extends Component {
                     mobile,
                     companyName,
                     contactName,
+                    showProvince: province,
+                    showCity: city,
+                    showZone: county,
                     address,
                     id
                 });
@@ -130,6 +126,10 @@ class AccountForm extends Component {
                             <a onClick={() => {
                                 this.handleChange('showProvince', item.name);
                                 this.getArea(item.id, 'city');
+                                this.setState({
+                                    showCity:'',
+                                    showZone:''
+                                });
                             }}>{item.name}</a>
                         </Menu.Item>
 
@@ -145,6 +145,9 @@ class AccountForm extends Component {
                             <a onClick={() => {
                                 this.handleChange('showCity', item.name);
                                 this.getArea(item.id, 'zone');
+                                this.setState({
+                                    showZone:''
+                                });
                             }}>{item.name}</a>
                         </Menu.Item>
 
@@ -224,9 +227,9 @@ class AccountForm extends Component {
                         label="省"
                     >
                         <Dropdown overlay={provinceMenu}>
-                            <a className="ant-dropdown-link" href="#">
-                                {showProvince}
-                            </a>
+                            <Button>
+                                {showProvince || '省'} <Icon type="down" />
+                            </Button>
                         </Dropdown>
 
                     </FormItem>}
@@ -235,9 +238,9 @@ class AccountForm extends Component {
                         label="市"
                     >
                         <Dropdown overlay={cityMenu}>
-                            <a className="ant-dropdown-link" href="#">
-                                {showCity}
-                            </a>
+                            <Button>
+                                {showCity || '市'} <Icon type="down" />
+                            </Button>
                         </Dropdown>
                     </FormItem>}
                     {!isView && <FormItem prefixCls="my-ant-form"
@@ -245,20 +248,19 @@ class AccountForm extends Component {
                         label="区"
                     >
                         <Dropdown overlay={zoneMenu}>
-                            <a className="ant-dropdown-link" href="#">
-                                {showZone}
-                            </a>
+                            <Button>
+                                {showZone || '区'} <Icon type="down" />
+                            </Button>
                         </Dropdown>
                     </FormItem>}
                     <FormItem prefixCls="my-ant-form"
                         {...formItemLayout}
                         label="地址"
                     >
-                        {isView ? <div>{
-                            `${showProvince}${showCity}${showZone}${showAddr}`
-                        }
+                        {isView ? <div>{showProvince}{showCity}{showZone}{address}
+
                         </div> : getFieldDecorator('address', {
-                            initialValue: showAddr
+                            initialValue: address
                         })(
                                 <Input prefixCls="my-ant-input" onChange={(value) => this.handleChange('address', value)} />
                                 )}
@@ -277,6 +279,7 @@ class AccountForm extends Component {
                                         prefixCls="my-ant-btn"
                                         size="large"
                                         type="primary"
+                                        style={{marginRight: '20px'}}
                                         onClick={this.handleSubmit}
                                     >保存</Button>
                                     <Button
@@ -309,12 +312,6 @@ class AccountForm extends Component {
             if (!err) {
                 let { password, companyName, contactName, address } = values;
                 const { id, showProvince, showCity, showZone } = this.state;
-                const saveAddr = JSON.stringify({
-                    address,
-                    province: showProvince,
-                    city: showCity,
-                    zone: showZone
-                });
                 // if (companyName != this.state.companyName
                 //     || contactName != this.state.contactName
                 //     || address != this.state.address
@@ -327,7 +324,10 @@ class AccountForm extends Component {
                 }, (code, msg) => {
                     message.error(msg);
                 }, {
-                        address: saveAddr,
+                        province: showProvince,
+                        city: showCity,
+                        county: showZone,
+                        address,
                         companyName,
                         contactName,
                         id
