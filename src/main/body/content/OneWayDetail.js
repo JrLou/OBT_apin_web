@@ -332,19 +332,20 @@ class page extends Component {
                                            retDate:voyagesArr[1]&&voyagesArr[1].depDate?voyagesArr[1].depDate:"",
                                            isDirect:data.isDirect,
                                        };
-
                                        const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
                                        if (isLogin){
                                            window.app_open(this.props.obj, "/FlightDetail", {
+                                               type:data.isDirect&&data.isDirect==1?1:2,
                                                step:1,
                                                data:obj
                                            },"self");
                                        }else {
                                            window.modal.showModal(0,()=>{
                                                window.app_open(this.props.obj, "/FlightDetail", {
+                                                   type:data.isDirect&&data.isDirect==1?1:2,
                                                    step:1,
                                                    data:obj
-                                               },"new");
+                                               },"self");
                                            });
                                        }
                                    }}/>);

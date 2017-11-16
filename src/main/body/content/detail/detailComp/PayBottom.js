@@ -21,16 +21,17 @@ class PayBottom extends Component {
         //     childNum:this.childNum,
         //     adultNum:this.adultNum,
         //     totalPrice:this.totalPrice,
-        let {param,isPay,callBack} = this.props;
+        let {param,isPay,isPosition,myTopHeight,callBack} = this.props;
         let str = param?"(成人¥"+param.adultPrice+"*"+(param.adultNum?param.adultNum:0)+(param.childNum!=0?("+"+"儿童¥" +param.childPrice+
-                "*"+param.childNum):"")+"=价格(含税)"+"¥"+param.totalPrice+")":"";
-
-        return (<div className={css.payDiv}>
+            "*"+param.childNum):"")+"=价格(含税)"+"¥"+param.totalPrice+")":"";
+        log(isPosition);
+        // style={{top:isPosition?"auto":myTopHeight+"px"}}
+        return (<div className={css.payDiv} >
             <div className={css.bottomDiv}>
                 <div className={css.bottomDiv_left}>
                     <div className={css.bottomBtn} onClick={()=>{
                         window.history.go(-1);
-                            }}>{"<返回上一级"}</div>
+                    }}>{"<返回上一级"}</div>
                 </div>
                 <div className={css.bottomDiv_center}>
                     <div className={css.depositPriceBg}>
@@ -39,7 +40,7 @@ class PayBottom extends Component {
                         <span style={{fontSize:"20px",color:"red"}}>{param.orderPrice==0?param.totalPrice:(param.orderPrice?param.orderPrice:0)}</span>
                     </div>
                     <div className={css.depositPriceBg}>
-                            <span style={{fontSize:"12px",color:"#888D99"}}>{str}</span>
+                        <span style={{fontSize:"12px",color:"#888D99"}}>{str}</span>
                     </div>
                 </div>
                 <div className={css.bottomDiv_right} onClick={()=>{

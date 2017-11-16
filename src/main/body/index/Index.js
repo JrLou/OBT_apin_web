@@ -255,7 +255,7 @@ class page extends Component {
                                          window.app_open(this, "/PublishMsg", {});
                                      } else {
                                          window.modal.showModal(0, () => {
-                                             window.app_open(this, "/", {});
+                                             window.app_open(this, "/PublishMsg", {});
                                          });
                                      }
                                  }}

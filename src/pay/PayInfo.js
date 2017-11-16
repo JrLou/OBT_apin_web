@@ -133,7 +133,10 @@ class Time extends Component{
       let v = this.state.time;
       let hh = Math.floor(v/3600);
       let mm = Math.floor(v%3600/60);
-      let show =(hh?(hh+":"):"") + mm+":" +v%60;
+      let ss = v%60;
+      let mmm = mm<10?("0"+mm):mm;
+      let sss = ss<10?("0"+ss):ss;
+      let show =(hh?(hh+":"):"") + mmm+":" +sss;
       return (
           <span>{show}</span>
       );

@@ -2,13 +2,13 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-01 14:09:48 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-15 12:20:38
+ * @Last Modified time: 2017-11-16 17:35:22
  */
 
 import React, { Component } from 'react';
 import { Modal } from 'antd';
 import Forms from './Forms';
-import { log } from 'debug';
+import { CookieHelp } from '../../../../../lib/utils/index';
 
 class SignUpView extends Component {
     constructor(props) {
@@ -36,8 +36,11 @@ class SignUpView extends Component {
                 style={{ width: '100px' }}
                 prefixCls="my-ant-modal"
                 afterClose={() => {
-                    if (this.loginCallback && callback && typeof (callback) === 'function')
-                        return callback();
+                    const user = CookieHelp.getUserInfo();
+                    const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
+                    if (user && user.Authorization && isLogin && callback && (typeof(callback) == 'function')) {
+                        callback();
+                    }
                 }}
             >
                 <Forms

@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-08 13:36:12 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-16 11:40:25
+ * @Last Modified time: 2017-11-16 22:25:03
  */
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
 import md5 from 'md5';
@@ -66,7 +66,7 @@ export function validateLoginPromise(entry) {
     let params = {
         account: '', mobile: '', picCode: ''
     };
-    params = Object.assign({},params,entry);
+    params = Object.assign({}, params, entry);
     return new Promise((resolve, reject) => {
         HttpTool.request(HttpTool.typeEnum.POST, "/bm/memberapi/v1.1/verifyInfo", (code, message, json, option) => {
             resolve(message);
@@ -80,7 +80,7 @@ export function validateLoginPromise(entry) {
  * 使用默认账号登录
  * @param {*} callback 
  */
-export function defaultLoginPromise(type,callback,failCallback) {
+export function defaultLoginPromise(type, callback, failCallback) {
     getLoginCodePromise(defaultAccount, type).then((data) =>
         loginPromise(defaultAccount, defaultPwd, data)
     ).then((data) => {
@@ -99,10 +99,20 @@ export function defaultLoginPromise(type,callback,failCallback) {
 export function AccoutInfoPromise(callback) {
     return new Promise((resolve, reject) => {
         HttpTool.request(HttpTool.typeEnum.POST, "/bm/memberapi/v1.1/memberInfo", (code, message, json, option) => {
-            CookieHelp.saveCookieInfo("phone",json.mobile);
+            CookieHelp.saveCookieInfo("phone", json.mobile);
             resolve({ json, option });
         }, (code, message) => {
-            reject(message);
+            let pathname = window.location.pathname;
+            // 未登录并且不在首页，则跳转到首页
+            if (code == -421 || code == -422 || code == -403 || code == -400) {
+                CookieHelp.clearCookie();
+                if (pathname !== '/' && pathname !== '/Search') {
+                    pathname = '/';
+                }
+                window.app_open(this, pathname, null, "self");
+
+                reject(message);
+            }
         }, {});
     });
 }
