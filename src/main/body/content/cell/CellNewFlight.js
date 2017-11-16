@@ -31,14 +31,14 @@ class CellNewFlight extends Component {
             {isNoShowRule?null:<div className={css.right}>
                 <div className={css.ruleDiv}>
                     <Tooltip placement="bottom" title={<div>
-                        <div className={css.rule}>
+                        {(dataSource.weightLimit&&dataSource.weightLimit!=0)?<div className={css.rule}>
                             {"免费托运: "+dataSource.freeBag+"件"}
-                        </div>
-                        <div className={css.rule}>
+                        </div>:null}
+                        {(dataSource.freeBag&&dataSource.freeBag!=0)?<div className={css.rule}>
                             {"每件重量上限: "}
                             <span style={{color:"#ff6600",fontSize:"14px"}}>{dataSource.weightLimit+"kg"}</span>
-                        </div>
-                        {!dataSource.weightLimit&&!dataSource.freeBag?<div className={css.rule}>
+                        </div>:null}
+                        {(!dataSource.weightLimit||dataSource.weightLimit==0)&&(!dataSource.freeBag||dataSource.freeBag==0)?<div className={css.rule}>
                             {"暂无行李规则"}
                         </div>:null}
                     </div>}>行李规则
