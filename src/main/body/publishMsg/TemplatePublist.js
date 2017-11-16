@@ -36,6 +36,7 @@ class page extends Component {
             this.marginBottomFormItem = this.props.styleObj.marginBottomFormItem;
             this.postHeight = this.props.styleObj.postHeight;
         }
+       
     }
     check() {//拼接数据
         this.props.form.validateFields((err, values) => {
@@ -126,7 +127,7 @@ class page extends Component {
                         </Row>
                     }
 
-                    <Row style={{ marginBottom: this.marginBottomRow }}>
+                    <Row style={{ marginBottom: this.marginBottomRow , fontSize: "14px"}}>
                         <Col span={10} >出发城市：</Col>
                         <Col span={10} offset={3}>目的城市：</Col>
                     </Row>
@@ -168,7 +169,7 @@ class page extends Component {
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row style={{ marginBottom: this.marginBottomRow }}>
+                    <Row style={{ marginBottom: this.marginBottomRow , fontSize: "14px"}}>
                         <Col span={10} >出发日期：</Col>
                         {this.state.lineType == 2 &&
                             <Col span={10} offset={3}>返回日期：</Col>
@@ -226,16 +227,16 @@ class page extends Component {
                         }
                         {this.state.lineType == 3 &&
                             <Col span={11} offset={2}>
-                                <Button type="primary" style={{ float: "right" }} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum == 2} onClick={() => this.lineDel()}>删除</Button>
+                                <Button type="primary" style={{ float: "right",borderRadius:"2px",width:60,height:36 }} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum == 2} onClick={() => this.lineDel()}>删除</Button>
                             </Col>
                         }
                     </Row>
                     {this.state.lineType == 3 && this.state.lineNum == (i + 1) && this.state.lineNum <= 5 &&
-                        <Row style={{ marginBottom: this.marginBottomRow, color: " #29A6FF" }}>
-                            <Col span={4} offset={9} style={{ width: "66px" }}>
+                        <Row style={{ marginBottom: this.marginBottomRow, color: "#2FA9FF",fontSize:"16px" }}>
+                            <Col span={4} offset={9} style={{ width: "76px" }}>
                                 <div style={{ position: "relative", cursor: "pointer" }} onClick={() => this.lineAdd()}>
                                     <Icon type="plus-circle-o" />
-                                    <span style={{ float: "right" }}>加一程</span>
+                                    <span style={{ float: "right",fontSize:"16px",marginLeft:10}}>加一程</span>
                                 </div>
                             </Col>
                         </Row>
@@ -246,10 +247,12 @@ class page extends Component {
         return div;
     }
 
-
+  
+    
 
     handleConfirmNum(str, e) {//成人人数和儿童人数判断
         let { childCount, adultCount } = this.state;
+        let {setFieldsValue}=this.props.form;
         if (str == "adultCount") {
             adultCount = e.target.value;
         } else if (str == "childCount") {
@@ -268,11 +271,11 @@ class page extends Component {
         return (
             <div className={less.content} ref={"test"}>
                 <div style={{ margin: "20px 0px" }}>
-                    <hr size='1' style={{ color: "#CBD3E5", borderStyle: "dotted" }}></hr>
+                    <div style={{width:"518px",height:"0px",border:"1px dashed #CBD3E5"}}></div>
                 </div>
                 <div className={less.innerbox} style={{ overflow: "auto", height: this.postHeight, overflowX: "hidden" }}>
                     {/**多选择*/}
-                    <Row style={{ marginBottom: this.marginBottomRow }}>
+                    <Row style={{ marginBottom: this.marginBottomRow , fontSize: "14px"}}>
                         <Col span={4}>航程类型：</Col>
                     </Row>
                     <Row >
@@ -280,7 +283,7 @@ class page extends Component {
                             {getFieldDecorator('flightType', {//lineType
                                 initialValue: this.state.lineType,
                             })(
-                                <RadioGroup onChange={(e) => this.lineTypeonChange(e)}>
+                                <RadioGroup style={{ fontSize: "12px"}} onChange={(e) => this.lineTypeonChange(e)}>
                                     <Radio value={1}>单程</Radio>
                                     <Radio value={2}>往返</Radio>
                                     {!this.state.isMult && 
@@ -293,7 +296,7 @@ class page extends Component {
                     {/*航线+时间*/}
                     {this.lineDetails()}
                     {/**出行人数*/}
-                    <Row style={{ marginBottom: this.marginBottomRow }}>
+                    <Row style={{ marginBottom: this.marginBottomRow , fontSize: "14px"}}>
                         <Col span={4}>出行人数：</Col>
                     </Row>
                     <Row >
@@ -304,14 +307,15 @@ class page extends Component {
                                         required: true,
                                         message: '请输入成人人数',
                                     }, {
-                                        pattern: /^[1-9]*$/,
+                                        pattern: /^[1-9]{1}\d*$/,
                                         message: '请输入正确的数字'
-                                    }],
+                                    }
+                                ],
                                     initialValue: this.state.adultCount,
                                 })(
                                     <div style={{ position: "relative" }}>
-                                        <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" }}>成人</span>
-                                        <Input style={{ width: 207, height: 34, borderRadius: "2px" }} defaultValue={this.state.adultCount} onChange={(e) => this.handleConfirmNum("adultCount", e)} maxLength="4" />
+                                        <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px"}}>成人</span>
+                                        <Input style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.state.adultCount} onChange={(e) => this.handleConfirmNum("adultCount", e)} maxLength="4" />
                                     </div>
                                     )}
                             </FormItem>
@@ -326,18 +330,18 @@ class page extends Component {
                                     initialValue: this.state.childCount,
                                 })(
                                     <div style={{ position: "relative" }}>
-                                        <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" }}>儿童(2～12周岁)</span>
-                                        <Input style={{ width: 207, height: 34, borderRadius: "2px" }} defaultValue={this.state.childCount} maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)} />
+                                        <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px"}}>儿童(2～12周岁)</span>
+                                        <Input style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.state.childCount} maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)} />
                                     </div>
                                     )}
                             </FormItem>
                         </Col>
                         <Col span={3}>
-                            <div style={{ height: 32, lineHeight: "32px", float: "right" }}>共:{(this.state.adultCount == "" || !/^\d*$/.test(this.state.adultCount) ? 0 : parseInt(this.state.adultCount)) + (this.state.childCount == "" || !/^\d*$/.test(this.state.childCount) ? 0 : parseInt(this.state.childCount))}人</div>
+                            <div style={{ height: 32, lineHeight: "32px", float: "right",fontSize: "14px" }}>共:{(this.state.adultCount == "" || !/^\d*$/.test(this.state.adultCount) ? 0 : parseInt(this.state.adultCount)) + (this.state.childCount == "" || !/^\d*$/.test(this.state.childCount) ? 0 : parseInt(this.state.childCount))}人</div>
                         </Col>
                     </Row>
 
-                    <Row style={{ marginBottom: this.marginBottomRow }}>
+                    <Row style={{ marginBottom: this.marginBottomRow, fontSize: "14px" }}>
                         <Col span={4}>备注(选填)：</Col>
                     </Row>
                     <Row>
@@ -347,13 +351,13 @@ class page extends Component {
                                     rules: [],
                                     initialValue: this.state.remark,
                                 })(
-                                    <Input type="textarea" maxLength="100" style={{ height: 180, resize: "none", borderRadius: 2 }} placeholder="如：价格、时间等" />
+                                    <Input type="textarea" maxLength="100" style={{ height: 180, resize: "none", borderRadius: 2,fontSize:"16px" }} placeholder="如：价格、时间等" />
                                     )}
                             </FormItem>
 
                         </Col>
                     </Row>
-                    <Row style={{ marginBottom: this.marginBottomRow }}>
+                    <Row style={{ marginBottom: this.marginBottomRow , fontSize: "14px"}}>
                         <Col span={4}>联系电话：</Col>
                     </Row>
                     <Row>
@@ -370,7 +374,7 @@ class page extends Component {
                                     initialValue: phoneCookie,
                                 })(
                                     <div style={{ width: "100%" }}>
-                                        <Input style={{ width: 240, height: 36, borderRadius: "2px" }} defaultValue={phoneCookie} placeholder="输入可联系的手机号码" />
+                                        <Input style={{ width: 240, height: 36, borderRadius: "2px",fontSize:"16px" }} defaultValue={phoneCookie} placeholder="输入可联系的手机号码" />
                                         {/* <span style={{ fontSize: "22px", color: "red", marginLeft: 10 }}>*</span> */}
                                     </div>
                                     )}

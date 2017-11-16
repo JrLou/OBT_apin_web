@@ -296,6 +296,7 @@ class OrderFormDetail extends Component{
     getTitleData(data){
         let titleData = {
             deadLine:data.expiredTime,
+            ticketDate:data.ticketDate,
             reason:data.failReason,
         };
         return titleData;

@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-15 22:20:06
+ * @Last Modified time: 2017-11-16 13:27:40
  */
 
 import React, { Component } from 'react';
@@ -236,6 +236,7 @@ class MsgLoginForm extends React.Component {
 
         getLoginCodePromise(account, 1).then((data)=>{
             this.data = data;
+            this.refs.code.autoTime(60);
         }).catch((msg) => {
             message.error(msg);
         });

@@ -25,6 +25,10 @@ class SearchLayout extends Component {
         this.img_login_check = require("../../../../images/check.png");
         this.img_login_uncheck = require("../../../../images/uncheck.png");
     }
+
+    setLoading(loading){
+
+    }
     componentDidMount() {
         this.loadDefaultData();
         this.loadSearchData();

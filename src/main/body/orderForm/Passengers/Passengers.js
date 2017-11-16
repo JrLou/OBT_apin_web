@@ -71,6 +71,9 @@ class PassengerMsg extends Component{
             },{
                 title:'乘机人',
                 dataIndex:'name',
+                render:(text,record)=>{
+                    return (<div style={{maxWidth:'150px'}}>{text}</div>);
+                }
             },{
                 title:'证件类型',
                 dataIndex:'credType',
@@ -89,6 +92,9 @@ class PassengerMsg extends Component{
             },{
                 title:'证件号',
                 dataIndex:'credNumber',
+                render:(text,record)=>{
+                    return (<div style={{maxWidth:'350px'}}>{text}</div>);
+                }
             },{
                 title:'性别',
                 dataIndex:'gender',
@@ -104,12 +110,21 @@ class PassengerMsg extends Component{
             },{
                 title:'出生日期',
                 dataIndex:'birthday',
+                render:(text,record)=>{
+                    return (<div style={{maxWidth:'200px'}}>{text}</div>);
+                }
             },{
                 title:'国籍',
                 dataIndex:'nation',
+                render:(text,record)=>{
+                    return (<div style={{maxWidth:'150px'}}>{text}</div>);
+                }
             },{
                 title:'签发地',
                 dataIndex:'issuePlace',
+                render:(text,record)=>{
+                    return (<div style={{maxWidth:'150px'}}>{text}</div>);
+                }
             },{
                 title:(this.state.isPassed?<div>票号</div>:<div>操作</div>),
                 dataIndex:'operation',
