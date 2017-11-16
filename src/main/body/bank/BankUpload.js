@@ -107,6 +107,7 @@ class BankUpload extends Component {
                   payment: data.payment,
                   errorMsg: "",
                   orderId: urlData.orderId,
+                  recordId: urlData.id,
                   loading: false,
                   inputData: _inputData,
                   fileList: _fileList,
@@ -285,7 +286,7 @@ class BankUpload extends Component {
    isUserChange(param) {
       let isChange = false;
       for (let k in param) {
-         if (k == "orderId") {
+         if (k == "orderId" || k== "recordId") {
             continue;
          }
          if (k == "amount") {
@@ -314,6 +315,7 @@ class BankUpload extends Component {
 
       data.showType = "paying";
       data.orderId = this.state.orderId;
+      data.recordId = this.state.recordId;
       let param = {
          account: data.account,
          accountName: data.accountName,
@@ -322,7 +324,8 @@ class BankUpload extends Component {
          orderId: data.orderId,
          payType: data.payType,
          payment: data.payment,
-         voucherUrl: data.voucherUrl
+         voucherUrl: data.voucherUrl,
+         recordId: data.recordId//当不是is2modify时，这个位undefined
       };
       //判断用户是否有更改
       if (!this.isUserChange(param)) {
@@ -330,33 +333,42 @@ class BankUpload extends Component {
          return;
       }
 
+      let is2modify = this.state.recordId ? true : false;
+
+      let bcFun = (code, msg, data)=>{
+         if (code > 0) {
+            //支付成功
+            this.panel.show(true, {
+               showType: "success",
+               content: "凭证上传成功，审核中",
+            }, () => {
+               //
+            });
+         } else {
+            //支付失败
+            this.panel.show(true, {
+               showType: "error",
+               content: <div>
+                  <p>{msg}</p>
+                  <p>如有疑问，请&nbsp;{this.getConnetUs()}</p>
+               </div>,
+            }, () => {
+               //
+            });
+         }
+      };
+
       this.panel.show(true, {
          content: "正在提交...",
          // title: "支付信息",
          showType: "verpay"
       }, () => {
-         this.loadSubmit(param, (code, msg, data) => {
-            if (code > 0) {
-               //支付成功
-               this.panel.show(true, {
-                  showType: "success",
-                  content: "凭证上传成功，审核中",
-               }, () => {
-                  //
-               });
-            } else {
-               //支付失败
-               this.panel.show(true, {
-                  showType: "error",
-                  content: <div>
-                     <p>{msg}</p>
-                     <p>如有疑问，请&nbsp;{this.getConnetUs()}</p>
-                  </div>,
-               }, () => {
-                  //
-               });
-            }
-         });
+         if(is2modify){
+            //
+            this.loadSubmitAgain(param, bcFun);
+         }else{
+            this.loadSubmit(param, bcFun);
+         }
       });
    }
 
@@ -370,6 +382,17 @@ class BankUpload extends Component {
 
       HttpTool.request(HttpTool.typeEnum.POST,
          "/bo/orderapi/v1.0/orders/pay/offline",
+         (code, msg, json, option) => {
+            cb(code, msg, json);
+         }, (code, msg, option) => {
+            cb(code, msg);
+         }, param);
+   }
+
+   //提交修改上传
+   loadSubmitAgain(param, cb){
+      HttpTool.request(HttpTool.typeEnum.POST,
+         "/bo/orderapi/v1.0/orders/pay/reOffine",
          (code, msg, json, option) => {
             cb(code, msg, json);
          }, (code, msg, option) => {

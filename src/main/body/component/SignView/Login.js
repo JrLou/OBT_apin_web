@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-16 13:27:40
+ * @Last Modified time: 2017-11-16 19:16:02
  */
 
 import React, { Component } from 'react';
@@ -187,7 +187,6 @@ class MsgLoginForm extends React.Component {
                         htmlType="submit"
                         className={css.btnSubmit}
                         disabled={hasErrors(getFieldsError())}
-                        onClick={this.props.onOK}
                     >登录</Button>
                 </FormItem>
             </Form>
@@ -254,12 +253,9 @@ class MsgLoginForm extends React.Component {
                     // IS_LOGIN判断是否真的登录
                     CookieHelp.saveCookieInfo('IS_LOGIN', true);
                     this.props.setLogin();
-                    if (this.props.callback && typeof (this.props.callback) === 'function')
-                        this.props.callback(1);
                     this.props.onOK();
-                }).catch((error) => {
-                    message.error(error);
-                    this.setState({ loading: false });
+                }).catch((msg) => {
+                    message.error(msg);
                 });
             }
         });

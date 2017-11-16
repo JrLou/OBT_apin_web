@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-16 11:59:07
+ * @Last Modified time: 2017-11-16 22:25:21
  */
 
 import React, { Component } from 'react';
@@ -64,7 +64,7 @@ class SignInForm extends Component {
                         {
                             validator: (rule, value, callback) => {
                                 this.getCode(() => {
-                                    validateLoginPromise({ account: value })
+                                    validateLoginPromise({ account: value, type: 1 })
                                         .then((data) => callback())
                                         .catch((data) => callback(data));
                                 });
@@ -88,7 +88,7 @@ class SignInForm extends Component {
                         {
                             validator: (rule, value, callback) => {
                                 this.getCode(() => {
-                                    validateLoginPromise({ mobile: value })
+                                    validateLoginPromise({ mobile: value, type: 1 })
                                         .then((data) => callback())
                                         .catch((data) => callback(data));
                                 });
@@ -112,7 +112,7 @@ class SignInForm extends Component {
                             validator: (rule, value, callback) => {
                                 const mobile = getFieldValue('mobile');
                                 this.getCode(() => {
-                                    validateLoginPromise({ picCode: value, mobile })
+                                    validateLoginPromise({ picCode: value, mobile, type: 1 })
                                         .then((data) => callback())
                                         .catch((data) => callback(data));
                                 });
@@ -155,7 +155,7 @@ class SignInForm extends Component {
                     validateStatus={bdChargerError ? 'error' : ''}
                     help={bdChargerError || ''}
                     label="市场经理姓名"
-                > 
+                >
                     {getFieldDecorator('bdCharger')(
                         <Input prefixCls="my-ant-input" placeholder="请务必准确输入" />
                     )}
@@ -217,8 +217,6 @@ class SignInForm extends Component {
         const mobile = getFieldValue('mobile');
         const picCode = getFieldValue('picCode') || '';
         HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
-
-
             // 测试
             if (json && json.length > 4) {
                 this.setState({
@@ -247,7 +245,7 @@ class SignInForm extends Component {
         if (user) {
             callback();
         } else {
-            defaultLoginPromise(0, callback,()=>{
+            defaultLoginPromise(0, callback, () => {
             });
         }
     }

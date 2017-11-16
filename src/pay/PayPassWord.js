@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import less from './UnionPayAdd.less';
+import less from './PayPassWord.less';
 import {HttpTool} from "../../lib/utils/index.js";
 import {Button, Form, Input, Icon, Spin,message, Modal, Radio} from 'antd';
 import Api from './Api.js';
@@ -41,7 +41,7 @@ class PayPassWord extends Component {
       return (
          <Modal
             visible={true}
-            title={"验证身份信息"}
+            title={"为了确定您的身份，请输入验证码"}
             style={{
                position: "absolute",
                margin: "auto",
@@ -82,7 +82,7 @@ class PayPassWord extends Component {
 
                      }}
                  >
-                    付款
+                    确认付款
                  </Button>
            </div>
          </Modal>
@@ -157,28 +157,13 @@ class InputLayout extends Component {
 
         return (
             <div>
-                <div style={{lineHeight: "40px"}}>
-                    <label htmlFor="mobileIpt" className={less.label}>账户手机号：</label>
-                    <Input
-                        id="mobileIpt"
-                        size="large"
-                        disabled={true}
-                        defaultValue={this.state.moblie}
-                        onChange={(e) => {
-                            let v = e.target.value;
-                            this.setState({
-                                moblie: v
-                            }, () => {
+                <div className={less.lineOne}>
+                    <label htmlFor="mobileIpt" className={less.label}>绑定手机：</label>
 
-                            });
-
-                        }}
-                        style={{width: 130}}
-                        prefix={<Icon type="mobile" style={{fontSize: 13}}/>} placeholder={"请输入账户手机号"}
-                    />
+                    {this.state.moblie.substring(0,3) + "****" + this.state.moblie.substring(7)}
                 </div>
-                <div style={{lineHeight: "40px"}}>
-                    <label htmlFor="codeIpt" className={less.label}>短信验证码：</label>
+                <div className={less.lineOne}>
+                    <label htmlFor="codeIpt" className={less.label}>验证码：</label>
                     <Input
                         id="codeIpt"
                         size="large"
@@ -190,7 +175,7 @@ class InputLayout extends Component {
                         }}
                         style={{width: 130, marginRight:"15px"}}
                         prefix={<Icon type="key" style={{fontSize: 13}}/>}
-                        placeholder={"请输入短信验证码"}
+                        placeholder={"请输入验证码"}
                     />
                     <Button
                         size={"large"}
@@ -208,12 +193,14 @@ class InputLayout extends Component {
                                 phone:this.state.moblie,
                             }, (code, msg, data) => {
                                 if(code>0){
-                                    message.success(msg);
+                                    // message.success(msg);
+                                   this.setState({getCodeTips: "succ"});
                                 }else{
                                     this.setState({
-                                        loading: false
+                                        loading: false,
+                                       getCodeTips: msg
                                     });
-                                    message.error(msg);
+                                    // message.error(msg);
                                     return;
                                 }
 
@@ -224,7 +211,7 @@ class InputLayout extends Component {
                                     if (succ) {
                                         this.autoTime(this.defaultTime);
                                     } else {
-                                        message.error(msg);
+                                        // message.error(msg);
                                     }
                                 });
 
@@ -235,6 +222,16 @@ class InputLayout extends Component {
 
                     </Button>
                 </div>
+               <div className={less.helpBlock + " " + (this.state.getCodeTips === "succ" ?
+                  less.codeSucc
+                  :
+                  (this.state.getCodeTips == undefined || this.state.loading ? less.codeUndefined : less.codeErr))}>
+                  {this.state.getCodeTips === "succ" ?
+                     <span><Icon type="check-circle-o" />&nbsp;验证码发送成功，请注意查收</span>
+                     :
+                     <span><Icon type="close-circle-o" />&nbsp;验证码发送失败，{this.state.getCodeTips}</span>
+                  }
+               </div>
 
             </div>
         );

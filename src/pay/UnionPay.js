@@ -175,13 +175,8 @@ class UnionPay extends Component {
          <div className={less.loading}>
             <img className={less.nocardImg} src={require("./images/pay_noCard.png")} alt="没有卡列表"/>
             {this.state.error ? <div className={less.loading}> {"服务器繁忙:" + this.state.error}</div> : null}
-            <div>还没有开通卡?
-               <a onClick={() => {
-                  this.openAddCard();
-               }}>点击开通</a>
-            </div>
+            <div>您尚未添加银行卡!</div>
             <div>
-
                <Button
                   style={{height: 60, width: 200, fontSize: 16, marginBottom: 12, marginTop: 15}}
                   type="primary"
@@ -299,11 +294,12 @@ class UnionPay extends Component {
                }
             </div>
             <UnionPayAdd
+                wh={this.props.wh}
                 orderId={this.props.orderId}
-               onAction={(data,apinPanel) => {
+               onAction={(data) => {
                   //打开开通
                   if (this.props.onAction) {
-                     this.props.onAction("unionopen", data,null,apinPanel);
+                     this.props.onAction("unionopen", data,null);
                   }
 
                }}
@@ -479,18 +475,16 @@ class InputLayout extends Component {
 
                </Button>
             </div>
-            <div className={less.helpBlock + " " + (this.state.getCodeTips === "succ" ? less.codeSucc : less.codeErr)}>
-               {this.state.getCodeTips == undefined || this.state.loading ?
-                  null
+            <div className={less.helpBlock + " " + (this.state.getCodeTips === "succ" ?
+               less.codeSucc
+               :
+               (this.state.getCodeTips == undefined || this.state.loading ? less.codeUndefined : less.codeErr))}>
+               {this.state.getCodeTips === "succ" ?
+                  <span><Icon type="check-circle-o" />&nbsp;验证码发送成功，请注意查收</span>
                   :
-                  (this.state.getCodeTips === "succ" ?
-                     <span><Icon type="check-circle-o" />&nbsp;验证码发送成功，请注意查收</span>
-                     :
-                     <span><Icon type="close-circle-o" />&nbsp;验证码发送失败，{this.state.getCodeTips}</span>
-                  )
+                  <span><Icon type="close-circle-o" />&nbsp;验证码发送失败，{this.state.getCodeTips}</span>
                }
             </div>
-
          </div>
       );
    }
