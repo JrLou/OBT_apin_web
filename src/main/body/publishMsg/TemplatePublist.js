@@ -71,7 +71,10 @@ class page extends Component {
                 //回调数据
                 if (this.props.callBack) {
                     this.props.callBack(values);
+                    //将COOKIE 清空     
+                    CookieHelp.saveCookieInfo("publishMsgCookie","");               
                 }
+
             }
         });
     }
@@ -179,7 +182,7 @@ class page extends Component {
                                         required: true,
                                         message: '请选择时间',
                                     }],
-                                    initialValue: this.state.listData[i] == undefined ? "" :(this.state.listData[i].fromDateTime==undefined?"": moment(this.state.listData[i].fromDateTime))
+                                    initialValue: this.state.listData[i] == undefined ? "" :(this.state.listData[i].fromDateTime==undefined || this.state.listData[i].fromDateTime==""?"": moment(this.state.listData[i].fromDateTime))
                                 })(
                                     <DatePicker getCalendarContainer={()=>{
                                         return this.refs.test;
@@ -204,7 +207,7 @@ class page extends Component {
                                             required: true,
                                             message: '请选择时间',
                                         }],
-                                        initialValue: this.state.listData[i] == undefined ? "" :(this.state.listData[i].toDateTime==undefined?"": moment(this.state.listData[i].toDateTime))
+                                        initialValue: this.state.listData[i] == undefined ? "" :(this.state.listData[i].toDateTime==undefined || this.state.listData[i].toDateTime==""?"": moment(this.state.listData[i].toDateTime))
                                     })(
                                         <DatePicker getCalendarContainer={()=>{
                                             return this.refs.test;
