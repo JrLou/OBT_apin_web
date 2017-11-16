@@ -95,7 +95,7 @@ class OrderFormList extends Component{
 
     componentDidMount(){
         //查询订单列表数据
-        this.loadData();
+        this.loadData(1);
     }
 
     /**
@@ -287,6 +287,7 @@ class OrderFormList extends Component{
                         <Input
                             value={this.state.cityDep}
                             className={css.inputStyle}
+                            maxLength={18}
                             placeholder={'请输入'}
                             onChange={(obj)=>{
                                 let value = removeSpace(obj.target.value);
@@ -299,6 +300,7 @@ class OrderFormList extends Component{
                         <Input
                             value={this.state.cityArr}
                             className={css.inputStyle}
+                            maxLength={18}
                             placeholder={'请输入'}
                             onChange={(obj)=>{
                                 let value = removeSpace(obj.target.value);
@@ -439,9 +441,7 @@ class OrderFormList extends Component{
             return;
         }
         let currentNum = pagination.current;
-        this.setState({
-            page:currentNum,
-        },this.loadData);
+        this.loadData(currentNum);
     }
 
     /**
@@ -451,23 +451,26 @@ class OrderFormList extends Component{
         if(this.isLoading()){
             return;
         }
-        this.loadData();
+        this.loadData(1);
     }
 
     /**
      * 请求数据
      * @param searchParames
      */
-    loadData(){
+    loadData(currentNum){
+        let page = currentNum;
         let parames = this.getSearchParames();
+        parames.page = page;
 
         let successCB = (code, msg, json, option)=>{
             //转换数据，更改状态机
             let newData = this.transformData(json);
             this.setLoading(false);
             this.setState({
+                page:page,
                 dataSource:newData,
-                total:parseInt(option.option.total?option.option.total:0),
+                total:parseInt(option.option&&option.option.total?option.option.total:0),
             });
         };
 
@@ -495,7 +498,6 @@ class OrderFormList extends Component{
             cityDep:state.cityDep,
             cityArr:state.cityArr,
             flightType:state.flightType,
-            page:state.page,
             pageSize:state.pageSize,
         };
         let dateDepStart = state.startDate?getDateFormat(state.startDate.valueOf()):'',
