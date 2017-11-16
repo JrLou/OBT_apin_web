@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {InputNumber} from 'antd';
+import {Input} from 'antd';
 import less from './IntegralInfo.less';
 
 class IntegralInfo extends Component {
@@ -42,39 +42,17 @@ class IntegralInfo extends Component {
                      </div>
                      <div className={less.integralInfo_middle_line2}>
                         <span className={less.integralInfo_middle_line2_light}>请输入您要抵用的积分:</span>
-                        <InputNumber
-                           defaultValue={integral.use === 0 ? "": integral.use}
-                           min={0}
-                           step={1}
+                        <Input
+                           value={integral.use}
                            size="large"
-                           formatter={(value) => {
-                           //
-                              console.log(value);
-                              if(!value){
-                                  value = 0;
-                              }
-                               value = Number(value);
-                              if(value> maxValue){
-                                 value = maxValue;
-                              }
-                              return value;
-                           }}
-                           //parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                           placeholder="1000积分/每元"
-                           onChange={(value) => {
-                               value = Number(value);
-                               if(value> maxValue){
-                                   value = maxValue;
-                               }
-                              console.log("eL:"+value);
-                              // let v = Number(value)*1000;// Number(e.target.value);
+                           onChange={(e) => {
+                              let value = +e.target.value;
                               if (Number.isInteger(value)) {
-                                  integral.use = value;
-                                 this.setState({
-                                    upData: this.state.upData + 1
-                                 });
-                              } else {
-                                 //请输入数字
+                                 if(value > maxValue){
+                                    value = maxValue;
+                                 }
+                                 integral.use = value;
+                                 this.setState({upData: this.state.upData + 1});
                               }
                               if (this.props.onPriceChange) {
                                  this.props.onPriceChange(integral.use);

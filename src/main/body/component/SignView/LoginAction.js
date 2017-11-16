@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-08 13:36:12 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-16 11:40:25
+ * @Last Modified time: 2017-11-16 19:21:38
  */
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
 import md5 from 'md5';
@@ -71,6 +71,9 @@ export function validateLoginPromise(entry) {
         HttpTool.request(HttpTool.typeEnum.POST, "/bm/memberapi/v1.1/verifyInfo", (code, message, json, option) => {
             resolve(message);
         }, (code, message) => {
+            if (code == 421 || code == 422 || code == 403) {
+                CookieHelp.clearCookie();
+            }
             reject(message);
         }, params);
     });

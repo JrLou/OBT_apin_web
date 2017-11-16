@@ -33,8 +33,9 @@
     transition: background .3s ease;
     text-align: left;
     color: @heading-color;
-    height: 38px;
-    line-height: 38px;
+    line-height: 40px;
+    font-size: @font_size_cell;
+    color: @font-color;
 
     &[colspan] {
       text-align: center;
@@ -72,6 +73,8 @@
     border-bottom: @border-width-base @border-style-base @border-color-split;
     transition: all .3s;
     padding: 17px 8px;
+    font-size: 12px;
+    color: #333;
   }
 
   &-thead > tr,
