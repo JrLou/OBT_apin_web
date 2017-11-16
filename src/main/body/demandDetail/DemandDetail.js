@@ -208,7 +208,15 @@ class page extends Component {
                                     }
 
                                 } else {
-                                    window.app_open(this, "/PublishMsg", {});
+                                    window.app_open(this, "/PublishMsg", {
+                                        flightType:data.flightType,
+                                        cityArr:data.cityArr,
+                                        cityDep:data.cityDep,
+                                        adultCount:data.adultCount,
+                                        childCount:data.childCount,
+                                        dataDep:data.dataDep,
+                                        dataArr:data.dataArr,
+                                    });
                                 }
                             }}
 
