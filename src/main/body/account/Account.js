@@ -324,7 +324,7 @@ class AccountForm extends Component {
                     this.setState({
                         isView: true
                     });
-                }, (code,msg) => {
+                }, (code, msg) => {
                     message.error(msg);
                 }, {
                         address: saveAddr,
@@ -399,6 +399,10 @@ class AccountForm extends Component {
      * 设置为修改模式
      */
     updateInfo() {
+        const { province } = this.state;
+        if (province && province.length == 0) {
+            this.getArea(0, 'province');
+        }
         this.setState({
             isView: false
         }, () => {
