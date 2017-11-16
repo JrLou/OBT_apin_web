@@ -336,15 +336,17 @@ class page extends Component {
                                        const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
                                        if (isLogin){
                                            window.app_open(this.props.obj, "/FlightDetail", {
+                                               type:1,
                                                step:1,
                                                data:obj
                                            },"self");
                                        }else {
                                            window.modal.showModal(0,()=>{
                                                window.app_open(this.props.obj, "/FlightDetail", {
+                                                   type:1,
                                                    step:1,
                                                    data:obj
-                                               },"new");
+                                               },"self");
                                            });
                                        }
                                    }}/>);

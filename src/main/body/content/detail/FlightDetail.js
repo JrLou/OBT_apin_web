@@ -16,6 +16,14 @@ import MyModalRequire from "./detailComp/MyModalRequire.js";
 
 import MyInput from '../../component/MyInput.js';
 
+
+import Scroll from 'react-scroll/modules/index'; // Imports all Mixins
+var Link = Scroll.Link;
+var Events = Scroll.Events;
+var scroll = Scroll.animateScroll;
+var scrollSpy = Scroll.scrollSpy;
+
+
 const FormItem = Form.Item;
 class page extends Component {
     constructor(props) {
@@ -30,7 +38,12 @@ class page extends Component {
             upData:0,
             adultNum:1,
             childNum:0,
+            isPosition:false,
         };
+        this.scrollTo = this.scrollTo.bind(this);
+    }
+    scrollTo(y) {
+        scroll.scrollTo(y);
     }
     componentWillReceiveProps(nextProps) {
 
@@ -44,6 +57,41 @@ class page extends Component {
 
     componentDidMount() {
         this.loadData();
+        Events.scrollEvent.register("begin", function () {
+            console.log("begin", arguments);
+        });
+        Events.scrollEvent.register("end", function () {
+            console.log("end", arguments);
+        });
+        scrollSpy.update();
+
+        window.addEventListener('scroll', (e)=>{this.handleScroll();});
+    }
+    componentWillUnmount() {
+        Events.scrollEvent.remove("begin");
+        Events.scrollEvent.remove("end");
+
+        window.removeEventListener('scroll', (e)=>{this.handleScroll();});
+    }
+
+    handleScroll() {
+        let y = this.mainDiv?this.mainDiv.offsetTop:0;
+        log(this.mainDiv.offsetHeight);
+        log(document.body.scrollHeight );
+        log(document.body.offsetHeight );
+
+        let isSeeHeight = document.body.offsetHeight;
+        let mainHeight = this.mainDiv.offsetHeight;
+        let mainTop = this.mainDiv.offsetTop;
+
+
+        this.setState({
+            isPosition:isSeeHeight>mainHeight+mainTop
+        });
+        // let isBigZero = y-150;
+        // if (isBigZero>0){
+        //     this.scrollTo(isBigZero);
+        // }
     }
 
     /**
@@ -197,7 +245,8 @@ class page extends Component {
         const mobileError = getFieldError('mobile');
         const customerNameError = getFieldError('customerName');
         let div = (
-            <div className={css.main}>
+            <div className={css.main}
+                 ref={(div)=>this.mainDiv = div}>
                 {this.data?<div className={css.refContent}>
                     <div className={css.table}>
                         <div className={css.line_bg}>
@@ -297,7 +346,7 @@ class page extends Component {
                                 <div className={css.i_subtitle}>
                                     <span style={{fontSize:"12px"}}>{"¥"}</span>
                                     {this.childPrice+".00"}
-                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div className={css.refOrderCellItem}>
@@ -366,6 +415,7 @@ class page extends Component {
                 </div>
 
                 <PayBottom
+                    isPosition={this.state.isPosition}
                     param={{
                         orderPrice:depositAmount,
                         adultPrice:this.adultPrice,

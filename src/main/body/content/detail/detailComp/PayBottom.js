@@ -21,11 +21,11 @@ class PayBottom extends Component {
         //     childNum:this.childNum,
         //     adultNum:this.adultNum,
         //     totalPrice:this.totalPrice,
-        let {param,isPay,callBack} = this.props;
+        let {param,isPay,isPosition,callBack} = this.props;
         let str = param?"(成人¥"+param.adultPrice+"*"+(param.adultNum?param.adultNum:0)+(param.childNum!=0?("+"+"儿童¥" +param.childPrice+
                 "*"+param.childNum):"")+"=价格(含税)"+"¥"+param.totalPrice+")":"";
 
-        return (<div className={css.payDiv}>
+        return (<div className={!isPosition?css.payDiv:css.payDivNone}>
             <div className={css.bottomDiv}>
                 <div className={css.bottomDiv_left}>
                     <div className={css.bottomBtn} onClick={()=>{

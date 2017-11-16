@@ -65,6 +65,9 @@ class CellNewFlight extends Component {
         if (!data){
             return null;
         }
+        let depCity_len = data.depCity&&data.depCity.length>3;
+        let ArrCity_len = data.arrCity&&data.arrCity.length>3;
+        let city = (depCity_len?(data.depCity.substring(0,3)+"..."):data.depCity)+" - "+data.arrCity;
         var itemView = (<div className={css.table}>
             <div className={css.type_super}>
                 <div className={css.typeText}>
@@ -73,8 +76,12 @@ class CellNewFlight extends Component {
             </div>
 
             <div className={css.date_super}>
-                <div className={css.date}>{data.arrDate}</div>
-                <div className={css.week}>{NumTransToTextHelp.getWeek(data.week)}</div>
+                {(depCity_len||ArrCity_len)?<Tooltip placement="bottom" title={data.depCity +" - "+data.arrCity}>
+                    <div className={css.city}>{city}</div>
+                </Tooltip>:
+                    <div className={css.city}>{data.depCity +" - "+data.arrCity}</div>}
+
+                <div className={css.date}>{data.arrDate+" " +NumTransToTextHelp.getWeek(data.week)}</div>
             </div>
 
             <div className={css.flightLine_super}>
