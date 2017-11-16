@@ -294,11 +294,12 @@ class UnionPay extends Component {
                }
             </div>
             <UnionPayAdd
+                wh={this.props.wh}
                 orderId={this.props.orderId}
-               onAction={(data,apinPanel) => {
+               onAction={(data) => {
                   //打开开通
                   if (this.props.onAction) {
-                     this.props.onAction("unionopen", data,null,apinPanel);
+                     this.props.onAction("unionopen", data,null);
                   }
 
                }}

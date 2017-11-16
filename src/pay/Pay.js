@@ -171,19 +171,20 @@ class page extends Component {
             } else {
                 let Com = this.getSecondStep();
                 stepView = <Com
+                    wh={this.wh}
                     ref={(ref) => {
                         this.stepAction = ref;
                     }
                     }
                     orderId = {this.id}
                     data={this.data.order||{}}
-                    onAction={(type, data, callBack,apinPanel) => {
+                    onAction={(type, data, callBack) => {
                         //打开
                         if (type === "unionopen") {
                             //打开开通银联
+
                             this.cardNo = data.cardNo;
-                            this.wh.setPanel(apinPanel);
-                            this.openUnionPayAdd(data,apinPanel);
+                            this.openUnionPayAdd(data,this.wh.getPanel());
                         } else if (type === "unionpay") {
                             //打开银联支付
                             this.openPayIng(callBack);
