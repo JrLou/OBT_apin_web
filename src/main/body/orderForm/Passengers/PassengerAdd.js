@@ -464,10 +464,36 @@ class PassengerAdd extends Component{
             if(requireData.name&&requireData.credNumber&&testMsg.credNumber.state){
                 checkedState = true;
             }
+            //对必填对输入项做验证
+            if(!requireData.name){
+                this.setTestState('name',{state:false,msg:'请输入姓名'});
+            }
+            if(!requireData.credNumber){
+                this.setTestState('credNumber',{state:false,msg:'请输入证件号'});
+            }
         }else{
             //其它类型
             if(requireData.name&&requireData.nation&&requireData.birthday&&requireData.credNumber&&requireData.expireTime&&requireData.issuePlace&&testMsg.credNumber.state){
                 checkedState = true;
+            }
+            //对必填对输入项做验证
+            if(!requireData.name){
+                this.setTestState('name',{state:false,msg:'请输入姓名'});
+            }
+            if(!requireData.credNumber){
+                this.setTestState('credNumber',{state:false,msg:'请输入证件号'});
+            }
+            if(!requireData.nation){
+                this.setTestState('nation',{state:false,msg:'请输入国籍'});
+            }
+            if(!requireData.birthday){
+                this.setTestState('birthday',{state:false,msg:'请输入出生日期'});
+            }
+            if(!requireData.expireTime){
+                this.setTestState('expireTime',{state:false,msg:'请输入证件有效期'});
+            }
+            if(!requireData.issuePlace){
+                this.setTestState('issuePlace',{state:false,msg:'请输入签发地'});
             }
         }
         return checkedState;

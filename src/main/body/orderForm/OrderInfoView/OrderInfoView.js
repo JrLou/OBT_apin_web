@@ -59,11 +59,7 @@ class OrderInfoView extends Component{
                                         style={{backgroundImage:`url(${require("../../../../images/orderForm/alert.png")})`}}
                                         className={css.helpIcon}
                                     ></span>
-                                    {
-                                        (this.state.orderState == 3)
-                                        ?`请在${sliceTimeString(orderMsg.expiredTime)}之前支付款`
-                                        :`请在${sliceTimeString(orderMsg.expiredTime)}之前支付尾款`
-                                    }
+                                    {`请在${sliceTimeString(orderMsg.expiredTime)}之前支付`}
                                 </div>
                             </div>
                         </div>
