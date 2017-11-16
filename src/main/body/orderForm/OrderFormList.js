@@ -144,6 +144,9 @@ class OrderFormList extends Component{
             },{
                 title:'返回日期',
                 dataIndex:'dateRet',
+                render:(text,recode)=>{
+                    return (<span>{text?text:'无'}</span>);
+                }
             },{
                 title:'航程类型',
                 dataIndex:'flightType',

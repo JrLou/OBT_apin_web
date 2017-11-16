@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-15 20:09:30
+ * @Last Modified time: 2017-11-15 22:20:06
  */
 
 import React, { Component } from 'react';
@@ -178,7 +178,7 @@ class MsgLoginForm extends React.Component {
                     })(
                         <Input prefixCls='my-ant-input' placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode error={getFieldError('account')} getCode={() => this.getCode(this.getCodeAction)} />
+                    <CheckCode ref="code" error={getFieldError('account')} getCode={() => this.getCode(this.getCodeAction)} />
                 </FormItem>
                 <FormItem prefixCls="my-ant-form">
                     <Button
@@ -203,7 +203,7 @@ class MsgLoginForm extends React.Component {
     //     const picCode = getFieldValue('picCode') || '';
     //     HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
     //         // 测试
-    //         if (json.length > 4) {
+    //         if (json && json.length > 4) {
     //             this.setState({
     //                 isShowPic: true,
     //                 picCode: 'data:image/jpg;base64,' + json

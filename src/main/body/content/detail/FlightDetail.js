@@ -54,6 +54,8 @@ class page extends Component {
         this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
             this.loadingView.refreshView(false,()=>{
+                log(json);
+                log("--------");
                 this.setData(json);
             });
         };
@@ -234,7 +236,7 @@ class page extends Component {
 
                                         }],
                                         initialValue: adultNum,
-                                    })(<Input style={{width:"110px",height:"35px"}}
+                                    })(<Input style={{width:"110px",height:"35px",textAlign:"center"}}
                                               placeholder={"人数"}
                                               addonBefore={<Icon type="minus"
                                                                  style={{cursor: "pointer",color:"#FF6600"}}
@@ -328,8 +330,8 @@ class page extends Component {
                                         required: true,
                                         message: '姓名不能为空',
                                     },{
-                                        pattern: /^[\u4e00-\u9fa5]{2,4}$|^[a-zA-Z]{2,20}$/,
-                                        message: '请输入姓名(汉字2-4个字或英文2-20个字符)'
+                                        pattern: /^[\u4e00-\u9fa5]{2,6}$|^[a-zA-Z]{2,12}$/,
+                                        message: '请输入姓名(汉字2-6个字或英文2-12个字符)'
                                     }],
                                 })(<Input style={{width:"220px"}}
                                           maxLength="20"

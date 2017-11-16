@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Input, Modal, message, Cascader } from 'antd';
+import { Form, Button, Input, Modal, message, Cascader, Dropdown, Menu } from 'antd';
 import css from './account.less';
 import { formatArgs } from 'debug';
 import { HttpTool, CookieHelp } from '../../../../lib/utils/index.js';
@@ -69,7 +69,10 @@ class AccountForm extends Component {
             province: [],
             city: [],
             zone: [],
-            showAddr: {}
+            showProvince: '省',
+            showCity: '市',
+            showZone: '区',
+            showAddr: ''
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.updateInfo = this.updateInfo.bind(this);
@@ -79,21 +82,19 @@ class AccountForm extends Component {
     }
 
     componentDidMount() {
+        // this.getArea(0, 'province');
         AccoutInfoPromise()
             .then((res) => {
                 const { json, option } = res;
                 const { account, password, mobile } = json;
                 let { companyName, contactName, id, address } = option.option;// option返回是null，这样保错了，后面然后setState也不会运行了
-                let { showAddr } = this.state;
+
 
                 let resAddr = getValue(address);
-                log("=======================================");
-                log(resAddr);
-                if (resAddr.province && resAddr.province.length > 0) { showAddr.province = this.getArea(resAddr.province); }
-                if (resAddr.city && resAddr.city.length > 0) showAddr.city = this.getArea(resAddr.city);
-                if (resAddr.zone && resAddr.zone.length > 0) showAddr.zone = this.getArea(resAddr.zone);
-
-
+                if (resAddr.province) { this.handleChange('showProvince', resAddr.province); }
+                if (resAddr.city) { this.handleChange('showCity', resAddr.city); }
+                if (resAddr.zone) { this.handleChange('showZone', resAddr.zone); }
+                if (resAddr.address) { this.handleChange('showAddr', resAddr.address); }
 
                 this.setState({
                     accountID: json.id,
@@ -103,53 +104,69 @@ class AccountForm extends Component {
                     companyName,
                     contactName,
                     address,
-                    id,
-                    showAddr
+                    id
                 });
-                // try {
-                //     let { address } = option.option;
-                //     log("address");
-                //     log(address);
-                //     address = JSON.parse(address);
-                //     log("address22");
-                //     log(address);
-                //     let { province, city, zone } = address;
-                //     let showAddr = {
-                //         address: address.address, province, city, zone
-                //     };
-                //     log(showAddr);
-                //     this.setState({
-                //         showAddr
-                //     }, () => {
-                //         log(this.state);
-                //     });
-                // } catch (error) {
-                //     log();
-                // }
-                //     this.setState({
-                //         accountID: json.id,
-                //         account,
-                //         password,
-                //         mobile,
-                //         companyName,
-                //         contactName,
-                //         address,
-                //         id
-                //     });
 
             })
             .catch(error => {
                 message.error(error);
             });
+
     }
 
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
-        const { isView, account, password, mobile, companyName, contactName, address, area, province, city, zone, showAddr } = this.state;
+        const { isView, account, password, mobile, companyName, contactName, address, area, province, city, zone, showProvince, showCity, showZone, showAddr } = this.state;
 
         const accountError = isFieldTouched('account') && getFieldError('account');
         const passwordError = isFieldTouched('password') && getFieldError('password');
         const mobileError = isFieldTouched('mobile') && getFieldError('mobile');
+
+        const provinceMenu = (
+            <Menu className={css.drop}>
+                {
+                    province.map((item) =>
+                        <Menu.Item key={item.id}>
+                            <a onClick={() => {
+                                this.handleChange('showProvince', item.name);
+                                this.getArea(item.id, 'city');
+                            }}>{item.name}</a>
+                        </Menu.Item>
+
+                    )
+                }
+            </Menu>
+        );
+        const cityMenu = (
+            <Menu className={css.drop}>
+                {
+                    city.map((item) =>
+                        <Menu.Item key={item.id}>
+                            <a onClick={() => {
+                                this.handleChange('showCity', item.name);
+                                this.getArea(item.id, 'zone');
+                            }}>{item.name}</a>
+                        </Menu.Item>
+
+                    )
+                }
+            </Menu>
+        );
+        const zoneMenu = (
+            <Menu className={css.drop}>
+                {
+                    zone.map((item) =>
+                        <Menu.Item key={item.id}>
+                            <a onClick={() => {
+                                this.handleChange('showZone', item.name);
+                            }}>{item.name}</a>
+                        </Menu.Item>
+
+                    )
+                }
+            </Menu>
+        );
+
         return (
             <div>
                 <Title>账号信息</Title>
@@ -166,10 +183,11 @@ class AccountForm extends Component {
                         validateStatus={passwordError ? 'error' : ''}
                         help={passwordError || ''}
                     >
-                        <div>******<span style={{ float: 'right', cursor: 'pointer', color: '#29A6FF' }} onClick={() => this.
+                        <div>******<span style={{ float: 'right', cursor: 'pointer', color: '#29A6FF' }} onClick={() => {
                             this.setState({
                                 visible: true
-                            })
+                            });
+                        }
                         }>修改</span></div>
                     </FormItem>
                     <FormItem prefixCls="my-ant-form"
@@ -205,45 +223,45 @@ class AccountForm extends Component {
                         {...formItemLayout}
                         label="省"
                     >
-                        {getFieldDecorator('province', {
-                            initialValue: showAddr.province
-                        })(
-                            <Cascader options={province} onChange={(value) => {
-                                this.getArea(value[0], 'city');
-                            }} placeholder="Please select" />
-                            )}
+                        <Dropdown overlay={provinceMenu}>
+                            <a className="ant-dropdown-link" href="#">
+                                {showProvince}
+                            </a>
+                        </Dropdown>
+
                     </FormItem>}
                     {!isView && <FormItem prefixCls="my-ant-form"
                         {...formItemLayout}
                         label="市"
                     >
-                        {getFieldDecorator('city', {
-                            initialValue: showAddr.city
-                        })(
-                            <Cascader options={city} onChange={(value) => {
-                                this.getArea(value[0], 'zone');
-                            }} placeholder="Please select" />
-                            )}
+                        <Dropdown overlay={cityMenu}>
+                            <a className="ant-dropdown-link" href="#">
+                                {showCity}
+                            </a>
+                        </Dropdown>
                     </FormItem>}
                     {!isView && <FormItem prefixCls="my-ant-form"
                         {...formItemLayout}
                         label="区"
                     >
-                        {getFieldDecorator('zone', {
-                            initialValue: showAddr.zone
-                        })(
-                            <Cascader options={zone} placeholder="Please select" />
-                            )}
+                        <Dropdown overlay={zoneMenu}>
+                            <a className="ant-dropdown-link" href="#">
+                                {showZone}
+                            </a>
+                        </Dropdown>
                     </FormItem>}
                     <FormItem prefixCls="my-ant-form"
                         {...formItemLayout}
                         label="地址"
                     >
-                        {isView ? <div>{address}</div> : getFieldDecorator('address', {
-                            initialValue: showAddr.address
+                        {isView ? <div>{
+                            `${showProvince}${showCity}${showZone}${showAddr}`
+                        }
+                        </div> : getFieldDecorator('address', {
+                            initialValue: showAddr
                         })(
-                            <Input prefixCls="my-ant-input" onChange={(value) => this.handleChange('address', value)} />
-                            )}
+                                <Input prefixCls="my-ant-input" onChange={(value) => this.handleChange('address', value)} />
+                                )}
                     </FormItem>
                     <FormItem prefixCls="my-ant-form" {...formTailLayout}>
                         {
@@ -254,12 +272,21 @@ class AccountForm extends Component {
                                     type="primary"
                                     onClick={this.updateInfo}
                                 >修改</Button>
-                                : <Button
-                                    prefixCls="my-ant-btn"
-                                    size="large"
-                                    type="primary"
-                                    onClick={this.handleSubmit}
-                                >保存</Button>
+                                : <div>
+                                    <Button
+                                        prefixCls="my-ant-btn"
+                                        size="large"
+                                        type="primary"
+                                        onClick={this.handleSubmit}
+                                    >保存</Button>
+                                    <Button
+                                        prefixCls="my-ant-btn"
+                                        size="large"
+                                        onClick={() => {
+                                            this.setState({ isView: true });
+                                        }}
+                                    >取消</Button>
+                                </div>
                         }
                     </FormItem>
                 </Form>
@@ -280,9 +307,14 @@ class AccountForm extends Component {
     handleSubmit() {
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                let { password, companyName, contactName, address, province, city, zone } = values;
-                const { id } = this.state;
-                const saveAddr = JSON.stringify({ address, province, city, zone });
+                let { password, companyName, contactName, address } = values;
+                const { id, showProvince, showCity, showZone } = this.state;
+                const saveAddr = JSON.stringify({
+                    address,
+                    province: showProvince,
+                    city: showCity,
+                    zone: showZone
+                });
                 // if (companyName != this.state.companyName
                 //     || contactName != this.state.contactName
                 //     || address != this.state.address
@@ -292,7 +324,8 @@ class AccountForm extends Component {
                     this.setState({
                         isView: true
                     });
-                }, () => {
+                }, (code, msg) => {
+                    message.error(msg);
                 }, {
                         address: saveAddr,
                         companyName,
@@ -342,7 +375,7 @@ class AccountForm extends Component {
             });
     }
 
-    getArea(id, key, showKey) {
+    getArea(id, key) {
         HttpTool.request(HttpTool.typeEnum.POST, '/bc/area/byPid/query', (code, msg, json, option) => {
             // HttpTool.request(HttpTool.typeEnum.POST, '/area/byPid/query', (code, msg, json, option) => {
             let res = json.map(item => {
@@ -355,8 +388,6 @@ class AccountForm extends Component {
                     [key]: res
                 });
             }
-            // if (showKey) {
-            // }
         }, (code, msg) => {
             message.error(msg);
         }, {
@@ -368,7 +399,8 @@ class AccountForm extends Component {
      * 设置为修改模式
      */
     updateInfo() {
-        if (this.state.province.length === 0) {
+        const { province } = this.state;
+        if (province && province.length == 0) {
             this.getArea(0, 'province');
         }
         this.setState({
@@ -376,6 +408,7 @@ class AccountForm extends Component {
         }, () => {
             this.props.form.validateFields();
         });
+
     }
 
 }
