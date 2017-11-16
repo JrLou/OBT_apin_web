@@ -408,10 +408,10 @@ class page extends Component {
                     </div>
 
 
-                    <div style={{paddingTop: 17, paddingLeft: 20, marginBottom: 50}}>
-                        <font className={less.mainTitle}>备注：</font>
-                        <font
-                            className={type === 5 ? less.mainContentClose1 : less.mainContent1}>{data && data.remark ? data.remark : "暂无"}</font>
+                    <div className={less.remarkLayout} style={{marginLeft:20,marginTop:15}}>
+                        <div className={less.remarkTitle}>备注：</div>
+                        <div className={type === 5 ?less.remarkContentClose:less.remarkContent}>{data && data.remark ? data.remark : "暂无"}</div>
+
                     </div>
                 </div>
             </div>
@@ -573,10 +573,10 @@ class page extends Component {
                             <font
                                 className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.dateRet ? data.dateRet : "暂无"}</font>
                         </div>
-                        <div>
-                            <font className={less.mainTitle}>备注：</font>
-                            <font
-                                className={type === 5 ? less.mainContentClose1 : less.mainContent1}>{data && data.remark ? data.remark : "暂无"}</font>
+                        <div className={less.remarkLayout}>
+                            <div className={less.remarkTitle}>备注：</div>
+                            <div className={type === 5 ?less.remarkContentClose:less.remarkContent}>{data && data.remark ? data.remark : "暂无"}</div>
+
                         </div>
 
 

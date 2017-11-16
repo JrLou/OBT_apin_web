@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, DatePicker, TimePicker, Button, Input, Row, Col, Radio, AutoComplete, Icon, message } from 'antd';
 import { HttpTool ,CookieHelp} from "../../../../lib/utils/index.js";
-import AutoInput from "../component/InputAuto";
+import AutoInput from "../component/InputAutoPublish";
 import TemplatePublist from "./TemplatePublist";
 
 import less from './PublishMsg.less';
@@ -105,6 +105,13 @@ class page extends Component {
         });
         this.lineDetails();//控制航线信息
     }
+
+    vueValue(value){
+        if(!value){
+            return "";
+        }
+        return value;
+    }
     lineDetails() {//航线信息
         let { lineNum, listData } = this.state;
         const { getFieldDecorator,getFieldValue} = this.props.form;
@@ -144,7 +151,7 @@ class page extends Component {
                                     initialValue: this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity
                                 })(
 
-                                    <AutoInput style={{ borderRadius: "2px" }} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity}
+                                    <AutoInput  defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity}
                                         type={"from"}
                                         placeholder={'中文／拼音／三字码'} />
                                     )}
@@ -188,13 +195,34 @@ class page extends Component {
                                     <DatePicker getCalendarContainer={()=>{
                                         return this.refs.test;
                                     }}  style={{ borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
-                                        let dateend=getFieldValue("toDateTime"+i);
-                                        if(dateend){
-                                            dateend=moment(dateend);
-                                            return current &&  (current.valueOf() <= Date.now() || current.valueOf() > dateend);
-                                        }else{
-                                            dateend="";
-                                            return current &&  current.valueOf() <= Date.now();
+                                       let lineType =this.state.lineType;
+                                       let lineNum= this.state.lineNum;
+                                       //起始时间
+                                       let startTime=Date.now();
+                                       let endTime="";
+                                        if(lineType== 3){
+                                            for(let j=0;j<i;j++){   //开始时间
+                                                let value=this.vueValue(getFieldValue("fromDateTime"+j));// (getFieldValue("fromDateTime"+j)==undefined||getFieldValue("fromDateTime"+j)==""||getFieldValue("fromDateTime"+j)==null)?"":getFieldValue("fromDateTime"+j);
+                                              if(value !=""){
+                                                startTime=value;
+                                              }
+                                            }
+                                            for(let j=lineNum;j>i;j--){   //结尾时间
+                                                let value=this.vueValue(getFieldValue("fromDateTime"+j));//(getFieldValue("fromDateTime"+j)==undefined||getFieldValue("fromDateTime"+j)==""||getFieldValue("fromDateTime"+j)==null)?"":getFieldValue("fromDateTime"+j);
+                                              if(value !=""){
+                                                endTime=value;
+                                              }
+                                            }
+                                        }else
+                                        if(lineType== 2){
+                                            endTime=this.vueValue(getFieldValue("toDateTime"+i));
+                                        }
+                                     //   console.log(endTime&& moment(endTime).format("YYYY-MM-DD"));
+                                        if(endTime!=""){
+                                            return current &&  (current.valueOf() <= startTime || current.valueOf() >= endTime);
+                                        }
+                                        if(endTime==""){//结束时间为空，表示永远
+                                            return current &&  current.valueOf() <= startTime;
                                         }
                                     }} />
                                     )}
@@ -227,7 +255,7 @@ class page extends Component {
                         }
                         {this.state.lineType == 3 &&
                             <Col span={11} offset={2}>
-                                <Button type="primary" style={{ float: "right",borderRadius:"2px",width:60,height:36 }} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum == 2} onClick={() => this.lineDel()}>删除</Button>
+                                <Button type="primary" style={{ float: "right",borderRadius:"2px",width:60,height:36 ,fontSize:16}} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum == 2} onClick={() => this.lineDel()}><span style={{position:"absolute",marginLeft:"-18px",marginTop:"-9px"}}>删除</span></Button>
                             </Col>
                         }
                     </Row>

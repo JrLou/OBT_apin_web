@@ -5,6 +5,9 @@ class WindowHelp {
     setPanel(panel){
         this.shareWindow = panel;
     }
+    getPanel(){
+        return this.shareWindow;
+    }
     openInitWindow(panel){
         if(panel){
             this.shareWindow = panel;
@@ -20,6 +23,7 @@ class WindowHelp {
         if(apinPanel.location){
             //打开URL类型
             apinPanel.location.href = value;
+            apinPanel.focus();
         }else{
             //打开自定义类型
             apinPanel.show(true,value);
