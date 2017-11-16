@@ -53,7 +53,7 @@ class page extends Component {
                     let voyage = [];
                     for (let i = 0; i < this.state.lineNum; i++) {
                         values["cityDep"] = values.fromCity0;
-                        values["cityArr"] = values.toCity0;
+                        values["cityArr"] = values.toCity+i;
                         values["dateDep"] = values.fromDateTime0 ? values.fromDateTime0.format(dateFormat) : "";
                         values["cityCodeDep"] = "",
                             values["cityCodeArr"] = "",
@@ -107,7 +107,7 @@ class page extends Component {
         let div = [];
         for (let i = 0; i < lineNum; i++) {
             div.push(
-                <div key={i}>
+                <div key={i} >
                     {this.state.lineType == 3 &&
                         <Row style={{ marginBottom: this.marginBottomRow, fontSize: "14px", color: " #29A6FF" }}>
                             <Col span={10} >
@@ -181,7 +181,9 @@ class page extends Component {
                                     }],
                                     initialValue: this.state.listData[i] == undefined ? "" :(this.state.listData[i].fromDateTime==undefined?"": moment(this.state.listData[i].fromDateTime))
                                 })(
-                                    <DatePicker style={{ borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
+                                    <DatePicker getCalendarContainer={()=>{
+                                        return this.refs.test;
+                                    }}  style={{ borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
                                         let dateend=getFieldValue("toDateTime"+i);
                                         if(dateend){
                                             dateend=moment(dateend);
@@ -204,7 +206,9 @@ class page extends Component {
                                         }],
                                         initialValue: this.state.listData[i] == undefined ? "" :(this.state.listData[i].toDateTime==undefined?"": moment(this.state.listData[i].toDateTime))
                                     })(
-                                        <DatePicker style={{ borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
+                                        <DatePicker getCalendarContainer={()=>{
+                                            return this.refs.test;
+                                        }} style={{ borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
                                             let datestart=getFieldValue("fromDateTime"+i);
                                             if(datestart){
                                                 datestart=moment(datestart);
@@ -259,7 +263,7 @@ class page extends Component {
         let bottomSumbit = { textAlign: "center", paddingBottom: 40, paddingTop: 20 };
         let phoneCookie =CookieHelp.getCookieInfo("phone")==undefined?"":CookieHelp.getCookieInfo("phone");
         return (
-            <div className={less.content} >
+            <div className={less.content} ref={"test"}>
                 <div style={{ margin: "20px 0px" }}>
                     <hr size='1' style={{ color: "#CBD3E5", borderStyle: "dotted" }}></hr>
                 </div>

@@ -2,11 +2,10 @@ import React, {Component} from "react";
 
 import {Button, Modal, message} from "antd";
 import less from "./DemandDetail.less";
-import OrderInfoView from '../component/OrderInfoView/index';
 import CellNewFlight from "../content/cell/CellNewFlight";
 import {HttpTool} from "../../../../lib/utils/index.js";
 import NumTransToTextHelp from '../tool/NumTransToTextHelp.js';
-import {hasKey, getFlightData} from '../tool/LXDHelp.js';
+import {getFlightData} from '../tool/LXDHelp.js';
 import APIGYW from '../../../api/APIGYW';
 /**
  * 需求已取消                    0
@@ -41,7 +40,7 @@ class page extends Component {
             visibleDelete: false,
             visibleConfirm: false,
             flightData: null,
-            demandId: -1
+            demandId: -1,
         };
         if (this.props.location.query.data) {
             this.parentId = JSON.parse(this.props.location.query.data).id;
@@ -61,7 +60,6 @@ class page extends Component {
             id: this.parentId
         };
         let success = (code, msg, json, option) => {
-
             this.setState({
                 data: json,
             });
@@ -75,10 +73,10 @@ class page extends Component {
                 data: null,
             });
         };
-        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_detail, success, failure, param,
-            {
-                ipKey: "hlIP"
-            });
+            HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_detail, success, failure, param,
+                {
+                    ipKey: "hlIP"
+                });
     }
 
     cancelDemand() {
@@ -92,10 +90,10 @@ class page extends Component {
         let failure = (code, msg, option) => {
             message.warning(msg);
         };
-        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_cancel, success, failure, param,
-            {
-                ipKey: "hlIP"
-            });
+            HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_cancel, success, failure, param,
+                {
+                    ipKey: "hlIP"
+                });
     }
 
     deleteDemand() {
@@ -109,10 +107,10 @@ class page extends Component {
         let failure = (code, msg, option) => {
             message.warning(msg);
         };
-        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_remove, success, failure, param,
-            {
-                ipKey: "hlIP"
-            });
+            HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_remove, success, failure, param,
+                {
+                    ipKey: "hlIP"
+                });
     }
 
     confirmDemand() {
@@ -133,10 +131,10 @@ class page extends Component {
         let failure = (code, msg, option) => {
             message.warning(msg);
         };
-        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_confirm, success, failure, param,
-            {
-                ipKey: "hlIP"
-            });
+            HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demand_confirm, success, failure, param,
+                {
+                    ipKey: "hlIP"
+                });
     }
 
     render() {
@@ -210,7 +208,15 @@ class page extends Component {
                                     }
 
                                 } else {
-                                    window.app_open(this, "/PublishMsg", {});
+                                    window.app_open(this, "/PublishMsg", {
+                                        flightType:data.flightType,
+                                        cityArr:data.cityArr,
+                                        cityDep:data.cityDep,
+                                        adultCount:data.adultCount,
+                                        childCount:data.childCount,
+                                        dataDep:data.dataDep,
+                                        dataArr:data.dataArr,
+                                    });
                                 }
                             }}
 
@@ -229,6 +235,7 @@ class page extends Component {
             </div>
         );
     }
+
 
     getCloseReason(data = {}) {
         return (
@@ -536,7 +543,7 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>航班人数：</font>
                             <font
-                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.totalPeople ? data.totalPeople : "0"}人（{data && data.adultCount ? data.adultCount + "成人" : "0"}{"，" + data && data.childCount ? data.childCount + "儿童）" : "0"}</font>
+                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.totalPeople ? data.totalPeople : "0"}人（{data && data.adultCount ? data.adultCount : "0"}成人，{"，" + data && data.childCount ? data.childCount: "0"}儿童）</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>出发日期：</font>
