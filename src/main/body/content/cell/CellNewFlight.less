@@ -66,17 +66,21 @@
 .date_super {
   composes: itemCenter;
   width: 15%;
-  min-width: 90px;
+  min-width: 110px;
+}
+.city{
+  font-size: @font_size_small;
+  color: @c_title_gray_base;
+  width: 110px;
+  text-align: left;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow: hidden;
 }
 .date{
-  font-size: 14px;
-  color: #4F5762;
-  width: 100%;
-  text-align: center;
-}
-.week{
-  composes: date;
-  font-size: 12px;
+  composes: city;
+  margin-top: @d_spadding_cell;
+  font-size: @font_size_cell;
   color: #999999;
 }
 
