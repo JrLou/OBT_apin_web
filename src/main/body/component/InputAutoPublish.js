@@ -3,7 +3,6 @@
  */
 import React, {Component, Input, Icon} from "react";
 import {AutoComplete} from "antd";
-
 const Option = AutoComplete.Option;
 const OptGroup = AutoComplete.OptGroup;
 import less from "./InputAuto.less";
@@ -11,7 +10,6 @@ import less from "./InputAuto.less";
 import {HttpTool} from "../../../../lib/utils/index.js";
 
 class InputAuto extends Component {
-
     constructor(props) {
         super(props);
         let a = ["安娜", "阿尔巴哈", "凯里", "乌兰察布"];
@@ -57,10 +55,7 @@ class InputAuto extends Component {
             });
         };
         let api = this.props.type === "from" ? "/os/hotcityapi/v1.0/depCity/list" : "/os/hotcityapi/v1.0/arrCity/list";
-        HttpTool.request(HttpTool.typeEnum.POST, api, success, failure, param,
-            {
-                ipKey: "hlIP"
-            });
+        HttpTool.request(HttpTool.typeEnum.POST, api, success, failure, param);
     }
 
     loadDataForKeyWord(keyWord) {
@@ -85,10 +80,7 @@ class InputAuto extends Component {
             }
 
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/ba/baseapi/v1.0/cities/list/key", success, failure, param,
-            {
-                ipKey: "hlIP"
-            });
+        HttpTool.request(HttpTool.typeEnum.POST, "/ba/baseapi/v1.0/cities/list/key", success, failure, param);
     }
 
     handleSearch(value) {
@@ -162,32 +154,33 @@ class InputAuto extends Component {
             );
         };
 
-        if(noData){
-            if (hasValue) {
-                return [
-                    <Option disabled key="all1" className="show-all">
-                        <div className={less.errorMessage}>
-                            对不起,暂不支持该地点
-                        </div>
-                    </Option>
-                ];
-            } else {
-                return [getHotHead(
-                    <div className={less.errorMessage}>
-                        暂无热门城市
-                    </div>
-                )];
-            }
-        }
+        // if(noData){
+        //     if (hasValue) {
+        //         return [
+        //             <Option disabled key="all1" className="show-all">
+        //                 <div className={less.errorMessage}>
+        //                     对不起,暂不支持该地点
+        //                 </div>
+        //             </Option>
+        //         ];
+        //     } else {
+        //         return [getHotHead(
+        //             <div className={less.errorMessage}>
+        //                 暂无热门城市
+        //             </div>
+        //         )];
+        //     }
+        // }
         let result = dataSource.map((obj, index) => {
             return <Option className={this.keyWord ? null : less.dropItemFloat} key={index}>{obj}</Option>;
         });
 
         if (hasValue) {
             return result;
-        } else {
-            return [getHotHead()].concat(result);
         }
+        //  else {
+        //     return [getHotHead()].concat(result);
+        // }
 
     }
 
@@ -207,11 +200,11 @@ class InputAuto extends Component {
             }
         }
         return (
-            <div  style={{width: "100%"}}>
-                <AutoComplete className="ant-input ant-select-search__field"
+            <div className="certain-category-search-wrapper" style={{width: "100%"}}>
+                <AutoComplete
                     {...props}
                     dropdownMatchSelectWidth={false}
-                    dropdownStyle={{width: "320px"}}
+                    dropdownStyle={{width: "220px"}}
                     size="large"
                     style={{width: "100%"}}
                     dataSource={this.getOptions(this.state.dataSource)}
@@ -226,9 +219,6 @@ class InputAuto extends Component {
                         log("==========");
                         log(value);
                         //防止连续快速搜索，请求接口
-
-
-
                         if(this.keyWord){
                             //搜索
 
@@ -257,7 +247,7 @@ class InputAuto extends Component {
                             }
                         }else{
                             //热门
-                            this.loadData();
+                 //           this.loadData();
                         }
 
                         this.tempTime = new Date().getTime();
@@ -270,20 +260,21 @@ class InputAuto extends Component {
         );
     }
 
-    render22() {
-        return <AutoComplete
-            ref="com"
-            dataSource={this.state.dataSource}
-            className={less.input}
-            onSelect={this.onSelect.bind(this)}
-            onChange={(value) => {
-                this.selectValue = this.formatValue(value);
-            }}
-            onSearch={this.handleSearch.bind(this)}
-            {...this.props}
-        />;
+    // render22() {
+    //     return <AutoComplete
+    //         ref="com"
+    //         style={{height:36}}
+    //         dataSource={this.state.dataSource}
+    //         className={less.input}
+    //         onSelect={this.onSelect.bind(this)}
+    //         onChange={(value) => {
+    //             this.selectValue = this.formatValue(value);
+    //         }}
+    //         onSearch={this.handleSearch.bind(this)}
+    //         {...this.props}
+    //     />;
 
-    }
+    // }
 }
 
 module.exports = InputAuto;
