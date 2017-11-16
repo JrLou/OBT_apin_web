@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, DatePicker, TimePicker, Button, Input, Row, Col, Radio, AutoComplete, Icon, message } from 'antd';
-import { HttpTool } from "../../../../lib/utils/index.js";
+import { HttpTool,CookieHelp} from "../../../../lib/utils/index.js";
 import APIGYW from "../../../api/APIGYW.js";
 import AutoInput from "../component/InputAuto";
 import TemplatePublist from "./TemplatePublist";
@@ -38,23 +38,24 @@ class page extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         let {data}=this.props.location.query;
+        let testdate=data;
+        if(CookieHelp.getCookieInfo("publishMsgCookie") != undefined && CookieHelp.getCookieInfo("publishMsgCookie") !="" ){
+            testdate=CookieHelp.getCookieInfo("publishMsgCookie");
+        }
         let lineType=2;
-        data=JSON.parse(data);
+        data=JSON.parse(testdate);
+        alert(JSON.stringify(data));
         if(data.lineType!=undefined && ["1","2","3"].indexOf(data.lineType)>-1){
             lineType=parseInt(data.lineType);
         }
-        let toCity="";
-        if(data.toCity!=undefined){
-            toCity=data.toCity;
-        }
-        let fromCity="";
-        if(data.fromCity!=undefined){
-            fromCity=data.fromCity;
-        }
-        let isMult=false;
-        if(data.fromCity!=undefined){
-            isMult=data.isMult;
-        }
+        let toCity=data.toCity==undefined?"":data.toCity;
+        let fromCity=data.fromCity==undefined?"":data.fromCity;
+        let isMult=data.fromCity==undefined?false:data.isMult;
+        let adultCount=data.adultCount==undefined?"":data.adultCount;
+        let childCount=data.childCount==undefined?"":data.childCount;
+        let listDefa=[{fromCity:fromCity,toCity:toCity}];
+        let listData =data.listData==undefined?listDefa:data.listData;
+        let lineNum =data.lineNum==undefined?1:data.lineNum;
         return (
             <div className={less.content}>
                 <div style={{ paddingTop: 10, width: 520, margin: "auto" }}>
@@ -63,12 +64,31 @@ class page extends Component {
                         <div style={{ width: 6, height: 20, position: "absolute", backgroundColor: "#29A6FF", marginTop: 8 }}></div>
                         <div style={{ color: "#333", fontSize: 20, marginLeft: 22 }}>需求信息</div>
                     </div>
-                    <TemplatePublist state={{lineType:lineType,lineNum:1,adultCount:"",isMult:isMult,childCount:"",remark:"",phone:"",listData:[{fromCity:fromCity,toCity:toCity}]}}  callBack={(e) => {
+                    <TemplatePublist state={{lineType:lineType,lineNum:lineNum,adultCount:adultCount,isMult:isMult,childCount:childCount,remark:"",phone:"",listData:listData}}  callBack={(e) => {
                         this.httpPostAdd(e);
                     }} />
                 </div>
-                 {/* <Button  onClick={() => {
-                            window.app_open(this, "/PublishMsg", {lineType:"2",toCity:"杭州",fromCity:"北京",isMult:false});}}> 
+
+
+                {/**
+                    本组件调用：
+                    lineType：航程类型1，2，3                    
+                    adultCount：成人人数                        
+                    childCount：儿童人数                              
+                    lineNum：单程，往返：1，往返【2】至【6】一个数          
+                    isMult：是否显示多层false 显示，true 不显示
+                    listData:[{fromCity:"from",toCity:"to",toDateTime:"",fromDateTime:""}] 航线的线路与时间
+                */}
+                {/* <Button  onClick={() => {
+                    let data ={lineType:"3",toCity:"杭州",fromCity:"北京",adultCount:"1",childCount:"1",lineNum:3,
+                    isMult:false,listData:[
+                        {fromCity:"from",toCity:"to",toDateTime:"",fromDateTime:""},
+                        {fromCity:"from1",toCity:"to1",toDateTime:"",fromDateTime:""}
+                    ]};
+                    CookieHelp.saveCookieInfo("publishMsgCookie",data);
+                    window.app_open(this, "/PublishMsg",{});
+                }
+                }> 
                     调整
                 </Button>  */}
             </div >
