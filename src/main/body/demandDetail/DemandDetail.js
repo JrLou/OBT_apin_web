@@ -194,64 +194,62 @@ class page extends Component {
     getButton(type) {
         return (
             <div className={less.buttonBottomLayout}>
-                <div>
-                    <Button className={less.buttonAgin}
-                            onClick={() => {
-                                if (type === 1 || type === 2) {
+                <Button className={less.buttonAgin}
+                        onClick={() => {
+                            if (type === 1 || type === 2) {
 
-                                    if (window.ysf && window.ysf.open) {
-                                        window.ysf.open();
-                                    }
+                                if (window.ysf && window.ysf.open) {
+                                    window.ysf.open();
+                                }
 
-                                } else {
-                                    let {data} = this.state;
-                                    let voyage = [];
-                                    let voyageObject = {};
-                                    if (data.voyage && JSON.parse(data.voyage).voyage) {
-                                        let voyageList=JSON.parse(data.voyage).voyage;
-                                        voyageList.map((data, index) => {
-                                            voyageObject = {
-                                                fromCity: data.cityDep,
-                                                toCity: data.cityArr,
-                                                toDateTime:"",
-                                                fromDateTime:data.dateDep,
-                                            };
-                                            voyage.push(voyageObject);
-                                        });
-                                    }
-                                    if(data.flightType===1||data.flightType===2){
+                            } else {
+                                let {data} = this.state;
+                                let voyage = [];
+                                let voyageObject = {};
+                                if (data.voyage && JSON.parse(data.voyage).voyage) {
+                                    let voyageList = JSON.parse(data.voyage).voyage;
+                                    voyageList.map((data, index) => {
                                         voyageObject = {
                                             fromCity: data.cityDep,
                                             toCity: data.cityArr,
-                                            toDateTime:data.dateRet,
-                                            fromDateTime:data.dateDep,
+                                            toDateTime: "",
+                                            fromDateTime: data.dateDep,
                                         };
                                         voyage.push(voyageObject);
-                                    }
-                                    let datas = {
-                                        lineType: data.flightType+"",
-                                        adultCount: data.adultCount,
-                                        childCount: data.childCount,
-                                        isMult: false,
-                                        listData: voyage,
-                                    };
-                                    CookieHelp.saveCookieInfo("publishMsgCookie", datas);
-                                    window.app_open(this, "/PublishMsg", {});
+                                    });
                                 }
-                            }}
+                                if (data.flightType === 1 || data.flightType === 2) {
+                                    voyageObject = {
+                                        fromCity: data.cityDep,
+                                        toCity: data.cityArr,
+                                        toDateTime: data.dateRet,
+                                        fromDateTime: data.dateDep,
+                                    };
+                                    voyage.push(voyageObject);
+                                }
+                                let datas = {
+                                    lineType: data.flightType + "",
+                                    adultCount: data.adultCount,
+                                    childCount: data.childCount,
+                                    isMult: false,
+                                    listData: voyage,
+                                };
+                                CookieHelp.saveCookieInfo("publishMsgCookie", datas);
+                                window.app_open(this, "/PublishMsg", {});
+                            }
+                        }}
 
-                    >{type === 1 || type === 2 ? "联系爱拼机客服处理需求" : "重新发布需求"}</Button>
-                    {
-                        type === 5 ? <Button className={less.buttonContact}
-                                             onClick={() => {
-                                                 if (window.ysf && window.ysf.open) {
-                                                     window.ysf.open();
-                                                 }
+                >{type === 1 || type === 2 ? "联系爱拼机客服处理需求" : "重新发布需求"}</Button>
+                {
+                    type === 5 ? <Button className={less.buttonContact}
+                                         onClick={() => {
+                                             if (window.ysf && window.ysf.open) {
+                                                 window.ysf.open();
+                                             }
 
-                                             }}
-                        >联系爱拼机客服</Button> : null
-                    }
-                </div>
+                                         }}
+                    >联系爱拼机客服</Button> : null
+                }
             </div>
         );
     }

@@ -9,7 +9,6 @@ import less from './PublishMsg.less';
 import moment from 'moment';
 const dateFormat = 'YYYY-MM-DD';
 const FormItem = Form.Item;
-const MonthPicker = DatePicker.MonthPicker;
 const RangePicker = DatePicker.RangePicker;
 const RadioGroup = Radio.Group;
 
@@ -50,6 +49,7 @@ class page extends Component {
         let listDefa=[{fromCity:fromCity,toCity:toCity}];
         let listData =data.listData==undefined?listDefa:data.listData;
         let lineNum =listData.length;
+    
         return (
             <div className={less.content}>
             <div style={{ paddingTop: 10, width: 520, margin: "auto" }}>

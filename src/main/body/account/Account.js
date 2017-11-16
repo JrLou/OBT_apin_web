@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Input, Modal, message, Cascader, Dropdown, Menu } from 'antd';
+import { Form, Button, Input, Modal, message, Cascader, Dropdown, Menu, Icon } from 'antd';
 import css from './account.less';
 import { formatArgs } from 'debug';
 import { HttpTool, CookieHelp } from '../../../../lib/utils/index.js';
@@ -126,6 +126,10 @@ class AccountForm extends Component {
                             <a onClick={() => {
                                 this.handleChange('showProvince', item.name);
                                 this.getArea(item.id, 'city');
+                                this.setState({
+                                    showCity:'',
+                                    showZone:''
+                                });
                             }}>{item.name}</a>
                         </Menu.Item>
 
@@ -141,6 +145,9 @@ class AccountForm extends Component {
                             <a onClick={() => {
                                 this.handleChange('showCity', item.name);
                                 this.getArea(item.id, 'zone');
+                                this.setState({
+                                    showZone:''
+                                });
                             }}>{item.name}</a>
                         </Menu.Item>
 
@@ -208,9 +215,15 @@ class AccountForm extends Component {
                     <FormItem prefixCls="my-ant-form"
                         {...formItemLayout}
                         label="联系人"
+                        validateStatus={isFieldTouched('contactName') && getFieldError('contactName') ? 'error' : ''}
+                        help={isFieldTouched('contactName') && getFieldError('contactName') || ''}
                     >
                         {isView ? <div>{contactName}</div> : getFieldDecorator('contactName', {
-                            initialValue: contactName
+                            initialValue: contactName,
+                            rules: [{
+                                pattern: /^[\u4e00-\u9fa5]{2,6}$|^[a-zA-Z]{2,12}$/,
+                                message: '请输入姓名(汉字2-6个字或英文2-12个字符)'
+                            }],
                         })(
                             <Input prefixCls="my-ant-input" onChange={(value) => this.handleChange('contactName', value)} />
                             )}
@@ -220,9 +233,9 @@ class AccountForm extends Component {
                         label="省"
                     >
                         <Dropdown overlay={provinceMenu}>
-                            <a className="ant-dropdown-link" href="#">
-                                {showProvince || '省'}
-                            </a>
+                            <Button>
+                                {showProvince || '省'} <Icon type="down" />
+                            </Button>
                         </Dropdown>
 
                     </FormItem>}
@@ -231,9 +244,9 @@ class AccountForm extends Component {
                         label="市"
                     >
                         <Dropdown overlay={cityMenu}>
-                            <a className="ant-dropdown-link" href="#">
-                                {showCity || '市'}
-                            </a>
+                            <Button>
+                                {showCity || '市'} <Icon type="down" />
+                            </Button>
                         </Dropdown>
                     </FormItem>}
                     {!isView && <FormItem prefixCls="my-ant-form"
@@ -241,9 +254,9 @@ class AccountForm extends Component {
                         label="区"
                     >
                         <Dropdown overlay={zoneMenu}>
-                            <a className="ant-dropdown-link" href="#">
-                                {showZone || '市'}
-                            </a>
+                            <Button>
+                                {showZone || '区'} <Icon type="down" />
+                            </Button>
                         </Dropdown>
                     </FormItem>}
                     <FormItem prefixCls="my-ant-form"
@@ -272,6 +285,7 @@ class AccountForm extends Component {
                                         prefixCls="my-ant-btn"
                                         size="large"
                                         type="primary"
+                                        style={{marginRight: '20px'}}
                                         onClick={this.handleSubmit}
                                     >保存</Button>
                                     <Button

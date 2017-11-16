@@ -20,6 +20,7 @@ class page extends Component {
         this.par = window.app_getPar(this);
         this.state = {
             step: this.par ? this.par.step : 0,
+            type: this.par ? this.par.type : 1,
             isLogin: false,
             account: ''
         };
@@ -33,7 +34,7 @@ class page extends Component {
     }
 
     render() {
-        let { step, isLogin, account } = this.state;
+        let { step, isLogin, account, type } = this.state;
         const menu = (
             <Menu className={less.dropMenu}>
                 <Menu.Item className={less.dropItem}>
@@ -60,7 +61,7 @@ class page extends Component {
                     {!step && isLogin && <Menus />}
                     {step ?
                         <div className={`${less.right} ${less.step}`}>
-                            <Steps step={step}></Steps>
+                            <Steps step={step} type={type}></Steps>
                         </div>
                         :
                         <div className={less.right}>
