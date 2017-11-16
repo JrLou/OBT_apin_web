@@ -165,7 +165,7 @@ class PassengerMsg extends Component{
                                 <div className={css.title}>乘机人信息</div>
                                 <Button
                                     type="primary"
-                                    className={css.btnType02}
+                                    className={hasKey(this.state.orderState,[0,8])?css.hidden:css.btnType02}
                                     onClick={()=>{
                                         this.exportPassenger();
                                     }}
