@@ -215,9 +215,15 @@ class AccountForm extends Component {
                     <FormItem prefixCls="my-ant-form"
                         {...formItemLayout}
                         label="联系人"
+                        validateStatus={isFieldTouched('contactName') && getFieldError('contactName') ? 'error' : ''}
+                        help={isFieldTouched('contactName') && getFieldError('contactName') || ''}
                     >
                         {isView ? <div>{contactName}</div> : getFieldDecorator('contactName', {
-                            initialValue: contactName
+                            initialValue: contactName,
+                            rules: [{
+                                pattern: /^[\u4e00-\u9fa5]{2,6}$|^[a-zA-Z]{2,12}$/,
+                                message: '请输入姓名(汉字2-6个字或英文2-12个字符)'
+                            }],
                         })(
                             <Input prefixCls="my-ant-input" onChange={(value) => this.handleChange('contactName', value)} />
                             )}
