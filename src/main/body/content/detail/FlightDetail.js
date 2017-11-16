@@ -54,6 +54,8 @@ class page extends Component {
         this.loadingView.refreshView(true);
         var success = (code, msg, json, option) => {
             this.loadingView.refreshView(false,()=>{
+                log(json);
+                log("--------");
                 this.setData(json);
             });
         };
@@ -234,7 +236,7 @@ class page extends Component {
 
                                         }],
                                         initialValue: adultNum,
-                                    })(<Input style={{width:"110px",height:"35px"}}
+                                    })(<Input style={{width:"110px",height:"35px",textAlign:"center"}}
                                               placeholder={"人数"}
                                               addonBefore={<Icon type="minus"
                                                                  style={{cursor: "pointer",color:"#FF6600"}}

@@ -240,7 +240,7 @@ class PassengerAdd extends Component{
                     onChange={(e)=>{
                         let value = e.target.value;
                         let regIDCard = /^[0-9Xx]{0,40}$/;
-                        let regOther = /^[0-9a-zA-Z\<\>\-\/]{0,40}$/;
+                        let regOther = /^[0-9a-zA-Z\<\>\-\/\－]{0,40}$/;
                         let reg = isSimple?regIDCard:regOther;
                         if(reg.test(value)){
                             this.setData('credNumber',value);
@@ -249,7 +249,7 @@ class PassengerAdd extends Component{
                     onBlur={(e)=>{
                         let value = e.target.value;
                         let regIDCard = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
-                        let regOther = /^[0-9a-zA-Z\<\>\-\/]{0,40}$/;
+                        let regOther = /^[0-9a-zA-Z\<\>\-\/\－]{0,40}$/;
                         let reg = isSimple?regIDCard:regOther;
                         this.setTestState('credNumber',{state:reg.test(value),msg:'请输入正确的证件号'});
                     }}
