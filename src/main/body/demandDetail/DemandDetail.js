@@ -192,10 +192,6 @@ class page extends Component {
     }
 
     getButton(type, data = {}) {
-        let status = ["需求已取消", "需求处理中", "需求处理中", "待用户确认", "处理完成", "需求已关闭"];
-        if (type < -1 || type > 5) {
-            status = 5;
-        }
         return (
             <div className={less.buttonBottomLayout}>
                 <div>
@@ -216,6 +212,7 @@ class page extends Component {
                                         childCount:data.childCount,
                                         dataDep:data.dataDep,
                                         dataArr:data.dataArr,
+                                        voyage:JSON.parse(data.voyage),
                                     });
                                 }
                             }}
@@ -354,7 +351,7 @@ class page extends Component {
     getMultiPass(type, data = {}) {
         let status = ["需求已取消", "需求处理中", "需求处理中", "待用户确认", "处理完成", "需求已关闭"];
         if (type < -1 || type > 5) {
-            status = 5;
+            type = 5;
         }
         return (
             <div className={less.topMessage}>
@@ -475,7 +472,7 @@ class page extends Component {
     getTop(type, data = {}) {
         let status = ["需求已取消", "需求处理中", "需求处理中", "待用户确认", "处理完成", "需求已关闭"];
         if (type < -1 || type > 5) {
-            status = 5;
+            type = 5;
         }
         if (!data)return null;
         let img = null;
@@ -493,7 +490,7 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>需求状态：</font>
                             <font
-                                className={type === 1 || type === 2 || type === 3 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{data.demandStatus === -1 ? "全部" : status[data.demandStatus]}</font>
+                                className={type === 1 || type === 2 || type === 3 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{type === -1 ? "全部" : status[type]}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
@@ -531,7 +528,7 @@ class page extends Component {
 
                         <div style={{clear: "both", marginTop: 0}}/>
                         <div style={{marginTop: 0}}>
-                            <font className={less.mainTitle}>需求类型：</font>
+                            <font className={less.mainTitle}>航程类型：</font>
                             <font
                                 className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.flightType === 1 ? "单程" : data && data.flightType === 2 ? "往返" : "暂无"}</font>
                         </div>
