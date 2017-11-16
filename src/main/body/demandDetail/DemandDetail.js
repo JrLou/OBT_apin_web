@@ -229,7 +229,7 @@ class page extends Component {
                                         voyage.push(voyageObject);
                                     }
                                     let datas = {
-                                        lineType: data.flightType,
+                                        lineType: parseInt(data.flightType),
                                         adultCount: data.adultCount,
                                         childCount: data.childCount,
                                         isMult: false,
