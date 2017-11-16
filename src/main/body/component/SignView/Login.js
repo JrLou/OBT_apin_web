@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-15 13:55:41
+ * @Last Modified time: 2017-11-15 22:20:06
  */
 
 import React, { Component } from 'react';
@@ -134,7 +134,7 @@ class MsgLoginForm extends React.Component {
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
 
-        const mobileError = isFieldTouched('mobile') && getFieldError('mobile');
+        const accountError = isFieldTouched('account') && getFieldError('account');
         const picCodeError = isFieldTouched('picCode') && getFieldError('picCode');
         const passwordError = isFieldTouched('password') && getFieldError('password');
 
@@ -143,10 +143,10 @@ class MsgLoginForm extends React.Component {
             <Form prefixCls="my-ant-form" onSubmit={this.handleSubmit}>
                 <FormItem
                     prefixCls="my-ant-form"
-                    validateStatus={mobileError ? 'error' : ''}
-                    help={mobileError || ''}
+                    validateStatus={accountError ? 'error' : ''}
+                    help={accountError || ''}
                 >
-                    {getFieldDecorator('mobile', {
+                    {getFieldDecorator('account', {
                         rules: [{ required: true, message: '请输入11位手机号' },
                         { pattern: /^(1)\d{10}$/, message: '手机号格式不正确！' }
                         ],
@@ -178,7 +178,7 @@ class MsgLoginForm extends React.Component {
                     })(
                         <Input prefixCls='my-ant-input' placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode error={getFieldError('account')} getCode={() => this.getCode(this.getCodeAction)} />
+                    <CheckCode ref="code" error={getFieldError('account')} getCode={() => this.getCode(this.getCodeAction)} />
                 </FormItem>
                 <FormItem prefixCls="my-ant-form">
                     <Button
@@ -203,7 +203,7 @@ class MsgLoginForm extends React.Component {
     //     const picCode = getFieldValue('picCode') || '';
     //     HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
     //         // 测试
-    //         if (json.length > 4) {
+    //         if (json && json.length > 4) {
     //             this.setState({
     //                 isShowPic: true,
     //                 picCode: 'data:image/jpg;base64,' + json
@@ -224,7 +224,7 @@ class MsgLoginForm extends React.Component {
     getCode(callback) {
 
         const { getFieldValue } = this.props.form;
-        const mobile = getFieldValue('mobile');
+        const account = getFieldValue('account');
         // const user = CookieHelp.getUserInfo();
         // log(user);
 
@@ -234,7 +234,7 @@ class MsgLoginForm extends React.Component {
         //     defaultLoginPromise(1, callback);
         // }
 
-        getLoginCodePromise(mobile, 1).then((data)=>{
+        getLoginCodePromise(account, 1).then((data)=>{
             this.data = data;
         }).catch((msg) => {
             message.error(msg);

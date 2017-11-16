@@ -257,7 +257,7 @@ class page extends Component {
         return (
             <div className={less.empty}>
                 <div className={less.emptyText}>
-                    <div>没有找到相应航线哟，试试提交需求订制专属航线</div>
+                    <div style={{color:"#666"}}>没有找到相应航线哟，试试提交需求订制专属航线</div>
                     <Button type="primary" onClick={()=>{
                         const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
                         if (isLogin){

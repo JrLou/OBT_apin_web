@@ -2,11 +2,10 @@ import React, {Component} from "react";
 
 import {Button, Modal, message} from "antd";
 import less from "./DemandDetail.less";
-import OrderInfoView from '../component/OrderInfoView/index';
 import CellNewFlight from "../content/cell/CellNewFlight";
-import {HttpTool} from "../../../../lib/utils/index.js";
+import {HttpTool, CookieHelp} from "../../../../lib/utils/index.js";
 import NumTransToTextHelp from '../tool/NumTransToTextHelp.js';
-import {hasKey, getFlightData} from '../tool/LXDHelp.js';
+import {getFlightData} from '../tool/LXDHelp.js';
 import APIGYW from '../../../api/APIGYW';
 /**
  * 需求已取消                    0
@@ -41,7 +40,7 @@ class page extends Component {
             visibleDelete: false,
             visibleConfirm: false,
             flightData: null,
-            demandId: -1
+            demandId: -1,
         };
         if (this.props.location.query.data) {
             this.parentId = JSON.parse(this.props.location.query.data).id;
@@ -61,7 +60,6 @@ class page extends Component {
             id: this.parentId
         };
         let success = (code, msg, json, option) => {
-
             this.setState({
                 data: json,
             });
@@ -155,7 +153,7 @@ class page extends Component {
                 {data.demandStatus === 1 || data.demandStatus === 2 ? this.getMessage("预计在30分钟内为您处理需求") :
                     (data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
                 {data.demandStatus === 5 ? this.getCloseReason(data) : null}
-                {data.demandStatus === 1 || data.demandStatus === 2 || data.demandStatus === 5 || data.demandStatus === 0 ? this.getButton(data.demandStatus, data) : null}
+                {data.demandStatus === 1 || data.demandStatus === 2 || data.demandStatus === 5 || data.demandStatus === 0 ? this.getButton(data.demandStatus) : null}
                 {data.demandStatus === 4 ? this.getOrderDetail(data) : null}
                 {data.demandStatus === 3 ? this.getConfirmButton(data && data.plans ? data.plans : [], data.flightType) : null}
             </div>
@@ -193,11 +191,7 @@ class page extends Component {
         );
     }
 
-    getButton(type, data = {}) {
-        let status = ["需求已取消", "需求处理中", "需求处理中", "待用户确认", "处理完成", "需求已关闭"];
-        if (type < -1 || type > 5) {
-            status = 5;
-        }
+    getButton(type) {
         return (
             <div className={less.buttonBottomLayout}>
                 <div>
@@ -210,6 +204,38 @@ class page extends Component {
                                     }
 
                                 } else {
+                                    let {data} = this.state;
+                                    let voyage = [];
+                                    let voyageObject = {};
+                                    if (data.voyage && JSON.parse(data.voyage).voyage) {
+                                        let voyageList=JSON.parse(data.voyage).voyage;
+                                        voyageList.map((data, index) => {
+                                            voyageObject = {
+                                                fromCity: data.cityDep,
+                                                toCity: data.cityArr,
+                                                toDateTime:"",
+                                                fromDateTime:data.dateDep,
+                                            };
+                                            voyage.push(voyageObject);
+                                        });
+                                    }
+                                    if(data.flightType===1||data.flightType===2){
+                                        voyageObject = {
+                                            fromCity: data.cityDep,
+                                            toCity: data.cityArr,
+                                            toDateTime:data.dateRet,
+                                            fromDateTime:data.dateDep,
+                                        };
+                                        voyage.push(voyageObject);
+                                    }
+                                    let datas = {
+                                        lineType: data.flightType+"",
+                                        adultCount: data.adultCount,
+                                        childCount: data.childCount,
+                                        isMult: false,
+                                        listData: voyage,
+                                    };
+                                    CookieHelp.saveCookieInfo("publishMsgCookie", datas);
                                     window.app_open(this, "/PublishMsg", {});
                                 }
                             }}
@@ -229,6 +255,7 @@ class page extends Component {
             </div>
         );
     }
+
 
     getCloseReason(data = {}) {
         return (
@@ -347,7 +374,7 @@ class page extends Component {
     getMultiPass(type, data = {}) {
         let status = ["需求已取消", "需求处理中", "需求处理中", "待用户确认", "处理完成", "需求已关闭"];
         if (type < -1 || type > 5) {
-            status = 5;
+            type = 5;
         }
         return (
             <div className={less.topMessage}>
@@ -468,7 +495,7 @@ class page extends Component {
     getTop(type, data = {}) {
         let status = ["需求已取消", "需求处理中", "需求处理中", "待用户确认", "处理完成", "需求已关闭"];
         if (type < -1 || type > 5) {
-            status = 5;
+            type = 5;
         }
         if (!data)return null;
         let img = null;
@@ -486,7 +513,7 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>需求状态：</font>
                             <font
-                                className={type === 1 || type === 2 || type === 3 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{data.demandStatus === -1 ? "全部" : status[data.demandStatus]}</font>
+                                className={type === 1 || type === 2 || type === 3 ? less.mainContentGreenStatus : (type === 5 ? less.mainContentClose : less.mainContent)}>{type === -1 ? "全部" : status[type]}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>创建时间：</font>
@@ -524,7 +551,7 @@ class page extends Component {
 
                         <div style={{clear: "both", marginTop: 0}}/>
                         <div style={{marginTop: 0}}>
-                            <font className={less.mainTitle}>需求类型：</font>
+                            <font className={less.mainTitle}>航程类型：</font>
                             <font
                                 className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.flightType === 1 ? "单程" : data && data.flightType === 2 ? "往返" : "暂无"}</font>
                         </div>
@@ -536,7 +563,7 @@ class page extends Component {
                         <div>
                             <font className={less.mainTitle}>航班人数：</font>
                             <font
-                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.totalPeople ? data.totalPeople : "0"}人（{data && data.adultCount ? data.adultCount + "成人" : "0"}{"，" + data && data.childCount ? data.childCount + "儿童）" : "0"}</font>
+                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.totalPeople ? data.totalPeople : "0"}人（{data && data.adultCount ? data.adultCount : "0"}成人，{"，" + data && data.childCount ? data.childCount : "0"}儿童）</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>出发日期：</font>

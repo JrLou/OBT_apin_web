@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-15 13:35:08
+ * @Last Modified time: 2017-11-15 22:20:07
  */
 
 import React, { Component } from 'react';
@@ -86,7 +86,7 @@ class ForgetForm extends Component {
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode error={getFieldError('tel')} getCode={() => this.getCode(this.getCodeAction)} />
+                    <CheckCode ref="code" error={getFieldError('tel')} getCode={() => this.getCode(this.getCodeAction)} />
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"
@@ -172,7 +172,7 @@ class ForgetForm extends Component {
         const picCode = getFieldValue('picCode') || '';
         HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
             // 测试
-            if (json.length > 4) {
+            if (json && json && json.length > 4) {
                 this.setState({
                     isShowPic: true,
                     picCode: 'data:image/jpg;base64,' + json

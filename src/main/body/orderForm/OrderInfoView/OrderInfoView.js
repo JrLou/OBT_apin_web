@@ -216,7 +216,7 @@ class OrderInfoView extends Component{
         let viewArray = [];
         if(payMsg instanceof Array){
             for(let key in payMsg){
-                viewArray.push(<div key={`item${key}`}>{this.getPayItemDetail(payMsg[key])}</div>);
+                viewArray.push(<div key={`item${key}`} className={css.payMsgBox}>{this.getPayItemDetail(payMsg[key])}</div>);
             }
         }
         return viewArray;
@@ -227,6 +227,7 @@ class OrderInfoView extends Component{
      * @param data
      */
     getPayItemDetail(data){
+        //data为pays中的一条
         if(!data){return;}
         let payment = parseInt(data.payment);
         let paymentName = '';
@@ -242,31 +243,76 @@ class OrderInfoView extends Component{
 
         //是否有积分支付
         let scorePay = parseInt(data.pointsAmount);
-        let otherPay = null;
-        let payName = '';
-        let voucherUrl = '';
-        if(data.records.length>0){
-            for(let key in data.records){
-                let payType = parseInt(data.records[key].payType);
-                switch(payType){
-                    case 0:otherPay = data.records[key];
-                            payName = '线下支付';
-                            break;
-                    case 1:otherPay = data.records[key];
-                            payName = '支付宝';
-                            break;
-                    case 2:otherPay = data.records[key];
-                            payName = '微信';
-                            break;
-                    case 3:otherPay = data.records[key];
-                            payName = '银联';
-                            break;
-                    case 4:break;       //积分支付
-                    default:break;
-                }
 
-                voucherUrl = (otherPay&&otherPay.voucherUrl)?otherPay.voucherUrl:'';
+        let recordView = [];
+        for(let key in data.records){
+            if (data.records[key].payType == 4){
+                //积分支付不用单条展示
+                continue;
             }
+
+            let payType = parseInt(data.records[key].payType);
+            let payName = '';
+            switch(payType) {
+                case 0:
+                    payName = '线下支付';
+                    break;
+                case 1:
+                    payName = '支付宝';
+                    break;
+                case 2:
+                    payName = '微信';
+                    break;
+                case 3:
+                    payName = '银联';
+                    break;
+                case 4:
+                    break;       //积分支付
+                default:
+                    break;
+            }
+            //凭证URL
+            let voucherUrl = (data.records[key]&&data.records[key].voucherUrl)?data.records[key].voucherUrl:'';
+
+            recordView.push(
+                <div key={`record${key}`} className={css.recordBox}>
+                    {
+                        payName
+                            ?   (<div className={css.payType}>
+                                {`(支付方式：${payName}`}
+                                <span>&nbsp;&nbsp;</span>
+                                {`支付时间：${data.records[key].payTime})`}
+                            </div>)
+                            :   ''
+                    }
+                    {
+                        voucherUrl
+                            ?   <div className={css.payVoucher}>
+                                <span>支付凭证</span>
+                                {this.getPayVoucher(voucherUrl)}
+                                {
+                                    data.records[key].auditStatus == 2
+                                        ?   <div className={css.reUpload}>
+                                            <Button
+                                                className={css.cancleBtnStyle}
+                                                onClick={()=>{
+                                                    window.app_open(this,'/UpLoad',{
+                                                        orderId:data.orderId,
+                                                        id:data.records[key].id,
+                                                    });
+                                                }}
+                                            >
+                                                重新上传
+                                            </Button>
+                                        </div>
+                                        :   ''
+                                }
+                            </div>
+                            :''
+                    }
+                </div>
+            );
+        }
 
         return(
             <div className={css.itemLinePay}>
@@ -280,47 +326,15 @@ class OrderInfoView extends Component{
                     {scorePay>0?`积分抵扣(¥${scorePay})`:''}
                 </div>
                 {
-                    payName
-                    ?   (<div className={css.payType}>
-                            {`(支付方式：${payName}`}
-                            <span>&nbsp;&nbsp;</span>
-                            {`支付时间：${otherPay.payTime})`}
+                    data.records.length == 0
+                    ?(<div className={css.payType}>
+                            {data.expiredTime?`支付截止日期：${sliceTimeString(data.expiredTime)}`:''}
                         </div>)
-                    :   (<div className={css.payType}>
-                            {data.exexpiredTime?`支付截止日期：${sliceTimeString(data.exexpiredTime)}`:''}
-                        </div>)
-                }
-                {
-                    voucherUrl
-                    ?   <div className={css.payVoucher}>
-                            <span>支付凭证</span>
-                            {this.getPayVoucher(voucherUrl)}
-                            {
-                                otherPay.auditStatus == 2
-                                ?   <div className={css.reUpload}>
-                                        <Button
-                                            className={css.cancleBtnStyle}
-                                            onClick={()=>{
-                                                window.app_open(this,'/UpLoad',{
-                                                    orderId:data.orderId,
-                                                    id:data.id,
-                                                });
-                                            }}
-                                        >
-                                            重新上传
-                                        </Button>
-                                    </div>
-                                :   ''
-                            }
-                        </div>
-                    :''
-                }
+                    : recordView
 
+                }
             </div>
         );
-        }else{
-            return (<div></div>);
-        }
     }
 
     /**

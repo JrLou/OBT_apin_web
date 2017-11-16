@@ -38,6 +38,9 @@ class CellNewFlight extends Component {
                             {"每件重量上限: "}
                             <span style={{color:"#ff6600",fontSize:"14px"}}>{dataSource.weightLimit+"kg"}</span>
                         </div>
+                        {!dataSource.weightLimit&&!dataSource.freeBag?<div className={css.rule}>
+                            {"暂无行李规则"}
+                        </div>:null}
                     </div>}>行李规则
                     </Tooltip>
                 </div>

@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-15 13:23:57
+ * @Last Modified time: 2017-11-16 11:59:07
  */
 
 import React, { Component } from 'react';
@@ -14,7 +14,6 @@ import CheckCode from './CheckCode';
 import { validateLoginPromise, defaultLoginPromise, loginPromise, getLoginCodePromise } from './LoginAction';
 
 import css from './sign.less';
-import { log } from 'debug';
 
 const FormItem = Form.Item;
 
@@ -123,7 +122,7 @@ class SignInForm extends Component {
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
                         )}
-                    <img src={picCode} alt="" className={css.checkCodeImg} />
+                    <img src={picCode} alt="" style={{ cursor: 'pointer' }} className={css.checkCodeImg} onClick={() => this.getCode(() => this.getCodeAction(true))} />
                 </FormItem>}
                 <FormItem
                     prefixCls="my-ant-form"
@@ -136,7 +135,7 @@ class SignInForm extends Component {
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode error={getFieldError('mobile')} getCode={() => this.getCode(this.getCodeAction)} />
+                    <CheckCode ref="code" error={getFieldError('mobile') || getFieldError('picCode')} getCode={() => this.getCode(this.getCodeAction)} />
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"
@@ -156,7 +155,7 @@ class SignInForm extends Component {
                     validateStatus={bdChargerError ? 'error' : ''}
                     help={bdChargerError || ''}
                     label="市场经理姓名"
-                >
+                > 
                     {getFieldDecorator('bdCharger')(
                         <Input prefixCls="my-ant-input" placeholder="请务必准确输入" />
                     )}
@@ -212,14 +211,16 @@ class SignInForm extends Component {
     /**
      * 获取注册验证码
      */
-    getCodeAction() {
+    getCodeAction(isSendPic) {
         const { getFieldValue } = this.props.form;
         const account = getFieldValue('account');
         const mobile = getFieldValue('mobile');
         const picCode = getFieldValue('picCode') || '';
         HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
+
+
             // 测试
-            if (json.length > 4) {
+            if (json && json.length > 4) {
                 this.setState({
                     isShowPic: true,
                     picCode: 'data:image/jpg;base64,' + json
@@ -228,11 +229,12 @@ class SignInForm extends Component {
                 this.setState({
                     isShowPic: false
                 });
+                this.refs.code.autoTime(60);
             }
         }, (code, msg, json, option) => {
             message.error(msg);
         }, {
-                account, mobile, picCode, type: 1
+                account, mobile, picCode: isSendPic ? "" : picCode, type: 1
             });
     }
 
@@ -245,7 +247,8 @@ class SignInForm extends Component {
         if (user) {
             callback();
         } else {
-            defaultLoginPromise(0, callback);
+            defaultLoginPromise(0, callback,()=>{
+            });
         }
     }
 }
