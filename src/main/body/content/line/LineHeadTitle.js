@@ -86,7 +86,6 @@ class page extends Component {
                           }}/>
                     </div>
 
-
                     <div className={css.requireAlert}>
                         {this.state.isMyOut?<div className={css.requireAlert_center}>
                             <div>
