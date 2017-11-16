@@ -287,7 +287,7 @@ class OrderFormList extends Component{
                         <Input
                             value={this.state.cityDep}
                             className={css.inputStyle}
-                            maxLength={18}
+                            maxLength={'18'}
                             placeholder={'请输入'}
                             onChange={(obj)=>{
                                 let value = removeSpace(obj.target.value);
@@ -300,7 +300,7 @@ class OrderFormList extends Component{
                         <Input
                             value={this.state.cityArr}
                             className={css.inputStyle}
-                            maxLength={18}
+                            maxLength={'18'}
                             placeholder={'请输入'}
                             onChange={(obj)=>{
                                 let value = removeSpace(obj.target.value);
