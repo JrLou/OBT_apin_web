@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-16 20:12:28
+ * @Last Modified time: 2017-11-16 22:24:56
  */
 
 import React, { Component } from 'react';
@@ -70,16 +70,16 @@ class ForgetForm extends Component {
                     >
                         {getFieldDecorator('picCode', {
                             rules: [{ required: true, message: '请输入图形验证码' },
-                                {
-                                    validator: (rule, value, callback) => {
-                                        const mobile = getFieldValue('mobile');
-                                        this.getCode(() => {
-                                            validateLoginPromise({ picCode: value, mobile,type:2 })
-                                                .then((data) => callback())
-                                                .catch((data) => callback(data));
-                                        });
-                                    }
+                            {
+                                validator: (rule, value, callback) => {
+                                    const mobile = getFieldValue('mobile');
+                                    this.getCode(() => {
+                                        validateLoginPromise({ picCode: value, mobile, type: 2 })
+                                            .then((data) => callback())
+                                            .catch((data) => callback(data));
+                                    });
                                 }
+                            }
                             ],
                         })(
                             <Input prefixCls='my-ant-input' placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
@@ -183,21 +183,18 @@ class ForgetForm extends Component {
         const mobile = getFieldValue('mobile');
         const picCode = getFieldValue('picCode') || '';
         HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
-            if (code == 421 || code == 422 || code == 403) {
-                CookieHelp.clearCookie();
-            } else
-                // 测试
-                if (json && json.length > 4) {
-                    this.setState({
-                        isShowPic: true,
-                        picCode: 'data:image/jpg;base64,' + json
-                    });
-                } else {
-                    this.setState({
-                        isShowPic: false
-                    });
-                    this.refs.code.autoTime(60);
-                }
+            // 测试
+            if (json && json.length > 4) {
+                this.setState({
+                    isShowPic: true,
+                    picCode: 'data:image/jpg;base64,' + json
+                });
+            } else {
+                this.setState({
+                    isShowPic: false
+                });
+                this.refs.code.autoTime(60);
+            }
         }, (code, msg, json, option) => {
 
             message.error(msg);
