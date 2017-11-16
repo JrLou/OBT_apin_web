@@ -21,30 +21,24 @@ class page extends Component {
     }
     httpPostAdd(param) {//发送数据
         let success = (code, msg, json, option) => {
-            //   console.log(msg);
             message.success(msg);
-            //跳转到---
             window.app_open(this, "/Demand",{});
         };
         let failure = (code, msg, option) => {
-            //   console.log(msg);
             message.error(msg);
         };
-        //  let api ="http://192.168.0.58:6300/demandapi/v1.0/demands";
-        // let api = "/demandapi/v1.0/demands";
         HttpTool.request(HttpTool.typeEnum.POST, APIGYW.demandapi_demands, success, failure, param);
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         let {data}=this.props.location.query;
-        let testdate=data;
+        let testdate=(data==undefined || data== "")?{}:data;
         if(CookieHelp.getCookieInfo("publishMsgCookie") != undefined && CookieHelp.getCookieInfo("publishMsgCookie") !="" ){
             testdate=CookieHelp.getCookieInfo("publishMsgCookie");
         }
         let lineType=2;
         data=JSON.parse(testdate);
-        alert(JSON.stringify(data));
         if(data.lineType!=undefined && ["1","2","3"].indexOf(data.lineType)>-1){
             lineType=parseInt(data.lineType);
         }
@@ -55,7 +49,7 @@ class page extends Component {
         let childCount=data.childCount==undefined?"":data.childCount;
         let listDefa=[{fromCity:fromCity,toCity:toCity}];
         let listData =data.listData==undefined?listDefa:data.listData;
-        let lineNum =data.lineNum==undefined?1:data.lineNum;
+        let lineNum =listData.length;
         return (
             <div className={less.content}>
                 <div style={{ paddingTop: 10, width: 520, margin: "auto" }}>
@@ -75,7 +69,7 @@ class page extends Component {
                     lineType：航程类型1，2，3                    
                     adultCount：成人人数                        
                     childCount：儿童人数                              
-                    lineNum：单程，往返：1，往返【2】至【6】一个数          
+                    lineNum：单程，往返：1，多程【2】至【6】一个数          
                     isMult：是否显示多层false 显示，true 不显示
                     listData:[{fromCity:"from",toCity:"to",toDateTime:"",fromDateTime:""}] 航线的线路与时间
                 */}
