@@ -240,7 +240,7 @@ class PassengerAdd extends Component{
                     onChange={(e)=>{
                         let value = e.target.value;
                         let regIDCard = /^[0-9Xx]{0,40}$/;
-                        let regOther = /^[0-9a-zA-Z\<\>\-\/\－]{0,40}$/;
+                        let regOther = /^[0-9a-zA-Z\<\>\-\/\－\－]{0,40}$/;
                         let reg = isSimple?regIDCard:regOther;
                         if(reg.test(value)){
                             this.setData('credNumber',value);
@@ -249,7 +249,7 @@ class PassengerAdd extends Component{
                     onBlur={(e)=>{
                         let value = e.target.value;
                         let regIDCard = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
-                        let regOther = /^[0-9a-zA-Z\<\>\-\/\－]{0,40}$/;
+                        let regOther = /^[0-9a-zA-Z\<\>\-\/\－\－]{0,40}$/;
                         let reg = isSimple?regIDCard:regOther;
                         this.setTestState('credNumber',{state:reg.test(value),msg:'请输入正确的证件号'});
                     }}
@@ -464,10 +464,36 @@ class PassengerAdd extends Component{
             if(requireData.name&&requireData.credNumber&&testMsg.credNumber.state){
                 checkedState = true;
             }
+            //对必填对输入项做验证
+            if(!requireData.name){
+                this.setTestState('name',{state:false,msg:'请输入姓名'});
+            }
+            if(!requireData.credNumber){
+                this.setTestState('credNumber',{state:false,msg:'请输入证件号'});
+            }
         }else{
             //其它类型
             if(requireData.name&&requireData.nation&&requireData.birthday&&requireData.credNumber&&requireData.expireTime&&requireData.issuePlace&&testMsg.credNumber.state){
                 checkedState = true;
+            }
+            //对必填对输入项做验证
+            if(!requireData.name){
+                this.setTestState('name',{state:false,msg:'请输入姓名'});
+            }
+            if(!requireData.credNumber){
+                this.setTestState('credNumber',{state:false,msg:'请输入证件号'});
+            }
+            if(!requireData.nation){
+                this.setTestState('nation',{state:false,msg:'请输入国籍'});
+            }
+            if(!requireData.birthday){
+                this.setTestState('birthday',{state:false,msg:'请输入出生日期'});
+            }
+            if(!requireData.expireTime){
+                this.setTestState('expireTime',{state:false,msg:'请输入证件有效期'});
+            }
+            if(!requireData.issuePlace){
+                this.setTestState('issuePlace',{state:false,msg:'请输入签发地'});
             }
         }
         return checkedState;
