@@ -40,13 +40,12 @@ class page extends Component {
                 <div className={css.right}>
                     <div className={css.title}>
                         <div className={css.titleHead}>{dataSource.depCity}</div>
-
                         <img className={css.imgIcon}
                              src={dataSource.flightType==2?require("../../../../images/trip_round.png"):require("../../../../images/trip_single.png")}/>
                         <div className={css.refTitleHead}>{dataSource.arrCity}{dataSource.flightType==2?"（往返）":"（单程）"}</div>
                     </div>
 
-                    <div className={css.rightLine} style={{marginTop:"40px"}}>
+                    <div className={css.rightLine} style={{marginTop:"50px"}}>
                         <div className={css.lineLeft}>时间</div>
                         <div className={css.lineRight}>{dataSource.startDate}</div>
                         <div className={css.center}> 至</div>
@@ -58,7 +57,7 @@ class page extends Component {
                         <div className={css.thirdLineRight}>
                             <span className={css.price}>{"¥ "}</span>
                             <span style={{fontSize:"20px", color:"#FF5841"}}>{dataSource.basePrice}</span>
-                            <span className={css.text}>{" 起"}</span>
+                            <span style={{fontSize:"12px", color:"#888D99"}}>{" 起"}</span>
                         </div>
                     </div>
 
