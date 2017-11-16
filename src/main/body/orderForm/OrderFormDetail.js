@@ -73,9 +73,13 @@ class OrderFormDetail extends Component{
         // log(markDiv);
         // //监听页面滚动
         // window.onscroll = ()=>{
+        //     //根元素的整个高度   （不是body）
         //     let rootDivHeight = window.getComputedStyle(rootDiv,'').height;
+        //     //标记div顶端 到 body顶端 的距离（body顶端 与root元素顶端位置相同）
         //     let markDivTop = markDiv.offsetTop;
-        //     log(markDivTop);
+        //     //浏览器窗口可视高度
+        //     let windowHeight = window.screen.clientHeight;
+        //     log(windowHeight);
         // };
     }
 
