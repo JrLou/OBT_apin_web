@@ -20,6 +20,7 @@ class page extends Component {
         this.par = window.app_getPar(this);
         this.state = {
             step: this.par ? this.par.step : 0,
+            type: this.par ? this.par.type : 1,
             isLogin: false,
             account: ''
         };
@@ -33,11 +34,11 @@ class page extends Component {
     }
 
     render() {
-        let { step, isLogin, account } = this.state;
+        let { step, isLogin, account, type } = this.state;
         const menu = (
-            <Menu>
-                <Menu.Item>
-                    <a onClick={() => {
+            <Menu className={less.dropMenu}>
+                <Menu.Item className={less.dropItem}>
+                    <a className={less.center} onClick={() => {
                         window.app_open(this.props.root, '/Account', null);
                     }}>用户中心</a>
                 </Menu.Item>
@@ -60,7 +61,7 @@ class page extends Component {
                     {!step && isLogin && <Menus />}
                     {step ?
                         <div className={`${less.right} ${less.step}`}>
-                            <Steps step={step}></Steps>
+                            <Steps step={step} type={type}></Steps>
                         </div>
                         :
                         <div className={less.right}>
@@ -77,12 +78,17 @@ class page extends Component {
                                     >注册</Button>
                                 }
                                 {
-                                    isLogin && <Dropdown overlay={menu}>
-                                        <span>
-                                            Hi,
-                                        <a className="ant-dropdown-link" href="#">{account}<Icon type="down" /></a>
-                                        </span>
-                                    </Dropdown>
+                                    isLogin && <div className={less.drop}>
+                                        Hi,
+                                    <Dropdown overlay={menu}>
+                                            <span>
+                                                <a className="ant-dropdown-link" href="#">
+                                                    <span className={less.name}>{account}</span>
+                                                    <Icon type="up" />
+                                                </a>
+                                            </span>
+                                        </Dropdown>
+                                    </div>
                                 }
 
                             </div>

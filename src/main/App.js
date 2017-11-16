@@ -15,6 +15,7 @@ class page extends Component {
                 <div className={less.mainContent}>
                     <AppTop
                         root={this}
+                        {...this.props}
                         showModal={e => this.showModal = e}
                     />
                     <div className={less.container} style={{ minHeight: document.body.clientHeight - 80 }}>
