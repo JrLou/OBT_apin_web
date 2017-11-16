@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-16 12:05:33
+ * @Last Modified time: 2017-11-16 14:34:16
  */
 
 import React, { Component } from 'react';
@@ -72,7 +72,7 @@ class ForgetForm extends Component {
                         })(
                             <Input prefixCls='my-ant-input' placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
                             )}
-                            <img src={picCode} alt="" className={css.checkCodeImg} />
+                            <img src={picCode} alt="" className={css.checkCodeImg}  onClick={() => this.getCode(() => this.getCodeAction(true))} />
                     </FormItem>
                 }
                 <FormItem
@@ -86,7 +86,7 @@ class ForgetForm extends Component {
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode ref="code" error={getFieldError('mobile')} getCode={() => this.getCode(this.getCodeAction)} />
+                    <CheckCode ref="code" error={getFieldError('mobile') || getFieldError('picCode')} getCode={() => this.getCode(this.getCodeAction)} />
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"
@@ -166,13 +166,13 @@ class ForgetForm extends Component {
         });
     }
 
-    getCodeAction() {
+    getCodeAction(isSendPic) {
         const { getFieldValue } = this.props.form;
         const mobile = getFieldValue('mobile');
         const picCode = getFieldValue('picCode') || '';
         HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
             // 测试
-            if (json && json && json.length > 4) {
+            if (json && json.length > 4) {
                 this.setState({
                     isShowPic: true,
                     picCode: 'data:image/jpg;base64,' + json
@@ -181,25 +181,28 @@ class ForgetForm extends Component {
                 this.setState({
                     isShowPic: false
                 });
+                this.refs.code.autoTime(60);
             }
-        }, (code, message, json, option) => {
+        }, (code, msg, json, option) => {
+            
+            message.error(msg);
         }, {
-                mobile, picCode, type: 2
+                mobile, picCode: isSendPic ? "" : picCode, type: 2
             });
     }
 
+    /**
+     * 获取初始token
+     */
     getCode(callback) {
-        // const user = CookieHelp.getUserInfo();
+        const user = CookieHelp.getUserInfo();
 
-        // if (user) {
-        //     callback();
-        // } else {
-        //     defaultLoginPromise(1, () => callback());
-        // }
-
-        callback();
-
-
+        if (user) {
+            callback();
+        } else {
+            defaultLoginPromise(0, callback,()=>{
+            });
+        }
     }
 }
 
