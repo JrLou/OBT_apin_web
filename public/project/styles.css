@@ -1880,8 +1880,8 @@ active {
 .src-main-body-content-line-LineHeadTitle---left---1qHuh {
   display: table-cell;
   vertical-align: middle;
-  width: 280px;
-  height: 210px;
+  width: 346px;
+  height: 260px;
 }
 .src-main-body-content-line-LineHeadTitle---img---pbQgA {
   width: 100%;
@@ -1893,7 +1893,6 @@ active {
 .src-main-body-content-line-LineHeadTitle---right---2qWYY {
   display: table-cell;
   vertical-align: middle;
-  padding-left: 15px;
   padding-right: 0;
 }
 .src-main-body-content-line-LineHeadTitle---title---2asfv {
@@ -1901,13 +1900,13 @@ active {
   border-style: dashed;
   border-color: #CBD3E5;
   width: 100%;
-  padding: 15px 0;
+  padding: 20px;
 }
 .src-main-body-content-line-LineHeadTitle---titleHead---2UZ1a {
   display: inline;
   vertical-align: middle;
   font-size: 20px;
-  color: #2db7f5;
+  color: #29A6FF;
   padding-right: 15px;
 }
 .src-main-body-content-line-LineHeadTitle---refTitleHead---_K9J9 {
@@ -1918,9 +1917,11 @@ active {
   background-size: cover;
 }
 .src-main-body-content-line-LineHeadTitle---rightLine---2TSUq {
+  padding-left: 20px;
   overflow: hidden;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
+  height: 20px;
+  line-height: 20px;
 }
 .src-main-body-content-line-LineHeadTitle---lineLeft---tYXhy {
   display: inline-block;
@@ -5340,6 +5341,7 @@ active {
   background: #fff;
   margin-bottom: 10px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 .src-main-body-orderForm-OrderFormList---operation---ewvOb {
   color: #29A6FF;
@@ -5354,7 +5356,7 @@ active {
 }
 .src-main-body-orderForm-OrderFormList---searchItem01---2RpcF,
 .src-main-body-orderForm-OrderFormList---searchItem02---3fpc- {
-  display: inline-block;
+  float: left;
   font-size: 14px;
   vertical-align: middle;
   min-height: 35px;
@@ -5762,6 +5764,7 @@ active {
   display: inline-block;
   vertical-align: middle;
   word-wrap: break-word;
+  word-break: keep-all;
 }
 .src-main-body-orderForm-Passengers-Passengers---operationUpDate---21P6N {
   color: #00A0E9;
@@ -6138,7 +6141,7 @@ active {
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---payVoucher---250VE {
   clear: both;
   padding-top: 20px;
-  width: 1000px;
+  position: relative;
 }
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---voucherImg---bk570 {
   width: 100px;
@@ -6181,7 +6184,17 @@ active {
   border: 1px solid #E6E6E6;
   border-radius: 2px;
 }
+.src-main-body-orderForm-OrderInfoView-OrderInfoView---reUploadBtnStyle---2T1l8 {
+  height: 36px;
+  width: 110px;
+  border: 1px solid #E6E6E6;
+  border-radius: 2px;
+  position: absolute;
+  top: 25px;
+  left: 950px;
+}
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---recordBox---3FSml {
+  margin-top: -2px;
   float: left;
 }
 .src-main-body-orderForm-PayBottom-PayBottom---maintheme---3s03j {
