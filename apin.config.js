@@ -4,6 +4,8 @@ module.exports = {
         var path = require("path");
         var CleanWebpackPlugin = require('clean-webpack-plugin');
         const ExtractTextPlugin = require("extract-text-webpack-plugin");
+        var extractApin = new ExtractTextPlugin({filename:"apin.css",allChunks:true});
+        var extractSrc = new ExtractTextPlugin({filename:"src.css",allChunks:true});
         var defaultPlugin = require('./lib/config/webpack/plugins');
 
 //修改ANTD主题
@@ -83,11 +85,11 @@ module.exports = {
                 },
                 {
                     test: /^(?!.*?(\\|\/)src(\\|\/)).*less$/,
-                    loader: "style-loader!css-loader!less-loader?{\"sourceMap\":true,\"modifyVars\":"+themeV+"}"
+                    loader: extractApin.extract("css-loader!less-loader?{\"sourceMap\":true,\"modifyVars\":"+themeV+"}")
                 },
                 {
                     test: /(.*?(\\|\/)src(\\|\/)).*less$/,
-                    loader: ExtractTextPlugin.extract("css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]!less-loader")
+                    loader: extractSrc.extract("css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]!less-loader")
                 },
                 {
                     test: /\.(png|jpg|gif)$/,
@@ -96,7 +98,7 @@ module.exports = {
 
             ]
         };
-	    return {
+        return {
             dev: {
                 useAnalyzer:false,
                 config: {
@@ -124,7 +126,8 @@ module.exports = {
                     },
                     module: configModule,
                     plugins: [
-                        new ExtractTextPlugin({filename:"styles.css",allChunks:true}),
+                        extractApin,
+                        extractSrc,
                         //删除上次打包目录
                         new CleanWebpackPlugin(['project'],
                             {

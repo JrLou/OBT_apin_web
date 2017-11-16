@@ -3,7 +3,6 @@ import less from './UnionPayAdd.less';
 import {HttpTool} from "../../lib/utils/index.js";
 import Api from  './Api.js';
 import {Button, Form, Input, Icon, Spin, Modal, Radio} from 'antd';
-import WindowHelp from './WindowHelp.js';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 
@@ -16,7 +15,7 @@ class UnionPayAdd extends Component {
          value: 0,
          inputValue: "",
       };
-       this.wh = new WindowHelp();
+       this.wh = this.props.wh;
       this.state = this.defaultState;
       this.showError();
    }
@@ -137,16 +136,13 @@ class UnionPayAdd extends Component {
                               upLoad: true
                            }, () => {
                               //打开
-                               let apinPanel = this.wh.openInitWindow();
+                              this.wh.openInitWindow();
                                let cardNo = this.state.inputValue;
                               this.loadUnionPayAdd({cardNo: cardNo}, (code, msg, data) => {
                                  this.showError(code > 0 ? null : msg);
                                  if(code>0){
                                     //去开卡
                                      if(!data){
-                                        //
-                                        //  alert("开始");
-                                        //
                                          this.loadUnionPayOpen({
                                              cardNo: this.state.inputValue,
                                              frontUrl:window.location.origin+"/html/paysuccess.html",
@@ -158,11 +154,12 @@ class UnionPayAdd extends Component {
                                                    upLoad: false
                                                 }, () => {
                                                     //打开开通
+
                                                     if (this.props.onAction) {
                                                         this.props.onAction({
                                                             url:"/apin"+Api.opencard+data.id,
                                                             cardNo:cardNo
-                                                        },apinPanel);
+                                                        });
                                                     }
                                                 });
                                             }else{
