@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-15 22:28:26
+ * @Last Modified time: 2017-11-16 11:59:07
  */
 
 import React, { Component } from 'react';
@@ -135,7 +135,7 @@ class SignInForm extends Component {
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode error={getFieldError('mobile')} getCode={() => this.getCode(this.getCodeAction)} />
+                    <CheckCode ref="code" error={getFieldError('mobile') || getFieldError('picCode')} getCode={() => this.getCode(this.getCodeAction)} />
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"
@@ -155,7 +155,7 @@ class SignInForm extends Component {
                     validateStatus={bdChargerError ? 'error' : ''}
                     help={bdChargerError || ''}
                     label="市场经理姓名"
-                >
+                > 
                     {getFieldDecorator('bdCharger')(
                         <Input prefixCls="my-ant-input" placeholder="请务必准确输入" />
                     )}
@@ -217,6 +217,8 @@ class SignInForm extends Component {
         const mobile = getFieldValue('mobile');
         const picCode = getFieldValue('picCode') || '';
         HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
+
+
             // 测试
             if (json && json.length > 4) {
                 this.setState({
@@ -227,6 +229,7 @@ class SignInForm extends Component {
                 this.setState({
                     isShowPic: false
                 });
+                this.refs.code.autoTime(60);
             }
         }, (code, msg, json, option) => {
             message.error(msg);
@@ -244,7 +247,8 @@ class SignInForm extends Component {
         if (user) {
             callback();
         } else {
-            defaultLoginPromise(0, callback);
+            defaultLoginPromise(0, callback,()=>{
+            });
         }
     }
 }

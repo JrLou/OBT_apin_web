@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-14 10:16:40
+ * @Last Modified time: 2017-11-16 11:50:15
  */
 
 import React, { Component } from 'react';
@@ -28,8 +28,8 @@ class Forget extends Component {
                 ghost
                 className={css.checkCodeBtn}
                 onClick={() => {
+
                     getCode();
-                    this.autoTime(60);
                 }}
             >{
                     time === 0 ? '获取验证码' : `${time}s`
