@@ -61,13 +61,16 @@ class CellNewFlight extends Component {
         });
     }
 
+    //提交代码
     createItemCell(data,index,flightType){
         if (!data){
             return null;
         }
-        let depCity_len = data.depCity&&data.depCity.length>3;
-        let ArrCity_len = data.arrCity&&data.arrCity.length>3;
-        let city = (depCity_len?(data.depCity.substring(0,3)+"..."):data.depCity)+" - "+data.arrCity;
+        data.cityDep = data.cityDep?data.cityDep:"";
+        data.cityArr = data.cityArr?data.cityArr:"";
+        let cityDep_len = data.cityDep&&data.cityDep.length>3;
+        let cityArr_len = data.cityArr&&data.cityArr.length>3;
+        let city = (cityDep_len?(data.cityDep.substring(0,3)+"..."):data.cityDep)+" - "+data.cityArr;
         var itemView = (<div className={css.table}>
             <div className={css.type_super}>
                 <div className={css.typeText}>
@@ -76,10 +79,10 @@ class CellNewFlight extends Component {
             </div>
 
             <div className={css.date_super}>
-                {(depCity_len||ArrCity_len)?<Tooltip placement="bottom" title={data.depCity +" - "+data.arrCity}>
+                {(cityDep_len||cityArr_len)?<Tooltip placement="bottom" title={data.cityDep +" - "+data.cityArr}>
                     <div className={css.city}>{city}</div>
                 </Tooltip>:
-                    <div className={css.city}>{data.depCity +" - "+data.arrCity}</div>}
+                    <div className={css.city}>{data.cityDep +" - "+data.cityArr}</div>}
 
                 <div className={css.date}>{data.arrDate+" " +NumTransToTextHelp.getWeek(data.week)}</div>
             </div>

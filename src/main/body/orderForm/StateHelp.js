@@ -11,10 +11,11 @@ let StateHelp = {
         let isPassed = data.passed;
         //付款类型
         let payType = data.payType;
-
+        //倒计时
+        let countDown = data.countDown;
         switch(returnState){
             //4 付款中（后台特有，前端需要转化）
-            case 4:returnState = StateHelp.payingStateForList(payType);break;
+            case 4:returnState = StateHelp.payingStateForList(payType,countDown);break;
             //6 已付款
             case 6:returnState = StateHelp.hasPayed(isPassed);break;
             //0 订单取消
@@ -22,11 +23,14 @@ let StateHelp = {
             //1 等待确认
             case 1:break;
             //2 待付订金
-            case 2:break;
+            case 2:returnState = (countDown == 0)?8:2;
+                    break;
             //3 待付全款
-            case 3:break;
+            case 3:returnState = (countDown == 0)?8:3;
+                    break;
             //5 待付尾款
-            case 5:break;
+            case 5:returnState = (countDown == 0)?8:5;
+                    break;
             //7 已出票
             case 7:break;
             //8 已关闭
@@ -48,18 +52,22 @@ let StateHelp = {
         let isPassed = data.passed;
         //付款类型
         let payType = data.payType;
+        //倒计时
+        let countDown = data.countDown;
 
         switch(returnState){
             //4 付款中（后台特有，前端需要转化）
-            case 4:returnState = StateHelp.payingState(pays,payType);break;
+            case 4:returnState = StateHelp.payingState(pays,payType,countDown);break;
             //5 待付尾款
-            case 5:returnState = StateHelp.waitingPay(pays);break;
+            case 5:returnState = StateHelp.waitingPay(pays,countDown);break;
             //6 已付款
             case 6:returnState = StateHelp.hasPayed(isPassed);break;
             case 0:break;
             case 1:break;
-            case 2:break;
-            case 3:break;
+            case 2:(countDown == 0)?8:2;
+                    break;
+            case 3:(countDown == 0)?8:3;
+                    break;
             case 7:break;
             case 8:break;
             default:break;
@@ -70,7 +78,11 @@ let StateHelp = {
     },
 
     //对返回状态为4的订单状态做转化(列表页)
-    payingStateForList(payType){
+    payingStateForList(payType,countDown){
+        if(countDown == 0){
+            //超时关闭订单
+            return 8;
+        }
         if(payType == 1){
             //付款类型为 1 全款
             return 3;   //待付全款
@@ -82,7 +94,11 @@ let StateHelp = {
 
 
     //对返回状态为4的订单状态做转化(详情页)
-    payingState(pays,payType){
+    payingState(pays,payType,countDown){
+        if(countDown == 0){
+            //超时关闭订单
+            return 8;
+        }
         let state = 4;
         //遍历交易流水信息
         for(let i in pays){
@@ -104,7 +120,11 @@ let StateHelp = {
     },
 
     //5的转化
-    waitingPay(pays){
+    waitingPay(pays,countDown){
+        if(countDown == 0){
+            //超时关闭订单
+            return 8;
+        }
         let state = 5;
         //遍历交易流水信息
         for(let i in pays){

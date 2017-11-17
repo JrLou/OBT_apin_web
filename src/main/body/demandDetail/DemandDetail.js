@@ -149,7 +149,7 @@ class page extends Component {
             <div className={less.top}>
 
                 {data.flightType === 3 ? this.getMultiPass(data.demandStatus, data) : this.getTop(data.demandStatus, data)}
-                {data.demandStatus === 4 ? this.getCellNewFlight(data && data.plans ? data.plans : []) : null}
+                {data.demandStatus === 4 ? this.getCellNewFlight(data && data.plans ? data.plans : [],data.flightType) : null}
                 {data.demandStatus === 1 || data.demandStatus === 2 ? this.getMessage("预计在30分钟内为您处理需求") :
                     (data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
                 {data.demandStatus === 5 ? this.getCloseReason(data) : null}
@@ -160,23 +160,23 @@ class page extends Component {
         );
     }
 
-    getCellNewFlight(data = {}) {
+    getCellNewFlight(data = {},flightType) {
         return (
             <div className={less.cellNewFlightLayout}>
                 <h2 className={less.title}>航班信息</h2>
                 <div className={less.line}/>
                 <div className={less.cellNewFlight}>
-                    {this.createViewCell(data || [])}
+                    {this.createViewCell(data || [],flightType)}
                 </div>
             </div>
         );
     }
 
-    createViewCell(dataArr) {
+    createViewCell(dataArr,flightType) {
         return dataArr.map((data, index) => {
-            let resultData = getFlightData(data.voyages, data.freeBag, data.weightLimit);
+            let resultData = getFlightData(data.voyages, flightType,data.freeBag, data.weightLimit);
 
-            return (<CellNewFlight key={index} dataSource={resultData} flightType={dataArr.flightType}/>);
+            return (<CellNewFlight key={index} dataSource={resultData} flightType={flightType}/>);
         });
     }
 

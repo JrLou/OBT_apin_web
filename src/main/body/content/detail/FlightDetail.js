@@ -147,15 +147,6 @@ class page extends Component {
         this.props.form.setFieldsValue({
             customerName:member.contactName?member.contactName:""
         });
-        //用来显示库存超出的时候 弹出module框添加已知数据
-        this.requireParam = {
-            lineType:this.flightType?this.flightType:1,
-            lineNum:1,
-            adultCount:this.state.adultNum,
-            childCount:this.state.childNum,
-            remark:"",
-            phone:"",
-            listData:[{}]};
         this.upView(()=>{
             this.handleScroll();
             });

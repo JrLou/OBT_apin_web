@@ -59,7 +59,7 @@ class OrderInfoView extends Component{
                                         style={{backgroundImage:`url(${require("../../../../images/orderForm/alert.png")})`}}
                                         className={css.helpIcon}
                                     ></span>
-                                    {`请在${sliceTimeString(orderMsg.expiredTime)}之前支付`}
+                                    {`请在  ${sliceTimeString(orderMsg.expiredTime)}  之前支付`}
                                 </div>
                             </div>
                         </div>
@@ -112,15 +112,15 @@ class OrderInfoView extends Component{
                         ?   <div className={css.itemLinePay}>
                                 <div className={css.payTitle}>订单关闭：</div>
                                 {
-                                    this.state.orderState == 0
-                                    ?'用户取消订单'
-                                    :orderMsg.closeReason
+                                    orderMsg.closeReason
+                                    ?orderMsg.closeReason
+                                    :''
                                 }
                                 <span style={{paddingLeft:'15px'}}></span>
                                 {
                                     orderMsg.closetime
                                     ?`(关闭时间：${orderMsg.closetime})`
-                                    :''
+                                    :'超时未付款，订单自动关闭'
 
                                 }
                             </div>
