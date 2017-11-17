@@ -36,6 +36,10 @@ class OrderFormList extends Component{
         //航程类型
         this.flightTypeList = [
             {
+                title:'全部',
+                value:'',
+            },
+            {
                 title:'单程',
                 value:'1',
             },
@@ -49,6 +53,10 @@ class OrderFormList extends Component{
         ];
         //订单状态
         this.orderStateList = [
+            {
+                title:'全部',
+                value:'',
+            },
             {
                 title:'订单取消',
                 value:'0',
