@@ -59,7 +59,7 @@ class OrderInfoView extends Component{
                                         style={{backgroundImage:`url(${require("../../../../images/orderForm/alert.png")})`}}
                                         className={css.helpIcon}
                                     ></span>
-                                    {`请在  ${sliceTimeString(orderMsg.expiredTime)}  之前支付`}
+                                    {`请在${sliceTimeString(orderMsg.expiredTime)}  之前支付`}
                                 </div>
                             </div>
                         </div>
@@ -114,13 +114,13 @@ class OrderInfoView extends Component{
                                 {
                                     orderMsg.closeReason
                                     ?orderMsg.closeReason
-                                    :''
+                                    :'超时未付款，订单自动关闭'
                                 }
                                 <span style={{paddingLeft:'15px'}}></span>
                                 {
                                     orderMsg.closetime
                                     ?`(关闭时间：${orderMsg.closetime})`
-                                    :'超时未付款，订单自动关闭'
+                                    :''
 
                                 }
                             </div>
@@ -251,7 +251,7 @@ class OrderInfoView extends Component{
             let payName = '';
             switch(payType) {
                 case 0:
-                    payName = '线下支付';
+                    payName = '线下转账';
                     break;
                 case 1:
                     payName = '支付宝';
@@ -321,7 +321,7 @@ class OrderInfoView extends Component{
         return(
             <div className={css.itemLinePay}>
                 <div className={css.payTitle}>
-                    {data.payStatus == 1?'':'待'}
+                    {data.payStatus == 1?'':(this.state.orderState == 14?'':'待')}
                     {paymentName}
                 </div>
                 {

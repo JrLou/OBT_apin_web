@@ -15,37 +15,20 @@
   width: 200px;
   margin-left: auto;
   margin-right: auto;
-  background-color: #2db7f5;
   overflow: hidden;
   margin-top: @d_spadding_big;
 }
-
-
-
-
-.modalLeftTitle{
-  float:left;
-  width:45%;
-  margin-right:15px;
-  text-align:right;
-  font-size: 15px;
-
+.btn{
+  width: 45%;
+  height: 40px;
+  float: left;
+  background-color: @c_theme_blue;
+  color: @c_white;
+  font-size: @font_size_big;
 }
-.modalRightCon{
-  float:left;
-  margin-left: 5px;
-  text-align:left;
-  font-size: 16px;
-}
-.modalBtnLeft {
-  background-color:#345;
-  border-width:0;
-  margin-right:5px;
-  color: #FFFFFF;
-}
-.modalBtnRight {
-  background-color:#345;
-  border-width:0;
-  margin-left:5px;
-  color: #FFFFFF;
+.refBtn{
+  background-color: @c_white;
+  composes: btn;
+  float: right;
+  color: @c_title_blue;
 }

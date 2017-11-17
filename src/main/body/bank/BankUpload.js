@@ -133,7 +133,7 @@ class BankUpload extends Component {
          this.setState({
             amount: urlData.price,
             orderId: urlData.orderId,
-            payment: urlData.payment,//todo 定金？尾款？ 需要喜峰哥页面传过来
+            payment: urlData.payment,
             loading: false,
             errorMsg: "",
          });
