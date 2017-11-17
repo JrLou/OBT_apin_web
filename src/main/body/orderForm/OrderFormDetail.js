@@ -2,6 +2,7 @@
  * Created by louxudong on 2017/10/30.
  */
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import css from './OrderFormDetail.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
@@ -20,7 +21,7 @@ import PayBottom from './PayBottom/PayBottomForDetail.js';
  * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中
  *
  * 接口可能返回的值：
- * 0：订单取消 1：等待确认 2：待付押金 3：待付全款 5：待付尾款 7：已出票 8：已关闭
+ * 0：订单取消 1：等待确认 2：待付押金 3：待付全款 4：支付中 5：待付尾款 7：已出票 8：已关闭
  */
 
 
@@ -46,6 +47,8 @@ class OrderFormDetail extends Component{
             payMsg:null,        //支付明细
             bottomData:null,    //底部浮动支付信息
 
+            shouldFixed:true,  //底部支付条是否应该固定定位
+
             upDate:0,
             loading:false,      //加载状态
         };
@@ -68,20 +71,50 @@ class OrderFormDetail extends Component{
     }
 
     listenScroll(){
-        // let markDiv = document.getElementById('markDiv');
-        // let rootDiv = document.getElementById('root');
-        // log('启动监听---------------------');
+        let markDiv = document.getElementById('markDiv');
+        let rootDiv = document.getElementById('root');
+        // console.warn('启动监听---------------------');
         // log(markDiv);
-        // //监听页面滚动
-        // window.onscroll = ()=>{
-        //     //根元素的整个高度   （不是body）
-        //     let rootDivHeight = window.getComputedStyle(rootDiv,'').height;
-        //     //标记div顶端 到 body顶端 的距离（body顶端 与root元素顶端位置相同）
-        //     let markDivTop = markDiv.offsetTop;
-        //     //浏览器窗口可视高度
-        //     let windowHeight = window.screen.clientHeight;
-        //     log(windowHeight);
-        // };
+
+        //支付条定位初始化  如果文档高度小于屏幕高度，则不固定定位
+        if(parseInt(window.getComputedStyle(rootDiv,'').height)<parseInt(document.body.clientHeight)){
+            this.setState({
+                shouldFixed:false,
+            });
+        }
+        //监听页面滚动
+        window.onscroll = ()=>{
+            //根元素的整个高度   （不是body）
+            let rootDivHeight = parseInt(window.getComputedStyle(rootDiv,'').height);
+            //标记div顶端 到 body顶端 的距离（body顶端 与root元素顶端位置相同）
+            let markDivTop = parseInt(markDiv.offsetTop);
+            //浏览器窗口可视高度
+            let windowHeight = parseInt(document.body.clientHeight);
+            //支付条自身的高度+固定定位的bottom值
+            let payDiv = ReactDOM.findDOMNode(this.payBottom);
+            let payDivHeight =
+                parseInt(window.getComputedStyle(payDiv,'').height)
+                +
+                parseInt(window.getComputedStyle(payDiv,'').bottom);
+            //支付条顶部到浏览器窗口顶部到高度
+            let payTop = windowHeight - payDivHeight;
+            //定位样式改变的临界滚动值
+            let changeDistance = markDivTop - payTop;
+            //网页滚动的距离
+            let scrollDistance = parseInt(window.scrollY);
+            //差值
+            let distance = changeDistance-scrollDistance;
+            // log(distance);
+            if(distance>0){
+                this.setState({
+                    shouldFixed:(distance>=0),
+                });
+            }else{
+                this.setState({
+                    shouldFixed:(distance>=-110),
+                });
+            }
+        };
     }
 
     //更新状态机
@@ -118,6 +151,7 @@ class OrderFormDetail extends Component{
                         <CellNewFlight
                             dataSource = {this.state.flightData}
                             isNoShowRule={false}
+                            flightType = {this.state.flightData.flightType}
                         />
                     </div>
                 </div>
@@ -148,6 +182,8 @@ class OrderFormDetail extends Component{
                 {
                     (hasKey(this.state.orderState,[2,3,5]))
                     ?<PayBottom
+                        shouldFixed={this.state.shouldFixed}
+                        ref={(payBottom)=>{this.payBottom = payBottom;}}
                         payType={this.state.orderState}
                         param={this.state.bottomData}
                         btnAction={this.openPayPage.bind(this)}

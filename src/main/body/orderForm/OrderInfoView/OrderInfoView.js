@@ -112,15 +112,15 @@ class OrderInfoView extends Component{
                         ?   <div className={css.itemLinePay}>
                                 <div className={css.payTitle}>订单关闭：</div>
                                 {
-                                    this.state.orderState == 0
-                                    ?'用户取消订单'
-                                    :orderMsg.closeReason
+                                    orderMsg.closeReason
+                                    ?orderMsg.closeReason
+                                    :''
                                 }
                                 <span style={{paddingLeft:'15px'}}></span>
                                 {
                                     orderMsg.closetime
                                     ?`(关闭时间：${orderMsg.closetime})`
-                                    :''
+                                    :'超时未付款，订单自动关闭'
 
                                 }
                             </div>
