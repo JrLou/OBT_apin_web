@@ -6583,6 +6583,12 @@ active {
   margin-top: -2px;
   float: left;
 }
+.src-main-body-orderForm-OrderInfoView-OrderInfoView---failStyle---1WIz8 {
+  padding-left: 15px;
+  font-size: 14px;
+  width: 250px;
+  color: #FF6600;
+}
 .src-main-body-orderForm-PayBottom-PayBottom---maintheme---3s03j {
   position: absolute;
   min-height: 100%;
@@ -8169,10 +8175,14 @@ active {
   right: 105px;
 }
 .src-pay-PaySelectLayout---bankItme_msg---1HjFe {
+  font-family: PingFangSC-Regular, "Microsoft YaHei", Helvetica, Arial, sans-serif;
+  font-size: 12px;
   margin-left: 74px;
 }
 .src-pay-PaySelectLayout---bankItme_msg---1HjFe p:first-child {
-  font-size: 20px;
+  font-size: 18px;
+  line-height: 30px;
+  font-weight: 600;
   color: #545456;
 }
 .src-pay-PaySelectLayout---payMore---dXvkR {
