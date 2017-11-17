@@ -7,6 +7,7 @@ import {HttpTool, CookieHelp} from "../../../../lib/utils/index.js";
 import NumTransToTextHelp from '../tool/NumTransToTextHelp.js';
 import {getFlightData} from '../tool/LXDHelp.js';
 import APIGYW from '../../../api/APIGYW';
+import AlertView from './AlertView.js';
 /**
  * 需求已取消                    0
  * 需求处理中 （单程）       1    1
@@ -149,13 +150,15 @@ class page extends Component {
             <div className={less.top}>
 
                 {data.flightType === 3 ? this.getMultiPass(data.demandStatus, data) : this.getTop(data.demandStatus, data)}
-                {data.demandStatus === 4 ? this.getCellNewFlight(data && data.plans ? data.plans : [],data.flightType) : null}
+                {data.demandStatus === 4 ? this.getCellNewFlight(data && data.plans ? data.plans : [], data.flightType) : null}
                 {data.demandStatus === 1 || data.demandStatus === 2 ? this.getMessage("预计在30分钟内为您处理需求") :
                     (data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
                 {data.demandStatus === 5 ? this.getCloseReason(data) : null}
                 {data.demandStatus === 1 || data.demandStatus === 2 || data.demandStatus === 5 || data.demandStatus === 0 ? this.getButton(data.demandStatus) : null}
                 {data.demandStatus === 4 ? this.getOrderDetail(data) : null}
                 {data.demandStatus === 3 ? this.getConfirmButton(data && data.plans ? data.plans : [], data.flightType) : null}
+
+
             </div>
         );
     }
@@ -174,7 +177,7 @@ class page extends Component {
 
     createViewCell(dataArr,flightType) {
         return dataArr.map((data, index) => {
-            let resultData = getFlightData(data.voyages, flightType,data.freeBag, data.weightLimit);
+            let resultData = getFlightData(data.voyages, data.freeBag, data.weightLimit);
 
             return (<CellNewFlight key={index} dataSource={resultData} flightType={flightType}/>);
         });

@@ -108,7 +108,7 @@ class page extends Component {
                                         lineType:dataSource.flightType,
                                         isMult:false,
                                         listData:[
-                                            {fromCity:dataSource.arrCity,toCity:dataSource.depCity,toDateTime:"",fromDateTime:""},
+                                            {fromCity:dataSource.depCity,toCity:dataSource.arrCity,toDateTime:"",fromDateTime:""},
                                         ]};
                                     CookieHelp.saveCookieInfo("publishMsgCookie",data);
                                     const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
