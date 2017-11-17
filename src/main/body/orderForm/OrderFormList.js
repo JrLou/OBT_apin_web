@@ -5,7 +5,8 @@ import React, {Component} from 'react';
 import css from './OrderFormList.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
-import {routeTranslate,getDateFormat,removeSpace,transformOrderState} from '../tool/LXDHelp.js';
+import {routeTranslate,getDateFormat,removeSpace} from '../tool/LXDHelp.js';
+import {transformForList} from './StateHelp.js';
 import {Table,Input,DatePicker,Select,Button,message} from 'antd';
 const Option = Select.Option;
 
@@ -188,7 +189,6 @@ class OrderFormList extends Component{
                         case 12:state = '已付款(未录乘机人)';break;
                         case 13:state = '等待出票';break;
                         case 14:state = '支付审核中';break;
-                        case 15:state = '支付审核失败';break;
                         default:state = '';
                     }
                     return state;
@@ -287,7 +287,7 @@ class OrderFormList extends Component{
                         <Input
                             value={this.state.cityDep}
                             className={css.inputStyle}
-                            maxLength={18}
+                            maxLength={'18'}
                             placeholder={'请输入'}
                             onChange={(obj)=>{
                                 let value = removeSpace(obj.target.value);
@@ -300,7 +300,7 @@ class OrderFormList extends Component{
                         <Input
                             value={this.state.cityArr}
                             className={css.inputStyle}
-                            maxLength={18}
+                            maxLength={'18'}
                             placeholder={'请输入'}
                             onChange={(obj)=>{
                                 let value = removeSpace(obj.target.value);
@@ -465,6 +465,8 @@ class OrderFormList extends Component{
 
         let successCB = (code, msg, json, option)=>{
             //转换数据，更改状态机
+            log(`=============列表页请求结果=============》`);
+            log(json);
             let newData = this.transformData(json);
             this.setLoading(false);
             this.setState({
@@ -540,7 +542,7 @@ class OrderFormList extends Component{
                 let adultNum = newData[key].adultCount?newData[key].adultCount:0;
                 let childNum = newData[key].childCount?newData[key].childCount:0;
                 newData[key].peopleNum = (''+adultNum+'/'+childNum);
-                newData[key].orderStatus = transformOrderState(newData[key].orderStatus,newData[key].extraCode);
+                newData[key].orderStatus = transformForList(data[key]);
             }
         }
         return newData;

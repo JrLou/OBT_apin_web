@@ -5,7 +5,7 @@
 /**
  * 订单状态说明  orderState
  * 0：订单取消 1：等待确认 2：待付押金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
- * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中 15：支付审核失败
+ * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中
  *
  * 接口可能返回的值： returnState
  * 0：订单取消 1：等待确认 2：待付押金 3：待付全款 5：待付尾款 7：已出票 8：已关闭
@@ -237,8 +237,8 @@ class PassengerMsg extends Component{
                             pagination={false}
                         />
                         {
-                            //提交按钮显示前提：状态未确认，且列表内容大于1，且订单状态处于3，5，12，14，15（之前已区分待付订金，这里不用再判断）
-                            (!this.state.isPassed)&&(this.state.dataSource.length>0)&&(hasKey(this.state.orderState,[3,5,12,14,15]))
+                            //提交按钮显示前提：状态未确认，且列表内容大于1，且订单状态处于3，5，12，14（之前已区分待付订金，这里不用再判断）
+                            (!this.state.isPassed)&&(this.state.dataSource.length>0)&&(hasKey(this.state.orderState,[3,5,12,14]))
                             ?   <div className={css.submitBox}>
                                     <Checkbox
                                         onChange={(e)=>{
@@ -378,10 +378,13 @@ class PassengerMsg extends Component{
             id:this.state.orderId,
         };
         let successCB = (code, msg, json, option)=>{
-            this.setState({
-                isPassed:true,
-                loading:false,
-            },message.success(msg));
+            // this.setState({
+            //     isPassed:true,
+            //     loading:false,
+            // },message.success(msg));
+
+            //刷新页面
+            window.location.reload();
         };
         let failureCB = (code, msg, option)=>{
             this.setLoading(false);
