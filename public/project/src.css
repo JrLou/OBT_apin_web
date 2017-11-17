@@ -2169,12 +2169,13 @@ active {
 .src-main-body-content-line-LineHeadTitle---requireBtn---3A7H0 {
   cursor: pointer;
   width: 100%;
-  height: 36px;
-  line-height: 36px;
+  height: 35px;
+  line-height: 35px;
   text-align: center;
   background-color: #EFF7FD;
   color: #29A6FF;
   font-size: 16px;
+  border-radius: 3px;
 }
 .src-main-body-component-MyDiv---maintheme---2E8ZE {
   position: absolute;
@@ -2265,9 +2266,10 @@ active {
 .src-main-body-component-MyDiv---bgIn---3WSg0 {
   border: 1px solid #29A6FF;
   -webkit-transition: border linear 0.2s, -webkit-box-shadow linear 0.5s;
-  -webkit-box-shadow: 0 0 3px #29A6FF;
-  -moz-box-shadow: 0 0 3px #29A6FF;
-  box-shadow: 0 0 3px #29A6FF;
+  -webkit-box-shadow: 0 0 5px #29A6FF;
+  -moz-box-shadow: 0 0 5px #29A6FF;
+  box-shadow: 0 0 5px #29A6FF;
+  border-radius: 3px;
 }
 .src-main-body-component-MyDiv---bgOut---3kCQc {
   border-width: 1px;
