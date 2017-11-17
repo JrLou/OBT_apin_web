@@ -117,6 +117,7 @@ class AccountForm extends Component {
         const accountError = isFieldTouched('account') && getFieldError('account');
         const passwordError = isFieldTouched('password') && getFieldError('password');
         const mobileError = isFieldTouched('mobile') && getFieldError('mobile');
+        const contactNameError = getFieldError('contactName');
 
         const provinceMenu = (
             <Menu className={css.drop}>
@@ -186,7 +187,7 @@ class AccountForm extends Component {
                         validateStatus={passwordError ? 'error' : ''}
                         help={passwordError || ''}
                     >
-                        <div>******<span style={{ float: 'right', cursor: 'pointer', color: '#29A6FF' }} onClick={() => {
+                        <div>******<span style={{ cursor: 'pointer', color: '#29A6FF', marginLeft:'10px' }} onClick={() => {
                             this.setState({
                                 visible: true
                             });
@@ -212,8 +213,8 @@ class AccountForm extends Component {
                         <FormItem prefixCls="my-ant-form"
                             {...formItemLayout}
                             label="联系人"
-                            validateStatus={isFieldTouched('contactName') && getFieldError('contactName') ? 'error' : ''}
-                            help={isFieldTouched('contactName') && getFieldError('contactName') || ''}
+                            validateStatus={contactNameError ? 'error' : ''}
+                            help={contactNameError || ''}
                         >
                             <div>{contactName}</div>
                         </FormItem>
@@ -295,6 +296,7 @@ class AccountForm extends Component {
                                     size="large"
                                     type="primary"
                                     style={{ marginRight: '20px' }}
+                                    disabled={hasErrors(getFieldsError())}
                                     onClick={this.handleSubmit}
                                 >保存</Button>
                                 <Button
@@ -335,7 +337,8 @@ class AccountForm extends Component {
                     message.success("修改成功");
                     this.setState({
                         isView: true,
-                        showProvince, showCity, showZone
+                        showProvince, showCity, showZone,
+                        companyName, contactName, address
                     });
                 }, (code, msg) => {
                     message.error(msg);

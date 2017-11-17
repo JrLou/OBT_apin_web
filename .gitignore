@@ -6,6 +6,7 @@ node_modules
 runtime
 .npm
 .directory
+project
 public.zip
 public.rar
 **/npm-debug.log
