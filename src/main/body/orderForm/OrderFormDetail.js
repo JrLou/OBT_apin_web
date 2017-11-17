@@ -85,15 +85,18 @@ class OrderFormDetail extends Component{
         //监听页面滚动
         window.onscroll = ()=>{
             markDiv = markDiv?markDiv:document.getElementById('markDiv');
-            rootDiv = rootDiv?rootDiv:document.getElementById('root');
+            // rootDiv = rootDiv?rootDiv:document.getElementById('root');
+            //支付条自身的高度+固定定位的bottom值
+            let payDiv = ReactDOM.findDOMNode(this.payBottom);
+            if(!payDiv){return;}
+
             //根元素的整个高度   （不是body）
-            let rootDivHeight = parseInt(window.getComputedStyle(rootDiv,'').height);
+            // let rootDivHeight = parseInt(window.getComputedStyle(rootDiv,'').height);
             //标记div顶端 到 body顶端 的距离（body顶端 与root元素顶端位置相同）
             let markDivTop = parseInt(markDiv.offsetTop);
             //浏览器窗口可视高度
             let windowHeight = parseInt(document.body.clientHeight);
-            //支付条自身的高度+固定定位的bottom值
-            let payDiv = ReactDOM.findDOMNode(this.payBottom);
+
             let payDivHeight =
                 parseInt(window.getComputedStyle(payDiv,'').height)
                 +
