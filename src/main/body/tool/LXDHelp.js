@@ -23,7 +23,7 @@ let LXDHelp = {
         if(type == 1 || type ==2){
             //单程 或 往返
             view.push(
-                <span>
+                <span key={'cell'}>
                     {list[0].cityDep||list[0].cityNameDep}
                     {tipList[flightType]}
                     {list[0].cityArr||list[0].cityNameArr}

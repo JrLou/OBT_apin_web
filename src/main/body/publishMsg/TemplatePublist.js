@@ -42,6 +42,13 @@ class page extends Component {
         let {adultCount}= this.props.state;
         console.log(adultCount,adultCount,adultCount,adultCount,adultCount);
     }
+    vueValueLenth(value){
+        if(value){
+            return value.length;
+        }
+        return 0;
+    }
+
     check() {//拼接数据
         this.props.form.validateFields((err, values) => {
             if (!err) {
@@ -71,6 +78,7 @@ class page extends Component {
                                 cityCodeArr: "",
                             });
                     }
+                    
                     values["voyage"] = "{\"voyage\":" + JSON.stringify(voyage) + "}";
                 }
                 //回调数据
@@ -149,7 +157,11 @@ class page extends Component {
                                     rules: [{
                                         required: true,
                                         message: '请输入城市名称',
-                                    }],
+                                    },{
+                                        max:10,
+                                        message:'请输入正确城市名称',
+                                    }
+                                   ],
                                     trigger: "onChangeValue",
                                     validateTrigger: "onChangeValue",
                                     initialValue: this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity
@@ -167,6 +179,9 @@ class page extends Component {
                                     rules: [{
                                         required: true,
                                         message: '请输入城市名称',
+                                    },{
+                                        max:10,
+                                        message:'请输入正确城市名称',
                                     }],
                                     trigger: "onChangeValue",
                                     validateTrigger: "onChangeValue",

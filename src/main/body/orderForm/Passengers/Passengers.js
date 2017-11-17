@@ -626,7 +626,7 @@ class PassengerMsg extends Component{
         }
 
         return(
-            <div>
+            <div className={css.importResult}>
                 {
                     result.totalCount
                     ?<div className={css.resultTitle}>{`文件中总共有数据：${result.totalCount}条`}</div>

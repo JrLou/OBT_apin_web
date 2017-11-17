@@ -8,6 +8,7 @@ import SpecialView from "../component/SpecialView";
 import SearchLayout from "../component/SearchLayout";
 import SearchHelp from "../search/SearchHelp.js";
 import {HttpTool,CookieHelp} from "../../../../lib/utils/index.js";
+import APIGYW from '../../../api/APIGYW.js';
 import routes from "../../../vm/routes.js";
 
 import Scroll from "react-scroll/modules/index"; // Imports all Mixins
@@ -61,7 +62,7 @@ class page extends Component {
             log(msg);
             // message.error(msg);
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/os/airlineapi/v1.0/bestList", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.manageapi_bestList, success, failure, param,
             {
                 ipKey: "hlIP"
             });
