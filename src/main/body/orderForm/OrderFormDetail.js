@@ -66,7 +66,7 @@ class OrderFormDetail extends Component{
         this.setLoading(true,this.loadFormDetail);
 
         //启动页面滚动监听
-        setTimeout(()=>{this.listenScroll();},1000);
+        setTimeout(()=>{this.listenScroll();},0);
         // this.listenScroll();
     }
 
@@ -106,7 +106,7 @@ class OrderFormDetail extends Component{
             let scrollDistance = parseInt(window.scrollY);
             //差值
             let distance = changeDistance-scrollDistance;
-            log(distance);
+            // log(distance);
             if(distance>-81){
                 this.setState({
                     shouldFixed:(distance>-81),

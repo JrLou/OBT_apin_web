@@ -28,7 +28,7 @@ class PassengerMsg extends Component{
             orderState:this.props.orderState,       //页面订单状态
             orderId:this.props.orderId,
             // orderId:'16b3639900f54a86b9116af77b088d75',
-            dataSource:this.props.defaultData?this.props.defaultData:[],
+            dataSource:[],
             isPassed:this.props.isPassed?this.props.isPassed:false,     //是否已经确认了乘机人
             checkedMsg:false,       //是否已经勾选'确认乘机人信息'
             submitConfirm:false,    //确认乘机人询问框
@@ -171,7 +171,7 @@ class PassengerMsg extends Component{
                         airlineSigns = {this.state.airlineSigns}        //航线类型
                         defaultData = {this.state.passengerMsg}     //单个乘机人信息
                         closeModCB = {()=>{this.setState({passengerMsg:null});}}  //关闭窗口回调
-                        changeSuccCB={(allData)=>{this.passengerChange(allData);}}                              //新增/修改成功的回调
+                        changeSuccCB={(allData)=>{this.passengerChange(allData,true);}}                              //新增/修改成功的回调
                         getFunction = {(changeVisible)=>{this.changeShow = changeVisible;}} //获取打开/关闭窗口的方法
                     />
                     {
@@ -465,7 +465,7 @@ class PassengerMsg extends Component{
             orderId:this.state.orderId,
         };
         let successCB = (code, msg, json, option)=>{
-            this.passengerChange(json);
+            this.passengerChange(json,true);
             message.success('删除成功');
             this.setLoading(false);
         };
@@ -487,7 +487,7 @@ class PassengerMsg extends Component{
      * 接受新的数据，改变乘机人列表
      * @param data
      */
-    passengerChange(data){
+    passengerChange(data,type){
         let newData = [];
         if(data instanceof Array){
             newData = data;
@@ -495,9 +495,11 @@ class PassengerMsg extends Component{
                 newData[key].index = newData[key].key = parseInt(key)+1;
             }
         }
-        this.setState({
-            dataSource:newData,
-        });
+        if(type){
+            this.setState({
+                dataSource:newData,
+            });
+        }
     }
 
     /**
@@ -508,7 +510,7 @@ class PassengerMsg extends Component{
             orderId:this.state.orderId,
         };
         let successCB = (code, msg, json, option)=>{
-            this.passengerChange(json);
+            this.passengerChange(json,true);
             this.setLoading(false);
         };
 
