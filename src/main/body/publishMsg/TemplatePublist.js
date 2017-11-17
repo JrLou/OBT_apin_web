@@ -23,12 +23,12 @@ class page extends Component {
             remark: "",
             phone: "",
             listData: [],
-            isMult:false
+            isMult:false,
         };
         if (this.props.state) {
             this.state = this.props.state;
         }
-        console.log(JSON.stringify(this.props));
+    //    console.log(JSON.stringify(this.props));
         this.marginBottomRow = 8;
         this.marginBottomFormItem = 24;
         if (this.props.styleObj) {
@@ -36,7 +36,11 @@ class page extends Component {
             this.marginBottomFormItem = this.props.styleObj.marginBottomFormItem;
             this.postHeight = this.props.styleObj.postHeight;
         }
-       
+        this.img_login_check = require("../../../../src/images/check.png");
+        this.img_login_uncheck = require("../../../../src/images/uncheck.png");
+
+        let {adultCount}= this.props.state;
+        console.log(adultCount,adultCount,adultCount,adultCount,adultCount);
     }
     check() {//拼接数据
         this.props.form.validateFields((err, values) => {
@@ -54,10 +58,10 @@ class page extends Component {
                     let voyage = [];
                     for (let i = 0; i < this.state.lineNum; i++) {
                         values["cityDep"] = values.fromCity0;
-                        values["cityArr"] = values.toCity+i;
+                        values["cityArr"] = values["toCity" + i];
                         values["dateDep"] = values.fromDateTime0 ? values.fromDateTime0.format(dateFormat) : "";
                         values["cityCodeDep"] = "",
-                            values["cityCodeArr"] = "",
+                        values["cityCodeArr"] = "",
                             voyage.push({
                                 tripIndex: (i + 1),
                                 dateDep: values["fromDateTime" + i] ? values["fromDateTime" + i].format(dateFormat) : "",
@@ -98,7 +102,7 @@ class page extends Component {
 
     lineAdd() {//多程添加
         let { lineNum } = this.state;
-        console.log(lineNum);
+   //     console.log(lineNum);
         lineNum = lineNum + 1;
         this.setState({
             lineNum
@@ -217,7 +221,6 @@ class page extends Component {
                                         if(lineType== 2){
                                             endTime=this.vueValue(getFieldValue("toDateTime"+i));
                                         }
-                                     //   console.log(endTime&& moment(endTime).format("YYYY-MM-DD"));
                                         if(endTime!=""){
                                             return current &&  (current.valueOf() <= startTime || current.valueOf() >= endTime);
                                         }
@@ -275,9 +278,6 @@ class page extends Component {
         return div;
     }
 
-  
-    
-
     handleConfirmNum(str, e) {//成人人数和儿童人数判断
         let { childCount, adultCount } = this.state;
         let {setFieldsValue}=this.props.form;
@@ -289,6 +289,54 @@ class page extends Component {
         this.setState({
             childCount, adultCount
         });
+    }
+
+
+    getSwitchView(v, title, cb,type) {
+     //   console.log(v, title, cb,type);
+        return (
+            <div
+                onClick={() => {
+                    cb();
+                }}
+                className={type === 1 ?less.searchAction:  less.action }
+            >
+                <img className={less.actionImg} style={{width:14,height:14}} src={v ? this.img_login_check : this.img_login_uncheck}
+                />
+                <div className={less.actionTitle} >{title}</div>
+            </div>
+        );
+    }
+
+    getSwitchLayout(type){
+      //  console.log(type+":type");
+        return (
+            <div >
+                {this.getSwitchView(this.state.lineType == 1, "单程",
+                    () => {
+                        this.setState({
+                            lineType: 1
+                        });
+                    },type)}
+                {type!==1?<div style={{width:20,display:"inline-block"}}/>:null}
+
+                {this.getSwitchView(this.state.lineType == 2, "往返",
+                    () => {
+                        this.setState({
+                            lineType: 2
+                        });
+                    },type)}
+                {type!==1?<div style={{width:20,display:"inline-block"}}/>:null}
+
+                {this.getSwitchView(this.state.lineType == 3, "多程",
+                    () => {
+                        this.setState({
+                            lineType: 3
+                        });
+                    },type)}
+                
+            </div>
+        );
     }
 
     render() {
@@ -306,7 +354,7 @@ class page extends Component {
                     <Row style={{ marginBottom: this.marginBottomRow , fontSize: "14px"}}>
                         <Col span={4}>航程类型：</Col>
                     </Row>
-                    <Row >
+                    {/* <Row >
                         <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                             {getFieldDecorator('flightType', {//lineType
                                 initialValue: this.state.lineType,
@@ -318,6 +366,18 @@ class page extends Component {
                                         <Radio value={3}>多程</Radio>
                                     }
                                 </RadioGroup>
+                                )}
+                        </FormItem>
+                    </Row> */}
+
+                    <Row >
+                        <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
+                            {getFieldDecorator('flightType', {//lineType
+                                initialValue: this.state.lineType,
+                            })(
+                                <div>
+                                    {this.getSwitchLayout()}
+                                </div>
                                 )}
                         </FormItem>
                     </Row>
@@ -403,7 +463,6 @@ class page extends Component {
                                 })(
                                     <div style={{ width: "100%" }}>
                                         <Input style={{ width: 240, height: 36, borderRadius: "2px",fontSize:"16px" }} defaultValue={phoneCookie} placeholder="输入可联系的手机号码" />
-                                        {/* <span style={{ fontSize: "22px", color: "red", marginLeft: 10 }}>*</span> */}
                                     </div>
                                     )}
                             </FormItem>

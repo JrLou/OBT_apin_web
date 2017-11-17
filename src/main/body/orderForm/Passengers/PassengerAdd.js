@@ -184,7 +184,7 @@ class PassengerAdd extends Component{
      * 获取日期选择框
      */
     getBirthDate(){
-        log(this.state.data.bitrh);
+        // log(this.state.data.bitrh);
         return(
             <div>
                 {this.getItemTitle('出生日期：')}
@@ -349,7 +349,7 @@ class PassengerAdd extends Component{
     }
 
     render(){
-        log(this.props.defaultData);
+        // log(this.props.defaultData);
         let defaultData = this.props.defaultData;
         let isSimple = (this.state.credType==1)?true:false;     //是否使用身份证
         let isAdd = (defaultData?false:true);                   //false:编辑   true:新增

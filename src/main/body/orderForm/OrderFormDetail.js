@@ -2,10 +2,12 @@
  * Created by louxudong on 2017/10/30.
  */
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import css from './OrderFormDetail.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
-import {hasKey,getFlightData,transformOrderState} from '../tool/LXDHelp.js';
+import {hasKey,getFlightData} from '../tool/LXDHelp.js';
+import {transformForDetail} from './StateHelp.js';
 import {Spin,message} from 'antd';
 import TitleBar from './TitleBar/index.js';
 import Passengers from './Passengers/index.js';
@@ -16,10 +18,10 @@ import PayBottom from './PayBottom/PayBottomForDetail.js';
 /**
  * 订单状态说明(页面)：
  * 0：订单取消 1：等待确认 2：待付押金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
- * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中 15：支付审核失败
+ * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中
  *
  * 接口可能返回的值：
- * 0：订单取消 1：等待确认 2：待付押金 3：待付全款 5：待付尾款 7：已出票 8：已关闭
+ * 0：订单取消 1：等待确认 2：待付押金 3：待付全款 4：支付中 5：待付尾款 7：已出票 8：已关闭
  */
 
 
@@ -29,7 +31,7 @@ class OrderFormDetail extends Component{
         super(props);
         //模拟随机状态
         // let random = Math.floor(Math.random()*11);
-        // let list = [0,1,2,3,5,7,8,12,13,14,15];
+        // let list = [0,1,2,3,5,7,8,12,13,14];
 
         this.state = {
             orderId:window.app_getPar(this).id,         //订单ID
@@ -44,6 +46,8 @@ class OrderFormDetail extends Component{
             orderMsg:null,      //订单信息
             payMsg:null,        //支付明细
             bottomData:null,    //底部浮动支付信息
+
+            shouldFixed:true,  //底部支付条是否应该固定定位
 
             upDate:0,
             loading:false,      //加载状态
@@ -62,25 +66,63 @@ class OrderFormDetail extends Component{
         this.setLoading(true,this.loadFormDetail);
 
         //启动页面滚动监听
-        setTimeout(()=>{this.listenScroll();},1000);
+        setTimeout(()=>{this.listenScroll();},0);
         // this.listenScroll();
     }
 
     listenScroll(){
-        // let markDiv = document.getElementById('markDiv');
-        // let rootDiv = document.getElementById('root');
-        // log('启动监听---------------------');
+        let markDiv = document.getElementById('markDiv');
+        let rootDiv = document.getElementById('root');
+        // console.warn('启动监听---------------------');
         // log(markDiv);
-        // //监听页面滚动
-        // window.onscroll = ()=>{
-        //     //根元素的整个高度   （不是body）
-        //     let rootDivHeight = window.getComputedStyle(rootDiv,'').height;
-        //     //标记div顶端 到 body顶端 的距离（body顶端 与root元素顶端位置相同）
-        //     let markDivTop = markDiv.offsetTop;
-        //     //浏览器窗口可视高度
-        //     let windowHeight = window.screen.clientHeight;
-        //     log(windowHeight);
-        // };
+
+        //支付条定位初始化  如果文档高度小于屏幕高度，则不固定定位
+        if(parseInt(window.getComputedStyle(rootDiv,'').height)<parseInt(document.body.clientHeight)){
+            this.setState({
+                shouldFixed:false,
+            });
+        }
+        //监听页面滚动
+        window.onscroll = ()=>{
+            markDiv = markDiv?markDiv:document.getElementById('markDiv');
+            rootDiv = rootDiv?rootDiv:document.getElementById('root');
+            //根元素的整个高度   （不是body）
+            let rootDivHeight = parseInt(window.getComputedStyle(rootDiv,'').height);
+            //标记div顶端 到 body顶端 的距离（body顶端 与root元素顶端位置相同）
+            let markDivTop = parseInt(markDiv.offsetTop);
+            //浏览器窗口可视高度
+            let windowHeight = parseInt(document.body.clientHeight);
+            //支付条自身的高度+固定定位的bottom值
+            let payDiv = ReactDOM.findDOMNode(this.payBottom);
+            let payDivHeight =
+                parseInt(window.getComputedStyle(payDiv,'').height)
+                +
+                parseInt(window.getComputedStyle(payDiv,'').bottom);
+            //支付条顶部到浏览器窗口顶部到高度
+            let payTop = windowHeight - payDivHeight;
+            //定位样式改变的临界滚动值
+            let changeDistance = markDivTop - payTop;
+            //网页滚动的距离
+            let scrollDistance = parseInt(window.scrollY);
+            //差值
+            let distance = changeDistance-scrollDistance;
+            // log(distance);
+            if(distance>-81){
+                this.setState({
+                    shouldFixed:(distance>-81),
+                });
+            }else{
+                if(this.state.shouldFixed){
+                    this.setState({
+                        shouldFixed:(distance>-81),
+                    });
+                }else{
+                    this.setState({
+                        shouldFixed:(distance>=-110),
+                    });
+                }
+            }
+        };
     }
 
     //更新状态机
@@ -92,7 +134,7 @@ class OrderFormDetail extends Component{
 
     render(){
         //仅在此处做状态异常判断，如果状态不在此列，说明出现异常，页面不展示
-        if(!(hasKey(this.state.orderState,[0,1,2,3,5,7,8,12,13,14,15]))){
+        if(!(hasKey(this.state.orderState,[0,1,2,3,5,7,8,12,13,14]))){
             return(
                 <div className={css.noMessage}>
                     <Spin size={'large'}></Spin>
@@ -117,6 +159,7 @@ class OrderFormDetail extends Component{
                         <CellNewFlight
                             dataSource = {this.state.flightData}
                             isNoShowRule={false}
+                            flightType = {this.state.flightData.flightType}
                         />
                     </div>
                 </div>
@@ -143,10 +186,12 @@ class OrderFormDetail extends Component{
                             payMsg={this.state.payMsg}
                         />
                 </div>
-                <div id={'markDiv'}></div>
+                <div id={'markDiv'} style={this.state.shouldFixed?{marginBottom:'100px'}:{}}></div>
                 {
                     (hasKey(this.state.orderState,[2,3,5]))
                     ?<PayBottom
+                        shouldFixed={this.state.shouldFixed}
+                        ref={(payBottom)=>{this.payBottom = payBottom;}}
                         payType={this.state.orderState}
                         param={this.state.bottomData}
                         btnAction={this.openPayPage.bind(this)}
@@ -202,7 +247,7 @@ class OrderFormDetail extends Component{
             let orderMsg = this.getOrderMsg(json);
             let payMsg = json.pays?json.pays:[];
             let bottomData = this.getBottomData(json);
-            let orderState = this.getOrderState(json);
+            let orderState = transformForDetail(json);
             let airlineSigns = json.airlineSigns?json.airlineSigns:1;
 
             this.setLoading(false);
@@ -251,19 +296,6 @@ class OrderFormDetail extends Component{
      */
     isLoading() {
         return this.state.loading;
-    }
-
-    /**
-     * 根据后端返回到orderStatus和extraCode判断页面状态
-     * @param data
-     * @return state
-     */
-    getOrderState(data){
-        let returnState = parseInt(data.orderStatus);
-        let extraCode = parseInt(data.extraCode);
-        let state = transformOrderState(returnState,extraCode);
-
-        return state;
     }
 
     /**

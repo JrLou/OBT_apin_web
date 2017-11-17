@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-16 19:16:02
+ * @Last Modified time: 2017-11-17 12:03:38
  */
 
 import React, { Component } from 'react';
@@ -255,6 +255,9 @@ class MsgLoginForm extends React.Component {
                     this.props.setLogin();
                     this.props.onOK();
                 }).catch((msg) => {
+                    if(msg == '密码错误'){
+                        msg = '验证码错误';
+                    }
                     message.error(msg);
                 });
             }

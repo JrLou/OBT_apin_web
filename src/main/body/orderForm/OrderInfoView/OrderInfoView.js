@@ -12,7 +12,7 @@ import {Button,message,Modal,Spin,Icon} from 'antd';
 /**
  * 订单状态说明(页面)：
  * 0：订单取消 1：等待确认 2：待付押金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
- * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中 15：支付审核失败
+ * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中
  */
 
 class OrderInfoView extends Component{
@@ -44,7 +44,7 @@ class OrderInfoView extends Component{
             >
             <div className={css.outerBox}>
                 <div className={css.orderBox}>
-                    <div className={hasKey(this.state.orderState,[1,2,3,5,14,15])?css.leftMsg:css.boxNoBorder}>
+                    <div className={hasKey(this.state.orderState,[1,2,3,5,14])?css.leftMsg:css.boxNoBorder}>
                         <div className={css.itemLine}>
                             <div className={css.itemTitle}>订单状态：</div>
                             <div className={css.itemValue}>
@@ -91,7 +91,7 @@ class OrderInfoView extends Component{
                             <span className={css.priceValue}>{orderMsg.orderAmount}</span>
                         </div>
                     </div>
-                    <div className={hasKey(this.state.orderState,[1,2,3,5,14,15])?css.rightMsg:css.hidden}>
+                    <div className={hasKey(this.state.orderState,[1,2,3,5,14])?css.rightMsg:css.hidden}>
                         <Button
                             className={css.cancleBtnStyle}
                             onClick={()=>{
@@ -112,15 +112,15 @@ class OrderInfoView extends Component{
                         ?   <div className={css.itemLinePay}>
                                 <div className={css.payTitle}>订单关闭：</div>
                                 {
-                                    this.state.orderState == 0
-                                    ?'用户取消订单'
-                                    :orderMsg.closeReason
+                                    orderMsg.closeReason
+                                    ?orderMsg.closeReason
+                                    :''
                                 }
                                 <span style={{paddingLeft:'15px'}}></span>
                                 {
                                     orderMsg.closetime
                                     ?`(关闭时间：${orderMsg.closetime})`
-                                    :''
+                                    :'超时未付款，订单自动关闭'
 
                                 }
                             </div>
@@ -294,17 +294,20 @@ class OrderInfoView extends Component{
                                 {
                                     data.records[key].auditStatus == 2
                                         ?   <div className={css.reUpload}>
-                                            <Button
-                                                className={css.reUploadBtnStyle}
-                                                onClick={()=>{
-                                                    window.app_open(this,'/UpLoad',{
-                                                        orderId:data.orderId,
-                                                        id:data.records[key].id,
-                                                    });
-                                                }}
-                                            >
-                                                重新上传
-                                            </Button>
+                                            {/*<Button*/}
+                                                {/*className={css.reUploadBtnStyle}*/}
+                                                {/*onClick={()=>{*/}
+                                                    {/*window.app_open(this,'/UpLoad',{*/}
+                                                        {/*orderId:data.orderId,*/}
+                                                        {/*id:data.records[key].id,*/}
+                                                    {/*});*/}
+                                                {/*}}*/}
+                                            {/*>*/}
+                                                {/*重新上传*/}
+                                            {/*</Button>*/}
+                                            <div className={css.failStyle}>
+                                                审核失败:{data.records[key].remark?data.records[key].remark:''}
+                                            </div>
                                         </div>
                                         :   ''
                                 }
@@ -400,8 +403,6 @@ class OrderInfoView extends Component{
             case 13:title='等待出票';
                 break;
             case 14:title='支付审核中';
-                break;
-            case 15:title='支付审核失败';
                 break;
             default:break;
         }
