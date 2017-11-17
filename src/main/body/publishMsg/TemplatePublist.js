@@ -315,7 +315,8 @@ class page extends Component {
                 {this.getSwitchView(this.state.lineType == 1, "单程",
                     () => {
                         this.setState({
-                            lineType: 1
+                            lineType: 1,
+                            lineNum:1
                         });
                     },type)}
                 {type!==1?<div style={{width:20,display:"inline-block"}}/>:null}
@@ -323,7 +324,8 @@ class page extends Component {
                 {this.getSwitchView(this.state.lineType == 2, "往返",
                     () => {
                         this.setState({
-                            lineType: 2
+                            lineType: 2,
+                            lineNum:1
                         });
                     },type)}
                 {type!==1?<div style={{width:20,display:"inline-block"}}/>:null}
@@ -331,7 +333,8 @@ class page extends Component {
                 {this.getSwitchView(this.state.lineType == 3, "多程",
                     () => {
                         this.setState({
-                            lineType: 3
+                            lineType: 3,
+                            lineNum:3
                         });
                     },type)}
                 
