@@ -618,14 +618,17 @@ class PassengerMsg extends Component{
             let numberList = [];
             if(list instanceof Array){
                 for(let key in list){
-                    let reason = list[key].split('(');
+                    let array01 = list[key].split('第');
+                    let array02 = array01[1].split('行');
                     numberList.push(<div
                                         key={`span${key}`}
                                         className={css.failureNum}
                                     >
-                                        <span style={{color:'#f50'}}>{reason[0]}</span>
+                                        <span>{`${array01[0]}第`}</span>
                                         &nbsp;&nbsp;
-                                        <span>{`(${reason[1]}`}</span>
+                                        <span style={{color:'#f50'}}>{array02[0]}</span>
+                                        &nbsp;&nbsp;
+                                        <span>{`行${array02[1]}`}</span>
                                     </div>);
                 }
             }
