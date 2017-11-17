@@ -1,5 +1,5 @@
 /**
- * Created by louxudong on 2017/10/30.
+ * Created by liuqing on 2017/10/30.
  */
 import React, {Component} from 'react';
 import css from './Demand.less';
