@@ -11,6 +11,7 @@ import {CookieHelp } from '../../../../lib/utils/index.js';
 import routes from '../../../vm/routes.js';
 import less from './Search.less';
 import MyAlert from "../content/line/MyAlert";
+import APIGYW from '../../../api/APIGYW.js';
 class page extends Component {
     constructor(props) {
         super(props);
@@ -109,7 +110,7 @@ class page extends Component {
                 this.setLoading(false, () => {
                 });
             };
-            HttpTool.request(HttpTool.typeEnum.POST, "/os/airlineapi/v1.0/list", success, failure, param,
+            HttpTool.request(HttpTool.typeEnum.POST, APIGYW.manageapi_list, success, failure, param,
                 {
                     ipKey: "hlIP"
                 });
@@ -259,17 +260,19 @@ class page extends Component {
                 <div className={less.emptyText}>
                     <div style={{color:"#666"}}>没有找到相应航线哟，试试提交需求订制专属航线</div>
                     <Button type="primary" onClick={()=>{
+                        let searchData = this.searchLayout.getData();
+                        let lineType = searchData&&searchData.one?1:2;
+                        let data ={
+                            lineType:lineType,
+                            listData:[
+                                {fromCity:searchData.from,toCity:searchData.to,toDateTime:"",fromDateTime:""},
+                            ]};
+                        CookieHelp.saveCookieInfo("publishMsgCookie",data);
                         const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
                         if (isLogin){
-                            window.app_open(this.props.obj, "/PublishMsg", {
-                                data:{}
-                            },"new");
+                            window.app_open(this, "/PublishMsg",{});
                         }else {
-                            window.modal.showModal(0,()=>{
-                                window.app_open(this.props.obj, "/PublishMsg", {
-                                    data:{}
-                                },"new");
-                            });
+                            window.app_open(this, "/PublishMsg",{});
                         }
                     }}>提交需求</Button>
                 </div>
