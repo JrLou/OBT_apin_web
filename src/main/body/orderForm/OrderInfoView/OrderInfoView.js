@@ -251,7 +251,7 @@ class OrderInfoView extends Component{
             let payName = '';
             switch(payType) {
                 case 0:
-                    payName = '线下支付';
+                    payName = '线下转账';
                     break;
                 case 1:
                     payName = '支付宝';
