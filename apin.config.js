@@ -128,6 +128,7 @@ module.exports = {
                     plugins: [
                         extractApin,
                         extractSrc,
+                        new (require('css-split-webpack-plugin').default)({ size: 4000, imports: true }),
                         //删除上次打包目录
                         new CleanWebpackPlugin(['project'],
                             {
