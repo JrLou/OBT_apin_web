@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Input, Modal, message, Cascader, Dropdown, Menu, Icon, Select } from 'antd';
+import { Form, Button, Input, Modal, message, Cascader, Icon } from 'antd';
 import css from './account.less';
 import { formatArgs } from 'debug';
 import { HttpTool, CookieHelp } from '../../../../lib/utils/index.js';
@@ -7,7 +7,6 @@ import { AccoutInfoPromise } from '../component/SignView/LoginAction';
 import Reset from '../component/SignView/Reset';
 import md5 from 'md5';
 
-const Option = Select.Option;
 const FormItem = Form.Item;
 
 function hasErrors(fieldsError) {
@@ -107,6 +106,8 @@ class AccountForm extends Component {
         const passwordError = isFieldTouched('password') && getFieldError('password');
         const mobileError = isFieldTouched('mobile') && getFieldError('mobile');
         const contactNameError = getFieldError('contactName');
+
+        const zone = [province, city, county];
 
         return (
             <div>
@@ -213,7 +214,7 @@ class AccountForm extends Component {
                                         // onChange={this.onChange}
                                         changeOnSelect
                                         style={{ marginBottom: '10px' }}
-                                        placeholder={[province, city, county].join('/') || "请选择地区"}
+                                        placeholder={zone.length > 0 ? zone.join('/') : "请选择地区"}
                                     />
                                     )}
 
