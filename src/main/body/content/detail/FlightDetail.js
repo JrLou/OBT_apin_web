@@ -5,6 +5,7 @@
  * Created by lixifeng on 16/10/25.
  */
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import {Tooltip,message,Form,Input,Icon} from 'antd';
 import css from './FlightDetail.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
@@ -15,14 +16,6 @@ import PayBottom from "./detailComp/PayBottom.js";
 import MyModalRequire from "./detailComp/MyModalRequire.js";
 
 import MyInput from '../../component/MyInput.js';
-
-
-import Scroll from 'react-scroll/modules/index'; // Imports all Mixins
-var Link = Scroll.Link;
-var Events = Scroll.Events;
-var scroll = Scroll.animateScroll;
-var scrollSpy = Scroll.scrollSpy;
-
 
 const FormItem = Form.Item;
 class page extends Component {
@@ -38,75 +31,78 @@ class page extends Component {
             upData:0,
             adultNum:1,
             childNum:0,
-            isPosition:false,
-            myTopHeight:0
+            shouldFixed:true,  //底部支付条是否应该固定定位
         };
-        this.scrollTo = this.scrollTo.bind(this);
-    }
-    scrollTo(y) {
-        scroll.scrollTo(y);
     }
     componentWillReceiveProps(nextProps) {
 
     }
 
-    upView(callBack){
+    upView(){
         this.setState({
             upData:this.state.upData++
-        },()=>{
-            if (callBack){
-                callBack();
-            }
         });
     }
 
     componentDidMount() {
         this.loadData();
-        Events.scrollEvent.register("begin", function () {
-            console.log("begin", arguments);
-        });
-        Events.scrollEvent.register("end", function () {
-            console.log("end", arguments);
-        });
-        scrollSpy.update();
-
-        window.addEventListener('scroll', (e)=>{this.handleScroll();});
-    }
-    componentWillUnmount() {
-        Events.scrollEvent.remove("begin");
-        Events.scrollEvent.remove("end");
-
-        window.removeEventListener('scroll', (e)=>{this.handleScroll();});
+        //启动页面滚动监听
+        setTimeout(()=>{this.listenScroll();},0);
     }
 
-    handleScroll() {
-        let y = this.mainDiv?this.mainDiv.offsetTop:0;
-        log("内容的值=============："+this.mainDiv.offsetHeight);
-        log("网页正文全文高=============："+document.body.scrollHeight );
-        log("网页可见区域高=============："+document.body.offsetHeight );
-        log("滚动的值=============："+document.documentElement.scrollTop);
-        log("内容的Top值=============："+this.mainDiv.offsetTop);
+    listenScroll(){
+        let markDiv = document.getElementById('markDiv');
+        let rootDiv = document.getElementById('root');
+        // console.warn('启动监听---------------------');
+        // log(markDiv);
 
-
-        let conHeight = this.mainDiv.offsetHeight;              //内容的高度
-        let mainHeight = document.body.scrollHeight;            //网页正文全文高
-        let isSeeHeight = document.body.offsetHeight;           //网页可见区域高
-        let scrollHeight = document.documentElement.scrollTop;  //滚动的值
-        let conTop = this.mainDiv.offsetTop;                    //内容距离顶部
-
-
-
-        let redomHeight = conHeight+conTop+scrollHeight;
-
-
-        this.setState({
-            isPosition:mainHeight>redomHeight && (conHeight+conTop)>isSeeHeight,
-            myTopHeight:conHeight+conTop
-        });
-        // let isBigZero = y-150;
-        // if (isBigZero>0){
-        //     this.scrollTo(isBigZero);
-        // }
+        //支付条定位初始化  如果文档高度小于屏幕高度，则不固定定位
+        if(parseInt(window.getComputedStyle(rootDiv,'').height)<parseInt(document.body.clientHeight)){
+            this.setState({
+                shouldFixed:false,
+            });
+        }
+        //监听页面滚动
+        window.onscroll = ()=>{
+            markDiv = markDiv?markDiv:document.getElementById('markDiv');
+            rootDiv = rootDiv?rootDiv:document.getElementById('root');
+            //根元素的整个高度   （不是body）
+            let rootDivHeight = parseInt(window.getComputedStyle(rootDiv,'').height);
+            //标记div顶端 到 body顶端 的距离（body顶端 与root元素顶端位置相同）
+            let markDivTop = parseInt(markDiv.offsetTop);
+            //浏览器窗口可视高度
+            let windowHeight = parseInt(document.body.clientHeight);
+            //支付条自身的高度+固定定位的bottom值
+            let payDiv = ReactDOM.findDOMNode(this.payBottom);
+            let payDivHeight =
+                parseInt(window.getComputedStyle(payDiv,'').height)
+                +
+                parseInt(window.getComputedStyle(payDiv,'').bottom);
+            //支付条顶部到浏览器窗口顶部到高度
+            let payTop = windowHeight - payDivHeight;
+            //定位样式改变的临界滚动值
+            let changeDistance = markDivTop - payTop;
+            //网页滚动的距离
+            let scrollDistance = parseInt(window.scrollY);
+            //差值
+            let distance = changeDistance-scrollDistance;
+            log(distance);
+            if(distance>0){
+                this.setState({
+                    shouldFixed:(distance>0),
+                });
+            }else{
+                if(this.state.shouldFixed){
+                    this.setState({
+                        shouldFixed:(distance>0),
+                    });
+                }else{
+                    this.setState({
+                        shouldFixed:(distance>=-29),
+                    });
+                }
+            }
+        };
     }
 
     /**
@@ -147,9 +143,7 @@ class page extends Component {
         this.props.form.setFieldsValue({
             customerName:member.contactName?member.contactName:""
         });
-        this.upView(()=>{
-            this.handleScroll();
-            });
+        this.upView();
     }
 
     /**
@@ -252,180 +246,178 @@ class page extends Component {
         const customerNameError = getFieldError('customerName');
         let div = (
             <div className={css.main}>
-                <div ref={(div)=>this.mainDiv = div}>
-                    {this.data?<div className={css.refContent}>
-                        <div className={css.table}>
-                            <div className={css.line_bg}>
-                                <div className={css.line}></div>
-                            </div>
-                            <div className={css.title}>航班信息</div>
+                {this.data?<div className={css.refContent}>
+                    <div className={css.table}>
+                        <div className={css.line_bg}>
+                            <div className={css.line}></div>
                         </div>
-                        {this.createList(this.data&&this.data.plans)}
-                    </div>:null}
+                        <div className={css.title}>航班信息</div>
+                    </div>
+                    {this.createList(this.data&&this.data.plans)}
+                </div>:null}
 
 
-                    <div className={css.title}>订单信息</div>
-                    <div className={css.content}
-                         style={{marginBottom:"0px",borderWidth:"0px"}}>
-                        <div className={css.cell}>
-                            <div className={css.cell_left}>1</div>
-                            <div className={css.cell_right}>确认乘机人数</div>
-                        </div>
-                        <div className={css.table}>
-                            <div className={css.orderCellItem}>
-                                <div className={css.i_cell}>
-                                    <div className={css.i_title}>{"成人(12岁以上):"}</div>
-                                    <FormItem prefixCls="my-ant-form"
-                                              validateStatus={adultCountError ? 'error' : ''}
-                                              help={adultCountError || ''}
-                                              style={{float:"left"}}>
-                                        {getFieldDecorator('adultCount', {
-                                            rules: [{
-                                                required: true,
-                                                message: '人数不能为空',
-                                            },{
-                                                pattern: /^.{1,4}$/,
-                                                message: '人数不能超过4位数',
-                                            },{
-                                                pattern: /^\+?[1-9]\d*$/,
-                                                message: '人数必须大于0',
-
-                                            }],
-                                            initialValue: adultNum,
-                                        })(<Input style={{width:"110px",height:"35px",textAlign:"center"}}
-                                                  placeholder={"人数"}
-                                                  addonBefore={<Icon type="minus"
-                                                                     style={{cursor: "pointer",color:"#FF6600"}}
-                                                                     onClick={()=>{
-                                                                         this.addAction(true,false);
-                                                                     }}/>}
-                                                  addonAfter={<Icon type="plus"
-                                                                    style={{cursor: "pointer",color:"#FF6600"}}
-                                                                    onClick={()=>{
-                                                                        this.addAction(true,true);
-                                                                    }}/>}
-                                                  onChange={(e)=>{
-                                                      let value = e.target.value;
-                                                      this.onChangeNumVal(true,value);
-                                                  }}/>)}
-                                    </FormItem>
-                                    <div className={css.i_subtitle}>
-                                        <span style={{fontSize:"12px"}}>{"¥"}</span>
-                                        {this.adultPrice+".00"}
-                                    </div>
-                                </div>
-
-
-                                <div className={css.i_cell}>
-                                    <div className={css.i_title}>{"儿童(2-12岁):"}</div>
-                                    <FormItem
-                                        validateStatus={childCountError ? 'error' : ''}
-                                        help={childCountError || ''}
-                                        prefixCls="my-ant-form" style={{float:"left"}}>
-                                        {getFieldDecorator('childCount', {
-                                            rules: [{
-                                                required: false,
-                                                message: '人数必须大于0',
-                                            },{
-                                                pattern: /^.{1,4}$/,
-                                                message: '人数不能超过4位数',
-                                            }],
-                                            initialValue: childNum
-                                        })(
-                                            <Input style={{width:"110px"}}
-                                                   placeholder={"人数"}
-                                                   addonBefore={<Icon type="minus"
-                                                                      style={{cursor: "pointer",color:"#FF6600",}}
-                                                                      onClick={()=>{
-                                                                          this.addAction(false,false);
-                                                                      }}/>}
-                                                   addonAfter={<Icon type="plus"
-                                                                     style={{cursor: "pointer",color:"#FF6600"}}
-                                                                     onClick={()=>{
-                                                                         this.addAction(false,true);
-                                                                     }}/>}
-                                                   onChange={(e)=>{
-                                                       let value = e.target.value;
-                                                       this.onChangeNumVal(false,value);
-                                                   }}/>
-                                        )}
-                                    </FormItem>
-                                    <div className={css.i_subtitle}>
-                                        <span style={{fontSize:"12px"}}>{"¥"}</span>
-                                        {this.childPrice+".00"}
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={css.refOrderCellItem}>
-                                <div className={css.perTotal}>
-                                    <span>{"总人数: "}</span>
-                                    <span style={{color:"#29A6FF"}}>{totolNum}</span>
-                                </div>
-                                <div className={css.priceText}>
-                                    <span>{"参考价（含税）"}</span>
-                                    <span className={css.priceTextColor}>{"¥"}</span>
-                                    <span className={css.priceTextFont}>{totalPrice}</span>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div className={css.cell}>
-                            <div className={css.cell_left}>2</div>
-                            <div className={css.cell_right} >填写联系人信息</div>
-                        </div>
+                <div className={css.title}>订单信息</div>
+                <div className={css.content}
+                     style={{marginBottom:"0px",borderWidth:"0px"}}>
+                    <div className={css.cell}>
+                        <div className={css.cell_left}>1</div>
+                        <div className={css.cell_right}>确认乘机人数</div>
+                    </div>
+                    <div className={css.table}>
                         <div className={css.orderCellItem}>
                             <div className={css.i_cell}>
-                                <div className={css.i_title}>{"姓名:"}</div>
+                                <div className={css.i_title}>{"成人(12岁以上):"}</div>
                                 <FormItem prefixCls="my-ant-form"
-                                          validateStatus={customerNameError ? 'error' : ''}
-                                          help={customerNameError || ''}
+                                          validateStatus={adultCountError ? 'error' : ''}
+                                          help={adultCountError || ''}
                                           style={{float:"left"}}>
-                                    {getFieldDecorator('customerName', {
+                                    {getFieldDecorator('adultCount', {
                                         rules: [{
                                             required: true,
-                                            message: '姓名不能为空',
+                                            message: '人数不能为空',
                                         },{
-                                            pattern: /^[\u4e00-\u9fa5]{2,6}$|^[a-zA-Z]{2,12}$/,
-                                            message: '请输入姓名(汉字2-6个字或英文2-12个字符)'
+                                            pattern: /^.{1,4}$/,
+                                            message: '人数不能超过4位数',
+                                        },{
+                                            pattern: /^\+?[1-9]\d*$/,
+                                            message: '人数必须大于0',
+
                                         }],
-                                    })(<Input style={{width:"220px"}}
-                                              maxLength="20"
-                                              placeholder={"请输入姓名"}/>)
-                                    }
+                                        initialValue: adultNum,
+                                    })(<Input style={{width:"110px",height:"35px",textAlign:"center"}}
+                                              placeholder={"人数"}
+                                              addonBefore={<Icon type="minus"
+                                                                 style={{cursor: "pointer",color:"#FF6600"}}
+                                                                 onClick={()=>{
+                                                                     this.addAction(true,false);
+                                                                 }}/>}
+                                              addonAfter={<Icon type="plus"
+                                                                style={{cursor: "pointer",color:"#FF6600"}}
+                                                                onClick={()=>{
+                                                                    this.addAction(true,true);
+                                                                }}/>}
+                                              onChange={(e)=>{
+                                                  let value = e.target.value;
+                                                  this.onChangeNumVal(true,value);
+                                              }}/>)}
                                 </FormItem>
+                                <div className={css.i_subtitle}>
+                                    <span style={{fontSize:"12px"}}>{"¥"}</span>
+                                    {this.adultPrice+".00"}
+                                </div>
                             </div>
 
 
                             <div className={css.i_cell}>
-                                <div className={css.i_title}>{"手机号码:"}</div>
-                                <FormItem prefixCls="my-ant-form"
-                                          validateStatus={mobileError ? 'error' : ''}
-                                          help={mobileError || ''}
-                                          style={{float:"left"}}>
-                                    {getFieldDecorator('mobile', {
+                                <div className={css.i_title}>{"儿童(2-12岁):"}</div>
+                                <FormItem
+                                    validateStatus={childCountError ? 'error' : ''}
+                                    help={childCountError || ''}
+                                    prefixCls="my-ant-form" style={{float:"left"}}>
+                                    {getFieldDecorator('childCount', {
                                         rules: [{
-                                            required: true,
-                                            message: '手机号不能为空',
+                                            required: false,
+                                            message: '人数必须大于0',
                                         },{
-                                            pattern: /^1\d{10}$/,
-                                            message: '请输入正确的11位手机号码'
+                                            pattern: /^.{1,4}$/,
+                                            message: '人数不能超过4位数',
                                         }],
+                                        initialValue: childNum
                                     })(
-                                        <Input style={{width:"220px"}}
-                                               placeholder={"请输入手机号"}
-                                               maxLength="11"/>
+                                        <Input style={{width:"110px"}}
+                                               placeholder={"人数"}
+                                               addonBefore={<Icon type="minus"
+                                                                  style={{cursor: "pointer",color:"#FF6600",}}
+                                                                  onClick={()=>{
+                                                                      this.addAction(false,false);
+                                                                  }}/>}
+                                               addonAfter={<Icon type="plus"
+                                                                 style={{cursor: "pointer",color:"#FF6600"}}
+                                                                 onClick={()=>{
+                                                                     this.addAction(false,true);
+                                                                 }}/>}
+                                               onChange={(e)=>{
+                                                   let value = e.target.value;
+                                                   this.onChangeNumVal(false,value);
+                                               }}/>
                                     )}
                                 </FormItem>
+                                <div className={css.i_subtitle}>
+                                    <span style={{fontSize:"12px"}}>{"¥"}</span>
+                                    {this.childPrice+".00"}
+                                </div>
                             </div>
+                        </div>
+                        <div className={css.refOrderCellItem}>
+                            <div className={css.perTotal}>
+                                <span>{"总人数: "}</span>
+                                <span style={{color:"#29A6FF"}}>{totolNum}</span>
+                            </div>
+                            <div className={css.priceText}>
+                                <span>{"参考价（含税）"}</span>
+                                <span className={css.priceTextColor}>{"¥"}</span>
+                                <span className={css.priceTextFont}>{totalPrice}</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div className={css.cell}>
+                        <div className={css.cell_left}>2</div>
+                        <div className={css.cell_right} >填写联系人信息</div>
+                    </div>
+                    <div className={css.orderCellItem}>
+                        <div className={css.i_cell}>
+                            <div className={css.i_title}>{"姓名:"}</div>
+                            <FormItem prefixCls="my-ant-form"
+                                      validateStatus={customerNameError ? 'error' : ''}
+                                      help={customerNameError || ''}
+                                      style={{float:"left"}}>
+                                {getFieldDecorator('customerName', {
+                                    rules: [{
+                                        required: true,
+                                        message: '姓名不能为空',
+                                    },{
+                                        pattern: /^[\u4e00-\u9fa5]{2,6}$|^[a-zA-Z]{2,12}$/,
+                                        message: '请输入姓名(汉字2-6个字或英文2-12个字符)'
+                                    }],
+                                })(<Input style={{width:"220px"}}
+                                          maxLength="20"
+                                          placeholder={"请输入姓名"}/>)
+                                }
+                            </FormItem>
+                        </div>
+
+
+                        <div className={css.i_cell}>
+                            <div className={css.i_title}>{"手机号码:"}</div>
+                            <FormItem prefixCls="my-ant-form"
+                                      validateStatus={mobileError ? 'error' : ''}
+                                      help={mobileError || ''}
+                                      style={{float:"left"}}>
+                                {getFieldDecorator('mobile', {
+                                    rules: [{
+                                        required: true,
+                                        message: '手机号不能为空',
+                                    },{
+                                        pattern: /^1\d{10}$/,
+                                        message: '请输入正确的11位手机号码'
+                                    }],
+                                })(
+                                    <Input style={{width:"220px"}}
+                                           placeholder={"请输入手机号"}
+                                           maxLength="11"/>
+                                )}
+                            </FormItem>
                         </div>
                     </div>
                 </div>
 
-
+                <div id={'markDiv'} ></div>
                 <PayBottom
-                    isPosition = {this.state.isPosition}
-                    myTopHeight = {this.state.myTopHeight}
+                    shouldFixed={this.state.shouldFixed}
+                    ref={(payBottom)=>{this.payBottom = payBottom;}}
                     param={{
                         orderPrice:depositAmount,
                         adultPrice:this.adultPrice,
