@@ -104,7 +104,7 @@ class UploadCmp extends Component {
       const beforeUploadingView = (<div>
          <Icon className={less.upload_text_line1} type="plus"/>
          <div className={less.upload_text_line2}>点击此处上传转账凭证</div>
-         <div className={less.upload_text_line3}>最多添加 6 张</div>
+         <div className={less.upload_text_line3}>最多添加 <span className={less.link_txt}>6</span> 张</div>
       </div>);
       const uploadButton = (
          <div className={less.upload_text}>

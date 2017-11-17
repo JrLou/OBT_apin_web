@@ -42,11 +42,11 @@ class PaySelectLayout extends Component {
                 getView: () => {
                     return (
                        <div>
+                          <img src={require("./images/pay_bank.png")} alt={"银行图片"}/>
                            <div className={less.bankItme_msg}>
                                <p>银行转账</p>
                                <p>(上传转账凭证)</p>
                            </div>
-                           <img src={require("./images/pay_bank.png")} alt={"银行图片"}/>
                        </div>
                     );
                 },
@@ -61,65 +61,65 @@ class PaySelectLayout extends Component {
             payList = payList.slice(0, this.state.maxSelect);
         }
         let data = this.getData();
+        const showMoreContent = (
+           <div
+              className={less.payMore}
+              onClick={() => {
+                 this.setState({
+                    showMore: !this.state.showMore
+                 },()=>{
+                    data.defaultshowMore = this.state.showMore;
+                 });
+              }}>
+              <span>更多支付方式 {this.state.showMore ? <Icon type="up" /> : <Icon type="down" />} </span>
+            </div>
+        );
         return (
             <div
                 {...this.props}
                 className={less.payLayout}
             >
+               <div className={less.payLayout_top}>请选择支付方式</div>
+               <div className={less.payLayout_middle}>
+                  <div>
+                     {
+                        payList.map((obj, index) => {
+                           obj.select = this.state.selectIndex === index;
 
-                    <div className={less.payLayout_top}>请选择支付方式</div>
-                    <div className={less.payLayout_middle}>
-                        <div>
-                           {
-                              payList.map((obj, index) => {
-                                 obj.select = this.state.selectIndex === index;
-
-                                 if(obj.select){
-                                    data.type = obj.type;
-                                    data.defaultIndex = index;
-                                 }
-                                 return <Item
-                                    key={index}
-                                    {...obj}
-                                    onClick={() => {
-                                       //选择当前选项
-                                       // let last = payList.length===index+1&&this.state.showMore;
-                                       // if(last){
-                                       //    //打开新的页面
-                                       //    if(this.props.onAction){
-                                       //       this.props.onAction();
-                                       //    }
-                                       //    return;
-                                       // }
-                                       this.setState({
-                                          selectIndex: index
-                                       }, () => {
-
-                                       });
-                                       //清空其他选择
-                                    }
-                                    }
-                                 >
-                                    {obj.getView()}
-                                 </Item>;
-                              })
+                           if(obj.select){
+                              data.type = obj.type;
+                              data.defaultIndex = index;
                            }
-                        </div>
-                        <div
-                           className={less.payMore}
-                           onClick={() => {
-                              this.setState({
-                                 showMore: !this.state.showMore
-                              },()=>{
-                                 data.defaultshowMore = this.state.showMore;
-                              });
-                           }}>
-                           {(this.state.showMore ? <span className={less.payMore_noshowmore}>收起<Icon type="up" /></span> : <span className={less.payMore_showmore}>更多支付方式<Icon type="down" /></span>)}
-                        </div>
-                    </div>
+                           let itemCmp = <Item
+                              key={index}
+                              {...obj}
+                              onClick={() => {
+                                 this.setState({
+                                    selectIndex: index
+                                 }, () => {
 
-
-
+                                 });
+                                 //清空其他选择
+                              }
+                              }
+                           >
+                              {obj.getView()}
+                           </Item>;
+                           if(index === 3){//即为showMore的时候
+                              return (
+                                 <div key={index}>
+                                    {showMoreContent}
+                                    {itemCmp}
+                                 </div>
+                              );
+                           } else {
+                              return itemCmp;
+                           }
+                        })
+                     }
+                  </div>
+                 {this.state.showMore ? null:showMoreContent}
+               </div>
             </div>
         );
     }
