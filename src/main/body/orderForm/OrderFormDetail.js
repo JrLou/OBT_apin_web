@@ -84,6 +84,8 @@ class OrderFormDetail extends Component{
         }
         //监听页面滚动
         window.onscroll = ()=>{
+            markDiv = markDiv?markDiv:document.getElementById('markDiv');
+            rootDiv = rootDiv?rootDiv:document.getElementById('root');
             //根元素的整个高度   （不是body）
             let rootDivHeight = parseInt(window.getComputedStyle(rootDiv,'').height);
             //标记div顶端 到 body顶端 的距离（body顶端 与root元素顶端位置相同）
@@ -104,15 +106,21 @@ class OrderFormDetail extends Component{
             let scrollDistance = parseInt(window.scrollY);
             //差值
             let distance = changeDistance-scrollDistance;
-            // log(distance);
-            if(distance>0){
+            log(distance);
+            if(distance>-81){
                 this.setState({
-                    shouldFixed:(distance>=0),
+                    shouldFixed:(distance>-81),
                 });
             }else{
-                this.setState({
-                    shouldFixed:(distance>=-110),
-                });
+                if(this.state.shouldFixed){
+                    this.setState({
+                        shouldFixed:(distance>-81),
+                    });
+                }else{
+                    this.setState({
+                        shouldFixed:(distance>=-110),
+                    });
+                }
             }
         };
     }
@@ -178,7 +186,7 @@ class OrderFormDetail extends Component{
                             payMsg={this.state.payMsg}
                         />
                 </div>
-                <div id={'markDiv'}></div>
+                <div id={'markDiv'} style={this.state.shouldFixed?{marginBottom:'100px'}:{}}></div>
                 {
                     (hasKey(this.state.orderState,[2,3,5]))
                     ?<PayBottom
