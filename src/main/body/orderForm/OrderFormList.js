@@ -58,10 +58,6 @@ class OrderFormList extends Component{
                 value:'',
             },
             {
-                title:'订单取消',
-                value:'0',
-            },
-            {
                 title:'等待确认',
                 value:'1',
             },
@@ -70,20 +66,12 @@ class OrderFormList extends Component{
                 value:'2',
             },
             {
-                title:'待付款',
-                value:'3',
-            },
-            {
                 title:'待付尾款',
                 value:'5',
             },
             {
-                title:'已出票',
-                value:'7',
-            },
-            {
-                title:'订单关闭',
-                value:'8',
+                title:'待付款',
+                value:'3',
             },
             {
                 title:'已付款(未录乘机人)',
@@ -92,6 +80,18 @@ class OrderFormList extends Component{
             {
                 title:'等待出票',
                 value:'13',
+            },
+            {
+                title:'已出票',
+                value:'7',
+            },
+            {
+                title:'订单取消',
+                value:'0',
+            },
+            {
+                title:'订单关闭',
+                value:'8',
             },
         ];
 

@@ -624,11 +624,15 @@ class PassengerMsg extends Component{
                                         key={`span${key}`}
                                         className={css.failureNum}
                                     >
-                                        <span>{`${array01[0]}第`}</span>
+                                        <span>{`${array01[0]}`}</span>
                                         &nbsp;&nbsp;
+                                        <span>第</span>
+                                        &nbsp;
                                         <span style={{color:'#f50'}}>{array02[0]}</span>
+                                        &nbsp;
+                                        <span>行</span>
                                         &nbsp;&nbsp;
-                                        <span>{`行${array02[1]}`}</span>
+                                        <span>{`${array02[1]}`}</span>
                                     </div>);
                 }
             }
