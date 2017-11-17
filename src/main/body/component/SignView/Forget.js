@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-16 22:24:56
+ * @Last Modified time: 2017-11-17 19:25:20
  */
 
 import React, { Component } from 'react';
@@ -35,7 +35,7 @@ class ForgetForm extends Component {
         this.props.form.validateFields();
     }
     render() {
-        const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched, getFieldValue } = this.props.form;
+        const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched, getFieldValue, setFields } = this.props.form;
         const { isShowPic, picCode } = this.state;
 
         // Only show error after a field is touched.
@@ -69,22 +69,39 @@ class ForgetForm extends Component {
                         label="验证码"
                     >
                         {getFieldDecorator('picCode', {
-                            rules: [{ required: true, message: '请输入图形验证码' },
-                            {
-                                validator: (rule, value, callback) => {
-                                    const mobile = getFieldValue('mobile');
-                                    this.getCode(() => {
-                                        validateLoginPromise({ picCode: value, mobile, type: 2 })
-                                            .then((data) => callback())
-                                            .catch((data) => callback(data));
-                                    });
-                                }
-                            }
+                            validateFirst: true,
+                            rules: [
+                                { required: true, message: '请输入图形验证码' },
+                                {
+                                    validator: (rule, value, callback) => {
+                                        const mobile = getFieldValue('mobile');
+                                        this.getCode(() => {
+                                            validateLoginPromise({ picCode: value, mobile, type: 2 })
+                                                .then((data) => callback())
+                                                .catch((data) => callback(data));
+                                        });
+                                    }
+                                },
                             ],
                         })(
                             <Input prefixCls='my-ant-input' placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
                             )}
-                        <img src={picCode} alt="" style={{ cursor: 'pointer' }} className={css.checkCodeImg} onClick={() => this.getCode(() => this.getCodeAction(true))} />
+                        <img src={picCode} alt="" style={{ cursor: 'pointer' }} className={css.checkCodeImg} onClick={() => {
+                            this.getCode(() => this.getCodeAction(true));
+                            validateLoginPromise({
+                                picCode: getFieldValue('picCode'),
+                                mobile: getFieldValue('picCode'), type: 2
+                            })
+                                .then((data) => { })
+                                .catch((data) => {
+                                    setFields({
+                                        picCode: {
+                                            value: '',
+                                            errors: [new Error(data)],
+                                        },
+                                    });
+                                });
+                        }} />
                     </FormItem>
                 }
                 <FormItem
@@ -98,7 +115,7 @@ class ForgetForm extends Component {
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode ref="code" error={getFieldError('mobile') || getFieldError('picCode')} getCode={() => this.getCode(this.getCodeAction)} />
+                    <CheckCode ref="code" error={isShowPic && !getFieldValue('picCode') || getFieldError('mobile') || getFieldError('picCode')} getCode={() => this.getCode(this.getCodeAction)} />
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"

@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-17 11:01:53
+ * @Last Modified time: 2017-11-17 19:25:36
  */
 
 import React, { Component } from 'react';
@@ -39,7 +39,7 @@ class SignInForm extends Component {
     }
 
     render() {
-        const { getFieldDecorator, getFieldsError, getFieldError, getFieldValue, isFieldTouched } = this.props.form;
+        const { getFieldDecorator, getFieldsError, getFieldError, getFieldValue, isFieldTouched, setFields } = this.props.form;
 
         const { isShowPic, picCode } = this.state;
 
@@ -109,7 +109,6 @@ class SignInForm extends Component {
                         validateFirst: true,
                         rules: [
                             { required: true, message: '请输入图形验证码' },
-                            { len: 4, message: '请输入4位图形验证码' },
                             {
                                 validator: (rule, value, callback) => {
                                     const mobile = getFieldValue('mobile');
@@ -124,7 +123,22 @@ class SignInForm extends Component {
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
                         )}
-                    <img src={picCode} alt="" style={{ cursor: 'pointer' }} className={css.checkCodeImg} onClick={() => this.getCode(() => this.getCodeAction(true))} />
+                    <img src={picCode} alt="" style={{ cursor: 'pointer' }} className={css.checkCodeImg} onClick={() => {
+                        this.getCode(() => this.getCodeAction(true));
+                        validateLoginPromise({
+                            picCode: getFieldValue('picCode'),
+                            mobile: getFieldValue('picCode'), type: 1
+                        })
+                            .then((data) => { })
+                            .catch((data) => {
+                                setFields({
+                                    picCode: {
+                                        value: '',
+                                        errors: [new Error(data)],
+                                    },
+                                });
+                            });
+                    }} />
                 </FormItem>}
                 <FormItem
                     prefixCls="my-ant-form"
@@ -137,7 +151,7 @@ class SignInForm extends Component {
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
-                    <CheckCode ref="code" error={getFieldError('mobile') || getFieldError('picCode')} getCode={() => this.getCode(this.getCodeAction)} />
+                    <CheckCode ref="code" error={isShowPic && !getFieldValue('picCode') || getFieldError('mobile') || getFieldError('picCode')} getCode={() => this.getCode(this.getCodeAction)} />
                 </FormItem>
                 <FormItem
                     prefixCls="my-ant-form"
