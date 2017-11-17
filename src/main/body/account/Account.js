@@ -187,7 +187,7 @@ class AccountForm extends Component {
                         validateStatus={passwordError ? 'error' : ''}
                         help={passwordError || ''}
                     >
-                        <div>******<span style={{ float: 'right', cursor: 'pointer', color: '#29A6FF' }} onClick={() => {
+                        <div>******<span style={{ cursor: 'pointer', color: '#29A6FF', marginLeft:'10px' }} onClick={() => {
                             this.setState({
                                 visible: true
                             });
@@ -337,7 +337,8 @@ class AccountForm extends Component {
                     message.success("修改成功");
                     this.setState({
                         isView: true,
-                        showProvince, showCity, showZone
+                        showProvince, showCity, showZone,
+                        companyName, contactName, address
                     });
                 }, (code, msg) => {
                     message.error(msg);
