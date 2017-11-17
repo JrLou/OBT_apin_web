@@ -597,6 +597,7 @@ class PassengerMsg extends Component{
             return (<div></div>);
         }
 
+        //普通行号
         let getNumber = (list,type)=>{
             let numberList = [];
             if(list instanceof Array){
@@ -607,6 +608,25 @@ class PassengerMsg extends Component{
                                     >
                                         {list[key]}
                                     </span>);
+                }
+            }
+
+            return numberList;
+        };
+        //失败行号  （括号内有原因）
+        let getFailNumber = (list,type)=>{
+            let numberList = [];
+            if(list instanceof Array){
+                for(let key in list){
+                    let reason = list[key].split('(');
+                    numberList.push(<div
+                                        key={`span${key}`}
+                                        className={css.failureNum}
+                                    >
+                                        <span style={{color:'#f50'}}>{reason[0]}</span>
+                                        &nbsp;&nbsp;
+                                        <span>{`(${reason[1]}`}</span>
+                                    </div>);
                 }
             }
 
@@ -626,7 +646,7 @@ class PassengerMsg extends Component{
         }
 
         return(
-            <div>
+            <div className={css.importResult}>
                 {
                     result.totalCount
                     ?<div className={css.resultTitle}>{`文件中总共有数据：${result.totalCount}条`}</div>
@@ -636,18 +656,6 @@ class PassengerMsg extends Component{
                         <span style={{color:'#87d068',fontSize:'16px'}}>导入成功：</span>
                         {`${result.successCount?result.successCount:0}人`}
                 </div>
-                {
-                    result.failCount
-                    ?<div className={css.resultItem}>
-                            <span style={{color:'#f50',fontSize:'16px'}}>导入失败：</span>
-                            {`${result.failCount}人`}
-                            <div className={css.numberList}>
-                                失败的记录行号：
-                                {getNumber(result.failRowNumber,1)}
-                            </div>
-                    </div>
-                    :''
-                }
                 {
                     result.repeatCount
                     ?<div className={css.resultItem}>
@@ -668,6 +676,18 @@ class PassengerMsg extends Component{
                             <div className={css.numberList}>
                                 已存在的记录行号：
                                 {getNumber(result.dbExistRowNumber,3)}
+                            </div>
+                        </div>
+                        :''
+                }
+                {
+                    result.failCount
+                        ?<div className={css.resultItem}>
+                            <span style={{color:'#f50',fontSize:'16px'}}>导入失败：</span>
+                            {`${result.failCount}人`}
+                            <div className={css.numberList}>
+                                失败的记录行号：
+                                {getFailNumber(result.failRowNumber,1)}
                             </div>
                         </div>
                         :''
