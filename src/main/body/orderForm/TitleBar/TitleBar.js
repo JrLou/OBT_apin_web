@@ -5,7 +5,7 @@
 /**
  * 订单状态说明
  * 0：订单取消 1：等待确认 2：待付押金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
- * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中 15：支付审核失败
+ * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中
  */
 
 import React, {Component} from 'react';
@@ -73,9 +73,6 @@ class TitleBar extends Component{
                      break;
             case 14:title='支付审核中...';
                     break;
-            case 15:title='支付审核失败';
-                    msg=`审核不通过原因：${this.state.reason}；重新提交截止时间 ${sliceTimeString(date)}`;
-                break;
             default:break;
         }
 
@@ -84,7 +81,7 @@ class TitleBar extends Component{
 
     render(){
         let state = this.state.orderState;
-        if(!(hasKey(state,[0,1,2,3,5,7,8,12,13,14,15]))){
+        if(!(hasKey(state,[0,1,2,3,5,7,8,12,13,14]))){
             return <div></div>;
         }
         return(

@@ -127,8 +127,8 @@ class AccountForm extends Component {
                                 this.handleChange('showProvince', item.name);
                                 this.getArea(item.id, 'city');
                                 this.setState({
-                                    showCity:'',
-                                    showZone:''
+                                    showCity: '',
+                                    showZone: ''
                                 });
                             }}>{item.name}</a>
                         </Menu.Item>
@@ -146,7 +146,7 @@ class AccountForm extends Component {
                                 this.handleChange('showCity', item.name);
                                 this.getArea(item.id, 'zone');
                                 this.setState({
-                                    showZone:''
+                                    showZone: ''
                                 });
                             }}>{item.name}</a>
                         </Menu.Item>
@@ -201,104 +201,113 @@ class AccountForm extends Component {
                     </FormItem>
                 </Form>
                 <Title>基本信息</Title>
-                <Form>
-                    <FormItem prefixCls="my-ant-form"
-                        {...formItemLayout}
-                        label="公司名称"
-                    >
-                        {isView ? <div>{companyName}</div> : getFieldDecorator('companyName', {
-                            initialValue: companyName
-                        })(
-                            <Input prefixCls="my-ant-input" onChange={(value) => this.handleChange('companyName', value)} />
-                            )}
-                    </FormItem>
-                    <FormItem prefixCls="my-ant-form"
-                        {...formItemLayout}
-                        label="联系人"
-                        validateStatus={isFieldTouched('contactName') && getFieldError('contactName') ? 'error' : ''}
-                        help={isFieldTouched('contactName') && getFieldError('contactName') || ''}
-                    >
-                        {isView ? <div>{contactName}</div> : getFieldDecorator('contactName', {
-                            initialValue: contactName,
-                            rules: [{
-                                pattern: /^[\u4e00-\u9fa5]{2,6}$|^[a-zA-Z]{2,12}$/,
-                                message: '请输入姓名(汉字2-6个字或英文2-12个字符)'
-                            }],
-                        })(
-                            <Input prefixCls="my-ant-input" onChange={(value) => this.handleChange('contactName', value)} />
-                            )}
-                    </FormItem>
-                    {!isView && <FormItem prefixCls="my-ant-form"
-                        {...formItemLayout}
-                        label="省"
-                    >
-                        <Dropdown overlay={provinceMenu}>
-                            <Button>
-                                {showProvince || '省'} <Icon type="down" />
-                            </Button>
-                        </Dropdown>
+                {
+                    isView ? <Form>
+                        <FormItem prefixCls="my-ant-form"
+                            {...formItemLayout}
+                            label="公司名称"
+                        >
+                            <div>{companyName}</div>
+                        </FormItem>
+                        <FormItem prefixCls="my-ant-form"
+                            {...formItemLayout}
+                            label="联系人"
+                            validateStatus={isFieldTouched('contactName') && getFieldError('contactName') ? 'error' : ''}
+                            help={isFieldTouched('contactName') && getFieldError('contactName') || ''}
+                        >
+                            <div>{contactName}</div>
+                        </FormItem>
+                        <FormItem prefixCls="my-ant-form"
+                            {...formItemLayout}
+                            label="地址"
+                        >
+                            <div>{showProvince}{showCity}{showZone}{address}
 
-                    </FormItem>}
-                    {!isView && <FormItem prefixCls="my-ant-form"
-                        {...formItemLayout}
-                        label="市"
-                    >
-                        <Dropdown overlay={cityMenu}>
-                            <Button>
-                                {showCity || '市'} <Icon type="down" />
-                            </Button>
-                        </Dropdown>
-                    </FormItem>}
-                    {!isView && <FormItem prefixCls="my-ant-form"
-                        {...formItemLayout}
-                        label="区"
-                    >
-                        <Dropdown overlay={zoneMenu}>
-                            <Button>
-                                {showZone || '区'} <Icon type="down" />
-                            </Button>
-                        </Dropdown>
-                    </FormItem>}
-                    <FormItem prefixCls="my-ant-form"
-                        {...formItemLayout}
-                        label="地址"
-                    >
-                        {isView ? <div>{showProvince}{showCity}{showZone}{address}
-
-                        </div> : getFieldDecorator('address', {
-                            initialValue: address
-                        })(
-                                <Input prefixCls="my-ant-input" onChange={(value) => this.handleChange('address', value)} />
-                                )}
-                    </FormItem>
-                    <FormItem prefixCls="my-ant-form" {...formTailLayout}>
-                        {
-                            isView ?
+                            </div>
+                        </FormItem>
+                        <FormItem prefixCls="my-ant-form" {...formTailLayout}>
+                            <Button
+                                prefixCls="my-ant-btn"
+                                size="large"
+                                type="primary"
+                                onClick={this.updateInfo}
+                            >修改</Button>
+                        </FormItem>
+                    </Form>
+                        :
+                        <Form>
+                            <FormItem prefixCls="my-ant-form"
+                                {...formItemLayout}
+                                label="公司名称"
+                            >
+                                {getFieldDecorator('companyName', {
+                                    initialValue: companyName
+                                })(
+                                    <Input prefixCls="my-ant-input" />
+                                    )}
+                            </FormItem>
+                            <FormItem prefixCls="my-ant-form"
+                                {...formItemLayout}
+                                label="联系人"
+                                validateStatus={isFieldTouched('contactName') && getFieldError('contactName') ? 'error' : ''}
+                                help={isFieldTouched('contactName') && getFieldError('contactName') || ''}
+                            >
+                                {getFieldDecorator('contactName', {
+                                    initialValue: contactName,
+                                    rules: [{
+                                        pattern: /^[\u4e00-\u9fa5]{2,6}$|^[a-zA-Z]{2,12}$/,
+                                        message: '请输入姓名(汉字2-6个字或英文2-12个字符)'
+                                    }],
+                                })(
+                                    <Input prefixCls="my-ant-input" />
+                                    )}
+                            </FormItem>
+                            <FormItem prefixCls="my-ant-form"
+                                {...formItemLayout}
+                                label="地址"
+                            >
+                                <div>
+                                    <Dropdown overlay={provinceMenu}>
+                                        <Button className={css.dropdown}>
+                                            {showProvince || '省'} <Icon type="down" />
+                                        </Button>
+                                    </Dropdown>
+                                    <Dropdown overlay={cityMenu}>
+                                        <Button className={css.dropdown}>
+                                            {showCity || '市'} <Icon type="down" />
+                                        </Button>
+                                    </Dropdown>
+                                    <Dropdown overlay={zoneMenu}>
+                                        <Button className={css.dropdown}>
+                                            {showZone || '区'} <Icon type="down" />
+                                        </Button>
+                                    </Dropdown>
+                                    {getFieldDecorator('address', {
+                                        initialValue: address
+                                    })(
+                                        <Input prefixCls="my-ant-input" />
+                                        )}
+                                </div>
+                            </FormItem>
+                            <FormItem prefixCls="my-ant-form" {...formTailLayout}>
                                 <Button
                                     prefixCls="my-ant-btn"
                                     size="large"
                                     type="primary"
-                                    onClick={this.updateInfo}
-                                >修改</Button>
-                                : <div>
-                                    <Button
-                                        prefixCls="my-ant-btn"
-                                        size="large"
-                                        type="primary"
-                                        style={{marginRight: '20px'}}
-                                        onClick={this.handleSubmit}
-                                    >保存</Button>
-                                    <Button
-                                        prefixCls="my-ant-btn"
-                                        size="large"
-                                        onClick={() => {
-                                            this.setState({ isView: true });
-                                        }}
-                                    >取消</Button>
-                                </div>
-                        }
-                    </FormItem>
-                </Form>
+                                    style={{ marginRight: '20px' }}
+                                    onClick={this.handleSubmit}
+                                >保存</Button>
+                                <Button
+                                    prefixCls="my-ant-btn"
+                                    size="large"
+                                    onClick={() => {
+                                        this.setState({ isView: true });
+                                    }}
+                                >取消</Button>
+                            </FormItem>
+                        </Form>
+                }
+
                 <Modal
                     prefixCls="my-ant-modal"
                     title="修改密码"
@@ -325,7 +334,8 @@ class AccountForm extends Component {
                 HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/modifyMemberInfo', (code, msg, json, option) => {
                     message.success("修改成功");
                     this.setState({
-                        isView: true
+                        isView: true,
+                        showProvince, showCity, showZone
                     });
                 }, (code, msg) => {
                     message.error(msg);
@@ -373,7 +383,8 @@ class AccountForm extends Component {
                 visible: false,
             });
             message.success("修改成功");
-        }, () => {
+        }, (code, msg) => {
+            message.error(msg);
         }, {
                 id: accountID,
                 option: md5(option),

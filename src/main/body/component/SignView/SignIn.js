@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-16 20:13:05
+ * @Last Modified time: 2017-11-16 22:25:21
  */
 
 import React, { Component } from 'react';
@@ -64,7 +64,7 @@ class SignInForm extends Component {
                         {
                             validator: (rule, value, callback) => {
                                 this.getCode(() => {
-                                    validateLoginPromise({ account: value,type:1 })
+                                    validateLoginPromise({ account: value, type: 1 })
                                         .then((data) => callback())
                                         .catch((data) => callback(data));
                                 });
@@ -88,7 +88,7 @@ class SignInForm extends Component {
                         {
                             validator: (rule, value, callback) => {
                                 this.getCode(() => {
-                                    validateLoginPromise({ mobile: value,type:1 })
+                                    validateLoginPromise({ mobile: value, type: 1 })
                                         .then((data) => callback())
                                         .catch((data) => callback(data));
                                 });
@@ -112,7 +112,7 @@ class SignInForm extends Component {
                             validator: (rule, value, callback) => {
                                 const mobile = getFieldValue('mobile');
                                 this.getCode(() => {
-                                    validateLoginPromise({ picCode: value, mobile,type:1 })
+                                    validateLoginPromise({ picCode: value, mobile, type: 1 })
                                         .then((data) => callback())
                                         .catch((data) => callback(data));
                                 });
@@ -217,24 +217,18 @@ class SignInForm extends Component {
         const mobile = getFieldValue('mobile');
         const picCode = getFieldValue('picCode') || '';
         HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
-            // 421---无效凭证
-            // 422---凭证过期，需要刷新
-            // 403---未授权
-            if (code == 421 || code == 422 || code == 403) {
-                CookieHelp.clearCookie();
-            } else
-                // 测试
-                if (json && json.length > 4) {
-                    this.setState({
-                        isShowPic: true,
-                        picCode: 'data:image/jpg;base64,' + json
-                    });
-                } else {
-                    this.setState({
-                        isShowPic: false
-                    });
-                    this.refs.code.autoTime(60);
-                }
+            // 测试
+            if (json && json.length > 4) {
+                this.setState({
+                    isShowPic: true,
+                    picCode: 'data:image/jpg;base64,' + json
+                });
+            } else {
+                this.setState({
+                    isShowPic: false
+                });
+                this.refs.code.autoTime(60);
+            }
         }, (code, msg, json, option) => {
             message.error(msg);
         }, {
