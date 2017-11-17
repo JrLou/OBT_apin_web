@@ -5,7 +5,8 @@ import React, {Component} from 'react';
 import css from './OrderFormDetail.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
-import {hasKey,getFlightData,transformOrderState} from '../tool/LXDHelp.js';
+import {hasKey,getFlightData} from '../tool/LXDHelp.js';
+import {transformForDetail} from './StateHelp.js';
 import {Spin,message} from 'antd';
 import TitleBar from './TitleBar/index.js';
 import Passengers from './Passengers/index.js';
@@ -16,7 +17,7 @@ import PayBottom from './PayBottom/PayBottomForDetail.js';
 /**
  * 订单状态说明(页面)：
  * 0：订单取消 1：等待确认 2：待付押金 3：待付款 5：待付尾款 7：已出票 8：订单关闭
- * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中 15：支付审核失败
+ * 12：已付款（未录乘机人） 13：等待出票 14：支付审核中
  *
  * 接口可能返回的值：
  * 0：订单取消 1：等待确认 2：待付押金 3：待付全款 5：待付尾款 7：已出票 8：已关闭
@@ -29,7 +30,7 @@ class OrderFormDetail extends Component{
         super(props);
         //模拟随机状态
         // let random = Math.floor(Math.random()*11);
-        // let list = [0,1,2,3,5,7,8,12,13,14,15];
+        // let list = [0,1,2,3,5,7,8,12,13,14];
 
         this.state = {
             orderId:window.app_getPar(this).id,         //订单ID
@@ -92,7 +93,7 @@ class OrderFormDetail extends Component{
 
     render(){
         //仅在此处做状态异常判断，如果状态不在此列，说明出现异常，页面不展示
-        if(!(hasKey(this.state.orderState,[0,1,2,3,5,7,8,12,13,14,15]))){
+        if(!(hasKey(this.state.orderState,[0,1,2,3,5,7,8,12,13,14]))){
             return(
                 <div className={css.noMessage}>
                     <Spin size={'large'}></Spin>
@@ -202,7 +203,7 @@ class OrderFormDetail extends Component{
             let orderMsg = this.getOrderMsg(json);
             let payMsg = json.pays?json.pays:[];
             let bottomData = this.getBottomData(json);
-            let orderState = this.getOrderState(json);
+            let orderState = transformForDetail(json);
             let airlineSigns = json.airlineSigns?json.airlineSigns:1;
 
             this.setLoading(false);
@@ -251,19 +252,6 @@ class OrderFormDetail extends Component{
      */
     isLoading() {
         return this.state.loading;
-    }
-
-    /**
-     * 根据后端返回到orderStatus和extraCode判断页面状态
-     * @param data
-     * @return state
-     */
-    getOrderState(data){
-        let returnState = parseInt(data.orderStatus);
-        let extraCode = parseInt(data.extraCode);
-        let state = transformOrderState(returnState,extraCode);
-
-        return state;
     }
 
     /**
