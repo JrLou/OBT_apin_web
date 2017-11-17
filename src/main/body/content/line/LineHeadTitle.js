@@ -104,19 +104,19 @@ class page extends Component {
                         <div className={css.requireAlert_right}>
                             <MyDiv div={
                                 <div className={css.requireBtn} onClick={()=>{
-                                    const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
-
-                                    let obj = {
+                                    let data ={
                                         lineType:dataSource.flightType,
-                                        toCity:dataSource.depCity,
-                                        fromCity:dataSource.arrCity,
-                                        isMult:false
-                                    };
+                                        isMult:false,
+                                        listData:[
+                                            {fromCity:dataSource.arrCity,toCity:dataSource.depCity,toDateTime:"",fromDateTime:""},
+                                        ]};
+                                    CookieHelp.saveCookieInfo("publishMsgCookie",data);
+                                    const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
                                     if (isLogin){
-                                        window.app_open(this.props.obj, "/PublishMsg", obj,"new");
+                                        window.app_open(this, "/PublishMsg", {},"new");
                                     }else {
                                         window.modal.showModal(0,()=>{
-                                            window.app_open(this.props.obj, "/PublishMsg", obj, "new");
+                                            window.app_open(this, "/PublishMsg", {},"new");
                                         });
                                     }
                                 }}>提交需求</div>

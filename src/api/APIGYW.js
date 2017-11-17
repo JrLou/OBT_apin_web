@@ -7,6 +7,15 @@ let APIGYW = {
      */
     flightapi_flight_query: "/ba/flightapi/v1.0/flight/query",
 
+// /os/hotcityapi/v1.0/arrCity/list  ->/ba/manageapi/v1.0/arrCity/list
+// /os/airlineapi/v1.0/bestList ->/ba/manageapi/v1.0/bestList
+// /os/hotcityapi/v1.0/depCity/list ->/ba/manageapi/v1.0/depCity/list
+// /os/airlineapi/v1.0/list ->/ba/manageapi/v1.0/list
+    manageapi_arrCity_list: "/ba/manageapi/v1.0/arrCity/list",
+    manageapi_bestList: "/ba/manageapi/v1.0/bestList",
+    manageapi_depCity_list: "/ba/manageapi/v1.0/depCity/list",
+    manageapi_list: "/ba/manageapi/v1.0/list",
+
     /**
      * 根据城市对与出发日期结束日期查询航班详情
      */
