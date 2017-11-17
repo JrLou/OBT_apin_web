@@ -61,6 +61,7 @@ class CellNewFlight extends Component {
         });
     }
 
+    //提交代码
     createItemCell(data,index,flightType){
         if (!data){
             return null;
