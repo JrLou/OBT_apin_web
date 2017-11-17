@@ -174,9 +174,9 @@ class page extends Component {
 
     createViewCell(dataArr) {
         return dataArr.map((data, index) => {
-            let resultData = getFlightData(data.voyages, dataArr.flightType, data.freeBag, data.weightLimit);
+            let resultData = getFlightData(data.voyages, data.freeBag, data.weightLimit);
 
-            return (<CellNewFlight key={index} dataSource={resultData}/>);
+            return (<CellNewFlight key={index} dataSource={resultData} flightType={dataArr.flightType}/>);
         });
     }
 
