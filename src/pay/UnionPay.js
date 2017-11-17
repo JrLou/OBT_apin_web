@@ -71,7 +71,7 @@ class UnionPay extends Component {
       //          data.push({
       //             code: "622***" + i.toString().repeat(4),
       //             type: "信用卡",
-      //             icon: "./images/zhaoshang.png"
+      //             icon: "./images/xx.png"
       //          });
       //       }
       //    }

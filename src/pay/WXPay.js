@@ -48,8 +48,8 @@ class WXPay extends Component {
                     <span style={{color:"#333333",fontSize:14}}>支付金额:</span> <span style={{color:"#FF6600",fontSize:12}}>￥</span><span style={{color:"#FF6600",fontSize:28}}>{data.price}</span>元
 
                     <div style={{color:"#333333",fontSize:14,margin: "8px 0 3px 0"}}>请使用 <img style={{verticalAlign:"middle",width:"23px",paddingBottom: "2px"}} src={require("./images/pay_wechat_logo.png")} alt="wechatLOGO"/> 扫描下方二维码完成支付</div>
-                    <div style={{position:"relative",width:"85%",display:"inline-block"}}>
-                        <div  dangerouslySetInnerHTML={{__html: qr.imageSync(data.url, { type: 'svg' })}} />
+                    <div>
+                        <div  dangerouslySetInnerHTML={{__html: qr.imageSync(data.url, { type: 'svg',size:10 })}} />
                         {/*<img style={{position:"absolute",top:0,left:0,right:0,bottom:0,margin:"auto"}} src={require("./images/pay_wechat_logo.png")}/>*/}
                     </div>
                 </div>
