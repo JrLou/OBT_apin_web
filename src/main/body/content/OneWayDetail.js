@@ -237,7 +237,7 @@ class page extends Component {
         var div = (
             <div className={css.main}>
                 <div className={css.content}>
-                    <LineHeadTitle dataSource = {this.myData} obj={this}/>
+                    <LineHeadTitle dataSource = {this.myData}/>
                 </div>
                 <div className={css.refContent} style={{overflow:"hidden"}}>
                     {this.flightType==2?<div className={css.myCalendar}

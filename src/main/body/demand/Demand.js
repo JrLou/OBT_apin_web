@@ -79,7 +79,7 @@ class page extends Component {
 
     componentDidMount() {
         //查询订单列表数据
-        this.loadData();
+        this.loadData(1);
     }
 
     /**
@@ -366,13 +366,11 @@ class page extends Component {
      * @param num
      */
     pageNumChange(pagination, filters, sorter) {
-        if (this.isLoading()) {
+        if(this.isLoading()){
             return;
         }
         let currentNum = pagination.current;
-        this.setState({
-            pageNumber: currentNum,
-        }, this.loadData);
+        this.loadData(currentNum);
 
     }
 
@@ -380,18 +378,20 @@ class page extends Component {
      * 点击查询按钮
      */
     searchOrderForm() {
-        if (this.isLoading()) {
+        if(this.isLoading()){
             return;
         }
-        this.loadData();
+        this.loadData(1);
     }
 
     /**
      * 请求数据
      * @param searchParames
      */
-    loadData() {
+    loadData(currentNum) {
+        let page = currentNum;
         let parames = this.getSearchParames();
+        parames.pageNum = page;
         let successCB = (code, msg, json, option) => {
             this.setLoading(false);
             let arr = [];
@@ -424,6 +424,7 @@ class page extends Component {
                     arr.push(datas);
                 });
                 this.setState({
+                    pageNumber:page,
                     total:option.option.total,
                     dataSource: arr
                 });

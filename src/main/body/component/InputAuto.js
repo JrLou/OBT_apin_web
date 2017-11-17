@@ -9,6 +9,7 @@ const OptGroup = AutoComplete.OptGroup;
 import less from "./InputAuto.less";
 
 import {HttpTool} from "../../../../lib/utils/index.js";
+import APIGYW from "../../../api/APIGYW.js";
 
 class InputAuto extends Component {
 
@@ -56,7 +57,7 @@ class InputAuto extends Component {
                 dataSource: this.hotDataSource
             });
         };
-        let api = this.props.type === "from" ? "/os/hotcityapi/v1.0/depCity/list" : "/os/hotcityapi/v1.0/arrCity/list";
+        let api = (this.props.type === "from") ? APIGYW.manageapi_depCity_list : APIGYW.manageapi_arrCity_list;
         HttpTool.request(HttpTool.typeEnum.POST, api, success, failure, param,
             {
                 ipKey: "hlIP"

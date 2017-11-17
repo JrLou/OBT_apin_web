@@ -28,7 +28,7 @@ class PassengerMsg extends Component{
             orderState:this.props.orderState,       //页面订单状态
             orderId:this.props.orderId,
             // orderId:'16b3639900f54a86b9116af77b088d75',
-            dataSource:this.props.defaultData?this.props.defaultData:[],
+            dataSource:[],
             isPassed:this.props.isPassed?this.props.isPassed:false,     //是否已经确认了乘机人
             checkedMsg:false,       //是否已经勾选'确认乘机人信息'
             submitConfirm:false,    //确认乘机人询问框
@@ -171,7 +171,7 @@ class PassengerMsg extends Component{
                         airlineSigns = {this.state.airlineSigns}        //航线类型
                         defaultData = {this.state.passengerMsg}     //单个乘机人信息
                         closeModCB = {()=>{this.setState({passengerMsg:null});}}  //关闭窗口回调
-                        changeSuccCB={(allData)=>{this.passengerChange(allData);}}                              //新增/修改成功的回调
+                        changeSuccCB={(allData)=>{this.passengerChange(allData,true);}}                              //新增/修改成功的回调
                         getFunction = {(changeVisible)=>{this.changeShow = changeVisible;}} //获取打开/关闭窗口的方法
                     />
                     {
@@ -465,7 +465,7 @@ class PassengerMsg extends Component{
             orderId:this.state.orderId,
         };
         let successCB = (code, msg, json, option)=>{
-            this.passengerChange(json);
+            this.passengerChange(json,true);
             message.success('删除成功');
             this.setLoading(false);
         };
@@ -487,7 +487,7 @@ class PassengerMsg extends Component{
      * 接受新的数据，改变乘机人列表
      * @param data
      */
-    passengerChange(data){
+    passengerChange(data,type){
         let newData = [];
         if(data instanceof Array){
             newData = data;
@@ -495,9 +495,11 @@ class PassengerMsg extends Component{
                 newData[key].index = newData[key].key = parseInt(key)+1;
             }
         }
-        this.setState({
-            dataSource:newData,
-        });
+        if(type){
+            this.setState({
+                dataSource:newData,
+            });
+        }
     }
 
     /**
@@ -508,7 +510,7 @@ class PassengerMsg extends Component{
             orderId:this.state.orderId,
         };
         let successCB = (code, msg, json, option)=>{
-            this.passengerChange(json);
+            this.passengerChange(json,true);
             this.setLoading(false);
         };
 
@@ -595,6 +597,7 @@ class PassengerMsg extends Component{
             return (<div></div>);
         }
 
+        //普通行号
         let getNumber = (list,type)=>{
             let numberList = [];
             if(list instanceof Array){
@@ -605,6 +608,32 @@ class PassengerMsg extends Component{
                                     >
                                         {list[key]}
                                     </span>);
+                }
+            }
+
+            return numberList;
+        };
+        //失败行号  （括号内有原因）
+        let getFailNumber = (list,type)=>{
+            let numberList = [];
+            if(list instanceof Array){
+                for(let key in list){
+                    let array01 = list[key].split('第');
+                    let array02 = array01[1].split('行');
+                    numberList.push(<div
+                                        key={`span${key}`}
+                                        className={css.failureNum}
+                                    >
+                                        <span>{`${array01[0]}`}</span>
+                                        &nbsp;&nbsp;
+                                        <span>第</span>
+                                        &nbsp;
+                                        <span style={{color:'#f50'}}>{array02[0]}</span>
+                                        &nbsp;
+                                        <span>行</span>
+                                        &nbsp;&nbsp;
+                                        <span>{`${array02[1]}`}</span>
+                                    </div>);
                 }
             }
 
@@ -624,7 +653,7 @@ class PassengerMsg extends Component{
         }
 
         return(
-            <div>
+            <div className={css.importResult}>
                 {
                     result.totalCount
                     ?<div className={css.resultTitle}>{`文件中总共有数据：${result.totalCount}条`}</div>
@@ -634,18 +663,6 @@ class PassengerMsg extends Component{
                         <span style={{color:'#87d068',fontSize:'16px'}}>导入成功：</span>
                         {`${result.successCount?result.successCount:0}人`}
                 </div>
-                {
-                    result.failCount
-                    ?<div className={css.resultItem}>
-                            <span style={{color:'#f50',fontSize:'16px'}}>导入失败：</span>
-                            {`${result.failCount}人`}
-                            <div className={css.numberList}>
-                                失败的记录行号：
-                                {getNumber(result.failRowNumber,1)}
-                            </div>
-                    </div>
-                    :''
-                }
                 {
                     result.repeatCount
                     ?<div className={css.resultItem}>
@@ -666,6 +683,18 @@ class PassengerMsg extends Component{
                             <div className={css.numberList}>
                                 已存在的记录行号：
                                 {getNumber(result.dbExistRowNumber,3)}
+                            </div>
+                        </div>
+                        :''
+                }
+                {
+                    result.failCount
+                        ?<div className={css.resultItem}>
+                            <span style={{color:'#f50',fontSize:'16px'}}>导入失败：</span>
+                            {`${result.failCount}人`}
+                            <div className={css.numberList}>
+                                失败的记录行号：
+                                {getFailNumber(result.failRowNumber,1)}
                             </div>
                         </div>
                         :''

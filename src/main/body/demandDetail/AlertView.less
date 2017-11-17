@@ -1,0 +1,34 @@
+@import "../../../theme.less";
+.modalTitle{
+  font-size: @font_size_super_big;
+  color:@c_title_gray;
+  text-align: center;
+}
+.modalDesc{
+  margin-top: @d_spadding_big;
+  font-size: @font_size_big;
+  color:@c_title_black;
+  text-align: center;
+}
+
+.btnDiv{
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  margin-top: @d_spadding_big;
+}
+.btn{
+  width: 45%;
+  height: 40px;
+  float: left;
+  background-color: @c_theme_blue;
+  color: @c_white;
+  font-size: @font_size_big;
+}
+.refBtn{
+  background-color: @c_white;
+  composes: btn;
+  float: right;
+  color: @c_title_blue;
+}

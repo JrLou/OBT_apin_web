@@ -52,7 +52,7 @@ class PayBottom extends Component {
         let str = param?"(成人¥"+param.adultPrice+"*"+param.adultCount+"+"+"儿童¥" +param.childPrice+
             "*"+param.childCount+"=价格(含税)"+"¥"+param.payAmount+")":"";
 
-        return (<div className={css.payDivFix}>
+        return (<div className={this.props.shouldFixed?css.payDivFix:css.payDivRel}>
             <div className={this.state.overTime?css.divDisabled:css.bottomDiv}>
                 <div className={css.bottomDiv_left}>
                     <div className={css.bottomBtn}

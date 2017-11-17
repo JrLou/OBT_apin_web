@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Input, Modal, message, Cascader, Dropdown, Menu, Icon } from 'antd';
+import { Form, Button, Input, Modal, message, Cascader, Icon } from 'antd';
 import css from './account.less';
 import { formatArgs } from 'debug';
 import { HttpTool, CookieHelp } from '../../../../lib/utils/index.js';
@@ -41,14 +41,6 @@ const Title = (props) => {
     );
 };
 
-// const province = [{
-//     value: '11',
-//     label: 'Zhejiang'
-// }, {
-//     value: '22',
-//     label: 'Jiangsu'
-// }];
-
 
 
 class AccountForm extends Component {
@@ -63,31 +55,29 @@ class AccountForm extends Component {
             mobile: '',
             companyName: '',
             contactName: '',
+            province: '',
+            city: '',
+            county: '',
             address: '',
             id: '',
-            area: {},
-            province: [],
-            city: [],
-            zone: [],
-            showProvince: '省',
-            showCity: '市',
-            showZone: '区',
-            showAddr: ''
+            options: []
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.updateInfo = this.updateInfo.bind(this);
         this.updatePsw = this.updatePsw.bind(this);
         this.handleOk = this.handleOk.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.loadData = this.loadData.bind(this);
     }
 
     componentDidMount() {
-        // this.getArea(0, 'province');
+        // 获取会员信息
         AccoutInfoPromise()
             .then((res) => {
                 const { json, option } = res;
                 const { account, password, mobile } = json;
                 let { companyName, contactName, id, province, city, county, address } = option.option;// option返回是null，这样保错了，后面然后setState也不会运行了
+                this.getArea(0, 'options');
 
                 this.setState({
                     accountID: json.id,
@@ -96,11 +86,9 @@ class AccountForm extends Component {
                     mobile,
                     companyName,
                     contactName,
-                    showProvince: province,
-                    showCity: city,
-                    showZone: county,
+                    province, city, county,
                     address,
-                    id
+                    id,
                 });
 
             })
@@ -112,64 +100,14 @@ class AccountForm extends Component {
 
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
-        const { isView, account, password, mobile, companyName, contactName, address, area, province, city, zone, showProvince, showCity, showZone, showAddr } = this.state;
+        const { isView, account, password, mobile, companyName, contactName, address, province, city, county } = this.state;
 
         const accountError = isFieldTouched('account') && getFieldError('account');
         const passwordError = isFieldTouched('password') && getFieldError('password');
         const mobileError = isFieldTouched('mobile') && getFieldError('mobile');
         const contactNameError = getFieldError('contactName');
 
-        const provinceMenu = (
-            <Menu className={css.drop}>
-                {
-                    province.map((item) =>
-                        <Menu.Item key={item.id}>
-                            <a onClick={() => {
-                                this.handleChange('showProvince', item.name);
-                                this.getArea(item.id, 'city');
-                                this.setState({
-                                    showCity: '',
-                                    showZone: ''
-                                });
-                            }}>{item.name}</a>
-                        </Menu.Item>
-
-                    )
-                }
-            </Menu>
-        );
-        const cityMenu = (
-            <Menu className={css.drop}>
-                {
-                    city.map((item) =>
-                        <Menu.Item key={item.id}>
-                            <a onClick={() => {
-                                this.handleChange('showCity', item.name);
-                                this.getArea(item.id, 'zone');
-                                this.setState({
-                                    showZone: ''
-                                });
-                            }}>{item.name}</a>
-                        </Menu.Item>
-
-                    )
-                }
-            </Menu>
-        );
-        const zoneMenu = (
-            <Menu className={css.drop}>
-                {
-                    zone.map((item) =>
-                        <Menu.Item key={item.id}>
-                            <a onClick={() => {
-                                this.handleChange('showZone', item.name);
-                            }}>{item.name}</a>
-                        </Menu.Item>
-
-                    )
-                }
-            </Menu>
-        );
+        const zone = [province, city, county];
 
         return (
             <div>
@@ -187,7 +125,7 @@ class AccountForm extends Component {
                         validateStatus={passwordError ? 'error' : ''}
                         help={passwordError || ''}
                     >
-                        <div>******<span style={{ float: 'right', cursor: 'pointer', color: '#29A6FF' }} onClick={() => {
+                        <div>******<span style={{ cursor: 'pointer', color: '#29A6FF', marginLeft: '10px' }} onClick={() => {
                             this.setState({
                                 visible: true
                             });
@@ -203,38 +141,39 @@ class AccountForm extends Component {
                 </Form>
                 <Title>基本信息</Title>
                 {
-                    isView ? <Form>
-                        <FormItem prefixCls="my-ant-form"
-                            {...formItemLayout}
-                            label="公司名称"
-                        >
-                            <div>{companyName}</div>
-                        </FormItem>
-                        <FormItem prefixCls="my-ant-form"
-                            {...formItemLayout}
-                            label="联系人"
-                            validateStatus={contactNameError ? 'error' : ''}
-                            help={contactNameError || ''}
-                        >
-                            <div>{contactName}</div>
-                        </FormItem>
-                        <FormItem prefixCls="my-ant-form"
-                            {...formItemLayout}
-                            label="地址"
-                        >
-                            <div>{showProvince}{showCity}{showZone}{address}
+                    isView ?
+                        <Form>
+                            <FormItem prefixCls="my-ant-form"
+                                {...formItemLayout}
+                                label="公司名称"
+                            >
+                                <div>{companyName}</div>
+                            </FormItem>
+                            <FormItem prefixCls="my-ant-form"
+                                {...formItemLayout}
+                                label="联系人"
+                                validateStatus={contactNameError ? 'error' : ''}
+                                help={contactNameError || ''}
+                            >
+                                <div>{contactName}</div>
+                            </FormItem>
+                            <FormItem prefixCls="my-ant-form"
+                                {...formItemLayout}
+                                label="地址"
+                            >
+                                <div>{province}{city}{county}{address}
 
-                            </div>
-                        </FormItem>
-                        <FormItem prefixCls="my-ant-form" {...formTailLayout}>
-                            <Button
-                                prefixCls="my-ant-btn"
-                                size="large"
-                                type="primary"
-                                onClick={this.updateInfo}
-                            >修改</Button>
-                        </FormItem>
-                    </Form>
+                                </div>
+                            </FormItem>
+                            <FormItem prefixCls="my-ant-form" {...formTailLayout}>
+                                <Button
+                                    prefixCls="my-ant-btn"
+                                    size="large"
+                                    type="primary"
+                                    onClick={this.updateInfo}
+                                >修改</Button>
+                            </FormItem>
+                        </Form>
                         :
                         <Form>
                             <FormItem prefixCls="my-ant-form"
@@ -267,28 +206,23 @@ class AccountForm extends Component {
                                 {...formItemLayout}
                                 label="地址"
                             >
-                                <div>
-                                    <Dropdown overlay={provinceMenu}>
-                                        <Button className={css.dropdown}>
-                                            {showProvince || '省'} <Icon type="down" />
-                                        </Button>
-                                    </Dropdown>
-                                    <Dropdown overlay={cityMenu}>
-                                        <Button className={css.dropdown}>
-                                            {showCity || '市'} <Icon type="down" />
-                                        </Button>
-                                    </Dropdown>
-                                    <Dropdown overlay={zoneMenu}>
-                                        <Button className={css.dropdown}>
-                                            {showZone || '区'} <Icon type="down" />
-                                        </Button>
-                                    </Dropdown>
-                                    {getFieldDecorator('address', {
-                                        initialValue: address
-                                    })(
-                                        <Input prefixCls="my-ant-input" />
-                                        )}
-                                </div>
+                                {getFieldDecorator('zone', {
+                                })(
+                                    <Cascader
+                                        options={this.state.options}
+                                        loadData={this.loadData}
+                                        // onChange={this.onChange}
+                                        changeOnSelect
+                                        style={{ marginBottom: '10px' }}
+                                        placeholder={zone.length > 0 ? zone.join('/') : "请选择地区"}
+                                    />
+                                    )}
+
+                                {getFieldDecorator('address', {
+                                    initialValue: address
+                                })(
+                                    <Input prefixCls="my-ant-input" placeholder="请输入详细地址" />
+                                    )}
                             </FormItem>
                             <FormItem prefixCls="my-ant-form" {...formTailLayout}>
                                 <Button
@@ -327,33 +261,67 @@ class AccountForm extends Component {
     handleSubmit() {
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                let { password, companyName, contactName, address } = values;
-                const { id, showProvince, showCity, showZone } = this.state;
+                let { password, companyName, contactName, zone, address } = values;
+                const { id } = this.state;
+                log("values");
+                log("values");
+                log("values");
+                log("values");
+                log("values");
+                log("values");
+                log(values);
+                log(zone);
+                log(zone[0]);
+                log(zone[0] || '');
                 // if (companyName != this.state.companyName
                 //     || contactName != this.state.contactName
                 //     || address != this.state.address
                 // ) {
+                let province = zone[0] || '';
+                let city = zone[1] || '';
+                let county = zone[2] || '';
+                log(province);
+                log(city);
+                log(county);
+
                 HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/modifyMemberInfo', (code, msg, json, option) => {
                     message.success("修改成功");
                     this.setState({
                         isView: true,
-                        showProvince, showCity, showZone
+                        province,
+                        city,
+                        county,
+                        companyName, contactName, address
                     });
                 }, (code, msg) => {
                     message.error(msg);
                 }, {
-                        province: showProvince,
-                        city: showCity,
-                        county: showZone,
+                        province,
+                        city,
+                        county,
                         address,
                         companyName,
                         contactName,
                         id
                     });
-                // }
-
             }
+
+            // }
         });
+    }
+
+    loadData(selectedOptions) {
+        const targetOption = selectedOptions[selectedOptions.length - 1];
+        targetOption.loading = true;
+        setTimeout(() => {
+            this.getArea(targetOption.id, null, (children) => {
+                targetOption.loading = false;
+                targetOption.children = children;
+                this.setState({
+                    options: [...this.state.options]
+                });
+            });
+        }, 500);
     }
 
     handleChange(key, value) {
@@ -394,12 +362,12 @@ class AccountForm extends Component {
             });
     }
 
-    getArea(id, key) {
+    getArea(id, key, callback) {
         HttpTool.request(HttpTool.typeEnum.POST, '/bc/area/byPid/query', (code, msg, json, option) => {
-            // HttpTool.request(HttpTool.typeEnum.POST, '/area/byPid/query', (code, msg, json, option) => {
             let res = json.map(item => {
-                item.value = item.id;
+                item.value = item.name;
                 item.label = item.name;
+                item.isLeaf = item.level == 3;
                 return item;
             });
             if (key) {
@@ -407,11 +375,15 @@ class AccountForm extends Component {
                     [key]: res
                 });
             }
+            if (callback && typeof (callback) == 'function') {
+                callback(res);
+            }
         }, (code, msg) => {
             message.error(msg);
         }, {
                 pid: String(id)
             });
+
     }
 
     /**
