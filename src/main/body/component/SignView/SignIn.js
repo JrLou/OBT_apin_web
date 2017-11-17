@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-16 22:25:21
+ * @Last Modified time: 2017-11-17 11:01:53
  */
 
 import React, { Component } from 'react';
@@ -58,7 +58,7 @@ class SignInForm extends Component {
                     label="账户名(不可修改)"
                 >
                     {getFieldDecorator('account', {
-                        validateTrigger: 'onBlur',
+                        validateFirst: true,
                         rules: [{ required: true, message: '请输入账户名' },
                         { pattern: /^[0-9A-Za-z]{6,20}$/, message: '请输入6-20位数字、字母' },
                         {
@@ -82,7 +82,7 @@ class SignInForm extends Component {
                     label="绑定手机"
                 >
                     {getFieldDecorator('mobile', {
-                        validateTrigger: 'onBlur',
+                        validateFirst: true,
                         rules: [{ required: true, message: '请输入11位手机号' },
                         { pattern: /^(1)\d{10}$/, message: '手机号格式不正确！' },
                         {
@@ -106,18 +106,20 @@ class SignInForm extends Component {
                     label="验证码"
                 >
                     {getFieldDecorator('picCode', {
-                        validateTrigger: 'onBlur',
-                        rules: [{ required: true, message: '请输入图形验证码' },
-                        {
-                            validator: (rule, value, callback) => {
-                                const mobile = getFieldValue('mobile');
-                                this.getCode(() => {
-                                    validateLoginPromise({ picCode: value, mobile, type: 1 })
-                                        .then((data) => callback())
-                                        .catch((data) => callback(data));
-                                });
+                        validateFirst: true,
+                        rules: [
+                            { required: true, message: '请输入图形验证码' },
+                            { len: 4, message: '请输入4位图形验证码' },
+                            {
+                                validator: (rule, value, callback) => {
+                                    const mobile = getFieldValue('mobile');
+                                    this.getCode(() => {
+                                        validateLoginPromise({ picCode: value, mobile, type: 1 })
+                                            .then((data) => callback())
+                                            .catch((data) => callback(data));
+                                    });
+                                }
                             }
-                        }
                         ],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
