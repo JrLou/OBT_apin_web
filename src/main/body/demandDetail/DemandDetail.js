@@ -7,7 +7,8 @@ import {HttpTool, CookieHelp} from "../../../../lib/utils/index.js";
 import NumTransToTextHelp from '../tool/NumTransToTextHelp.js';
 import {getFlightData} from '../tool/LXDHelp.js';
 import APIGYW from '../../../api/APIGYW';
-import AlertView from './AlertView.js';
+
+import AlertView from "./AlertView.js";
 /**
  * 需求已取消                    0
  * 需求处理中 （单程）       1    1
@@ -150,36 +151,63 @@ class page extends Component {
             <div className={less.top}>
 
                 {data.flightType === 3 ? this.getMultiPass(data.demandStatus, data) : this.getTop(data.demandStatus, data)}
-                {data.demandStatus === 4 ? this.getCellNewFlight(data && data.plans ? data.plans : [], data.flightType) : null}
+                {data.demandStatus === 4 ? this.getCellNewFlight(data && data.plans ? data.plans : []) : null}
                 {data.demandStatus === 1 || data.demandStatus === 2 ? this.getMessage("预计在30分钟内为您处理需求") :
                     (data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
                 {data.demandStatus === 5 ? this.getCloseReason(data) : null}
                 {data.demandStatus === 1 || data.demandStatus === 2 || data.demandStatus === 5 || data.demandStatus === 0 ? this.getButton(data.demandStatus) : null}
                 {data.demandStatus === 4 ? this.getOrderDetail(data) : null}
                 {data.demandStatus === 3 ? this.getConfirmButton(data && data.plans ? data.plans : [], data.flightType) : null}
-
-
+                <AlertView ref={(a) => this.partnerDetail = a}
+                           callBack={(typeIndex,json)=>{
+                               this.commitSureBtn(typeIndex,json);
+                           }}/>
             </div>
         );
     }
+    /**
+     * typeIndex:   1.取消需求
+     *              2.删除需求
+     *              3.确定此航班
+     * json:          值的传入传出
+     */
 
-    getCellNewFlight(data = {},flightType) {
+    commitSureBtn(typeIndex,json){
+        switch (typeIndex){
+            case 1:{
+                this.cancelDemand();
+            }
+            break;
+            case 2:{
+                this.deleteDemand();
+            }
+                break;
+            case 3:{
+                this.confirmDemand();
+            }
+                break;
+            default:
+                break;
+        }
+
+    }
+    getCellNewFlight(data = {}) {
         return (
             <div className={less.cellNewFlightLayout}>
                 <h2 className={less.title}>航班信息</h2>
                 <div className={less.line}/>
                 <div className={less.cellNewFlight}>
-                    {this.createViewCell(data || [],flightType)}
+                    {this.createViewCell(data || [])}
                 </div>
             </div>
         );
     }
 
-    createViewCell(dataArr,flightType) {
+    createViewCell(dataArr) {
         return dataArr.map((data, index) => {
             let resultData = getFlightData(data.voyages, data.freeBag, data.weightLimit);
 
-            return (<CellNewFlight key={index} dataSource={resultData} flightType={flightType}/>);
+            return (<CellNewFlight key={index} dataSource={resultData} flightType={dataArr.flightType}/>);
         });
     }
 
@@ -282,10 +310,9 @@ class page extends Component {
         });
     }
 
-    showConfirmModal(demandId) {
+    showConfirmModal() {
         this.setState({
             visibleConfirm: true,
-            demandId: demandId,
         });
     }
 
@@ -324,7 +351,12 @@ class page extends Component {
                 <div className={less.buttonLayout}>
                     <Button className={less.buttonCancel}
                             onClick={() => {
-                                this.showCancleModal();
+                                // this.showCancleModal();
+                                this.partnerDetail.showModal({
+                                    typeIndex:1,
+                                    title:"提示",
+                                    desc:"是否确定取消此需求?",
+                                });
                             }}
                     >取消需求</Button>
                     <Modal
@@ -351,7 +383,12 @@ class page extends Component {
                 <div className={less.buttonLayout}>
                     <Button className={less.buttonDelete}
                             onClick={() => {
-                                this.showDeleteModal();
+                                // this.showDeleteModal();
+                                this.partnerDetail.showModal({
+                                    typeIndex:2,
+                                    title:"提示",
+                                    desc:"是否确定删除此需求?",
+                                });
                             }}
                     >删除需求</Button>
                     <Modal
@@ -455,8 +492,17 @@ class page extends Component {
                                         <div
                                             className={this.state.index === index ? less.confirmFlightButton : less.uncertainFlightButton}
                                             onClick={() => {
-                                                this.setState({index: index});
-                                                this.showConfirmModal(data.id);
+                                                this.setState({
+                                                    index: index,
+                                                    demandId:data.id
+                                                });
+                                                // this.showConfirmModal(data.id);
+                                                this.partnerDetail.showModal({
+                                                    typeIndex:3,
+                                                    json:{id:data.id},
+                                                    title:"提示",
+                                                    desc:"是否确认选择该方案?",
+                                                });
                                             }}>
                                             <div
                                                 className={this.state.index === index ? less.confirmBtnImg : less.uncertainBtnImg}>
