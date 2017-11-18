@@ -487,6 +487,7 @@ class InputLayout extends Component {
                   <label htmlFor="accountName" className={less.control_label}>账户名：</label>
                   <br/>
                   <Input
+                     prefixCls="my-ant-input"
                      {...iptProps}
                      id="accountName"
                      value={this.state.accountName}
@@ -500,6 +501,7 @@ class InputLayout extends Component {
                   <label htmlFor="account" className={less.control_label}>卡号：</label>
                   <br/>
                   <Input
+                     prefixCls="my-ant-input"
                      {...iptProps}
                      id="account"
                      onChange={(e) => {
@@ -518,6 +520,7 @@ class InputLayout extends Component {
                   <label htmlFor="bank" className={less.control_label}>银行：</label>
                   <br/>
                   <Input
+                     prefixCls="my-ant-input"
                      {...iptProps}
                      value={this.state.bank}
                      id="bank"
@@ -532,6 +535,7 @@ class InputLayout extends Component {
                   <label htmlFor="amount" className={less.control_label}>转账金额：</label>
                   <br/>
                   <Input
+                     prefixCls="my-ant-input"
                      {...iptProps}
                      id="amount"
                      value={this.state.amount + "元"}

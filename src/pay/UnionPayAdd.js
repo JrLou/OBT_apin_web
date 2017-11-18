@@ -99,6 +99,7 @@ class UnionPayAdd extends Component {
                      help={this.help}
                   >
                      <Input
+                        prefixCls="my-ant-input"
                         size={"large"}
                         style={{width: "240px"}}
                         className={less.cardNumIpt}
