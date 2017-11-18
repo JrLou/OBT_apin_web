@@ -11,7 +11,7 @@
 import React, {Component} from 'react';
 import css from './TitleBar.less';
 import {hasKey,sliceTimeString} from '../../tool/LXDHelp.js';
-import AlertView from '../../demandDetail/AlertView.js';
+import AlertView from '../../component/AlertView.js';
 
 class TitleBar extends Component{
     constructor(props){
