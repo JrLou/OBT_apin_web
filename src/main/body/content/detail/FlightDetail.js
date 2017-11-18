@@ -128,16 +128,13 @@ class page extends Component {
      */
     setData(json){
         this.data = json;
+        this.adultPrice = json&&json.adultPrice?json.adultPrice:0;
+        this.childPrice = json&&json.childPrice?json.childPrice:0;
+        this.depositAmount = json&&json.depositAmount?json.depositAmount:0;
 
-
-
-        let adultPrice = json&&json.adultPrice?json.adultPrice:0;
-        let childPrice = json&&json.childPrice?json.childPrice:0;
-        let depositAmount = json&&json.depositAmount?json.depositAmount:0;
-
-        this.adultPrice =Math.round(parseFloat(adultPrice)*100)/100;
-        this.childPrice=Math.round(parseFloat(childPrice)*100)/100;
-        this.depositAmount = Math.round(parseFloat(depositAmount)*100)/100;
+        // this.adultPrice =Math.round(parseFloat(adultPrice)*100)/100;
+        // this.childPrice=Math.round(parseFloat(childPrice)*100)/100;
+        // this.depositAmount = Math.round(parseFloat(depositAmount)*100)/100;
 
 
         this.cityArr = json&&json.cityArr?json.cityArr:"";
