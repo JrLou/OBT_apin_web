@@ -71,7 +71,7 @@ class page extends Component {
                     </div>
                 </div>
 
-                <div className={css.requireAlertBg} style={{transform:translateX,}}>
+                <div className={css.requireAlertBg} style={{right:(0-this.state.step)+"px",}}>
                     <div className={css.alertImage}
                          style={{pointerEvents:this.state.isClick}}
                          onClick={()=>{
