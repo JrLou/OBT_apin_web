@@ -88,7 +88,8 @@
 .src-main-body-component-Steps-step---payCpmBox---Bbwap {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-component-Steps-step---payCpmBox---Bbwap .src-main-body-component-Steps-step---top---3Jrmj {
   line-height: 50px;
@@ -217,7 +218,8 @@
 .src-main-AppTop---payCpmBox---G1pVZ {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-AppTop---payCpmBox---G1pVZ .src-main-AppTop---top---2EGnr {
   line-height: 50px;
@@ -393,7 +395,8 @@
 .src-main-App---payCpmBox---1GaZm {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-App---payCpmBox---1GaZm .src-main-App---top---3KWEp {
   line-height: 50px;
@@ -497,7 +500,8 @@
 .src-main-None---payCpmBox---2ENkR {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-None---payCpmBox---2ENkR .src-main-None---top---37pzq {
   line-height: 50px;
@@ -607,7 +611,8 @@
 .src-main-body-index-Index---payCpmBox---1s601 {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-index-Index---payCpmBox---1s601 .src-main-body-index-Index---top---16WGr {
   line-height: 50px;
@@ -898,7 +903,8 @@ active {
 .src-main-body-component-RecommendView-index---payCpmBox---1np2N {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-component-RecommendView-index---payCpmBox---1np2N .src-main-body-component-RecommendView-index---top---2I_ZR {
   line-height: 50px;
@@ -1130,7 +1136,8 @@ active {
 .src-main-body-component-SpecialView-index---payCpmBox---2ScxL {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-component-SpecialView-index---payCpmBox---2ScxL .src-main-body-component-SpecialView-index---top---3zV_E {
   line-height: 50px;
@@ -1308,7 +1315,8 @@ active {
 .src-main-body-component-InputAuto---payCpmBox---4lPCw {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-component-InputAuto---payCpmBox---4lPCw .src-main-body-component-InputAuto---top----Ziv3 {
   line-height: 50px;
@@ -1419,6 +1427,18 @@ active {
 .src-main-body-component-InputAuto---errorMessage---1LRbE {
   color: rgba(255, 88, 37, 0.73);
 }
+.src-main-body-component-InputAuto---autoComplete---1DeFD {
+  height: 36px;
+  width: 150px;
+}
+.src-main-body-component-InputAuto---autoComplete---1DeFD div {
+  height: 36px !important;
+  border-radius: 1px !important;
+}
+.src-main-body-component-InputAuto---autoComplete---1DeFD input {
+  height: 36px !important;
+  border-radius: 1px !important;
+}
 .src-main-body-component-SearchLayout-index---maintheme---2mNbi {
   position: absolute;
   min-height: 100%;
@@ -1444,7 +1464,8 @@ active {
 .src-main-body-component-SearchLayout-index---payCpmBox---1edsI {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-component-SearchLayout-index---payCpmBox---1edsI .src-main-body-component-SearchLayout-index---top---OY7cp {
   line-height: 50px;
@@ -1634,7 +1655,8 @@ active {
 .src-main-body-content-OneWayDetail---payCpmBox---7P2EE {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-content-OneWayDetail---payCpmBox---7P2EE .src-main-body-content-OneWayDetail---top---2z3Nz {
   line-height: 50px;
@@ -1956,7 +1978,8 @@ active {
 .src-main-body-content-line-LineHeadTitle---payCpmBox---UUZ3u {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-content-line-LineHeadTitle---payCpmBox---UUZ3u .src-main-body-content-line-LineHeadTitle---top---14ppy {
   line-height: 50px;
@@ -2202,7 +2225,8 @@ active {
 .src-main-body-component-MyDiv---payCpmBox---1UwUl {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-component-MyDiv---payCpmBox---1UwUl .src-main-body-component-MyDiv---top---1cNRN {
   line-height: 50px;
@@ -2301,7 +2325,8 @@ active {
 .src-main-body-content-line-MyCalendar---payCpmBox---3LuI0 {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-content-line-MyCalendar---payCpmBox---3LuI0 .src-main-body-content-line-MyCalendar---top---1OYcL {
   line-height: 50px;
@@ -2587,7 +2612,8 @@ active {
 .src-main-body-content-line-MyAlert---payCpmBox---13Duk {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-content-line-MyAlert---payCpmBox---13Duk .src-main-body-content-line-MyAlert---top---2zJG- {
   line-height: 50px;
@@ -2728,7 +2754,8 @@ active {
 .src-main-body-component-LoadingView---payCpmBox---fCVcJ {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-component-LoadingView---payCpmBox---fCVcJ .src-main-body-component-LoadingView---top---3X37p {
   line-height: 50px;
@@ -2839,7 +2866,8 @@ active {
 .src-main-body-content-line-CellFlightCom---payCpmBox---3i6Kk {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-content-line-CellFlightCom---payCpmBox---3i6Kk .src-main-body-content-line-CellFlightCom---top---158vS {
   line-height: 50px;
@@ -3140,7 +3168,8 @@ active {
 .src-main-body-search-Search---payCpmBox---1-J68 {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-search-Search---payCpmBox---1-J68 .src-main-body-search-Search---top---3I2x_ {
   line-height: 50px;
@@ -3355,7 +3384,8 @@ active {
 .src-main-body-content-detail-FlightDetail---payCpmBox---3Ob8G {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-content-detail-FlightDetail---payCpmBox---3Ob8G .src-main-body-content-detail-FlightDetail---top---Z-p_l {
   line-height: 50px;
@@ -3632,7 +3662,8 @@ active {
 .src-main-body-content-cell-CellNewFlight---payCpmBox---1NM3- {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-content-cell-CellNewFlight---payCpmBox---1NM3- .src-main-body-content-cell-CellNewFlight---top---31qF0 {
   line-height: 50px;
@@ -3896,7 +3927,8 @@ active {
 .src-main-body-content-cell-CellNewFlightDetail---payCpmBox---2tWlS {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-content-cell-CellNewFlightDetail---payCpmBox---2tWlS .src-main-body-content-cell-CellNewFlightDetail---top---3Hcas {
   line-height: 50px;
@@ -3993,7 +4025,8 @@ active {
 .src-main-body-content-cell-CellTransFlight---payCpmBox---2LtTU {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-content-cell-CellTransFlight---payCpmBox---2LtTU .src-main-body-content-cell-CellTransFlight---top---2s5LI {
   line-height: 50px;
@@ -4231,7 +4264,8 @@ active {
 .src-main-body-content-detail-detailComp-PayBottom---payCpmBox---34F5x {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-content-detail-detailComp-PayBottom---payCpmBox---34F5x .src-main-body-content-detail-detailComp-PayBottom---top---1cZTn {
   line-height: 50px;
@@ -4400,7 +4434,8 @@ active {
 .src-main-body-publishMsg-PublishMsg---payCpmBox---YPdmy {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-publishMsg-PublishMsg---payCpmBox---YPdmy .src-main-body-publishMsg-PublishMsg---top---22Bks {
   line-height: 50px;
@@ -4534,7 +4569,8 @@ active {
 .src-main-body-content-detail-detailComp-MyModalRequire---payCpmBox---1Bnk1 {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-content-detail-detailComp-MyModalRequire---payCpmBox---1Bnk1 .src-main-body-content-detail-detailComp-MyModalRequire---top---O6YQT {
   line-height: 50px;
@@ -4653,7 +4689,8 @@ active {
 .src-main-body-component-MyInput---payCpmBox---VnPkc {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-component-MyInput---payCpmBox---VnPkc .src-main-body-component-MyInput---top---2jxnh {
   line-height: 50px;
@@ -4797,7 +4834,8 @@ active {
 .src-main-body-content-detail-PubRequirement---payCpmBox---1tcwa {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-content-detail-PubRequirement---payCpmBox---1tcwa .src-main-body-content-detail-PubRequirement---top---16MjF {
   line-height: 50px;
@@ -5044,7 +5082,8 @@ active {
 .src-main-body-component-MyTextArea---payCpmBox---2B7xr {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-component-MyTextArea---payCpmBox---2B7xr .src-main-body-component-MyTextArea---top---1ofuU {
   line-height: 50px;
@@ -5148,7 +5187,8 @@ active {
 .src-main-body-content-detail-detailComp-AddFlightLine---payCpmBox---1vtOe {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-content-detail-detailComp-AddFlightLine---payCpmBox---1vtOe .src-main-body-content-detail-detailComp-AddFlightLine---top---2JiC3 {
   line-height: 50px;
@@ -5331,7 +5371,8 @@ active {
 .src-main-body-component-DatePick-MyDatePick---payCpmBox---lJm8s {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-component-DatePick-MyDatePick---payCpmBox---lJm8s .src-main-body-component-DatePick-MyDatePick---top---1M2AU {
   line-height: 50px;
@@ -5437,7 +5478,8 @@ active {
 .src-main-body-component-DatePick-DatePick---payCpmBox---1Z5sp {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-component-DatePick-DatePick---payCpmBox---1Z5sp .src-main-body-component-DatePick-DatePick---top---g0YXc {
   line-height: 50px;
@@ -5632,7 +5674,8 @@ active {
 .src-main-body-orderForm-OrderFormList---payCpmBox---2vkCe {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-orderForm-OrderFormList---payCpmBox---2vkCe .src-main-body-orderForm-OrderFormList---top---wSmD0 {
   line-height: 50px;
@@ -5778,6 +5821,10 @@ active {
   height: 36px;
   line-height: 36px;
 }
+.src-main-body-orderForm-OrderFormList---lableText---Oy0-3 {
+  display: inline-block;
+  vertical-align: -15%;
+}
 .src-main-body-orderForm-OrderFormDetail---maintheme---z9-s8 {
   position: absolute;
   min-height: 100%;
@@ -5803,7 +5850,8 @@ active {
 .src-main-body-orderForm-OrderFormDetail---payCpmBox---3y4QS {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-orderForm-OrderFormDetail---payCpmBox---3y4QS .src-main-body-orderForm-OrderFormDetail---top---kI7Cm {
   line-height: 50px;
@@ -5919,7 +5967,8 @@ active {
 .src-main-body-orderForm-TitleBar-TitleBar---payCpmBox---SE2Uw {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-orderForm-TitleBar-TitleBar---payCpmBox---SE2Uw .src-main-body-orderForm-TitleBar-TitleBar---top---2wvlH {
   line-height: 50px;
@@ -6042,7 +6091,8 @@ active {
 .src-main-body-orderForm-Passengers-Passengers---payCpmBox---3KgTI {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-orderForm-Passengers-Passengers---payCpmBox---3KgTI .src-main-body-orderForm-Passengers-Passengers---top---2Epsh {
   line-height: 50px;
@@ -6195,9 +6245,6 @@ active {
   text-align: center;
   margin-top: 10px;
 }
-.src-main-body-orderForm-Passengers-Passengers---failureNum---2AwFc {
-  padding-left: 20px;
-}
 .src-main-body-orderForm-Passengers-Passengers---warningNum---1Qno7 {
   color: #fa0;
   padding: 0 5px;
@@ -6228,6 +6275,13 @@ active {
   max-height: 400px;
   overflow: auto;
 }
+.src-main-body-orderForm-Passengers-Passengers---confirmTitle---26w4i {
+  font-size: 20px;
+  color: #666666;
+  letter-spacing: 0.3px;
+  text-align: center;
+  margin-bottom: 26px;
+}
 .src-main-body-orderForm-Passengers-PassengerAdd---maintheme---2TZ4m {
   position: absolute;
   min-height: 100%;
@@ -6253,7 +6307,8 @@ active {
 .src-main-body-orderForm-Passengers-PassengerAdd---payCpmBox---12gtt {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-orderForm-Passengers-PassengerAdd---payCpmBox---12gtt .src-main-body-orderForm-Passengers-PassengerAdd---top---JEeFp {
   line-height: 50px;
@@ -6361,6 +6416,46 @@ active {
   color: #333;
   margin-bottom: 5px;
 }
+.src-main-body-orderForm-Passengers-PassengerAdd---inputStyle---2QDi- {
+  width: 100%;
+  height: 36px;
+  border-radius: 2px;
+}
+.src-main-body-orderForm-Passengers-PassengerAdd---inputStyle---2QDi- div {
+  border-radius: 2px;
+}
+.src-main-body-orderForm-Passengers-PassengerAdd---dateStyle---2Cu7- {
+  width: 100%;
+  border-radius: 2px;
+}
+.src-main-body-orderForm-Passengers-PassengerAdd---dateStyle---2Cu7- input {
+  height: 36px;
+  border-radius: 2px;
+}
+.src-main-body-orderForm-Passengers-PassengerAdd---selectStyle---2pp4v {
+  width: 100%;
+  height: 36px;
+  border-radius: 2px;
+}
+.src-main-body-orderForm-Passengers-PassengerAdd---selectStyle---2pp4v div {
+  border-radius: 2px;
+}
+.src-main-body-orderForm-Passengers-PassengerAdd---selectStyle---2pp4v > div {
+  height: 36px;
+  line-height: 36px;
+}
+.src-main-body-orderForm-Passengers-PassengerAdd---selectStyle---2pp4v > div > div {
+  height: 36px;
+  line-height: 36px;
+}
+.src-main-body-orderForm-Passengers-PassengerAdd---checkBtn---2SgEl {
+  width: 306px;
+  height: 36px;
+  font-size: 16px;
+  color: #FFFFFF;
+  letter-spacing: 0.24px;
+  margin-top: 20px;
+}
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---maintheme---2McXi {
   position: absolute;
   min-height: 100%;
@@ -6386,7 +6481,8 @@ active {
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---payCpmBox---21MaB {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---payCpmBox---21MaB .src-main-body-orderForm-OrderInfoView-OrderInfoView---top---1EF9z {
   line-height: 50px;
@@ -6641,7 +6737,8 @@ active {
 .src-main-body-orderForm-PayBottom-PayBottom---payCpmBox---2G7cR {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-orderForm-PayBottom-PayBottom---payCpmBox---2G7cR .src-main-body-orderForm-PayBottom-PayBottom---top---3XQPM {
   line-height: 50px;
@@ -6810,7 +6907,8 @@ active {
 .src-main-body-score-score---payCpmBox---3gs5t {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-score-score---payCpmBox---3gs5t .src-main-body-score-score---top---1dErT {
   line-height: 50px;
@@ -6958,7 +7056,8 @@ active {
 .src-main-body-account-account---payCpmBox---UyPK- {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-account-account---payCpmBox---UyPK- .src-main-body-account-account---top---1gbUw {
   line-height: 50px;
@@ -7073,7 +7172,8 @@ active {
 .src-pay-PayInfo---payCpmBox---16yVb {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-pay-PayInfo---payCpmBox---16yVb .src-pay-PayInfo---top---1Xs59 {
   line-height: 50px;
@@ -7137,7 +7237,8 @@ active {
 .src-pay-PayInfo---payInfo---2ixk0 {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-pay-PayInfo---payInfo---2ixk0 .src-pay-PayInfo---top---1Xs59 {
   line-height: 50px;
@@ -7217,7 +7318,8 @@ active {
 .src-pay-Pay---payCpmBox---wShmx {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-pay-Pay---payCpmBox---wShmx .src-pay-Pay---top---1y87y {
   line-height: 50px;
@@ -7359,7 +7461,8 @@ active {
 .src-pay-Panel---payCpmBox---2QNwS {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-pay-Panel---payCpmBox---2QNwS .src-pay-Panel---top---2R4nO {
   line-height: 50px;
@@ -7504,7 +7607,8 @@ active {
 .src-pay-UnionPay---payCpmBox---swKol {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-pay-UnionPay---payCpmBox---swKol .src-pay-UnionPay---top---2CTZw {
   line-height: 50px;
@@ -7568,7 +7672,8 @@ active {
 .src-pay-UnionPay---unionPay---32mEd {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-pay-UnionPay---unionPay---32mEd .src-pay-UnionPay---top---2CTZw {
   line-height: 50px;
@@ -7711,7 +7816,8 @@ active {
 .src-pay-Item---payCpmBox---1BwpE {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-pay-Item---payCpmBox---1BwpE .src-pay-Item---top---31C6k {
   line-height: 50px;
@@ -7823,7 +7929,8 @@ active {
 .src-pay-UnionPayAdd---payCpmBox---2hiyJ {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-pay-UnionPayAdd---payCpmBox---2hiyJ .src-pay-UnionPayAdd---top---2k8pa {
   line-height: 50px;
@@ -7937,7 +8044,8 @@ active {
 .src-pay-IntegralInfo---payCpmBox---2KB52 {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-pay-IntegralInfo---payCpmBox---2KB52 .src-pay-IntegralInfo---top---nztqk {
   line-height: 50px;
@@ -8001,7 +8109,8 @@ active {
 .src-pay-IntegralInfo---integralInfo---2DqaC {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-pay-IntegralInfo---integralInfo---2DqaC .src-pay-IntegralInfo---top---nztqk {
   line-height: 50px;
@@ -8089,7 +8198,8 @@ active {
 .src-pay-PaySelectLayout---payCpmBox---2GStf {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-pay-PaySelectLayout---payCpmBox---2GStf .src-pay-PaySelectLayout---top---20ua0 {
   line-height: 50px;
@@ -8153,7 +8263,8 @@ active {
 .src-pay-PaySelectLayout---payLayout---7HirO {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-pay-PaySelectLayout---payLayout---7HirO .src-pay-PaySelectLayout---top---20ua0 {
   line-height: 50px;
@@ -8183,11 +8294,13 @@ active {
   color: #999;
   padding: 25px 20px 30px 20px;
 }
-.src-pay-PaySelectLayout---payLayout_middle---klanX > div > div[type] {
-  margin-bottom: 26px;
+.src-pay-PaySelectLayout---payLayout_middle---klanX > div div[type] {
+  margin-bottom: 20px;
   position: relative;
 }
-.src-pay-PaySelectLayout---payLayout_middle---klanX > div > div[type] img {
+.src-pay-PaySelectLayout---payLayout_middle---klanX > div div[type] img {
+  width: 110px;
+  height: 40px;
   position: absolute;
   top: 0;
   right: 0;
@@ -8195,10 +8308,14 @@ active {
   left: 0;
   margin: auto;
 }
-.src-pay-PaySelectLayout---payLayout_middle---klanX > div > div[type=bank] {
+.src-pay-PaySelectLayout---payLayout_middle---klanX > div div[type=bank] {
   margin-bottom: 5px;
+  margin-top: 8px;
 }
-.src-pay-PaySelectLayout---payLayout_middle---klanX > div > div[type=bank] img {
+.src-pay-PaySelectLayout---payLayout_middle---klanX > div div[type=bank] img {
+  width: 30px;
+  height: 30px;
+  margin-top: 13px;
   right: 105px;
 }
 .src-pay-PaySelectLayout---bankItme_msg---1HjFe {
@@ -8214,8 +8331,17 @@ active {
 }
 .src-pay-PaySelectLayout---payMore---dXvkR {
   font-size: 16px;
-  text-align: center;
   width: 200px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -ms-user-select: none;
+  /* 以下两个属性目前并未支持，写在这里为了减少风险 */
+  -o-user-select: none;
+  user-select: none;
+}
+.src-pay-PaySelectLayout---payMore---dXvkR:hover {
+  cursor: pointer;
 }
 .src-pay-PayPassWord---maintheme---ncQzP {
   position: absolute;
@@ -8242,7 +8368,8 @@ active {
 .src-pay-PayPassWord---payCpmBox---3A-gi {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-pay-PayPassWord---payCpmBox---3A-gi .src-pay-PayPassWord---top---3odQF {
   line-height: 50px;
@@ -8348,7 +8475,8 @@ active {
 .src-main-body-bank-BankUpload---payCpmBox---1VWil {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-bank-BankUpload---payCpmBox---1VWil .src-main-body-bank-BankUpload---top---2CsBL {
   line-height: 50px;
@@ -8424,7 +8552,8 @@ active {
 .src-main-body-bank-BankUpload---content---2B-fx .src-main-body-bank-BankUpload---bankBox---26mDl {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-bank-BankUpload---content---2B-fx .src-main-body-bank-BankUpload---bankBox---26mDl .src-main-body-bank-BankUpload---top---2CsBL {
   line-height: 50px;
@@ -8517,11 +8646,7 @@ active {
   overflow: hidden;
 }
 .src-main-body-bank-BankUpload---content---2B-fx .src-main-body-bank-BankUpload---bankBox_middle---3sW-N .forUploadStyle .ant-upload.ant-upload-select-picture-card > .ant-upload {
-  display: flex;
-  align-items: center;
-  /*定义子元素垂直居中*/
-  justify-content: center;
-  /*定义子元素水平居中*/
+  padding-top: 63px;
   background-color: #F8F8F8;
 }
 .src-main-body-bank-BankUpload---content---2B-fx .src-main-body-bank-BankUpload---bankBox_middle---3sW-N .forUploadStyle .ant-upload.ant-upload-select-picture-card,
@@ -8587,6 +8712,9 @@ active {
   background-color: #ff5100;
   border-color: #ff5100;
 }
+.src-main-body-bank-BankUpload---content---2B-fx .src-main-body-bank-BankUpload---link_txt---1e2BW {
+  color: #00A0E9;
+}
 div[role=document][style^="width: 813px"] .ant-modal-close span {
   font-size: 40px;
 }
@@ -8615,7 +8743,8 @@ div[role=document][style^="width: 813px"] .ant-modal-close span {
 .src-main-body-demand-Demand---payCpmBox---1r55B {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-demand-Demand---payCpmBox---1r55B .src-main-body-demand-Demand---top---yxY41 {
   line-height: 50px;
@@ -8799,7 +8928,8 @@ div[role=document][style^="width: 813px"] .ant-modal-close span {
 .src-main-body-demandDetail-DemandDetail---payCpmBox---A1o0b {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-demandDetail-DemandDetail---payCpmBox---A1o0b .src-main-body-demandDetail-DemandDetail---top---2C9AZ {
   line-height: 50px;
@@ -9379,7 +9509,8 @@ div[role=document][style^="width: 813px"] .ant-modal-close span {
 .src-main-body-demandDetail-AlertView---payCpmBox---3w-ku {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .src-main-body-demandDetail-AlertView---payCpmBox---3w-ku .src-main-body-demandDetail-AlertView---top---1LwUS {
   line-height: 50px;
@@ -9455,32 +9586,19 @@ div[role=document][style^="width: 813px"] .ant-modal-close span {
   width: 200px;
   margin-left: auto;
   margin-right: auto;
-  background-color: #2db7f5;
   overflow: hidden;
   margin-top: 30px;
 }
-.src-main-body-demandDetail-AlertView---modalLeftTitle---l3jZE {
-  float: left;
+.src-main-body-demandDetail-AlertView---btn---3TQSu {
   width: 45%;
-  margin-right: 15px;
-  text-align: right;
-  font-size: 15px;
-}
-.src-main-body-demandDetail-AlertView---modalRightCon---IOvPE {
+  height: 40px;
   float: left;
-  margin-left: 5px;
-  text-align: left;
-  font-size: 16px;
+  background-color: #29A6FF;
+  color: #ffffff;
+  font-size: 20px;
 }
-.src-main-body-demandDetail-AlertView---modalBtnLeft---URKli {
-  background-color: #345;
-  border-width: 0;
-  margin-right: 5px;
-  color: #FFFFFF;
-}
-.src-main-body-demandDetail-AlertView---modalBtnRight---1mw1K {
-  background-color: #345;
-  border-width: 0;
-  margin-left: 5px;
-  color: #FFFFFF;
+.src-main-body-demandDetail-AlertView---refBtn---2Wn95 {
+  background-color: #ffffff;
+  float: right;
+  color: #29A6FF;
 }

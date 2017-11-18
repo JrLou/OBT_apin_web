@@ -994,7 +994,8 @@
 .payCpmBox {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .payCpmBox .top {
   line-height: 50px;
@@ -1569,7 +1570,8 @@
 .payCpmBox {
   background-color: #fff;
   margin: 10px 0;
-  box-shadow: 0 1px 2px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .payCpmBox .top {
   line-height: 50px;
@@ -2244,7 +2246,6 @@ tr.my-ant-table-expanded-row:hover {
   color: #333333;
   line-height: 26px;
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.85);
   text-align: center;
 }
 .my-ant-modal-content {
@@ -2304,14 +2305,25 @@ tr.my-ant-table-expanded-row:hover {
   line-height: 1.5;
 }
 .my-ant-modal-footer {
-  border-top: 1px solid #e9e9e9;
   padding: 10px 16px 10px 10px;
-  text-align: right;
+  text-align: center;
   border-radius: 0 0 4px 4px;
 }
+.my-ant-modal-footer button {
+  width: 80px;
+  background: rgba(0, 163, 255, 0.37);
+  border: 1px solid rgba(41, 138, 231, 0.37);
+  border-radius: 2px;
+  color: #29A6FF;
+  height: 36px;
+  line-height: 36px;
+  font-size: 16px;
+}
 .my-ant-modal-footer button + button {
-  margin-left: 8px;
+  margin-left: 20px;
   margin-bottom: 0;
+  background: #29A6FF;
+  color: #fff;
 }
 .my-ant-modal.zoom-enter,
 .my-ant-modal.zoom-appear {
@@ -3098,7 +3110,7 @@ input[type="checkbox"].disabled {
   margin-bottom: 6px;
 }
 .my-ant-form-item-label {
-  text-align: right;
+  text-align: left;
   vertical-align: middle;
   line-height: 32px;
   display: inline-block;
