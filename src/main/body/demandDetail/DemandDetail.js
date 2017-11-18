@@ -8,7 +8,7 @@ import NumTransToTextHelp from '../tool/NumTransToTextHelp.js';
 import {getFlightData} from '../tool/LXDHelp.js';
 import APIGYW from '../../../api/APIGYW';
 
-import AlertView from "./AlertView.js";
+import AlertView from "../component/AlertView.js";
 /**
  * 需求已取消                    0
  * 需求处理中 （单程）       1    1
