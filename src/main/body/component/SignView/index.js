@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-01 14:09:48 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-18 14:11:55
+ * @Last Modified time: 2017-11-18 15:33:01
  */
 
 import React, { Component } from 'react';
@@ -31,7 +31,7 @@ class SignUpView extends Component {
             <Modal
                 title={title[mode]}
                 visible={visible}
-                key={(Math.random()*100000).toFixed()}
+                // key={(Math.random()*100000).toFixed()}
                 onCancel={this.handleCancel}
                 footer={null}
                 style={{ width: '100px' }}
