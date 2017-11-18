@@ -273,7 +273,7 @@ class page extends Component {
                         }
                         {this.state.lineType == 3 &&
                             <Col span={11} offset={2}>
-                                <Button type="primary" style={{ float: "right",borderRadius:"2px",width:60,height:36 ,fontSize:16}} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum == 2} onClick={() => this.lineDel()}><span style={{position:"absolute",marginLeft:"-18px",marginTop:"-9px"}}>删除</span></Button>
+                                <Button type="primary" style={{ float: "right",borderRadius:"2px",width:66,height:35 ,fontSize:16}} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum == 2} onClick={() => this.lineDel()}><span style={{fontSize:15}}>删除</span></Button>
                             </Col>
                         }
                     </Row>
@@ -454,7 +454,10 @@ class page extends Component {
                         <Col >
                             <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                                 {getFieldDecorator('remark', {//annotation
-                                    rules: [],
+                                    rules: [{
+                                        max:100,
+                                        message: '不能超过100个字符',
+                                    }],
                                     initialValue: this.state.remark,
                                 })(
                                     <Input type="textarea" maxLength="100" style={{ height: 180, resize: "none", borderRadius: 2,fontSize:"16px" }} placeholder="如：价格、时间等" />
