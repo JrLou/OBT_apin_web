@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-17 19:25:20
+ * @Last Modified time: 2017-11-18 13:42:34
  */
 
 import React, { Component } from 'react';
@@ -25,7 +25,8 @@ class ForgetForm extends Component {
         super(props);
         this.state = {
             isShowPic: false,// 是否显示图形验证码
-            picCode: ''//图片base64
+            picCode: '',//图片base64
+            loading: false
         };
         this.getCode = this.getCode.bind(this);
         this.getCodeAction = this.getCodeAction.bind(this);
@@ -36,7 +37,7 @@ class ForgetForm extends Component {
     }
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched, getFieldValue, setFields } = this.props.form;
-        const { isShowPic, picCode } = this.state;
+        const { isShowPic, picCode, loading } = this.state;
 
         // Only show error after a field is touched.
         const mobileError = isFieldTouched('mobile') && getFieldError('mobile');
@@ -166,6 +167,7 @@ class ForgetForm extends Component {
                         prefixCls="my-ant-btn"
                         type="primary"
                         htmlType="submit"
+                        loading={loading}
                         className={css.btnSubmitSmall}
                         disabled={hasErrors(getFieldsError())}
                     >提交</Button>
@@ -177,13 +179,24 @@ class ForgetForm extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
+        this.setState({
+            loading: true
+        });
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const { mobile, option, password } = values;
                 HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/users/resetPassword', (code, message, json, option) => {
+                    this.setState({
+                        loading: false
+                    });
                     message.success('修改成功');
                     this.props.handleChangeMode(0);
                 }, (code, msg) => {
+                    setTimeout(() => {
+                        this.setState({
+                            loading: false
+                        });
+                    }, 1000);
                     message.error(msg);
                 }, {
                         account: mobile,

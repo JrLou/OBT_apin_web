@@ -128,9 +128,18 @@ class page extends Component {
      */
     setData(json){
         this.data = json;
-        this.adultPrice = json&&json.adultPrice?parseInt(json.adultPrice):0;
-        this.childPrice = json&&json.childPrice?parseInt(json.childPrice):0;
-        this.depositAmount = json&&json.depositAmount?parseInt(json.depositAmount):0;
+
+
+
+        let adultPrice = json&&json.adultPrice?json.adultPrice:0;
+        let childPrice = json&&json.childPrice?json.childPrice:0;
+        let depositAmount = json&&json.depositAmount?json.depositAmount:0;
+
+        this.adultPrice =Math.round(parseFloat(adultPrice)*100)/100;
+        this.childPrice=Math.round(parseFloat(childPrice)*100)/100;
+        this.depositAmount = Math.round(parseFloat(depositAmount)*100)/100;
+
+
         this.cityArr = json&&json.cityArr?json.cityArr:"";
         this.cityDep = json&&json.cityDep?json.cityDep:"";
         let voyage = json&&json.plans?json.plans:{};
@@ -235,7 +244,7 @@ class page extends Component {
 
     render() {
         let {childNum,adultNum}=this.state;
-        let totolNum = parseInt(childNum?childNum:0)+parseInt(adultNum?adultNum:0);
+        let totolNum = childNum?childNum:0+adultNum?adultNum:0;
 
         let totalPrice = this.childPrice*childNum+this.adultPrice*adultNum;
         let depositAmount =this.depositAmount*(childNum+adultNum);
@@ -304,7 +313,7 @@ class page extends Component {
                                 </FormItem>
                                 <div className={css.i_subtitle}>
                                     <span style={{fontSize:"12px"}}>{"¥"}</span>
-                                    {this.adultPrice+".00"}
+                                    {this.adultPrice}
                                 </div>
                             </div>
 
@@ -345,7 +354,7 @@ class page extends Component {
                                 </FormItem>
                                 <div className={css.i_subtitle}>
                                     <span style={{fontSize:"12px"}}>{"¥"}</span>
-                                    {this.childPrice+".00"}
+                                    {this.childPrice}
                                 </div>
                             </div>
                         </div>
