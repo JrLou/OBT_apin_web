@@ -37,7 +37,7 @@ class PayBottom extends Component {
 
 
     render() {
-        let payName = '押金';
+        let payName = '';
         switch (this.state.payType){
             case 2:payName = '支付押金';
                     break;
