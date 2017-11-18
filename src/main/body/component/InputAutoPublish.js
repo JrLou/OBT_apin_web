@@ -207,7 +207,7 @@ class InputAuto extends Component {
                     dropdownMatchSelectWidth={false}
                     dropdownStyle={{width: "220px"}}
                     size="large"
-                    style={{width: "100%"}}
+                    style={{width: "230px"}}
                     dataSource={this.getOptions(this.state.dataSource)}
                     onSelect={this.onSelect.bind(this)}
                     onFocus={() => {
