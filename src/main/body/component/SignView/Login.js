@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-17 12:03:38
+ * @Last Modified time: 2017-11-18 12:34:19
  */
 
 import React, { Component } from 'react';
@@ -39,6 +39,7 @@ class AccountLoginForm extends React.Component {
 
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+        const { loading } = this.state;
 
         // Only show error after a field is touched.
         const accountError = isFieldTouched('account') && getFieldError('account');
@@ -51,7 +52,17 @@ class AccountLoginForm extends React.Component {
                     help={accountError || ''}
                 >
                     {getFieldDecorator('account', {
-                        rules: [{ required: true, message: '请输入用户名!' }
+                        validateFirst: true,
+                        rules: [{ required: true, message: '请输入用户名!' },
+                        {
+                            validator: (rule, value, callback) => {
+                                if (/^[0-9A-Za-z]{6,20}$/.test(value) || /^(1)\d{10}$/.test(value)) {
+                                    callback();
+                                } else {
+                                    callback('请输入手机号或者6-20位字母或数字账户名');
+                                }
+                            }
+                        }
                         ],
                     })(
                         <Input prefixCls='my-ant-input' placeholder="账号/手机号" />
@@ -77,7 +88,7 @@ class AccountLoginForm extends React.Component {
                         htmlType="submit"
                         className={css.btnSubmit}
                         disabled={hasErrors(getFieldsError())}
-                        onClick={this.login}
+                        loading={loading}
                     >登录</Button>
                 </FormItem>
             </Form>
@@ -86,14 +97,17 @@ class AccountLoginForm extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
+        this.setState({
+            loading: true
+        });
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 let { account, password } = values;
-                this.setState({ loading: true });
                 getLoginCodePromise(account, 0).then((data) => {
                     return loginPromise(account, md5(password), data);
                 }
                 ).then((data) => {
+                    this.setState({ loading: false });
                     // 获取注册验证码也会调登录接口 保存APIN_USER token
                     // IS_LOGIN判断是否真的登录
                     CookieHelp.saveCookieInfo('IS_LOGIN', true);
@@ -102,8 +116,12 @@ class AccountLoginForm extends React.Component {
                         this.props.callback(1);
                     this.props.onOK();
                 }).catch((error) => {
+                    setTimeout(() => {
+                        this.setState({
+                            loading: false
+                        });
+                    }, 1000);
                     message.error(error);
-                    this.setState({ loading: false });
                 });
             }
         });
@@ -120,7 +138,8 @@ class MsgLoginForm extends React.Component {
         super(props);
         this.state = {
             isShowPic: false,// 是否显示图形验证码
-            picCode: ''//图片base64
+            picCode: '',//图片base64
+            loading: false
         };
         this.getCode = this.getCode.bind(this);
         this.getCodeAction = this.getCodeAction.bind(this);
@@ -133,6 +152,7 @@ class MsgLoginForm extends React.Component {
 
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+        const { loading } = this.state;
 
         const accountError = isFieldTouched('account') && getFieldError('account');
         const picCodeError = isFieldTouched('picCode') && getFieldError('picCode');
@@ -147,7 +167,10 @@ class MsgLoginForm extends React.Component {
                     help={accountError || ''}
                 >
                     {getFieldDecorator('account', {
+                        validateFirst: true,
+                        validateTrigger: 'onBlur',
                         rules: [{ required: true, message: '请输入11位手机号' },
+                        { len: 11, message: '请输入11位手机号' },
                         { pattern: /^(1)\d{10}$/, message: '手机号格式不正确！' }
                         ],
                     })(
@@ -174,7 +197,9 @@ class MsgLoginForm extends React.Component {
                     help={passwordError || ''}
                 >
                     {getFieldDecorator('password', {
-                        rules: [{ required: true, message: '请输入验证码' }],
+                        validateFirst: true,
+                        rules: [{ required: true, message: '请输入验证码' },
+                        { len: 4, message: '请输入4位验证码' }],
                     })(
                         <Input prefixCls='my-ant-input' placeholder="请输入验证码" className={css.checkCodeInput} />
                         )}
@@ -187,6 +212,7 @@ class MsgLoginForm extends React.Component {
                         htmlType="submit"
                         className={css.btnSubmit}
                         disabled={hasErrors(getFieldsError())}
+                        loading={loading}
                     >登录</Button>
                 </FormItem>
             </Form>
@@ -197,26 +223,26 @@ class MsgLoginForm extends React.Component {
      * 获取登录验证码
      */
     getCodeAction() {
-    //     const { getFieldValue } = this.props.form;
-    //     const mobile = getFieldValue('mobile');
-    //     const picCode = getFieldValue('picCode') || '';
-    //     HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
-    //         // 测试
-    //         if (json && json.length > 4) {
-    //             this.setState({
-    //                 isShowPic: true,
-    //                 picCode: 'data:image/jpg;base64,' + json
-    //             });
-    //         } else {
-    //             this.setState({
-    //                 isShowPic: false
-    //             });
-    //         }
-    //     }, (code, msg, json, option) => {
-    //         message.error(msg);
-    //     }, {
-    //             mobile, picCode, type: 1
-    //         });
+        //     const { getFieldValue } = this.props.form;
+        //     const mobile = getFieldValue('mobile');
+        //     const picCode = getFieldValue('picCode') || '';
+        //     HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
+        //         // 测试
+        //         if (json && json.length > 4) {
+        //             this.setState({
+        //                 isShowPic: true,
+        //                 picCode: 'data:image/jpg;base64,' + json
+        //             });
+        //         } else {
+        //             this.setState({
+        //                 isShowPic: false
+        //             });
+        //         }
+        //     }, (code, msg, json, option) => {
+        //         message.error(msg);
+        //     }, {
+        //             mobile, picCode, type: 1
+        //         });
     }
 
     // 获取登录码
@@ -233,7 +259,7 @@ class MsgLoginForm extends React.Component {
         //     defaultLoginPromise(1, callback);
         // }
 
-        getLoginCodePromise(account, 1).then((data)=>{
+        getLoginCodePromise(account, 1).then((data) => {
             this.data = data;
             this.refs.code.autoTime(60);
         }).catch((msg) => {
@@ -244,6 +270,9 @@ class MsgLoginForm extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
+        this.setState({
+            loading: true
+        });
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const { account, password } = values;
@@ -254,10 +283,18 @@ class MsgLoginForm extends React.Component {
                     CookieHelp.saveCookieInfo('IS_LOGIN', true);
                     this.props.setLogin();
                     this.props.onOK();
+                    this.setState({
+                        loading: false
+                    });
                 }).catch((msg) => {
-                    if(msg == '密码错误'){
+                    if (msg == '密码错误') {
                         msg = '验证码错误';
                     }
+                    setTimeout(() => {
+                        this.setState({
+                            loading: false
+                        });
+                    }, 1000);
                     message.error(msg);
                 });
             }
