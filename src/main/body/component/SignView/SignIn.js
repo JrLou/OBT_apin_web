@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-18 11:24:06
+ * @Last Modified time: 2017-11-18 13:32:55
  */
 
 import React, { Component } from 'react';
@@ -26,7 +26,8 @@ class SignInForm extends Component {
         super(props);
         this.state = {
             isShowPic: false,// 是否显示图形验证码
-            picCode: ''//图片base64
+            picCode: '',//图片base64
+            loading: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.getCode = this.getCode.bind(this);
@@ -41,7 +42,7 @@ class SignInForm extends Component {
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, getFieldValue, isFieldTouched, setFields } = this.props.form;
 
-        const { isShowPic, picCode } = this.state;
+        const { isShowPic, picCode, loading } = this.state;
 
         const accountError = isFieldTouched('account') && getFieldError('account');
         const mobileError = isFieldTouched('mobile') && getFieldError('mobile');
@@ -184,6 +185,7 @@ class SignInForm extends Component {
                         htmlType="submit"
                         className={css.btnSubmit}
                         disabled={hasErrors(getFieldsError())}
+                        loading={loading}
                     // onClick={this.props.onOK}
                     >注册并登录</Button>
                 </FormItem>
@@ -194,11 +196,17 @@ class SignInForm extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
+        this.setState({
+            loading: true
+        });
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const { account, bdCharger, code, mobile, password } = values;
                 HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/addMember', (code, message, json, option) => {
                     getLoginCodePromise(account, 0).then((data) => {
+                        this.setState({
+                            loading: false
+                        });
                         loginPromise(account, md5(password), data).then((data) => {
                             // 获取注册验证码也会调登录接口 保存APIN_USER token
                             // IS_LOGIN判断是否真的登录
@@ -210,6 +218,11 @@ class SignInForm extends Component {
                         });
                     });
                 }, (code, message) => {
+                    setTimeout(() => {
+                        this.setState({
+                            loading: false
+                        });
+                    }, 1000);
                     message.error(message);
                 }, {
                         account,
