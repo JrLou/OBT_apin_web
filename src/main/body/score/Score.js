@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-04 15:07:27 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-15 22:42:38
+ * @Last Modified time: 2017-11-18 14:38:15
  */
 import React, { Component } from 'react';
 import { Table, Modal } from 'antd';
@@ -55,6 +55,7 @@ class ScoreList extends Component {
             dataIndex: 'points',
             key: 'points',
             render: (text) => {
+                if (text > 0) text = '+' + text;
                 return <div className={css.large}>{text}</div>;
             }
         }, {
