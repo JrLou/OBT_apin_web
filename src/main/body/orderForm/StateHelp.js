@@ -54,8 +54,8 @@ let StateHelp = {
         let payType = data.payType;
         //倒计时
         let countDown = data.countDown;
-
         switch(returnState){
+
             //4 付款中（后台特有，前端需要转化）
             case 4:returnState = StateHelp.payingState(pays,payType,countDown);break;
             //5 待付尾款
@@ -64,9 +64,9 @@ let StateHelp = {
             case 6:returnState = StateHelp.hasPayed(isPassed);break;
             case 0:break;
             case 1:break;
-            case 2:(countDown == 0)?8:2;
+            case 2:returnState = (countDown == 0)?8:2;
                     break;
-            case 3:(countDown == 0)?8:3;
+            case 3:returnState = (countDown == 0)?8:3;
                     break;
             case 7:break;
             case 8:break;
