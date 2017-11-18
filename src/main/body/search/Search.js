@@ -272,7 +272,9 @@ class page extends Component {
                         if (isLogin){
                             window.app_open(this, "/PublishMsg",{});
                         }else {
-                            window.app_open(this, "/PublishMsg",{});
+                            window.modal.showModal(0,()=>{
+                                window.app_open(this, "/PublishMsg",{});
+                            });
                         }
                     }}>提交需求</Button>
                 </div>

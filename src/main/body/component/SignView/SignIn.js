@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-17 19:25:36
+ * @Last Modified time: 2017-11-18 11:24:06
  */
 
 import React, { Component } from 'react';
@@ -72,7 +72,7 @@ class SignInForm extends Component {
                         }
                         ],
                     })(
-                        <Input prefixCls="my-ant-input" placeholder="请输入账户名" />
+                        <Input prefixCls="my-ant-input" placeholder="请输入6-20位字母或数字" />
                         )}
                 </FormItem>
                 <FormItem
