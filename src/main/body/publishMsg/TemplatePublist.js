@@ -454,7 +454,10 @@ class page extends Component {
                         <Col >
                             <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                                 {getFieldDecorator('remark', {//annotation
-                                    rules: [],
+                                    rules: [{
+                                        max:100,
+                                        message: '不能超过100个字符',
+                                    }],
                                     initialValue: this.state.remark,
                                 })(
                                     <Input type="textarea" maxLength="100" style={{ height: 180, resize: "none", borderRadius: 2,fontSize:"16px" }} placeholder="如：价格、时间等" />
