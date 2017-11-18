@@ -107,7 +107,13 @@ class AccountForm extends Component {
         const mobileError = isFieldTouched('mobile') && getFieldError('mobile');
         const contactNameError = getFieldError('contactName');
 
-        const zone = [province, city, county];
+        let zone = [];
+        for (let item of [province, city, county]) {
+            if (item) {
+                zone.push(item);
+            }
+        }
+
 
         return (
             <div>
@@ -214,7 +220,7 @@ class AccountForm extends Component {
                                         // onChange={this.onChange}
                                         changeOnSelect
                                         style={{ marginBottom: '10px' }}
-                                        placeholder={zone.length > 0 ? zone.join('/') : "请选择地区"}
+                                        placeholder={Array.isArray(zone) && zone.length > 0 ? zone.join('/') : "请选择地区"}
                                     />
                                     )}
 
@@ -262,27 +268,16 @@ class AccountForm extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 let { password, companyName, contactName, zone, address } = values;
-                const { id } = this.state;
-                log("values");
-                log("values");
-                log("values");
-                log("values");
-                log("values");
-                log("values");
-                log(values);
-                log(zone);
-                log(zone[0]);
-                log(zone[0] || '');
+                let { id, province, city, county } = this.state;
                 // if (companyName != this.state.companyName
                 //     || contactName != this.state.contactName
                 //     || address != this.state.address
                 // ) {
-                let province = zone[0] || '';
-                let city = zone[1] || '';
-                let county = zone[2] || '';
-                log(province);
-                log(city);
-                log(county);
+                if (zone && Array.isArray(zone)) {
+                    province = zone[0] || province;
+                    city = zone[1] || city;
+                    county = zone[2] || county;
+                }
 
                 HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/modifyMemberInfo', (code, msg, json, option) => {
                     message.success("修改成功");

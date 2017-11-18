@@ -43,6 +43,7 @@ class OrderFormDetail extends Component{
 
             titleData:null,     //头部导航信息
             flightData:null,    //航班信息
+
             orderMsg:null,      //订单信息
             payMsg:null,        //支付明细
             bottomData:null,    //底部浮动支付信息
@@ -82,21 +83,22 @@ class OrderFormDetail extends Component{
                 shouldFixed:false,
             });
         }
+
         //监听页面滚动
         window.onscroll = ()=>{
+            let payDiv = ReactDOM.findDOMNode(this.payBottom);
+            if(!payDiv){
+                return;
+            }
             markDiv = markDiv?markDiv:document.getElementById('markDiv');
             // rootDiv = rootDiv?rootDiv:document.getElementById('root');
-            //支付条自身的高度+固定定位的bottom值
-            let payDiv = ReactDOM.findDOMNode(this.payBottom);
-            if(!payDiv){return;}
-
             //根元素的整个高度   （不是body）
             // let rootDivHeight = parseInt(window.getComputedStyle(rootDiv,'').height);
             //标记div顶端 到 body顶端 的距离（body顶端 与root元素顶端位置相同）
             let markDivTop = parseInt(markDiv.offsetTop);
             //浏览器窗口可视高度
             let windowHeight = parseInt(document.body.clientHeight);
-
+            //支付条自身的高度+固定定位的bottom值
             let payDivHeight =
                 parseInt(window.getComputedStyle(payDiv,'').height)
                 +
@@ -126,13 +128,6 @@ class OrderFormDetail extends Component{
                 }
             }
         };
-    }
-
-    //更新状态机
-    upView(){
-        this.setState({
-            upDate:this.state.upDate+1,
-        });
     }
 
     render(){
@@ -176,7 +171,7 @@ class OrderFormDetail extends Component{
                                     isPassed={this.state.isPassed}
                                     orderId={this.state.orderId}
                                     airlineSigns={this.state.airlineSigns}
-                                    defaultData={[]}
+                                    defaultData={this.state.passengersData}
                                 />
                             </div>
                         :   <div></div>
