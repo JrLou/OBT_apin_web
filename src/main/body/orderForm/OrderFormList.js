@@ -8,6 +8,7 @@ import APILXD from "../../../api/APILXD.js";
 import {routeTranslate,getDateFormat,removeSpace} from '../tool/LXDHelp.js';
 import {transformForList} from './StateHelp.js';
 import {Table,Input,DatePicker,Select,Button,message} from 'antd';
+import InputAuto from '../component/InputForList.js';
 const Option = Select.Option;
 
 class OrderFormList extends Component{
@@ -221,98 +222,36 @@ class OrderFormList extends Component{
                 ),
             },
         ];
-        // let dataSource = [
-        //     {
-        //         index:1,
-        //         key:1,
-        //         orderNo:'20170923132332333',
-        //         voyages:[{
-        //             cityDep:'宁波',
-        //             cityArr:'杭州',
-        //         },],
-        //         dateDep:'2017-09-13',
-        //         flightType:1,
-        //         peopleNum:'12/2',
-        //         adultCount:3,
-        //         childCount:15,
-        //         orderAmount:'¥1200',
-        //         createDate:'2017-08-23 16:23',
-        //         orderStatus:'0',
-        //         operation:'查看详情',
-        //     },
-        //     {
-        //         index:2,
-        //         key:2,
-        //         orderNo:'20170923132332333',
-        //         voyages:[{
-        //             cityDep:'波罗地亚吉卜力岛',
-        //             cityArr:'阿西列宁科克丽缇岛',
-        //         }],
-        //         dateDep:'2017-09-13',
-        //         dateRet:'2017-09-13',
-        //         flightType:2,
-        //         peopleNum:'12/2',
-        //         childCount:'3',
-        //         orderAmount:'¥1200',
-        //         createDate:'2017-08-23 16:23',
-        //         orderStatus:'1',
-        //         operation:'查看详情',
-        //     },
-        //     {
-        //         index:3,
-        //         key:3,
-        //         orderNo:'20170923132332333',
-        //         voyages:[
-        //                 {
-        //                     cityDep:'杭州',
-        //                     cityArr:'厦门',
-        //                 },{
-        //                     cityDep:'北京',
-        //                     cityArr:'天津',
-        //                 },{
-        //                     cityDep:'宁波',
-        //                     cityArr:'广州',
-        //                 }
-        //             ],
-        //         dateDep:'2017-09-13',
-        //         dateRet:'2017-09-13',
-        //         flightType:3,
-        //         adultCount:'8',
-        //         peopleNum:'12/2',
-        //         orderAmount:'¥1200',
-        //         createDate:'2017-08-23 16:23',
-        //         orderStatus:'5',
-        //         operation:'查看详情',
-        //     },
-        // ];
-
 
         return(
             <div className={css.mainPage}>
                 <div className={css.searchContainer}>
                     <div className={css.searchItem01}>
-                        <span>出发城市：</span>
-                        <Input
-                            value={this.state.cityDep}
-                            className={css.inputStyle}
-                            maxLength={'18'}
+                        <span className={css.lableText}>出发城市：</span>
+                        <InputAuto
+                            type={"from"}
                             placeholder={'请输入'}
-                            onChange={(obj)=>{
-                                let value = removeSpace(obj.target.value);
-                                this.changeState('cityDep',value);
+                            onChange={(val)=>{
+                                this.setState({cityDep:val});
+                                }
+                            }
+                            onChangeValue={(val)=>{
+                                this.setState({cityDep:val});
                             }}
+
                         />
                     </div>
                     <div className={css.searchItem01}>
-                        <span>目的城市：</span>
-                        <Input
-                            value={this.state.cityArr}
-                            className={css.inputStyle}
-                            maxLength={'18'}
+                        <span className={css.lableText}>目的城市：</span>
+                        <InputAuto
+                            type={"to"}
                             placeholder={'请输入'}
-                            onChange={(obj)=>{
-                                let value = removeSpace(obj.target.value);
-                                this.changeState('cityArr',value);
+                            onChange={(val)=>{
+                                this.setState({cityArr:val});
+                            }
+                            }
+                            onChangeValue={(val)=>{
+                                this.setState({cityArr:val});
                             }}
                         />
                     </div>

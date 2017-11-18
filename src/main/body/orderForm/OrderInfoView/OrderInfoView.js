@@ -321,7 +321,7 @@ class OrderInfoView extends Component{
         return(
             <div className={css.itemLinePay}>
                 <div className={css.payTitle}>
-                    {data.payStatus == 1?'':(this.state.orderState == 14?'':'待')}
+                    {data.payStatus == 1?'':((data.records&&data.records.length>0)?'':'待')}
                     {paymentName}
                 </div>
                 {

@@ -104,6 +104,7 @@ class PassengerAdd extends Component{
               {this.getItemTitle('姓名：')}
               <Input
                   value={this.state.data.name}
+                  className={css.inputStyle}
                   placeholder={'请与证件姓名保持一致'}
                   onChange={(e)=>{
                       let val = e.target.value;
@@ -136,6 +137,7 @@ class PassengerAdd extends Component{
                 {this.getItemTitle('性别：')}
                 <RadioGroup
                     value={this.state.data.gender}
+                    style={{marginTop:'5px'}}
                     onChange={(e)=>{
                         let val = e.target.value;
                         this.setData('gender',val);
@@ -158,6 +160,7 @@ class PassengerAdd extends Component{
                 {this.getItemTitle('国籍：')}
                 <Input
                     value={this.state.data.nation}
+                    className={css.inputStyle}
                     placeholder={'请输入国籍'}
                     onChange={(e)=>{
                         let val = e.target.value;
@@ -190,6 +193,7 @@ class PassengerAdd extends Component{
                 {this.getItemTitle('出生日期：')}
                 <DatePicker
                     style={{width:'100%'}}
+                    className={css.dateStyle}
                     placeholder={'例：1990-01-01'}
                     format={'YYYY-MM-DD'}
                     value={this.state.data.birthday?moment(this.state.data.birthday, 'YYYY-MM-DD'):null}
@@ -213,6 +217,7 @@ class PassengerAdd extends Component{
                 <Select
                     style={{width:'100%'}}
                     value={''+this.state.data.credType}
+                    className={css.selectStyle}
                     onChange={(value)=>{
                         this.setState({
                             credType:value,
@@ -237,6 +242,7 @@ class PassengerAdd extends Component{
                 <Input
                     placeholder={'证件号码'}
                     value={this.state.data.credNumber}
+                    className={css.inputStyle}
                     onChange={(e)=>{
                         let value = e.target.value;
                         let regIDCard = /^[0-9Xx]{0,40}$/;
@@ -269,6 +275,7 @@ class PassengerAdd extends Component{
                 <DatePicker
                     style={{width:'100%'}}
                     placeholder={'请输入证件有效期'}
+                    className={css.dateStyle}
                     format={'YYYY-MM-DD'}
                     value={this.state.data.expireTime?moment(this.state.data.expireTime, 'YYYY-MM-DD'):null}
                     disabledDate={this.disabledTimeForExpire.bind(this)}
@@ -290,6 +297,7 @@ class PassengerAdd extends Component{
                 {this.getItemTitle('签发地：')}
                 <Input
                     value={this.state.data.issuePlace}
+                    className={css.inputStyle}
                     placeholder={'请输入签发地'}
                     onChange={(e)=>{
                         let val = e.target.value;
@@ -400,6 +408,7 @@ class PassengerAdd extends Component{
                         </div>
                         <div className={css.modFooter}>
                             <Button
+                                className={css.checkBtn}
                                 type={'primary'}
                                 onClick={()=>{
                                     this.clickSubmitBtn(isAdd);

@@ -262,7 +262,6 @@ class PassengerMsg extends Component{
                                     </Button>
                                     <Modal
                                         prefixCls={'my-ant-modal'}
-                                        title="提交乘机人信息"
                                         visible={this.state.submitConfirm}
                                         onOk={()=>{
                                             this.setState({
@@ -276,6 +275,7 @@ class PassengerMsg extends Component{
                                             });
                                         }}
                                     >
+                                        <div className={css.confirmTitle}>提交乘机人信息</div>
                                         <div className={css.contentTitle}>
                                             是否确定现在提交乘机人信息？
                                         </div>
