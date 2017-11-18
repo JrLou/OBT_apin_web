@@ -38,9 +38,6 @@ class page extends Component {
             itemNum: 3,
             index: -1,
             data: null,
-            visibleCancle: false,
-            visibleDelete: false,
-            visibleConfirm: false,
             flightData: null,
             demandId: -1,
         };
@@ -189,7 +186,6 @@ class page extends Component {
             default:
                 break;
         }
-
     }
     getCellNewFlight(data = {}) {
         return (
@@ -298,60 +294,12 @@ class page extends Component {
         );
     }
 
-    showCancleModal() {
-        this.setState({
-            visibleCancle: true,
-        });
-    }
-
-    showDeleteModal() {
-        this.setState({
-            visibleDelete: true,
-        });
-    }
-
-    showConfirmModal() {
-        this.setState({
-            visibleConfirm: true,
-        });
-    }
-
-    handleDeleteOk() {
-        this.deleteDemand();
-        this.setState({
-            visibleDelete: false
-        });
-    }
-
-    handleFlightOk() {
-        this.confirmDemand();
-        this.setState({
-            visibleConfirm: false
-        });
-    }
-
-    handleCancelOk() {
-        this.cancelDemand();
-        this.setState({
-            visibleCancle: false
-        });
-    }
-
-    handleCancel() {
-        this.setState({
-            visibleCancle: false,
-            visibleDelete: false,
-            visibleConfirm: false,
-        });
-    }
-
     getDemandButton(type) {
         if (type === 1 || type === 2 || type === 3) {
             return (
                 <div className={less.buttonLayout}>
                     <Button className={less.buttonCancel}
                             onClick={() => {
-                                // this.showCancleModal();
                                 this.partnerDetail.showModal({
                                     typeIndex:1,
                                     title:"提示",
@@ -359,19 +307,6 @@ class page extends Component {
                                 });
                             }}
                     >取消需求</Button>
-                    <Modal
-                        title="提示"
-                        visible={this.state.visibleCancle}
-                        onCancel={this.handleCancel.bind(this)}
-                        onOk={this.handleCancelOk.bind(this)}
-                        okText="是"
-                        cancelText="否"
-                        style={{width: '100px'}}
-                        prefixCls="my-ant-modal"
-                    >
-                        <font style={{fontSize: 16, color: "#333"}}>是否确定取消此需求</font>
-
-                    </Modal>
                 </div>
             );
         } else if (type === 4) {
@@ -383,7 +318,6 @@ class page extends Component {
                 <div className={less.buttonLayout}>
                     <Button className={less.buttonDelete}
                             onClick={() => {
-                                // this.showDeleteModal();
                                 this.partnerDetail.showModal({
                                     typeIndex:2,
                                     title:"提示",
@@ -391,19 +325,6 @@ class page extends Component {
                                 });
                             }}
                     >删除需求</Button>
-                    <Modal
-                        title="提示"
-                        visible={this.state.visibleDelete}
-                        onCancel={this.handleCancel.bind(this)}
-                        onOk={this.handleDeleteOk.bind(this)}
-                        okText="是"
-                        cancelText="否"
-                        style={{width: '100px'}}
-                        prefixCls="my-ant-modal"
-                    >
-                        <font style={{fontSize: 16, color: "#333"}}>是否确定删除此需求</font>
-
-                    </Modal>
                 </div>
             );
         }
@@ -496,7 +417,6 @@ class page extends Component {
                                                     index: index,
                                                     demandId:data.id
                                                 });
-                                                // this.showConfirmModal(data.id);
                                                 this.partnerDetail.showModal({
                                                     typeIndex:3,
                                                     json:{id:data.id},
@@ -513,19 +433,6 @@ class page extends Component {
                                                 className={this.state.index === index ? less.confirmBtnText : less.uncertainBtnText}>
                                                 确定此航班
                                             </div>
-                                            <Modal
-                                                title="提示"
-                                                visible={this.state.visibleConfirm}
-                                                onCancel={this.handleCancel.bind(this)}
-                                                onOk={this.handleFlightOk.bind(this)}
-                                                okText="是"
-                                                cancelText="否"
-                                                style={{width: '100px'}}
-                                                prefixCls="my-ant-modal"
-                                            >
-                                                <font style={{fontSize: 16, color: "#333"}}>是否确认选择该方案</font>
-
-                                            </Modal>
                                         </div>
                                     </div>
                                 </div>
