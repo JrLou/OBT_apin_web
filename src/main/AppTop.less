@@ -28,10 +28,15 @@
 
 .right {
     position: absolute;
-    top: 12px;
+    top: 0;
     right: 0;
-    height: 50px;
-    display: table;
+    height: 72px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
 }
 
 .rightIcon {
@@ -85,6 +90,7 @@
 
 .drop {
   font-size: 14px;
+  line-height: 72px;
   a {
     color: #29A6FF;
   }
