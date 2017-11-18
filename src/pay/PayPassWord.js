@@ -165,6 +165,7 @@ class InputLayout extends Component {
                 <div className={less.lineOne}>
                     <label htmlFor="codeIpt" className={less.label}>验证码：</label>
                     <Input
+                        prefixCls="my-ant-input"
                         id="codeIpt"
                         size="large"
                         onChange={(e) => {
