@@ -150,6 +150,9 @@
 .src-main-body-component-Steps-step---codeUndefined---38WWM {
   opacity: 0;
 }
+.src-main-body-component-Steps-step---steps---3BxuI {
+  width: 100%;
+}
 .src-main-body-component-Steps-step---step---36wTR {
   display: inline-block;
   text-align: center;
@@ -308,7 +311,12 @@
   top: 0;
   right: 0;
   height: 72px;
-  display: table;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 .src-main-AppTop---rightIcon---20Or0 {
   width: 40px;
@@ -6193,11 +6201,11 @@ active {
 }
 .src-main-body-component-AlertView---btn---3_fSE {
   width: 45%;
-  height: 40px;
+  height: 36px;
   float: left;
   background-color: #29A6FF;
   color: #ffffff;
-  font-size: 20px;
+  font-size: 16px;
 }
 .src-main-body-component-AlertView---refBtn---1R9_3 {
   background-color: #ffffff;
@@ -6377,7 +6385,6 @@ active {
   margin: 0 35px;
   font-size: 12px;
   color: #999;
-  letter-spacing: -1px;
 }
 .src-main-body-orderForm-Passengers-Passengers---btnBox---dq9h6 {
   text-align: center;
