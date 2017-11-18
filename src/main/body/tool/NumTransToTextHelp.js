@@ -9,9 +9,6 @@ let NumTransToTextHelp = {
         let upperCaseNumber = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '百', '千', '万', '亿'];
         let length = num.toString().length;
 
-        log(length);
-        log("--------");
-
         num = parseInt(num);
 
         if (length == 1) {
