@@ -9,6 +9,7 @@ import {routeTranslate,getDateFormat,removeSpace,transformOrderState} from '../t
 import {Table, Input, DatePicker, Select, Button, message} from 'antd';
 import APIGYW from '../../../api/APIGYW';
 import moment from 'moment';
+import InputAuto from '../component/InputForList.js';
 const Option = Select.Option;
 
 class page extends Component {
@@ -170,27 +171,35 @@ class page extends Component {
             <div className={css.mainPage}>
                 <div className={css.searchContainer}>
                     <div className={css.searchItem01}>
-                        <span>出发城市：</span>
-                        <Input
-                            value={this.state.cityDep}
-                            className={css.inputStyle}
+                        <span className={css.lableText}>出发城市：</span>
+                        <InputAuto
+                            type={"from"}
                             placeholder={'请输入'}
-                            onChange={(obj) => {
-                                let value = this.replaceSpace(obj.target.value);
-                                this.changeState('cityDep', value);
+                            onChange={(val)=>{
+                                this.setState({cityDep:val});
+                            }
+                            }
+                            onChangeValue={(val)=>{
+                                this.setState({cityDep:val});
                             }}
+                            getClearAction={(clearAction)=>{this.clearDepCity = clearAction;}}
+
                         />
                     </div>
                     <div className={css.searchItem01}>
-                        <span>目的城市：</span>
-                        <Input
-                            value={this.state.cityArrive}
-                            className={css.inputStyle}
+                        <span className={css.lableText}>目的城市：</span>
+                        <InputAuto
+                            type={"to"}
                             placeholder={'请输入'}
-                            onChange={(obj) => {
-                                let value = this.replaceSpace(obj.target.value);
-                                this.changeState('cityArrive', value);
+                            onChange={(val)=>{
+                                this.setState({cityArrive:val});
+                            }
+                            }
+                            onChangeValue={(val)=>{
+                                this.setState({cityArrive:val});
                             }}
+                            getClearAction={(clearAction)=>{this.clearArriveCity = clearAction;}}
+
                         />
                     </div>
                     <div className={css.searchItem02}>
@@ -262,6 +271,8 @@ class page extends Component {
                         </Button>
                         <span style={{fontSize: 12, color: "#29A6FF", marginLeft: 10, cursor: "pointer"}}
                               onClick={() => {
+                                  this.clearDepCity();
+                                  this.clearArriveCity();
                                   this.setState({
                                       cityDep: '',
                                       cityArrive: '',
