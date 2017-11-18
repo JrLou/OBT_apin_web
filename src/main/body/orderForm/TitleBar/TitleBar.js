@@ -11,7 +11,7 @@
 import React, {Component} from 'react';
 import css from './TitleBar.less';
 import {hasKey,sliceTimeString} from '../../tool/LXDHelp.js';
-import {Modal} from 'antd';
+import AlertView from '../../component/AlertView.js';
 
 class TitleBar extends Component{
     constructor(props){
@@ -23,8 +23,6 @@ class TitleBar extends Component{
             deadLine:this.props.titleData.deadLine?this.props.titleData.deadLine:'',
             ticketDate:this.props.titleData.ticketDate?this.props.titleData.ticketDate:'',
             reason:this.props.titleData.reason?this.props.titleData.reason:'',
-
-            confirmModal:false,     //删除订单询问框
         };
 
         if(this.props.onDelete instanceof Function){
@@ -100,23 +98,13 @@ class TitleBar extends Component{
                             :''
                     }
                 </div>
-                <Modal
-                    prefixCls={'my-ant-modal'}
-                    title={'提示'}
-                    visible={this.state.confirmModal}
-                    onOk={()=>{
-                        this.setState({
-                            confirmModal:false,
-                        },this.deleteCB);
-                    }}
-                    onCancel={()=>{
-                        this.setState({
-                            confirmModal:false,
-                        });
-                    }}
-                >
-                    <div>是否删除此订单</div>
-                </Modal>
+                <AlertView
+                    ref={(a) => this.partnerDetail = a}
+                    callBack={(typeIndex,json)=>{
+                         this.deleteCB();
+                        }
+                    }
+                />
             </div>
         );
     }
@@ -125,8 +113,9 @@ class TitleBar extends Component{
      * 删除订单
      */
     deleteOrder(){
-        this.setState({
-            confirmModal:true,
+        this.partnerDetail.showModal({
+            title:"提示",
+            desc:"是否确定删除此订单?",
         });
     }
 }
