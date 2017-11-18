@@ -2262,7 +2262,7 @@ tr.my-ant-table-expanded-row:hover {
   background: transparent;
   position: absolute;
   right: 0;
-  top: 0;
+  top: 0px;
   z-index: 10;
   font-weight: 700;
   line-height: 1;
@@ -2300,7 +2300,7 @@ tr.my-ant-table-expanded-row:hover {
   color: rgba(0, 0, 0, 0.65);
 }
 .my-ant-modal-body {
-  padding: 24px 50px 30px;
+  padding: 20px 50px 30px;
   font-size: 12px;
   line-height: 1.5;
 }
