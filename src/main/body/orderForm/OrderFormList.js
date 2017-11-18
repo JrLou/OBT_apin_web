@@ -238,7 +238,7 @@ class OrderFormList extends Component{
                             onChangeValue={(val)=>{
                                 this.setState({cityDep:val});
                             }}
-
+                            getClearAction={(clearAction)=>{this.clearDepCity = clearAction;}}
                         />
                     </div>
                     <div className={css.searchItem01}>
@@ -253,6 +253,7 @@ class OrderFormList extends Component{
                             onChangeValue={(val)=>{
                                 this.setState({cityArr:val});
                             }}
+                            getClearAction={(clearAction)=>{this.clearArrCity = clearAction;}}
                         />
                     </div>
                     <div className={css.searchItem02}>
@@ -318,6 +319,23 @@ class OrderFormList extends Component{
                         >
                             查询
                         </Button>
+                        <span
+                            className={css.clearBtn}
+                            onClick={()=>{
+                                this.clearDepCity();
+                                this.clearArrCity();
+                                this.setState({
+                                    cityDep:'',
+                                    cityArr:'',
+                                    flightType:'',
+                                    orderStatus:'',
+                                    startDate:null,
+                                    dateRet:null,
+                                });
+                            }}
+                        >
+                            清除查询条件
+                        </span>
                     </div>
                 </div>
                 <div className={css.resultContainer}>
