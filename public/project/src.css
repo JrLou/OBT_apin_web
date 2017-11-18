@@ -337,8 +337,6 @@
   font-size: 16px;
   height: 32px;
   text-align: center;
-  display: table-cell;
-  vertical-align: middle;
   margin-left: 10px;
   width: 70px;
   border: 1px #29A6FF solid;
@@ -9611,7 +9609,7 @@ div[role=document][style^="width: 813px"] .ant-modal-close span {
   display: inline-block;
 }
 .src-main-body-demandDetail-DemandDetail---remarkTitle---2DS5I {
-  width: 96px;
+  width: 70px;
   display: table-cell;
   color: #999;
   font-size: 14px;
@@ -9619,12 +9617,12 @@ div[role=document][style^="width: 813px"] .ant-modal-close span {
 .src-main-body-demandDetail-DemandDetail---remarkContentClose---E2B2c {
   display: table-cell;
   color: #999;
-  margin-left: 25px;
+  padding-left: 25px;
   font-size: 16px;
 }
 .src-main-body-demandDetail-DemandDetail---remarkContent---3q6jG {
   display: table-cell;
   color: #333;
-  margin-left: 25px;
+  padding-left: 25px;
   font-size: 16px;
 }
