@@ -311,17 +311,16 @@
   top: 0;
   right: 0;
   height: 72px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
 }
 .src-main-AppTop---rightIcon---20Or0 {
   width: 40px;
   height: 40px;
   margin-right: 10px;
+}
+.src-main-AppTop---rightItem---Ymu2S {
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 15px;
 }
 .src-main-AppTop---login---3ZKkm {
   font-size: 16px;
@@ -356,7 +355,6 @@
 }
 .src-main-AppTop---drop---3RJwk {
   font-size: 14px;
-  line-height: 72px;
 }
 .src-main-AppTop---drop---3RJwk a {
   color: #29A6FF;
