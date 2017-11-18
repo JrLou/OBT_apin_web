@@ -370,7 +370,7 @@ class page extends Component {
 
 
                     <div className={less.remarkLayout} style={{marginLeft:20,marginTop:15}}>
-                        <div className={less.remarkTitle}>备注：</div>
+                        <div className={less.remarkTitle}>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</div>
                         <div className={type === 5 ?less.remarkContentClose:less.remarkContent}>{data && data.remark ? data.remark : "暂无"}</div>
 
                     </div>
@@ -475,7 +475,7 @@ class page extends Component {
                                 className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.createdTime ? data.createdTime : "暂无"}</font>
                         </div>
                         <div className={less.voyageLayout} style={{marginTop: 0}}>
-                            <div className={less.voyageTitle}>航程：</div>
+                            <div className={less.voyageTitle}>航&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;程：</div>
                             {/*<font*/}
                             {/*className={type === 5 ? less.mainContentCloseBig : less.mainContentBig}>{data && data.vayage ? data.vayage : "暂无"}</font>*/}
                             <div className={less.voyageContentLayout}>
@@ -530,7 +530,7 @@ class page extends Component {
                                 className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.dateRet ? data.dateRet : "暂无"}</font>
                         </div>
                         <div className={less.remarkLayout}>
-                            <div className={less.remarkTitle}>备注：</div>
+                            <div className={less.remarkTitle}>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</div>
                             <div className={type === 5 ?less.remarkContentClose:less.remarkContent}>{data && data.remark ? data.remark : "暂无"}</div>
 
                         </div>
