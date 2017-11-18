@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-18 12:34:19
+ * @Last Modified time: 2017-11-18 14:06:13
  */
 
 import React, { Component } from 'react';
@@ -75,9 +75,10 @@ class AccountLoginForm extends React.Component {
                 >
                     {getFieldDecorator('password', {
                         rules: [{ required: true, message: '请输入密码!' },
-                        { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
+                        // { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }
+                    ],
                     })(
-                        <Input prefixCls='my-ant-input' type="password" placeholder="请输入8-16位数字、字母" autoComplete="new-password" />
+                        <Input prefixCls='my-ant-input' type="password" placeholder="请输入密码" autoComplete="new-password" />
                         )}
                 </FormItem>
                 <FormItem prefixCls="my-ant-form">
