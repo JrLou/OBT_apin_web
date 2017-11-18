@@ -128,8 +128,8 @@ class page extends Component {
      */
     setData(json){
         this.data = json;
-        this.adultPrice = json&&json.adultPrice?parseInt(json.adultPrice):0;
-        this.childPrice = json&&json.childPrice?parseInt(json.childPrice):0;
+        this.adultPrice = json&&json.adultPrice?json.adultPrice:0;
+        this.childPrice = json&&json.childPrice?json.childPrice:0;
         this.depositAmount = json&&json.depositAmount?parseInt(json.depositAmount):0;
         this.cityArr = json&&json.cityArr?json.cityArr:"";
         this.cityDep = json&&json.cityDep?json.cityDep:"";
@@ -304,7 +304,7 @@ class page extends Component {
                                 </FormItem>
                                 <div className={css.i_subtitle}>
                                     <span style={{fontSize:"12px"}}>{"¥"}</span>
-                                    {this.adultPrice+".00"}
+                                    {this.adultPrice}
                                 </div>
                             </div>
 
@@ -345,7 +345,7 @@ class page extends Component {
                                 </FormItem>
                                 <div className={css.i_subtitle}>
                                     <span style={{fontSize:"12px"}}>{"¥"}</span>
-                                    {this.childPrice+".00"}
+                                    {this.childPrice}
                                 </div>
                             </div>
                         </div>

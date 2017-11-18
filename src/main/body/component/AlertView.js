@@ -23,7 +23,7 @@ class AlertView extends Component {
             visible:props.visible?props.visible:false,
             typeIndex:props.typeIndex?props.typeIndex:0,
             json:props.json?props.json:{},
-            title:props.title?props.title:"",
+            title:props.title?props.title:"提示",
             desc:props.desc?props.desc:"",
             con:props.con?props.con:"",
         };
@@ -32,7 +32,7 @@ class AlertView extends Component {
         option = option?option:{};
         this.setState({
             visible:true,
-            title:option.title?option.title:"",
+            title:option.title?option.title:"提示",
             desc:option.desc?option.desc:"",
             con:option.con?option.con:"",
             typeIndex:option.typeIndex?option.typeIndex:0,
