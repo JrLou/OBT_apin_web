@@ -289,6 +289,7 @@ class OrderFormList extends Component{
                     <div className={css.searchItem01}>
                         <span>航程类型：</span>
                         <Select
+                            value={this.state.flightType}
                             className={css.selectStyle}
                             placeholder={'请选择'}
                             onChange={(value)=>{
@@ -301,6 +302,7 @@ class OrderFormList extends Component{
                     <div className={css.searchItem01}>
                         <span>订单状态：</span>
                         <Select
+                            value={this.state.orderStatus}
                             className={css.selectStyle}
                             placeholder={'请选择'}
                             onChange={(value)=>{
