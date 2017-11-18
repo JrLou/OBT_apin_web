@@ -9,14 +9,11 @@ const OptGroup = AutoComplete.OptGroup;
 import less from "./InputAuto.less";
 
 import {HttpTool} from "../../../../lib/utils/index.js";
-import APIGYW from "../../../api/APIGYW.js";
 
 class InputAuto extends Component {
 
     constructor(props) {
         super(props);
-        let a = ["安娜", "阿尔巴哈", "凯里", "乌兰察布"];
-        a = a.concat(a).concat(a).concat(a).concat(a);
 
         this.state = {
             dataSource: [],
@@ -25,6 +22,16 @@ class InputAuto extends Component {
         };
         this.selectValue = this.props.defaultValue;
         this.keyWord = this.props.defaultValue;
+
+        if(this.props.getClearAction){
+            this.props.getClearAction(this.clearValue.bind(this));
+        }
+    }
+
+    clearValue(){
+        this.setState({
+            inputValue:'',
+        });
     }
 
     componentDidMount() {
@@ -37,32 +44,7 @@ class InputAuto extends Component {
     }
 
     loadData() {
-        if (this.hotDataSource) {
-            this.setState({
-                dataSource: this.hotDataSource
-            });
-            return;
-        }
-        let param = {};
-        let success = (code, msg, json, option) => {
-            log(json);
-            this.hotDataSource = json||[];
-            this.setState({
-                dataSource: this.hotDataSource
-            });
-        };
-        let failure = (code, msg, option) => {
-            //无结果
-            this.hotDataSource = [];
-            this.setState({
-                dataSource: this.hotDataSource
-            });
-        };
-        let api = (this.props.type === "from") ? APIGYW.manageapi_depCity_list : APIGYW.manageapi_arrCity_list;
-        HttpTool.request(HttpTool.typeEnum.POST, api, success, failure, param,
-            {
-                ipKey: "hlIP"
-            });
+
     }
 
     loadDataForKeyWord(keyWord) {
@@ -93,16 +75,6 @@ class InputAuto extends Component {
             });
     }
 
-    handleSearch(value) {
-        let arr = [];
-        for (let i = 0; i < 100; i++) {
-            arr.push("i" + i);
-        }
-        this.setState({
-            dataSource: arr
-        });
-    }
-
     formatValue(value) {
 
         return this.state.dataSource[value];
@@ -123,23 +95,8 @@ class InputAuto extends Component {
     }
 
     getValue() {
-        console.log(this.selectValue);
+        log(this.selectValue);
         return this.selectValue;
-    }
-
-    renderTitle(title) {
-        return (
-            <span>
-             {title}
-                <a
-                    style={{float: "right"}}
-                    href="https://www.google.com/search?q=antd"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >更多
-      </a>
-    </span>
-        );
     }
 
     getOptions(dataSource) {
@@ -208,8 +165,8 @@ class InputAuto extends Component {
                         this.keyWord = value;
                         this.selectValue = value;
                         this.onChangeValue();
-                        log("==========");
-                        log(value);
+                        // log("==========");
+                        // log(value);
                         //防止连续快速搜索，请求接口
 
 
@@ -252,21 +209,6 @@ class InputAuto extends Component {
                 >
                 </AutoComplete>
         );
-    }
-
-    render22() {
-        return <AutoComplete
-            ref="com"
-            dataSource={this.state.dataSource}
-            className={less.input}
-            onSelect={this.onSelect.bind(this)}
-            onChange={(value) => {
-                this.selectValue = this.formatValue(value);
-            }}
-            onSearch={this.handleSearch.bind(this)}
-            {...this.props}
-        />;
-
     }
 }
 
