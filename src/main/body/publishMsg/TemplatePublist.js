@@ -273,7 +273,7 @@ class page extends Component {
                         }
                         {this.state.lineType == 3 &&
                             <Col span={11} offset={2}>
-                                <Button type="primary" style={{ float: "right",borderRadius:"2px",width:60,height:36 ,fontSize:16}} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum == 2} onClick={() => this.lineDel()}><span style={{position:"absolute",marginLeft:"-18px",marginTop:"-9px"}}>删除</span></Button>
+                                <Button type="primary" style={{ float: "right",borderRadius:"2px",width:66,height:35 ,fontSize:16}} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum == 2} onClick={() => this.lineDel()}><span style={{fontSize:15}}>删除</span></Button>
                             </Col>
                         }
                     </Row>
