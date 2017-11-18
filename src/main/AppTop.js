@@ -84,7 +84,7 @@ class page extends Component {
                                             <span>
                                                 <a className="ant-dropdown-link" href="#">
                                                     <span className={less.name}>{account}</span>
-                                                    <Icon type="up" />
+                                                    <Icon type="up" className={less.iconDown} />
                                                 </a>
                                             </span>
                                         </Dropdown>
