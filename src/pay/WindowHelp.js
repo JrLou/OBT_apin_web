@@ -26,17 +26,22 @@ class WindowHelp {
             apinPanel.focus();
         }else{
             //打开自定义类型
-            apinPanel.show(true,value);
+            if(apinPanel.show){
+                apinPanel.show(true,value);
+            }
+
         }
     }
     closeWindow(apinPanel){
         let panel = apinPanel||this.shareWindow;
-
         if(panel){
             if(panel.location){
                 panel.close();
             }else{
-                panel.show(false);
+                if(panel.show){
+                    panel.show(false);
+                }
+
             }
 
         }
