@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-08 13:36:12 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-16 22:25:03
+ * @Last Modified time: 2017-11-18 17:39:20
  */
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
 import md5 from 'md5';
@@ -100,6 +100,12 @@ export function AccoutInfoPromise(callback) {
     return new Promise((resolve, reject) => {
         HttpTool.request(HttpTool.typeEnum.POST, "/bm/memberapi/v1.1/memberInfo", (code, message, json, option) => {
             CookieHelp.saveCookieInfo("phone", json.mobile);
+            if(window.fundebug && window.fundebug.user){
+                window.fundebug.user = {
+                    name: json.account,
+                    email: json.email
+                };
+            }
             resolve({ json, option });
         }, (code, message) => {
             let pathname = window.location.pathname;
