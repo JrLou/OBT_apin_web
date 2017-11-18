@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import css from './CellFlightCom.less';
+import {CookieHelp } from '../../../../../lib/utils/index.js';
 
 class CellFlightCom extends Component {
     constructor(props) {
@@ -32,7 +33,7 @@ class CellFlightCom extends Component {
 
     }
     render(){
-        let {dataItem,flightType,callBack} = this.props;
+        let {dataItem,flightType} = this.props;
         if (!dataItem){
             return null;
         }
@@ -68,8 +69,28 @@ class CellFlightCom extends Component {
                                 <div className={css.table}>
                                     <div className={css.btn} style={{cursor: 'pointer'}}
                                          onClick={() => {
-                                             if (this.props.callBack){
-                                                 this.props.callBack(dataItem);
+                                             let voyagesArr = dataItem.voyages?dataItem.voyages:[];
+                                             let obj= {
+                                                 airlineId:dataItem.airlineId?dataItem.airlineId:"",
+                                                 depDate:voyagesArr[0]&&voyagesArr[0].depDate?voyagesArr[0].depDate:"",
+                                                 retDate:voyagesArr[1]&&voyagesArr[1].depDate?voyagesArr[1].depDate:"",
+                                                 isDirect:dataItem.isDirect,
+                                             };
+                                             const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
+                                             if (isLogin){
+                                                 window.app_open(this, "/FlightDetail", {
+                                                     type:dataItem.isDirect&&dataItem.isDirect==1?1:2,
+                                                     step:1,
+                                                     data:obj
+                                                 },"self");
+                                             }else {
+                                                 window.modal.showModal(0,()=>{
+                                                     window.app_open(this, "/FlightDetail", {
+                                                         type:dataItem.isDirect&&dataItem.isDirect==1?1:2,
+                                                         step:1,
+                                                         data:obj
+                                                     },"self");
+                                                 });
                                              }
                                          }}>{"预订"}</div>
                                 </div>

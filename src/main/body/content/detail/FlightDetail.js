@@ -131,7 +131,6 @@ class page extends Component {
         this.adultPrice = json&&json.adultPrice?json.adultPrice:0;
         this.childPrice = json&&json.childPrice?json.childPrice:0;
         this.depositAmount = json&&json.depositAmount?json.depositAmount:0;
-
         // this.adultPrice =Math.round(parseFloat(adultPrice)*100)/100;
         // this.childPrice=Math.round(parseFloat(childPrice)*100)/100;
         // this.depositAmount = Math.round(parseFloat(depositAmount)*100)/100;
@@ -243,8 +242,8 @@ class page extends Component {
         let {childNum,adultNum}=this.state;
         let totolNum = childNum?childNum:0+adultNum?adultNum:0;
 
-        let totalPrice = this.childPrice*childNum+this.adultPrice*adultNum;
-        let depositAmount =this.depositAmount*(childNum+adultNum);
+        let totalPrice = (this.childPrice*childNum*100+this.adultPrice*adultNum*100)/100;
+        let depositAmount =(this.depositAmount*(childNum+adultNum)*100)/100;
         const {getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
         const adultCountError = getFieldError('adultCount');
         const childCountError = getFieldError('childCount');
