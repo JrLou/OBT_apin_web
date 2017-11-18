@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-18 14:06:13
+ * @Last Modified time: 2017-11-18 16:38:04
  */
 
 import React, { Component } from 'react';
@@ -56,10 +56,10 @@ class AccountLoginForm extends React.Component {
                         rules: [{ required: true, message: '请输入用户名!' },
                         {
                             validator: (rule, value, callback) => {
-                                if (/^[0-9A-Za-z]{6,20}$/.test(value) || /^(1)\d{10}$/.test(value)) {
+                                if (/^[0-9A-Za-z]{1,32}$/.test(value) || /^(1)\d{10}$/.test(value)) {
                                     callback();
                                 } else {
-                                    callback('请输入手机号或者6-20位字母或数字账户名');
+                                    callback('请输入手机号或者账户名');
                                 }
                             }
                         }
@@ -75,7 +75,7 @@ class AccountLoginForm extends React.Component {
                 >
                     {getFieldDecorator('password', {
                         rules: [{ required: true, message: '请输入密码!' },
-                        // { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }
+                        { pattern: /^[0-9A-Za-z]{1,32}$/, message: '请输入数字或字母' }
                     ],
                     })(
                         <Input prefixCls='my-ant-input' type="password" placeholder="请输入密码" autoComplete="new-password" />

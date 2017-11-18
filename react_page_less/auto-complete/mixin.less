@@ -6,7 +6,7 @@
 // size mixins for input
 .input-lg() {
   padding: @input-padding-vertical-lg @input-padding-horizontal-lg;
-  height: 36px;
+  height: @input-height-lg;
 }
 
 .input-sm() {
@@ -44,7 +44,7 @@
   padding: @input-padding-vertical-base @input-padding-horizontal-base;
   width: 100%;
   height: @input-height-base;
-  font-size: @font-size-lg;
+  font-size: @font-size-base;
   line-height: @line-height-base;
   color: @input-color;
   background-color: @input-bg;
@@ -320,8 +320,8 @@
   .@{inputClass}-prefix,
   .@{inputClass}-suffix {
     position: absolute;
-    top: 12px;
-    //transform: translateY(-50%);
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 2;
     line-height: 0;
     color: @input-color;

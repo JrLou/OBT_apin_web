@@ -158,7 +158,7 @@ class page extends Component {
                                         required: true,
                                         message: '请输入城市名称',
                                     },{
-                                        max:10,
+                                        max:20,
                                         message:'请输入正确城市名称',
                                     }
                                    ],
@@ -167,7 +167,7 @@ class page extends Component {
                                     initialValue: this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity
                                 })(
 
-                                    <AutoInput  defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity}
+                                    <AutoInput  style={{ borderRadius: "2px",width:"230px"}} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity}
                                         type={"from"}
                                         placeholder={'中文／拼音／三字码'} />
                                     )}
@@ -180,7 +180,7 @@ class page extends Component {
                                         required: true,
                                         message: '请输入城市名称',
                                     },{
-                                        max:10,
+                                        max:20,
                                         message:'请输入正确城市名称',
                                     }],
                                     trigger: "onChangeValue",
@@ -188,7 +188,7 @@ class page extends Component {
                                     initialValue: this.state.listData[i] == undefined ? "" : this.state.listData[i].toCity
                                 })(
 
-                                    <AutoInput style={{ borderRadius: "2px" }} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].toCity}
+                                    <AutoInput style={{ borderRadius: "2px",width:"230px"}} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].toCity}
                                         type={"to"}
                                         placeholder={'中文／拼音／三字码'} />
                                     )}
@@ -213,7 +213,7 @@ class page extends Component {
                                 })(
                                     <DatePicker getCalendarContainer={()=>{
                                         return this.refs.test;
-                                    }}  style={{ borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
+                                    }}  style={{ borderRadius: "2px", minWidth: "200px", width:"230px" }} format='YYYY-MM-DD' disabledDate={(current) => {
                                        let lineType =this.state.lineType;
                                        let lineNum= this.state.lineNum;
                                        //起始时间
@@ -258,7 +258,7 @@ class page extends Component {
                                     })(
                                         <DatePicker getCalendarContainer={()=>{
                                             return this.refs.test;
-                                        }} style={{ borderRadius: "2px", minWidth: "200px", width: '100%' }} format='YYYY-MM-DD' disabledDate={(current) => {
+                                        }} style={{ borderRadius: "2px", minWidth: "200px",width:"230px" }} format='YYYY-MM-DD' disabledDate={(current) => {
                                             let datestart=getFieldValue("fromDateTime"+i);
                                             if(datestart){
                                                 datestart=moment(datestart);
@@ -273,7 +273,7 @@ class page extends Component {
                         }
                         {this.state.lineType == 3 &&
                             <Col span={11} offset={2}>
-                                <Button type="primary" style={{ float: "right",borderRadius:"2px",width:60,height:36 ,fontSize:16}} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum == 2} onClick={() => this.lineDel()}><span style={{position:"absolute",marginLeft:"-18px",marginTop:"-9px"}}>删除</span></Button>
+                                <Button type="primary" style={{ float: "right",borderRadius:"2px",width:66,height:35 ,fontSize:16}} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum == 2} onClick={() => this.lineDel()}><span style={{fontSize:15}}>删除</span></Button>
                             </Col>
                         }
                     </Row>
@@ -420,7 +420,7 @@ class page extends Component {
                                     initialValue: this.state.adultCount,
                                 })(
                                     <div style={{ position: "relative" }}>
-                                        <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px"}}>成人</span>
+                                        <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px",pointerEvents:"none"}}>成人</span>
                                         <Input style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.state.adultCount} onChange={(e) => this.handleConfirmNum("adultCount", e)} maxLength="4" />
                                     </div>
                                     )}
@@ -436,8 +436,8 @@ class page extends Component {
                                     initialValue: this.state.childCount,
                                 })(
                                     <div style={{ position: "relative" }}>
-                                        <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px"}}>儿童(2～12周岁)</span>
-                                        <Input style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.state.childCount} maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)} />
+                                        <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px",pointerEvents:"none"}}>儿童(2～12周岁)</span>
+                                        <Input id="male" style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.state.childCount} maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)} />
                                     </div>
                                     )}
                             </FormItem>
@@ -454,7 +454,10 @@ class page extends Component {
                         <Col >
                             <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                                 {getFieldDecorator('remark', {//annotation
-                                    rules: [],
+                                    rules: [{
+                                        max:100,
+                                        message: '不能超过100个字符',
+                                    }],
                                     initialValue: this.state.remark,
                                 })(
                                     <Input type="textarea" maxLength="100" style={{ height: 180, resize: "none", borderRadius: 2,fontSize:"16px" }} placeholder="如：价格、时间等" />

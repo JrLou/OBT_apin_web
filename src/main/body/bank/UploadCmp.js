@@ -98,7 +98,7 @@ class UploadCmp extends Component {
    render() {
       const {previewVisible, previewImage, fileList} = this.state;
       const upLoadingView = (<div>
-         <Spin spinning={true}></Spin>
+         <Spin spinning={true} style={{marginTop:"20px"}}></Spin>
          <div className={less.upload_text_line2}>上传中</div>
       </div>);
       const beforeUploadingView = (<div>
