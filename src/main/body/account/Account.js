@@ -8,6 +8,7 @@ import Reset from '../component/SignView/Reset';
 import md5 from 'md5';
 
 const FormItem = Form.Item;
+const { TextArea } = Input;
 
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -29,7 +30,7 @@ const formItemLayout = {
 };
 const formTailLayout = {
     // labelCol: { span: 4 },
-    wrapperCol: { span: 8, offset: 6 },
+    wrapperCol: { span: 18, offset: 6 },
 };
 
 const Title = (props) => {
@@ -219,15 +220,24 @@ class AccountForm extends Component {
                                         loadData={this.loadData}
                                         // onChange={this.onChange}
                                         changeOnSelect
-                                        style={{ marginBottom: '10px' }}
                                         placeholder={Array.isArray(zone) && zone.length > 0 ? zone.join('/') : "请选择地区"}
                                     />
                                     )}
+                            </FormItem>
+                            <FormItem prefixCls="my-ant-form"
+                                {...formTailLayout}
+                                validateStatus={isFieldTouched('address') && getFieldError('address') ? 'error' : ''}
+                                help={isFieldTouched('address') && getFieldError('address') || ''}
+                            >
 
                                 {getFieldDecorator('address', {
-                                    initialValue: address
+                                    initialValue: address,
+                                    rules: [{
+                                        max: 50,
+                                        message: '最多输入50位'
+                                    }],
                                 })(
-                                    <Input prefixCls="my-ant-input" placeholder="请输入详细地址" />
+                                    <TextArea rows={4} placeholder="请输入详细地址" />
                                     )}
                             </FormItem>
                             <FormItem prefixCls="my-ant-form" {...formTailLayout}>
