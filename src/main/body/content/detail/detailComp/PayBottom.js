@@ -31,16 +31,17 @@ class PayBottom extends Component {
                         window.history.go(-1);
                     }}>{"<返回上一级"}</div>
                 </div>
-                <div className={css.bottomDiv_center}>
+                {param.orderPrice||param.totalPrice?<div className={css.bottomDiv_center}>
                     <div className={css.depositPriceBg}>
                         <span style={{fontSize:"14px",color:"#333"}}>{param.orderPrice==0?"全款":"押金"}</span>
                         <span style={{fontSize:"14px",color:"red"}}>￥</span>
                         <span style={{fontSize:"20px",color:"red"}}>{param.orderPrice==0?param.totalPrice:(param.orderPrice?param.orderPrice:0)}</span>
                     </div>
+
                     <div className={css.depositPriceBg}>
                         <span style={{fontSize:"12px",color:"#888D99"}}>{str}</span>
                     </div>
-                </div>
+                </div>:<div className={css.bottomDiv_center}></div>}
                 <div className={css.bottomDiv_right} onClick={()=>{
                     if (callBack){
                         callBack();

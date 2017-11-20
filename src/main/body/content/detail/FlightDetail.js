@@ -127,6 +127,9 @@ class page extends Component {
      *  请求接口后初始化数据
      */
     setData(json){
+        log(json);
+        log("---------gyw");
+
         this.data = json;
         this.adultPrice = json&&json.adultPrice?json.adultPrice:0;
         this.childPrice = json&&json.childPrice?json.childPrice:0;
@@ -138,8 +141,8 @@ class page extends Component {
 
         this.cityArr = json&&json.cityArr?json.cityArr:"";
         this.cityDep = json&&json.cityDep?json.cityDep:"";
-        let voyage = json&&json.plans?json.plans:{};
-        this.flightType = voyage.flightType;
+        let plans = json&&json.plans?json.plans:{};
+        this.flightType = plans.flightType;
 
         let member = json.member?json.member:{};
         this.props.form.setFieldsValue({
@@ -163,6 +166,7 @@ class page extends Component {
                 for(var i in jsonParam){
                     param[i] = jsonParam[i];
                 }
+
                 this.loadingView.refreshView(true);
                 var success = (code, msg, json, option) => {
                     this.loadingView.refreshView(false,()=>{
@@ -240,8 +244,7 @@ class page extends Component {
 
     render() {
         let {childNum,adultNum}=this.state;
-        let totolNum = childNum?childNum:0+adultNum?adultNum:0;
-
+        let totolNum = (childNum?childNum:0)+(adultNum?adultNum:0);
         let totalPrice = (this.childPrice*childNum*100+this.adultPrice*adultNum*100)/100;
         let depositAmount =(this.depositAmount*(childNum+adultNum)*100)/100;
         const {getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
@@ -307,10 +310,10 @@ class page extends Component {
                                                   this.onChangeNumVal(true,value);
                                               }}/>)}
                                 </FormItem>
-                                <div className={css.i_subtitle}>
+                                {this.adultPrice?<div className={css.i_subtitle}>
                                     <span style={{fontSize:"12px"}}>{"¥"}</span>
                                     {this.adultPrice}
-                                </div>
+                                </div>:null}
                             </div>
 
 
@@ -348,10 +351,11 @@ class page extends Component {
                                                }}/>
                                     )}
                                 </FormItem>
-                                <div className={css.i_subtitle}>
+                                {this.childPrice?<div className={css.i_subtitle}>
                                     <span style={{fontSize:"12px"}}>{"¥"}</span>
-                                    {this.childPrice}
-                                </div>
+                                        {this.childPrice}
+                                </div>:null}
+
                             </div>
                         </div>
                         <div className={css.refOrderCellItem}>

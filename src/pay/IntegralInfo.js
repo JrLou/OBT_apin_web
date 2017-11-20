@@ -43,6 +43,7 @@ class IntegralInfo extends Component {
                      <div className={less.integralInfo_middle_line2}>
                         <span className={less.integralInfo_middle_line2_light}>请输入您要抵用的积分:</span>
                         <Input
+                           disabled={integral.point == 0 ? true : false}
                            value={integral.use}
                            size="large"
                            onChange={(e) => {

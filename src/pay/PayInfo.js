@@ -29,10 +29,10 @@ class PayInfo extends Component {
 
       let passengersInfo = "";
       if(data.adultCount){
-          passengersInfo +=(data.adultCount+"/成人");
+          passengersInfo +=(data.adultCount+"成人");
       }
        if(data.childCount){
-           passengersInfo +=(data.childCount+"/儿童");
+           passengersInfo +=("/"+data.childCount+"儿童");
        }
 
        let showTime = null;

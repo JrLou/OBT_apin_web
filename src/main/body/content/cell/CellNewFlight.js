@@ -48,15 +48,62 @@ class CellNewFlight extends Component {
 
         </div>);
     }
+
+    //计算历经总时间
+    addTime(data){
+        let hour = 0;
+        let min = 0;
+        let childArr = data.child?data.child:[];
+        for(let i = 0;i<childArr.length;i++){
+            let timeObj = this.getMinAndHour(childArr[i].flightTime);
+            hour = hour+timeObj.hour;
+            min = min+timeObj.min;
+        }
+        
+        let minZheng = parseInt(min/60);
+        let minYu =min%60;
+        hour = hour+minZheng;
+        return hour+"小时 "+minYu+"分钟";
+    }
+    //提取分钟 小时
+    getMinAndHour(time){
+        let minAndHourArr = time?time.split(" "):[];
+        let hour = minAndHourArr[0]?parseInt(minAndHourArr[0]):0;
+        let min = minAndHourArr[1]?parseInt(minAndHourArr[1]):0;
+
+        let obj = {
+            hour:hour,
+            min:min
+        };
+        return obj;
+    }
     createCell(dataArr,flightType,isNoShowRule){
         return dataArr.map((data, index)=>{
+            let isHasTrans = data.child&&data.child.length>0;
+            let myChildArr = [];
+            if (isHasTrans){
+                myChildArr.push(data);
+                data.child.map((data, index)=>{
+                    myChildArr.push(data);
+                });
+                
+                let obj = myChildArr[myChildArr.length-1];
+                data.myArrAirport = obj.arrAirport;
+                data.myArrTime = obj.arrTime;
+                
+                data.myCityArr = obj.cityArr;
+                data.myflightTime =  this.addTime(data);
+            }else {
+                myChildArr = data.child;
+            }
+            data.myChild = myChildArr;
             return (<div key={index}
                          className={css.cellBg}
                          style={{paddingLeft:isNoShowRule?"8%":"0",
                              paddingRight:isNoShowRule?"8%":"0",
                              borderBottomWidth:(index==dataArr.length-1)?"0px":"1px"}}>
                 {this.createItemCell(data, index,flightType)}
-                {data.child&&data.child.length>0?<CellNewFlightDetail data = {data.child}/>:null}
+                {data.myChild&&data.myChild.length>0?<CellNewFlightDetail data = {data.myChild}/>:null}
             </div>);
         });
     }
@@ -67,22 +114,24 @@ class CellNewFlight extends Component {
             return null;
         }
         data.cityDep = data.cityDep?data.cityDep:"";
-        data.cityArr = data.cityArr?data.cityArr:"";
+        let cityArr = data.myCityArr?data.myCityArr:data.cityArr;
+        
         let cityDep_len = data.cityDep&&data.cityDep.length>3;
-        let cityArr_len = data.cityArr&&data.cityArr.length>3;
-        let city = (cityDep_len?(data.cityDep.substring(0,3)+"..."):data.cityDep)+" - "+data.cityArr;
+        let cityArr_len = cityArr&&cityArr.length>3;
+        let city = (cityDep_len?(data.cityDep.substring(0,3)+"..."):data.cityDep)+" - "+cityArr;
         var itemView = (<div className={css.table}>
-            <div className={css.type_super}>
+            {flightType == 1?null:<div className={css.type_super}>
                 <div className={css.typeText}>
                     {flightType==3?("第"+ NumTransToTextHelp.getValue(index+1)+"程"):(data.tripIndex==0?"去程":"回程")}
                 </div>
-            </div>
+            </div>}
+            
 
             <div className={css.date_super}>
-                {(cityDep_len||cityArr_len)?<Tooltip placement="bottom" title={data.cityDep +" - "+data.cityArr}>
+                {(cityDep_len||cityArr_len)?<Tooltip placement="bottom" title={data.cityDep +" - "+cityArr}>
                     <div className={css.city}>{city}</div>
                 </Tooltip>:
-                    <div className={css.city}>{data.cityDep +" - "+data.cityArr}</div>}
+                    <div className={css.city}>{data.cityDep +" - "+cityArr}</div>}
 
                 <div className={css.date}>{data.arrDate+" " +NumTransToTextHelp.getWeek(data.week)}</div>
             </div>
@@ -117,7 +166,7 @@ class CellNewFlight extends Component {
                                 <div className={css.logoCompanyText}>{data.compName}</div>
                             </div>
                         </div>
-                        <div className={css.totalTimeText}>{"约"+data.flightTime}</div>
+                        <div className={css.totalTimeText}>{"约"+(data.myflightTime?data.myflightTime:data.flightTime)}</div>
                         <div className={css.flightLineNum}>
                             <span>{data.num}</span>
                             {data.isStop==1?<span style={{fontSize:"12px",color:"#FF5841"}}>{" 经停"}</span>:null}
@@ -139,11 +188,11 @@ class CellNewFlight extends Component {
                     <div className={css.placeLine}>
                         {data.depAirport&&data.depAirport.length>7?
                             (<div className={css.refPlaceLineItem}>
-                                <Tooltip placement="bottom" title={data.arrAirport}>{data.arrAirport}</Tooltip>
-                            </div>): (<div className={css.refPlaceLineItem}>{data.arrAirport}</div>)
+                                <Tooltip placement="bottom" title={data.arrAirport}>{data.myArrAirport?data.myArrAirport:data.arrAirport}</Tooltip>
+                            </div>): (<div className={css.refPlaceLineItem}>{data.myArrAirport?data.myArrAirport:data.arrAirport}</div>)
                         }
                         <div className={css.time}>
-                            <span>{data.arrTime}</span>
+                            <span>{data.myArrTime?data.myArrTime:data.arrTime}</span>
                             <span style={{fontSize:"12px",color:"#FF5841"}}>{data.tag==1?"+1天":""}</span>
                         </div>
                     </div>
