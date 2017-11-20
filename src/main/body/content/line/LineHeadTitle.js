@@ -112,10 +112,10 @@ class page extends Component {
                                     CookieHelp.saveCookieInfo("publishMsgCookie",data);
                                     const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
                                     if (isLogin){
-                                        window.app_open(this, "/PublishMsg", {},"new");
+                                        window.app_open(this, "/PublishMsg", {},"self");
                                     }else {
                                         window.modal.showModal(0,()=>{
-                                            window.app_open(this, "/PublishMsg", {},"new");
+                                            window.app_open(this, "/PublishMsg", {},"self");
                                         });
                                     }
                                 }}>提交需求</div>

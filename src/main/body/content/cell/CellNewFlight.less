@@ -1,7 +1,7 @@
 @import "../../../../theme.less";
 @content_width : 100%;
 @width_text : 20px;
-@width_icon : 20px;
+@width_icon : 26px;
 
 .main{
   width: 100%;
@@ -41,8 +41,8 @@
 //左边的样式
 .cellBg{
   width: 100%;
-  padding-top: @d_spadding_big;
-  padding-bottom: @d_spadding_big;
+  padding-top: @d_spadding_center;
+  padding-bottom: @d_spadding_center;
   border-width: 0 0 1px 0;
   border-style: solid;
   border-color: @c_border_gray;
@@ -140,10 +140,12 @@
   display: inline-block;
   vertical-align: top;
   margin: 0 auto;
+  height:@width_icon;
 }
 .logo{
   width: @width_icon;
   height: @width_icon;
+
 }
 
 .logoCompany{
@@ -151,10 +153,12 @@
   vertical-align: top;
   max-width: 180px;
   height: @width_icon;
+  line-height: @width_icon;
 }
 .logoCompanyText{
   font-size: @font_size_cell;
-  padding: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
   color: #4F5762;
   white-space:nowrap;
   text-overflow:ellipsis;
