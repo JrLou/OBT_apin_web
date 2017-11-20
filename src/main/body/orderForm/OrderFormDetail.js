@@ -238,7 +238,8 @@ class OrderFormDetail extends Component{
             log(json);
             if(!json){
                 //如果信息为空，则跳转到404
-                window.app_open(this,'/None',{});
+                (this,'/None',{});
+                return;
             }
             let resultData = getFlightData(json.voyages,json.flightType,json.freeBag,json.weightLimit);
             let titleData = this.getTitleData(json);
