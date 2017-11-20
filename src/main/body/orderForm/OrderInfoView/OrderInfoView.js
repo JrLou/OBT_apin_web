@@ -110,7 +110,7 @@ class OrderInfoView extends Component{
                     {
                         hasKey(this.state.orderState,[0,8])
                         ?   <div className={css.itemLinePay}>
-                                <div className={css.payTitle}>订单关闭：</div>
+                                <div className={css.payTitle}>{this.state.orderState==8?'订单关闭：':'订单取消：'}</div>
                                 {
                                     orderMsg.closeReason
                                     ?orderMsg.closeReason
@@ -419,7 +419,7 @@ class OrderInfoView extends Component{
         let parames = {
             id:id,
             orderStatus:0,
-            remark:'',
+            remark:'用户取消订单',
         };
         let successCB = (code, msg, json, option)=>{
             this.setLoading(false);
