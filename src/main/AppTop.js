@@ -22,7 +22,8 @@ class page extends Component {
             step: this.par ? this.par.step : 0,
             type: this.par ? this.par.type : 1,
             isLogin: false,
-            account: ''
+            account: '',
+            visible: false
         };
         this.setLogin = this.setLogin.bind(this);
         this.logout = this.logout.bind(this);
@@ -34,7 +35,7 @@ class page extends Component {
     }
 
     render() {
-        let { step, isLogin, account, type } = this.state;
+        let { step, isLogin, account, type, visible } = this.state;
         const menu = (
             <Menu className={less.dropMenu}>
                 <Menu.Item className={less.dropItem}>
@@ -80,11 +81,15 @@ class page extends Component {
                                 {
                                     isLogin && <div className={less.drop}>
                                         Hi,
-                                    <Dropdown overlay={menu}>
+                                    <Dropdown overlay={menu} onVisibleChange={(visible) => {
+                                            this.setState({
+                                                visible
+                                            });
+                                        }}>
                                             <span>
                                                 <a className="ant-dropdown-link" href="#">
                                                     <span className={less.name}>{account}</span>
-                                                    <Icon type="up" className={less.iconDown} />
+                                                    <Icon type="up" className={`${visible ? less.active : ''} ${less.iconDown}`} />
                                                 </a>
                                             </span>
                                         </Dropdown>
