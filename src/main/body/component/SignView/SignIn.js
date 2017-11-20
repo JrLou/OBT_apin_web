@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-18 13:32:55
+ * @Last Modified time: 2017-11-18 17:48:44
  */
 
 import React, { Component } from 'react';
@@ -173,7 +173,9 @@ class SignInForm extends Component {
                     help={bdChargerError || ''}
                     label="市场经理姓名"
                 >
-                    {getFieldDecorator('bdCharger')(
+                    {getFieldDecorator('bdCharger',{
+                        rules: [{ max: 30, message: '最多输入30位' }],
+                    })(
                         <Input prefixCls="my-ant-input" placeholder="请务必准确输入" />
                     )}
                 </FormItem>

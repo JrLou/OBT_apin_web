@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-18 13:42:34
+ * @Last Modified time: 2017-11-20 11:45:49
  */
 
 import React, { Component } from 'react';
@@ -126,7 +126,8 @@ class ForgetForm extends Component {
                 >
                     {getFieldDecorator('password', {
                         rules: [{ required: true, message: '请输入密码!' },
-                        { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
+                        { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' },
+                        ],
                     })(
                         <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" />
                         )}
@@ -182,7 +183,7 @@ class ForgetForm extends Component {
         this.setState({
             loading: true
         });
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields({ force: true }, (err, values) => {
             if (!err) {
                 const { mobile, option, password } = values;
                 HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/users/resetPassword', (code, message, json, option) => {
