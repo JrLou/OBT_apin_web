@@ -19,6 +19,7 @@ import WindowHelp from '../../tool/WindowHelp.js';
 import {hasKey} from '../../tool/LXDHelp.js';
 import PassengerAdd from './PassengerAdd.js';
 import {Table,Modal} from 'antd';
+import AlertView from '../../component/AlertView.js';
 import {Button,Checkbox,message,Spin,Upload} from 'antd';
 
 class PassengerMsg extends Component{
@@ -32,8 +33,6 @@ class PassengerMsg extends Component{
             dataSource:[],
             isPassed:this.props.isPassed?this.props.isPassed:false,     //是否已经确认了乘机人
             checkedMsg:false,       //是否已经勾选'确认乘机人信息'
-            submitConfirm:false,    //确认乘机人询问框
-            deleteConfirm:false,    //删除乘机人询问框
             importResultMod:false,     //导入乘机人结果提示框
             importResultMsg:null,       //导入结果展示数据
             deleteMsg:'',          //将要被删除的乘机人的姓名
@@ -284,33 +283,20 @@ class PassengerMsg extends Component{
                                     >
                                         提交乘机人信息
                                     </Button>
-                                    <Modal
-                                        prefixCls={'my-ant-modal'}
-                                        visible={this.state.submitConfirm}
-                                        onOk={()=>{
-                                            this.setState({
-                                                submitConfirm:false,
-                                            },this.submit());
-                                        }}
-                                        okText={'是'}
-                                        onCancel={()=>{
-                                            this.setState({
-                                                submitConfirm:false,
-                                            });
-                                        }}
-                                    >
-                                        <div className={css.confirmTitle}>提交乘机人信息</div>
-                                        <div className={css.contentTitle}>
-                                            是否确定现在提交乘机人信息？
-                                        </div>
-                                        <div className={css.contentMsg}>
-                                            注：只可提交一次，提交后不可修改。
-                                            您也可在付完尾款/全款后和提交信息人时间截止前提交。
-                                        </div>
-                                    </Modal>
                                 </div>
                             :   ''
                         }
+                        <AlertView
+                            ref={(view) => this.partnerDetail = view}
+                            callBack={(typeIndex,json)=>{
+                                if(typeIndex == 1){
+                                    this.submit();
+                                }else if(typeIndex== 2){
+                                    this.toDeletePassenger();
+                                }
+                            }
+                            }
+                        />
                         <Modal
                             prefixCls={'my-ant-modal'}
                             title="导入乘机人结果"
@@ -343,26 +329,6 @@ class PassengerMsg extends Component{
                                 </Button>
                             </div>
                         </Modal>
-                        <Modal
-                            prefixCls={'my-ant-modal'}
-                            title="删除乘机人"
-                            visible={this.state.deleteConfirm}
-                            onOk={()=>{
-                                this.setState({
-                                    deleteConfirm:false,
-                                },this.toDeletePassenger());
-                            }}
-                            okText={'是'}
-                            onCancel={()=>{
-                                this.setState({
-                                    deleteConfirm:false,
-                                });
-                            }}
-                        >
-                            <div className={css.contentTitle}>
-                                {`是否确定删除乘机人：${this.state.deleteMsg.name} ？`}
-                            </div>
-                        </Modal>
                     </div>
                     </Spin>
                 </div>
@@ -387,8 +353,11 @@ class PassengerMsg extends Component{
         if(!this.state.checkedMsg){
             message.warning('请先选择确认乘机人信息无误');
         }else{
-            this.setState({
-                submitConfirm:true,
+            this.partnerDetail.showModal({
+                typeIndex:1,
+                title:"提交乘机人信息",
+                desc:"是否确定现在提交乘机人信息?",
+                con:"注：只可提交一次，提交后不可修改。您也可在付完尾款/全款后和提交信息人时间截止前提交。",
             });
         }
     }
@@ -476,6 +445,12 @@ class PassengerMsg extends Component{
         this.setState({
             deleteMsg:data,
             deleteConfirm:true,
+        },()=>{
+            this.partnerDetail.showModal({
+                typeIndex:2,
+                title:"删除乘机人",
+                desc:`是否确定删除乘机人 ${data.name}?`,
+            });
         });
     }
 
