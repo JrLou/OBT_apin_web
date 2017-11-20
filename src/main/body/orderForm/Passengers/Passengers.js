@@ -113,6 +113,18 @@ class PassengerMsg extends Component{
                     return <div style={{minWidth:'30px'}}>{gender}</div>;
                 }
             },{
+                title:'乘机人类型',
+                dataIndex:'passengerType',
+                render:(text,record)=>{
+                    let passengerType = '';
+                    if(text == 1){
+                        passengerType = '成人';
+                    }else if(text ==2){
+                        passengerType = '儿童';
+                    }
+                    return <div style={{minWidth:'30px'}}>{passengerType}</div>;
+                }
+            },{
                 title:'出生日期',
                 dataIndex:'birthday',
                 render:(text,record)=>{
