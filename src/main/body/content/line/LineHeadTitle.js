@@ -28,7 +28,6 @@ class page extends Component {
         if (!dataSource ||dataSource.length<1){
             return null;
         }
-        var translateX = "translateX("+ this.state.step +"px)";
 
         var div = (<div className={css.main}>
             <div className={css.con}>

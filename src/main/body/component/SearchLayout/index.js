@@ -92,7 +92,7 @@ class SearchLayout extends Component {
 
     getSwitchLayout(type){
         return (
-            <div >
+            <div style={{minWidth:"70px"}}>
                 
 
                 {this.getSwitchView(this.state.one, "单程",

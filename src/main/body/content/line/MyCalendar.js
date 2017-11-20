@@ -452,8 +452,7 @@ class MonthView extends Component{
         if (monthArr&&monthArr.length>0){
             month_width = monthArr.length*85;
         }
-        var translateX = "translateX("+this.state.remove_width +"px)";
-        var monthView_With = this.monthView?this.monthView.offsetWidth:0;
+        let monthView_With = this.monthView?this.monthView.offsetWidth:0;
         return(<div className={css.monthView_bg}>
             {this.removeNum==0?(<div style={{float: "left",width:"15px",height:"20px" }}></div>):
                 (<div className={css.calendarHeaderIcon}>
@@ -501,7 +500,7 @@ class MonthView extends Component{
                 <div className={css.monthView_super}
                      style={{
                          width:month_width+"px",
-                         transform:translateX,
+                         left:this.state.remove_width+"px",
                      }}>
                     {this.createMonthItem(monthArr,selectMonthAction)}
                 </div>

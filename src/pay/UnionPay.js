@@ -410,6 +410,7 @@ class InputLayout extends Component {
             <div style={{lineHeight: "40px"}}>
                <label htmlFor="mobileIpt" className={less.label}>银行卡预留手机号：</label>
                <Input
+                  prefixCls="my-ant-input"
                   disabled={true}
                   id="mobileIpt"
                   size="large"
@@ -430,6 +431,7 @@ class InputLayout extends Component {
             <div style={{lineHeight: "40px"}}>
                <label htmlFor="codeIpt" className={less.label}>短信验证码：</label>
                <Input
+                  prefixCls="my-ant-input"
                   id="codeIpt"
                   size="large"
                   onChange={(e) => {

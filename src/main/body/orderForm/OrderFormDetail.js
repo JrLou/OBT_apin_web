@@ -56,9 +56,9 @@ class OrderFormDetail extends Component{
 
         if(!this.state.orderId){
             //没有订单号，直接跳404页面
-            window.app_open(this, "/None", {
-
-            });
+            // window.app_open(this, "/None", {
+            //
+            // });
         }
     }
 

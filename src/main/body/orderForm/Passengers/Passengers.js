@@ -15,6 +15,7 @@ import React, {Component} from 'react';
 import css from './Passengers.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APILXD from "../../../../api/APILXD.js";
+import WindowHelp from '../../tool/WindowHelp.js';
 import {hasKey} from '../../tool/LXDHelp.js';
 import PassengerAdd from './PassengerAdd.js';
 import {Table,Modal} from 'antd';
@@ -42,6 +43,8 @@ class PassengerMsg extends Component{
 
             loading:false,          //加载状态
         };
+
+        this.WindowHelp = new WindowHelp();
     }
 
     componentDidMount(){
@@ -129,13 +132,29 @@ class PassengerMsg extends Component{
                 title:(this.state.isPassed?<div>票号</div>:<div>操作</div>),
                 dataIndex:'operation',
                 width:'200px',
-                render:(text,record)=>(
-                    this.state.isPassed
-                    ?   <div className={css.waitTicket}>{record.ticket?record.ticket:'等待出票'}</div>
-                    :   <div>
+                render:(text,record)=> {
+                    if(this.state.isPassed){
+                        let ticketStr = record.ticket?record.ticket:'';
+                        let ticketList = ticketStr.split(',');
+                        let listLength = ticketList.length;
+                        let ticketViews = [];
+                        for(let index = 0;index<listLength;index+=2){
+                            ticketViews.push(
+                                <div key={`ticket${index}`} style={{textAlign:'left'}}>
+                                    <span>{ticketList[index]?`${ticketList[index]},`:''}</span>
+                                    <span>&nbsp;&nbsp;</span>
+                                    <span>{ticketList[index+1]?ticketList[index+1]:''}</span>
+                                </div>
+                            );
+                        }
+                        return(<div className={css.waitTicket}>
+                            {ticketStr ? ticketViews : '等待出票'}
+                        </div>);
+                    }else{
+                        return(<div>
                             <div
                                 className={css.operationUpDate}
-                                onClick={()=>{
+                                onClick={() => {
                                     this.toUpDatePassenger(record);
                                 }}
                             >
@@ -144,14 +163,15 @@ class PassengerMsg extends Component{
                             <span>/</span>
                             <div
                                 className={css.operationDelete}
-                                onClick={()=>{
+                                onClick={() => {
                                     this.clickDeleteBtn(record);
                                 }}
                             >
                                 删除
                             </div>
-                        </div>
-                ),
+                        </div>);
+                    }
+                },
             },
         ];
 
@@ -182,6 +202,7 @@ class PassengerMsg extends Component{
                                     type="primary"
                                     className={hasKey(this.state.orderState,[0,8])?css.hidden:css.btnType02}
                                     onClick={()=>{
+                                        this.exportWindow = this.WindowHelp.openInitWindow();
                                         this.exportPassenger();
                                     }}
                                 >
@@ -533,11 +554,13 @@ class PassengerMsg extends Component{
         };
         let successCB = (code, msg, json, option)=>{
             // window.location.href = json;
-            window.open(json);
+            // window.open(json);
+            this.WindowHelp.openWindow(this.exportWindow,json);
             this.setLoading(false);
         };
 
         let failureCB = (code, msg, option)=>{
+            this.WindowHelp.closeWindow(this.exportWindow);
             this.setLoading(false);
             message.error(msg);
         };
