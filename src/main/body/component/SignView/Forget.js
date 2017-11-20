@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-20 11:45:49
+ * @Last Modified time: 2017-11-20 14:13:57
  */
 
 import React, { Component } from 'react';
@@ -227,7 +227,6 @@ class ForgetForm extends Component {
                 this.refs.code.autoTime(60);
             }
         }, (code, msg, json, option) => {
-
             message.error(msg);
         }, {
                 mobile, picCode: isSendPic ? "" : picCode, type: 2
