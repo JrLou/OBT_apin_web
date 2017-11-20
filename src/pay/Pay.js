@@ -613,7 +613,7 @@ class page extends Component {
             <div>
                 {/*UI说：长文字的时候，就不提示“支付失败”了*/}
                 {action === "ok" ?
-                    <div>{content}&nbsp;
+                    <div style={{textAlign: "left"}}>{content}&nbsp;
                         {connectUsLink}
                     </div>
                     :
