@@ -86,7 +86,7 @@ class OrderInfoView extends Component{
                             </div>
                         </div>
                         <div className={css.priceItem}>
-                            <span className={css.priceTitle}>订单总金额</span>
+                            <span className={css.priceTitle}>{hasKey(this.state.orderState,[1])?'参考价（含税）':'订单总金额'}</span>
                             <span className={css.priceTip}>¥</span>
                             <span className={css.priceValue}>{orderMsg.orderAmount}</span>
                         </div>

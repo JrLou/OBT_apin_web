@@ -71,11 +71,14 @@ class PassengerMsg extends Component{
             {
                 title:'序号',
                 dataIndex:'index',
+                render:(text,record)=>{
+                    return (<div style={{minWidth:'30px'}}>{text}</div>);
+                }
             },{
                 title:'乘机人',
                 dataIndex:'name',
                 render:(text,record)=>{
-                    return (<div style={{maxWidth:'150px'}}>{text}</div>);
+                    return (<div style={{maxWidth:'150px',display:'inline-block'}}>{text}</div>);
                 }
             },{
                 title:'证件类型',
@@ -90,13 +93,13 @@ class PassengerMsg extends Component{
                         case 4:type = '台胞证';break;
                         default:type = '';
                     }
-                    return type;
+                    return <div style={{minWidth:'80px',display:'inline-block'}}>{type}</div>;
                 }
             },{
                 title:'证件号',
                 dataIndex:'credNumber',
                 render:(text,record)=>{
-                    return (<div style={{maxWidth:'350px'}}>{text}</div>);
+                    return (<div style={{maxWidth:'350px',display:'inline-block'}}>{text}</div>);
                 }
             },{
                 title:'性别',
@@ -108,25 +111,25 @@ class PassengerMsg extends Component{
                     }else if(text ==0){
                         gender = '女';
                     }
-                    return gender;
+                    return <div style={{minWidth:'30px'}}>{gender}</div>;
                 }
             },{
                 title:'出生日期',
                 dataIndex:'birthday',
                 render:(text,record)=>{
-                    return (<div style={{maxWidth:'200px'}}>{text}</div>);
+                    return (<div style={{minWidth:'100px'}}>{text}</div>);
                 }
             },{
                 title:'国籍',
                 dataIndex:'nation',
                 render:(text,record)=>{
-                    return (<div style={{maxWidth:'150px'}}>{text}</div>);
+                    return (<div style={{maxWidth:'200px',display:'inline-block'}}>{text}</div>);
                 }
             },{
                 title:'签发地',
                 dataIndex:'issuePlace',
                 render:(text,record)=>{
-                    return (<div style={{maxWidth:'150px'}}>{text}</div>);
+                    return (<div style={{maxWidth:'200px',display:'inline-block'}}>{text}</div>);
                 }
             },{
                 title:(this.state.isPassed?<div>票号</div>:<div>操作</div>),
