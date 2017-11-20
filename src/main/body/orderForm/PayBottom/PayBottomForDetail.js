@@ -8,7 +8,7 @@ class PayBottom extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            payType:this.props.payType?this.props.payType:'', //支付类型：2：待付押金 3：待付全款 5：待付尾款
+            payType:this.props.payType?this.props.payType:'', //订单类型：2：待付押金 3：待付全款 5：待付尾款
             overTime:false,
             countDown:this.props.param.countDown,
             timerStr:'00:00:00',
@@ -29,7 +29,7 @@ class PayBottom extends Component {
                 overTime:true,
                 timerStr:'已超时',
             });
-        }else if(this.state.countDown && (this.state.payType == 2 || this.state.payType == 3)) {
+        }else if(this.state.countDown) {
             //启动倒计时
             this.getTimeOut(this.state.countDown);
         }
@@ -106,8 +106,8 @@ class PayBottom extends Component {
         if(!time||time>86400000){
             return;
         }
-        let timeCount = setInterval(()=>{
-            time = time -1000;
+
+        let doCountDown = (time)=>{
             let hour = Math.floor(time/3600000),
                 minute = Math.floor((time%3600000)/60000),
                 second = Math.floor((time%60000)/1000),
@@ -124,8 +124,16 @@ class PayBottom extends Component {
                     timerStr:str,
                 });
             }
+        };
+        doCountDown(time);
+
+        let timeCount = setInterval(()=>{
+            time = time -1000;
+            doCountDown(time);
         },1000);
     }
+
+
 }
 PayBottom.contextTypes = {
     router: React.PropTypes.object
