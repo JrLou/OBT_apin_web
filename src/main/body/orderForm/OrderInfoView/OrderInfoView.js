@@ -86,7 +86,7 @@ class OrderInfoView extends Component{
                             </div>
                         </div>
                         <div className={css.priceItem}>
-                            <span className={css.priceTitle}>订单总金额</span>
+                            <span className={css.priceTitle}>{hasKey(this.state.orderState,[1])?'参考价（含税）':'订单总金额'}</span>
                             <span className={css.priceTip}>¥</span>
                             <span className={css.priceValue}>{orderMsg.orderAmount}</span>
                         </div>
@@ -110,7 +110,7 @@ class OrderInfoView extends Component{
                     {
                         hasKey(this.state.orderState,[0,8])
                         ?   <div className={css.itemLinePay}>
-                                <div className={css.payTitle}>订单关闭：</div>
+                                <div className={css.payTitle}>{this.state.orderState==8?'订单关闭：':'订单取消：'}</div>
                                 {
                                     orderMsg.closeReason
                                     ?orderMsg.closeReason
@@ -419,7 +419,7 @@ class OrderInfoView extends Component{
         let parames = {
             id:id,
             orderStatus:0,
-            remark:'',
+            remark:'用户取消订单',
         };
         let successCB = (code, msg, json, option)=>{
             this.setLoading(false);
