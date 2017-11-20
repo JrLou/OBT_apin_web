@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-10 16:51:38 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-18 18:12:54
+ * @Last Modified time: 2017-11-20 11:25:16
  */
 
 
@@ -61,23 +61,12 @@ class ResetForm extends Component {
                     {getFieldDecorator('password', {
                         rules: [{ required: true, message: '请输入密码!' },
                         { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' },
-                        {
-                            validator: (rule, value, callback) => {
-                                const confirmPsw = getFieldValue('confirmPsw');
-                                if (confirmPsw && value !== confirmPsw) {
-                                    setFields({
-                                        confirmPsw: {
-                                            value: ''
-                                        },
-                                    });
-                                }
-
-                                callback();
-                            }
-                        }
-                    ],
+                        ],
                     })(
-                        <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" />
+                        <Input prefixCls="my-ant-input"
+                            type="password"
+                            placeholder="请输入8-16位数字、字母"
+                        />
                         )}
                 </FormItem>
                 <FormItem
@@ -98,7 +87,9 @@ class ResetForm extends Component {
                             }
                         }],
                     })(
-                        <Input prefixCls="my-ant-input" type="password" placeholder="请再次输入密码" />
+                        <Input prefixCls="my-ant-input"
+                            type="password"
+                            placeholder="请再次输入密码" />
                         )}
                 </FormItem>
                 <FormItem prefixCls="my-ant-form">
@@ -111,13 +102,15 @@ class ResetForm extends Component {
                         style={{ width: '100%' }}
                     >提交</Button>
                 </FormItem>
+                <div>
+                </div>
             </Form>
         );
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields({ force: true }, (err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
                 const { option, password } = values;
