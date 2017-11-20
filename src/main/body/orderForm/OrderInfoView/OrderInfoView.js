@@ -8,6 +8,7 @@ import { HttpTool } from '../../../../../lib/utils/index.js';
 import APILXD from "../../../../api/APILXD.js";
 import {hasKey,sliceTimeString} from '../../tool/LXDHelp.js';
 import {Button,message,Modal,Spin,Icon} from 'antd';
+import AlertView from '../../component/AlertView.js';
 
 /**
  * 订单状态说明(页面)：
@@ -23,7 +24,6 @@ class OrderInfoView extends Component{
             orderStateName:'',
             imgShow:false,          //查看图片模态框
             imgUrl:'',
-            confirmModal:false,     //取消订单询问框
             loading:false,          //加载状态
         };
     }
@@ -96,9 +96,17 @@ class OrderInfoView extends Component{
                             className={css.cancleBtnStyle}
                             onClick={()=>{
                                 //订单取消
-                                this.setState({
-                                    confirmModal:true,
-                                });
+                                this.state.orderState == 5
+                                    ?   this.partnerDetail.showModal({
+                                        title:"提示",
+                                        desc:"是否确定要取消此行程订单?",
+                                        con:'订单取消后将不退还订金',
+                                    })
+                                    :   this.partnerDetail.showModal({
+                                        title:"提示",
+                                        desc:"是否确定删除此订单?",
+                                    })
+                                ;
                             }}
                         >
                             取消订单
@@ -173,32 +181,13 @@ class OrderInfoView extends Component{
                         /></div>
                     </div>
                 </Modal>
-                <Modal
-                    prefixCls={'my-ant-modal'}
-                    title={'提示'}
-                    visible={this.state.confirmModal}
-                    onOk={()=>{
-                        this.setState({
-                            confirmModal:false,
-                        },()=>{this.cancelOrder(orderMsg.orderId);});
-                    }}
-                    onCancel={()=>{
-                        this.setState({
-                            confirmModal:false,
-                        });
-                    }}
-                >
-                    {
-                        this.state.orderState == 5
-                            ?   (<div className={css.messageBox}>
-                                    <div>是否确定要取消此行程订单？</div>
-                                    <div>订单取消后将不退还订金</div>
-                                </div>)
-                            :   (<div className={css.messageBox}>
-                                    是否确定取消此订单？
-                                </div>)
+                <AlertView
+                    ref={(view) => this.partnerDetail = view}
+                    callBack={(typeIndex,json)=>{
+                        this.cancelOrder(orderMsg.orderId);
                     }
-                </Modal>
+                    }
+                />
             </div>
             </Spin>
         );
