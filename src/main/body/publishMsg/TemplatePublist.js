@@ -235,37 +235,50 @@ class page extends Component {
                                        let lineType =this.state.lineType;
                                        let lineNum= this.state.lineNum;
                                        //起始时间
-                                       let startTime=Date.now();
+                                       let startTime=moment(moment(Date.now()).format("YYYY-MM-DD")).unix();
+                                       let newDate=moment(moment(new Date()).format("YYYY-MM-DD")).unix();
                                        let endTime="";
                                         if(lineType== 3){
                                             for(let j=0;j<i;j++){   //开始时间
                                                 let value=this.vueValue(getFieldValue("fromDateTime"+j));// (getFieldValue("fromDateTime"+j)==undefined||getFieldValue("fromDateTime"+j)==""||getFieldValue("fromDateTime"+j)==null)?"":getFieldValue("fromDateTime"+j);
-                                                console.log("当前时间与选中时间:"+startTime+"<"+value +"="+(startTime<value));
-                                                if(value !="" && startTime<value){
-                                                    startTime=value;
+                                                if(value==""){
+                                                    value=startTime;
+                                                }else
+                                                if(value !=""){
+                                                    value=moment(moment(value).format("YYYY-MM-DD")).unix();
                                                 }
-                                                if(i !=0 ){
-                                                    startTime=(startTime-(24*60*60*1000));
+                                                if(startTime<=value){
+                                                    startTime=value;
                                                 }
                                             }
                                             for(let j=lineNum;j>i;j--){   //结尾时间
-                                                let value=this.vueValue(getFieldValue("fromDateTime"+j));//(getFieldValue("fromDateTime"+j)==undefined||getFieldValue("fromDateTime"+j)==""||getFieldValue("fromDateTime"+j)==null)?"":getFieldValue("fromDateTime"+j);
-                                              if(value !="" && startTime<value){
-                                                endTime=value;
-                                              }
-                                              
+                                                let value=this.vueValue(getFieldValue("fromDateTime"+j));// (getFieldValue("fromDateTime"+j)==undefined||getFieldValue("fromDateTime"+j)==""||getFieldValue("fromDateTime"+j)==null)?"":getFieldValue("fromDateTime"+j);
+                                                if(value !="" && endTime==""){//结尾时间
+                                                    endTime=moment(moment(value).format("YYYY-MM-DD")).unix();
+                                                } 
+                                                if(endTime!="" && endTime<newDate){
+                                                    endTime="";
+                                                }
                                             }
-                                            endTime=(endTime+(24*60*60*1000));
+                                           
                                         }else
-                                        if(lineType== 2){
-                                            endTime=this.vueValue(getFieldValue("toDateTime"+i)+(24*60*60*1000));
+                                        if(lineType== 2){   //往返时间
+                                            let value=this.vueValue(getFieldValue("toDateTime0"));
+                                            if(value !=""){
+                                                endTime=moment(moment(value).format("YYYY-MM-DD")).unix();
+                                            }
                                         }
-                                        
                                         if(endTime!=""){
-                                            return current &&  (current.valueOf() <= startTime || current.valueOf() >= endTime);
+                                            endTime=endTime+(24*60*60);
+                                        }
+                                        //console.log("开始时间："+moment(startTime).format("YYYY-MM-DD"));
+                                       // console.log("结尾时间："+ (endTime && moment(endTime).format("YYYY-MM-DD")));
+                                        let changsVlaue=current && moment(moment(current.valueOf()).format("YYYY-MM-DD")).unix();
+                                        if(endTime!=""){
+                                            return changsVlaue <= startTime || changsVlaue >= endTime;
                                         }
                                         if(endTime==""){//结束时间为空，表示永远
-                                            return current &&  current.valueOf() <= startTime;
+                                            return changsVlaue <= startTime;
                                         }
                                     }} />
                                     )}
@@ -285,13 +298,9 @@ class page extends Component {
                                         <DatePicker getCalendarContainer={()=>{
                                             return this.refs.test;
                                         }} style={{ borderRadius: "2px", minWidth: "200px",width:"230px" }} format='YYYY-MM-DD' disabledDate={(current) => {
-                                            let datestart=getFieldValue("fromDateTime"+i);
-                                            if(datestart){
-                                                datestart=moment(datestart);
-                                            }else{
-                                                datestart="";
-                                            }
-                                            return current && current.valueOf() <= (datestart== "" ? Date.now():datestart);
+                                            let value=this.vueValue(getFieldValue("fromDateTime0"))==""?"":getFieldValue("fromDateTime0");
+                                            let startTime =value==""?Date.now() :value;
+                                            return current && current.valueOf() <= startTime;
                                         }} />
                                         )}
                                 </FormItem>
