@@ -38,16 +38,22 @@ class page extends Component {
 
     }
 
-    upView(){
+    upView(callBack){
         this.setState({
             upData:this.state.upData++
+        },()=>{
+            if (callBack){
+                setTimeout(()=>{
+                    callBack();
+                },0);
+            }
         });
     }
 
     componentDidMount() {
         this.loadData();
         //启动页面滚动监听
-        setTimeout(()=>{this.listenScroll();},0);
+        // setTimeout(()=>{this.listenScroll();},0);
     }
 
     listenScroll(){
@@ -143,6 +149,9 @@ class page extends Component {
         this.cityDep = json&&json.cityDep?json.cityDep:"";
         let plans = json&&json.plans?json.plans:{};
         this.flightType = plans.flightType;
+        let voyages = plans.voyages?plans.voyages:[];
+        this.depDate = voyages[0]&&voyages[0].depDate?voyages[0].depDate:"";
+        this.arrDate = voyages[1]&&voyages[1].depDate?voyages[1].depDate:"";
 
         let member = json.member?json.member:{};
         this.props.form.setFieldsValue({
@@ -151,7 +160,9 @@ class page extends Component {
         this.props.form.setFieldsValue({
             customerName:member.contactName?member.contactName:""
         });
-        this.upView();
+        this.upView(()=>{
+            this.listenScroll();
+        });
     }
 
     /**
@@ -209,7 +220,12 @@ class page extends Component {
                 childCount:this.state.childNum,
                 remark:"",
                 isMult:this.flightType&&(this.flightType<3),
-                listData:[{fromCity:this.cityArr,toCity:this.cityDep}]
+                listData:[{
+                    fromCity:this.cityDep,
+                    toCity:this.cityArr,
+                    fromDateTime:this.depDate,
+                    toDateTime:this.arrDate,
+                }]
             };
             this.myModalRequire.showModal(true,
                 {
