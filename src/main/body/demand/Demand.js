@@ -71,6 +71,16 @@ class page extends Component {
             total: 0,                //总数据
             loading: false,         //是否处于加载状态
         };
+
+        //点击分页器的查询条件
+        this.searchParames = {
+            cityDep:'',
+            cityArrive:'',
+            flightType:'',
+            orderStatus:'',
+            startDate:null,
+            dateRet:null,
+        };
     }
 
 
@@ -80,7 +90,7 @@ class page extends Component {
 
     componentDidMount() {
         //查询订单列表数据
-        this.loadData(1);
+        this.loadData(1,true);
     }
 
     /**
@@ -269,7 +279,7 @@ class page extends Component {
                         >
                             查询
                         </Button>
-                        <span style={{fontSize: 12, color: "#29A6FF", marginLeft: 10, cursor: "pointer"}}
+                        <span className={css.clearBtn}
                               onClick={() => {
                                   this.clearDepCity();
                                   this.clearArriveCity();
@@ -280,7 +290,7 @@ class page extends Component {
                                       demandStatus:  this.flightTypeList[3].value,
                                       startDate: null,
                                       endDate: null,
-                                  });
+                                  },()=>{this.loadData(1,true);});
                               }}
                         >清空查询条件</span>
                     </div>
@@ -381,7 +391,7 @@ class page extends Component {
             return;
         }
         let currentNum = pagination.current;
-        this.loadData(currentNum);
+        this.loadData(currentNum,false);
 
     }
 
@@ -392,16 +402,21 @@ class page extends Component {
         if(this.isLoading()){
             return;
         }
-        this.loadData(1);
+        this.loadData(1,true);
     }
 
     /**
      * 请求数据
      * @param searchParames
      */
-    loadData(currentNum) {
+    loadData(currentNum,type) {
         let page = currentNum;
-        let parames = this.getSearchParames();
+        let parames = {};
+        if(type){
+            parames = this.getSearchParames();
+        }else{
+            parames = this.searchParames;
+        }
         parames.pageNum = page;
         let successCB = (code, msg, json, option) => {
             this.setLoading(false);

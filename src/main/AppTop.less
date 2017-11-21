@@ -9,7 +9,7 @@
 }
 
 .headContent {
-    max-width: @d_screen_width;
+    min-width: @d_screen_width;
     position: relative;
     margin: auto;
     left: 0;
@@ -97,5 +97,12 @@
     text-align: center;
     .center {
         color: #29A6FF;
+    }
+}
+
+.iconDown{
+    transition: all .3s cubic-bezier(.645,.045,.355,1);
+    &.active{
+        transform: rotate(180deg);
     }
 }

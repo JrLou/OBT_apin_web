@@ -99,7 +99,7 @@ class TitleBar extends Component{
                     }
                 </div>
                 <AlertView
-                    ref={(a) => this.partnerDetail = a}
+                    ref={(view) => this.partnerDetail = view}
                     callBack={(typeIndex,json)=>{
                          this.deleteCB();
                         }

@@ -1,6 +1,6 @@
-import React, {Component} from "react";
-import {Input, Button, Icon, message} from 'antd';
-import {HttpTool} from "../../../../lib/utils/index.js";
+import React, { Component } from "react";
+import { Input, Button, Icon, message } from 'antd';
+import { HttpTool } from "../../../../lib/utils/index.js";
 import Panel from '../../../pay/Panel';
 import UploadCmp from './UploadCmp';
 import less from "./BankUpload.less";
@@ -87,7 +87,7 @@ class BankUpload extends Component {
             });
             return;
          }
-         this.loadPayInfo2modify({recordId: urlData.id}, (code, msg, data) => {
+         this.loadPayInfo2modify({ recordId: urlData.id }, (code, msg, data) => {
             this.sourceData = data;
             if (code > 0) {
                if (data === null) {
@@ -147,7 +147,7 @@ class BankUpload extends Component {
                <div className={less.bankBox_top}>收款账户信息</div>
                <div className={less.bankBox_middle}>
                   <div className={less.bankBox_middle_tips}>
-                     <span className={less.tipsIcon}><Icon type="exclamation-circle"/></span>
+                     <span className={less.tipsIcon}><Icon type="exclamation-circle" /></span>
                      <span>建议在周一至周六，9:00~18:00内使用该转账功能。若在此时间之外，有可能导致审核异常，如有疑问，请&nbsp;{this.getConnetUs()}</span>
                   </div>
                   <div>
@@ -171,7 +171,7 @@ class BankUpload extends Component {
                <div className={less.bankBox_top}>付款账户信息</div>
                <div className={less.bankBox_middle}>
                   <div className={less.bankBox_middle_tips}>
-                     <span className={less.tipsIcon}><Icon type="exclamation-circle"/></span>
+                     <span className={less.tipsIcon}><Icon type="exclamation-circle" /></span>
                      <span>请优先选择"建行"转账，转账需确保1小时内到账，不然资金到账延时会导致财务审核不通过，敬请谅解！</span>
                   </div>
                   <InputLayout
@@ -198,16 +198,25 @@ class BankUpload extends Component {
                   </div>
                </div>
             </div>
-            <div className={less.txtCenter}>
-               <Button
-                  type={"primary"}
-                  className={less.submitBtn}
-                  onClick={() => {
-                     this.handleSubmit();
+            <div style={{ textAlign: "right" }}>
+               <a
+                  onClick={(e) => {
+                     e.preventDefault();
+                     window.history.go(-1);
                   }}
                >
-                  提交
-               </Button>
+                  <Icon type="left" />返回上一级
+               </a>
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               <div style={{ display: "inline-block" }}>
+                  <Button
+                     type={"primary"}
+                     className={less.submitBtn}
+                     onClick={() => {
+                        this.handleSubmit();
+                     }}
+                  >提交</Button>
+               </div>
             </div>
             <Panel
                onAction={(action, showType) => {
@@ -218,7 +227,7 @@ class BankUpload extends Component {
                }}
                ref={(ref) => {
                   this.panel = ref;
-               }}/>
+               }} />
          </div>
       );
    }
@@ -236,7 +245,7 @@ class BankUpload extends Component {
    getErrorView() {
       return (
          <div>
-            <h1 style={{color: "red", textAlign: "center"}}>{this.state.errorMsg}</h1>
+            <h1 style={{ color: "red", textAlign: "center" }}>{this.state.errorMsg}</h1>
          </div>
       );
    }
@@ -286,7 +295,7 @@ class BankUpload extends Component {
    isUserChange(param) {
       let isChange = false;
       for (let k in param) {
-         if (k == "orderId" || k== "recordId") {
+         if (k == "orderId" || k == "recordId") {
             continue;
          }
          if (k == "amount") {
@@ -335,7 +344,7 @@ class BankUpload extends Component {
 
       let is2modify = this.state.recordId ? true : false;
 
-      let bcFun = (code, msg, data)=>{
+      let bcFun = (code, msg, data) => {
          if (code > 0) {
             //支付成功
             this.panel.show(true, {
@@ -363,10 +372,10 @@ class BankUpload extends Component {
          // title: "支付信息",
          showType: "verpay"
       }, () => {
-         if(is2modify){
+         if (is2modify) {
             //
             this.loadSubmitAgain(param, bcFun);
-         }else{
+         } else {
             this.loadSubmit(param, bcFun);
          }
       });
@@ -390,7 +399,7 @@ class BankUpload extends Component {
    }
 
    //提交修改上传
-   loadSubmitAgain(param, cb){
+   loadSubmitAgain(param, cb) {
       HttpTool.request(HttpTool.typeEnum.POST,
          "/bo/orderapi/v1.0/orders/pay/reOffine",
          (code, msg, json, option) => {
@@ -468,9 +477,9 @@ class InputLayout extends Component {
             ?
             "请填写账户名"
             : (!this.isRightCardNum(this.state.account)
-                  ?
-                  "请填写正确的卡号"
-                  : (!this.state.bank ? "请填写银行名" : null)
+               ?
+               "请填写正确的卡号"
+               : (!this.state.bank ? "请填写银行名" : null)
             )
       };
    }
@@ -485,7 +494,7 @@ class InputLayout extends Component {
             <div className={less.container2Son}>
                <div className={less.form_group + " " + less.fl}>
                   <label htmlFor="accountName" className={less.control_label}>账户名：</label>
-                  <br/>
+                  <br />
                   <Input
                      prefixCls="my-ant-input"
                      {...iptProps}
@@ -494,12 +503,12 @@ class InputLayout extends Component {
                      onChange={(e) => {
                         this.setFomrFileds(e, "accountName");
                      }}
-                     prefix={<Icon type="mobile" style={{fontSize: 13}}/>} placeholder={"请输入账户名"}
+                     prefix={<Icon type="mobile" style={{ fontSize: 13 }} />} placeholder={"请输入账户名"}
                   />
                </div>
                <div className={less.form_group + " " + less.fl}>
                   <label htmlFor="account" className={less.control_label}>卡号：</label>
-                  <br/>
+                  <br />
                   <Input
                      prefixCls="my-ant-input"
                      {...iptProps}
@@ -510,7 +519,7 @@ class InputLayout extends Component {
                         }
                      }}
                      value={this.state.account}
-                     prefix={<Icon type="credit-card" style={{fontSize: 13}}/>} placeholder={"请输入卡号"}
+                     prefix={<Icon type="credit-card" style={{ fontSize: 13 }} />} placeholder={"请输入卡号"}
                   />
                </div>
             </div>
@@ -518,7 +527,7 @@ class InputLayout extends Component {
             <div className={less.container2Son}>
                <div className={less.form_group + " " + less.fl}>
                   <label htmlFor="bank" className={less.control_label}>银行：</label>
-                  <br/>
+                  <br />
                   <Input
                      prefixCls="my-ant-input"
                      {...iptProps}
@@ -527,20 +536,20 @@ class InputLayout extends Component {
                      onChange={(e) => {
                         this.setFomrFileds(e, "bank");
                      }}
-                     prefix={<Icon type="bank" style={{fontSize: 13}}/>} placeholder={"请输入转账银行"}
+                     prefix={<Icon type="bank" style={{ fontSize: 13 }} />} placeholder={"请输入转账银行"}
                   />
                </div>
 
                <div className={less.form_group + " " + less.fl}>
                   <label htmlFor="amount" className={less.control_label}>转账金额：</label>
-                  <br/>
+                  <br />
                   <Input
                      prefixCls="my-ant-input"
                      {...iptProps}
                      id="amount"
                      value={this.state.amount + "元"}
                      disabled={true}
-                     prefix={<Icon type="pay-circle" style={{fontSize: 13}}/>}
+                     prefix={<Icon type="pay-circle" style={{ fontSize: 13 }} />}
                   />
                </div>
             </div>

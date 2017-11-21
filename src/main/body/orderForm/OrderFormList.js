@@ -5,9 +5,9 @@ import React, {Component} from 'react';
 import css from './OrderFormList.less';
 import { HttpTool } from '../../../../lib/utils/index.js';
 import APILXD from "../../../api/APILXD.js";
-import {routeTranslate,getDateFormat,removeSpace} from '../tool/LXDHelp.js';
+import {routeTranslate,getDateFormat} from '../tool/LXDHelp.js';
 import {transformForList} from './StateHelp.js';
-import {Table,Input,DatePicker,Select,Button,message} from 'antd';
+import {Table,DatePicker,Select,Button,message} from 'antd';
 import InputAuto from '../component/InputForList.js';
 const Option = Select.Option;
 
@@ -30,6 +30,16 @@ class OrderFormList extends Component{
             total:0,                //总数据
 
             loading: false,         //是否处于加载状态
+        };
+
+        //点击分页器的查询条件
+        this.searchParames = {
+            cityDep:'',
+            cityArr:'',
+            flightType:'',
+            orderStatus:'',
+            startDate:null,
+            dateRet:null,
         };
 
         this.earliest = new Date(2015,0,1);
@@ -105,7 +115,7 @@ class OrderFormList extends Component{
 
     componentDidMount(){
         //查询订单列表数据
-        this.loadData(1);
+        this.loadData(1,true);
     }
 
     /**
@@ -333,10 +343,10 @@ class OrderFormList extends Component{
                                     orderStatus:'',
                                     startDate:null,
                                     dateRet:null,
-                                });
+                                },()=>{this.loadData(1,true);});
                             }}
                         >
-                            清除查询条件
+                            清空查询条件
                         </span>
                     </div>
                 </div>
@@ -408,7 +418,7 @@ class OrderFormList extends Component{
             return;
         }
         let currentNum = pagination.current;
-        this.loadData(currentNum);
+        this.loadData(currentNum,false);
     }
 
     /**
@@ -418,16 +428,21 @@ class OrderFormList extends Component{
         if(this.isLoading()){
             return;
         }
-        this.loadData(1);
+        this.loadData(1,true);
     }
 
     /**
      * 请求数据
      * @param searchParames
      */
-    loadData(currentNum){
+    loadData(currentNum,type){
         let page = currentNum;
-        let parames = this.getSearchParames();
+        let parames = {};
+        if(type){
+            parames = this.getSearchParames();
+        }else{
+            parames = this.searchParames;
+        }
         parames.page = page;
 
         let successCB = (code, msg, json, option)=>{
@@ -473,6 +488,7 @@ class OrderFormList extends Component{
             dateDepStop = state.dateRet?getDateFormat(state.dateRet.valueOf()):'';
         parames.dateDepStart = dateDepStart;
         parames.dateDepStop = dateDepStop;
+        this.searchParames = parames;
         return parames;
     }
 
