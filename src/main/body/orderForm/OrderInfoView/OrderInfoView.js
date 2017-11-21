@@ -100,7 +100,7 @@ class OrderInfoView extends Component{
                                     ?   this.partnerDetail.showModal({
                                         title:"提示",
                                         desc:"是否确定要取消此行程订单?",
-                                        con:'订单取消后将不退还订金',
+                                        con:'订单取消后将不退还押金',
                                     })
                                     :   this.partnerDetail.showModal({
                                         title:"提示",
@@ -263,14 +263,22 @@ class OrderInfoView extends Component{
                 <div key={`record${key}`} className={css.recordBox}>
                     <div className={key==0?css.payValue:css.hidden}>
                         {`¥${data.amount}`}
-                        <span>&nbsp;&nbsp;</span>
+                        <span>&nbsp;&nbsp;&nbsp;</span>
                         {scorePay>0?`积分抵扣(¥${scorePay})`:''}
                     </div>
                     {
                         payName
                             ?   (<div className={css.payType}>
                                     {`(支付方式：${payName}`}
-                                    <span>&nbsp;&nbsp;</span>
+                                    <span style={{paddingLeft:'15px'}}></span>
+                                    {
+                                        data.records[key].auditStatus == 2
+                                            ?   <span className={css.failStyle}>
+                                                    审核不通过原因:{data.records[key].remark?data.records[key].remark:''}
+                                                </span>
+                                            :   ''
+                                    }
+                                    <span style={{paddingLeft:'15px'}}></span>
                                     {`支付时间：${data.records[key].payTime})`}
                                 </div>)
                             :   ''
@@ -280,26 +288,6 @@ class OrderInfoView extends Component{
                             ?   <div className={css.payVoucher}>
                                 <span>支付凭证</span>
                                 {this.getPayVoucher(voucherUrl)}
-                                {
-                                    data.records[key].auditStatus == 2
-                                        ?   <div className={css.reUpload}>
-                                            {/*<Button*/}
-                                                {/*className={css.reUploadBtnStyle}*/}
-                                                {/*onClick={()=>{*/}
-                                                    {/*window.app_open(this,'/UpLoad',{*/}
-                                                        {/*orderId:data.orderId,*/}
-                                                        {/*id:data.records[key].id,*/}
-                                                    {/*});*/}
-                                                {/*}}*/}
-                                            {/*>*/}
-                                                {/*重新上传*/}
-                                            {/*</Button>*/}
-                                            <div className={css.failStyle}>
-                                                审核失败:{data.records[key].remark?data.records[key].remark:''}
-                                            </div>
-                                        </div>
-                                        :   ''
-                                }
                             </div>
                             :''
                     }

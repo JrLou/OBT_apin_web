@@ -126,7 +126,7 @@ class page extends Component {
     }
     lineDetails() {//航线信息
         let { lineNum, listData } = this.state;
-        const { getFieldDecorator,getFieldValue} = this.props.form;
+        const { getFieldDecorator,getFieldValue,setFieldsValue} = this.props.form;
         let div = [];
         for (let i = 0; i < lineNum; i++) {
             div.push(
@@ -222,22 +222,31 @@ class page extends Component {
                                         if(lineType== 3){
                                             for(let j=0;j<i;j++){   //开始时间
                                                 let value=this.vueValue(getFieldValue("fromDateTime"+j));// (getFieldValue("fromDateTime"+j)==undefined||getFieldValue("fromDateTime"+j)==""||getFieldValue("fromDateTime"+j)==null)?"":getFieldValue("fromDateTime"+j);
-                                              if(value !=""){
-                                                startTime=value;
-                                              }
+                                                console.log("当前时间与选中时间:"+startTime+"<"+value +"="+(startTime<value));
+                                                if(value !="" && startTime<value){
+                                                    startTime=value;
+                                                }
+                                                if(i !=0 ){
+                                                    startTime=(startTime-(24*60*60*1000));
+                                                }
                                             }
                                             for(let j=lineNum;j>i;j--){   //结尾时间
                                                 let value=this.vueValue(getFieldValue("fromDateTime"+j));//(getFieldValue("fromDateTime"+j)==undefined||getFieldValue("fromDateTime"+j)==""||getFieldValue("fromDateTime"+j)==null)?"":getFieldValue("fromDateTime"+j);
-                                              if(value !=""){
+                                          //      console.log("第【"+j+"】层："+moment(value).format("YYYY-MM-DD")+"===》");
+                                              if(value !="" && startTime<value){
+                                          //      console.log("第【"+j+"】层选中。。。："+moment(value).format("YYYY-MM-DD")+"===》");
                                                 endTime=value;
+                                          //      console.log("当前时间与选中时间:"+startTime+"<"+endTime +"="+(startTime<endTime));
                                               }
                                             }
+                                            
                                         }else
                                         if(lineType== 2){
                                             endTime=this.vueValue(getFieldValue("toDateTime"+i));
                                         }
+                                        
                                         if(endTime!=""){
-                                            return current &&  (current.valueOf() <= startTime || current.valueOf() >= endTime);
+                                            return current &&  (current.valueOf() <= startTime || current.valueOf() >= (endTime+(24*60*60*1000)));
                                         }
                                         if(endTime==""){//结束时间为空，表示永远
                                             return current &&  current.valueOf() <= startTime;
@@ -343,16 +352,14 @@ class page extends Component {
                             lineNum:1
                         });
                     },type)}
-                {type!==1?<div style={{width:20,display:"inline-block"}}/>:null}
-
-                {this.getSwitchView(this.state.lineType == 3, "多程",
+                {!this.state.isMult && type!==1?<div style={{width:20,display:"inline-block"}}/>:null}
+                {!this.state.isMult && this.getSwitchView(this.state.lineType == 3, "多程",
                     () => {
                         this.setState({
                             lineType: 3,
                             lineNum:3
                         });
                     },type)}
-                
             </div>
         );
     }

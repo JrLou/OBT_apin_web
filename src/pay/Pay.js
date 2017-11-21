@@ -740,6 +740,7 @@ class page extends Component {
                     time:json.time,
                     phone:json.phone,
                     price: json.amount,
+                    priceAll: json.totalAmount,
                 },
                 integral: {
                     point: json.point,
