@@ -21,7 +21,11 @@ class page extends Component {
     httpPostAdd(param) {//发送数据
         let success = (code, msg, json, option) => {
             message.success(msg);
-            window.app_open(this, "/Demand",{});
+            if(code == 200 && json.id){
+                window.app_open(this, "/DemandDetail", {
+                    id: json.id
+                });
+            }
         };
         let failure = (code, msg, option) => {
             message.error(msg);
