@@ -202,6 +202,22 @@ let LXDHelp = {
             return'';
         }
         return timeString.slice(0,-3);
+    },
+
+    /**
+     * 图片地址改成 七牛
+     * @param url
+     * @param width
+     * @return {string}
+     */
+    changeImgUrl(url,width) {
+        if (!url) {
+            return '';
+        }
+        let w = width ? width : 150;
+        let newUrl = `${url}?imageView2/0/w/${w}/interlace/1/q/75`;
+        return newUrl;
     }
+
 };
 module.exports = LXDHelp;

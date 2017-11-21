@@ -40,16 +40,30 @@ class page extends Component {
         this.img_login_uncheck = require("../../../../src/images/uncheck.png");
 
         let {adultCount}= this.props.state;
-        console.log(adultCount,adultCount,adultCount,adultCount,adultCount);
+        
     }
+    //===============
     vueValueLenth(value){
         if(value){
             return value.length;
         }
         return 0;
     }
-
+    vueValue(value){
+        if(!value){
+            return "";
+        }
+        return value;
+    }
+    //===============
     check() {//拼接数据
+        // let sss=true;
+        // if(sss){
+        //     alert(JSON.stringify(this.props.state));
+        //     this.setState(this.props.state);
+        //     return;
+        // }
+
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 //组装数据
@@ -110,7 +124,6 @@ class page extends Component {
 
     lineAdd() {//多程添加
         let { lineNum } = this.state;
-   //     console.log(lineNum);
         lineNum = lineNum + 1;
         this.setState({
             lineNum
@@ -118,17 +131,21 @@ class page extends Component {
         this.lineDetails();//控制航线信息
     }
 
-    vueValue(value){
-        if(!value){
-            return "";
-        }
-        return value;
-    }
+    
     lineDetails() {//航线信息
         let { lineNum, listData } = this.state;
-        const { getFieldDecorator,getFieldValue} = this.props.form;
+        const { getFieldDecorator,getFieldValue,setFieldsValue} = this.props.form;
+        let propslistData=this.props.state.listData;
         let div = [];
         for (let i = 0; i < lineNum; i++) {
+           //航线信息的信息
+           let fromCity     =this.vueValue(propslistData[i])==""?(this.vueValue(this.state.listData[i])==""?"":this.state.listData[i].fromCity) : this.vueValue(propslistData[i].fromCity);
+           let toCity       =this.vueValue(propslistData[i])==""?(this.vueValue(this.state.listData[i])==""?"":this.state.listData[i].toCity)   : this.vueValue(propslistData[i].toCity);
+       
+           let fromDateTime =this.vueValue(propslistData[i])==""?(this.vueValue(this.state.listData[i])==""?"":moment(this.state.listData[i].fromDateTime)):(this.vueValue(propslistData[i].fromDateTime)==""?"":moment(propslistData[i].fromDateTime));
+           let toDateTime   =this.vueValue(propslistData[i])==""?(this.vueValue(this.state.listData[i])==""?"":moment(this.state.listData[i].toDateTime)):(this.vueValue(propslistData[i].toDateTime)==""?"":moment(propslistData[i].toDateTime));
+        
+
             div.push(
                 <div key={i} >
                     {this.state.lineType == 3 &&
@@ -164,10 +181,10 @@ class page extends Component {
                                    ],
                                     trigger: "onChangeValue",
                                     validateTrigger: "onChangeValue",
-                                    initialValue: this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity
+                                    initialValue: fromCity
                                 })(
 
-                                    <AutoInput  style={{ borderRadius: "2px",width:"230px"}} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].fromCity}
+                                    <AutoInput  style={{ borderRadius: "2px",width:"230px"}} defaultValue={fromCity}
                                         type={"from"}
                                         placeholder={'中文／拼音／三字码'} />
                                     )}
@@ -185,10 +202,10 @@ class page extends Component {
                                     }],
                                     trigger: "onChangeValue",
                                     validateTrigger: "onChangeValue",
-                                    initialValue: this.state.listData[i] == undefined ? "" : this.state.listData[i].toCity
+                                    initialValue: toCity
                                 })(
 
-                                    <AutoInput style={{ borderRadius: "2px",width:"230px"}} defaultValue={this.state.listData[i] == undefined ? "" : this.state.listData[i].toCity}
+                                    <AutoInput style={{ borderRadius: "2px",width:"230px"}} defaultValue={toCity} 
                                         type={"to"}
                                         placeholder={'中文／拼音／三字码'} />
                                     )}
@@ -198,7 +215,8 @@ class page extends Component {
                     <Row style={{ marginBottom: this.marginBottomRow , fontSize: "14px"}}>
                         <Col span={10} >出发日期：</Col>
                         {this.state.lineType == 2 &&
-                            <Col span={10} offset={3}>返回日期：</Col>
+                            <Col span={10} offset={3}>返回日期：
+                           </Col>
                         }
                     </Row>
                     <Row >
@@ -209,38 +227,58 @@ class page extends Component {
                                         required: true,
                                         message: '请选择时间',
                                     }],
-                                    initialValue: this.state.listData[i] == undefined ? "" :(this.state.listData[i].fromDateTime==undefined || this.state.listData[i].fromDateTime==""?"": moment(this.state.listData[i].fromDateTime))
+                                    initialValue: fromDateTime
                                 })(
-                                    <DatePicker getCalendarContainer={()=>{
+                                    <DatePicker  getCalendarContainer={()=>{
                                         return this.refs.test;
                                     }}  style={{ borderRadius: "2px", minWidth: "200px", width:"230px" }} format='YYYY-MM-DD' disabledDate={(current) => {
                                        let lineType =this.state.lineType;
                                        let lineNum= this.state.lineNum;
                                        //起始时间
-                                       let startTime=Date.now();
+                                       let startTime=moment(moment(Date.now()).format("YYYY-MM-DD")).unix();
+                                       let newDate=moment(moment(new Date()).format("YYYY-MM-DD")).unix();
                                        let endTime="";
                                         if(lineType== 3){
                                             for(let j=0;j<i;j++){   //开始时间
                                                 let value=this.vueValue(getFieldValue("fromDateTime"+j));// (getFieldValue("fromDateTime"+j)==undefined||getFieldValue("fromDateTime"+j)==""||getFieldValue("fromDateTime"+j)==null)?"":getFieldValue("fromDateTime"+j);
-                                              if(value !=""){
-                                                startTime=value;
-                                              }
+                                                if(value==""){
+                                                    value=startTime;
+                                                }else
+                                                if(value !=""){
+                                                    value=moment(moment(value).format("YYYY-MM-DD")).unix();
+                                                }
+                                                if(startTime<=value){
+                                                    startTime=value;
+                                                }
                                             }
                                             for(let j=lineNum;j>i;j--){   //结尾时间
-                                                let value=this.vueValue(getFieldValue("fromDateTime"+j));//(getFieldValue("fromDateTime"+j)==undefined||getFieldValue("fromDateTime"+j)==""||getFieldValue("fromDateTime"+j)==null)?"":getFieldValue("fromDateTime"+j);
-                                              if(value !=""){
-                                                endTime=value;
-                                              }
+                                                let value=this.vueValue(getFieldValue("fromDateTime"+j));// (getFieldValue("fromDateTime"+j)==undefined||getFieldValue("fromDateTime"+j)==""||getFieldValue("fromDateTime"+j)==null)?"":getFieldValue("fromDateTime"+j);
+                                                if(value !="" && endTime==""){//结尾时间
+                                                    endTime=moment(moment(value).format("YYYY-MM-DD")).unix();
+                                                } 
+                                                if(endTime!="" && endTime<newDate){
+                                                    endTime="";
+                                                }
                                             }
+                                           
                                         }else
-                                        if(lineType== 2){
-                                            endTime=this.vueValue(getFieldValue("toDateTime"+i));
+                                        if(lineType== 2){   //往返时间
+                                            let value=this.vueValue(getFieldValue("toDateTime0"));
+                                            if(value !=""){
+                                                endTime=moment(moment(value).format("YYYY-MM-DD")).unix();
+                                            }
                                         }
                                         if(endTime!=""){
-                                            return current &&  (current.valueOf() <= startTime || current.valueOf() >= endTime);
+                                            endTime=endTime+(24*60*60);
+                                        }
+                                        //console.log("开始时间："+moment(startTime).format("YYYY-MM-DD"));
+                                       // console.log("结尾时间："+ (endTime && moment(endTime).format("YYYY-MM-DD")));
+                                        let changsVlaue=current && moment(moment(current.valueOf()).format("YYYY-MM-DD")).unix();
+                                        if(endTime!=""){
+                                            return changsVlaue <= startTime || changsVlaue >= endTime;
                                         }
                                         if(endTime==""){//结束时间为空，表示永远
-                                            return current &&  current.valueOf() <= startTime;
+                                            return changsVlaue <= startTime;
                                         }
                                     }} />
                                     )}
@@ -254,18 +292,15 @@ class page extends Component {
                                             required: true,
                                             message: '请选择时间',
                                         }],
-                                        initialValue: this.state.listData[i] == undefined ? "" :(this.state.listData[i].toDateTime==undefined || this.state.listData[i].toDateTime==""?"": moment(this.state.listData[i].toDateTime))
+                                        initialValue: toDateTime
+                                        //this.state.listData[i] == undefined ? "" :(this.state.listData[i].toDateTime==undefined || this.state.listData[i].toDateTime==""?"": moment(this.state.listData[i].toDateTime))
                                     })(
                                         <DatePicker getCalendarContainer={()=>{
                                             return this.refs.test;
                                         }} style={{ borderRadius: "2px", minWidth: "200px",width:"230px" }} format='YYYY-MM-DD' disabledDate={(current) => {
-                                            let datestart=getFieldValue("fromDateTime"+i);
-                                            if(datestart){
-                                                datestart=moment(datestart);
-                                            }else{
-                                                datestart="";
-                                            }
-                                            return current && current.valueOf() <= (datestart== "" ? Date.now():datestart);
+                                            let value=this.vueValue(getFieldValue("fromDateTime0"))==""?"":getFieldValue("fromDateTime0");
+                                            let startTime =value==""?Date.now() :value;
+                                            return current && current.valueOf() <= startTime;
                                         }} />
                                         )}
                                 </FormItem>
@@ -343,16 +378,14 @@ class page extends Component {
                             lineNum:1
                         });
                     },type)}
-                {type!==1?<div style={{width:20,display:"inline-block"}}/>:null}
-
-                {this.getSwitchView(this.state.lineType == 3, "多程",
+                {!this.state.isMult && type!==1?<div style={{width:20,display:"inline-block"}}/>:null}
+                {!this.state.isMult && this.getSwitchView(this.state.lineType == 3, "多程",
                     () => {
                         this.setState({
                             lineType: 3,
                             lineNum:3
                         });
                     },type)}
-                
             </div>
         );
     }
@@ -362,6 +395,8 @@ class page extends Component {
         let { lineType } = this.state;
         let bottomSumbit = { textAlign: "center", paddingBottom: 40, paddingTop: 20 };
         let phoneCookie =CookieHelp.getCookieInfo("phone")==undefined?"":CookieHelp.getCookieInfo("phone");
+        let {adultCount,childCount,mobile}=this.props.state;
+        phoneCookie=this.vueValue(mobile)==""?(phoneCookie):this.vueValue(mobile);
         return (
             <div className={less.content} ref={"test"}>
                 <div style={{ margin: "20px 0px" }}>
@@ -417,11 +452,12 @@ class page extends Component {
                                         message: '请输入正确的数字'
                                     }
                                 ],
-                                    initialValue: this.state.adultCount,
+                                    initialValue:this.vueValue(adultCount)!=""?this.vueValue(adultCount):this.state.adultCount,
                                 })(
+                              
                                     <div style={{ position: "relative" }}>
                                         <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px",pointerEvents:"none"}}>成人</span>
-                                        <Input style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.state.adultCount} onChange={(e) => this.handleConfirmNum("adultCount", e)} maxLength="4" />
+                                        <Input style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.vueValue(adultCount)!=""?this.vueValue(adultCount):this.state.adultCount}   maxLength="4" onChange={(e) => this.handleConfirmNum("adultCount", e)}/>
                                     </div>
                                     )}
                             </FormItem>
@@ -433,11 +469,11 @@ class page extends Component {
                                         pattern: /^[0-9]*$/,
                                         message: '请输入正确的数字'
                                     }],
-                                    initialValue: this.state.childCount,
+                                    initialValue: this.vueValue(childCount)!=""?this.vueValue(childCount):this.state.childCount,
                                 })(
                                     <div style={{ position: "relative" }}>
                                         <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px",pointerEvents:"none"}}>儿童(2～12周岁)</span>
-                                        <Input id="male" style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.state.childCount} maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)} />
+                                        <Input id="male" style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.vueValue(childCount)!=""?this.vueValue(childCount):this.state.childCount} maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)} />
                                     </div>
                                     )}
                             </FormItem>
@@ -480,7 +516,7 @@ class page extends Component {
                                         pattern: /^1[0-9]{10}$/,
                                         message: '请输入正确的11位手机号码'
                                     }],
-                                    initialValue: phoneCookie,
+                                    initialValue:phoneCookie,
                                 })(
                                     <div style={{ width: "100%" }}>
                                         <Input style={{ width: 240, height: 36, borderRadius: "2px",fontSize:"16px" }} defaultValue={phoneCookie} placeholder="输入可联系的手机号码" />

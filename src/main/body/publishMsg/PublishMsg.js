@@ -21,7 +21,11 @@ class page extends Component {
     httpPostAdd(param) {//发送数据
         let success = (code, msg, json, option) => {
             message.success(msg);
-            window.app_open(this, "/Demand",{});
+            if(code == 200 && json.id){
+                window.app_open(this, "/DemandDetail", {
+                    id: json.id
+                });
+            }
         };
         let failure = (code, msg, option) => {
             message.error(msg);
@@ -43,7 +47,7 @@ class page extends Component {
         }
         let toCity=data.toCity==undefined?"":data.toCity;
         let fromCity=data.fromCity==undefined?"":data.fromCity;
-        let isMult=data.fromCity==undefined?false:data.isMult;
+        let isMult=data.isMult==undefined?false:data.isMult;
         let adultCount=data.adultCount==undefined?"":data.adultCount;
         let childCount=data.childCount==undefined?"":data.childCount;
         let listDefa=[{fromCity:fromCity,toCity:toCity}];
@@ -73,15 +77,17 @@ class page extends Component {
                     isMult：是否显示多层false 显示，true 不显示
                     listData:[{fromCity:"from",toCity:"to",toDateTime:"",fromDateTime:""}] 航线的线路与时间
                 */}
-                {/* <Button  onClick={() => {
-                    let data ={lineType:"3",toCity:"杭州",fromCity:"北京",adultCount:"1",childCount:"1",lineNum:3,
+                 {/* <Button  onClick={() => {
+                    let data ={lineType:"3",toCity:"杭州",fromCity:"北京",adultCount:"1",childCount:"1",lineNum:4,
                     isMult:false,listData:[
-                        {fromCity:"from",toCity:"to",toDateTime:"",fromDateTime:""},
-                        {fromCity:"from1",toCity:"to1",toDateTime:"",fromDateTime:""}
+                        {fromCity:"杭州1",toCity:"北京1",toDateTime:"2017-11-11",fromDateTime:"2017-11-11"},
+                        {fromCity:"杭州2",toCity:"北京2",toDateTime:"2017-11-12",fromDateTime:"2017-11-12"},
+                        {fromCity:"杭州3",toCity:"北京3",toDateTime:"2017-11-20",fromDateTime:"2017-11-20"},
+                        {fromCity:"杭州4",toCity:"北京4",toDateTime:"2017-11-30",fromDateTime:"2017-11-30"}
                     ]};
                     CookieHelp.saveCookieInfo("publishMsgCookie",data);
                     window.app_open(this, "/PublishMsg",{});
-                }
+                } 
                 }> 
                     调整
                 </Button>  */}
