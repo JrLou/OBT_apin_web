@@ -59,9 +59,9 @@ class page extends Component {
     }
 
     /**
-     * @param param 请求参数(根据搜索框与列表数据提取,不建议此外修改)
+     * @param par 请求参数(根据搜索框与列表数据提取,不建议此外修改)
      */
-    loadData(par) {
+    loadData(par = {}) {
         // arrCity	到达城市名	string
         // depCity	出发城市名	string
         // flightType	航程类型：0、未定义；1、单程；2、往返；3、多程	number
