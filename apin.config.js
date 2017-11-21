@@ -114,7 +114,7 @@ module.exports = {
 
             },
             release: {
-                useAnalyzer:false,
+                useAnalyzer:true,
                 config: {
                     output: {
                         path: path.resolve(__dirname,"./public/project"),

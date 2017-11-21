@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-01 14:09:48 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-18 15:33:01
+ * @Last Modified time: 2017-11-21 15:47:36
  */
 
 import React, { Component } from 'react';
@@ -17,7 +17,8 @@ class SignUpView extends Component {
             visible: false,
             mode: 0, // 弹框类型 对应title索引
             title: ['登录账号', '账户注册', '忘记密码'],
-            callback: null
+            callback: null,
+            key: (Math.random() * 100000).toFixed()
         };
         this.showModal = this.showModal.bind(this);
         this.handleOk = this.handleOk.bind(this);
@@ -26,12 +27,12 @@ class SignUpView extends Component {
     }
 
     render() {
-        const { visible, confirmLoading, title, mode, callback } = this.state;
+        const { visible, confirmLoading, title, mode, callback, key } = this.state;
         return (
             <Modal
                 title={title[mode]}
                 visible={visible}
-                // key={(Math.random()*100000).toFixed()}
+                key={key}
                 onCancel={this.handleCancel}
                 footer={null}
                 style={{ width: '100px' }}
@@ -39,9 +40,12 @@ class SignUpView extends Component {
                 afterClose={() => {
                     const user = CookieHelp.getUserInfo();
                     const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
-                    if (user && user.Authorization && isLogin && callback && (typeof(callback) == 'function')) {
+                    if (user && user.Authorization && isLogin && callback && (typeof (callback) == 'function')) {
                         callback();
                     }
+                    this.setState({
+                        key: key + 1
+                    });
                 }}
             >
                 <Forms

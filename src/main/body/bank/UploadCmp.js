@@ -17,12 +17,12 @@ class UploadCmp extends Component {
    }
 
    isImageTypeOk(file) {
-      if (!/image\/\w+/.test(file.type)) {
+      if (!/^\w+((.jpeg)|(.png)|(.bmp))$/.test(file.type)) {
          message.warning("凭证必须为图片格式");
          return false;
       }
-      if (file.size >= 1024000 * 2) {
-         message.warning("图片过大，最大允许2M。");
+      if (file.size >= 1024000 * 4) {
+         message.warning("图片过大，最大允许4M。");
          return false;
       }
       return true;
@@ -47,7 +47,7 @@ class UploadCmp extends Component {
                name: data.filename,
                status: 'done',
                url: data.url,
-               thumbUrl: data.url,
+               thumbUrl: this.transform2thumbUrl(data.url),
             };
             let _backurl = {
                url: currFile.url,
@@ -70,11 +70,23 @@ class UploadCmp extends Component {
       this.setState({previewVisible: false});
    }
 
+   transform2thumbUrl(url){
+      //具体可详见“七牛”的API
+      return url + "?imageView2/2/w/368/h/214/interlace/1/q/99";
+   }
+
    handlePreview(file) {
+      console.log("~~~~~file~~~~~");
+      console.log(file);
       this.setState({
-         previewImage: file.url || file.thumbUrl,
+         previewImage: "",
          previewVisible: true,
+      },()=>{
+         this.setState({
+            previewImage: file.url
+         });
       });
+
    }
 
    deepClone(obj) {
@@ -98,7 +110,7 @@ class UploadCmp extends Component {
    render() {
       const {previewVisible, previewImage, fileList} = this.state;
       const upLoadingView = (<div>
-         <Spin spinning={true}></Spin>
+         <Spin spinning={true} style={{marginTop:"20px"}}></Spin>
          <div className={less.upload_text_line2}>上传中</div>
       </div>);
       const beforeUploadingView = (<div>
@@ -115,7 +127,7 @@ class UploadCmp extends Component {
       return (
          <div className="clearfix forUploadStyle">
             <Upload
-               accept=".jpg,.png,"
+               accept=".jpg,.png,.bmp"
                action="/Upload"
                listType="picture-card"
                fileList={fileList}

@@ -8,6 +8,7 @@ import Reset from '../component/SignView/Reset';
 import md5 from 'md5';
 
 const FormItem = Form.Item;
+const { TextArea } = Input;
 
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -29,7 +30,7 @@ const formItemLayout = {
 };
 const formTailLayout = {
     // labelCol: { span: 4 },
-    wrapperCol: { span: 8, offset: 6 },
+    wrapperCol: { span: 18, offset: 6 },
 };
 
 const Title = (props) => {
@@ -185,9 +186,15 @@ class AccountForm extends Component {
                             <FormItem prefixCls="my-ant-form"
                                 {...formItemLayout}
                                 label="公司名称"
+                                validateStatus={isFieldTouched('companyName') && getFieldError('companyName') ? 'error' : ''}
+                                help={isFieldTouched('companyName') && getFieldError('companyName') || ''}
                             >
                                 {getFieldDecorator('companyName', {
-                                    initialValue: companyName
+                                    initialValue: companyName,
+                                    rules: [{
+                                        max: 20,
+                                        message: '公司名称最长不能超过20'
+                                    }]
                                 })(
                                     <Input prefixCls="my-ant-input" />
                                     )}
@@ -201,8 +208,8 @@ class AccountForm extends Component {
                                 {getFieldDecorator('contactName', {
                                     initialValue: contactName,
                                     rules: [{
-                                        pattern: /^[\u4e00-\u9fa5]{2,6}$|^[a-zA-Z]{2,12}$/,
-                                        message: '请输入姓名(汉字2-6个字或英文2-12个字符)'
+                                        max: 20,
+                                        message: '联系人最长不能超过20'
                                     }],
                                 })(
                                     <Input prefixCls="my-ant-input" />
@@ -219,15 +226,24 @@ class AccountForm extends Component {
                                         loadData={this.loadData}
                                         // onChange={this.onChange}
                                         changeOnSelect
-                                        style={{ marginBottom: '10px' }}
                                         placeholder={Array.isArray(zone) && zone.length > 0 ? zone.join('/') : "请选择地区"}
                                     />
                                     )}
+                            </FormItem>
+                            <FormItem prefixCls="my-ant-form"
+                                {...formTailLayout}
+                                validateStatus={isFieldTouched('address') && getFieldError('address') ? 'error' : ''}
+                                help={isFieldTouched('address') && getFieldError('address') || ''}
+                            >
 
                                 {getFieldDecorator('address', {
-                                    initialValue: address
+                                    initialValue: address,
+                                    rules: [{
+                                        max: 50,
+                                        message: '最多输入50位'
+                                    }],
                                 })(
-                                    <Input prefixCls="my-ant-input" placeholder="请输入详细地址" />
+                                    <TextArea rows={4} placeholder="请输入详细地址" />
                                     )}
                             </FormItem>
                             <FormItem prefixCls="my-ant-form" {...formTailLayout}>

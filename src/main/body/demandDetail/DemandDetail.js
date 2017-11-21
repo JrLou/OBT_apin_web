@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-import {Button, Modal, message} from "antd";
+import {Button, message,Tooltip} from "antd";
 import less from "./DemandDetail.less";
 import CellNewFlight from "../content/cell/CellNewFlight";
 import {HttpTool, CookieHelp} from "../../../../lib/utils/index.js";
@@ -148,7 +148,7 @@ class page extends Component {
             <div className={less.top}>
 
                 {data.flightType === 3 ? this.getMultiPass(data.demandStatus, data) : this.getTop(data.demandStatus, data)}
-                {data.demandStatus === 4 ? this.getCellNewFlight(data && data.plans ? data.plans : []) : null}
+                {data.demandStatus === 4 ? this.getCellNewFlight(data && data.plans ? data.plans : [], data.flightType) : null}
                 {data.demandStatus === 1 || data.demandStatus === 2 ? this.getMessage("预计在30分钟内为您处理需求") :
                     (data.demandStatus === 5 ? this.getMessage("您的需求已经关闭，如有疑问，请联系客服／出行日期已超过，需求关闭") : null)}
                 {data.demandStatus === 5 ? this.getCloseReason(data) : null}
@@ -174,7 +174,7 @@ class page extends Component {
             case 1:{
                 this.cancelDemand();
             }
-            break;
+                break;
             case 2:{
                 this.deleteDemand();
             }
@@ -187,23 +187,23 @@ class page extends Component {
                 break;
         }
     }
-    getCellNewFlight(data = {}) {
+    getCellNewFlight(data = {}, flightType) {
         return (
             <div className={less.cellNewFlightLayout}>
                 <h2 className={less.title}>航班信息</h2>
                 <div className={less.line}/>
                 <div className={less.cellNewFlight}>
-                    {this.createViewCell(data || [])}
+                    {this.createViewCell(data || [],flightType)}
                 </div>
             </div>
         );
     }
 
-    createViewCell(dataArr) {
+    createViewCell(dataArr,flightType) {
         return dataArr.map((data, index) => {
             let resultData = getFlightData(data.voyages, data.freeBag, data.weightLimit);
 
-            return (<CellNewFlight key={index} dataSource={resultData} flightType={dataArr.flightType}/>);
+            return (<CellNewFlight key={index} dataSource={resultData} flightType={flightType}/>);
         });
     }
 
@@ -365,7 +365,6 @@ class page extends Component {
                     {this.getDemandButton(type)}
                     <div className={less.tripLayout}>
                         {this.getTripList(data)}
-                        <div style={{clear: "both"}}/>
                     </div>
 
 
@@ -394,7 +393,7 @@ class page extends Component {
                         }
                         <div className={less.programmeLayout}>方案{NumTransToTextHelp.getValue(index + 1)}</div>
 
-                        <div style={{marginTop: 20}} className={less.flightInfoLayout}>
+                        <div className={less.flightInfoLayout}>
                             <div className={less.flightButtonLeftLayout}>
                                 <CellNewFlight key={index} dataSource={resultData} flightType={flightType}/>
                             </div>
@@ -482,7 +481,7 @@ class page extends Component {
                                 <div className={less.voyageContent}>
                                     <div className={type === 5 ? less.voyageGray : less.voyage}
                                          style={{
-                                             paddingLeft: 54,
+                                             paddingLeft: 25,
                                              paddingRight: 10
                                          }}>{data && data.cityDep ? data.cityDep : "暂无"}
                                     </div>
@@ -524,11 +523,11 @@ class page extends Component {
                             <font
                                 className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.dateDep ? data.dateDep : "暂无"}</font>
                         </div>
-                        <div>
+                        {data && data.dateRet?<div>
                             <font className={less.mainTitle}>返程日期：</font>
                             <font
-                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data && data.dateRet ? data.dateRet : "暂无"}</font>
-                        </div>
+                                className={type === 5 ? less.mainContentClose : less.mainContent}>{data.dateRet}</font>
+                        </div>:null}
                         <div className={less.remarkLayout}>
                             <div className={less.remarkTitle}>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</div>
                             <div className={type === 5 ?less.remarkContentClose:less.remarkContent}>{data && data.remark ? data.remark : "暂无"}</div>
@@ -559,31 +558,31 @@ class page extends Component {
     getTripItem(data = {}, index) {
         if (!data)return null;
 
-        let img = require('../../../images/oneWay.png');
-
         return (
             <div key={index}
                  className={less.cells}
             >
                 <div className={less.bottom}>
                     <div className={less.bottomLeft}>
-
-                        <div className={less.table}>
-                            <div className={less.text}>{data && data.cityDep ? data.cityDep : "暂无"}</div>
-
-
-                            <div className={less.text2}>
-                                <div className={less.icon}
-                                     style={{
-                                         backgroundImage: "url(" + img + ")"
-                                     }}
-                                >
-                                </div>
-                            </div>
-
-
-                            <div className={less.text}>{data && data.cityArr ? data.cityArr : "暂无"}</div>
+                        <div className={less.text}>
+                            {(data && data.cityDep&&data.cityDep.length>2)?<Tooltip placement="bottom" title={data.cityDep}>
+                                {data && data.cityDep ? data.cityDep : "暂无"}
+                            </Tooltip>:(data && data.cityDep ? data.cityDep : "暂无")}
                         </div>
+                        <div className={less.text2}>
+                            <div className={less.icon}></div>
+                        </div>
+
+                        <div className={less.text}>
+                            {(data && data.cityArr&&data.cityArr.length>2)?<Tooltip placement="bottom" title={data.cityArr}>
+                                {data && data.cityArr ? data.cityArr : "暂无"}
+                            </Tooltip>:(data && data.cityArr ? data.cityArr : "暂无")}
+                        </div>
+
+
+
+
+
                     </div>
                     <div className={less.bottomRight}>
                         <div className={less.date}>{"行程" + (index + 1)}</div>
@@ -612,22 +611,22 @@ class page extends Component {
                         </div>
                         <div>
                             <font className={less.mainTitle}>成人价格：</font>
-                            <font className={less.mainContent}>{data && data.adultPrice ? data.adultPrice : "0"}</font>
+                            <font className={less.mainContent}>{data && data.adultPrice ? ("¥"+data.adultPrice) : "0"}</font>
                             <font style={{
                                 color: "#333",
                                 fontSize: 12,
                                 marginLeft: 8
-                            }}>x{data && data.adultCount ? data.adultCount : "0"}</font>
+                            }}>x{data && data.adultCount ? (data.adultCount+"人") : "0"}</font>
                         </div>
                         <div>
                             <font className={less.mainTitle}>儿童价格：</font>
                             <font
-                                className={less.mainContent}>{data && data.childPrice ? data.childPrice : "0"}</font>
+                                className={less.mainContent}>{data && data.childPrice ? ("¥"+data.childPrice) : "0"}</font>
                             <font style={{
                                 color: "#333",
                                 fontSize: 12,
                                 marginLeft: 8
-                            }}>x{data && data.childCount ? data.childCount : "0"}</font>
+                            }}>x{data && data.childCount ? (data.childCount+"人") : "0"}</font>
                         </div>
                     </div>
                     <div className={less.moneyLayout}>

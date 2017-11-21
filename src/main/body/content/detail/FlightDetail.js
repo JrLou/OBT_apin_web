@@ -31,16 +31,21 @@ class page extends Component {
             upData:0,
             adultNum:1,
             childNum:0,
-            shouldFixed:true,  //底部支付条是否应该固定定位
+            shouldFixed:false,  //底部支付条是否应该固定定位
         };
     }
     componentWillReceiveProps(nextProps) {
 
     }
 
-    upView(){
+    upView(callBack){
         this.setState({
             upData:this.state.upData++
+        },()=>{
+            if (callBack){
+                callBack();
+            }
+            window.scrollTo(0,1);
         });
     }
 
@@ -56,8 +61,11 @@ class page extends Component {
         // console.warn('启动监听---------------------');
         // log(markDiv);
 
+        log(parseInt(window.getComputedStyle(rootDiv,'').height));
+        log(parseInt(document.body.clientHeight));
+        log("----------------------------gyw---");
         //支付条定位初始化  如果文档高度小于屏幕高度，则不固定定位
-        if(parseInt(window.getComputedStyle(rootDiv,'').height)<parseInt(document.body.clientHeight)){
+        if(parseInt(window.getComputedStyle(markDiv,'').off)<parseInt(document.body.clientHeight)){
             this.setState({
                 shouldFixed:false,
             });
@@ -138,8 +146,11 @@ class page extends Component {
 
         this.cityArr = json&&json.cityArr?json.cityArr:"";
         this.cityDep = json&&json.cityDep?json.cityDep:"";
-        let voyage = json&&json.plans?json.plans:{};
-        this.flightType = voyage.flightType;
+        let plans = json&&json.plans?json.plans:{};
+        this.flightType = plans.flightType;
+        let voyages = plans.voyages?plans.voyages:[];
+        this.depDate = voyages[0]&&voyages[0].depDate?voyages[0].depDate:"";
+        this.arrDate = voyages[1]&&voyages[1].depDate?voyages[1].depDate:"";
 
         let member = json.member?json.member:{};
         this.props.form.setFieldsValue({
@@ -148,7 +159,9 @@ class page extends Component {
         this.props.form.setFieldsValue({
             customerName:member.contactName?member.contactName:""
         });
-        this.upView();
+        this.upView(()=>{
+            this.listenScroll();
+        });
     }
 
     /**
@@ -163,6 +176,7 @@ class page extends Component {
                 for(var i in jsonParam){
                     param[i] = jsonParam[i];
                 }
+
                 this.loadingView.refreshView(true);
                 var success = (code, msg, json, option) => {
                     this.loadingView.refreshView(false,()=>{
@@ -203,9 +217,15 @@ class page extends Component {
                 lineNum:1,
                 adultCount:this.state.adultNum,
                 childCount:this.state.childNum,
+                mobile:this.props.form.getFieldValue("mobile"),
                 remark:"",
                 isMult:this.flightType&&(this.flightType<3),
-                listData:[{fromCity:this.cityArr,toCity:this.cityDep}]
+                listData:[{
+                    fromCity:this.cityDep,
+                    toCity:this.cityArr,
+                    fromDateTime:this.depDate,
+                    toDateTime:this.arrDate,
+                }]
             };
             this.myModalRequire.showModal(true,
                 {
@@ -240,8 +260,7 @@ class page extends Component {
 
     render() {
         let {childNum,adultNum}=this.state;
-        let totolNum = childNum?childNum:0+adultNum?adultNum:0;
-
+        let totolNum = parseInt(childNum?childNum:0)+parseInt(adultNum?adultNum:0);
         let totalPrice = (this.childPrice*childNum*100+this.adultPrice*adultNum*100)/100;
         let depositAmount =(this.depositAmount*(childNum+adultNum)*100)/100;
         const {getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
@@ -307,10 +326,10 @@ class page extends Component {
                                                   this.onChangeNumVal(true,value);
                                               }}/>)}
                                 </FormItem>
-                                <div className={css.i_subtitle}>
+                                {this.adultPrice?<div className={css.i_subtitle}>
                                     <span style={{fontSize:"12px"}}>{"¥"}</span>
                                     {this.adultPrice}
-                                </div>
+                                </div>:null}
                             </div>
 
 
@@ -348,10 +367,11 @@ class page extends Component {
                                                }}/>
                                     )}
                                 </FormItem>
-                                <div className={css.i_subtitle}>
+                                {this.childPrice?<div className={css.i_subtitle}>
                                     <span style={{fontSize:"12px"}}>{"¥"}</span>
-                                    {this.childPrice}
-                                </div>
+                                        {this.childPrice}
+                                </div>:null}
+
                             </div>
                         </div>
                         <div className={css.refOrderCellItem}>
@@ -383,9 +403,6 @@ class page extends Component {
                                     rules: [{
                                         required: true,
                                         message: '姓名不能为空',
-                                    },{
-                                        pattern: /^[\u4e00-\u9fa5]{2,6}$|^[a-zA-Z]{2,12}$/,
-                                        message: '请输入姓名(汉字2-6个字或英文2-12个字符)'
                                     }],
                                 })(<Input style={{width:"220px"}}
                                           maxLength="20"
@@ -393,7 +410,6 @@ class page extends Component {
                                 }
                             </FormItem>
                         </div>
-
 
                         <div className={css.i_cell}>
                             <div className={css.i_title}>{"手机号码:"}</div>
@@ -443,6 +459,10 @@ class page extends Component {
             </div>);
         return div;
     }
+// {
+//     pattern: /^[\u4e00-\u9fa5]{2,6}$|^[a-zA-Z]{2,12}$/,
+//     message: '请输入姓名(汉字2-6个字或英文2-12个字符)'
+// }
 
     createList(voyagesObj){
         let itemDiv = (
@@ -522,7 +542,6 @@ class page extends Component {
                 mobile:value
             });
         }else {
-            alert(1);
             this.props.form.setFieldsValue({
                 mobile:""
             });

@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-18 16:38:04
+ * @Last Modified time: 2017-11-21 10:53:02
  */
 
 import React, { Component } from 'react';
@@ -116,13 +116,16 @@ class AccountLoginForm extends React.Component {
                     if (this.props.callback && typeof (this.props.callback) === 'function')
                         this.props.callback(1);
                     this.props.onOK();
-                }).catch((error) => {
+                }).catch((msg) => {
                     setTimeout(() => {
                         this.setState({
                             loading: false
                         });
                     }, 1000);
-                    message.error(error);
+                    if(msg == '用户不存在'){
+                        msg = '当前账号未注册';
+                    }
+                    message.error(msg);
                 });
             }
         });
@@ -169,7 +172,7 @@ class MsgLoginForm extends React.Component {
                 >
                     {getFieldDecorator('account', {
                         validateFirst: true,
-                        validateTrigger: 'onBlur',
+                        // validateTrigger: 'onBlur',
                         rules: [{ required: true, message: '请输入11位手机号' },
                         { len: 11, message: '请输入11位手机号' },
                         { pattern: /^(1)\d{10}$/, message: '手机号格式不正确！' }
@@ -264,6 +267,9 @@ class MsgLoginForm extends React.Component {
             this.data = data;
             this.refs.code.autoTime(60);
         }).catch((msg) => {
+            if(msg == '用户不存在'){
+                msg = '当前手机号未注册';
+            }
             message.error(msg);
         });
 
@@ -290,6 +296,9 @@ class MsgLoginForm extends React.Component {
                 }).catch((msg) => {
                     if (msg == '密码错误') {
                         msg = '验证码错误';
+                    }
+                    if(msg == '用户不存在'){
+                        msg = '当前手机号未注册';
                     }
                     setTimeout(() => {
                         this.setState({

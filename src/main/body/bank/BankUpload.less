@@ -127,13 +127,29 @@
                      margin-top: 90px;
                   }
                }
-               .ant-upload-list-picture-card .ant-upload-list-item-actions a:first-child {
+               .ant-upload-list-picture-card .ant-upload-list-item-actions{
                   //display: none;
+                  transform: translate(0, 0);
+                  left: 39%;
+                  top: 44%;
                }
                .ant-upload-list-picture-card .ant-upload-list-item-actions .anticon-eye-o,
                .ant-upload-list-picture-card .ant-upload-list-item-actions .anticon-delete {
                   font-size: 30px;
                   padding-right: 30px;
+               }
+
+               //设置缩略图居中不变形
+               .ant-upload-list-picture-card .ant-upload-list-item-thumbnail,
+               .ant-upload-list-picture-card .ant-upload-list-item-thumbnail img{
+                  width: auto;
+                  height: auto;
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  bottom: 0;
+                  margin: auto;
                }
 
             }

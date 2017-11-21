@@ -31,52 +31,52 @@ class CellTransFlight extends Component {
                     {!isLast?<div className={css.typeLine}></div>:null}
                 </div>
                 <div className={css.cellLine}>
-                    <div className={css.table}>
-                        <div className={css.myCell}>
-                            <div className={css.floatDiv}>
-                                <div className={css.date_super}>
-                                    <div className={css.date}>{data.arrDate}</div>
+                    <div className={css.myCell}>
+                        <div className={css.floatDiv}>
+                            <div className={css.date_super}>
+                                <div className={css.date}>
+                                    <span >{(data.depDate?data.depDate.substring(5,data.depDate.length):"")+" "}</span>
+                                    <span style={{fontWeight:"bold",}}>{data.depTime}</span>
                                 </div>
-                                <div className={css.placeLine_super}>
-                                    {data.depAirport&&data.depAirport.length>7?
-                                        (<div className={css.placeLineItem}>
-                                            <Tooltip placement="bottomLeft" title={data.depAirport}>{data.depAirport}</Tooltip>
-                                        </div>): (<div className={css.placeLineItem}>{data.depAirport}</div>)
-                                    }
-                                </div>
-                                <div className={css.company_super}>
-                                    <div className={css.logoCompany_super}>
-                                        <div className={css.logoBg}>
-                                            <img className={css.logo}
-                                                 src ={data.logo?data.logo:require("../../../../images/logo.png")}/>
-                                        </div>
-                                        <div className={css.logoCompany}>
-                                            <div className={css.logoCompanyText}>{data.compName}</div>
-                                        </div>
+                            </div>
+                            <div className={css.placeLine_super}>
+                                {data.depAirport&&data.depAirport.length>7?
+                                    (<div className={css.placeLineItem}>
+                                        <Tooltip placement="bottomLeft" title={data.depAirport}>{data.depAirport}</Tooltip>
+                                    </div>): (<div className={css.placeLineItem}>{data.depAirport}</div>)
+                                }
+                            </div>
+                            <div className={css.company_super}>
+                                <div className={css.logoCompany_super}>
+                                    <div className={css.logoBg}>
+                                        <img className={css.logo}
+                                             src ={data.logo?data.logo:require("../../../../images/logo.png")}/>
+                                    </div>
+                                    <div className={css.logoCompany}>
+                                        <div className={css.logoCompanyText}>{data.compName}</div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div className={css.floatDiv}>
-                                <div className={css.date_super}>
-                                    <div className={css.date}>
-                                        <span >{"11-05"+" "}</span>
-                                        <span style={{fontWeight:"bold",}}>{"12:25"}</span>
-                                    </div>
-                                </div>
-                                <div className={css.placeLine_super}>
-                                    <div className={css.placeLineItem}>{data.arrAirport}</div>
-                                    {/*<div style={{fontSize:"22px",textAlign:"right"}}>{data.depTime}</div>*/}
-                                </div>
-                                <div className={css.company_super}>
-                                    <div className={css.logoCompanyText}>{data.num}</div>
+                        <div className={css.floatDiv}>
+                            <div className={css.date_super}>
+                                <div className={css.date}>
+                                    <span >{(data.arrDate?data.arrDate.substring(5,data.arrDate.length):"")+" "}</span>
+                                    <span style={{fontWeight:"bold",}}>{data.arrTime}</span>
                                 </div>
                             </div>
-
+                            <div className={css.placeLine_super}>
+                                <div className={css.placeLineItem}>{data.arrAirport}</div>
+                                {/*<div style={{fontSize:"22px",textAlign:"right"}}>{data.depTime}</div>*/}
+                            </div>
+                            <div className={css.company_super}>
+                                <div className={css.logoCompanyText}>{data.num}</div>
+                            </div>
                         </div>
-                        <div className={css.totalTime}>
-                            <div className={css.totalTimeText}>{"约"+data.flightTime}</div>
-                        </div>
+                    </div>
+                    <div className={css.totalTime}>
+                        <div className={css.totalTimeText}>{"约"+data.flightTime}</div>
                     </div>
                 </div>
 
@@ -88,8 +88,8 @@ class CellTransFlight extends Component {
                     </div>
                     <div className={css.transText}>
                         <span>{"中转"}</span>
-                        <span style={{color:"#29A6FF"}}>{" 上海 "}</span>
-                        <span>{"约"+data.flightTime}</span>
+                        <span style={{color:"#29A6FF"}}>{" "+data.cityArr+" "}</span>
+                        <span>{data.transTime?("约"+data.transTime):""}</span>
                     </div>
                 </div>:null}
 

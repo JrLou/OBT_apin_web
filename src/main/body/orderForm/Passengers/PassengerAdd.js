@@ -32,6 +32,7 @@ class PassengerAdd extends Component{
             data:{
                 name:'',
                 gender:1,
+                passengerType:1,
             }
         };
 
@@ -53,10 +54,11 @@ class PassengerAdd extends Component{
         if(defaultData){
             //修改
             newData.name = defaultData.name?defaultData.name:'';
-            newData.gender = (defaultData.gender==0)?0:1;
+            newData.gender = (defaultData.gender==0)?0:1;                       //默认为男
+            newData.passengerType = (defaultData.passengerType==2)?2:1;         //默认为成人
             newData.nation = defaultData.nation?defaultData.nation:'';
             newData.birthday = defaultData.birthday?defaultData.birthday:null;
-            newData.credType = defaultData.credType?defaultData.credType:1;
+            newData.credType = defaultData.credType?defaultData.credType:1;     //默认为国内
             newData.credNumber = defaultData.credNumber?defaultData.credNumber:'';
             newData.expireTime = defaultData.expireTime?defaultData.expireTime:null;
             newData.issuePlace = defaultData.issuePlace?defaultData.issuePlace:'';
@@ -64,6 +66,7 @@ class PassengerAdd extends Component{
         }else{
             //新增
             newData.gender = 1;
+            newData.passengerType = 1;
             newData.credType = nextProps.lineType?nextProps.lineType:1;
         }
         this.setState({
@@ -111,6 +114,7 @@ class PassengerAdd extends Component{
                       let reg = /^[a-zA-Z\u4e00-\u9fa5 .]{0,20}$/;
                       if(reg.test(val)){
                           this.setData('name',val);
+                          this.setTestState('name',{state:true,msg:'请输入姓名'});
                       }
                   }}
                   onBlur={(e)=>{
@@ -143,8 +147,31 @@ class PassengerAdd extends Component{
                         this.setData('gender',val);
                     }}
                 >
-                    <Radio value={1}>男</Radio>
-                    <Radio value={0}>女</Radio>
+                    <Radio value={1} className={css.radioStyle}>男</Radio>
+                    <Radio value={0} className={css.radioStyle}>女</Radio>
+                </RadioGroup>
+            </div>
+        );
+    }
+
+    /**
+     * 获得乘机人类型选项
+     * @returns {XML}
+     */
+    getPassengerType(){
+        return(
+            <div>
+                {this.getItemTitle('乘机人类型：')}
+                <RadioGroup
+                    value={this.state.data.passengerType}
+                    style={{marginTop:'5px'}}
+                    onChange={(e)=>{
+                        let val = e.target.value;
+                        this.setData('passengerType',val);
+                    }}
+                >
+                    <Radio value={1} className={css.radioStyle}>成人</Radio>
+                    <Radio value={2} className={css.radioStyle}>儿童</Radio>
                 </RadioGroup>
             </div>
         );
@@ -167,6 +194,7 @@ class PassengerAdd extends Component{
                         let reg = /^[a-zA-Z\u4e00-\u9fa5 .]{0,20}$/;
                         if(reg.test(val)){
                             this.setData('nation',val);
+                            this.setTestState('nation',{state:true,msg:'请输入国籍'});
                         }
                     }}
                     onBlur={(e)=>{
@@ -199,7 +227,11 @@ class PassengerAdd extends Component{
                     value={this.state.data.birthday?moment(this.state.data.birthday, 'YYYY-MM-DD'):null}
                     disabledDate={this.disabledTimeForBirth.bind(this)}
                     onChange={(date,dateString)=>{
+                        let birth = dateString.slice(0,4);
+                        //判断成人儿童
+                        this.setType(birth);
                         this.setData('birthday',dateString);
+                        this.setTestState('birthday',{state:true,msg:'请输入出生年月'});
                     }}
                 />
                 <div className={this.state.testState.birthday.state?css.hideMsg:css.errorMsg}>
@@ -245,19 +277,25 @@ class PassengerAdd extends Component{
                     className={css.inputStyle}
                     onChange={(e)=>{
                         let value = e.target.value;
-                        let regIDCard = /^[0-9Xx]{0,40}$/;
-                        let regOther = /^[0-9a-zA-Z\<\>\-\/\－\－]{0,40}$/;
+                        let regIDCard = /^[0-9Xx]{0,30}$/;
+                        let regOther = /^[0-9a-zA-Z\<\>\-\/\－\－]{0,30}$/;
                         let reg = isSimple?regIDCard:regOther;
                         if(reg.test(value)){
                             this.setData('credNumber',value);
+                            this.setTestState('credNumber',{state:true,msg:'请输入正确的证件号'});
                         }
                     }}
                     onBlur={(e)=>{
                         let value = e.target.value;
                         let regIDCard = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
-                        let regOther = /^[0-9a-zA-Z\<\>\-\/\－\－]{0,40}$/;
+                        let regOther = /^[0-9a-zA-Z\<\>\-\/\－\－]{0,30}$/;
                         let reg = isSimple?regIDCard:regOther;
-                        this.setTestState('credNumber',{state:reg.test(value),msg:'请输入正确的证件号'});
+                        let regResult = reg.test(value);
+                        if(regResult&&isSimple){
+                            //从身份证号中得到出生日期,并设置乘机人类型
+                            this.setPassengerType(value);
+                        }
+                        this.setTestState('credNumber',{state:regResult,msg:'请输入正确的证件号'});
                     }}
                 />
                 <div className={this.state.testState.credNumber.state?css.hideMsg:css.errorMsg}>
@@ -281,6 +319,7 @@ class PassengerAdd extends Component{
                     disabledDate={this.disabledTimeForExpire.bind(this)}
                     onChange={(date,dateString)=>{
                         this.setData('expireTime',dateString);
+                        this.setTestState('expireTime',{state:true,msg:'请输入证件有效期'});
                     }}
                 />
                 <div className={this.state.testState.expireTime.state?css.hideMsg:css.errorMsg}>
@@ -304,6 +343,7 @@ class PassengerAdd extends Component{
                         let reg = /^[a-zA-Z\u4e00-\u9fa5 .]{0,20}$/;
                         if(reg.test(val)){
                             this.setData('issuePlace',val);
+                            this.setTestState('issuePlace',{state:true,msg:'请输入签发地'});
                         }
                     }}
                     onBlur={(e)=>{
@@ -381,17 +421,16 @@ class PassengerAdd extends Component{
                     <div className={css.modBody}>
                         <div className={css.modTitle}>{isAdd?'新增乘机人':'修改乘机人'}</div>
                         <div className={css.modContent}>
-                            <div className={isSimple?css.contentOneLine:css.contentItem}>
+                            <div className={css.contentItem}>
                                 {this.getNameInput()}
                             </div>
-                            <div className={itemStyle}>
-                                {this.getGenderSel()}
-                            </div>
-                            <div className={itemStyle}>
-                                {this.getNationInput()}
-                            </div>
-                            <div className={itemStyle}>
-                                {this.getBirthDate()}
+                            <div className={css.contentItem}>
+                                <div className={css.halfItemLf}>
+                                    {this.getPassengerType()}
+                                </div>
+                                <div className={isSimple?css.hiddenItem:css.halfItemGt}>
+                                    {this.getGenderSel()}
+                                </div>
                             </div>
                             <div className={css.contentItem}>
                                 {this.getCredType()}
@@ -400,10 +439,16 @@ class PassengerAdd extends Component{
                                 {this.getCredNum(isSimple)}
                             </div>
                             <div className={itemStyle}>
-                                {this.getExpireTime()}
+                                {this.getNationInput()}
+                            </div>
+                            <div className={itemStyle}>
+                                {this.getBirthDate()}
                             </div>
                             <div className={itemStyle}>
                                 {this.getIssuePlace()}
+                            </div>
+                            <div className={itemStyle}>
+                                {this.getExpireTime()}
                             </div>
                         </div>
                         <div className={css.modFooter}>
@@ -456,6 +501,37 @@ class PassengerAdd extends Component{
      */
     isLoading() {
         return this.state.loading;
+    }
+
+    /**
+     * 从身份证号取得出生日期并设置乘机人类型
+     * @param card
+     */
+    setPassengerType(card){
+        if(!card){
+            return;
+        }
+        if(card.length == 15){
+            //15位的身份证,必定是成人
+            this.setData('passengerType',1);
+        }else if(card.length == 18){
+            //18位的身份证
+            let birth = card.slice(6,10);
+            this.setType(birth);
+        }
+    }
+
+    setType(birth){
+        if(birth){
+            let currentDate = new Date;
+            let currentYear = currentDate.getFullYear();
+            let distance = currentYear - birth;
+            if(distance<13){
+                this.setData('passengerType',2);
+            }else{
+                this.setData('passengerType',1);
+            }
+        }
     }
 
     /**
@@ -531,14 +607,17 @@ class PassengerAdd extends Component{
         let newData = this.state.data;
         let parames = {};
         if(newData.credType == 1){
+            //使用身份证
             parames = {
                 orderId:this.orderId,
                 id:newData.id,
                 name:newData.name,
                 credType:newData.credType,
                 credNumber:newData.credNumber,
+                passengerType:newData.passengerType,
             };
         }else{
+            //使用其他证件
             parames = newData;
             parames.orderId = this.orderId;
         }

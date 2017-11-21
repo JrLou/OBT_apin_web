@@ -14,6 +14,7 @@ import Passengers from './Passengers/index.js';
 import CellNewFlight from '../content/cell/CellNewFlight.js';
 import OrderInfoView from './OrderInfoView/index.js';
 import PayBottom from './PayBottom/PayBottomForDetail.js';
+import AlertView from '../component/AlertView.js';
 
 /**
  * 订单状态说明(页面)：
@@ -56,9 +57,9 @@ class OrderFormDetail extends Component{
 
         if(!this.state.orderId){
             //没有订单号，直接跳404页面
-            window.app_open(this, "/None", {
-
-            });
+            // window.app_open(this, "/None", {
+            //
+            // });
         }
     }
 
@@ -73,16 +74,7 @@ class OrderFormDetail extends Component{
 
     listenScroll(){
         let markDiv = document.getElementById('markDiv');
-        let rootDiv = document.getElementById('root');
         // console.warn('启动监听---------------------');
-        // log(markDiv);
-
-        //支付条定位初始化  如果文档高度小于屏幕高度，则不固定定位
-        if(parseInt(window.getComputedStyle(rootDiv,'').height)<parseInt(document.body.clientHeight)){
-            this.setState({
-                shouldFixed:false,
-            });
-        }
 
         //监听页面滚动
         window.onscroll = ()=>{
@@ -141,6 +133,13 @@ class OrderFormDetail extends Component{
         }
         return(
             <div className={css.mainPage}>
+                <AlertView
+                    ref={(view) => this.partnerDetail = view}
+                    callBack={(typeIndex,json)=>{
+                            window.location.reload();
+                        }
+                    }
+                />
                 <Spin
                     size={'large'}
                     spinning={this.state.loading}
@@ -172,6 +171,7 @@ class OrderFormDetail extends Component{
                                     orderId={this.state.orderId}
                                     airlineSigns={this.state.airlineSigns}
                                     defaultData={this.state.passengersData}
+                                    checkOrderState={this.checkOrderState.bind(this)}
                                 />
                             </div>
                         :   <div></div>
@@ -182,6 +182,7 @@ class OrderFormDetail extends Component{
                             orderState={this.state.orderState}
                             orderMsg={this.state.orderMsg}
                             payMsg={this.state.payMsg}
+                            checkOrderState={this.checkOrderState.bind(this)}
                         />
                 </div>
                 <div id={'markDiv'} style={this.state.shouldFixed?{marginBottom:'100px'}:{}}></div>
@@ -234,11 +235,14 @@ class OrderFormDetail extends Component{
             orderId:this.state.orderId,
         };
         let successCB = (code, msg, json, option)=>{
+            //滚动页面，初始化支付条位置
+            window.scroll(0,1);
             log('=========请求订单详情结果>>>>>>>>>>>>>>>');
             log(json);
             if(!json){
                 //如果信息为空，则跳转到404
                 window.app_open(this,'/None',{});
+                return;
             }
             let resultData = getFlightData(json.voyages,json.flightType,json.freeBag,json.weightLimit);
             let titleData = this.getTitleData(json);
@@ -354,7 +358,52 @@ class OrderFormDetail extends Component{
      * 打开支付页面
      */
     openPayPage(){
-        window.app_open(this,'/Pay',{id:this.state.orderId});
+        let successCB = ()=>{
+            window.app_open(this,'/Pay',{id:this.state.orderId});
+        };
+        this.checkOrderState(successCB);
+    }
+
+    /**
+     * 查询订单信息，判断订单状态是否已经改变
+     */
+    checkOrderState(successCB,failureCB){
+        let currentState = this.state.orderState;
+        let parames = {
+            orderId:this.state.orderId,
+        };
+
+        let success = (code, msg, json, option)=>{
+            this.setLoading(false);
+            let newState = transformForDetail(json);
+            if(newState == currentState){
+                //订单状态未发生改变
+                if(successCB){
+                    successCB();
+                }
+            }else{
+                //已经改变，提示用户
+                this.partnerDetail.showModal({
+                    title:"提示",
+                    desc:"订单状态已改变，请刷新页面",
+                });
+                if(failureCB){
+                    failureCB();
+                }
+            }
+        };
+        let failure = (code, msg, option)=>{
+            this.setLoading(false);
+            message.error('服务器繁忙，请重试');
+        };
+
+        this.setLoading(true,()=>{
+            HttpTool.request(HttpTool.typeEnum.POST,APILXD.lordOrderDetail, success, failure, parames,
+                {
+                    ipKey: "hlIP"
+                });
+        });
+
     }
 }
 

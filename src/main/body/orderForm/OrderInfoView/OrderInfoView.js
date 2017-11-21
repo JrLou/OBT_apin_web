@@ -6,8 +6,9 @@ import React, {Component} from 'react';
 import css from './OrderInfoView.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APILXD from "../../../../api/APILXD.js";
-import {hasKey,sliceTimeString} from '../../tool/LXDHelp.js';
+import {hasKey,sliceTimeString,changeImgUrl} from '../../tool/LXDHelp.js';
 import {Button,message,Modal,Spin,Icon} from 'antd';
+import AlertView from '../../component/AlertView.js';
 
 /**
  * 订单状态说明(页面)：
@@ -23,7 +24,6 @@ class OrderInfoView extends Component{
             orderStateName:'',
             imgShow:false,          //查看图片模态框
             imgUrl:'',
-            confirmModal:false,     //取消订单询问框
             loading:false,          //加载状态
         };
     }
@@ -86,7 +86,7 @@ class OrderInfoView extends Component{
                             </div>
                         </div>
                         <div className={css.priceItem}>
-                            <span className={css.priceTitle}>订单总金额</span>
+                            <span className={css.priceTitle}>{hasKey(this.state.orderState,[1])?'参考价（含税）':'订单总金额'}</span>
                             <span className={css.priceTip}>¥</span>
                             <span className={css.priceValue}>{orderMsg.orderAmount}</span>
                         </div>
@@ -96,9 +96,17 @@ class OrderInfoView extends Component{
                             className={css.cancleBtnStyle}
                             onClick={()=>{
                                 //订单取消
-                                this.setState({
-                                    confirmModal:true,
-                                });
+                                this.state.orderState == 5
+                                    ?   this.partnerDetail.showModal({
+                                        title:"提示",
+                                        desc:"是否确定要取消此行程订单?",
+                                        con:'订单取消后将不退还押金',
+                                    })
+                                    :   this.partnerDetail.showModal({
+                                        title:"提示",
+                                        desc:"是否确定删除此订单?",
+                                    })
+                                ;
                             }}
                         >
                             取消订单
@@ -110,7 +118,7 @@ class OrderInfoView extends Component{
                     {
                         hasKey(this.state.orderState,[0,8])
                         ?   <div className={css.itemLinePay}>
-                                <div className={css.payTitle}>订单关闭：</div>
+                                <div className={css.payTitle}>{this.state.orderState==8?'订单关闭：':'订单取消：'}</div>
                                 {
                                     orderMsg.closeReason
                                     ?orderMsg.closeReason
@@ -173,32 +181,13 @@ class OrderInfoView extends Component{
                         /></div>
                     </div>
                 </Modal>
-                <Modal
-                    prefixCls={'my-ant-modal'}
-                    title={'提示'}
-                    visible={this.state.confirmModal}
-                    onOk={()=>{
-                        this.setState({
-                            confirmModal:false,
-                        },()=>{this.cancelOrder(orderMsg.orderId);});
-                    }}
-                    onCancel={()=>{
-                        this.setState({
-                            confirmModal:false,
-                        });
-                    }}
-                >
-                    {
-                        this.state.orderState == 5
-                            ?   (<div className={css.messageBox}>
-                                    <div>是否确定要取消此行程订单？</div>
-                                    <div>订单取消后将不退还订金</div>
-                                </div>)
-                            :   (<div className={css.messageBox}>
-                                    是否确定取消此订单？
-                                </div>)
+                <AlertView
+                    ref={(view) => this.partnerDetail = view}
+                    callBack={(typeIndex,json)=>{
+                        this.cancelOrder(orderMsg.orderId);
                     }
-                </Modal>
+                    }
+                />
             </div>
             </Spin>
         );
@@ -274,14 +263,22 @@ class OrderInfoView extends Component{
                 <div key={`record${key}`} className={css.recordBox}>
                     <div className={key==0?css.payValue:css.hidden}>
                         {`¥${data.amount}`}
-                        <span>&nbsp;&nbsp;</span>
+                        <span>&nbsp;&nbsp;&nbsp;</span>
                         {scorePay>0?`积分抵扣(¥${scorePay})`:''}
                     </div>
                     {
                         payName
                             ?   (<div className={css.payType}>
                                     {`(支付方式：${payName}`}
-                                    <span>&nbsp;&nbsp;</span>
+                                    <span style={{paddingLeft:'15px'}}></span>
+                                    {
+                                        data.records[key].auditStatus == 2
+                                            ?   <span className={css.failStyle}>
+                                                    审核不通过原因:{data.records[key].remark?data.records[key].remark:''}
+                                                </span>
+                                            :   ''
+                                    }
+                                    <span style={{paddingLeft:'15px'}}></span>
                                     {`支付时间：${data.records[key].payTime})`}
                                 </div>)
                             :   ''
@@ -291,26 +288,6 @@ class OrderInfoView extends Component{
                             ?   <div className={css.payVoucher}>
                                 <span>支付凭证</span>
                                 {this.getPayVoucher(voucherUrl)}
-                                {
-                                    data.records[key].auditStatus == 2
-                                        ?   <div className={css.reUpload}>
-                                            {/*<Button*/}
-                                                {/*className={css.reUploadBtnStyle}*/}
-                                                {/*onClick={()=>{*/}
-                                                    {/*window.app_open(this,'/UpLoad',{*/}
-                                                        {/*orderId:data.orderId,*/}
-                                                        {/*id:data.records[key].id,*/}
-                                                    {/*});*/}
-                                                {/*}}*/}
-                                            {/*>*/}
-                                                {/*重新上传*/}
-                                            {/*</Button>*/}
-                                            <div className={css.failStyle}>
-                                                审核失败:{data.records[key].remark?data.records[key].remark:''}
-                                            </div>
-                                        </div>
-                                        :   ''
-                                }
                             </div>
                             :''
                     }
@@ -351,11 +328,12 @@ class OrderInfoView extends Component{
         let views = [];
         for(let key in urlList){
             let imgUrl = urlList[key];
+            let newUrl = changeImgUrl(urlList[key]);
             if(imgUrl){
                 views.push(
                     <img
                         key={`img${key}`}
-                        src={imgUrl}
+                        src={newUrl}
                         alt="支付凭证"
                         className={css.voucherImg}
                         onClick={()=>{
@@ -419,7 +397,7 @@ class OrderInfoView extends Component{
         let parames = {
             id:id,
             orderStatus:0,
-            remark:'',
+            remark:'用户取消订单',
         };
         let successCB = (code, msg, json, option)=>{
             this.setLoading(false);
@@ -431,12 +409,22 @@ class OrderInfoView extends Component{
             this.setLoading(false);
             message.error(msg);
         };
-        this.setLoading(true,()=>{
-            HttpTool.request(HttpTool.typeEnum.POST,APILXD.cancelOrder, successCB, failureCB, parames,
-                {
-                    ipKey: "hlIP"
-                });
-        });
+
+        let requestAction = ()=>{
+            this.setLoading(true,()=>{
+                HttpTool.request(HttpTool.typeEnum.POST,APILXD.cancelOrder, successCB, failureCB, parames,
+                    {
+                        ipKey: "hlIP"
+                    });
+            });
+        };
+
+        //判断订单状态是否已经改变
+        if(this.props.checkOrderState){
+            this.props.checkOrderState(requestAction);
+        }else{
+            requestAction();
+        }
     }
 
 
