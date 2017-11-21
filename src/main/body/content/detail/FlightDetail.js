@@ -153,9 +153,8 @@ class page extends Component {
         this.arrDate = voyages[1]&&voyages[1].depDate?voyages[1].depDate:"";
 
         let member = json.member?json.member:{};
-        this.mobile = member.contactPhone?member.contactPhone:"";
         this.props.form.setFieldsValue({
-            mobile:this.mobile
+            mobile:member.contactPhone?member.contactPhone:""
         });
         this.props.form.setFieldsValue({
             customerName:member.contactName?member.contactName:""
@@ -218,7 +217,7 @@ class page extends Component {
                 lineNum:1,
                 adultCount:this.state.adultNum,
                 childCount:this.state.childNum,
-                mobile:this.mobile,
+                mobile:this.props.form.getFieldValue("mobile"),
                 remark:"",
                 isMult:this.flightType&&(this.flightType<3),
                 listData:[{
@@ -543,7 +542,6 @@ class page extends Component {
                 mobile:value
             });
         }else {
-            alert(1);
             this.props.form.setFieldsValue({
                 mobile:""
             });
