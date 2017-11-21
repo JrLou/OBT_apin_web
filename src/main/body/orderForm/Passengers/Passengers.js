@@ -383,11 +383,6 @@ class PassengerMsg extends Component{
             id:this.state.orderId,
         };
         let successCB = (code, msg, json, option)=>{
-            // this.setState({
-            //     isPassed:true,
-            //     loading:false,
-            // },message.success(msg));
-
             //刷新页面
             window.location.reload();
         };
@@ -396,25 +391,23 @@ class PassengerMsg extends Component{
             message.warning(msg);
         };
 
-        this.setLoading(true,()=>{
-            HttpTool.request(HttpTool.typeEnum.POST,APILXD.confirmPassenger, successCB, failureCB, parames,
-                {
-                    ipKey: "hlIP"
-                });
-        });
 
-        //模拟接口
-        // this.setLoading(true,()=>{
-        //     log(parames);
-        //     setTimeout(()=>{
-        //         let num = Math.random();
-        //         if(num<0.5){
-        //             successCB();
-        //         }else{
-        //             failureCB();
-        //         }
-        //     },1000);
-        // });
+
+        let submitAction = ()=>{
+            this.setLoading(true,()=>{
+                HttpTool.request(HttpTool.typeEnum.POST,APILXD.confirmPassenger, successCB, failureCB, parames,
+                    {
+                        ipKey: "hlIP"
+                    });
+            });
+        };
+
+        //判断订单状态是否已经改变
+        if(this.props.checkOrderState){
+            this.props.checkOrderState(submitAction);
+        }else{
+            submitAction();
+        }
     }
 
     /**

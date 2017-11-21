@@ -409,12 +409,22 @@ class OrderInfoView extends Component{
             this.setLoading(false);
             message.error(msg);
         };
-        this.setLoading(true,()=>{
-            HttpTool.request(HttpTool.typeEnum.POST,APILXD.cancelOrder, successCB, failureCB, parames,
-                {
-                    ipKey: "hlIP"
-                });
-        });
+
+        let requestAction = ()=>{
+            this.setLoading(true,()=>{
+                HttpTool.request(HttpTool.typeEnum.POST,APILXD.cancelOrder, successCB, failureCB, parames,
+                    {
+                        ipKey: "hlIP"
+                    });
+            });
+        };
+
+        //判断订单状态是否已经改变
+        if(this.props.checkOrderState){
+            this.props.checkOrderState(requestAction);
+        }else{
+            requestAction();
+        }
     }
 
 
