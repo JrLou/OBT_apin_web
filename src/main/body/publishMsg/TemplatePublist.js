@@ -204,6 +204,7 @@ class page extends Component {
                                     validateTrigger: "onChangeValue",
                                     initialValue: toCity
                                 })(
+
                                     <AutoInput style={{ borderRadius: "2px",width:"230px"}} defaultValue={toCity} 
                                         type={"to"}
                                         placeholder={'中文／拼音／三字码'} />
@@ -318,20 +319,18 @@ class page extends Component {
         return div;
     }
 
-    // handleConfirmNum(str, e) {//成人人数和儿童人数判断
-    //     console.log(this.props.state.adultCount? this.props.state.adultCount:this.state.adultCount);
-
-    //     let { childCount, adultCount } = this.state;
-    //     let {setFieldsValue}=this.props.form;
-    //     if (str == "adultCount") {
-    //         adultCount = e.target.value;
-    //     } else if (str == "childCount") {
-    //         childCount = e.target.value;
-    //     }
-    //     this.setState({
-    //         childCount, adultCount
-    //     });
-    // }
+    handleConfirmNum(str, e) {//成人人数和儿童人数判断
+        let { childCount, adultCount } = this.state;
+        let {setFieldsValue}=this.props.form;
+        if (str == "adultCount") {
+            adultCount = e.target.value;
+        } else if (str == "childCount") {
+            childCount = e.target.value;
+        }
+        this.setState({
+            childCount, adultCount
+        });
+    }
 
 
     getSwitchView(v, title, cb,type) {
@@ -449,7 +448,7 @@ class page extends Component {
                               
                                     <div style={{ position: "relative" }}>
                                         <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px",pointerEvents:"none"}}>成人</span>
-                                        <Input style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.vueValue(adultCount)!=""?this.vueValue(adultCount):this.state.adultCount}   maxLength="4" />
+                                        <Input style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.vueValue(adultCount)!=""?this.vueValue(adultCount):this.state.adultCount}   maxLength="4" onChange={(e) => this.handleConfirmNum("adultCount", e)}/>
                                     </div>
                                     )}
                             </FormItem>
@@ -465,7 +464,7 @@ class page extends Component {
                                 })(
                                     <div style={{ position: "relative" }}>
                                         <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px",pointerEvents:"none"}}>儿童(2～12周岁)</span>
-                                        <Input id="male" style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.vueValue(childCount)!=""?this.vueValue(childCount):this.state.childCount} maxLength="4"  />
+                                        <Input id="male" style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.vueValue(childCount)!=""?this.vueValue(childCount):this.state.childCount} maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)} />
                                     </div>
                                     )}
                             </FormItem>
