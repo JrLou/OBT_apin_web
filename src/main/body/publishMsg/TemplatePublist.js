@@ -352,16 +352,14 @@ class page extends Component {
                             lineNum:1
                         });
                     },type)}
-                {type!==1?<div style={{width:20,display:"inline-block"}}/>:null}
-
-                {this.getSwitchView(this.state.lineType == 3, "多程",
+                {!this.state.isMult && type!==1?<div style={{width:20,display:"inline-block"}}/>:null}
+                {!this.state.isMult && this.getSwitchView(this.state.lineType == 3, "多程",
                     () => {
                         this.setState({
                             lineType: 3,
                             lineNum:3
                         });
                     },type)}
-                
             </div>
         );
     }
