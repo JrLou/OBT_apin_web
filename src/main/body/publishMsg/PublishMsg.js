@@ -83,10 +83,10 @@ class page extends Component {
                     ]};
                     CookieHelp.saveCookieInfo("publishMsgCookie",data);
                     window.app_open(this, "/PublishMsg",{});
-                } */}
+                } 
                 }> 
                     调整
-                </Button>  
+                </Button>  */}
             </div >
         );
     }
