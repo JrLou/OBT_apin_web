@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-import {Button, Modal, message} from "antd";
+import {Button, message,Tooltip} from "antd";
 import less from "./DemandDetail.less";
 import CellNewFlight from "../content/cell/CellNewFlight";
 import {HttpTool, CookieHelp} from "../../../../lib/utils/index.js";
@@ -174,7 +174,7 @@ class page extends Component {
             case 1:{
                 this.cancelDemand();
             }
-            break;
+                break;
             case 2:{
                 this.deleteDemand();
             }
@@ -365,7 +365,6 @@ class page extends Component {
                     {this.getDemandButton(type)}
                     <div className={less.tripLayout}>
                         {this.getTripList(data)}
-                        <div style={{clear: "both"}}/>
                     </div>
 
 
@@ -559,31 +558,31 @@ class page extends Component {
     getTripItem(data = {}, index) {
         if (!data)return null;
 
-        let img = require('../../../images/oneWay.png');
-
         return (
             <div key={index}
                  className={less.cells}
             >
                 <div className={less.bottom}>
                     <div className={less.bottomLeft}>
-
-                        <div className={less.table}>
-                            <div className={less.text}>{data && data.cityDep ? data.cityDep : "暂无"}</div>
-
-
-                            <div className={less.text2}>
-                                <div className={less.icon}
-                                     style={{
-                                         backgroundImage: "url(" + img + ")"
-                                     }}
-                                >
-                                </div>
-                            </div>
-
-
-                            <div className={less.text}>{data && data.cityArr ? data.cityArr : "暂无"}</div>
+                        <div className={less.text}>
+                            {(data && data.cityDep&&data.cityDep.length>2)?<Tooltip placement="bottom" title={data.cityDep}>
+                                {data && data.cityDep ? data.cityDep : "暂无"}
+                            </Tooltip>:(data && data.cityDep ? data.cityDep : "暂无")}
                         </div>
+                        <div className={less.text2}>
+                            <div className={less.icon}></div>
+                        </div>
+
+                        <div className={less.text}>
+                            {(data && data.cityArr&&data.cityArr.length>2)?<Tooltip placement="bottom" title={data.cityArr}>
+                                {data && data.cityArr ? data.cityArr : "暂无"}
+                            </Tooltip>:(data && data.cityArr ? data.cityArr : "暂无")}
+                        </div>
+
+
+
+
+
                     </div>
                     <div className={less.bottomRight}>
                         <div className={less.date}>{"行程" + (index + 1)}</div>

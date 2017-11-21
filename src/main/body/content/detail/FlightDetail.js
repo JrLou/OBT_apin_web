@@ -387,9 +387,6 @@ class page extends Component {
                                     rules: [{
                                         required: true,
                                         message: '姓名不能为空',
-                                    },{
-                                        pattern: /^[\u4e00-\u9fa5]{2,6}$|^[a-zA-Z]{2,12}$/,
-                                        message: '请输入姓名(汉字2-6个字或英文2-12个字符)'
                                     }],
                                 })(<Input style={{width:"220px"}}
                                           maxLength="20"
@@ -397,7 +394,6 @@ class page extends Component {
                                 }
                             </FormItem>
                         </div>
-
 
                         <div className={css.i_cell}>
                             <div className={css.i_title}>{"手机号码:"}</div>
@@ -447,6 +443,10 @@ class page extends Component {
             </div>);
         return div;
     }
+// {
+//     pattern: /^[\u4e00-\u9fa5]{2,6}$|^[a-zA-Z]{2,12}$/,
+//     message: '请输入姓名(汉字2-6个字或英文2-12个字符)'
+// }
 
     createList(voyagesObj){
         let itemDiv = (
