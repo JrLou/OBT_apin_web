@@ -28,7 +28,6 @@ class page extends Component {
         if (!dataSource ||dataSource.length<1){
             return null;
         }
-
         var div = (<div className={css.main}>
             <div className={css.con}>
                 <div className={css.left}>
@@ -105,9 +104,12 @@ class page extends Component {
                                 <div className={css.requireBtn} onClick={()=>{
                                     let data ={
                                         lineType:dataSource.flightType,
-                                        isMult:false,
-                                        listData:[
-                                            {fromCity:dataSource.depCity,toCity:dataSource.arrCity,toDateTime:"",fromDateTime:""},
+                                        isMult:true,
+                                        listData:[{
+                                                fromCity:dataSource.depCity,
+                                                toCity:dataSource.arrCity,
+                                                fromDateTime:dataSource.startDate,
+                                                toDateTime:dataSource.endDate},
                                         ]};
                                     CookieHelp.saveCookieInfo("publishMsgCookie",data);
                                     const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');

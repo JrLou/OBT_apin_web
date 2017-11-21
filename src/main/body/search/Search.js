@@ -264,6 +264,7 @@ class page extends Component {
                         let lineType = searchData&&searchData.one?1:2;
                         let data ={
                             lineType:lineType,
+                            isMult:true,
                             listData:[
                                 {fromCity:searchData.from,toCity:searchData.to,toDateTime:"",fromDateTime:""},
                             ]};

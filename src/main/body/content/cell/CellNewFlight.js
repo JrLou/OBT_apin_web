@@ -133,7 +133,7 @@ class CellNewFlight extends Component {
                         : city}
                 </div>
 
-                <div className={css.date}>{data.arrDate+" " +NumTransToTextHelp.getWeek(data.week)}</div>
+                <div className={css.date}>{data.depDate+" " +NumTransToTextHelp.getWeek(data.week)}</div>
             </div>
 
             <div className={css.flightLine_super}>

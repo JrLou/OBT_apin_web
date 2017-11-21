@@ -31,7 +31,7 @@ class page extends Component {
             upData:0,
             adultNum:1,
             childNum:0,
-            shouldFixed:true,  //底部支付条是否应该固定定位
+            shouldFixed:false,  //底部支付条是否应该固定定位
         };
     }
     componentWillReceiveProps(nextProps) {
