@@ -97,8 +97,7 @@ class CellNewFlight extends Component {
                 myChildArr = data.child;
             }
             data.myChild = myChildArr;
-            return (<div key={index}
-                         className={css.cellBg}
+            return (<div key={index} className={css.cellBg}
                          style={{paddingLeft:isNoShowRule?"8%":"0",
                              paddingRight:isNoShowRule?"8%":"0",
                              borderBottomWidth:(index==dataArr.length-1)?"0px":"1px"}}>
@@ -128,10 +127,11 @@ class CellNewFlight extends Component {
             
 
             <div className={css.date_super}>
-                {(cityDep_len||cityArr_len)?<Tooltip placement="bottom" title={data.cityDep +" - "+cityArr}>
-                    <div className={css.city}>{city}</div>
-                </Tooltip>:
-                    <div className={css.city}>{data.cityDep +" - "+cityArr}</div>}
+                <div className={css.city}>
+                    {(cityDep_len||cityArr_len)?
+                        <Tooltip placement="bottom" title={data.cityDep +" - "+cityArr}>{city}</Tooltip>
+                        : city}
+                </div>
 
                 <div className={css.date}>{data.arrDate+" " +NumTransToTextHelp.getWeek(data.week)}</div>
             </div>
@@ -139,12 +139,12 @@ class CellNewFlight extends Component {
             <div className={css.flightLine_super}>
                 <div className={css.flightLine}>
                     <div className={css.placeLine}>
-                        {data.depAirport&&data.depAirport.length>7?
-                            (<div className={css.placeLineItem}>
-                                <Tooltip placement="bottom" title={data.depAirport}>{data.depAirport}</Tooltip>
-                            </div>):
-                            (<div className={css.placeLineItem}>{data.depAirport}</div>)}
-                        <div className={css.time}>{data.depTime}</div>
+                        
+                            <div className={css.placeLineItem}>
+                                {(data.depAirport&&data.depAirport.length>7)?
+                                    <Tooltip placement="bottom" title={data.depAirport}>{data.depAirport}</Tooltip>
+                                    :data.depAirport}
+                            </div>
                     </div>
 
                     <div className={css.lineBg}>
@@ -186,14 +186,14 @@ class CellNewFlight extends Component {
                     </div>
 
                     <div className={css.placeLine}>
-                        {data.depAirport&&data.depAirport.length>7?
-                            (<div className={css.refPlaceLineItem}>
+                        <div className={css.refPlaceLineItem}>
+                            {(data.depAirport&&data.depAirport.length>7)?
                                 <Tooltip placement="bottom" title={data.arrAirport}>{data.myArrAirport?data.myArrAirport:data.arrAirport}</Tooltip>
-                            </div>): (<div className={css.refPlaceLineItem}>{data.myArrAirport?data.myArrAirport:data.arrAirport}</div>)
-                        }
+                                :(data.myArrAirport?data.myArrAirport:data.arrAirport)}
+                            </div>
                         <div className={css.time}>
                             <span>{data.myArrTime?data.myArrTime:data.arrTime}</span>
-                            <span style={{fontSize:"12px",color:"#FF5841"}}>{data.tag==1?"+1天":""}</span>
+                            {flightType==3?null:<span style={{fontSize:"12px",color:"#FF5841"}}>{data.tag==1?"+1天":""}</span>}
                         </div>
                     </div>
                 </div>
