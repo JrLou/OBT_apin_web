@@ -98,7 +98,9 @@ class UnionPay extends Component {
 
 
    getLoadingView() {
-      return <div className={less.loading}>正在为您拉取卡列表,请稍候...</div>;
+      return (<div className={less.loading}>
+         <div className={less.allCenter}>正在为您拉取卡列表,请稍候...</div>
+      </div>);
    }
 
    getCardList(data) {

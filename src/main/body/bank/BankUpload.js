@@ -239,7 +239,9 @@ class BankUpload extends Component {
    }
 
    getLoadingView() {
-      return <div className={less.loading}>正在为您拉取订单信息,请稍候...</div>;
+      return (<div className={less.loading}>
+         <div className={less.allCenter}>正在为您拉取订单信息,请稍候...</div>
+      </div>);
    }
 
    getErrorView() {
