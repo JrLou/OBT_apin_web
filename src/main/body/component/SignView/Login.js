@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-20 14:06:55
+ * @Last Modified time: 2017-11-21 10:53:02
  */
 
 import React, { Component } from 'react';
@@ -172,7 +172,7 @@ class MsgLoginForm extends React.Component {
                 >
                     {getFieldDecorator('account', {
                         validateFirst: true,
-                        validateTrigger: 'onBlur',
+                        // validateTrigger: 'onBlur',
                         rules: [{ required: true, message: '请输入11位手机号' },
                         { len: 11, message: '请输入11位手机号' },
                         { pattern: /^(1)\d{10}$/, message: '手机号格式不正确！' }
