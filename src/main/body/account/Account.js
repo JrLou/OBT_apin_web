@@ -186,9 +186,15 @@ class AccountForm extends Component {
                             <FormItem prefixCls="my-ant-form"
                                 {...formItemLayout}
                                 label="公司名称"
+                                validateStatus={isFieldTouched('companyName') && getFieldError('companyName') ? 'error' : ''}
+                                help={isFieldTouched('companyName') && getFieldError('companyName') || ''}
                             >
                                 {getFieldDecorator('companyName', {
-                                    initialValue: companyName
+                                    initialValue: companyName,
+                                    rules: [{
+                                        max: 20,
+                                        message: '公司名称最长不能超过20'
+                                    }]
                                 })(
                                     <Input prefixCls="my-ant-input" />
                                     )}
@@ -202,8 +208,8 @@ class AccountForm extends Component {
                                 {getFieldDecorator('contactName', {
                                     initialValue: contactName,
                                     rules: [{
-                                        pattern: /^[\u4e00-\u9fa5]{2,6}$|^[a-zA-Z]{2,12}$/,
-                                        message: '请输入姓名(汉字2-6个字或英文2-12个字符)'
+                                        max: 20,
+                                        message: '联系人最长不能超过20'
                                     }],
                                 })(
                                     <Input prefixCls="my-ant-input" />
