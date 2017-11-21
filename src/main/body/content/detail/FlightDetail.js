@@ -43,17 +43,16 @@ class page extends Component {
             upData:this.state.upData++
         },()=>{
             if (callBack){
-                setTimeout(()=>{
-                    callBack();
-                },0);
+                callBack();
             }
+            window.scrollTo(0,1);
         });
     }
 
     componentDidMount() {
         this.loadData();
         //启动页面滚动监听
-        // setTimeout(()=>{this.listenScroll();},0);
+        setTimeout(()=>{this.listenScroll();},0);
     }
 
     listenScroll(){
@@ -62,8 +61,11 @@ class page extends Component {
         // console.warn('启动监听---------------------');
         // log(markDiv);
 
+        log(parseInt(window.getComputedStyle(rootDiv,'').height));
+        log(parseInt(document.body.clientHeight));
+        log("----------------------------gyw---");
         //支付条定位初始化  如果文档高度小于屏幕高度，则不固定定位
-        if(parseInt(window.getComputedStyle(rootDiv,'').height)<parseInt(document.body.clientHeight)){
+        if(parseInt(window.getComputedStyle(markDiv,'').off)<parseInt(document.body.clientHeight)){
             this.setState({
                 shouldFixed:false,
             });
@@ -133,9 +135,6 @@ class page extends Component {
      *  请求接口后初始化数据
      */
     setData(json){
-        log(json);
-        log("---------gyw");
-
         this.data = json;
         this.adultPrice = json&&json.adultPrice?json.adultPrice:0;
         this.childPrice = json&&json.childPrice?json.childPrice:0;
@@ -154,8 +153,9 @@ class page extends Component {
         this.arrDate = voyages[1]&&voyages[1].depDate?voyages[1].depDate:"";
 
         let member = json.member?json.member:{};
+        this.mobile = member.contactPhone?member.contactPhone:"";
         this.props.form.setFieldsValue({
-            mobile:member.contactPhone?member.contactPhone:""
+            mobile:this.mobile
         });
         this.props.form.setFieldsValue({
             customerName:member.contactName?member.contactName:""
@@ -218,6 +218,7 @@ class page extends Component {
                 lineNum:1,
                 adultCount:this.state.adultNum,
                 childCount:this.state.childNum,
+                mobile:this.mobile,
                 remark:"",
                 isMult:this.flightType&&(this.flightType<3),
                 listData:[{
@@ -260,7 +261,7 @@ class page extends Component {
 
     render() {
         let {childNum,adultNum}=this.state;
-        let totolNum = (childNum?childNum:0)+(adultNum?adultNum:0);
+        let totolNum = parseInt(childNum?childNum:0)+parseInt(adultNum?adultNum:0);
         let totalPrice = (this.childPrice*childNum*100+this.adultPrice*adultNum*100)/100;
         let depositAmount =(this.depositAmount*(childNum+adultNum)*100)/100;
         const {getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;

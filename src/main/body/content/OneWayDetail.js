@@ -190,16 +190,9 @@ class page extends Component {
     }
 
     loadTripData(date,days) {
-        if (this.flightType=="2"){
-            if (!date||!days){
-                message.warning("航程不存在");
-                return;
-            }
-        }else {
-            if (!date){
-                message.warning("航程不存在");
-                return;
-            }
+        if (!date){
+            message.warning("航程不存在");
+            return;
         }
         this.loadingView.refreshView(true);
         var param = {
@@ -214,7 +207,6 @@ class page extends Component {
                 this.loadingView.refreshView(false);
                 this.myLineData = json;
                 this.upView();
-
                 if (json&&json.length>0){
                     let y = this.myflightCon?this.myflightCon.offsetTop:0;
                     let isBigZero = y-150;
@@ -223,7 +215,6 @@ class page extends Component {
                     }
                 }
             });
-
         };
         var failure = (code, msg, option) => {
             message.warning(msg);
