@@ -80,7 +80,7 @@ class PayInfo extends Component {
                      </p>
                      <p>
                         订单金额：
-                        <span className={less.payInfo_middle_msg}>￥{data.price}</span>
+                        <span className={less.payInfo_middle_msg}>￥{data.priceAll}</span>
                      </p>
                      <p>
                         乘机人数：
