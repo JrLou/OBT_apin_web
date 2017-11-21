@@ -73,16 +73,7 @@ class OrderFormDetail extends Component{
 
     listenScroll(){
         let markDiv = document.getElementById('markDiv');
-        let rootDiv = document.getElementById('root');
         // console.warn('启动监听---------------------');
-        // log(markDiv);
-
-        //支付条定位初始化  如果文档高度小于屏幕高度，则不固定定位
-        if(parseInt(window.getComputedStyle(rootDiv,'').height)<parseInt(document.body.clientHeight)){
-            this.setState({
-                shouldFixed:false,
-            });
-        }
 
         //监听页面滚动
         window.onscroll = ()=>{
@@ -234,11 +225,13 @@ class OrderFormDetail extends Component{
             orderId:this.state.orderId,
         };
         let successCB = (code, msg, json, option)=>{
+            //滚动页面，初始化支付条位置
+            window.scroll(0,1);
             log('=========请求订单详情结果>>>>>>>>>>>>>>>');
             log(json);
             if(!json){
                 //如果信息为空，则跳转到404
-                (this,'/None',{});
+                window.app_open(this,'/None',{});
                 return;
             }
             let resultData = getFlightData(json.voyages,json.flightType,json.freeBag,json.weightLimit);
