@@ -44,7 +44,7 @@ class OrderFormDetail extends Component{
 
             titleData:null,     //头部导航信息
             flightData:null,    //航班信息
-
+            passengerData:[], //乘客信息
             orderMsg:null,      //订单信息
             payMsg:null,        //支付明细
             bottomData:null,    //底部浮动支付信息
@@ -173,7 +173,7 @@ class OrderFormDetail extends Component{
                                     isPassed={this.state.isPassed}
                                     orderId={this.state.orderId}
                                     airlineSigns={this.state.airlineSigns}
-                                    defaultData={this.state.passengersData}
+                                    passengerData={this.state.passengerData}
                                     // checkOrderState={this.checkOrderState.bind(this)}
                                 />
                             </div>
@@ -250,6 +250,7 @@ class OrderFormDetail extends Component{
             let resultData = getFlightData(json.voyages,json.flightType,json.freeBag,json.weightLimit);
             let titleData = this.getTitleData(json);
             let orderMsg = this.getOrderMsg(json);
+            let passengerData = json.passengers?json.passengers:[];
             let payMsg = json.pays?json.pays:[];
             let bottomData = this.getBottomData(json);
             let orderState = transformForDetail(json);
@@ -261,6 +262,7 @@ class OrderFormDetail extends Component{
                 flightData:resultData,
                 orderMsg:orderMsg,
                 payMsg:payMsg,
+                passengerData:passengerData,
                 bottomData:bottomData,
                 orderState:orderState,
                 returnState:json.orderStatus,
