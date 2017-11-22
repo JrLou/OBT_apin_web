@@ -14,8 +14,8 @@ import AlertView from "../component/AlertView.js";
  * 需求处理中 （单程）       1    1
  * 需求处理中（多程）        7    1
  *
- * 待用户确认 （单程）       8    3
- * 待用户确认 （多程）       9    3
+ * 待确认 （单程）       8    3
+ * 待确认 （多程）       9    3
  * 处理完成                     4
  * 需求已关闭                   5
  *
@@ -331,7 +331,7 @@ class page extends Component {
     }
 
     getMultiPass(type, data = {}) {
-        let status = ["需求已取消", "需求处理中", "需求处理中", "待用户确认", "处理完成", "需求已关闭"];
+        let status = ["需求已取消", "需求处理中", "需求处理中", "待确认", "处理完成", "需求已关闭"];
         if (type < -1 || type > 5) {
             type = 5;
         }
@@ -446,7 +446,7 @@ class page extends Component {
 
 
     getTop(type, data = {}) {
-        let status = ["需求已取消", "需求处理中", "需求处理中", "待用户确认", "处理完成", "需求已关闭"];
+        let status = ["需求已取消", "需求处理中", "需求处理中", "待确认", "处理完成", "需求已关闭"];
         if (type < -1 || type > 5) {
             type = 5;
         }
