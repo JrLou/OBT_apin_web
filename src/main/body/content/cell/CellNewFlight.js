@@ -53,7 +53,7 @@ class CellNewFlight extends Component {
     addTime(data){
         let hour = 0;
         let min = 0;
-        let childArr = data.child?data.child:[];
+        let childArr = data?data:[];
         for(let i = 0;i<childArr.length;i++){
             let timeObj = this.getMinAndHour(childArr[i].flightTime);
             hour = hour+timeObj.hour;
@@ -92,7 +92,7 @@ class CellNewFlight extends Component {
                 data.myArrTime = obj.arrTime;
                 
                 data.myCityArr = obj.cityArr;
-                data.myflightTime =  this.addTime(data);
+                data.myflightTime =  this.addTime(myChildArr);
             }else {
                 myChildArr = data.child;
             }
