@@ -67,27 +67,22 @@ class OrderFormDetail extends Component{
         //请求数据
         this.setLoading(true,this.loadFormDetail);
 
-        //启动页面滚动监听
+        //启动页面滚动监听,（有支付条才需要监听）
         setTimeout(()=>{this.listenScroll();},0);
-        // this.listenScroll();
     }
 
     listenScroll(){
-        let markDiv = document.getElementById('markDiv');
-        // console.warn('启动监听---------------------');
-
-        //监听页面滚动
-        window.onscroll = ()=>{
+        let scrollAction = ()=>{
             let payDiv = ReactDOM.findDOMNode(this.payBottom);
             if(!payDiv){
                 return;
             }
-            markDiv = markDiv?markDiv:document.getElementById('markDiv');
+            this.markDiv = this.markDiv?this.markDiv:document.getElementById('markDiv');
             // rootDiv = rootDiv?rootDiv:document.getElementById('root');
             //根元素的整个高度   （不是body）
             // let rootDivHeight = parseInt(window.getComputedStyle(rootDiv,'').height);
             //标记div顶端 到 body顶端 的距离（body顶端 与root元素顶端位置相同）
-            let markDivTop = parseInt(markDiv.offsetTop);
+            let markDivTop = parseInt(this.markDiv.offsetTop);
             //浏览器窗口可视高度
             let windowHeight = parseInt(document.body.clientHeight);
             //支付条自身的高度+固定定位的bottom值
@@ -120,6 +115,14 @@ class OrderFormDetail extends Component{
                 }
             }
         };
+
+        // console.warn('启动监听---------------------');
+        //监听页面滚动
+        if(window.addEventListener){
+            window.addEventListener("scroll", scrollAction, false);
+        }else if(window.attachEvent){
+            window.attachEvent("onscroll", scrollAction);
+        }
     }
 
     render(){

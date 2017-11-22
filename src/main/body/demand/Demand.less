@@ -5,6 +5,7 @@
   margin: 0 auto;
 }
 .searchContainer,.resultContainer{
+  clear: both;
   box-sizing: border-box;
   border: 1px solid @c_border_gray;
   padding: @d_spadding_center @d_spadding_small;
@@ -13,6 +14,7 @@
   background: @bg-color;
   margin-bottom: @d_spadding_base;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10);
+  overflow: hidden;
 }
 .operation{
   color: @c_theme_blue;
@@ -27,18 +29,16 @@
   margin-top: @d_spadding_small;
 }
 .searchItem01,.searchItem02{
-  display: inline-block;
+  float: left;
   font-size: @font_size_small;
   vertical-align: middle;
-  min-height: @d_spadding_super_big;
+  height: 40px;
   box-sizing: border-box;
-  min-width: 200px;
-  width: 23%;
+  width: 250px;
   margin: @d_spadding_base 0;
 }
 .searchItem02{
-  min-width: 250px;
-  width: 31%;
+  width:400px;
 }
 .inputStyle{
   width: 60%;
