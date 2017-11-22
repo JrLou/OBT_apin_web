@@ -171,7 +171,7 @@ class OrderFormDetail extends Component{
                                     orderId={this.state.orderId}
                                     airlineSigns={this.state.airlineSigns}
                                     defaultData={this.state.passengersData}
-                                    checkOrderState={this.checkOrderState.bind(this)}
+                                    // checkOrderState={this.checkOrderState.bind(this)}
                                 />
                             </div>
                         :   <div></div>
@@ -182,7 +182,7 @@ class OrderFormDetail extends Component{
                             orderState={this.state.orderState}
                             orderMsg={this.state.orderMsg}
                             payMsg={this.state.payMsg}
-                            checkOrderState={this.checkOrderState.bind(this)}
+                            // checkOrderState={this.checkOrderState.bind(this)}
                         />
                 </div>
                 <div id={'markDiv'} style={this.state.shouldFixed?{marginBottom:'100px'}:{}}></div>
