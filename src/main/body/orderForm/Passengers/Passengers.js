@@ -158,15 +158,18 @@ class PassengerMsg extends Component{
                 render:(text,record)=> {
                     if(this.state.isPassed){
                         let ticketStr = record.ticket?record.ticket:'';
+                        // let ticketStr = '1231231,12313123,12313123';   //测试数据
                         let ticketList = ticketStr.split(',');
                         let listLength = ticketList.length;
                         let ticketViews = [];
                         for(let index = 0;index<listLength;index+=2){
                             ticketViews.push(
                                 <div key={`ticket${index}`} style={{textAlign:'left'}}>
-                                    <span>{ticketList[index]?`${ticketList[index]},`:''}</span>
-                                    <span>&nbsp;&nbsp;</span>
+                                    <span>{ticketList[index]?`${ticketList[index]}`:''}</span>
+                                    <span>{ticketList[index+1]?',':''}</span>
+                                    <span style={{paddingLeft:'10px'}}></span>
                                     <span>{ticketList[index+1]?ticketList[index+1]:''}</span>
+                                    <span>{index+2<listLength?',':''}</span>
                                 </div>
                             );
                         }
