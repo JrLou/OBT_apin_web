@@ -1,3 +1,18 @@
+.src-main-Menu---menu---3qb2Y {
+  display: inline-block;
+  height: 100%;
+}
+@media screen {
+  .src-main-Menu---menu---3qb2Y {
+    width: 100px;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .src-main-Menu---menu---3qb2Y {
+    width: auto;
+    padding: 0 10px;
+  }
+}
 .src-main-body-component-SignView-sign---login---inUZX {
   font-size: 16px;
 }
@@ -330,13 +345,11 @@
   background-color: #ffffff;
   border-width: 0px 0px 1px 0px;
   border-style: solid;
-  border-color: rgba(49, 20, 20, 0.1);
+  border-color: rgba(0, 0, 0, 0.1);
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-  width: 100%;
-  overflow: hidden;
 }
 .src-main-AppTop---headContent----vG-3 {
-  width: 1200px;
+  max-width: 1200px;
   position: relative;
   margin: auto;
   left: 0;
@@ -6940,6 +6953,29 @@ active {
   float: right;
   color: #29A6FF;
 }
+.src-main-body-component-AlertView---centerBtn---8KUgx {
+  width: 45%;
+  height: 36px;
+  float: left;
+  background-color: #29A6FF;
+  color: #ffffff;
+  font-size: 16px;
+  display: block;
+  float: none;
+  margin: 0 auto;
+}
+.src-main-body-component-AlertView---hidden---FDCTQ {
+  display: none;
+}
+.src-main-body-component-AlertView---descDouble---15w-c {
+  margin-top: 30px;
+  font-size: 16px;
+  height: 20px;
+  line-height: 20px;
+  color: #333;
+  text-align: center;
+  margin-top: 5px;
+}
 .src-main-body-orderForm-Passengers-Passengers---maintheme---16GHG {
   position: absolute;
   min-height: 100%;
@@ -7649,6 +7685,7 @@ active {
   border: 1px solid #E6E6E6;
   border-radius: 2px;
   font-size: 16px;
+  font-weight: normal;
   color: #666;
 }
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---reUploadBtnStyle---2T1l8 {
@@ -7657,6 +7694,7 @@ active {
   border: 1px solid #E6E6E6;
   border-radius: 2px;
   font-size: 16px;
+  font-weight: normal;
   color: #666;
   position: absolute;
   top: 25px;
