@@ -14,6 +14,7 @@ import css from './AlertView.less';
  * json 用来传值 一般与typeIndex同时使用
  * title 标题
  * desc 提示描述
+ * descDouble 提示描述的第二行
  * con 提示内容
  * hideCancel 隐藏取消按钮
  * okText 确定按钮的文字
@@ -28,6 +29,7 @@ class AlertView extends Component {
             json:props.json?props.json:{},
             title:props.title?props.title:"提示",
             desc:props.desc?props.desc:"",
+            descDouble:props.descDouble?props.descDouble:"",
             con:props.con?props.con:"",
             hideCancel:props.hideCancel?props.hideCancel:false,
             okText:props.okText?props.okText:'是',
@@ -40,6 +42,7 @@ class AlertView extends Component {
             visible:true,
             title:option.title?option.title:"提示",
             desc:option.desc?option.desc:"",
+            descDouble:option.descDouble?option.descDouble:"",
             con:option.con?option.con:"",
             typeIndex:option.typeIndex?option.typeIndex:0,
             json:option.json?option.json:{},
@@ -60,6 +63,7 @@ class AlertView extends Component {
                        footer={null}>
             <div className={css.modalTitle}>{this.state.title}</div>
             <div className={css.modalDesc}>{this.state.desc}</div>
+            <div className={this.state.descDouble?css.descDouble:css.hidden}>{this.state.descDouble}</div>
             <div className={css.modalCon}>{this.state.con}</div>
             <div className={css.btnDiv}>
                 <Button type="primary"

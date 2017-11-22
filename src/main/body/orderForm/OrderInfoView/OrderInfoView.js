@@ -100,7 +100,7 @@ class OrderInfoView extends Component{
                                     ?   this.partnerDetail.showModal({
                                         title:"提示",
                                         desc:"是否确定要取消此行程订单?",
-                                        con:'订单取消后将不退还押金',
+                                        descDouble:'订单取消后将不退还押金',
                                     })
                                     :   this.partnerDetail.showModal({
                                         title:"提示",
