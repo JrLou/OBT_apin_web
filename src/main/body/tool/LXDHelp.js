@@ -217,6 +217,25 @@ let LXDHelp = {
         let w = width ? width : 150;
         let newUrl = `${url}?imageView2/0/w/${w}/interlace/1/q/75`;
         return newUrl;
+    },
+
+    /**
+     * 用来下载资源，可以跳过浏览器弹窗
+     * @param url
+     */
+    loadHelp(url){
+        if(!url){
+            return;
+        }
+        let f = document.createElement("form");
+        document.body.appendChild(f);
+        let i = document.createElement("input");
+        i.type = "hidden";
+        f.appendChild(i);
+        i.value = "5";
+        i.name = "price";
+        f.action = url;
+        f.submit();
     }
 
 };

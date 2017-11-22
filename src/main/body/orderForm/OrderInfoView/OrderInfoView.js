@@ -122,7 +122,9 @@ class OrderInfoView extends Component{
                                 {
                                     orderMsg.closeReason
                                     ?orderMsg.closeReason
-                                    :'超时未付款，订单自动关闭'
+                                    :(this.state.orderState==8)
+                                        ?'超时未付款，订单自动关闭'
+                                        :'用户取消订单'
                                 }
                                 <span style={{paddingLeft:'15px'}}></span>
                                 {
