@@ -56,6 +56,7 @@ class AlertView extends Component {
         var {callBack,cancelCallBack}=this.props;
         return (<Modal prefixCls={'my-ant-modal'}
                        width="450"
+                       style={{top:"25%"}}
                        visible={this.state.visible}
                        onCancel={()=>{
                            this.handleCancel();

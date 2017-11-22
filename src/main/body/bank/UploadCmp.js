@@ -22,7 +22,7 @@ class UploadCmp extends Component {
          return false;
       }
       if (file.size >= 1024000 * 4) {
-         message.warning("图片过大，最大允许4M。");
+         message.warning("图片过大，最大允许4M");
          return false;
       }
       return true;
