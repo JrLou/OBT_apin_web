@@ -16,8 +16,8 @@ class PassengerAdd extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            lineType:this.props.lineType?this.props.lineType:1,  //1:国内  2：国际
-            credType:this.props.lineType?this.props.lineType:1,     //证件类型
+            lineType:this.props.airlineSigns?this.props.airlineSigns:1,  //1:国内  2：国际
+            credType:this.props.airlineSigns?this.props.airlineSigns:1,     //证件类型
             visible:false,  //模态框显示
             loading:false,   //是否处于加载中
 
@@ -58,7 +58,8 @@ class PassengerAdd extends Component{
             newData.passengerType = (defaultData.passengerType==2)?2:1;         //默认为成人
             newData.nation = defaultData.nation?defaultData.nation:'';
             newData.birthday = defaultData.birthday?defaultData.birthday:null;
-            newData.credType = defaultData.credType?defaultData.credType:1;     //默认为国内
+            newData.lineType = nextProps.airlineSigns?nextProps.airlineSigns:1; //默认为国内
+            newData.credType = defaultData.credType?defaultData.credType:1;     //默认身份证
             newData.credNumber = defaultData.credNumber?defaultData.credNumber:'';
             newData.expireTime = defaultData.expireTime?defaultData.expireTime:null;
             newData.issuePlace = defaultData.issuePlace?defaultData.issuePlace:'';
@@ -67,7 +68,8 @@ class PassengerAdd extends Component{
             //新增
             newData.gender = 1;
             newData.passengerType = 1;
-            newData.credType = nextProps.lineType?nextProps.lineType:1;
+            newData.lineType = nextProps.airlineSigns?nextProps.airlineSigns:1;
+            newData.credType = nextProps.airlineSigns?nextProps.airlineSigns:1;
         }
         this.setState({
             data:newData,
@@ -257,7 +259,7 @@ class PassengerAdd extends Component{
                         this.setData('credType',value);
                     }}
                 >
-                    <Option value="1">身份证</Option>
+                    <Option value="1" className={this.state.lineType==2?css.hiddenItem:''}>身份证</Option>
                     <Option value="2">护照</Option>
                     <Option value="3">港澳通行证</Option>
                     <Option value="4">台胞证</Option>
