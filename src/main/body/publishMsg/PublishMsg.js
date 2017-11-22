@@ -47,7 +47,7 @@ class page extends Component {
         }
         let toCity=data.toCity==undefined?"":data.toCity;
         let fromCity=data.fromCity==undefined?"":data.fromCity;
-        let isMult=data.fromCity==undefined?false:data.isMult;
+        let isMult=data.isMult==undefined?false:data.isMult;
         let adultCount=data.adultCount==undefined?"":data.adultCount;
         let childCount=data.childCount==undefined?"":data.childCount;
         let listDefa=[{fromCity:fromCity,toCity:toCity}];

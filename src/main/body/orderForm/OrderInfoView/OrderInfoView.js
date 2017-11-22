@@ -6,7 +6,7 @@ import React, {Component} from 'react';
 import css from './OrderInfoView.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APILXD from "../../../../api/APILXD.js";
-import {hasKey,sliceTimeString} from '../../tool/LXDHelp.js';
+import {hasKey,sliceTimeString,changeImgUrl} from '../../tool/LXDHelp.js';
 import {Button,message,Modal,Spin,Icon} from 'antd';
 import AlertView from '../../component/AlertView.js';
 
@@ -328,11 +328,12 @@ class OrderInfoView extends Component{
         let views = [];
         for(let key in urlList){
             let imgUrl = urlList[key];
+            let newUrl = changeImgUrl(urlList[key]);
             if(imgUrl){
                 views.push(
                     <img
                         key={`img${key}`}
-                        src={imgUrl}
+                        src={newUrl}
                         alt="支付凭证"
                         className={css.voucherImg}
                         onClick={()=>{
@@ -408,12 +409,22 @@ class OrderInfoView extends Component{
             this.setLoading(false);
             message.error(msg);
         };
-        this.setLoading(true,()=>{
-            HttpTool.request(HttpTool.typeEnum.POST,APILXD.cancelOrder, successCB, failureCB, parames,
-                {
-                    ipKey: "hlIP"
-                });
-        });
+
+        let requestAction = ()=>{
+            this.setLoading(true,()=>{
+                HttpTool.request(HttpTool.typeEnum.POST,APILXD.cancelOrder, successCB, failureCB, parames,
+                    {
+                        ipKey: "hlIP"
+                    });
+            });
+        };
+
+        //判断订单状态是否已经改变
+        if(this.props.checkOrderState){
+            this.props.checkOrderState(requestAction);
+        }else{
+            requestAction();
+        }
     }
 
 

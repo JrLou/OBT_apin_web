@@ -84,42 +84,55 @@ class page extends Component {
         }, "self");
     }
     getLoadingView() {
-        return <div className={less.loading}>正在为您拉取订单信息,请稍候...</div>;
+        return (<div className={less.loading}>
+           <div className={less.allCenter}>正在为您拉取订单信息,请稍候...</div>
+        </div>);
     }
 
     getDefaultView() {
+       let go2Order = (
+          <Button
+             className={less.modalBtn}
+             type="primary"
+             onClick={()=>{
+                this.openOrder();
+             }}>查看订单</Button>
+       );
         return (
             <div className={less.loading}>
-                {this.state.error  ? <div className={less.loading}> {this.state.error}</div> : null}
-                {this.state.code<=-9999 ? <div className={less.aHref}
-                                               onClick={()=>{
-                                                   this.openOrder();
-                                               }}
-                > 查看订单</div> : (
-                    <div>订单号异常? <a onClick={() => {
-                        if (window.ysf && window.ysf.open) {
-                            // window.ysf.open();
-                            window.ysf.product({
-                                show: 1, // 1为打开， 其他参数为隐藏（包括非零元素）
-                                title: "订单支付异常",
-                                desc: "异常原因:" + (this.state.error || "未知"),
-                                note: "订单号:" + this.id,
-                                url: window.location.host,
-                                success: function () {     // 成功回调
-                                    window.ysf.open();
-                                },
-                                error: function () {       // 错误回调
-                                    // handle error
-                                }
-                            });
-                        } else {
+               <div className={less.allCenter2}>
+                {this.state.error  ? <div> {this.state.error}</div> : null}
+                {this.state.code<=-9999 ? go2Order : (
+                    <div>订单号异常?
+                        <a onClick={() => {
+                           if (window.ysf && window.ysf.open) {
+                               // window.ysf.open();
+                               window.ysf.product({
+                                   show: 1, // 1为打开， 其他参数为隐藏（包括非零元素）
+                                   title: "订单支付异常",
+                                   desc: "异常原因:" + (this.state.error || "未知"),
+                                   note: "订单号:" + this.id,
+                                   url: window.location.host,
+                                   success: function () {     // 成功回调
+                                       window.ysf.open();
+                                   },
+                                   error: function () {       // 错误回调
+                                       // handle error
+                                   }
+                               });
+                           } else {
 
-                            message.warn("");
-                        }
-                    }}>联系客服</a></div>
+                               message.warn("");
+                           }
+                          }}
+                        >联系客服
+                        </a>
+                       <br/>
+                       {go2Order}
+                    </div>
                 )}
 
-
+               </div>
             </div>
         );
 
