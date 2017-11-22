@@ -80,6 +80,7 @@ class page extends Component {
             orderStatus:'',
             startDate:null,
             dateRet:null,
+            pageSize: 10,
         };
     }
 
@@ -410,14 +411,8 @@ class page extends Component {
      * @param searchParames
      */
     loadData(currentNum,type) {
-        let page = currentNum;
-        let parames = {};
-        if(type){
-            parames = this.getSearchParames();
-        }else{
-            parames = this.searchParames;
-        }
-        parames.pageNum = page;
+        let parames = this.getSearchParames();
+        parames.pageNum = currentNum;
         let successCB = (code, msg, json, option) => {
             this.setLoading(false);
             let arr = [];
