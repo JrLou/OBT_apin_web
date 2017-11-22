@@ -58,20 +58,8 @@ class page extends Component {
     listenScroll(){
         let markDiv = document.getElementById('markDiv');
         let rootDiv = document.getElementById('root');
-        // console.warn('启动监听---------------------');
-        // log(markDiv);
-
-        log(parseInt(window.getComputedStyle(rootDiv,'').height));
-        log(parseInt(document.body.clientHeight));
-        log("----------------------------gyw---");
-        //支付条定位初始化  如果文档高度小于屏幕高度，则不固定定位
-        if(parseInt(window.getComputedStyle(markDiv,'').off)<parseInt(document.body.clientHeight)){
-            this.setState({
-                shouldFixed:false,
-            });
-        }
         //监听页面滚动
-        window.onscroll = ()=>{
+        let scrollAction = ()=>{
             markDiv = markDiv?markDiv:document.getElementById('markDiv');
             rootDiv = rootDiv?rootDiv:document.getElementById('root');
             //根元素的整个高度   （不是body）
@@ -94,7 +82,6 @@ class page extends Component {
             let scrollDistance = parseInt(window.scrollY);
             //差值
             let distance = changeDistance-scrollDistance;
-            log(distance);
             if(distance>0){
                 this.setState({
                     shouldFixed:(distance>0),
@@ -111,6 +98,11 @@ class page extends Component {
                 }
             }
         };
+        if(window.addEventListener){
+            window.addEventListener("scroll", scrollAction, false);
+        }else if(window.attachEvent){
+            window.attachEvent("onscroll", scrollAction);
+        }
     }
 
     /**

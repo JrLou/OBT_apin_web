@@ -44,7 +44,7 @@ class OrderFormDetail extends Component{
 
             titleData:null,     //头部导航信息
             flightData:null,    //航班信息
-
+            passengerData:[], //乘客信息
             orderMsg:null,      //订单信息
             payMsg:null,        //支付明细
             bottomData:null,    //底部浮动支付信息
@@ -67,27 +67,22 @@ class OrderFormDetail extends Component{
         //请求数据
         this.setLoading(true,this.loadFormDetail);
 
-        //启动页面滚动监听
+        //启动页面滚动监听,（有支付条才需要监听）
         setTimeout(()=>{this.listenScroll();},0);
-        // this.listenScroll();
     }
 
     listenScroll(){
-        let markDiv = document.getElementById('markDiv');
-        // console.warn('启动监听---------------------');
-
-        //监听页面滚动
-        window.onscroll = ()=>{
+        let scrollAction = ()=>{
             let payDiv = ReactDOM.findDOMNode(this.payBottom);
             if(!payDiv){
                 return;
             }
-            markDiv = markDiv?markDiv:document.getElementById('markDiv');
+            this.markDiv = this.markDiv?this.markDiv:document.getElementById('markDiv');
             // rootDiv = rootDiv?rootDiv:document.getElementById('root');
             //根元素的整个高度   （不是body）
             // let rootDivHeight = parseInt(window.getComputedStyle(rootDiv,'').height);
             //标记div顶端 到 body顶端 的距离（body顶端 与root元素顶端位置相同）
-            let markDivTop = parseInt(markDiv.offsetTop);
+            let markDivTop = parseInt(this.markDiv.offsetTop);
             //浏览器窗口可视高度
             let windowHeight = parseInt(document.body.clientHeight);
             //支付条自身的高度+固定定位的bottom值
@@ -120,6 +115,14 @@ class OrderFormDetail extends Component{
                 }
             }
         };
+
+        // console.warn('启动监听---------------------');
+        //监听页面滚动
+        if(window.addEventListener){
+            window.addEventListener("scroll", scrollAction, false);
+        }else if(window.attachEvent){
+            window.attachEvent("onscroll", scrollAction);
+        }
     }
 
     render(){
@@ -170,7 +173,7 @@ class OrderFormDetail extends Component{
                                     isPassed={this.state.isPassed}
                                     orderId={this.state.orderId}
                                     airlineSigns={this.state.airlineSigns}
-                                    defaultData={this.state.passengersData}
+                                    passengerData={this.state.passengerData}
                                     // checkOrderState={this.checkOrderState.bind(this)}
                                 />
                             </div>
@@ -247,6 +250,7 @@ class OrderFormDetail extends Component{
             let resultData = getFlightData(json.voyages,json.flightType,json.freeBag,json.weightLimit);
             let titleData = this.getTitleData(json);
             let orderMsg = this.getOrderMsg(json);
+            let passengerData = json.passengers?json.passengers:[];
             let payMsg = json.pays?json.pays:[];
             let bottomData = this.getBottomData(json);
             let orderState = transformForDetail(json);
@@ -258,6 +262,7 @@ class OrderFormDetail extends Component{
                 flightData:resultData,
                 orderMsg:orderMsg,
                 payMsg:payMsg,
+                passengerData:passengerData,
                 bottomData:bottomData,
                 orderState:orderState,
                 returnState:json.orderStatus,
@@ -361,44 +366,44 @@ class OrderFormDetail extends Component{
         let successCB = ()=>{
             window.app_open(this,'/Pay',{id:this.state.orderId});
         };
-        this.checkOrderState(successCB);
+        this.checkOrderPayInfo(successCB);
     }
 
     /**
      * 查询订单信息，判断订单状态是否已经改变
      */
-    checkOrderState(successCB,failureCB){
-        let currentState = this.state.orderState;
+    checkOrderPayInfo(successCB,failureCB){
         let parames = {
             orderId:this.state.orderId,
         };
 
         let success = (code, msg, json, option)=>{
             this.setLoading(false);
-            let newState = transformForDetail(json);
-            if(newState == currentState){
-                //订单状态未发生改变
                 if(successCB){
                     successCB();
                 }
-            }else{
-                //已经改变，提示用户
+        };
+        let failure = (code, msg, option)=>{
+            this.setLoading(false);
+            if(code==-430){
+                //不能支付
                 this.partnerDetail.showModal({
                     title:"提示",
-                    desc:"订单状态已改变，请刷新页面",
+                    desc:`${msg}`,
                 });
+                if(failureCB){
+                    failureCB();
+                }
+            }else{
+                message.error(msg);
                 if(failureCB){
                     failureCB();
                 }
             }
         };
-        let failure = (code, msg, option)=>{
-            this.setLoading(false);
-            message.error('服务器繁忙，请重试');
-        };
 
         this.setLoading(true,()=>{
-            HttpTool.request(HttpTool.typeEnum.POST,APILXD.lordOrderDetail, success, failure, parames,
+            HttpTool.request(HttpTool.typeEnum.POST,APILXD.payInfo, success, failure, parames,
                 {
                     ipKey: "hlIP"
                 });

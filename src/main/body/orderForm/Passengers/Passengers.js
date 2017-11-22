@@ -30,7 +30,7 @@ class PassengerMsg extends Component{
             orderState:this.props.orderState,       //页面订单状态
             orderId:this.props.orderId,
             // orderId:'16b3639900f54a86b9116af77b088d75',
-            dataSource:[],
+            dataSource:this.props.passengerData?this.passengerChange(this.props.passengerData,false):[],
             isPassed:this.props.isPassed?this.props.isPassed:false,     //是否已经确认了乘机人
             checkedMsg:false,       //是否已经勾选'确认乘机人信息'
             importResultMod:false,     //导入乘机人结果提示框
@@ -48,7 +48,7 @@ class PassengerMsg extends Component{
 
     componentDidMount(){
         //加载乘机人列表数据
-        this.setLoading(true,this.loadPassengerList);
+        // this.setLoading(true,this.loadPassengerList);
         //模拟导入成功的窗口
         // this.setState({
         //     importResultMod:true,
@@ -62,6 +62,15 @@ class PassengerMsg extends Component{
         //         reason:'XXXXXXXX',
         //     },
         // });
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(this.hasChanged){
+            return;
+        }
+        let newData = nextProps.passengerData?nextProps.passengerData:[];
+        this.passengerChange(newData,true);
+        this.hasChanged = true;
     }
 
     render(){
@@ -403,11 +412,13 @@ class PassengerMsg extends Component{
         };
 
         //判断订单状态是否已经改变
-        if(this.props.checkOrderState){
-            this.props.checkOrderState(submitAction);
-        }else{
-            submitAction();
-        }
+        // if(this.props.checkOrderState){
+        //     this.props.checkOrderState(submitAction);
+        // }else{
+        //     submitAction();
+        // }
+
+        submitAction();
     }
 
     /**
@@ -503,6 +514,8 @@ class PassengerMsg extends Component{
             this.setState({
                 dataSource:newData,
             });
+        }else{
+            return newData;
         }
     }
 
