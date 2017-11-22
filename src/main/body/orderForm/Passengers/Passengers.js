@@ -80,7 +80,7 @@ class PassengerMsg extends Component{
                 title:'序号',
                 dataIndex:'index',
                 render:(text,record)=>{
-                    return (<div style={{minWidth:'30px'}}>{text}</div>);
+                    return (<div style={{minWidth:'30px',display:'inline-block'}}>{text}</div>);
                 }
             },{
                 title:'乘机人',
@@ -119,7 +119,7 @@ class PassengerMsg extends Component{
                     }else if(text ==0){
                         gender = '女';
                     }
-                    return <div style={{minWidth:'30px'}}>{gender}</div>;
+                    return <div style={{minWidth:'30px',display:'inline-block'}}>{gender}</div>;
                 }
             },{
                 title:'乘机人类型',
@@ -131,13 +131,13 @@ class PassengerMsg extends Component{
                     }else if(text ==2){
                         passengerType = '儿童';
                     }
-                    return <div style={{minWidth:'30px'}}>{passengerType}</div>;
+                    return <div style={{minWidth:'30px',display:'inline-block'}}>{passengerType}</div>;
                 }
             },{
                 title:'出生日期',
                 dataIndex:'birthday',
                 render:(text,record)=>{
-                    return (<div style={{minWidth:'100px'}}>{text}</div>);
+                    return (<div style={{minWidth:'100px',display:'inline-block'}}>{text}</div>);
                 }
             },{
                 title:'国籍',
@@ -244,11 +244,17 @@ class PassengerMsg extends Component{
                                     onClick={()=>{
                                         if(this.state.airlineSigns == 1){
                                             //国内
-                                            window.open("http://oqum3uti8.bkt.clouddn.com/guonei.xlsx");
+                                            let currentTime = new Date();
+                                            let timeShip = currentTime.valueOf();
+                                            let url = "http://oqum3uti8.bkt.clouddn.com/guonei.xlsx"+'?'+timeShip;
+                                            window.open(url);
                                             // window.location.href = 'http://oqum3uti8.bkt.clouddn.com/guonei.xlsx';
                                         }else{
                                             //国际
-                                            window.open("http://oqum3uti8.bkt.clouddn.com/guoji.xlsx");
+                                            let currentTime = new Date();
+                                            let timeShip = currentTime.valueOf();
+                                            let url = "http://oqum3uti8.bkt.clouddn.com/guoji.xlsx"+'?'+timeShip;
+                                            window.open(url);
                                             // window.location.href = 'http://oqum3uti8.bkt.clouddn.com/guoji.xlsx';
                                         }
                                     }}
@@ -263,6 +269,7 @@ class PassengerMsg extends Component{
                                     添加乘机人
                                 </Button>
                                 <Upload
+                                    showUploadList={false}
                                     accept={'.xls,.xlsx'}
                                     action={'/upload'}
                                     onChange={(obj)=>{this.upLoadStateChange(obj);}}
