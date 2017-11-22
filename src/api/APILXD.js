@@ -15,5 +15,7 @@ let APILXD = {
     lordOrderDetail:'/bo/orderapi/v1.0/orders/find',                 //加载订单详情
     cancelOrder:'/bo/orderapi/v1.0/orders/cancel',                        //取消订单
     deleteOrder:'/bo/orderapi/v1.0/orders/delete',                        //删除订单
+    //支付模块
+    payInfo:'/bo/orderapi/v1.0/orders/payInfo',                            //获取支付信息
 };
 module.exports = APILXD;

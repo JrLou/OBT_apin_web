@@ -23,7 +23,7 @@ class page extends Component {
         super(props);
         let par = window.app_getPar(this);
         this.param = par.data?par.data:{};
-        this.isPay = this.param&&this.param.isDirect&&this.param.isDirect?this.param.isDirect:0;
+        this.isPay = this.param&&this.param.isDirect?this.param.isDirect:0;
 
         this.adultPrice = "";
         this.childPrice = "";
@@ -58,20 +58,8 @@ class page extends Component {
     listenScroll(){
         let markDiv = document.getElementById('markDiv');
         let rootDiv = document.getElementById('root');
-        // console.warn('启动监听---------------------');
-        // log(markDiv);
-
-        log(parseInt(window.getComputedStyle(rootDiv,'').height));
-        log(parseInt(document.body.clientHeight));
-        log("----------------------------gyw---");
-        //支付条定位初始化  如果文档高度小于屏幕高度，则不固定定位
-        if(parseInt(window.getComputedStyle(markDiv,'').off)<parseInt(document.body.clientHeight)){
-            this.setState({
-                shouldFixed:false,
-            });
-        }
         //监听页面滚动
-        window.onscroll = ()=>{
+        let scrollAction = ()=>{
             markDiv = markDiv?markDiv:document.getElementById('markDiv');
             rootDiv = rootDiv?rootDiv:document.getElementById('root');
             //根元素的整个高度   （不是body）
@@ -94,7 +82,6 @@ class page extends Component {
             let scrollDistance = parseInt(window.scrollY);
             //差值
             let distance = changeDistance-scrollDistance;
-            log(distance);
             if(distance>0){
                 this.setState({
                     shouldFixed:(distance>0),
@@ -111,6 +98,11 @@ class page extends Component {
                 }
             }
         };
+        if(window.addEventListener){
+            window.addEventListener("scroll", scrollAction, false);
+        }else if(window.attachEvent){
+            window.attachEvent("onscroll", scrollAction);
+        }
     }
 
     /**
@@ -139,10 +131,6 @@ class page extends Component {
         this.adultPrice = json&&json.adultPrice?json.adultPrice:0;
         this.childPrice = json&&json.childPrice?json.childPrice:0;
         this.depositAmount = json&&json.depositAmount?json.depositAmount:0;
-        // this.adultPrice =Math.round(parseFloat(adultPrice)*100)/100;
-        // this.childPrice=Math.round(parseFloat(childPrice)*100)/100;
-        // this.depositAmount = Math.round(parseFloat(depositAmount)*100)/100;
-
 
         this.cityArr = json&&json.cityArr?json.cityArr:"";
         this.cityDep = json&&json.cityDep?json.cityDep:"";
@@ -245,9 +233,7 @@ class page extends Component {
         let success = (code, msg, json, option) => {
             this.loadingView.refreshView(false,()=>{
                 if (json&&json.id){
-                    window.app_open(this, "/DemandDetail", {
-                        data: {id:json.id}
-                    }, "self");
+                    window.app_open(this, "/DemandDetail", {id:json.id}, "self");
                 }
             });
         };
@@ -262,7 +248,7 @@ class page extends Component {
         let {childNum,adultNum}=this.state;
         let totolNum = parseInt(childNum?childNum:0)+parseInt(adultNum?adultNum:0);
         let totalPrice = (this.childPrice*childNum*100+this.adultPrice*adultNum*100)/100;
-        let depositAmount =(this.depositAmount*(childNum+adultNum)*100)/100;
+        let depositAmount =(this.depositAmount*totolNum*100)/100;
         const {getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
         const adultCountError = getFieldError('adultCount');
         const childCountError = getFieldError('childCount');
@@ -380,7 +366,7 @@ class page extends Component {
                                 <span style={{color:"#29A6FF"}}>{totolNum}</span>
                             </div>
                             <div className={css.priceText}>
-                                <span>{"参考价（含税）"}</span>
+                                <span>{(this.isPay==1?"总金额":"参考价")+"（含税）"}</span>
                                 <span className={css.priceTextColor}>{"¥"}</span>
                                 <span className={css.priceTextFont}>{totalPrice}</span>
                             </div>
