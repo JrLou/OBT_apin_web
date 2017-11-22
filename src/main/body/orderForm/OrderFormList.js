@@ -271,7 +271,7 @@ class OrderFormList extends Component{
                         <DatePicker
                             value={this.state.startDate}
                             disabledDate={this.disabledStart.bind(this)}
-                            placeholder={'请选择'}
+                            placeholder={'请选择日期'}
                             className={css.dateStyle}
                             format="YYYY-MM-DD"
                             onChange={(data)=>{
@@ -285,7 +285,7 @@ class OrderFormList extends Component{
                         <DatePicker
                             value={this.state.dateRet}
                             disabledDate={this.disabledEnd.bind(this)}
-                            placeholder={'请选择'}
+                            placeholder={'请选择日期'}
                             className={css.dateStyle}
                             format="YYYY-MM-DD"
                             onChange={(data)=>{

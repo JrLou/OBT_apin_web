@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-21 10:53:02
+ * @Last Modified time: 2017-11-22 15:02:19
  */
 
 import React, { Component } from 'react';
@@ -53,7 +53,7 @@ class AccountLoginForm extends React.Component {
                 >
                     {getFieldDecorator('account', {
                         validateFirst: true,
-                        rules: [{ required: true, message: '请输入用户名!' },
+                        rules: [{ required: true, message: '请输入用户名' },
                         {
                             validator: (rule, value, callback) => {
                                 if (/^[0-9A-Za-z]{1,32}$/.test(value) || /^(1)\d{10}$/.test(value)) {
@@ -74,7 +74,7 @@ class AccountLoginForm extends React.Component {
                     help={passwordError || ''}
                 >
                     {getFieldDecorator('password', {
-                        rules: [{ required: true, message: '请输入密码!' },
+                        rules: [{ required: true, message: '请输入密码' },
                         { pattern: /^[0-9A-Za-z]{1,32}$/, message: '请输入数字或字母' }
                     ],
                     })(
@@ -175,7 +175,7 @@ class MsgLoginForm extends React.Component {
                         // validateTrigger: 'onBlur',
                         rules: [{ required: true, message: '请输入11位手机号' },
                         { len: 11, message: '请输入11位手机号' },
-                        { pattern: /^(1)\d{10}$/, message: '手机号格式不正确！' }
+                        { pattern: /^(1)\d{10}$/, message: '手机号格式不正确' }
                         ],
                     })(
                         <Input prefixCls='my-ant-input' placeholder="请输入11位手机号" />

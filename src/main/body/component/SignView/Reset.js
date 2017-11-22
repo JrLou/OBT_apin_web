@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-10 16:51:38 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-22 13:01:08
+ * @Last Modified time: 2017-11-22 15:04:16
  */
 
 
@@ -50,7 +50,7 @@ class ResetForm extends Component {
                     label="旧密码"
                 >
                     {getFieldDecorator('option', {
-                        rules: [{ required: true, message: '请输入密码!' },
+                        rules: [{ required: true, message: '请输入密码' },
                         { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
                         <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" />
@@ -63,7 +63,7 @@ class ResetForm extends Component {
                     label="设定密码"
                 >
                     {getFieldDecorator('password', {
-                        rules: [{ required: true, message: '请输入密码!' },
+                        rules: [{ required: true, message: '请输入密码' },
                         { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' },
                         {
                             validator: (rule, value, callback) => {
@@ -94,7 +94,7 @@ class ResetForm extends Component {
                         {
                             validator: (rule, value, callback) => {
                                 if (value && value !== getFieldValue('password')) {
-                                    callback('两次输入不一致！');
+                                    callback('两次输入不一致');
                                 }
 
                                 callback();
