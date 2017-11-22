@@ -104,7 +104,7 @@ class OrderInfoView extends Component{
                                     })
                                     :   this.partnerDetail.showModal({
                                         title:"提示",
-                                        desc:"是否确定删除此订单?",
+                                        desc:"是否确定取消此订单?",
                                     })
                                 ;
                             }}
