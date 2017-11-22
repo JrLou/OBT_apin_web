@@ -420,11 +420,12 @@ class OrderInfoView extends Component{
         };
 
         //判断订单状态是否已经改变
-        if(this.props.checkOrderState){
-            this.props.checkOrderState(requestAction);
-        }else{
-            requestAction();
-        }
+        // if(this.props.checkOrderState){
+        //     this.props.checkOrderState(requestAction);
+        // }else{
+        //     requestAction();
+        // }
+        requestAction();
     }
 
 

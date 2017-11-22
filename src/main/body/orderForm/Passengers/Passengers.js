@@ -412,11 +412,13 @@ class PassengerMsg extends Component{
         };
 
         //判断订单状态是否已经改变
-        if(this.props.checkOrderState){
-            this.props.checkOrderState(submitAction);
-        }else{
-            submitAction();
-        }
+        // if(this.props.checkOrderState){
+        //     this.props.checkOrderState(submitAction);
+        // }else{
+        //     submitAction();
+        // }
+
+        submitAction();
     }
 
     /**

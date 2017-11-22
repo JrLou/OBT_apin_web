@@ -366,44 +366,44 @@ class OrderFormDetail extends Component{
         let successCB = ()=>{
             window.app_open(this,'/Pay',{id:this.state.orderId});
         };
-        this.checkOrderState(successCB);
+        this.checkOrderPayInfo(successCB);
     }
 
     /**
      * 查询订单信息，判断订单状态是否已经改变
      */
-    checkOrderState(successCB,failureCB){
-        let currentState = this.state.orderState;
+    checkOrderPayInfo(successCB,failureCB){
         let parames = {
             orderId:this.state.orderId,
         };
 
         let success = (code, msg, json, option)=>{
             this.setLoading(false);
-            let newState = transformForDetail(json);
-            if(newState == currentState){
-                //订单状态未发生改变
                 if(successCB){
                     successCB();
                 }
-            }else{
-                //已经改变，提示用户
+        };
+        let failure = (code, msg, option)=>{
+            this.setLoading(false);
+            if(code==-430){
+                //不能支付
                 this.partnerDetail.showModal({
                     title:"提示",
-                    desc:"订单状态已改变，请刷新页面",
+                    desc:`${msg}`,
                 });
+                if(failureCB){
+                    failureCB();
+                }
+            }else{
+                message.error(msg);
                 if(failureCB){
                     failureCB();
                 }
             }
         };
-        let failure = (code, msg, option)=>{
-            this.setLoading(false);
-            message.error('服务器繁忙，请重试');
-        };
 
         this.setLoading(true,()=>{
-            HttpTool.request(HttpTool.typeEnum.POST,APILXD.lordOrderDetail, success, failure, parames,
+            HttpTool.request(HttpTool.typeEnum.POST,APILXD.payInfo, success, failure, parames,
                 {
                     ipKey: "hlIP"
                 });
