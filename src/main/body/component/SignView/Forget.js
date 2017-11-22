@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-20 14:13:57
+ * @Last Modified time: 2017-11-22 14:52:32
  */
 
 import React, { Component } from 'react';
@@ -36,7 +36,7 @@ class ForgetForm extends Component {
         this.props.form.validateFields();
     }
     render() {
-        const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched, getFieldValue, setFields } = this.props.form;
+        const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched, getFieldValue, setFields, validateFields } = this.props.form;
         const { isShowPic, picCode, loading } = this.state;
 
         // Only show error after a field is touched.
@@ -56,7 +56,18 @@ class ForgetForm extends Component {
                 >
                     {getFieldDecorator('mobile', {
                         rules: [{ required: true, message: '请输入11位手机号' },
-                        { pattern: /^(1)\d{10}$/, message: '手机号格式不正确！' }
+                        { pattern: /^(1)\d{10}$/, message: '手机号格式不正确' },
+                        {
+                            validator: (rule, value, callback) => {
+                                this.getCode(() => {
+                                    validateLoginPromise({ mobile: value, type: 1 })
+                                        .then((data) => {
+                                            callback('当前手机号未注册');
+                                        })
+                                        .catch((data) => callback());
+                                });
+                            }
+                        }
                         ],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入11位手机号" />
@@ -125,8 +136,18 @@ class ForgetForm extends Component {
                     label="设定密码"
                 >
                     {getFieldDecorator('password', {
-                        rules: [{ required: true, message: '请输入密码!' },
+                        rules: [{ required: true, message: '请输入密码' },
                         { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' },
+                        {
+                            validator: (rule, value, callback) => {
+                                const confirmPsw = getFieldValue('confirmPsw');
+                                if (confirmPsw) {
+                                    validateFields(['confirmPsw'], { force: true });
+                                }
+
+                                callback();
+                            }
+                        }
                         ],
                     })(
                         <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" />
@@ -139,13 +160,14 @@ class ForgetForm extends Component {
                     label="密码确认"
                 >
                     {getFieldDecorator('confirmPsw', {
+                        validateFirst: true,
                         rules: [{ required: true, message: '请再次输入密码' },
                         { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' },
                         {
                             validator: (rule, value, callback) => {
                                 const { getFieldValue } = this.props.form;
                                 if (value && value !== getFieldValue('password')) {
-                                    callback('两次输入不一致！');
+                                    callback('两次输入不一致');
                                 }
 
                                 callback();

@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-10 16:51:38 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-20 11:25:16
+ * @Last Modified time: 2017-11-22 15:04:16
  */
 
 
@@ -24,13 +24,17 @@ function hasErrors(fieldsError) {
 class ResetForm extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            loading: false
+        };
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentDidMount() {
         this.props.form.validateFields();
     }
     render() {
-        const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched, getFieldValue, setFields } = this.props.form;
+        const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched, getFieldValue, setFields, validateFields } = this.props.form;
+        const { loading } = this.state;
 
         // Only show error after a field is touched.
         const optionError = isFieldTouched('option') && getFieldError('option');
@@ -46,7 +50,7 @@ class ResetForm extends Component {
                     label="旧密码"
                 >
                     {getFieldDecorator('option', {
-                        rules: [{ required: true, message: '请输入密码!' },
+                        rules: [{ required: true, message: '请输入密码' },
                         { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
                         <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" />
@@ -59,8 +63,18 @@ class ResetForm extends Component {
                     label="设定密码"
                 >
                     {getFieldDecorator('password', {
-                        rules: [{ required: true, message: '请输入密码!' },
+                        rules: [{ required: true, message: '请输入密码' },
                         { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' },
+                        {
+                            validator: (rule, value, callback) => {
+                                const confirmPsw = getFieldValue('confirmPsw');
+                                if (confirmPsw) {
+                                    validateFields(['confirmPsw'], { force: true });
+                                }
+
+                                callback();
+                            }
+                        }
                         ],
                     })(
                         <Input prefixCls="my-ant-input"
@@ -80,7 +94,7 @@ class ResetForm extends Component {
                         {
                             validator: (rule, value, callback) => {
                                 if (value && value !== getFieldValue('password')) {
-                                    callback('两次输入不一致！');
+                                    callback('两次输入不一致');
                                 }
 
                                 callback();
@@ -97,6 +111,7 @@ class ResetForm extends Component {
                         prefixCls="my-ant-btn"
                         type="primary"
                         htmlType="submit"
+                        loading={loading}
                         className={css.btnSubmitSmall}
                         disabled={hasErrors(getFieldsError())}
                         style={{ width: '100%' }}
@@ -109,7 +124,18 @@ class ResetForm extends Component {
     }
 
     handleSubmit(e) {
+        this.setState({
+            loading: true
+        });
         e.preventDefault();
+        setTimeout(() => {
+            const { loading } = this.state;
+            if (loading) {
+                this.setState({
+                    loading: false
+                });
+            }
+        }, 1000);
         this.props.form.validateFields({ force: true }, (err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
