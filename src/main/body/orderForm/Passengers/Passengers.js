@@ -16,7 +16,7 @@ import css from './Passengers.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APILXD from "../../../../api/APILXD.js";
 import WindowHelp from '../../tool/WindowHelp.js';
-import {hasKey} from '../../tool/LXDHelp.js';
+import {hasKey,loadHelp} from '../../tool/LXDHelp.js';
 import PassengerAdd from './PassengerAdd.js';
 import {Table,Modal} from 'antd';
 import AlertView from '../../component/AlertView.js';
@@ -228,7 +228,6 @@ class PassengerMsg extends Component{
                                     type="primary"
                                     className={hasKey(this.state.orderState,[0,8])?css.hidden:css.btnType02}
                                     onClick={()=>{
-                                        this.exportWindow = this.WindowHelp.openInitWindow();
                                         this.exportPassenger();
                                     }}
                                 >
@@ -247,15 +246,13 @@ class PassengerMsg extends Component{
                                             let currentTime = new Date();
                                             let timeShip = currentTime.valueOf();
                                             let url = "http://oqum3uti8.bkt.clouddn.com/guonei.xlsx"+'?'+timeShip;
-                                            window.open(url);
-                                            // window.location.href = 'http://oqum3uti8.bkt.clouddn.com/guonei.xlsx';
+                                            loadHelp(url);
                                         }else{
                                             //国际
                                             let currentTime = new Date();
                                             let timeShip = currentTime.valueOf();
                                             let url = "http://oqum3uti8.bkt.clouddn.com/guoji.xlsx"+'?'+timeShip;
-                                            window.open(url);
-                                            // window.location.href = 'http://oqum3uti8.bkt.clouddn.com/guoji.xlsx';
+                                            loadHelp(url);
                                         }
                                     }}
                                 >
@@ -559,14 +556,12 @@ class PassengerMsg extends Component{
             orderId:this.state.orderId,
         };
         let successCB = (code, msg, json, option)=>{
-            // window.location.href = json;
-            // window.open(json);
-            this.WindowHelp.openWindow(this.exportWindow,json);
+
             this.setLoading(false);
+            loadHelp(json);
         };
 
         let failureCB = (code, msg, option)=>{
-            this.WindowHelp.closeWindow(this.exportWindow);
             this.setLoading(false);
             message.error(msg);
         };
