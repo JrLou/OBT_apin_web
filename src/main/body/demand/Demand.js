@@ -45,7 +45,7 @@ class page extends Component {
                 title: '需求处理中',
                 value: '1',
             },{
-                title: '待用户确认',
+                title: '待确认',
                 value: '3',
             }, {
                 title: '处理完成',
@@ -428,7 +428,7 @@ class page extends Component {
                 });
             } else {
                 let flightType = ["单程", "往返", "多程"];
-                let demandStatus = ["需求已取消", "需求处理中", "需求处理中", "待用户确认", "处理完成", "需求关闭"];
+                let demandStatus = ["需求已取消", "需求处理中", "需求处理中", "待确认", "处理完成", "需求关闭"];
 
                 json.map((data, index) => {
                     datas = {

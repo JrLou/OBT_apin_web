@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Menu } from 'antd';
 import { HttpTool,CookieHelp} from "../../lib/utils/index.js";
+import css from "./Menu.less";
 
 const MenuItem = Menu.Item;
 
@@ -41,7 +42,7 @@ class Menus extends Component {
                     menus.map((menu) => {
                         return (
                             <MenuItem key={menu.path}>
-                                <span style={{ display: 'inline-block', width: '100%', height: '100%' }} onClick={() => {
+                                <span className={css.menu} onClick={() => {
                                     this.setState({
                                         selectedKey: menu.path
                                     });

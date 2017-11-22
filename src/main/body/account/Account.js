@@ -267,6 +267,7 @@ class AccountForm extends Component {
                 }
 
                 <Modal
+                    key={(Math.random() * 100000).toFixed()}
                     prefixCls="my-ant-modal"
                     title="修改密码"
                     visible={this.state.visible}

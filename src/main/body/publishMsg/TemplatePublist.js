@@ -236,15 +236,14 @@ class page extends Component {
                                        let lineNum= this.state.lineNum;
                                        //起始时间
                                        let startTime=moment(moment(Date.now()).format("YYYY-MM-DD")).unix();
-                                       let newDate=moment(moment(new Date()).format("YYYY-MM-DD")).unix();
+                                    //   let newDate=moment(moment(new Date()).format("YYYY-MM-DD")).unix();
                                        let endTime="";
                                         if(lineType== 3){
                                             for(let j=0;j<i;j++){   //开始时间
                                                 let value=this.vueValue(getFieldValue("fromDateTime"+j));// (getFieldValue("fromDateTime"+j)==undefined||getFieldValue("fromDateTime"+j)==""||getFieldValue("fromDateTime"+j)==null)?"":getFieldValue("fromDateTime"+j);
                                                 if(value==""){
                                                     value=startTime;
-                                                }else
-                                                if(value !=""){
+                                                }else{
                                                     value=moment(moment(value).format("YYYY-MM-DD")).unix();
                                                 }
                                                 if(startTime<=value){
@@ -256,7 +255,7 @@ class page extends Component {
                                                 if(value !="" && endTime==""){//结尾时间
                                                     endTime=moment(moment(value).format("YYYY-MM-DD")).unix();
                                                 } 
-                                                if(endTime!="" && endTime<newDate){
+                                                if(endTime!="" && endTime<startTime){
                                                     endTime="";
                                                 }
                                             }
@@ -268,9 +267,11 @@ class page extends Component {
                                                 endTime=moment(moment(value).format("YYYY-MM-DD")).unix();
                                             }
                                         }
+
                                         if(endTime!=""){
                                             endTime=endTime+(24*60*60);
                                         }
+                                        
                                         //console.log("开始时间："+moment(startTime).format("YYYY-MM-DD"));
                                        // console.log("结尾时间："+ (endTime && moment(endTime).format("YYYY-MM-DD")));
                                         let changsVlaue=current && moment(moment(current.valueOf()).format("YYYY-MM-DD")).unix();
@@ -306,7 +307,7 @@ class page extends Component {
                                 </FormItem>
                             </Col>
                         }
-                        {this.state.lineType == 3 &&
+                        {this.state.lineType == 3 && i >= 2 &&
                             <Col span={11} offset={2}>
                                 <Button type="primary" style={{ float: "right",borderRadius:"2px",width:66,height:35 ,fontSize:16}} disabled={this.state.lineNum != (i + 1) || i == 0 || this.state.lineNum == 2} onClick={() => this.lineDel()}><span style={{fontSize:15}}>删除</span></Button>
                             </Col>
@@ -407,22 +408,6 @@ class page extends Component {
                     <Row style={{ marginBottom: this.marginBottomRow , fontSize: "14px"}}>
                         <Col span={4}>航程类型：</Col>
                     </Row>
-                    {/* <Row >
-                        <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
-                            {getFieldDecorator('flightType', {//lineType
-                                initialValue: this.state.lineType,
-                            })(
-                                <RadioGroup style={{ fontSize: "12px"}} onChange={(e) => this.lineTypeonChange(e)}>
-                                    <Radio value={1}>单程</Radio>
-                                    <Radio value={2}>往返</Radio>
-                                    {!this.state.isMult && 
-                                        <Radio value={3}>多程</Radio>
-                                    }
-                                </RadioGroup>
-                                )}
-                        </FormItem>
-                    </Row> */}
-
                     <Row >
                         <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                             {getFieldDecorator('flightType', {//lineType
@@ -438,10 +423,14 @@ class page extends Component {
                     {this.lineDetails()}
                     {/**出行人数*/}
                     <Row style={{ marginBottom: this.marginBottomRow , fontSize: "14px"}}>
-                        <Col span={4}>出行人数：</Col>
+                        <Col span={11} >成人：</Col>
+                        <Col span={11} offset={2}>儿童：</Col>
                     </Row>
+                    {/* <Row style={{ marginBottom: this.marginBottomRow , fontSize: "14px"}}>
+                        <Col span={4}>出行人数：</Col>
+                    </Row> */}
                     <Row >
-                        <Col span={10} >
+                        <Col span={11} >
                             <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                                 {getFieldDecorator('adultCount', {//adultCount
                                     rules: [{
@@ -455,14 +444,15 @@ class page extends Component {
                                     initialValue:this.vueValue(adultCount)!=""?this.vueValue(adultCount):this.state.adultCount,
                                 })(
                               
-                                    <div style={{ position: "relative" }}>
-                                        <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px",pointerEvents:"none"}}>成人</span>
-                                        <Input style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.vueValue(adultCount)!=""?this.vueValue(adultCount):this.state.adultCount}   maxLength="4" onChange={(e) => this.handleConfirmNum("adultCount", e)}/>
-                                    </div>
+                                    // <div style={{ position: "relative" }}>
+                                    //     <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px",pointerEvents:"none"}}>成人</span>
+                                   // <Input style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.vueValue(adultCount)!=""?this.vueValue(adultCount):this.state.adultCount}   maxLength="4" onChange={(e) => this.handleConfirmNum("adultCount", e)}/>
+                                    <Input style={{ width: 230, height: 34}}  maxLength="4" onChange={(e) => this.handleConfirmNum("adultCount", e)}/>
+                                    // </div>
                                     )}
                             </FormItem>
                         </Col>
-                        <Col span={10} offset={1}>
+                        <Col span={8} offset={2}>
                             <FormItem style={{ marginBottom: this.marginBottomFormItem }}>
                                 {getFieldDecorator('childCount', {//childCount
                                     rules: [{
@@ -471,10 +461,11 @@ class page extends Component {
                                     }],
                                     initialValue: this.vueValue(childCount)!=""?this.vueValue(childCount):this.state.childCount,
                                 })(
-                                    <div style={{ position: "relative" }}>
-                                        <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px",pointerEvents:"none"}}>儿童(2～12周岁)</span>
-                                        <Input id="male" style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.vueValue(childCount)!=""?this.vueValue(childCount):this.state.childCount} maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)} />
-                                    </div>
+                                    // <div style={{ position: "relative" }}>
+                                    //     <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px",pointerEvents:"none"}}>儿童(2～12周岁)</span>
+                                    //     <Input id="male" style={{ width: 230, height: 36, borderRadius: "2px" }} defaultValue={this.vueValue(childCount)!=""?this.vueValue(childCount):this.state.childCount} maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)} />
+                                     // </div>
+                                    <Input  style={{ width: 160, height: 34}}  maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)}  placeholder={'2～12周岁'}/>
                                     )}
                             </FormItem>
                         </Col>
@@ -496,7 +487,7 @@ class page extends Component {
                                     }],
                                     initialValue: this.state.remark,
                                 })(
-                                    <Input type="textarea" maxLength="100" style={{ height: 180, resize: "none", borderRadius: 2,fontSize:"16px" }} placeholder="如：价格、时间等" />
+                                    <Input type="textarea" maxLength="100" style={{ height: 180, resize: "none",fontSize:"14px" }} placeholder="如：价格、时间等" />
                                     )}
                             </FormItem>
 
@@ -518,9 +509,7 @@ class page extends Component {
                                     }],
                                     initialValue:phoneCookie,
                                 })(
-                                    <div style={{ width: "100%" }}>
-                                        <Input style={{ width: 240, height: 36, borderRadius: "2px",fontSize:"16px" }} defaultValue={phoneCookie} placeholder="输入可联系的手机号码" />
-                                    </div>
+                                        <Input style={{ width: 230, height: 34, fontSize:"14px" }}  placeholder="输入可联系的手机号码" />
                                     )}
                             </FormItem>
 
