@@ -15,6 +15,9 @@ import css from './AlertView.less';
  * title 标题
  * desc 提示描述
  * con 提示内容
+ * hideCancel 隐藏取消按钮
+ * okText 确定按钮的文字
+ * noText 取消按钮的文字
  */
 class AlertView extends Component {
     constructor(props) {
@@ -26,6 +29,9 @@ class AlertView extends Component {
             title:props.title?props.title:"提示",
             desc:props.desc?props.desc:"",
             con:props.con?props.con:"",
+            hideCancel:props.hideCancel?props.hideCancel:false,
+            okText:props.okText?props.okText:'是',
+            noText:props.noText?props.noText:'否',
         };
     }
     showModal(option) {
@@ -37,6 +43,9 @@ class AlertView extends Component {
             con:option.con?option.con:"",
             typeIndex:option.typeIndex?option.typeIndex:0,
             json:option.json?option.json:{},
+            hideCancel:option.hideCancel?option.hideCancel:false,
+            okText:option.okText?option.okText:'是',
+            noText:option.noText?option.noText:'否',
         });
     }
 
@@ -54,14 +63,14 @@ class AlertView extends Component {
             <div className={css.modalCon}>{this.state.con}</div>
             <div className={css.btnDiv}>
                 <Button type="primary"
-                        className={css.btn}
+                        className={this.state.hideCancel?css.centerBtn:css.btn}
                         onClick={()=>{
                             this.handleOk(callBack);
-                        }}>是</Button>
-                <Button className={css.refBtn}
+                        }}>{this.state.okText}</Button>
+                <Button className={this.state.hideCancel?css.hidden:css.refBtn}
                         onClick={()=>{
                             this.handleCancel(cancelCallBack);
-                        }}>否</Button>
+                        }}>{this.state.noText}</Button>
             </div>
         </Modal>);
     }

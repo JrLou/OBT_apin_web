@@ -114,6 +114,7 @@ class TitleBar extends Component{
      */
     deleteOrder(){
         this.partnerDetail.showModal({
+            hideCancel:true,
             title:"提示",
             desc:"是否确定删除此订单?",
         });

@@ -19,7 +19,7 @@
   margin-top: @d_spadding_cell;
   font-size: @font_size_cell;
   color:#999999;
-  text-align: left;
+  text-align: center;
 }
 
 .btnDiv{
@@ -42,4 +42,13 @@
   composes: btn;
   float: right;
   color: @c_title_blue;
+}
+.centerBtn{
+  .btn;
+  display: block;
+  float: none;
+  margin: 0 auto;
+}
+.hidden{
+  display: none;
 }
