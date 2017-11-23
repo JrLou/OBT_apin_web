@@ -3450,6 +3450,7 @@ active {
   padding-top: 5px;
   padding-bottom: 5px;
   width: 18%;
+  min-width: 70px;
   margin-left: 1%;
   margin-right: 1%;
   position: relative;
@@ -3483,7 +3484,7 @@ active {
 .src-main-body-content-line-CellFlightCom---timeLineItem---2xCR9 {
   float: left;
   font-size: 24px;
-  width: 40%;
+  width: 39%;
   color: #333;
   text-align: right;
   box-sizing: content-box;
@@ -3491,14 +3492,19 @@ active {
 }
 .src-main-body-content-line-CellFlightCom---space---3lU7y {
   width: 20%;
-  display: inline-block;
+  height: 1px;
+  min-width: 70px;
+  float: left;
 }
 .src-main-body-content-line-CellFlightCom---placeLineItem---33RCa {
-  display: inline-block;
+  float: left;
   color: #333;
   text-align: right;
   box-sizing: content-box;
-  width: 40%;
+  width: 39%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .src-main-body-content-line-CellFlightCom---refPlaceLineItem---l7rQs {
   text-align: left;
@@ -8707,30 +8713,32 @@ active {
 }
 .src-pay-Panel---modalConent---3P1ap .src-pay-Panel---animationGroup_circle---1wavw {
   display: inline-block;
-  width: 16px;
-  height: 16px;
+  height: 15px;
+  width: 15px;
   border-radius: 50%;
   margin: 0 5px 0;
   background-color: #29A6FF;
 }
 .src-pay-Panel---modalConent---3P1ap .src-pay-Panel---animationGroup_circle---1wavw:nth-child(1) {
-  animation: src-pay-Panel---mymove---OTQLh 1.5s infinite;
+  -webkit-animation: src-pay-Panel---scale---aQgoQ 0.75s 0.12s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
+  animation: src-pay-Panel---scale---aQgoQ 0.75s 0.12s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
 }
 .src-pay-Panel---modalConent---3P1ap .src-pay-Panel---animationGroup_circle---1wavw:nth-child(2) {
-  animation: src-pay-Panel---mymove---OTQLh 1.5s infinite 0.5s;
+  -webkit-animation: src-pay-Panel---scale---aQgoQ 0.75s 0.24s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
+  animation: src-pay-Panel---scale---aQgoQ 0.75s 0.24s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
 }
 .src-pay-Panel---modalConent---3P1ap .src-pay-Panel---animationGroup_circle---1wavw:nth-child(3) {
-  animation: src-pay-Panel---mymove---OTQLh 1.5s infinite 1s;
+  -webkit-animation: src-pay-Panel---scale---aQgoQ 0.75s 0.36s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
+  animation: src-pay-Panel---scale---aQgoQ 0.75s 0.36s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
 }
-@keyframes src-pay-Panel---mymove---OTQLh {
-  0% {
-    background: #b8f5ff;
-  }
-  50% {
-    background: #5edaff;
+@keyframes src-pay-Panel---scale---aQgoQ {
+  30% {
+    -webkit-transform: scale(0.3);
+    transform: scale(0.3);
   }
   100% {
-    background: #1a9cff;
+    -webkit-transform: scale(1);
+    transform: scale(1);
   }
 }
 .src-pay-UnionPay---maintheme---2mRjJ {
@@ -9716,6 +9724,8 @@ active {
 .src-pay-PayPassWord---lineOne---JCFff {
   line-height: 40px;
   font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .src-pay-PayPassWord---lineOne---JCFff .src-pay-PayPassWord---label---2Leuo {
   display: inline-block;
