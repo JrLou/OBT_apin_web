@@ -76,7 +76,7 @@ window.app_open = function (obj, path, state, open, callBack) {
     if(get==="?"){
         get = "";
     }
-    if(get&&get.length>256){
+    if(get&&get.length>1024){
         throw Error("参数过长(最长256字符),请检查:get = "+get);
     }
     if (open === "new") {

@@ -1,8 +1,8 @@
 /**
  * Created by lixifeng on 17/10/12.
  */
-import React, {Component, Input, Icon} from "react";
-import {AutoComplete} from "antd";
+import React, {Component, Icon} from "react";
+import {AutoComplete,Input} from "antd";
 
 const Option = AutoComplete.Option;
 const OptGroup = AutoComplete.OptGroup;
@@ -207,7 +207,8 @@ class InputAuto extends Component {
         }
         return (
             <div  style={{width: "100%"}}>
-                <AutoComplete className="ant-input ant-select-search__field"
+                <AutoComplete
+                    className="sa"
                     {...props}
                     dropdownMatchSelectWidth={false}
                     dropdownStyle={{width: "320px"}}
@@ -218,6 +219,7 @@ class InputAuto extends Component {
                     onFocus={() => {
                         this.changeFirstState();
                     }}
+                    children={<Input maxLength={30} />}
                     onSearch={(value) => {
                         if(!this.keyWord){
                             this.setState({
@@ -263,10 +265,11 @@ class InputAuto extends Component {
 
                         this.tempTime = new Date().getTime();
                     }}
-
+                              maxLength={5}
 
                 >
                 </AutoComplete>
+
             </div>
         );
     }
