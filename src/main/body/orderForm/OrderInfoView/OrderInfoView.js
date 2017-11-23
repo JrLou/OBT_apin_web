@@ -99,12 +99,12 @@ class OrderInfoView extends Component{
                                 this.state.orderState == 5
                                     ?   this.partnerDetail.showModal({
                                         title:"提示",
-                                        desc:"是否确定要取消此行程订单?",
-                                        descDouble:'订单取消后将不退还押金',
+                                        desc:"是否确认取消此行程订单？",
+                                        descDouble:'订单取消后将不退还押金。',
                                     })
                                     :   this.partnerDetail.showModal({
                                         title:"提示",
-                                        desc:"是否确定取消此订单?",
+                                        desc:"是否确认取消此行程订单？",
                                     })
                                 ;
                             }}
@@ -122,7 +122,9 @@ class OrderInfoView extends Component{
                                 {
                                     orderMsg.closeReason
                                     ?orderMsg.closeReason
-                                    :'超时未付款，订单自动关闭'
+                                    :(this.state.orderState==8)
+                                        ?'超时未付款，订单自动关闭'
+                                        :'用户取消订单'
                                 }
                                 <span style={{paddingLeft:'15px'}}></span>
                                 {

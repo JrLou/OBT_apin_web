@@ -444,7 +444,7 @@ class InputLayout extends Component {
 
    setFomrFileds(e, propName) {
       let v = e.target.value;
-      if (v.length >= 64 || (propName == "account" && v.length >= 24)) {//后台设置的最大长度就是64
+      if (v.length >= 64 || (propName == "account" && v.length > 30)) {//后台设置的最大长度就是64
          return;
       }
       this.setState({
@@ -455,7 +455,7 @@ class InputLayout extends Component {
    }
 
    isRightCardNum(account) {
-      return account.length >= 12 && account.length <= 24;
+      return account.length >= 1 && account.length <= 30;
    }
 
    formatDataState() {//删除首尾的空格
