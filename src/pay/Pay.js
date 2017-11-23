@@ -83,7 +83,7 @@ class page extends Component {
             id: this.id
         }, "self");
     }
-    getLoadingView() {//todo 这里美化！记得再检验下
+    getLoadingView() {
         return (<div className={less.loading}>
            <div className={less.allCenter} style={{height:"80px"}}>
                <div style={{marginBottom:"20px"}}>
