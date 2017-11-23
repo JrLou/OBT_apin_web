@@ -4797,11 +4797,11 @@ tr.ant-table-expanded-row:hover {
 .ant-upload-list-item-error,
 .ant-upload-list-item-error .anticon-paper-clip,
 .ant-upload-list-item-error .ant-upload-list-item-name {
-  color: #f50;
+  color: #E1593C;
 }
 .ant-upload-list-item-error .anticon-cross {
   opacity: 1;
-  color: #f50 !important;
+  color: #E1593C !important;
 }
 .ant-upload-list-item-progress {
   line-height: 0;
@@ -4824,7 +4824,7 @@ tr.ant-table-expanded-row:hover {
 }
 .ant-upload-list-picture .ant-upload-list-item-error,
 .ant-upload-list-picture-card .ant-upload-list-item-error {
-  border-color: #f50;
+  border-color: #E1593C;
 }
 .ant-upload-list-picture .ant-upload-list-item-info,
 .ant-upload-list-picture-card .ant-upload-list-item-info {
@@ -5098,13 +5098,13 @@ tr.ant-table-expanded-row:hover {
   animation: ant-progress-active 2.4s cubic-bezier(0.23, 1, 0.32, 1) infinite;
 }
 .ant-progress-status-exception .ant-progress-bg {
-  background-color: #f50;
+  background-color: #E1593C;
 }
 .ant-progress-status-exception .ant-progress-text {
-  color: #f50;
+  color: #E1593C;
 }
 .ant-progress-status-exception .ant-progress-circle-path {
-  stroke: #f50;
+  stroke: #E1593C;
 }
 .ant-progress-status-success .ant-progress-bg {
   background-color: #87d068;
@@ -5136,7 +5136,7 @@ tr.ant-table-expanded-row:hover {
   font-size: 1.16666667em;
 }
 .ant-progress-circle .ant-progress-status-exception .ant-progress-text {
-  color: #f50;
+  color: #E1593C;
 }
 .ant-progress-circle .ant-progress-status-success .ant-progress-text {
   color: #87d068;
