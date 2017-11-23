@@ -58,7 +58,6 @@ class PassengerAdd extends Component{
             newData.passengerType = (defaultData.passengerType==2)?2:1;         //默认为成人
             newData.nation = defaultData.nation?defaultData.nation:'';
             newData.birthday = defaultData.birthday?defaultData.birthday:null;
-            newData.lineType = nextProps.airlineSigns?nextProps.airlineSigns:1; //默认为国内
             newData.credType = defaultData.credType?defaultData.credType:1;     //默认身份证
             newData.credNumber = defaultData.credNumber?defaultData.credNumber:'';
             newData.expireTime = defaultData.expireTime?defaultData.expireTime:null;
@@ -68,12 +67,12 @@ class PassengerAdd extends Component{
             //新增
             newData.gender = 1;
             newData.passengerType = 1;
-            newData.lineType = nextProps.airlineSigns?nextProps.airlineSigns:1;
             newData.credType = nextProps.airlineSigns?nextProps.airlineSigns:1;
         }
         this.setState({
             data:newData,
             credType:newData.credType,
+            lineType:nextProps.airlineSigns?nextProps.airlineSigns:1,
             testState:{
                 name:{state:true,msg:`请输入姓名`},
                 nation:{state:true,msg:'请输入国籍'},
@@ -386,7 +385,7 @@ class PassengerAdd extends Component{
             return true;
         }
         let nowDate = new Date();
-        return (date.valueOf()<=nowDate.valueOf()-86400000);
+        return (date.valueOf()<=nowDate.valueOf());
     }
     //默认不可选的日期(生日)
     disabledTimeForBirth(date){
