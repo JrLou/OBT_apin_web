@@ -55,9 +55,25 @@ class PassengerMsg extends Component{
         //     importResultMsg:{
         //         successCount:10,
         //         failCount:3,
-        //         failRowNumber:[1,2,3],
+        //         failRowNumber:[
+        //             "[身份证]第4行(票号不能重复，有3张票号重复)",
+        //             "[身份证]第5行(票号1必填)",
+        //             "[身份证]第6行(票号1必填)"
+        //         ],
         //         repeatCount:4,
-        //         repeatRowNumber:[6,7,8,9],
+        //         repeatRowNumber:[
+        //             "[身份证]第3行(Excel乘客重复)"
+        //         ],
+        //         dbExistCount:3,
+        //         dbExistRowNumber:[
+        //             "[身份证]第2行(乘客不存在)",
+        //             "[护照]第2行(乘客不存在)",
+        //             "[护照]第3行(乘客不存在)",
+        //             "[护照]第4行(乘客不存在)",
+        //             "[护照]第5行(乘客不存在)",
+        //             "[护照]第6行(乘客不存在)",
+        //             "[护照]第7行(乘客不存在)"
+        //         ],
         //         totalCount:13,
         //         reason:'XXXXXXXX',
         //     },
@@ -326,9 +342,8 @@ class PassengerMsg extends Component{
                             }
                         />
                         <Modal
-                            prefixCls={'my-ant-modal'}
-                            title="导入乘机人结果"
                             visible={this.state.importResultMod}
+                            width={500}
                             footer={null}
                             maskClosable={false}
                             onCancel={()=>{
@@ -339,11 +354,13 @@ class PassengerMsg extends Component{
                                 this.setLoading(true,this.loadPassengerList);
                             }}
                         >
+                            <div className={css.ModalTitle}>导入乘机人结果</div>
                             <div>
                                 {this.getResultView()}
                             </div>
                             <div className={css.btnBox}>
                                 <Button
+                                    className={css.checkBtn}
                                     type={'primary'}
                                     onClick={()=>{
                                         this.setState({
@@ -640,6 +657,13 @@ class PassengerMsg extends Component{
         //失败行号  （括号内有原因）
         let getFailNumber = (list,type)=>{
             let numberList = [];
+            let style = {};
+            switch(type){
+                case 1:style={color:'#f50'};break;
+                case 2:style={color:'#333'};break;
+                case 3:style={color:'#fa0'};break;
+                default:break;
+            }
             if(list instanceof Array){
                 for(let key in list){
                     let array01 = list[key].split('第');
@@ -652,7 +676,7 @@ class PassengerMsg extends Component{
                                         &nbsp;&nbsp;
                                         <span>第</span>
                                         &nbsp;
-                                        <span style={{color:'#f50'}}>{array02[0]}</span>
+                                        <span style={style}>{array02[0]}</span>
                                         &nbsp;
                                         <span>行</span>
                                         &nbsp;&nbsp;
@@ -694,7 +718,7 @@ class PassengerMsg extends Component{
                             {`${result.repeatCount}人`}
                             <div className={css.numberList}>
                                 重复的记录行号：
-                                {getNumber(result.repeatRowNumber,2)}
+                                {getFailNumber(result.repeatRowNumber,2)}
                             </div>
                     </div>
                     :''
@@ -706,7 +730,7 @@ class PassengerMsg extends Component{
                             {`${result.dbExistCount}人`}
                             <div className={css.numberList}>
                                 已存在的记录行号：
-                                {getNumber(result.dbExistRowNumber,3)}
+                                {getFailNumber(result.dbExistRowNumber,3)}
                             </div>
                         </div>
                         :''
