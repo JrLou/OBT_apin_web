@@ -97,7 +97,7 @@ class OrderFormDetail extends Component{
             //定位样式改变的临界滚动值
             let changeDistance = markDivTop - payTop;
             //网页滚动的距离
-            let scrollDistance = parseInt(window.pageYOffset);
+            let scrollDistance = parseInt(window.scrollY);
 
             //差值
             let distance = changeDistance-scrollDistance;
