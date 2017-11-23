@@ -438,7 +438,7 @@ class page extends Component {
                                         message: '请输入成人人数',
                                     }, {
                                         pattern: /^[1-9]{1}\d*$/,
-                                        message: '请输入正确的数字'
+                                        message: '请输入1人以上数字'
                                     }
                                 ],
                                     initialValue:this.vueValue(adultCount)!=""?this.vueValue(adultCount):this.state.adultCount,
