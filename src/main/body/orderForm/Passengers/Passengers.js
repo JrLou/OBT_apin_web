@@ -129,18 +129,6 @@ class PassengerMsg extends Component{
                     return (<div style={{maxWidth:'350px',display:'inline-block'}}>{text}</div>);
                 }
             },{
-                title:'性别',
-                dataIndex:'gender',
-                render:(text,record)=>{
-                    let gender = '';
-                    if(text == 1){
-                        gender = '男';
-                    }else if(text ==0){
-                        gender = '女';
-                    }
-                    return <div style={{minWidth:'30px',display:'inline-block'}}>{gender}</div>;
-                }
-            },{
                 title:'乘机人类型',
                 dataIndex:'passengerType',
                 render:(text,record)=>{
@@ -151,6 +139,18 @@ class PassengerMsg extends Component{
                         passengerType = '儿童';
                     }
                     return <div style={{minWidth:'30px',display:'inline-block'}}>{passengerType}</div>;
+                }
+            },{
+                title:'性别',
+                dataIndex:'gender',
+                render:(text,record)=>{
+                    let gender = '';
+                    if(text == 1){
+                        gender = '男';
+                    }else if(text ==0){
+                        gender = '女';
+                    }
+                    return <div style={{minWidth:'30px',display:'inline-block'}}>{gender}</div>;
                 }
             },{
                 title:'出生日期',

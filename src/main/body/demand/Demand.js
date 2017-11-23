@@ -445,7 +445,7 @@ class page extends Component {
                     arr.push(datas);
                 });
                 this.setState({
-                    pageNumber:page,
+                    pageNumber:currentNum,
                     total:option.option.total,
                     dataSource: arr
                 });
