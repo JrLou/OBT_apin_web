@@ -174,7 +174,7 @@ class OrderInfoView extends Component{
                             }}
                         >
                             <div
-                                style={{backgroundImage:`url(${require('../../../../images/orderForm/close02.png')})`}}
+                                style={{backgroundImage:`url(${require('../../../../images/orderForm/close04.png')})`}}
                                 className={css.closeImg}
                             >
 
