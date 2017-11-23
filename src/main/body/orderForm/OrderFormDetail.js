@@ -69,6 +69,7 @@ class OrderFormDetail extends Component{
 
         //启动页面滚动监听,（有支付条才需要监听）
         setTimeout(()=>{this.listenScroll();},0);
+
     }
 
     listenScroll(){
@@ -92,10 +93,12 @@ class OrderFormDetail extends Component{
                 parseInt(window.getComputedStyle(payDiv,'').bottom);
             //支付条顶部到浏览器窗口顶部到高度
             let payTop = windowHeight - payDivHeight;
+
             //定位样式改变的临界滚动值
             let changeDistance = markDivTop - payTop;
             //网页滚动的距离
-            let scrollDistance = parseInt(window.scrollY);
+            let scrollDistance = parseInt(window.pageYOffset);
+
             //差值
             let distance = changeDistance-scrollDistance;
             // log(distance);
