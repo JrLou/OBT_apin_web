@@ -16,12 +16,33 @@ class UploadCmp extends Component {
       this.backUrl = this.props.urlArr || [];
    }
 
+   componentDidMount(){
+      //给ant-upload ant-upload-select ant-upload-select-picture-card这个元素绑定ondragenter & ondragover事件
+      let dragContainerEle = document.querySelector(".forUploadStyle .ant-upload.ant-upload-select-picture-card");
+      // dragContainerEle.ondragenter = ()=>{
+      //    dragContainerEle.style.border = "2px dashed #00A0E9";
+      //    console.log("触发了：enter事件");
+      // };
+      // dragContainerEle.hover = ()=>{
+      //    dragContainerEle.style.border = "2px dashed #00A0E9";
+      //    console.log("触发了：hover事件");
+      // };
+      // dragContainerEle.ondragleave = ()=>{
+      //    dragContainerEle.style.border = "none";
+      //    console.log("触发了：leave事件");
+      // };
+      // dragContainerEle.ondragover=(ev)=>{
+      //     ev.preventDefault();
+      //     console.log("ondragover的preventDefault事件");
+      // };
+   }
+
    isImageTypeOk(file) {
       if (!/^\w+((.jpeg)|(.png)|(.bmp))$/.test(file.type)) {
          message.warning("凭证必须为图片格式");
          return false;
       }
-      if (file.size >= 1024000 * 4) {
+      if (file.size >= 1024 * 1024 * 4) {
          message.warning("图片过大，最大允许4M");
          return false;
       }
@@ -76,8 +97,6 @@ class UploadCmp extends Component {
    }
 
    handlePreview(file) {
-      console.log("~~~~~file~~~~~");
-      console.log(file);
       this.setState({
          previewImage: "",
          previewVisible: true,
