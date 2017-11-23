@@ -90,6 +90,7 @@
   margin-top: @d_spadding_base;
 }
 .failureNum{
+  padding: 0 @d_spadding_center;
 }
 .warningNum{
   color: @warning-color;
@@ -120,6 +121,7 @@
 .importResult{
   max-height: 400px;
   overflow: auto;
+  border-bottom: 1px solid #ddd;
 }
 .confirmTitle{
   font-size: @font_size_big;
@@ -127,4 +129,21 @@
   letter-spacing: 0.3px;
   text-align: center;
   margin-bottom: 26px;
+}
+.ModalTitle{
+  font-size: @font_size_big;
+  font-weight: bold;
+  text-align: center;
+  padding: @d_spadding_cell 0;
+  border-bottom: 1px solid #ddd;
+}
+.checkBtn{
+  border-radius: 2px;
+  background-color: @primary-color;
+  width:200px;
+  height: 36px;
+  font-size: @font_size_center;
+  color: #FFFFFF;
+  letter-spacing: 0.24px;
+  margin-top: 20px;
 }

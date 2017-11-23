@@ -15,8 +15,6 @@ class InputAuto extends Component {
 
     constructor(props) {
         super(props);
-        let a = ["安娜", "阿尔巴哈", "凯里", "乌兰察布"];
-        a = a.concat(a).concat(a).concat(a).concat(a);
 
         this.state = {
             dataSource: [],
@@ -221,6 +219,11 @@ class InputAuto extends Component {
                         this.changeFirstState();
                     }}
                     onSearch={(value) => {
+                        if(!this.keyWord){
+                            this.setState({
+                                dataSource:null
+                            });
+                        }
                         this.keyWord = value;
                         this.selectValue = value;
                         this.onChangeValue();
@@ -229,13 +232,10 @@ class InputAuto extends Component {
                         //防止连续快速搜索，请求接口
 
 
-
                         if(this.keyWord){
                             //搜索
 
-                            // this.setState({
-                            //     dataSource:null
-                            // });
+
                             clearTimeout(this.seeIng);
                             this.seeIng = null;
                             let time = 300;
