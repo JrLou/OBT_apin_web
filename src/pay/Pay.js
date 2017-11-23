@@ -83,9 +83,16 @@ class page extends Component {
             id: this.id
         }, "self");
     }
-    getLoadingView() {//todo 这里美化！通过添加loading那个动画
+    getLoadingView() {
         return (<div className={less.loading}>
-           <div className={less.allCenter}>正在为您拉取订单信息,请稍候...</div>
+           <div className={less.allCenter} style={{height:"80px"}}>
+               <div style={{marginBottom:"20px"}}>
+                   <span className={less.animationGroup_circle}></span>
+                   <span className={less.animationGroup_circle}></span>
+                   <span className={less.animationGroup_circle}></span>
+               </div>
+               正在为您拉取订单信息,请稍候
+           </div>
         </div>);
     }
 
@@ -100,7 +107,7 @@ class page extends Component {
              }}>查看订单</Button>
        );
         return (
-            <div className={less.loading}>
+            <div className={less.loading} style={{height:"600px"}}>
                <div className={less.allCenter2}>
                    <img src={require("../../src/images/search_empty.png")} alt="空"/>
                 {this.state.error  ? <div> {this.state.error}</div> : null}

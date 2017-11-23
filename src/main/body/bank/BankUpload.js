@@ -239,8 +239,15 @@ class BankUpload extends Component {
    }
 
    getLoadingView() {
-      return (<div className={less.loading}>//todo 优化UI
-         <div className={less.allCenter}>正在为您拉取订单信息,请稍候...</div>
+      return (<div className={less.loading}>
+         <div className={less.allCenter} style={{height:"80px"}}>
+            <div style={{marginBottom:"20px"}}>
+               <span className={less.animationGroup_circle}></span>
+               <span className={less.animationGroup_circle}></span>
+               <span className={less.animationGroup_circle}></span>
+            </div>
+            正在为您拉取订单信息,请稍候
+         </div>
       </div>);
    }
 
