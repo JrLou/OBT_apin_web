@@ -9,7 +9,7 @@
 @info-color             : #2db7f5;
 @success-color          : #87d068;
 @success2-color          : #01C12D;
-@error-color            : #f50;
+@error-color            : #E1593C;
 @warning-color          : #fa0;
 //边框颜色
 @border-color:#ccc;
@@ -170,6 +170,17 @@
   }
 }
 
+.lightNorBtn{
+  width: 170px;
+  height:40px;
+  font-size: 16px;
+  margin-top:20px;
+  text-align:center;
+  background-color: #def6ff;
+  color: #00a3ff;
+  border: 1px #B0D4F7 solid;
+}
+
 .normalSizeBtn{
   width: 145px;
   height: 36px;
@@ -205,9 +216,9 @@
 
 .loading{
   text-align: center;
-  height: 400px;
+  height: 600px;
   background-color: #fff;
-  color: #ff5500;
+  color: @error-color;
   line-height: 50px;
   font-size: @font_size_big;
   position: relative;
