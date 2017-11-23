@@ -49,6 +49,10 @@ class PassengerAdd extends Component{
     }
 
     componentWillReceiveProps(nextProps){
+        this.propsChange(nextProps);
+    }
+
+    propsChange(nextProps,cb){
         let defaultData = nextProps.defaultData;
         let newData = {};
         if(defaultData){
@@ -81,7 +85,7 @@ class PassengerAdd extends Component{
                 expireTime:{state:true,msg:'请选择证件有效期'},
                 issuePlace:{state:true,msg:'请输入签发地'},
             },
-        });
+        },cb);
     }
 
     /**
@@ -474,15 +478,17 @@ class PassengerAdd extends Component{
      * @param value
      */
     changeVisible(value){
-        this.setState({
-           visible:!!value,
-        });
-        if(!value){
-            if(this.props.closeModCB){
-                //关闭模态框的回调（用于提示父组件将默认选择的乘机人信息置为null）
-                this.props.closeModCB();
+        this.propsChange(this.props,()=>{
+            this.setState({
+                visible:!!value,
+            });
+            if(!value){
+                if(this.props.closeModCB){
+                    //关闭模态框的回调（用于提示父组件将默认选择的乘机人信息置为null）
+                    this.props.closeModCB();
+                }
             }
-        }
+        });
     }
 
     /**
