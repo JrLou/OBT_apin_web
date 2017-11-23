@@ -8,7 +8,7 @@ import ClickHelp from '../../tool/ClickHelp.js';
 import CellNewFlightDetail from './CellNewFlightDetail.js';
 import NumTransToTextHelp from '../../tool/NumTransToTextHelp.js';
 import DateHelp from '../../tool/DateHelp.js';
-
+//0
 class CellNewFlight extends Component {
     constructor(props) {
         super(props);
