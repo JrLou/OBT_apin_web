@@ -124,6 +124,7 @@ class CellNewFlight extends Component {
         let cityDep_len = data.cityDep && data.cityDep.length > 3;
         let cityArr_len = cityArr && cityArr.length > 3;
         let city = (cityDep_len ? (data.cityDep.substring(0, 3) + "...") : data.cityDep) + " - " + cityArr;
+        let arrAir = data.myArrAirport ? data.myArrAirport : data.arrAirport;
         var itemView = (<div className={css.table}>
             {flightType == 1 ? null : <div className={css.type_super}>
                 <div className={css.typeText}>
@@ -199,10 +200,10 @@ class CellNewFlight extends Component {
 
                     <div className={css.placeLine}>
                         <div className={css.refPlaceLineItem}>
-                            {(data.depAirport && data.depAirport.length > 7) ?
+                            {(arrAir&&arrAir.length>7) ?
                                 <Tooltip placement="bottom"
-                                         title={data.arrAirport}>{data.myArrAirport ? data.myArrAirport : data.arrAirport}</Tooltip>
-                                : (data.myArrAirport ? data.myArrAirport : data.arrAirport)}
+                                         title={arrAir}>{arrAir}</Tooltip>
+                                : arrAir}
                         </div>
                         <div className={css.time}>
                             <span>{data.myArrTime ? data.myArrTime : data.arrTime}</span>
