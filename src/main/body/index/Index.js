@@ -9,12 +9,10 @@ import SearchLayout from "../component/SearchLayout";
 import SearchHelp from "../search/SearchHelp.js";
 import {HttpTool,CookieHelp} from "../../../../lib/utils/index.js";
 import APIGYW from '../../../api/APIGYW.js';
-import routes from "../../../vm/routes.js";
 
 import Scroll from "react-scroll/modules/index"; // Imports all Mixins
 // Or Access Link,Element,etc as follows
 
-var Link = Scroll.Link;
 var Events = Scroll.Events;
 var scroll = Scroll.animateScroll;
 var scrollSpy = Scroll.scrollSpy;
