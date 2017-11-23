@@ -2,11 +2,11 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-23 15:08:01
+ * @Last Modified time: 2017-11-23 16:03:26
  */
 
 import React, { Component } from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Button, message, Checkbox } from 'antd';
 import md5 from 'md5';
 
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
@@ -17,21 +17,19 @@ import css from './sign.less';
 
 const FormItem = Form.Item;
 
-function hasErrors(fieldsError) {
-    return Object.keys(fieldsError).some(field => fieldsError[field]);
-}
-
 class SignInForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
             isShowPic: false,// 是否显示图形验证码
             picCode: '',//图片base64
-            loading: false
+            loading: false,
+            checked: true, // 是否同意协议
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.getCode = this.getCode.bind(this);
         this.getCodeAction = this.getCodeAction.bind(this);
+        this.hasErrors = this.hasErrors.bind(this);
         this.accessToken = '';
         this.data = '';
     }
@@ -42,7 +40,7 @@ class SignInForm extends Component {
     render() {
         const { getFieldDecorator, getFieldsError, getFieldError, getFieldValue, isFieldTouched, setFields } = this.props.form;
 
-        const { isShowPic, picCode, loading } = this.state;
+        const { isShowPic, picCode, loading, checked } = this.state;
 
         const accountError = isFieldTouched('account') && getFieldError('account');
         const mobileError = isFieldTouched('mobile') && getFieldError('mobile');
@@ -173,11 +171,11 @@ class SignInForm extends Component {
                     help={bdChargerError || ''}
                     label="市场经理姓名"
                 >
-                    {getFieldDecorator('bdCharger',{
+                    {getFieldDecorator('bdCharger', {
                         rules: [{ max: 30, message: '最多输入30位' }],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请务必准确输入" maxLength="30" />
-                    )}
+                        )}
                 </FormItem>
                 <div className={css.tip}>请填写爱拼机的市场对接人信息，便于我们为您提供更好的服务（非必填）</div>
                 <FormItem prefixCls="my-ant-form">
@@ -186,11 +184,21 @@ class SignInForm extends Component {
                         type="primary"
                         htmlType="submit"
                         className={css.btnSubmit}
-                        disabled={hasErrors(getFieldsError())}
+                        disabled={this.hasErrors(getFieldsError())}
                         loading={loading}
                     // onClick={this.props.onOK}
                     >注册并登录</Button>
                 </FormItem>
+                <div className={css.read}>
+                    <Checkbox style={{ paddingRight: '0' }} defaultChecked={true} onChange={(e) => {
+                        this.setState({
+                            checked: e.target.checked
+                        });
+                    }}>
+                        我已阅读并同意
+                    <a href="/html/protocol.html" target='_blank'>《爱拼机服务协议》</a>
+                    </Checkbox>
+                </div>
                 <div className={css.textRight}>已有登录账号？ <span className={css.toLogin} onClick={() => this.props.handleChangeMode(0)}>立即登录</span></div>
             </Form>
         );
@@ -237,6 +245,10 @@ class SignInForm extends Component {
             }
         });
 
+    }
+
+    hasErrors(fieldsError) {
+        return Object.keys(fieldsError).some(field => fieldsError[field]) || !this.state.checked;
     }
 
     /**

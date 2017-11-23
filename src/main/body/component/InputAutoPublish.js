@@ -28,7 +28,7 @@ class InputAuto extends Component {
         if (this.keyWord) {
             this.loadDataForKeyWord(this.keyWord);
         } else {
-            this.loadData();
+      //      this.loadData();
         }
 
     }
@@ -243,7 +243,7 @@ class InputAuto extends Component {
                                     if(this.keyWord) {
                                         this.loadDataForKeyWord(this.keyWord);
                                     }else{
-                                        this.loadData();
+                             //           this.loadData();
                                     }
                                 },time);
                             }

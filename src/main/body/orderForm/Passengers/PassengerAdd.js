@@ -49,6 +49,10 @@ class PassengerAdd extends Component{
     }
 
     componentWillReceiveProps(nextProps){
+        this.propsChange(nextProps);
+    }
+
+    propsChange(nextProps,cb){
         let defaultData = nextProps.defaultData;
         let newData = {};
         if(defaultData){
@@ -58,7 +62,6 @@ class PassengerAdd extends Component{
             newData.passengerType = (defaultData.passengerType==2)?2:1;         //默认为成人
             newData.nation = defaultData.nation?defaultData.nation:'';
             newData.birthday = defaultData.birthday?defaultData.birthday:null;
-            newData.lineType = nextProps.airlineSigns?nextProps.airlineSigns:1; //默认为国内
             newData.credType = defaultData.credType?defaultData.credType:1;     //默认身份证
             newData.credNumber = defaultData.credNumber?defaultData.credNumber:'';
             newData.expireTime = defaultData.expireTime?defaultData.expireTime:null;
@@ -68,12 +71,12 @@ class PassengerAdd extends Component{
             //新增
             newData.gender = 1;
             newData.passengerType = 1;
-            newData.lineType = nextProps.airlineSigns?nextProps.airlineSigns:1;
             newData.credType = nextProps.airlineSigns?nextProps.airlineSigns:1;
         }
         this.setState({
             data:newData,
             credType:newData.credType,
+            lineType:nextProps.airlineSigns?nextProps.airlineSigns:1,
             testState:{
                 name:{state:true,msg:`请输入姓名`},
                 nation:{state:true,msg:'请输入国籍'},
@@ -82,7 +85,7 @@ class PassengerAdd extends Component{
                 expireTime:{state:true,msg:'请选择证件有效期'},
                 issuePlace:{state:true,msg:'请输入签发地'},
             },
-        });
+        },cb);
     }
 
     /**
@@ -386,14 +389,14 @@ class PassengerAdd extends Component{
             return true;
         }
         let nowDate = new Date();
-        return (date.valueOf()<=nowDate.valueOf()-86400000);
+        return (date.valueOf()<=nowDate.valueOf());
     }
     //默认不可选的日期(生日)
     disabledTimeForBirth(date){
         if(!date){
             return true;
         }
-        let earlistDate = new Date(1900,0,1);
+        let earlistDate = new Date(1901,0,1);
         let nowDate = new Date();
         return (date.valueOf()<=earlistDate.valueOf()-86400000||date.valueOf()>=nowDate.valueOf());
     }
@@ -475,15 +478,17 @@ class PassengerAdd extends Component{
      * @param value
      */
     changeVisible(value){
-        this.setState({
-           visible:!!value,
-        });
-        if(!value){
-            if(this.props.closeModCB){
-                //关闭模态框的回调（用于提示父组件将默认选择的乘机人信息置为null）
-                this.props.closeModCB();
+        this.propsChange(this.props,()=>{
+            this.setState({
+                visible:!!value,
+            });
+            if(!value){
+                if(this.props.closeModCB){
+                    //关闭模态框的回调（用于提示父组件将默认选择的乘机人信息置为null）
+                    this.props.closeModCB();
+                }
             }
-        }
+        });
     }
 
     /**

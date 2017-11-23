@@ -9,7 +9,7 @@
 @info-color             : #2db7f5;
 @success-color          : #87d068;
 @success2-color          : #01C12D;
-@error-color            : #f50;
+@error-color            : #E1593C;
 @warning-color          : #fa0;
 //边框颜色
 @border-color:#ccc;
@@ -170,6 +170,17 @@
   }
 }
 
+.lightNorBtn{
+  width: 170px;
+  height:40px;
+  font-size: 16px;
+  margin-top:20px;
+  text-align:center;
+  background-color: #def6ff;
+  color: #00a3ff;
+  border: 1px #B0D4F7 solid;
+}
+
 .normalSizeBtn{
   width: 145px;
   height: 36px;
@@ -207,7 +218,7 @@
   text-align: center;
   height: 400px;
   background-color: #fff;
-  color: #ff5500;
+  color: @error-color;
   line-height: 50px;
   font-size: @font_size_big;
   position: relative;
@@ -223,4 +234,40 @@
   line-height: 20px;
   height: 20px;
   text-align: center;
+}
+
+//加载中的动画
+.animationGroup {
+  padding-top: 64px;
+  padding-bottom: 30px;
+  &_circle {
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    margin: 0 5px 0;
+    background-color: #29A6FF;
+    &:nth-child(1) {
+      -webkit-animation: scale 0.75s 0.12s infinite cubic-bezier(.2, .68, .18, 1.08);
+      animation:         scale 0.75s 0.12s infinite cubic-bezier(.2, .68, .18, 1.08);
+    }
+    &:nth-child(2) {
+      -webkit-animation: scale 0.75s 0.24s infinite cubic-bezier(.2, .68, .18, 1.08);
+      animation:         scale 0.75s 0.24s infinite cubic-bezier(.2, .68, .18, 1.08);
+    }
+    &:nth-child(3) {
+      -webkit-animation: scale 0.75s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
+      animation:         scale 0.75s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
+    }
+  }
+  @keyframes scale {
+    30% {
+      -webkit-transform: scale(0.3);
+      transform: scale(0.3);
+    }
+    100% {
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+  }
 }

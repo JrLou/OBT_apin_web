@@ -99,7 +99,15 @@ class UnionPay extends Component {
 
    getLoadingView() {
       return (<div className={less.loading}>
-         <div className={less.allCenter}>正在为您拉取卡列表,请稍候...</div>
+
+         <div className={less.allCenter} style={{height:"80px"}}>
+            <div style={{marginBottom:"20px"}}>
+               <span className={less.animationGroup_circle}></span>
+               <span className={less.animationGroup_circle}></span>
+               <span className={less.animationGroup_circle}></span>
+            </div>
+            正在为您拉取卡列表,请稍候
+         </div>
       </div>);
    }
 
@@ -177,7 +185,7 @@ class UnionPay extends Component {
          <div className={less.loading}>
             <img className={less.nocardImg} src={require("./images/pay_noCard.png")} alt="没有卡列表"/>
             {this.state.error ? <div className={less.loading}> {this.state.error||"服务器繁忙^_^"}</div> : null}
-            <div>您尚未添加银行卡!</div>
+            <div>您尚未添加银行卡</div>
             <div>
                <Button
                   style={{height: 60, width: 200, fontSize: 16, marginBottom: 12, marginTop: 15}}
@@ -363,7 +371,7 @@ class InputLayout extends Component {
        }, param);
       // setTimeout(() => {
       //    let code = (Math.random() * 10).toFixed(0) - 5;
-      //    //todo 没有data吧?
+      //
       //    let data = [];
       //    cb(code, code > 0 ? "获取成功" : "获取失败", data);
       // }, Math.random() * 1000);

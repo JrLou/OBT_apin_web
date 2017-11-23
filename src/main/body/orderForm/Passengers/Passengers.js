@@ -86,6 +86,9 @@ class PassengerMsg extends Component{
         }
         let newData = nextProps.passengerData?nextProps.passengerData:[];
         this.passengerChange(newData,true);
+        this.setState({
+            airlineSigns:nextProps.airlineSigns?nextProps.airlineSigns:1,
+        });
         this.hasChanged = true;
     }
 
