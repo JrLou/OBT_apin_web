@@ -460,7 +460,16 @@ class OrderFormList extends Component{
 
         let failureCB = (code, msg, option)=>{
             this.setLoading(false);
-            message.error(msg);
+            // message.error(msg);
+            if(code == -490){
+                message.error(msg);
+                return;
+            }
+            this.setState({
+                page:1,
+                dataSource:[],
+                total:0,
+            });
         };
 
         this.setLoading(true,()=>{
