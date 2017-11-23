@@ -74,12 +74,13 @@ class page extends Component {
                 parseInt(window.getComputedStyle(payDiv,'').height)
                 +
                 parseInt(window.getComputedStyle(payDiv,'').bottom);
+            payDivHeight = payDivHeight?payDivHeight:105;
             //支付条顶部到浏览器窗口顶部到高度
             let payTop = windowHeight - payDivHeight;
             //定位样式改变的临界滚动值
             let changeDistance = markDivTop - payTop;
             //网页滚动的距离
-            let scrollDistance = parseInt(window.scrollY);
+            let scrollDistance = parseInt(window.pageYOffset);
             //差值
             let distance = changeDistance-scrollDistance;
             if(distance>0){

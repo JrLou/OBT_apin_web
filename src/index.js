@@ -50,7 +50,10 @@ window.app_getPar = function (obj) {
     let state = obj.props.location.state;
     let query = obj.props.location.query;
     let data = query ? query.data : null;
-    return Object.assign(state || {}, data ? JSON.parse(decodeURIComponent(data)) : {});
+    if(data&&data.indexOf("{")<0){//JSON对像结构,必有
+        data = decodeURIComponent(data);
+    }
+    return Object.assign(state || {}, data ? JSON.parse(data) : {});
 };
 window.app_open = function (obj, path, state, open, callBack) {
     log(obj);
