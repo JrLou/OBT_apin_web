@@ -14,7 +14,11 @@ import css from './AlertView.less';
  * json 用来传值 一般与typeIndex同时使用
  * title 标题
  * desc 提示描述
+ * descDouble 提示描述的第二行
  * con 提示内容
+ * hideCancel 隐藏取消按钮
+ * okText 确定按钮的文字
+ * noText 取消按钮的文字
  */
 class AlertView extends Component {
     constructor(props) {
@@ -25,7 +29,11 @@ class AlertView extends Component {
             json:props.json?props.json:{},
             title:props.title?props.title:"提示",
             desc:props.desc?props.desc:"",
+            descDouble:props.descDouble?props.descDouble:"",
             con:props.con?props.con:"",
+            hideCancel:props.hideCancel?props.hideCancel:false,
+            okText:props.okText?props.okText:'是',
+            noText:props.noText?props.noText:'否',
         };
     }
     showModal(option) {
@@ -34,9 +42,13 @@ class AlertView extends Component {
             visible:true,
             title:option.title?option.title:"提示",
             desc:option.desc?option.desc:"",
+            descDouble:option.descDouble?option.descDouble:"",
             con:option.con?option.con:"",
             typeIndex:option.typeIndex?option.typeIndex:0,
             json:option.json?option.json:{},
+            hideCancel:option.hideCancel?option.hideCancel:false,
+            okText:option.okText?option.okText:'是',
+            noText:option.noText?option.noText:'否',
         });
     }
 
@@ -44,6 +56,7 @@ class AlertView extends Component {
         var {callBack,cancelCallBack}=this.props;
         return (<Modal prefixCls={'my-ant-modal'}
                        width="450"
+                       style={{top:"25%"}}
                        visible={this.state.visible}
                        onCancel={()=>{
                            this.handleCancel();
@@ -51,17 +64,18 @@ class AlertView extends Component {
                        footer={null}>
             <div className={css.modalTitle}>{this.state.title}</div>
             <div className={css.modalDesc}>{this.state.desc}</div>
+            <div className={this.state.descDouble?css.descDouble:css.hidden}>{this.state.descDouble}</div>
             <div className={css.modalCon}>{this.state.con}</div>
             <div className={css.btnDiv}>
                 <Button type="primary"
-                        className={css.btn}
+                        className={this.state.hideCancel?css.centerBtn:css.btn}
                         onClick={()=>{
                             this.handleOk(callBack);
-                        }}>是</Button>
-                <Button className={css.refBtn}
+                        }}>{this.state.okText}</Button>
+                <Button className={this.state.hideCancel?css.hidden:css.refBtn}
                         onClick={()=>{
                             this.handleCancel(cancelCallBack);
-                        }}>否</Button>
+                        }}>{this.state.noText}</Button>
             </div>
         </Modal>);
     }

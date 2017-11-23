@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-22 12:39:32
+ * @Last Modified time: 2017-11-22 19:17:05
  */
 
 import React, { Component } from 'react';
@@ -55,8 +55,20 @@ class ForgetForm extends Component {
                     label="手机号"
                 >
                     {getFieldDecorator('mobile', {
+                        validateFirst: true,
                         rules: [{ required: true, message: '请输入11位手机号' },
-                        { pattern: /^(1)\d{10}$/, message: '手机号格式不正确' }
+                        { pattern: /^(1)\d{10}$/, message: '手机号格式不正确' },
+                        {
+                            validator: (rule, value, callback) => {
+                                this.getCode(() => {
+                                    validateLoginPromise({ mobile: value, type: 1 })
+                                        .then((data) => {
+                                            callback('当前手机号未注册');
+                                        })
+                                        .catch((data) => callback());
+                                });
+                            }
+                        }
                         ],
                     })(
                         <Input prefixCls="my-ant-input" placeholder="请输入11位手机号" />

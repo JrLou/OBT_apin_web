@@ -373,7 +373,7 @@ class OrderFormDetail extends Component{
     }
 
     /**
-     * 查询订单信息，判断订单状态是否已经改变
+     * 查询支付信息，确定是否能进行支付
      */
     checkOrderPayInfo(successCB,failureCB){
         let parames = {
@@ -391,6 +391,8 @@ class OrderFormDetail extends Component{
             if(code==-430){
                 //不能支付
                 this.partnerDetail.showModal({
+                    hideCancel:true,
+                    okText:'确定',
                     title:"提示",
                     desc:`${msg}`,
                 });

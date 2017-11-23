@@ -16,7 +16,7 @@ import css from './Passengers.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APILXD from "../../../../api/APILXD.js";
 import WindowHelp from '../../tool/WindowHelp.js';
-import {hasKey} from '../../tool/LXDHelp.js';
+import {hasKey,loadHelp} from '../../tool/LXDHelp.js';
 import PassengerAdd from './PassengerAdd.js';
 import {Table,Modal} from 'antd';
 import AlertView from '../../component/AlertView.js';
@@ -80,7 +80,7 @@ class PassengerMsg extends Component{
                 title:'序号',
                 dataIndex:'index',
                 render:(text,record)=>{
-                    return (<div style={{minWidth:'30px'}}>{text}</div>);
+                    return (<div style={{minWidth:'30px',display:'inline-block'}}>{text}</div>);
                 }
             },{
                 title:'乘机人',
@@ -119,7 +119,7 @@ class PassengerMsg extends Component{
                     }else if(text ==0){
                         gender = '女';
                     }
-                    return <div style={{minWidth:'30px'}}>{gender}</div>;
+                    return <div style={{minWidth:'30px',display:'inline-block'}}>{gender}</div>;
                 }
             },{
                 title:'乘机人类型',
@@ -131,13 +131,13 @@ class PassengerMsg extends Component{
                     }else if(text ==2){
                         passengerType = '儿童';
                     }
-                    return <div style={{minWidth:'30px'}}>{passengerType}</div>;
+                    return <div style={{minWidth:'30px',display:'inline-block'}}>{passengerType}</div>;
                 }
             },{
                 title:'出生日期',
                 dataIndex:'birthday',
                 render:(text,record)=>{
-                    return (<div style={{minWidth:'100px'}}>{text}</div>);
+                    return (<div style={{minWidth:'100px',display:'inline-block'}}>{text}</div>);
                 }
             },{
                 title:'国籍',
@@ -158,15 +158,18 @@ class PassengerMsg extends Component{
                 render:(text,record)=> {
                     if(this.state.isPassed){
                         let ticketStr = record.ticket?record.ticket:'';
+                        // let ticketStr = '1231231,12313123,12313123';   //测试数据
                         let ticketList = ticketStr.split(',');
                         let listLength = ticketList.length;
                         let ticketViews = [];
                         for(let index = 0;index<listLength;index+=2){
                             ticketViews.push(
                                 <div key={`ticket${index}`} style={{textAlign:'left'}}>
-                                    <span>{ticketList[index]?`${ticketList[index]},`:''}</span>
-                                    <span>&nbsp;&nbsp;</span>
+                                    <span>{ticketList[index]?`${ticketList[index]}`:''}</span>
+                                    <span>{ticketList[index+1]?',':''}</span>
+                                    <span style={{paddingLeft:'10px'}}></span>
                                     <span>{ticketList[index+1]?ticketList[index+1]:''}</span>
+                                    <span>{index+2<listLength?',':''}</span>
                                 </div>
                             );
                         }
@@ -225,7 +228,6 @@ class PassengerMsg extends Component{
                                     type="primary"
                                     className={hasKey(this.state.orderState,[0,8])?css.hidden:css.btnType02}
                                     onClick={()=>{
-                                        this.exportWindow = this.WindowHelp.openInitWindow();
                                         this.exportPassenger();
                                     }}
                                 >
@@ -241,12 +243,16 @@ class PassengerMsg extends Component{
                                     onClick={()=>{
                                         if(this.state.airlineSigns == 1){
                                             //国内
-                                            window.open("http://oqum3uti8.bkt.clouddn.com/guonei.xlsx");
-                                            // window.location.href = 'http://oqum3uti8.bkt.clouddn.com/guonei.xlsx';
+                                            let currentTime = new Date();
+                                            let timeShip = currentTime.valueOf();
+                                            let url = "http://oqum3uti8.bkt.clouddn.com/guonei.xlsx"+'?'+timeShip;
+                                            loadHelp(url);
                                         }else{
                                             //国际
-                                            window.open("http://oqum3uti8.bkt.clouddn.com/guoji.xlsx");
-                                            // window.location.href = 'http://oqum3uti8.bkt.clouddn.com/guoji.xlsx';
+                                            let currentTime = new Date();
+                                            let timeShip = currentTime.valueOf();
+                                            let url = "http://oqum3uti8.bkt.clouddn.com/guoji.xlsx"+'?'+timeShip;
+                                            loadHelp(url);
                                         }
                                     }}
                                 >
@@ -260,6 +266,7 @@ class PassengerMsg extends Component{
                                     添加乘机人
                                 </Button>
                                 <Upload
+                                    showUploadList={false}
                                     accept={'.xls,.xlsx'}
                                     action={'/upload'}
                                     onChange={(obj)=>{this.upLoadStateChange(obj);}}
@@ -549,14 +556,12 @@ class PassengerMsg extends Component{
             orderId:this.state.orderId,
         };
         let successCB = (code, msg, json, option)=>{
-            // window.location.href = json;
-            // window.open(json);
-            this.WindowHelp.openWindow(this.exportWindow,json);
+
             this.setLoading(false);
+            loadHelp(json);
         };
 
         let failureCB = (code, msg, option)=>{
-            this.WindowHelp.closeWindow(this.exportWindow);
             this.setLoading(false);
             message.error(msg);
         };
