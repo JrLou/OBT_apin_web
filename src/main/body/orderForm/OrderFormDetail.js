@@ -86,16 +86,19 @@ class OrderFormDetail extends Component{
             //浏览器窗口可视高度
             let windowHeight = parseInt(document.body.clientHeight);
             //支付条自身的高度+固定定位的bottom值
-            let payDivHeight =
-                parseInt(window.getComputedStyle(payDiv,'').height)
-                +
-                parseInt(window.getComputedStyle(payDiv,'').bottom);
+            // let payDivHeight =
+            //     parseInt(window.getComputedStyle(payDiv,'').height)
+            //     +
+            //     parseInt(window.getComputedStyle(payDiv,'').bottom);
+            //
+            // alert(payDivHeight);
+            let payDivHeight = 105;
             //支付条顶部到浏览器窗口顶部到高度
             let payTop = windowHeight - payDivHeight;
             //定位样式改变的临界滚动值
             let changeDistance = markDivTop - payTop;
             //网页滚动的距离
-            let scrollDistance = parseInt(window.scrollY);
+            let scrollDistance = parseInt(window.pageYOffset);
             //差值
             let distance = changeDistance-scrollDistance;
             // log(distance);
