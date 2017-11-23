@@ -183,7 +183,7 @@ class PassengerMsg extends Component{
                         let ticketViews = [];
                         for(let index = 0;index<listLength;index+=2){
                             ticketViews.push(
-                                <div key={`ticket${index}`} style={{textAlign:'left'}}>
+                                <div key={`ticket${index}`} style={{textAlign:'left',minWidth:'230px'}}>
                                     <span>{ticketList[index]?`${ticketList[index]}`:''}</span>
                                     <span>{ticketList[index+1]?',':''}</span>
                                     <span style={{paddingLeft:'10px'}}></span>

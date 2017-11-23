@@ -8,7 +8,7 @@ import ClickHelp from '../../tool/ClickHelp.js';
 import CellNewFlightDetail from './CellNewFlightDetail.js';
 import NumTransToTextHelp from '../../tool/NumTransToTextHelp.js';
 import DateHelp from '../../tool/DateHelp.js';
-
+//0
 class CellNewFlight extends Component {
     constructor(props) {
         super(props);
@@ -124,6 +124,7 @@ class CellNewFlight extends Component {
         let cityDep_len = data.cityDep && data.cityDep.length > 3;
         let cityArr_len = cityArr && cityArr.length > 3;
         let city = (cityDep_len ? (data.cityDep.substring(0, 3) + "...") : data.cityDep) + " - " + cityArr;
+        let arrAir = data.myArrAirport ? data.myArrAirport : data.arrAirport;
         var itemView = (<div className={css.table}>
             {flightType == 1 ? null : <div className={css.type_super}>
                 <div className={css.typeText}>
@@ -147,9 +148,7 @@ class CellNewFlight extends Component {
                     <div className={css.placeLine}>
 
                         <div className={css.placeLineItem}>
-                            {(data.depAirport && data.depAirport.length > 7) ?
-                                <Tooltip placement="bottom" title={data.depAirport}>{data.depAirport}</Tooltip>
-                                : data.depAirport}
+                            <Tooltip placement="bottom" title={data.depAirport}>{data.depAirport}</Tooltip>
                         </div>
 
                         <div className={css.time}>
@@ -199,10 +198,8 @@ class CellNewFlight extends Component {
 
                     <div className={css.placeLine}>
                         <div className={css.refPlaceLineItem}>
-                            {(data.depAirport && data.depAirport.length > 7) ?
-                                <Tooltip placement="bottom"
-                                         title={data.arrAirport}>{data.myArrAirport ? data.myArrAirport : data.arrAirport}</Tooltip>
-                                : (data.myArrAirport ? data.myArrAirport : data.arrAirport)}
+                            <Tooltip placement="bottom"
+                                     title={arrAir}>{arrAir}</Tooltip>
                         </div>
                         <div className={css.time}>
                             <span>{data.myArrTime ? data.myArrTime : data.arrTime}</span>
