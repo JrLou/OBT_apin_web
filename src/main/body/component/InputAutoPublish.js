@@ -1,8 +1,8 @@
 /**
  * Created by lixifeng on 17/10/12.
  */
-import React, {Component, Input, Icon} from "react";
-import {AutoComplete} from "antd";
+import React, {Component, Icon} from "react";
+import {AutoComplete,Input} from "antd";
 const Option = AutoComplete.Option;
 const OptGroup = AutoComplete.OptGroup;
 import less from "./InputAuto.less";
@@ -205,6 +205,7 @@ class InputAuto extends Component {
             <div className="certain-category-search-wrapper" style={{width: "100%"}}>
                 <AutoComplete
                     {...props}
+                    children={<Input maxLength={30} />}
                     dropdownMatchSelectWidth={false}
                     dropdownStyle={{width: "220px"}}
                     size="large"
