@@ -85,14 +85,14 @@ class OrderFormDetail extends Component{
             let markDivTop = parseInt(this.markDiv.offsetTop);
             //浏览器窗口可视高度
             let windowHeight = parseInt(document.body.clientHeight);
-            //支付条自身的高度+固定定位的bottom值
-            // let payDivHeight =
-            //     parseInt(window.getComputedStyle(payDiv,'').height)
-            //     +
-            //     parseInt(window.getComputedStyle(payDiv,'').bottom);
-            //
+            // 支付条自身的高度+固定定位的bottom值
+            let payDivHeight =
+                parseInt(window.getComputedStyle(payDiv,'').height)
+                +
+                parseInt(window.getComputedStyle(payDiv,'').bottom);
+
             // alert(payDivHeight);
-            let payDivHeight = 105;
+            payDivHeight = payDivHeight?payDivHeight:105;
             //支付条顶部到浏览器窗口顶部到高度
             let payTop = windowHeight - payDivHeight;
             //定位样式改变的临界滚动值
