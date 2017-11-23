@@ -447,7 +447,7 @@ class page extends Component {
                                     // <div style={{ position: "relative" }}>
                                     //     <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px",pointerEvents:"none"}}>成人</span>
                                    // <Input style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.vueValue(adultCount)!=""?this.vueValue(adultCount):this.state.adultCount}   maxLength="4" onChange={(e) => this.handleConfirmNum("adultCount", e)}/>
-                                    <Input style={{ width: 230, height: 34}}  maxLength="4" onChange={(e) => this.handleConfirmNum("adultCount", e)}/>
+                                    <Input style={{ width: 230, height: 34}}  maxLength="4" onChange={(e) => this.handleConfirmNum("adultCount", e)} placeholder={'必填,1人以上'}/>
                                     // </div>
                                     )}
                             </FormItem>
@@ -509,7 +509,7 @@ class page extends Component {
                                     }],
                                     initialValue:phoneCookie,
                                 })(
-                                        <Input style={{ width: 230, height: 34, fontSize:"14px" }}  placeholder="输入可联系的手机号码" />
+                                        <Input style={{ width: 230, height: 34, fontSize:"14px" }}  placeholder="输入可联系的手机号码" maxLength={"11"}/>
                                     )}
                             </FormItem>
 
