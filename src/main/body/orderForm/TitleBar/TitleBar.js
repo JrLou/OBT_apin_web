@@ -48,7 +48,7 @@ class TitleBar extends Component{
         switch(state){
             case 0:title='订单取消';
                     break;
-            case 1:title='等待确认...';
+            case 1:title='申请中...';
                     msg='30分钟以内，即可确认资源信息';
                     break;
             case 2:title='待付押金...';

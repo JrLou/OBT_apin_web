@@ -28,7 +28,7 @@ class InputAuto extends Component {
         if (this.keyWord) {
             this.loadDataForKeyWord(this.keyWord);
         } else {
-            this.loadData();
+      //      this.loadData();
         }
 
     }
@@ -43,7 +43,8 @@ class InputAuto extends Component {
         let param = {};
         let success = (code, msg, json, option) => {
             log(json);
-            this.hotDataSource = json||[];
+            // json||
+            this.hotDataSource =[];
             this.setState({
                 dataSource: this.hotDataSource
             });
@@ -242,7 +243,7 @@ class InputAuto extends Component {
                                     if(this.keyWord) {
                                         this.loadDataForKeyWord(this.keyWord);
                                     }else{
-                                        this.loadData();
+                             //           this.loadData();
                                     }
                                 },time);
                             }

@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-22 15:00:30
+ * @Last Modified time: 2017-11-23 09:48:03
  */
 
 import React, { Component } from 'react';
@@ -85,7 +85,7 @@ class SignInForm extends Component {
                     {getFieldDecorator('mobile', {
                         validateFirst: true,
                         rules: [{ required: true, message: '请输入11位手机号' },
-                        { pattern: /^(1)\d{10}$/, message: '手机号格式不正确' },
+                        { pattern: /^(1)\d{10}$/, message: '手机格式不正确' },
                         {
                             validator: (rule, value, callback) => {
                                 this.getCode(() => {
