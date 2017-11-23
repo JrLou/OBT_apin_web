@@ -98,7 +98,7 @@ class UnionPay extends Component {
 
 
    getLoadingView() {
-      return (<div className={less.loading}>
+      return (<div className={less.loading}>//todo 优化UI
          <div className={less.allCenter}>正在为您拉取卡列表,请稍候...</div>
       </div>);
    }
@@ -177,7 +177,7 @@ class UnionPay extends Component {
          <div className={less.loading}>
             <img className={less.nocardImg} src={require("./images/pay_noCard.png")} alt="没有卡列表"/>
             {this.state.error ? <div className={less.loading}> {this.state.error||"服务器繁忙^_^"}</div> : null}
-            <div>您尚未添加银行卡!</div>
+            <div>您尚未添加银行卡</div>
             <div>
                <Button
                   style={{height: 60, width: 200, fontSize: 16, marginBottom: 12, marginTop: 15}}
