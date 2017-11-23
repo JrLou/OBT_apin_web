@@ -243,7 +243,7 @@ class AccountForm extends Component {
                                         message: '最多输入50位'
                                     }],
                                 })(
-                                    <TextArea rows={4} placeholder="请输入详细地址" />
+                                    <TextArea rows={4} placeholder="请输入详细地址" style={{resize: 'none'}} />
                                     )}
                             </FormItem>
                             <FormItem prefixCls="my-ant-form" {...formTailLayout}>
