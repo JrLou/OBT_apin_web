@@ -9,13 +9,12 @@ const OptGroup = AutoComplete.OptGroup;
 import less from "./InputAuto.less";
 
 import {HttpTool} from "../../../../lib/utils/index.js";
+import APIGYW from "../../../api/APIGYW.js";
 
 class InputAuto extends Component {
 
     constructor(props) {
         super(props);
-        let a = ["安娜", "阿尔巴哈", "凯里", "乌兰察布"];
-        a = a.concat(a).concat(a).concat(a).concat(a);
 
         this.state = {
             dataSource: [],
@@ -56,7 +55,7 @@ class InputAuto extends Component {
                 dataSource: this.hotDataSource
             });
         };
-        let api = this.props.type === "from" ? "/os/hotcityapi/v1.0/depCity/list" : "/os/hotcityapi/v1.0/arrCity/list";
+        let api = (this.props.type === "from") ? APIGYW.manageapi_depCity_list : APIGYW.manageapi_arrCity_list;
         HttpTool.request(HttpTool.typeEnum.POST, api, success, failure, param,
             {
                 ipKey: "hlIP"
@@ -109,6 +108,13 @@ class InputAuto extends Component {
     onSelect(value, option) {
         this.selectValue = this.formatValue(value);
         this.keyWord = this.formatValue(value);
+        this.onChangeValue();
+    }
+    onChangeValue(){
+        const onChangeValue = this.props.onChangeValue;
+        if (onChangeValue) {
+            onChangeValue(this.selectValue);
+        }
     }
 
     getValue() {
@@ -190,11 +196,19 @@ class InputAuto extends Component {
         }
     }
 
+
     render() {
+        let props = {};
+        for(let v in this.props){
+            //去除值选项
+            if(v!=="value"){
+                props[v]= this.props[v];
+            }
+        }
         return (
-            <div className="certain-category-search-wrapper" style={{width: "100%"}}>
-                <AutoComplete
-                    {...this.props}
+            <div  style={{width: "100%"}}>
+                <AutoComplete className="ant-input ant-select-search__field"
+                    {...props}
                     dropdownMatchSelectWidth={false}
                     dropdownStyle={{width: "320px"}}
                     size="large"
@@ -205,20 +219,23 @@ class InputAuto extends Component {
                         this.changeFirstState();
                     }}
                     onSearch={(value) => {
+                        if(!this.keyWord){
+                            this.setState({
+                                dataSource:null
+                            });
+                        }
                         this.keyWord = value;
                         this.selectValue = value;
+                        this.onChangeValue();
                         log("==========");
                         log(value);
                         //防止连续快速搜索，请求接口
 
 
-
                         if(this.keyWord){
                             //搜索
 
-                            // this.setState({
-                            //     dataSource:null
-                            // });
+
                             clearTimeout(this.seeIng);
                             this.seeIng = null;
                             let time = 300;

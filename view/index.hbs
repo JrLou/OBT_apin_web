@@ -11,8 +11,16 @@
 	<link rel="shortcut icon" href="/images/icon.ico" >
     <script type="application/javascript" src="/js/verie.js"></script>
     <script type="application/javascript" src="/js/kefu.js?groupid=497519"></script>
-
-
+    <script type="application/javascript" src="/config.js"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?87a859ed748359f2868dab367b36867a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
     <style>
         body{
             min-width: 1024px;
@@ -27,11 +35,7 @@
             font-family: "Microsoft YaHei", Helvetica, Arial, sans-serif ! important;
             -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
             -webkit-touch-callout:none;
-            -webkit-user-select:none;
-            -khtml-user-select:none;
-            -moz-user-select:none;
-            -ms-user-select:none;
-            user-select:none;
+
         }
         .title{
 
@@ -46,24 +50,32 @@
             right: 0;
             bottom: 0;
         }
-
+        .root{
+            min-height: 100%;
+        }
     </style>
+    <link rel="stylesheet" href="/project/apin.css?v=1" />
+    <link rel="stylesheet" href="/project/src.css?v=1" />
 </head>
 <body>
 
-	<div id="root" >
+	<div id="root" class="root" >
         <div class="title">团购机票就上爱拼机</div>
     </div>
     <script>
         if(!window.checkIE||(checkIE.isIE()&&(checkIE.isIE6()||checkIE.isIE7()||checkIE.isIE8()))){
             window.location.pathname = "/hintPage.html"
         }
+
     </script>
+
+
     <!-- react 项目入口  -->
-    <script type="application/javascript" src="/project/spa.js"></script>
+    <script type="application/javascript" src="/project/spa.js?v=1"></script>
 
 
+    <!--<link rel="stylesheet" href="/project/styles.css?v=1" />-->
 
 </body>
-
+<script type="application/javascript" src="/js/debug.js"></script>
 </html>

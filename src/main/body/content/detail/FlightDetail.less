@@ -1,0 +1,225 @@
+@import "../../../../theme.less";
+@width_icon : 25px;
+@content_width : 100%;
+@height_Input:25px;
+
+.main{
+  min-width: @content_width;
+  background-color: @c_bg_gray;
+}
+.content{
+  background-color: @c_bg_white;
+  margin-left: auto;
+  margin-right: auto;
+  width: @content_width;
+  max-width: @d_screen_width;
+  margin-bottom: @d_spadding_base;
+  padding: @d_spadding_base @d_spadding_small;
+
+  border-width: 0px 0px 1px 0px;
+  border-style: solid;
+  border-color: rgba(0,0,0,0.10);
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+}
+.refContent{
+  composes: content;
+  padding: 0;
+  background-color: @c_bg_gray;
+}
+
+.title{
+  margin-left: auto;
+  margin-right: auto;
+  width: @content_width;
+  max-width: @d_screen_width;
+  padding: @d_spadding_base 0 @d_spadding_cell @d_spadding_small;
+  font-size: @font_size_title_small;
+  color: @c_title_black;
+  padding-right: @d_spadding_small;
+  border-style: solid;
+  border-width: 0 0 1px 0;
+  border-color: @c_border_gray;
+  background-color: @c_bg_white;
+}
+
+.itemCenter{
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.table{
+  display: table;
+  width: 100%;
+}
+.flightLineCell{
+  width:100%;
+  background-color:@c_bg_white;
+  margin-bottom: @d_spadding_small;
+  position:relative;
+}
+.sign{
+  background-image: url("../../../../images/sold_icon.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 64px;
+  height: 20px;
+  line-height: 20px;
+  font-size: @font_size_small;
+  text-align: center;
+  color: @c_white;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+}
+.tableCell{
+  composes: table;
+  width: 100%;
+}
+.left{
+  composes: itemCenter;
+  width: 80%;
+  background: @c_bg_white;
+}
+
+//右边的样式
+.right{
+  composes: itemCenter;
+  width: 20%;
+  background: @c_bg_white;
+  border-color: @c_border_gray;
+  border-style: solid;
+  border-width: 0 0 0 1px;
+  text-align: center;
+}
+.ruleDiv{
+  cursor: pointer;
+  margin-left: 100%;
+  width: 60px;
+  color: @c_theme_blue;
+  opacity: 0.8;
+  font-size: @font_size_small;
+  letter-spacing: 0;
+  border-width: 0 0 1px 0;
+  border-style: dashed;
+  border-color: @c_border_blue;
+}
+.rule{
+  color: @c_title_black;
+  font-size: @font_size_cell;
+  letter-spacing: 0;
+}
+
+
+
+
+
+.verticalMiddle{
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.cell{
+  display: table;
+  padding-top: @d_spadding_small;
+  padding-bottom: @d_spadding_cell;
+  padding-left: @d_spadding_big;
+}
+.cell_left{
+  composes: verticalMiddle;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-size: @font_size_center;
+  color: @c_white;
+  border-radius: 100%;
+  background-color: @c_theme_blue;
+}
+.cell_right{
+  composes: verticalMiddle;
+  padding-left: @d_spadding_center;
+  font-size: @font_size_center;
+  color: @c_title_black;
+}
+
+
+.orderCellItem{
+  width: 35%;
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 100px;
+}
+.refOrderCellItem{
+  composes: orderCellItem;
+  width: 30%;
+  text-align: left;
+  overflow: hidden;
+}
+
+.perTotal{
+  font-size:@font_size_small;
+  color:@c_title_black;
+  float:left;
+  width:200px;
+  height: 40px;
+  line-height: 40px;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow: hidden;
+  padding-right: @d_spadding_center;
+}
+.priceText{
+  float: left;
+  max-width: 200px;
+  height: 40px;
+  line-height: 40px;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow: hidden;
+}
+.priceTextColor{
+  font-size: @font_size_cell;
+  color: @c_text_red;
+}
+.priceTextFont{
+  composes: priceTextColor;
+  font-size: 20px;
+}
+
+
+
+.i_cell{
+  overflow: hidden;
+  width: 100%;
+}
+.i_title{
+  float: left;
+  width: 130px;
+  height: 32px;
+  line-height: 32px;
+  margin-right: 70px;
+  text-align: right;
+  font-size: @font_size_small;
+  color: @c_title_black;
+}
+.i_error{
+  color: @c_text_red;
+  font-size: @font_size_cell;
+  margin-left: 200px;
+  margin-top: 3px;
+  margin-bottom: @d_spadding_cell;
+}
+
+.i_subtitle{
+  margin-left: 70px;
+  float: left;
+  height: 32px;
+  line-height: 32px;
+  font-size: @d_spadding_small;
+  color: @c_text_red;
+}
+

@@ -1,0 +1,214 @@
+@import "../../../../theme.less";
+@content_width : 100%;
+@width_text : 20px;
+@width_icon : 26px;
+
+.main{
+  width: 100%;
+  display: table;
+}
+.itemCenter{
+  display: table-cell;
+  vertical-align: middle;
+}
+.left{
+  composes: itemCenter;
+  width: 75%;
+}
+.right{
+  composes: itemCenter;
+  width: 18%;
+  padding-left: 3.5%;
+  padding-right: 3.5%;
+  text-align: center;
+}
+.ruleDiv{
+  width: 60px;
+  color: @c_theme_blue;
+  opacity: 0.8;
+  font-size: @font_size_small;
+  letter-spacing: 0;
+  border-width: 0 0 1px 0;
+  border-style: dashed;
+  border-color: @c_border_blue;
+}
+.rule{
+  color: @c_title_black;
+  font-size: @font_size_cell;
+  letter-spacing: 0;
+}
+
+//左边的样式
+.cellBg{
+  width: 100%;
+  padding-top: @d_spadding_center;
+  padding-bottom: @d_spadding_center;
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: @c_border_gray;
+}
+.table{
+  width: 100%;
+  display: table;
+}
+
+.type_super {
+  composes: itemCenter;
+  width: 5%;
+}
+.typeText{
+  width: @width_text;
+  text-align: center;
+  font-size: 12px;
+  color: @c_title_gray;
+}
+
+.date_super {
+  composes: itemCenter;
+  width: 15%;
+  min-width: 110px;
+}
+.city{
+  font-size: @font_size_small;
+  color: @c_title_gray_base;
+  width: 110px;
+  text-align: left;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow: hidden;
+}
+.date{
+  composes: city;
+  margin-top: @d_spadding_cell;
+  font-size: @font_size_cell;
+  color: #999999;
+}
+
+.flightLine_super{
+  composes: itemCenter;
+  width: 80%;
+}
+.flightLine{
+  display: table;
+  width: 100%;
+  margin-left: @d_spadding_cell;
+  color: @c_title_black;
+  text-align: center;
+}
+
+
+.placeLine{
+  composes: itemCenter;
+  font-size: @font_size_super_big;
+  width: 20%;
+  color: @c_title_black;
+  padding-top: @d_spadding_cell;
+}
+.placeLineItem{
+  width: 100px;
+  color: @c_title_black;
+  text-align: center;
+  font-size: @font_size_small;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow: hidden;
+}
+.refPlaceLineItem{
+  composes: placeLineItem;
+  text-align: center;
+}
+.time{
+  font-size: 22px;
+  text-align:center;
+  width:100px;
+}
+
+
+
+.company_super{
+  composes: itemCenter;
+  width: 30%;
+  padding-left: 1%;
+  padding-right: 1%;
+}
+
+.logoCompany_super {
+  width: 100%;
+  min-width: 200px;
+}
+.logoBg{
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 auto;
+  height:@width_icon;
+}
+.logo{
+  width: @width_icon;
+  height: @width_icon;
+
+}
+
+.logoCompany{
+  display: inline-block;
+  vertical-align: top;
+  max-width: 180px;
+  height: @width_icon;
+  line-height: @width_icon;
+}
+.logoCompanyText{
+  font-size: @font_size_cell;
+  padding-left: 2px;
+  padding-right: 2px;
+  color: #4F5762;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow: hidden;
+}
+.totalTimeText{
+  width: 100%;
+  font-size: @font_size_cell;
+  color: @c_title_gray;
+  text-align: center;
+}
+.flightLineNum{
+  width: 100%;
+  font-size: @font_size_cell;
+  color: @c_title_black;
+  text-align: center;
+}
+
+.lineBg{
+  composes: itemCenter;
+  width: 14%;
+}
+.line_item{
+  padding-left: 10%;
+  padding-right: 10%;
+  width: 100%;
+  display: table;
+}
+.line{
+  composes: itemCenter;
+  height:6px;
+  width: 95%;
+}
+.line_line{
+  width: 100%;
+  height: 2px;
+  background-color: #BABABA;
+}
+.line_icon{
+  composes: itemCenter;
+  width: 5%;
+  height:6px;
+}
+.line_icon_icon{
+  width: 3px;
+  height: 6px;
+  background-image: url("../../../../images/CombinedShape.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+

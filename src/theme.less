@@ -8,6 +8,7 @@
 @primary-color          : #00A0E9;
 @info-color             : #2db7f5;
 @success-color          : #87d068;
+@success2-color          : #01C12D;
 @error-color            : #f50;
 @warning-color          : #fa0;
 //边框颜色
@@ -15,6 +16,11 @@
 @line-color:#333;
 //字体颜色
 @font-color:#333;
+@font-light-color:#999;
+@font-dark-color:#221A18;
+@font-paytitle-color:#FF5841;
+@font-light2-color:#545456;
+
 //背景色
 @bg-color:#fff;
 
@@ -47,16 +53,20 @@
 //字体
 @font-size-base: 14px;
 @font_size_title: @font-size-base + 6px;
+@font_size_title_small: @font-size-base + 4px;
+
 
 @font_size_cell: 12px;
 @font_size_small: 14px;
 @font_size_center: 16px;
 @font_size_big: 20px;
 @font_size_super_big: 24px;
+@font_size_super_big_x: 28px;
 
 // Color;
 @normal-color			: #131C30; // 主色
 @info-color             : #2db7f5;
+@upload_color: #F8F8F8;
 //背景色
 @c_white: #ffffff;
 //主题蓝色
@@ -66,20 +76,30 @@
 
 //边框蓝色
 @c_border_blue: #29A6FF;
-@c_border_gray: #CBD3E5;
+@c_border_gray: #e3e7eb;
 
 //title color
 @c_title_black: #333;
 @c_title_gray: #888D99;
 @c_title_gray_base: #4F5762;
+@c_title_blue: #29A6FF;
+@c_title_alert_gray: #666666;
+
 
 @c_text_red: #FF6600;
+@c_text_red_dark: #ff5100;
+@c_text_red_light: #ff9100;
 //边距
+@d_spadding_super_big: 35px;
+@d_spadding_big: 30px;
+@d_spadding_big_center: 25px;
 @d_spadding_center: 20px;
 @d_spadding_small: 15px;
 @d_spadding_base: 10px;
 @d_spadding_cell: 5px;
 
+@tooltip-bg : #eeeeee;
+@tooltip-color : #333333;
 .maintheme{
   position: absolute;
   min-height: 100%;
@@ -88,4 +108,119 @@
   right:0;
   left: 0;
   background:rgba(255, 255, 255, 0.12);
+}
+
+.payOutBox {
+  margin: auto;
+  max-width: 1200px;
+  margin-top: 10px;
+  position: relative;
+}
+
+.toContainAllSon{
+  content: "";
+  height: 0;
+  visibility: hidden;
+  display: block;
+  clear: both;
+}
+
+.payCpmBox{
+  background-color: @content-backcolor;
+  margin: 10px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
+  border: 1px rgba(0, 0, 0, 0.10) solid;
+  .top{
+    line-height: 50px;
+    height: 50px;
+    font-size: @font_size_center;
+    font-weight: bolder;
+    padding-left: 20px;
+    border-bottom: 1px solid #EDEDED;
+    color: @font-color;
+  }
+  .middle{
+    font-size: @font_size_small;
+    color: @font-light-color;
+    padding: 25px 20px 30px 20px;
+  }
+}
+
+.modalBtn{
+  width: 165px;
+  height: 35px;
+  margin: 0 8px;
+  font-size: @font_size_center;
+}
+
+.bigOrangeBtn{
+  width: 200px;
+  height: 50px;
+  font-size: @font_size_big;
+  margin-top: 11px;
+  background-color: @c_text_red;
+  border-color: @c_text_red;
+  &:hover, &:focus{
+    background-color: @c_text_red_light;
+    border-color: @c_text_red_light;
+  }
+  &:active{
+    background-color: @c_text_red_dark;
+    border-color: @c_text_red_dark;
+  }
+}
+
+.normalSizeBtn{
+  width: 145px;
+  height: 36px;
+  font-size: @font_size_center;
+}
+
+.fl{
+  float: left;
+}
+
+.fr{
+  float: right;
+}
+
+.txtCenter{
+  text-align: center;
+}
+
+//验证码的样式
+
+
+.codeSucc{
+  color: @success2-color;
+}
+
+.codeErr{
+  color: @error-color;
+}
+
+.codeUndefined{
+  opacity: 0;
+}
+
+.loading{
+  text-align: center;
+  height: 400px;
+  background-color: #fff;
+  color: #ff5500;
+  line-height: 50px;
+  font-size: @font_size_big;
+  position: relative;
+}
+
+.allCenter{
+  position: absolute;
+  top:0;
+  left:0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  line-height: 20px;
+  height: 20px;
+  text-align: center;
 }

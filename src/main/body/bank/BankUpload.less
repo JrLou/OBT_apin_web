@@ -1,0 +1,170 @@
+@import "../../../theme.less";
+
+.content {
+   .loading {
+      .loading;
+   }
+   .payOutBox;
+   .bankBox {
+      .payCpmBox;
+      &_top {
+         .top;
+      }
+      &_middle {
+         &:after {
+            .toContainAllSon;
+         }
+         .middle;
+         &_msg {
+            display: inline-block;
+            font-family: "MicrosoftYaHei", Helvetica, Arial, sans-serif;
+            font-size: @font_size_center;
+            color: @font-dark-color;
+            line-height: 1.9rem;
+         }
+         &_titleMsg {
+            width: 90px;
+            display: inline-block;
+         }
+         &_tips {
+            float: right;
+            width: 320px;
+            text-align: justify;
+            .tipsIcon {
+               float: left;
+               margin-left: -20px;
+               color: @c_text_red_light;
+            }
+         }
+         //第二段
+
+         .container2Son:after {
+            .toContainAllSon;
+         }
+         .container2Son {
+            .form_group {
+               margin-right: 30px;
+               line-height: 30px;
+            }
+            &:first-child .form_group {
+               margin-bottom: 20px;
+            }
+            .form_control {
+               width: 240px;
+            }
+            .control_label {
+               color: @font-color;
+            }
+         }
+
+         //第三阶段，上传
+         .upload_text {
+            &_line1 {
+               font-size: 70px;
+            }
+            &_line2 {
+               font-size: @font_size_center;
+            }
+            &_line3 {
+               font-size: @font_size_small;
+            }
+
+         }
+
+         :global {
+            .forUploadStyle {
+               min-height: 238px;
+               max-height: 454px;
+               overflow: hidden;
+               .ant-upload-list-item.ant-upload-list-item-undefined{
+                  //display: none!important;//这个是上传的时候的第一个div
+               }
+               .ant-upload.ant-upload-select-picture-card > .ant-upload {
+                  padding-top: 63px;
+                  background-color: @upload_color;
+               }
+               .ant-upload.ant-upload-select-picture-card,
+               .ant-upload-list-item.ant-upload-list-item-uploading,
+               .ant-upload-list-picture-card .ant-upload-list-item {
+                  vertical-align: top;
+                  float: none;
+                  display: inline-block;
+                  width: 370px;
+                  height: 216px;
+                  padding: 0;
+                  border-radius: 0;
+                  margin-right: 22px;
+                  margin-bottom: 22px;
+                  img {
+                     max-width: 368px;
+                     max-height: 214px;
+                     border-radius: 0;
+                  }
+               }
+
+               //新加的样式，给图片的
+               .ant-upload.ant-upload-select-picture-card,
+               .ant-upload-list-item:nth-child(3),
+               .ant-upload-list-item:nth-child(6) {
+                  margin-right: 0;
+               }
+               .ant-upload.ant-upload-select-picture-card,
+               .ant-upload-list-item.ant-upload-list-item-uploading,
+               .ant-upload-list-item.ant-upload-list-item-done:nth-child(3) ~ div {
+                  margin-bottom: 0;
+               }
+
+               .ant-upload-list-picture-card .ant-upload-list-item-info{
+                  text-align: center;
+                  &:before {
+                     background-color: rgba(0, 0, 0, 0.5);
+                     left: 0;
+                  }
+                  .ant-upload-list-item-uploading-text{
+                     margin-top: 90px;
+                  }
+               }
+               .ant-upload-list-picture-card .ant-upload-list-item-actions{
+                  //display: none;
+                  transform: translate(0, 0);
+                  left: 39%;
+                  top: 44%;
+               }
+               .ant-upload-list-picture-card .ant-upload-list-item-actions .anticon-eye-o,
+               .ant-upload-list-picture-card .ant-upload-list-item-actions .anticon-delete {
+                  font-size: 30px;
+                  padding-right: 30px;
+               }
+
+               //设置缩略图居中不变形
+               .ant-upload-list-picture-card .ant-upload-list-item-thumbnail,
+               .ant-upload-list-picture-card .ant-upload-list-item-thumbnail img{
+                  width: auto;
+                  height: auto;
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  bottom: 0;
+                  margin: auto;
+               }
+
+            }
+         }
+      }
+   }
+   .submitBtn {
+      .bigOrangeBtn;
+      margin-top: 20px;
+   }
+   .link_txt{
+      color: @primary-color;
+   }
+}
+
+:global {
+   div[role=document][style^="width: 813px"] .ant-modal-close span {
+      font-size: 40px;
+   }
+}
+

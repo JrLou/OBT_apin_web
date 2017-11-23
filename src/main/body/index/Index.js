@@ -7,13 +7,12 @@ import RecommendView from "../component/RecommendView";
 import SpecialView from "../component/SpecialView";
 import SearchLayout from "../component/SearchLayout";
 import SearchHelp from "../search/SearchHelp.js";
-import {HttpTool} from "../../../../lib/utils/index.js";
-import routes from "../../../vm/routes.js";
+import {HttpTool,CookieHelp} from "../../../../lib/utils/index.js";
+import APIGYW from '../../../api/APIGYW.js';
 
 import Scroll from "react-scroll/modules/index"; // Imports all Mixins
 // Or Access Link,Element,etc as follows
 
-var Link = Scroll.Link;
 var Events = Scroll.Events;
 var scroll = Scroll.animateScroll;
 var scrollSpy = Scroll.scrollSpy;
@@ -61,7 +60,7 @@ class page extends Component {
             log(msg);
             // message.error(msg);
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/os/airlineapi/v1.0/bestList", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.manageapi_bestList, success, failure, param,
             {
                 ipKey: "hlIP"
             });
@@ -170,7 +169,7 @@ class page extends Component {
 
             var param = {
                 pageIndex: this.page,
-                pageSize:25
+                pageSize: 25
             };
             var success = (code, msg, json, option) => {
                 log(json);
@@ -229,14 +228,12 @@ class page extends Component {
                 <div className={less.topRightContent}>
                     {/*<img className={less.topRightCarousel}*/}
                     {/*src={require("../../../images/banner.png")}/>*/}
-                    <Carousel autoplay={true} >
-                        <div className={less.topRightCarousel}
-                             style={{backgroundImage:"url("+require("../../../images/b2.jpg")+")"}}
-                        />
-                        <div className={less.topRightCarousel}
-                             style={{backgroundImage:"url("+require("../../../images/b1.jpg")+")"}}
-                        />
-
+                    <Carousel >
+                        <a href="/html/fanli.html" target='_blank'>
+                            <div className={less.topRightCarousel}
+                                 style={{backgroundImage: "url(" + require("../../../images/fanli.jpg") + ")"}}
+                            />
+                        </a>
                     </Carousel>
                 </div>
             </div>
@@ -249,6 +246,26 @@ class page extends Component {
             return (
                 <div className={less.center}>
                     <div className={less.centerTitleLayout}>
+                        <div className={less.centerTitleLeftLayout}>
+                            <div className={less.centerTitleLeftText}
+                                 onClick={() => {
+                                     const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
+                                     if (isLogin) {
+                                         window.app_open(this, "/PublishMsg", {});
+                                     } else {
+                                         window.modal.showModal(0, () => {
+                                             window.app_open(this, "/PublishMsg", {});
+                                         });
+                                     }
+                                 }}
+                            >
+                                <font className={less.goLeftText}>三人可成团</font>
+                                <div className={less.goText}>
+                                    GO
+                                </div>
+                            </div>
+
+                        </div>
                         <div className={less.centerIcon}/>
                         <div className={less.centerTitle}>精品特价航线</div>
 
@@ -290,7 +307,7 @@ class page extends Component {
     render() {
 
         return (
-            <div    className={less.main}>
+            <div className={less.main}>
                 <div
                     className={less.mainContent}
                 >
@@ -316,7 +333,7 @@ class page extends Component {
                             {/*轮播部分*/}
                             {this.getSwitchLayout()}
                         </div>
-                        <div style={{clear:"both"}}/>
+                        <div style={{clear: "both"}}/>
                     </div>
                     {/*精品特价航线*/}
                     {this.getRecommendLayout()}
@@ -332,14 +349,15 @@ class page extends Component {
                         <br/>
                     </div>
                     {this.state.loading ? <div className={less.more}>
-                            加载中...</div> :
+                        加载中...</div> :
                         <div className={less.more}
                              onClick={() => {
                                  this.getNetData();
                              }}
                         >
                             {this.isLastPage ? "没有更多航线啦" : <div style={{
-                                cursor: "pointer"}}>下拉加载更多</div>}</div>}
+                                cursor: "pointer"
+                            }}>下拉加载更多</div>}</div>}
 
 
                 </div>

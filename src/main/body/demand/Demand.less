@@ -1,0 +1,109 @@
+@import "../../../theme.less";
+.mainPage{
+  min-width: 1200px;
+  height:auto;
+  margin: 0 auto;
+}
+.searchContainer,.resultContainer{
+  clear: both;
+  box-sizing: border-box;
+  border: 1px solid @c_border_gray;
+  padding: @d_spadding_center @d_spadding_small;
+  width: 100%;
+  height: auto;
+  background: @bg-color;
+  margin-bottom: @d_spadding_base;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10);
+  overflow: hidden;
+}
+.operation{
+  color: @c_theme_blue;
+  cursor: pointer;
+
+  &:hover{
+    font-weight: bold;
+  }
+}
+.pagination{
+  text-align: right;
+  margin-top: @d_spadding_small;
+}
+.searchItem01,.searchItem02{
+  float: left;
+  font-size: @font_size_small;
+  vertical-align: middle;
+  height: 40px;
+  box-sizing: border-box;
+  width: 250px;
+  margin: @d_spadding_base 0;
+}
+.searchItem02{
+  width:400px;
+}
+.inputStyle{
+  width: 60%;
+  height: 36px;
+  border-radius: 2px;
+
+  & div{
+    border-radius: 2px;
+  }
+}
+.dateStyle{
+  width: 35%;
+  border-radius: 2px;
+
+  & input{
+    height: 36px;
+    border-radius: 2px;
+  }
+}
+.buttonStyle{
+  border-radius: 2px;
+  font-size: 14px;
+  height: 36px;
+  width: 35%;
+  background-color: #29A6FF;
+  cursor: pointer;
+}
+.buttonRelease{
+  width: 110px;
+  border-radius: 2px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  height: 36px;
+  cursor: pointer;
+  background-color: #29A6FF;
+  color: #fff;
+}
+.routeStyle{
+  display: inline-block;
+  max-width: 100px;
+  white-space: nowrap;
+  text-overflow:ellipsis;
+  overflow:hidden;
+}
+.selectStyle{
+  .inputStyle;
+  &>div{
+    height: 36px;
+    line-height: 36px;
+  }
+  &>div>div{
+    height: 36px;
+    line-height: 36px;
+  }
+}
+.lableText{
+  display: inline-block;
+  vertical-align: -15%;
+}
+.clearBtn{
+  font-size: @font_size_cell;
+  color:@primary-color;
+  cursor: pointer;
+  padding-left: @d_spadding_center;
+}
+.clearBtn:hover{
+  font-weight: bold;
+}

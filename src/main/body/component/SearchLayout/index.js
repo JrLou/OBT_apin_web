@@ -21,10 +21,13 @@ class SearchLayout extends Component {
         this.state = Object.assign({
             searchSource: [],
             defaultSource : [],
-            loading: false
         }, data);
         this.img_login_check = require("../../../../images/check.png");
         this.img_login_uncheck = require("../../../../images/uncheck.png");
+    }
+
+    setLoading(loading){
+
     }
     componentDidMount() {
         this.loadDefaultData();
@@ -59,7 +62,6 @@ class SearchLayout extends Component {
         return (
             <div className={less.buttonLayout}>
                 <Button
-                    loading={this.state.loading}
                     type="primary"
                     className={less.button}
                     onClick={() => {
@@ -67,7 +69,7 @@ class SearchLayout extends Component {
                             this.props.submit(this.getData());
                         }
                     }}>
-                    {"搜索" + (this.state.loading ? "中" : "")}
+                   搜索航班
                 </Button>
             </div>
         );
@@ -90,7 +92,8 @@ class SearchLayout extends Component {
 
     getSwitchLayout(type){
         return (
-            <div >
+            <div style={{minWidth:"70px"}}>
+                
 
                 {this.getSwitchView(this.state.one, "单程",
                     () => {
@@ -185,11 +188,6 @@ class SearchLayout extends Component {
         );
     }
 
-    setLoading(loading) {
-        this.setState({
-            loading: loading
-        });
-    }
 
     valChange(val){
         this.setState({

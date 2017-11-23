@@ -6,10 +6,12 @@ import SearchLayout from '../component/SearchLayout';
 import OneWayDetail from '../content/OneWayDetail.js';
 import SearchHelp from '../search/SearchHelp.js';
 import {HttpTool} from "../../../../lib/utils/index.js";
+import {CookieHelp } from '../../../../lib/utils/index.js';
 //获取模拟数据
 import routes from '../../../vm/routes.js';
 import less from './Search.less';
 import MyAlert from "../content/line/MyAlert";
+import APIGYW from '../../../api/APIGYW.js';
 class page extends Component {
     constructor(props) {
         super(props);
@@ -57,9 +59,9 @@ class page extends Component {
     }
 
     /**
-     * @param param 请求参数(根据搜索框与列表数据提取,不建议此外修改)
+     * @param par 请求参数(根据搜索框与列表数据提取,不建议此外修改)
      */
-    loadData(par) {
+    loadData(par = {}) {
         // arrCity	到达城市名	string
         // depCity	出发城市名	string
         // flightType	航程类型：0、未定义；1、单程；2、往返；3、多程	number
@@ -108,7 +110,7 @@ class page extends Component {
                 this.setLoading(false, () => {
                 });
             };
-            HttpTool.request(HttpTool.typeEnum.POST, "/os/airlineapi/v1.0/list", success, failure, param,
+            HttpTool.request(HttpTool.typeEnum.POST, APIGYW.manageapi_list, success, failure, param,
                 {
                     ipKey: "hlIP"
                 });
@@ -213,7 +215,7 @@ class page extends Component {
 
         return (
             <div style={{clear: "both"}}>
-                <OneWayDetail data={data}/>
+                <OneWayDetail data={data} obj = {this}/>
             </div>
         );
     }
@@ -256,8 +258,26 @@ class page extends Component {
         return (
             <div className={less.empty}>
                 <div className={less.emptyText}>
-                    <div>没有查询到航班信息，请重新搜索或联系客服询问航班 </div>
-                    <Button type="primary" onClick={()=>{this.myAlert.showView(true);}}>联系客服</Button>
+                    <div style={{color:"#666"}}>没有找到相应航线哟，试试提交需求订制专属航线</div>
+                    <Button type="primary" onClick={()=>{
+                        let searchData = this.searchLayout.getData();
+                        let lineType = searchData&&searchData.one?1:2;
+                        let data ={
+                            lineType:lineType,
+                            isMult:true,
+                            listData:[
+                                {fromCity:searchData.from,toCity:searchData.to,toDateTime:"",fromDateTime:""},
+                            ]};
+                        CookieHelp.saveCookieInfo("publishMsgCookie",data);
+                        const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
+                        if (isLogin){
+                            window.app_open(this, "/PublishMsg",{});
+                        }else {
+                            window.modal.showModal(0,()=>{
+                                window.app_open(this, "/PublishMsg",{});
+                            });
+                        }
+                    }}>提交需求</Button>
                 </div>
                 <MyAlert data={"客服电话"} ref={(a)=>this.myAlert = a}/>
             </div>

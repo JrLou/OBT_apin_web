@@ -8,5 +8,4 @@ runtime
 .directory
 public.zip
 public.rar
-public/project/*
 **/npm-debug.log

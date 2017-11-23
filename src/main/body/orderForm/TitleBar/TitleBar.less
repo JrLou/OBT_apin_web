@@ -1,0 +1,39 @@
+@import "../../../../theme.less";
+.stateBar{
+  box-sizing: border-box;
+  background-color: #fffff5;
+  padding: @d_spadding_small;
+  margin-bottom: @d_spadding_base;
+}
+.stateTitle{
+  display: inline-block;
+  font-weight: bold;
+  font-size: @font_size_center;
+  color: #ff5500;
+}
+.stateIcon{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-size: 100% 100%;
+  vertical-align: sub;
+  margin-right: @d_spadding_cell;
+}
+.helpMsg{
+  padding-left: 10px;
+  display: inline-block;
+  font-size: @font-size-base;
+  letter-spacing: 1px;
+  color: #a3a3a3;
+}
+.deleteOrder{
+  float: right;
+  font-size: @font-size-base;
+  cursor: pointer;
+  padding-top: 3px;
+
+  span{
+    font-size: @font_size_center;
+    color:#999;
+  }
+}

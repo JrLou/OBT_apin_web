@@ -1,33 +1,46 @@
 @import "../../../../theme.less";
+@content_width : 100%;
 @width_text : 20px;
 @width_icon : 25px;
-@content_width : 100%;
-@left_width:0.7*@content_width;
-@right_width:0.3*@content_width;
-.lineView{
-  width: 100%;
-  display: table-cell;
-  vertical-align: middle;
+
+.themeLine{
+  overflow: hidden;
+  margin: @d_spadding_base @d_spadding_base 0 @d_spadding_base;
 }
-.fontBase{
-  font-size: @font_size_cell;
+.themeTitle{
+  float: left;
+  font-size: @font_size_small;
+  color: @c_title_black;
+  margin-right: @d_spadding_base;
 }
-.cellBg{
-  background: #F7F7F7;
-  width: @content_width;
-  height:160px;
-  padding:@d_spadding_cell @d_spadding_base;
-  margin-bottom: @d_spadding_base;
+.themeCon{
+  float: left;
+  font-size: @font_size_small;
+  color: @c_title_gray;
+  padding-right: 3*@d_spadding_center;
 }
+
 .cell{
   display: table;
-  width: 100%;
-  transition:1s;
-  transform: scale(1) translateX(0px);
+  background: white;
+  width: @content_width;
+  padding:0 @d_spadding_base;
+  margin-bottom: @d_spadding_base;
+  position: relative;
 }
-.hiddenCell{
-  width: 100%;
-  transform: scale(0.5) translateX(0);
+.sign{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 60px;
+  height: 25px;
+  line-height: 25px;
+  font-size: @font_size_small;
+  text-align: center;
+  background-color: #4ff92e;
+  color: @c_white;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
 }
 .table{
   width: 100%;
@@ -50,6 +63,7 @@
 .rightCenter{
   display: table;
   width: 100%;
+  background-color: #2db7f5;
 }
 .daysText{
   composes: itemCenter;
@@ -91,6 +105,9 @@
 
 
 //左边的样式
+.fontBase{
+  font-size: @font_size_cell;
+}
 .cellLine{
   composes: table;
   padding: @d_spadding_cell;
@@ -158,8 +175,6 @@
   position: relative;
 }
 .totalTimeText{
-  height: 18px;
-  line-height: 18px;
   font-size: @font_size_cell;
   color: @c_title_black;
 }

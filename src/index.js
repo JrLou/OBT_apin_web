@@ -1,3 +1,15 @@
+import './myAntDesign';
+//添加公用库
+window._ = require('lodash');
+//引用用公用库
+import moment from 'moment';
+// 推荐在入口文件全局设置 locale
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
+
+import { CookieHelp } from '../lib/utils/index';
+
+CookieHelp.userCookieKey = 'APIN_USER_MVP_1.8';
 //重写日志系统
 function getUrlSearch(str) {
     var query = {};
@@ -21,6 +33,12 @@ function getUrlSearch(str) {
     return query;
 }
 
+if(window.location.hostname.indexOf("apin.com")>=0){
+    window.console.log =  function (e) {
+        //清除所有日志
+    };
+}
+
 window.log = function (obj) {
     /* eslint-disable no-console */
     console.log(obj);
@@ -32,14 +50,18 @@ window.app_getPar = function (obj) {
     let state = obj.props.location.state;
     let query = obj.props.location.query;
     let data = query ? query.data : null;
-    return Object.assign(state || {}, data ? JSON.parse(decodeURIComponent(data)) : {});
+    if(data&&data.indexOf("{")<0){//JSON对像结构,必有
+        data = decodeURIComponent(data);
+    }
+    return Object.assign(state || {}, data ? JSON.parse(data) : {});
 };
 window.app_open = function (obj, path, state, open, callBack) {
     log(obj);
     if (!obj || (!obj.context) || (!obj.context.router) || (!obj.context.router.push)) {
-        alert("打开页面错误,请检查");
+
         if (callBack) {
             callBack("打开页面错误,请检查");
+            throw Error("打开页面错误,请检查");
         }
     }
 
@@ -54,18 +76,22 @@ window.app_open = function (obj, path, state, open, callBack) {
     if(get==="?"){
         get = "";
     }
+    if(get&&get.length>256){
+        throw Error("参数过长(最长256字符),请检查:get = "+get);
+    }
     if (open === "new") {
         window.open(path + get);
-    } else if (open === "self") {
-        window.location.pathname = path + get;
     } else {
-        document.documentElement.scrollTop = document.body.scrollTop = 0;
-        obj.context.router.push(
-            {
-                pathname: path,
-                state: state
-            });
+        window.location.href = path + get;
     }
+    // {
+    //     // document.documentElement.scrollTop = document.body.scrollTop = 0;
+    //     // obj.context.router.push(
+    //     //     {
+    //     //         pathname: path,
+    //     //         state: state
+    //     //     });
+    // }
 };
 
 window.apin = {};

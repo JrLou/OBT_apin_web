@@ -1,0 +1,177 @@
+@import "../../../../theme.less";
+.hidden{
+  display: none;
+}
+.outerBox{
+  box-sizing: border-box;
+}
+.orderBox{
+  overflow: hidden;
+  position: relative;
+}
+.payBox{
+  background-color: #F0F4FB;
+  padding-bottom: @d_spadding_base;
+  overflow: hidden;
+}
+.leftMsg{
+  box-sizing: border-box;
+  position: relative;
+  padding: @d_spadding_small;
+  float: left;
+  width: 85%;
+  border-right: 1px solid #EDEDED;
+}
+.boxNoBorder{
+  .leftMsg;
+  border:none;
+}
+.rightMsg{
+  position: absolute;
+  top: 40%;
+  right: 2.5%;
+  border-left: 1px solid #EDEDED;
+}
+.itemLine{
+  clear: both;
+  padding: @d_spadding_base 0;
+}
+.itemTitle{
+  float: left;
+  width: 90px;
+  font-size: @font-size-base;
+  color: @font-light-color;
+}
+.itemValue{
+  float: left;
+  font-size: @font_size_center;
+  color: @font-color;
+}
+.helpMsg{
+  background: #FFF7D9;
+  border: 1px solid #FF9901;
+  font-size: 12px;
+  color: #4D4D4D;
+  padding: @d_spadding_cell @d_spadding_base;
+}
+.helpIcon{
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background-size: 100% 100%;
+  vertical-align: sub;
+  margin-right: @d_spadding_cell;
+}
+.priceItem{
+  position: absolute;
+  top: 40%;
+  right: 5%;
+}
+.priceTitle{
+  font-size: @font_size_cell;
+  color: @font-light-color;
+  padding-right: @d_spadding_cell;
+}
+.priceTip{
+  font-size: @font_size_cell;
+  color: #FF5841;;
+}
+.priceValue{
+  font-size: @font_size_big;
+  color: #FF5841;;
+}
+.payTitle{
+  float: left;
+  width: 90px;
+  font-size: @font_size_cell;
+  color: @font-color;
+}
+.payValue{
+  float: left;
+  font-size: @font_size_center;
+  color: #FF5841;
+  padding-right: @font_size_big;
+}
+.payType{
+  float: left;
+  font-size: @font_size_cell;
+  color: @font-color;
+  padding-top: 3px;
+}
+.payVoucher{
+  clear: both;
+  padding-top: 20px;
+  position: relative;
+}
+.voucherImg{
+  width: 100px;
+  height: 60px;
+  cursor: pointer;
+  margin-left: @font_size_center;
+  vertical-align: top;
+  border:1px solid #999;
+}
+.imgShow{
+  display: block;
+  position: relative;
+  left:-420px;
+  width: 840px;
+  height: auto;
+}
+.payMsgBox{
+  clear: both;
+}
+.itemLinePay{
+  clear: both;
+  padding: @d_spadding_small;
+}
+.reUpload{
+  float: right;
+}
+.closeImgBtn{
+  position: absolute;
+  top:-18px;
+  right: -468px;
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.closeImg{
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 42px;
+  height: 42px;
+  background-size: 100% 100%;
+}
+.messageBox{
+  font-size: @font_size_center;
+  color: @font-color;
+  letter-spacing: 0.24px;
+}
+.cancleBtnStyle{
+  height: 36px;
+  width: 110px;
+  border: 1px solid #E6E6E6;
+  border-radius: 2px;
+  font-size: @font_size_center;
+  font-weight: normal;
+  color: #666;
+}
+.reUploadBtnStyle{
+  .cancleBtnStyle;
+  position: absolute;
+  top: 25px;
+  left: 950px;
+}
+.recordBox{
+  margin-top: -2px;
+  float: left;
+}
+.failStyle{
+  font-size: @font_size_cell;
+  font-weight: bold;
+  color:#FF5841;
+}
