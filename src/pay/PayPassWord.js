@@ -123,7 +123,7 @@ class InputLayout extends Component {
         }, param);
         // setTimeout(() => {
         //     let code = (Math.random() * 10).toFixed(0) - 5;
-        //     //todo 没有data吧?
+        //
         //     let data = [];
         //     cb(code, code > 0 ? "获取成功" : "获取失败", data);
         // }, Math.random() * 1000);
