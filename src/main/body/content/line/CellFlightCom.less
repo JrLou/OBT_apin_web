@@ -186,6 +186,7 @@
   padding-top: @d_spadding_cell;
   padding-bottom: @d_spadding_cell;
   width: 18%;
+  min-width: 70px;
   margin-left: 1%;
   margin-right: 1%;
   position: relative;
@@ -217,7 +218,7 @@
 .timeLineItem{
   float: left;
   font-size: @font_size_super_big;
-  width: 40%;
+  width: 39%;
   color: @c_title_black;
   text-align: right;
   box-sizing: content-box;
@@ -226,16 +227,22 @@
 
 .space{
   width: 20%;
-  display: inline-block;
+  height: 1px;
+  min-width: 70px;
+  float: left;
 }
 .placeLineItem{
-  display: inline-block;
+  float: left;
   color: @c_title_black;
   text-align: right;
   box-sizing: content-box;
-  width: 40%;
+  width: 39%;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow: hidden;
 }
 .refPlaceLineItem{
   composes: placeLineItem;
   text-align: left;
+
 }
