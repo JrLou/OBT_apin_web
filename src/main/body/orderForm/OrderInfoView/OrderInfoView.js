@@ -80,7 +80,7 @@ class OrderInfoView extends Component{
                             <div className={css.itemValue}>{`¥${orderMsg.childPrice}`}</div>
                         </div>
                         <div className={css.itemLine}>
-                            <div className={css.itemTitle}>航班人数：</div>
+                            <div className={css.itemTitle}>乘机人数：</div>
                             <div className={css.itemValue}>
                                 {`${parseInt(orderMsg.adultCount)+parseInt(orderMsg.childCount)}人（${orderMsg.adultCount}成人，${orderMsg.childCount}儿童）`}
                             </div>
