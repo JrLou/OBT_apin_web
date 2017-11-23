@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-22 19:17:05
+ * @Last Modified time: 2017-11-23 10:08:47
  */
 
 import React, { Component } from 'react';
@@ -57,7 +57,7 @@ class ForgetForm extends Component {
                     {getFieldDecorator('mobile', {
                         validateFirst: true,
                         rules: [{ required: true, message: '请输入11位手机号' },
-                        { pattern: /^(1)\d{10}$/, message: '手机号格式不正确' },
+                        { pattern: /^(1)\d{10}$/, message: '手机格式不正确' },
                         {
                             validator: (rule, value, callback) => {
                                 this.getCode(() => {
@@ -71,7 +71,7 @@ class ForgetForm extends Component {
                         }
                         ],
                     })(
-                        <Input prefixCls="my-ant-input" placeholder="请输入11位手机号" />
+                        <Input prefixCls="my-ant-input" placeholder="请输入11位手机号" maxLength="11" />
                         )}
                 </FormItem>
                 {
@@ -151,7 +151,7 @@ class ForgetForm extends Component {
                         }
                         ],
                     })(
-                        <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" />
+                        <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母"  maxLength="16" />
                         )}
                 </FormItem>
                 <FormItem
@@ -175,7 +175,7 @@ class ForgetForm extends Component {
                             }
                         }],
                     })(
-                        <Input prefixCls="my-ant-input" type="password" placeholder="请再次输入密码" />
+                        <Input prefixCls="my-ant-input" type="password" placeholder="请再次输入密码" maxLength="16" />
                         )}
                 </FormItem>
                 <FormItem prefixCls="my-ant-form">
