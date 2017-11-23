@@ -393,7 +393,7 @@ class PassengerAdd extends Component{
         if(!date){
             return true;
         }
-        let earlistDate = new Date(1900,0,1);
+        let earlistDate = new Date(1901,0,1);
         let nowDate = new Date();
         return (date.valueOf()<=earlistDate.valueOf()-86400000||date.valueOf()>=nowDate.valueOf());
     }
