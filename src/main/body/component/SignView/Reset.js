@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-10 16:51:38 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-22 15:04:16
+ * @Last Modified time: 2017-11-23 10:12:07
  */
 
 
@@ -53,7 +53,7 @@ class ResetForm extends Component {
                         rules: [{ required: true, message: '请输入密码' },
                         { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
-                        <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" />
+                        <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" maxLength="16" />
                         )}
                 </FormItem>
                 <FormItem
@@ -80,6 +80,7 @@ class ResetForm extends Component {
                         <Input prefixCls="my-ant-input"
                             type="password"
                             placeholder="请输入8-16位数字、字母"
+                            maxLength="16"
                         />
                         )}
                 </FormItem>
@@ -103,7 +104,9 @@ class ResetForm extends Component {
                     })(
                         <Input prefixCls="my-ant-input"
                             type="password"
-                            placeholder="请再次输入密码" />
+                            placeholder="请再次输入密码"
+                            maxLength="16"
+                        />
                         )}
                 </FormItem>
                 <FormItem prefixCls="my-ant-form">
