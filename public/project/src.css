@@ -6489,6 +6489,7 @@ active {
   border-radius: 2px;
   height: 36px;
   width: 35%;
+  font-size: 14px;
 }
 .src-main-body-orderForm-OrderFormList---routeStyle---1o7wi {
   display: inline-block;
@@ -7182,6 +7183,9 @@ active {
   text-align: center;
   margin-top: 10px;
 }
+.src-main-body-orderForm-Passengers-Passengers---failureNum---2AwFc {
+  padding: 0 20px;
+}
 .src-main-body-orderForm-Passengers-Passengers---warningNum---1Qno7 {
   color: #fa0;
   padding: 0 5px;
@@ -7211,6 +7215,7 @@ active {
 .src-main-body-orderForm-Passengers-Passengers---importResult---1DxAy {
   max-height: 400px;
   overflow: auto;
+  border-bottom: 1px solid #ddd;
 }
 .src-main-body-orderForm-Passengers-Passengers---confirmTitle---26w4i {
   font-size: 20px;
@@ -7218,6 +7223,23 @@ active {
   letter-spacing: 0.3px;
   text-align: center;
   margin-bottom: 26px;
+}
+.src-main-body-orderForm-Passengers-Passengers---ModalTitle---3WMfN {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+}
+.src-main-body-orderForm-Passengers-Passengers---checkBtn---33weW {
+  border-radius: 2px;
+  background-color: #00A0E9;
+  width: 200px;
+  height: 36px;
+  font-size: 16px;
+  color: #FFFFFF;
+  letter-spacing: 0.24px;
+  margin-top: 20px;
 }
 .src-main-body-orderForm-Passengers-PassengerAdd---maintheme---2TZ4m {
   position: absolute;
@@ -7677,8 +7699,21 @@ active {
 }
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---closeImgBtn---3FdKe {
   position: absolute;
-  top: -15px;
-  right: -465px;
+  top: -18px;
+  right: -468px;
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.src-main-body-orderForm-OrderInfoView-OrderInfoView---closeImg---2lwpq {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 42px;
+  height: 42px;
+  background-size: 100% 100%;
 }
 .src-main-body-orderForm-OrderInfoView-OrderInfoView---messageBox---SKqBo {
   font-size: 16px;
@@ -10216,6 +10251,7 @@ div[role=document][style^="width: 813px"] .ant-modal-close span {
   font-size: 14px;
   height: 36px;
   width: 35%;
+  background-color: #29A6FF;
   cursor: pointer;
 }
 .src-main-body-demand-Demand---buttonRelease---1V9vD {
@@ -10441,13 +10477,10 @@ div[role=document][style^="width: 813px"] .ant-modal-close span {
   display: table-cell;
   width: 100%;
   padding-left: 20px;
-  padding-bottom: 20px;
-}
-.src-main-body-demandDetail-DemandDetail---mainTextLayout---2ARAb div {
-  margin-top: 11px;
 }
 .src-main-body-demandDetail-DemandDetail---voyageLayout---2-RI_ {
-  display: inline-block;
+  display: table;
+  padding-top: 10px;
 }
 .src-main-body-demandDetail-DemandDetail---voyageTitle---cTQkT {
   color: #999;
@@ -10461,6 +10494,7 @@ div[role=document][style^="width: 813px"] .ant-modal-close span {
 }
 .src-main-body-demandDetail-DemandDetail---voyageContent---3DlHZ {
   display: inline-block;
+  vertical-align: middle;
 }
 .src-main-body-demandDetail-DemandDetail---voyage---13oWo {
   display: table-cell;
@@ -10474,6 +10508,7 @@ div[role=document][style^="width: 813px"] .ant-modal-close span {
   display: table-cell;
 }
 .src-main-body-demandDetail-DemandDetail---voyageGray---16uV4 {
+  vertical-align: middle;
   display: table-cell;
   color: #999;
   font-size: 20px;
@@ -10849,6 +10884,7 @@ div[role=document][style^="width: 813px"] .ant-modal-close span {
 }
 .src-main-body-demandDetail-DemandDetail---remarkLayout---3j_PM {
   display: inline-block;
+  padding-top: 10px;
 }
 .src-main-body-demandDetail-DemandDetail---remarkTitle---2DS5I {
   width: 70px;
