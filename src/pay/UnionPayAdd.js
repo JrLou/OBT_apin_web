@@ -106,7 +106,7 @@ class UnionPayAdd extends Component {
                         onChange={(e) => {
                            let v = e.target.value;
                            if (v) {
-                              if (/^[0-9]{12,24}$/.test(v)) {
+                              if (/^[0-9]{1,30}$/.test(v)) {
                                  //成功
                                  this.showError();
                               } else {
