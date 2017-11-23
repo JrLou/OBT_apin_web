@@ -92,7 +92,8 @@ class OrderFormDetail extends Component{
                 parseInt(window.getComputedStyle(payDiv,'').bottom);
 
             // alert(payDivHeight);
-            payDivHeight = payDivHeight?payDivHeight:105;
+            // log(payDivHeight);
+            payDivHeight = payDivHeight?payDivHeight:((this.state.shouldFixed)?105:80);
             //支付条顶部到浏览器窗口顶部到高度
             let payTop = windowHeight - payDivHeight;
             //定位样式改变的临界滚动值
