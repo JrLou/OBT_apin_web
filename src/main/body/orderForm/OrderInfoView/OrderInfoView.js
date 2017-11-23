@@ -172,15 +172,14 @@ class OrderInfoView extends Component{
                                     imgUrl:'',
                                 });
                             }}
-                        ><Icon
-                            style={{
-                                fontSize:'35px',
-                                cursor:'pointer',
-                                backgroundColor:'#fff',
-                                borderRadius:'50%',
-                            }}
-                            type="close-circle-o"
-                        /></div>
+                        >
+                            <div
+                                style={{backgroundImage:`url(${require('../../../../images/orderForm/close04.png')})`}}
+                                className={css.closeImg}
+                            >
+
+                            </div>
+                        </div>
                     </div>
                 </Modal>
                 <AlertView
