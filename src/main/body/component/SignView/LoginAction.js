@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-08 13:36:12 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-24 22:25:41
+ * @Last Modified time: 2017-11-24 23:01:49
  */
 import {
     HttpTool,
@@ -49,7 +49,7 @@ export function loginPromise(account, password, code) {
  * 获取登录码
  * @param {*} account 
  */
-export function getLoginCodePromise(account, option) {
+export function getLoginCodePromise(account, type) {
     return new Promise((resolve, reject) => {
         HttpTool.request(HttpTool.typeEnum.GET, API.codes, (code, message, json, option) => {
             if (json) {
@@ -62,7 +62,7 @@ export function getLoginCodePromise(account, option) {
         }, {
             account,
             appid,
-            option
+            type
         });
     });
 }
@@ -98,12 +98,14 @@ export function validateLoginPromise(entry) {
  * 使用默认账号登录
  * @param {*} callback 
  */
-export function defaultLoginPromise(type, callback, failCallback) {
+export function defaultLoginPromise(type, callback, failCallback ,notSetCookiee) {
     getLoginCodePromise(defaultAccount, type).then((data) =>
         loginPromise(defaultAccount, defaultPwd, data)
     ).then((data) => {
-        data.Authorization = data.accessToken;
-        CookieHelp.saveUserInfo(data, 1);
+        if(!notSetCookiee){
+            data.Authorization = data.accessToken;
+            CookieHelp.saveUserInfo(data);
+        }
         if (callback && typeof (callback) === 'function') callback();
     }).catch((error) => {
         if (failCallback && typeof (failCallback) === 'function') failCallback();
