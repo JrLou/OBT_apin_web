@@ -145,6 +145,25 @@ class page extends Component {
         });
     }
 
+    checkTokenAction(isValid){
+        const user = CookieHelp.getUserInfo();
+        const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
+        const pathname = window.location.pathname;
+        if(isValid){
+            // 未登录并且不在首页，则跳转到首页
+            if (!isLogin && pathname !== '/' && pathname !== '/Search') {
+                window.app_open(this, '/', null, "self");
+            }else {
+                window.location.reload();
+            }
+        }else{
+            // 未登录并且不在首页，则跳转到首页
+            if (!isLogin && pathname !== '/' && pathname !== '/Search') {
+                window.app_open(this, '/', null, "self");
+            }
+        }
+    }
+
 
     /**
      * 检测是否已经登录
@@ -152,27 +171,29 @@ class page extends Component {
     checkLogin() {
         const user = CookieHelp.getUserInfo();
         const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
-        if (user && user.Authorization && isLogin) this.setLogin();
+        if (user && isLogin) this.setLogin();
 
         const pathname = window.location.pathname;
         // if (!isLogin && pathname !== '/' && pathname !== '/Search') {
         //     window.app_open(this, '/', null, "self");
         // }
-        if(!user) {
+        if(isLogin) return;
+        
+        if(!user) { // token为空
             defaultLoginPromise(0,()=>{
-                
-                // 未登录并且不在首页，则跳转到首页
-                if (!isLogin && pathname !== '/' && pathname !== '/Search') {
-                    window.app_open(this, '/', null, "self");
-                }else {
-                    window.location.reload();
-                }
+                this.checkTokenAction(true);
             });
-        }else{
-            // 未登录并且不在首页，则跳转到首页
-            if (!isLogin && pathname !== '/' && pathname !== '/Search') {
-                window.app_open(this, '/', null, "self");
-            }
+        }else {
+            defaultLoginPromise(0,()=>{ // token 存在
+                
+            },()=>{ // token 失效
+                defaultLoginPromise(0,()=>{
+
+                    this.checkTokenAction(true);
+                    
+                });
+    
+            },false);
         }
         
     }
