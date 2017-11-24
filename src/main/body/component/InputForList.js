@@ -7,7 +7,7 @@ import {AutoComplete} from "antd";
 const Option = AutoComplete.Option;
 const OptGroup = AutoComplete.OptGroup;
 import less from "./InputAuto.less";
-
+import APIGYW from '../../../api/APIGYW.js';
 import {HttpTool} from "../../../../lib/utils/index.js";
 
 class InputAuto extends Component {
@@ -69,7 +69,7 @@ class InputAuto extends Component {
             }
 
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/ba/baseapi/v1.0/cities/list/key", success, failure, param,
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.cities_list_key, success, failure, param,
             {
                 ipKey: "hlIP"
             });

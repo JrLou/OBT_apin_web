@@ -44,6 +44,8 @@ let APIGYW = {
     /**
      * 公共服务接口
     */
-
+    lineapi_lines_new:  "/ba/lineapi/v1.0/lines/new",
+    cities_list_key:    "/ba/baseapi/v1.0/cities/list/key",
+        
 };
 module.exports = APIGYW;
