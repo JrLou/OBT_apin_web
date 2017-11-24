@@ -5,16 +5,7 @@ import React, { Component } from 'react';
 import AppTop from './AppTop.js';
 import AppBottom from './AppBottom.js';
 import less from './App.less';
-import { CookieHelp } from '../../lib/utils/index';
-import { defaultLoginPromise } from './body/component/SignView/LoginAction';
 class page extends Component {
-
-    componentWillMount(){
-        const user = CookieHelp.getUserInfo();
-        if(!user){
-            defaultLoginPromise(0);
-        }
-    }
 
     render() {
         console.log(window.screen.height);
