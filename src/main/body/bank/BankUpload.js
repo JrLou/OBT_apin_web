@@ -400,7 +400,7 @@ class BankUpload extends Component {
       // }, Math.random() * 1000 + 2000);
 
       HttpTool.request(HttpTool.typeEnum.POST,
-         "/bo/orderapi/v1.0/orders/pay/offline",
+         APIGYW.pay_offline,//"/bo/orderapi/v1.0/orders/pay/offline",
          (code, msg, json, option) => {
             cb(code, msg, json);
          }, (code, msg, option) => {
@@ -411,7 +411,7 @@ class BankUpload extends Component {
    //提交修改上传
    loadSubmitAgain(param, cb) {
       HttpTool.request(HttpTool.typeEnum.POST,
-         "/bo/orderapi/v1.0/orders/pay/reOffine",
+         APIGYW.pay_reOffine,//"/bo/orderapi/v1.0/orders/pay/reOffine",
          (code, msg, json, option) => {
             cb(code, msg, json);
          }, (code, msg, option) => {

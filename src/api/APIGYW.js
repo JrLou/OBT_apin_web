@@ -38,8 +38,9 @@ let APIGYW = {
      * 审核相关接口
      * 
     */
-    pay_recordQuery:"/bo/orderapi/v1.0/orders/recordQuery",//记录查询
-
+    pay_recordQuery:    "/bo/orderapi/v1.0/orders/recordQuery",         //凭证审核记录查询
+    pay_offline:        "/bo/orderapi/v1.0/orders/pay/offline",         //首次  上传凭证
+    pay_reOffine:       "/bo/orderapi/v1.0/orders/pay/reOffine",        //再次  上传修改凭证
     /**
      * 公共服务接口
     */
