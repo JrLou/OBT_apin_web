@@ -2,11 +2,16 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-08 13:36:12 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-24 22:05:25
+ * @Last Modified time: 2017-11-24 22:25:41
  */
-import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
+import {
+    HttpTool,
+    CookieHelp
+} from '../../../../../lib/utils/index.js';
 import md5 from 'md5';
-import { message } from 'antd';
+import {
+    message
+} from 'antd';
 import API from '../../../../api/APINYH';
 
 export const defaultAccount = 'b3619ef5dc944e4aad02acc7c83b220d';
@@ -33,10 +38,10 @@ export function loginPromise(account, password, code) {
         }, (code, message) => {
             reject(message);
         }, {
-                account,
-                signature: md5(md5(account + password) + code),
-                appid
-            });
+            account,
+            signature: md5(md5(account + password) + code),
+            appid
+        });
     });
 }
 
@@ -55,10 +60,10 @@ export function getLoginCodePromise(account, option) {
         }, (code, message) => {
             reject(message);
         }, {
-                account,
-                appid,
-                option
-            });
+            account,
+            appid,
+            option
+        });
     });
 }
 /**
@@ -68,7 +73,9 @@ export function getLoginCodePromise(account, option) {
  */
 export function validateLoginPromise(entry) {
     let params = {
-        account: '', mobile: '', picCode: ''
+        account: '',
+        mobile: '',
+        picCode: ''
     };
     params = Object.assign({}, params, entry);
     return new Promise((resolve, reject) => {
@@ -96,7 +103,7 @@ export function defaultLoginPromise(type, callback, failCallback) {
         loginPromise(defaultAccount, defaultPwd, data)
     ).then((data) => {
         data.Authorization = data.accessToken;
-        CookieHelp.saveUserInfo(data);
+        CookieHelp.saveUserInfo(data, 1);
         if (callback && typeof (callback) === 'function') callback();
     }).catch((error) => {
         if (failCallback && typeof (failCallback) === 'function') failCallback();
@@ -111,13 +118,16 @@ export function AccoutInfoPromise(callback) {
     return new Promise((resolve, reject) => {
         HttpTool.request(HttpTool.typeEnum.POST, API.memberInfo, (code, message, json, option) => {
             CookieHelp.saveCookieInfo("phone", json.mobile);
-            if(window.fundebug && window.fundebug.user){
+            if (window.fundebug && window.fundebug.user) {
                 window.fundebug.user = {
                     name: json.account,
                     email: json.email
                 };
             }
-            resolve({ json, option });
+            resolve({
+                json,
+                option
+            });
         }, (code, message) => {
             let pathname = window.location.pathname;
             // 未登录并且不在首页，则跳转到首页
