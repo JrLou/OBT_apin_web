@@ -155,6 +155,9 @@ class page extends Component {
         if (user && user.Authorization && isLogin) this.setLogin();
 
         const pathname = window.location.pathname;
+        // if (!isLogin && pathname !== '/' && pathname !== '/Search') {
+        //     window.app_open(this, '/', null, "self");
+        // }
         if(!user) {
             defaultLoginPromise(0,()=>{
                 
