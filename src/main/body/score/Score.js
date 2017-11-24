@@ -2,11 +2,12 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-04 15:07:27 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-18 14:38:15
+ * @Last Modified time: 2017-11-24 19:48:29
  */
 import React, { Component } from 'react';
 import { Table, Modal } from 'antd';
 import { HttpTool } from '../../../../lib/utils/index.js';
+import API from '../../../api/APINYH';
 
 import css from './score.less';
 
@@ -114,12 +115,13 @@ class ScoreList extends Component {
     getPointsList(pageNo) {
         log(pageNo);
         const { pageSize } = this.state;
-        HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.0/orders/pointsList', (code, message, json, option) => {
-            log(json);
-            const { memberPoints, remainPoint, usedPoint } = json;
-            this.setState({
-                memberPoints, remainPoint, usedPoint, total: option.option, current: pageNo
-            });
+        HttpTool.request(HttpTool.typeEnum.POST, API.pointsList, (code, message, json, option) => {
+            if(option){
+                const { memberPoints, remainPoint, usedPoint } = json;
+                this.setState({
+                    memberPoints, remainPoint, usedPoint, total: option.option, current: pageNo
+                });
+            }
         }, () => {
         }, {
                 pageSize, pageNo

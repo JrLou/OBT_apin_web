@@ -435,10 +435,10 @@ class page extends Component {
                                 {getFieldDecorator('adultCount', {//adultCount
                                     rules: [{
                                         required: true,
-                                        message: '请输入成人人数',
+                                        message: '请输入大于0的整数',
                                     }, {
                                         pattern: /^[1-9]{1}\d*$/,
-                                        message: '请输入1人以上数字'
+                                        message: '请输入大于0的整数'
                                     }
                                 ],
                                     initialValue:this.vueValue(adultCount)!=""?this.vueValue(adultCount):this.state.adultCount,
@@ -457,7 +457,7 @@ class page extends Component {
                                 {getFieldDecorator('childCount', {//childCount
                                     rules: [{
                                         pattern: /^[0-9]*$/,
-                                        message: '请输入正确的数字'
+                                        message: '请输入正确的整数'
                                     }],
                                     initialValue: this.vueValue(childCount)!=""?this.vueValue(childCount):this.state.childCount,
                                 })(
