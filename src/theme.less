@@ -1,15 +1,12 @@
 //字体大小
-
 @bodyFontSize:62.5%;
-
-
 
 // Color;
 @primary-color          : #00A0E9;
 @info-color             : #2db7f5;
 @success-color          : #87d068;
 @success2-color          : #01C12D;
-@error-color            : #f50;
+@error-color            : #E1593C;
 @warning-color          : #fa0;
 //边框颜色
 @border-color:#ccc;
@@ -45,7 +42,6 @@
 
 //标题的颜色
 @zi                     :#e4393c;
-
 
 @searchBOrder:1px solid #00A0E9;
 
@@ -85,7 +81,6 @@
 @c_title_blue: #29A6FF;
 @c_title_alert_gray: #666666;
 
-
 @c_text_red: #FF6600;
 @c_text_red_dark: #ff5100;
 @c_text_red_light: #ff9100;
@@ -100,127 +95,3 @@
 
 @tooltip-bg : #eeeeee;
 @tooltip-color : #333333;
-.maintheme{
-  position: absolute;
-  min-height: 100%;
-  width: 100%;
-  top:0;
-  right:0;
-  left: 0;
-  background:rgba(255, 255, 255, 0.12);
-}
-
-.payOutBox {
-  margin: auto;
-  max-width: 1200px;
-  margin-top: 10px;
-  position: relative;
-}
-
-.toContainAllSon{
-  content: "";
-  height: 0;
-  visibility: hidden;
-  display: block;
-  clear: both;
-}
-
-.payCpmBox{
-  background-color: @content-backcolor;
-  margin: 10px 0;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
-  border: 1px rgba(0, 0, 0, 0.10) solid;
-  .top{
-    line-height: 50px;
-    height: 50px;
-    font-size: @font_size_center;
-    font-weight: bolder;
-    padding-left: 20px;
-    border-bottom: 1px solid #EDEDED;
-    color: @font-color;
-  }
-  .middle{
-    font-size: @font_size_small;
-    color: @font-light-color;
-    padding: 25px 20px 30px 20px;
-  }
-}
-
-.modalBtn{
-  width: 165px;
-  height: 35px;
-  margin: 0 8px;
-  font-size: @font_size_center;
-}
-
-.bigOrangeBtn{
-  width: 200px;
-  height: 50px;
-  font-size: @font_size_big;
-  margin-top: 11px;
-  background-color: @c_text_red;
-  border-color: @c_text_red;
-  &:hover, &:focus{
-    background-color: @c_text_red_light;
-    border-color: @c_text_red_light;
-  }
-  &:active{
-    background-color: @c_text_red_dark;
-    border-color: @c_text_red_dark;
-  }
-}
-
-.normalSizeBtn{
-  width: 145px;
-  height: 36px;
-  font-size: @font_size_center;
-}
-
-.fl{
-  float: left;
-}
-
-.fr{
-  float: right;
-}
-
-.txtCenter{
-  text-align: center;
-}
-
-//验证码的样式
-
-
-.codeSucc{
-  color: @success2-color;
-}
-
-.codeErr{
-  color: @error-color;
-}
-
-.codeUndefined{
-  opacity: 0;
-}
-
-.loading{
-  text-align: center;
-  height: 400px;
-  background-color: #fff;
-  color: #ff5500;
-  line-height: 50px;
-  font-size: @font_size_big;
-  position: relative;
-}
-
-.allCenter{
-  position: absolute;
-  top:0;
-  left:0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  line-height: 20px;
-  height: 20px;
-  text-align: center;
-}
