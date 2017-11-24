@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { history } from 'react-router';
 import { Button, Menu, Dropdown, Icon, message } from 'antd';
 import { CookieHelp } from '../../lib/utils/index.js';
-import { AccoutInfoPromise } from './body/component/SignView/LoginAction';
+import { AccoutInfoPromise, defaultLoginPromise } from './body/component/SignView/LoginAction';
 import Menus from './Menu';
 
 import Sign from './body/component/SignView';
@@ -155,10 +155,18 @@ class page extends Component {
         if (user && user.Authorization && isLogin) this.setLogin();
 
         const pathname = window.location.pathname;
-        // 未登录并且不在首页，则跳转到首页
-        if (!isLogin && pathname !== '/' && pathname !== '/Search') {
-            window.app_open(this, '/', null, "self");
+        if(!user) {
+            defaultLoginPromise(0,()=>{
+                
+                // 未登录并且不在首页，则跳转到首页
+                if (!isLogin && pathname !== '/' && pathname !== '/Search') {
+                    window.app_open(this, '/', null, "self");
+                }else {
+                    window.location.reload();
+                }
+            });
         }
+        
     }
 
 }
