@@ -82,7 +82,7 @@ class InputAuto extends Component {
             }
 
         };
-        HttpTool.request(HttpTool.typeEnum.POST, "/ba/baseapi/v1.0/cities/list/key", success, failure, param);
+        HttpTool.request(HttpTool.typeEnum.POST, APIGYW.cities_list_key, success, failure, param);
     }
 
     handleSearch(value) {
