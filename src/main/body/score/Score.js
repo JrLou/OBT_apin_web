@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-04 15:07:27 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-24 19:48:29
+ * @Last Modified time: 2017-11-24 21:01:11
  */
 import React, { Component } from 'react';
 import { Table, Modal } from 'antd';
@@ -47,6 +47,20 @@ class ScoreList extends Component {
                         return '消费抵扣';
                     case 1:
                         return '注册';
+                    case 2:
+                        return '被推荐';
+                    case 3:
+                        return '成交奖';
+                    case 4:
+                        return '发布需求';
+                    case 5:
+                        return '签到';
+                    case 6:
+                        return '抽奖';
+                    case 7:
+                        return '订单成交';
+                    case 8:
+                        return '注册奖';
                     default:
                         return '';
                 }
