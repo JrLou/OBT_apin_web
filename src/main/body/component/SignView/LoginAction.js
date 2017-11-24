@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-08 13:36:12 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-18 17:39:20
+ * @Last Modified time: 2017-11-24 15:36:40
  */
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
 import md5 from 'md5';
@@ -10,6 +10,7 @@ import { message } from 'antd';
 
 export const defaultAccount = 'b3619ef5dc944e4aad02acc7c83b220d';
 export const defaultPwd = '4b91884d9290981da047b4c85af35a39';
+export const appid = 'b3619ef5dc944e4aad02acc7c83b220d';
 
 /**
  * 登录
@@ -19,7 +20,7 @@ export const defaultPwd = '4b91884d9290981da047b4c85af35a39';
  */
 export function loginPromise(account, password, code) {
     return new Promise((resolve, reject) => {
-        HttpTool.request(HttpTool.typeEnum.POST, "/bm/memberapi/v1.1/tokens", (code, message, json, option) => {
+        HttpTool.request(HttpTool.typeEnum.GET, "/uc/authapi/v1.1/tokens", (code, message, json, option) => {
             if (json.accessToken) {
                 json.Authorization = json.accessToken;
                 // 保存登录token
@@ -32,7 +33,8 @@ export function loginPromise(account, password, code) {
             reject(message);
         }, {
                 account,
-                option: md5(md5(account + password) + code)
+                signature: md5(md5(account + password) + code),
+                appid
             });
     });
 }
@@ -43,7 +45,7 @@ export function loginPromise(account, password, code) {
  */
 export function getLoginCodePromise(account, option) {
     return new Promise((resolve, reject) => {
-        HttpTool.request(HttpTool.typeEnum.POST, "/bm/memberapi/v1.1/tokens/codes", (code, message, json, option) => {
+        HttpTool.request(HttpTool.typeEnum.GET, "/uc/authapi/v1.1/tokens/codes", (code, message, json, option) => {
             if (json) {
                 resolve(json);
             } else {
@@ -53,7 +55,7 @@ export function getLoginCodePromise(account, option) {
             reject(message);
         }, {
                 account,
-                option
+                appid
             });
     });
 }
