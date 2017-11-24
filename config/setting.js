@@ -1,4 +1,5 @@
 module.exports = {
-    port: 3002,//port
-    ip:"http://10.0.0.62:9008"
+    port: 3000,
+    ip:"http://10.0.0.182:9008",
+    domain:"http://10.0.0.182:9008"
 };
