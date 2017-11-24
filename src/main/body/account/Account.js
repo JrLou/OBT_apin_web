@@ -6,6 +6,7 @@ import { HttpTool, CookieHelp } from '../../../../lib/utils/index.js';
 import { AccoutInfoPromise } from '../component/SignView/LoginAction';
 import Reset from '../component/SignView/Reset';
 import md5 from 'md5';
+import API from '../../../api/APINYH';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -296,7 +297,7 @@ class AccountForm extends Component {
                     county = zone[2] || county;
                 }
 
-                HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/modifyMemberInfo', (code, msg, json, option) => {
+                HttpTool.request(HttpTool.typeEnum.POST, API.modifyMemberInfo, (code, msg, json, option) => {
                     message.success("修改成功");
                     this.setState({
                         isView: true,
@@ -363,7 +364,7 @@ class AccountForm extends Component {
      */
     updatePsw(option, password) {
         const { accountID } = this.state;
-        HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/users/updatePassword', (code, msg, json, option) => {
+        HttpTool.request(HttpTool.typeEnum.POST, API.updatePassword, (code, msg, json, option) => {
             this.setState({
                 visible: false,
             });

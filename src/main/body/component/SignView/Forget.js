@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-23 10:08:47
+ * @Last Modified time: 2017-11-24 17:58:29
  */
 
 import React, { Component } from 'react';
@@ -11,6 +11,7 @@ import md5 from 'md5';
 import CheckCode from './CheckCode';
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
 import { loginPromise, getLoginCodePromise, defaultLoginPromise, validateLoginPromise } from './LoginAction';
+import API from '../../../../api/APINYH';
 
 import css from './sign.less';
 
@@ -209,7 +210,7 @@ class ForgetForm extends Component {
         this.props.form.validateFields({ force: true }, (err, values) => {
             if (!err) {
                 const { mobile, option, password } = values;
-                HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/users/resetPassword', (code, message, json, option) => {
+                HttpTool.request(HttpTool.typeEnum.POST, API.resetPassword, (code, message, json, option) => {
                     this.setState({
                         loading: false
                     });
@@ -236,7 +237,7 @@ class ForgetForm extends Component {
         const { getFieldValue } = this.props.form;
         const mobile = getFieldValue('mobile');
         const picCode = getFieldValue('picCode') || '';
-        HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
+        HttpTool.request(HttpTool.typeEnum.POST, API.getSmsCode, (code, message, json, option) => {
             // 测试
             if (json && json.length > 4) {
                 this.setState({

@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-23 16:03:26
+ * @Last Modified time: 2017-11-24 17:58:50
  */
 
 import React, { Component } from 'react';
@@ -12,6 +12,7 @@ import md5 from 'md5';
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
 import CheckCode from './CheckCode';
 import { validateLoginPromise, defaultLoginPromise, loginPromise, getLoginCodePromise } from './LoginAction';
+import API from '../../../../api/APINYH';
 
 import css from './sign.less';
 
@@ -212,7 +213,7 @@ class SignInForm extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const { account, bdCharger, code, mobile, password } = values;
-                HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/addMember', (code, message, json, option) => {
+                HttpTool.request(HttpTool.typeEnum.POST, API.addMember, (code, message, json, option) => {
                     getLoginCodePromise(account, 0).then((data) => {
                         this.setState({
                             loading: false
@@ -259,7 +260,7 @@ class SignInForm extends Component {
         const account = getFieldValue('account');
         const mobile = getFieldValue('mobile');
         const picCode = getFieldValue('picCode') || '';
-        HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
+        HttpTool.request(HttpTool.typeEnum.POST, API.getSmsCode, (code, message, json, option) => {
             // 测试
             if (json && json.length > 4) {
                 this.setState({
