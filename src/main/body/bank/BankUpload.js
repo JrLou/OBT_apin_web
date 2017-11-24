@@ -4,6 +4,7 @@ import { HttpTool } from "../../../../lib/utils/index.js";
 import Panel from '../../../pay/Panel';
 import UploadCmp from './UploadCmp';
 import less from "./BankUpload.less";
+import APIGYW from "../../../api/APIGYW.js";
 
 
 class BankUpload extends Component {
@@ -36,7 +37,7 @@ class BankUpload extends Component {
 
    loadPayInfo2modify(param, cb) {
       HttpTool.request(HttpTool.typeEnum.POST,
-         "/bo/orderapi/v1.0/orders/recordQuery",
+         APIGYW.pay_recordQuery,
          (code, msg, json, option) => {
             cb(code, msg, json);
          }, (code, msg) => {
