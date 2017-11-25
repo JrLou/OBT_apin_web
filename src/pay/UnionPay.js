@@ -184,8 +184,11 @@ class UnionPay extends Component {
       return (
          <div className={less.loading}>
             <img className={less.nocardImg} src={require("./images/pay_noCard.png")} alt="没有卡列表"/>
-            {this.state.error ? <div className={less.loading}> {this.state.error||"服务器繁忙^_^"}</div> : null}
+            {this.state.error ? <div> {this.state.error||"服务器繁忙^_^"}</div>
+            : 
             <div>您尚未添加银行卡</div>
+         }
+            
             <div>
                <Button
                   style={{height: 60, width: 200, fontSize: 16, marginBottom: 12, marginTop: 15}}
