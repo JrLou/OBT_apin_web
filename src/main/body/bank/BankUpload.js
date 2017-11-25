@@ -97,9 +97,9 @@ class BankUpload extends Component {
                   return;
                }
                let _inputData = {
-                  accountName: data.accountName,
-                  account: data.account,
-                  bank: data.bank,
+                  // accountName: data.accountName,
+                  // account: data.account,
+                  // bank: data.bank,
                   amount: data.payAmount,
                };
                let _fileList = this.mothedStr2fileListArr(data.voucherUrl);
@@ -336,10 +336,10 @@ class BankUpload extends Component {
       data.orderId = this.state.orderId;
       data.recordId = this.state.recordId;
       let param = {
-         account: data.account,
-         accountName: data.accountName,
+         // account: data.account,
+         // accountName: data.accountName,
          amount: data.amount,
-         bank: data.bank,
+         // bank: data.bank,
          orderId: data.orderId,
          payType: data.payType,
          payment: data.payment,
@@ -441,9 +441,9 @@ class InputLayout extends Component {
    constructor(props) {
       super(props);
       this.state = {
-         accountName: this.props.data.accountName || '',//账户名
-         account: this.props.data.account || "",//卡号
-         bank: this.props.data.bank || "",//银行名
+         // accountName: this.props.data.accountName || '',//账户名
+         // account: this.props.data.account || "",//卡号
+         // bank: this.props.data.bank || "",//银行名
          amount: this.props.data.amount || this.props.amount,//转账金额
          error: null,
          loading: false,
@@ -479,18 +479,11 @@ class InputLayout extends Component {
    getData() {
       this.formatDataState();
       return {
-         accountName: this.state.accountName,
-         account: this.state.account,
-         bank: this.state.bank,
+         // accountName: this.state.accountName,
+         // account: this.state.account,
+         // bank: this.state.bank,
          amount: this.state.amount,
-         error: !this.state.accountName
-            ?
-            "请填写账户名"
-            : (!this.isRightCardNum(this.state.account)
-               ?
-               "请填写正确的卡号"
-               : (!this.state.bank ? "请填写银行名" : null)
-            )
+         error: ""
       };
    }
 
@@ -501,54 +494,54 @@ class InputLayout extends Component {
       };
       return (
          <div>
-            <div className={less.container2Son}>
-               <div className={less.form_group + " " + less.fl}>
-                  <label htmlFor="accountName" className={less.control_label}>账户名：</label>
-                  <br />
-                  <Input
-                     prefixCls="my-ant-input"
-                     {...iptProps}
-                     id="accountName"
-                     value={this.state.accountName}
-                     onChange={(e) => {
-                        this.setFomrFileds(e, "accountName");
-                     }}
-                     prefix={<Icon type="mobile" style={{ fontSize: 13 }} />} placeholder={"请输入账户名"}
-                  />
-               </div>
-               <div className={less.form_group + " " + less.fl}>
-                  <label htmlFor="account" className={less.control_label}>卡号：</label>
-                  <br />
-                  <Input
-                     prefixCls="my-ant-input"
-                     {...iptProps}
-                     id="account"
-                     onChange={(e) => {
-                        if (Number.isInteger(+e.target.value)) {
-                           this.setFomrFileds(e, "account");
-                        }
-                     }}
-                     value={this.state.account}
-                     prefix={<Icon type="credit-card" style={{ fontSize: 13 }} />} placeholder={"请输入卡号"}
-                  />
-               </div>
-            </div>
+            {/*<div className={less.container2Son}>*/}
+               {/*<div className={less.form_group + " " + less.fl}>*/}
+                  {/*<label htmlFor="accountName" className={less.control_label}>账户名：</label>*/}
+                  {/*<br />*/}
+                  {/*<Input*/}
+                     {/*prefixCls="my-ant-input"*/}
+                     {/*{...iptProps}*/}
+                     {/*id="accountName"*/}
+                     {/*value={this.state.accountName}*/}
+                     {/*onChange={(e) => {*/}
+                        {/*this.setFomrFileds(e, "accountName");*/}
+                     {/*}}*/}
+                     {/*prefix={<Icon type="mobile" style={{ fontSize: 13 }} />} placeholder={"请输入账户名"}*/}
+                  {/*/>*/}
+               {/*</div>*/}
+               {/*<div className={less.form_group + " " + less.fl}>*/}
+                  {/*<label htmlFor="account" className={less.control_label}>卡号：</label>*/}
+                  {/*<br />*/}
+                  {/*<Input*/}
+                     {/*prefixCls="my-ant-input"*/}
+                     {/*{...iptProps}*/}
+                     {/*id="account"*/}
+                     {/*onChange={(e) => {*/}
+                        {/*if (Number.isInteger(+e.target.value)) {*/}
+                           {/*this.setFomrFileds(e, "account");*/}
+                        {/*}*/}
+                     {/*}}*/}
+                     {/*value={this.state.account}*/}
+                     {/*prefix={<Icon type="credit-card" style={{ fontSize: 13 }} />} placeholder={"请输入卡号"}*/}
+                  {/*/>*/}
+               {/*</div>*/}
+            {/*</div>*/}
 
             <div className={less.container2Son}>
-               <div className={less.form_group + " " + less.fl}>
-                  <label htmlFor="bank" className={less.control_label}>银行：</label>
-                  <br />
-                  <Input
-                     prefixCls="my-ant-input"
-                     {...iptProps}
-                     value={this.state.bank}
-                     id="bank"
-                     onChange={(e) => {
-                        this.setFomrFileds(e, "bank");
-                     }}
-                     prefix={<Icon type="bank" style={{ fontSize: 13 }} />} placeholder={"请输入转账银行"}
-                  />
-               </div>
+               {/*<div className={less.form_group + " " + less.fl}>*/}
+                  {/*<label htmlFor="bank" className={less.control_label}>银行：</label>*/}
+                  {/*<br />*/}
+                  {/*<Input*/}
+                     {/*prefixCls="my-ant-input"*/}
+                     {/*{...iptProps}*/}
+                     {/*value={this.state.bank}*/}
+                     {/*id="bank"*/}
+                     {/*onChange={(e) => {*/}
+                        {/*this.setFomrFileds(e, "bank");*/}
+                     {/*}}*/}
+                     {/*prefix={<Icon type="bank" style={{ fontSize: 13 }} />} placeholder={"请输入转账银行"}*/}
+                  {/*/>*/}
+               {/*</div>*/}
 
                <div className={less.form_group + " " + less.fl}>
                   <label htmlFor="amount" className={less.control_label}>转账金额：</label>

@@ -219,7 +219,7 @@ class InputAuto extends Component {
                     onFocus={() => {
                         this.changeFirstState();
                     }}
-                    children={<Input maxLength={30} />}
+                    children={<Input maxLength={30} style={{zIndex:0}}/>}
                     onSearch={(value) => {
                         if(!this.keyWord){
                             this.setState({
