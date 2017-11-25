@@ -111,7 +111,7 @@ class page extends Component {
                <div className={less.allCenter2}>
                    <img src={require("../../src/images/search_empty.png")} alt="空"/>
                 {this.state.error  ? <div> {this.state.error}</div> : null}
-                {go2Order}
+                <div>{go2Order}</div>
                </div>
             </div>
         );
