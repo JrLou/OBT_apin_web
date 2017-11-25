@@ -14,12 +14,15 @@
     <script type="application/javascript" src="/config.js"></script>
     <script>
         var _hmt = _hmt || [];
-        (function() {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?87a859ed748359f2868dab367b36867a";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
+        if(window.location.hostname.indexOf("apin.com")>=0){
+            (function() {
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?87a859ed748359f2868dab367b36867a";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+        }
+
     </script>
     <style>
         body{
