@@ -91,7 +91,7 @@ class ScoreList extends Component {
                     </div>
                     <div className={css.scoreDes}>
                         <p className={css.title}>积分已抵扣</p>
-                        <p className={`${css.scoreNum} ${css.scoreConsume}`}>￥{usedPoint / 1000}</p>
+                        <p className={`${css.scoreNum} ${css.scoreConsume}`}>￥{usedPoint?(usedPoint / 1000):0}</p>
                     </div>
                     <div className={css.line}></div>
                 </div>

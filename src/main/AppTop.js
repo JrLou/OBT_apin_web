@@ -121,9 +121,9 @@ class page extends Component {
             //回显用户名
             AccoutInfoPromise()
                 .then((res) => {
-                    const { account } = res.json;
+                    const { name } = res.json;
                     this.setState({
-                        account
+                        account:name
                     });
 
                 })
