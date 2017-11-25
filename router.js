@@ -1,16 +1,15 @@
 var express = require("express");
 var router = express.Router();
-var request = require("request");
 
-function setIp(ip) {
-    this.ip = ip;
+function setDomain(domain) {
+    this.domain = domain;
 }
 router.get("/apin/*", function (req, res, next) {
-    console.log("serviceIP:"+this.ip);
-    var url = this.ip+""+req.originalUrl.slice("/apin".length);
+    console.log("serviceDomain:"+this.domain);
+    var url = this.domain+""+req.originalUrl.slice("/apin".length);
     console.log("url:"+url);
     res.redirect(url);
 });
 
 
-module.exports = {router,setIp};
+module.exports = {router,setDomain};

@@ -38,7 +38,7 @@ class CellFlightCom extends Component {
             return null;
         }
         let airlineInfo = (dataItem.voyages&&dataItem.voyages.length>0)?dataItem.voyages:[];
-        let itemView = (<div className={css.cellBg}>
+        let itemView = (<div className={css.cellBg} style={{height: flightType?"180px":"100px"}}>
             <div className={this.state.isAn?css.cell:css.hiddenCell} >
                 {dataItem.isDirect&&dataItem.isDirect==1?<div className={css.sign}>直营</div>:null}
                 <div className={css.left}>
