@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-08 13:36:12 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-28 09:53:20
+ * @Last Modified time: 2017-11-28 09:54:07
  */
 import {
     HttpTool,
@@ -14,9 +14,9 @@ import {
 } from 'antd';
 import API from '../../../../api/APINYH';
 
-// export const defaultAccount = 'b3619ef5dc944e4aad02acc7c83b220d';
-// export const defaultPwd = '4b91884d9290981da047b4c85af35a39';
-// export const appid = 'b3619ef5dc944e4aad02acc7c83b220d';
+export const defaultAccount = 'b3619ef5dc944e4aad02acc7c83b220d';
+export const defaultPwd = '4b91884d9290981da047b4c85af35a39';
+export const appid = 'b3619ef5dc944e4aad02acc7c83b220d';
 
 /**
  * 登录
