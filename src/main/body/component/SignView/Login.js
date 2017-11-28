@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-23 10:31:38
+ * @Last Modified time: 2017-11-28 09:49:26
  */
 
 import React, { Component } from 'react';
@@ -10,7 +10,7 @@ import React, { Component } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import md5 from 'md5';
 import CheckCode from './CheckCode';
-import { loginPromise, getLoginCodePromise, defaultLoginPromise } from './LoginAction';
+import { loginPromise } from './LoginAction';
 
 import { CookieHelp, HttpTool } from '../../../../../lib/utils/index.js';
 
@@ -104,29 +104,29 @@ class AccountLoginForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 let { account, password } = values;
-                getLoginCodePromise(account, 0).then((data) => {
-                    return loginPromise(account, md5(password), data);
-                }
-                ).then((data) => {
-                    this.setState({ loading: false });
-                    // 获取注册验证码也会调登录接口 保存APIN_USER token
-                    // IS_LOGIN判断是否真的登录
-                    CookieHelp.saveCookieInfo('IS_LOGIN', true);
-                    this.props.setLogin();
-                    if (this.props.callback && typeof (this.props.callback) === 'function')
-                        this.props.callback(1);
-                    this.props.onOK();
-                }).catch((msg) => {
-                    setTimeout(() => {
-                        this.setState({
-                            loading: false
-                        });
-                    }, 1000);
-                    if(msg == '用户不存在'){
-                        msg = '当前账号未注册';
-                    }
-                    message.error(msg);
-                });
+                // getLoginCodePromise(account, 0).then((data) => {
+                //     return loginPromise(account, md5(password), data);
+                // }
+                // ).then((data) => {
+                //     this.setState({ loading: false });
+                //     // 获取注册验证码也会调登录接口 保存APIN_USER token
+                //     // IS_LOGIN判断是否真的登录
+                //     CookieHelp.saveCookieInfo('IS_LOGIN', true);
+                //     this.props.setLogin();
+                //     if (this.props.callback && typeof (this.props.callback) === 'function')
+                //         this.props.callback(1);
+                //     this.props.onOK();
+                // }).catch((msg) => {
+                //     setTimeout(() => {
+                //         this.setState({
+                //             loading: false
+                //         });
+                //     }, 1000);
+                //     if(msg == '用户不存在'){
+                //         msg = '当前账号未注册';
+                //     }
+                //     message.error(msg);
+                // });
             }
         });
     }
@@ -263,15 +263,15 @@ class MsgLoginForm extends React.Component {
         //     defaultLoginPromise(1, callback);
         // }
 
-        getLoginCodePromise(account, 1).then((data) => {
-            this.data = data;
-            this.refs.code.autoTime(60);
-        }).catch((msg) => {
-            if(msg == '用户不存在'){
-                msg = '当前手机号未注册';
-            }
-            message.error(msg);
-        });
+        // getLoginCodePromise(account, 1).then((data) => {
+        //     this.data = data;
+        //     this.refs.code.autoTime(60);
+        // }).catch((msg) => {
+        //     if(msg == '用户不存在'){
+        //         msg = '当前手机号未注册';
+        //     }
+        //     message.error(msg);
+        // });
 
     }
 

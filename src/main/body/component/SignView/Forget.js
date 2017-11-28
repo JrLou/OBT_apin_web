@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-24 17:58:29
+ * @Last Modified time: 2017-11-28 09:49:07
  */
 
 import React, { Component } from 'react';
@@ -10,7 +10,7 @@ import { Form, Input, Button, message } from 'antd';
 import md5 from 'md5';
 import CheckCode from './CheckCode';
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
-import { loginPromise, getLoginCodePromise, defaultLoginPromise, validateLoginPromise } from './LoginAction';
+import { loginPromise, validateLoginPromise } from './LoginAction';
 import API from '../../../../api/APINYH';
 
 import css from './sign.less';
@@ -265,9 +265,6 @@ class ForgetForm extends Component {
 
         if (user) {
             callback();
-        } else {
-            defaultLoginPromise(0, callback, () => {
-            });
         }
     }
 }

@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-08 13:36:12 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-24 23:01:49
+ * @Last Modified time: 2017-11-28 09:53:20
  */
 import {
     HttpTool,
@@ -14,9 +14,9 @@ import {
 } from 'antd';
 import API from '../../../../api/APINYH';
 
-export const defaultAccount = 'b3619ef5dc944e4aad02acc7c83b220d';
-export const defaultPwd = '4b91884d9290981da047b4c85af35a39';
-export const appid = 'b3619ef5dc944e4aad02acc7c83b220d';
+// export const defaultAccount = 'b3619ef5dc944e4aad02acc7c83b220d';
+// export const defaultPwd = '4b91884d9290981da047b4c85af35a39';
+// export const appid = 'b3619ef5dc944e4aad02acc7c83b220d';
 
 /**
  * 登录
@@ -38,10 +38,10 @@ export function loginPromise(account, password, code) {
         }, (code, message) => {
             reject(message);
         }, {
-            account,
-            signature: md5(md5(account + password) + code),
-            appid
-        });
+                account,
+                signature: md5(md5(account + password) + code),
+                appid
+            });
     });
 }
 
@@ -60,10 +60,10 @@ export function getLoginCodePromise(account, type) {
         }, (code, message) => {
             reject(message);
         }, {
-            account,
-            appid,
-            type
-        });
+                account,
+                appid,
+                type
+            });
     });
 }
 /**
@@ -79,13 +79,6 @@ export function validateLoginPromise(entry) {
     };
     params = Object.assign({}, params, entry);
     return new Promise((resolve, reject) => {
-        log(API.verifyInfo);
-        log(API.verifyInfo);
-        log(API.verifyInfo);
-        log(API.verifyInfo);
-        log(API.verifyInfo);
-        log(API.verifyInfo);
-        log(API.verifyInfo);
         HttpTool.request(HttpTool.typeEnum.POST, API.verifyInfo, (code, message, json, option) => {
             resolve(message);
         }, (code, message) => {
@@ -98,19 +91,38 @@ export function validateLoginPromise(entry) {
  * 使用默认账号登录
  * @param {*} callback 
  */
-export function defaultLoginPromise(type, callback, failCallback ,notSetCookiee) {
-    getLoginCodePromise(defaultAccount, type).then((data) =>
-        loginPromise(defaultAccount, defaultPwd, data)
-    ).then((data) => {
-        if(!notSetCookiee){
-            data.Authorization = data.accessToken;
-            CookieHelp.saveUserInfo(data);
-        }
-        if (callback && typeof (callback) === 'function') callback();
-    }).catch((error) => {
-        if (failCallback && typeof (failCallback) === 'function') failCallback();
-    });
-}
+// export function defaultLoginPromise(type, callback, failCallback, notSetCookiee) {
+//     getLoginCodePromise(defaultAccount, type).then((data) =>
+//         loginPromise(defaultAccount, defaultPwd, data)
+//     ).then((data) => {
+//         if (!notSetCookiee) {
+//             data.Authorization = data.accessToken;
+//             CookieHelp.saveUserInfo(data);
+//         }
+//         if (callback && typeof (callback) === 'function') callback();
+//     }).catch((error) => {
+//         if (failCallback && typeof (failCallback) === 'function') failCallback();
+//     });
+// }
+
+/**
+ * token不正确时跳转
+ */
+// export function refreshToken(code) {
+//     // 未登录并且不在首页，则跳转到首页
+//     if (code == -421 || code == -422 || code == -403 || code == -400) {
+//         let pathname = window.location.pathname;
+//         CookieHelp.clearCookie();
+//         defaultLoginPromise(0, () => { // 获取默认token
+//             if (pathname !== '/' && pathname !== '/Search') {
+//                 window.app_open(this, '/', null, "self");
+//             } else {
+//                 window.location.reload();
+//             }
+    
+//         });
+//     }
+// }
 
 /**
  * 获取用户信息
@@ -118,8 +130,10 @@ export function defaultLoginPromise(type, callback, failCallback ,notSetCookiee)
 
 export function AccoutInfoPromise(callback) {
     return new Promise((resolve, reject) => {
+        document.getElementsByTagName('body')[0].style.display = "none";
         HttpTool.request(HttpTool.typeEnum.POST, API.memberInfo, (code, message, json, option) => {
             CookieHelp.saveCookieInfo("phone", json.mobile);
+            document.getElementsByTagName('body')[0].style.display = "block";
             if (window.fundebug && window.fundebug.user) {
                 window.fundebug.user = {
                     name: json.account,
@@ -131,17 +145,7 @@ export function AccoutInfoPromise(callback) {
                 option
             });
         }, (code, message) => {
-            let pathname = window.location.pathname;
-            // 未登录并且不在首页，则跳转到首页
-            if (code == -421 || code == -422 || code == -403 || code == -400) {
-                CookieHelp.clearCookie();
-                if (pathname !== '/' && pathname !== '/Search') {
-                    pathname = '/';
-                }
-                window.app_open(this, pathname, null, "self");
-
-                reject(message);
-            }
+            reject(message);
         }, {});
     });
 }
