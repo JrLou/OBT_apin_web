@@ -745,7 +745,7 @@ class page extends Component {
                 if (!data.pay) {
                     data.pay = {
                         defaultIndex: 0,
-                        defaultshowMore: false
+                        defaultshowMore: true
                     };
                 }
             }
