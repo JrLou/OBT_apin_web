@@ -13,15 +13,15 @@ let APIGYW = {
     /**
      * 根据城市对与出发日期结束日期查询航班详情
      */
-    flightapi_flightDetail_query:       "/ba/flightapi/v1.0/flightDetail/query",
+    flightapi_flightDetail_query:       "/ba/flightapi/v1.0/flightDetail/query",        //航程列表
     flightapi_flightDetail_month_query: "/ba/flightapi/v1.0/flightDetail/month/query",  //左日历月份
     flightapi_retFlight_month_query:    "/ba/flightapi/v1.0/retFlight/month/query",     //右日历月份
-    flightapi_flightDetail_day_query:   "/ba/flightapi/v1.0/flightDetail/day/query",    //左日期
+    flightapi_flightDetail_day_query:   "/ba/flightapi/v1.0/flightDetail/day/query",    //右日历每天的数据
     /**
      * 根据城市对与出发日期查询航班 右日期
      */
-    flightapi_flights_query:            "/ba/flightapi/v1.0/flights/query",
-    flightapi_orderDetail_query:        "/ba/flightapi/v1.0/orderDetail/query",         //订单详情页  
+    flightapi_flights_query:            "/ba/flightapi/v1.0/flights/query",             //右日历每天的数据
+    flightapi_orderDetail_query:        "/ba/flightapi/v1.0/orderDetail/query",         //预订详情页
     orderapi_orders_create:             "/bo/orderapi/v1.0/orders/create",              //新增订单
 
     /**
