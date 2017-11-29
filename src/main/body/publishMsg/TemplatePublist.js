@@ -506,7 +506,7 @@ class page extends Component {
                                     }],
                                     initialValue:phoneCookie,
                                 })(
-                                        <Input style={{ width: 230, height: 34, fontSize:"14px" }}  placeholder="输入可联系的手机号码" maxLength={"11"}/>
+                                        <Input style={{ width: 230, height: 34, fontSize:"14px" }}  placeholder="输入可联系的手机号码" maxLength="11"/>
                                     )}
                             </FormItem>
 
