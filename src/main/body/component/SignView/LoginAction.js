@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-08 13:36:12 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-29 14:29:40
+ * @Last Modified time: 2017-11-29 17:14:49
  */
 import {
     HttpTool,
@@ -27,7 +27,7 @@ export const appid = 'b3619ef5dc944e4aad02acc7c83b220d';
  * @param {*} password 
  * @param {*} code 
  */
-export function loginPromise(account, password) {
+export function loginPromise(account, password, data) {
     return new Promise((resolve, reject) => {
         HttpTool.request(HttpTool.typeEnum.GET, API.tokens, (code, message, json, option) => {
             if (json.accessToken) {
@@ -42,7 +42,7 @@ export function loginPromise(account, password) {
             reject(message);
         }, {
                 account,
-                signature: md5(account + password),
+                signature: md5(md5(account + password) + data),
                 appid
             });
     });
@@ -122,7 +122,7 @@ export function validateLoginPromise(entry) {
 //             } else {
 //                 window.location.reload();
 //             }
-    
+
 //         });
 //     }
 // }
