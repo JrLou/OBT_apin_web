@@ -271,7 +271,7 @@ class page extends Component {
                                         if(endTime!=""){
                                             endTime=endTime+(24*60*60);
                                         }
-                                        
+                                        startTime =startTime-(24*60*60); //2017-11-28，解开当前时间可选# 
                                         //console.log("开始时间："+moment(startTime).format("YYYY-MM-DD"));
                                        // console.log("结尾时间："+ (endTime && moment(endTime).format("YYYY-MM-DD")));
                                         let changsVlaue=current && moment(moment(current.valueOf()).format("YYYY-MM-DD")).unix();
@@ -300,7 +300,8 @@ class page extends Component {
                                             return this.refs.test;
                                         }} style={{ borderRadius: "2px", minWidth: "200px",width:"230px" }} format='YYYY-MM-DD' disabledDate={(current) => {
                                             let value=this.vueValue(getFieldValue("fromDateTime0"))==""?"":getFieldValue("fromDateTime0");
-                                            let startTime =value==""?Date.now() :value;
+                                          //  let startTime =value==""?Date.now() :value;
+                                            let startTime = value =="" ?moment(Date.now()).subtract("1","d"):value;//2017-11-28，解开当前时间可选#
                                             return current && current.valueOf() <= startTime;
                                         }} />
                                         )}
