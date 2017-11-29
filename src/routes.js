@@ -40,15 +40,6 @@ const root = (
             }
             >
             </Route>
-            <Route path="/PubRequirement" getComponent={
-                (nextState, cb) => {
-                    require.ensure([], require => {
-                        cb(null, require("./main/body/content/detail/PubRequirement.js"));
-                    }, "PubRequirement");
-                }
-            }
-            >
-            </Route>
             <Route path="/OrderFormList" getComponent={
                 (nextState,cb)=>{
                     require.ensure([], require =>{

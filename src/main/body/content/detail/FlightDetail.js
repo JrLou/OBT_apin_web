@@ -15,7 +15,6 @@ import CellNewFlight from "../cell/CellNewFlight.js";
 import PayBottom from "./detailComp/PayBottom.js";
 import MyModalRequire from "./detailComp/MyModalRequire.js";
 
-import MyInput from '../../component/MyInput.js';
 
 const FormItem = Form.Item;
 class page extends Component {

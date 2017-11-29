@@ -189,6 +189,7 @@ class page extends Component {
         HttpTool.request(HttpTool.typeEnum.POST,APIGYW.flightapi_flights_query,success, failure, param);
     }
 
+    //航程列表
     loadTripData(date,days) {
         if (!date){
             message.warning("航程不存在");
