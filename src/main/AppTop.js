@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { history } from 'react-router';
 import { Button, Menu, Dropdown, Icon, message } from 'antd';
 import { CookieHelp } from '../../lib/utils/index.js';
-import { AccoutInfoPromise, defaultLoginPromise } from './body/component/SignView/LoginAction';
+import { AccoutInfoPromise} from './body/component/SignView/LoginAction';
 import Menus from './Menu';
 
 import Sign from './body/component/SignView';
@@ -174,26 +174,8 @@ class page extends Component {
         if (user && isLogin) this.setLogin();
 
         const pathname = window.location.pathname;
-        // if (!isLogin && pathname !== '/' && pathname !== '/Search') {
-        //     window.app_open(this, '/', null, "self");
-        // }
-        if(isLogin) return;
-        
-        if(!user) { // token为空
-            defaultLoginPromise(0,()=>{
-                this.checkTokenAction(true);
-            });
-        }else {
-            defaultLoginPromise(0,()=>{ // token 存在
-                
-            },()=>{ // token 失效
-                defaultLoginPromise(0,()=>{
-
-                    this.checkTokenAction(true);
-                    
-                });
-    
-            },false);
+        if (!isLogin && pathname !== '/' && pathname !== '/Search') {
+            window.app_open(this, '/', null, "self");
         }
         
     }
