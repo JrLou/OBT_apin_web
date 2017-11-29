@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-08 13:36:12 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-29 19:18:27
+ * @Last Modified time: 2017-11-29 19:42:48
  */
 import {
     HttpTool,
@@ -133,10 +133,8 @@ export function validateLoginPromise(entry) {
 
 export function AccoutInfoPromise(callback) {
     return new Promise((resolve, reject) => {
-        document.getElementsByTagName('body')[0].style.display = "none";
         HttpTool.request(HttpTool.typeEnum.POST, API.memberInfo, (code, message, json, option) => {
             CookieHelp.saveCookieInfo("phone", json.mobile);
-            document.getElementsByTagName('body')[0].style.display = "block";
             if (window.fundebug && window.fundebug.user) {
                 window.fundebug.user = {
                     name: json.account,
@@ -148,6 +146,17 @@ export function AccoutInfoPromise(callback) {
                 option
             });
         }, (code, message) => {
+            // 未登录并且不在首页，则跳转到首页
+            if (code == -421 || code == -422 || code == -403 || code == -400) {
+                let pathname = window.location.pathname;
+                CookieHelp.clearCookie();
+                if (pathname !== '/' && pathname !== '/Search') {
+                    window.app_open(this, '/', null, "self");
+                } else {
+                    window.location.reload();
+                }
+            }
+
             reject(message);
         }, {});
     });
