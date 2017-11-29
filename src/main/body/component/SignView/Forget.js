@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-28 09:49:07
+ * @Last Modified time: 2017-11-29 14:51:35
  */
 
 import React, { Component } from 'react';
@@ -261,9 +261,12 @@ class ForgetForm extends Component {
      * 获取初始token
      */
     getCode(callback) {
-        const user = CookieHelp.getUserInfo();
+        // const user = CookieHelp.getUserInfo();
 
-        if (user) {
+        // if (user) {
+        //     callback();
+        // }
+        if(callback && typeof(callback) == 'function'){
             callback();
         }
     }

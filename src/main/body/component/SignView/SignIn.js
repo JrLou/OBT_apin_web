@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-28 09:52:46
+ * @Last Modified time: 2017-11-29 14:31:41
  */
 
 import React, { Component } from 'react';
@@ -11,7 +11,7 @@ import md5 from 'md5';
 
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
 import CheckCode from './CheckCode';
-import { validateLoginPromise, loginPromise } from './LoginAction';
+import { validateLoginPromise, loginPromise,getLoginCodePromise } from './LoginAction';
 import API from '../../../../api/APINYH';
 
 import css from './sign.less';
@@ -214,20 +214,20 @@ class SignInForm extends Component {
             if (!err) {
                 const { account, bdCharger, code, mobile, password } = values;
                 HttpTool.request(HttpTool.typeEnum.POST, API.addMember, (code, message, json, option) => {
-                    // getLoginCodePromise(account, 0).then((data) => {
-                    //     this.setState({
-                    //         loading: false
-                    //     });
-                    //     loginPromise(account, md5(password), data).then((data) => {
-                    //         // 获取注册验证码也会调登录接口 保存APIN_USER token
-                    //         // IS_LOGIN判断是否真的登录
-                    //         CookieHelp.saveCookieInfo('IS_LOGIN', true);
-                    //         this.props.setLogin();
-                    //         this.props.onOK();
-                    //     }).catch((error) => {
-                    //         message.error(error);
-                    //     });
-                    // });
+                    getLoginCodePromise(account, 0).then((data) => {
+                        this.setState({
+                            loading: false
+                        });
+                        loginPromise(account, md5(password), data).then((data) => {
+                            // 获取注册验证码也会调登录接口 保存APIN_USER token
+                            // IS_LOGIN判断是否真的登录
+                            CookieHelp.saveCookieInfo('IS_LOGIN', true);
+                            this.props.setLogin();
+                            this.props.onOK();
+                        }).catch((error) => {
+                            message.error(error);
+                        });
+                    });
                 }, (code, message) => {
                     setTimeout(() => {
                         this.setState({
@@ -284,9 +284,12 @@ class SignInForm extends Component {
      * 获取初始token
      */
     getCode(callback) {
-        const user = CookieHelp.getUserInfo();
+        // const user = CookieHelp.getUserInfo();
 
-        if (user) {
+        // if (user) {
+        //     callback();
+        // }
+        if(callback && typeof(callback) == 'function'){
             callback();
         }
     }

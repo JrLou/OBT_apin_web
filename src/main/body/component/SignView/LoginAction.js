@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-08 13:36:12 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-28 09:54:07
+ * @Last Modified time: 2017-11-29 14:29:40
  */
 import {
     HttpTool,
@@ -14,8 +14,11 @@ import {
 } from 'antd';
 import API from '../../../../api/APINYH';
 
-export const defaultAccount = 'b3619ef5dc944e4aad02acc7c83b220d';
-export const defaultPwd = '4b91884d9290981da047b4c85af35a39';
+// export const defaultAccount = 'b3619ef5dc944e4aad02acc7c83b220d';
+// export const defaultPwd = '4b91884d9290981da047b4c85af35a39';
+// export const appid = 'b3619ef5dc944e4aad02acc7c83b220d';
+export const defaultAccount = '';
+export const defaultPwd = '';
 export const appid = 'b3619ef5dc944e4aad02acc7c83b220d';
 
 /**
@@ -24,7 +27,7 @@ export const appid = 'b3619ef5dc944e4aad02acc7c83b220d';
  * @param {*} password 
  * @param {*} code 
  */
-export function loginPromise(account, password, code) {
+export function loginPromise(account, password) {
     return new Promise((resolve, reject) => {
         HttpTool.request(HttpTool.typeEnum.GET, API.tokens, (code, message, json, option) => {
             if (json.accessToken) {
@@ -39,7 +42,7 @@ export function loginPromise(account, password, code) {
             reject(message);
         }, {
                 account,
-                signature: md5(md5(account + password) + code),
+                signature: md5(account + password),
                 appid
             });
     });
