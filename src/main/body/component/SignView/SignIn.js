@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-29 14:31:41
+ * @Last Modified time: 2017-11-29 19:20:40
  */
 
 import React, { Component } from 'react';
@@ -11,7 +11,7 @@ import md5 from 'md5';
 
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
 import CheckCode from './CheckCode';
-import { validateLoginPromise, loginPromise,getLoginCodePromise } from './LoginAction';
+import { validateLoginPromise, loginPromise,getLoginCodePromise,appid } from './LoginAction';
 import API from '../../../../api/APINYH';
 
 import css from './sign.less';
@@ -241,7 +241,8 @@ class SignInForm extends Component {
                         code,
                         mobile,
                         password: md5(password),
-                        type: 1
+                        type: 1,
+                        applicationId: appid
                     });
             }
         });
