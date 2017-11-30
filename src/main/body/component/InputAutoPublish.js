@@ -205,7 +205,7 @@ class InputAuto extends Component {
             <div className="certain-category-search-wrapper" style={{width: "100%"}}>
                 <AutoComplete
                     {...props}
-                    children={<Input maxLength={30} />}
+                    children={<Input maxLength="30" />}
                     dropdownMatchSelectWidth={false}
                     dropdownStyle={{width: "220px"}}
                     size="large"

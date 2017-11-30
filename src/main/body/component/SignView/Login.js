@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-23 10:31:38
+ * @Last Modified time: 2017-11-29 14:22:22
  */
 
 import React, { Component } from 'react';
@@ -10,7 +10,7 @@ import React, { Component } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import md5 from 'md5';
 import CheckCode from './CheckCode';
-import { loginPromise, getLoginCodePromise, defaultLoginPromise } from './LoginAction';
+import { loginPromise, getLoginCodePromise } from './LoginAction';
 
 import { CookieHelp, HttpTool } from '../../../../../lib/utils/index.js';
 
@@ -106,8 +106,8 @@ class AccountLoginForm extends React.Component {
                 let { account, password } = values;
                 getLoginCodePromise(account, 0).then((data) => {
                     return loginPromise(account, md5(password), data);
-                }
-                ).then((data) => {
+                })
+                .then((data) => {
                     this.setState({ loading: false });
                     // 获取注册验证码也会调登录接口 保存APIN_USER token
                     // IS_LOGIN判断是否真的登录
@@ -227,26 +227,26 @@ class MsgLoginForm extends React.Component {
      * 获取登录验证码
      */
     getCodeAction() {
-        //     const { getFieldValue } = this.props.form;
-        //     const mobile = getFieldValue('mobile');
-        //     const picCode = getFieldValue('picCode') || '';
-        //     HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
-        //         // 测试
-        //         if (json && json.length > 4) {
-        //             this.setState({
-        //                 isShowPic: true,
-        //                 picCode: 'data:image/jpg;base64,' + json
-        //             });
-        //         } else {
-        //             this.setState({
-        //                 isShowPic: false
-        //             });
-        //         }
-        //     }, (code, msg, json, option) => {
-        //         message.error(msg);
-        //     }, {
-        //             mobile, picCode, type: 1
-        //         });
+            const { getFieldValue } = this.props.form;
+            const mobile = getFieldValue('mobile');
+            const picCode = getFieldValue('picCode') || '';
+            HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
+                // 测试
+                if (json && json.length > 4) {
+                    this.setState({
+                        isShowPic: true,
+                        picCode: 'data:image/jpg;base64,' + json
+                    });
+                } else {
+                    this.setState({
+                        isShowPic: false
+                    });
+                }
+            }, (code, msg, json, option) => {
+                message.error(msg);
+            }, {
+                    mobile, picCode, type: 1
+                });
     }
 
     // 获取登录码

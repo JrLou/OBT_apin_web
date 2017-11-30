@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-10 16:51:38 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-23 10:12:07
+ * @Last Modified time: 2017-11-28 09:49:49
  */
 
 
@@ -11,7 +11,7 @@ import { Form, Input, Button } from 'antd';
 import md5 from 'md5';
 import CheckCode from './CheckCode';
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
-import { loginPromise, getLoginCodePromise } from './LoginAction';
+import { loginPromise } from './LoginAction';
 
 import css from './sign.less';
 
