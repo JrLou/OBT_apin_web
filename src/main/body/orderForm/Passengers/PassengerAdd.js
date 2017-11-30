@@ -238,6 +238,12 @@ class PassengerAdd extends Component{
                         this.setData('birthday',dateString);
                         this.setTestState('birthday',{state:true,msg:'请输入出生年月'});
                     }}
+                    onOpenChange={(status)=>{
+                        if(status){return;}
+                        if(!this.state.data.birthday){
+                            this.setTestState('birthday',{state:false,msg:'请输入出生年月'});
+                        }
+                    }}
                 />
                 <div className={this.state.testState.birthday.state?css.hideMsg:css.errorMsg}>
                     {this.state.testState.birthday.msg}
@@ -293,7 +299,7 @@ class PassengerAdd extends Component{
                     onBlur={(e)=>{
                         let value = e.target.value;
                         let regIDCard = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
-                        let regOther = /^[0-9a-zA-Z\<\>\-\/\－\－]{0,30}$/;
+                        let regOther = /^[0-9a-zA-Z\<\>\-\/\－\－]{1,30}$/;
                         let reg = isSimple?regIDCard:regOther;
                         let regResult = reg.test(value);
                         if(regResult&&isSimple){
@@ -325,6 +331,12 @@ class PassengerAdd extends Component{
                     onChange={(date,dateString)=>{
                         this.setData('expireTime',dateString);
                         this.setTestState('expireTime',{state:true,msg:'请输入证件有效期'});
+                    }}
+                    onOpenChange={(status)=>{
+                        if(status){return;}
+                        if(!this.state.data.expireTime){
+                            this.setTestState('expireTime',{state:false,msg:'请输入证件有效期'});
+                        }
                     }}
                 />
                 <div className={this.state.testState.expireTime.state?css.hideMsg:css.errorMsg}>
