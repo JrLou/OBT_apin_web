@@ -121,13 +121,16 @@ class PassengerAdd extends Component{
                           this.setData('name',val);
                           this.setTestState('name',{state:true,msg:'请输入姓名'});
                       }
+                      if(!val){
+                          this.setTestState('name',{state:false,msg:'请输入姓名'});
+                      }
                   }}
-                  onBlur={(e)=>{
-                      let value = e.target.value;
-                      let result = !(!value||value.trim()=='');
-                      this.setData('name',removeSpace(value));
-                      this.setTestState('name',{state:result,msg:'请输入姓名'});
-                  }}
+                  // onBlur={(e)=>{
+                  //     let value = e.target.value;
+                  //     let result = !(!value||value.trim()=='');
+                  //     this.setData('name',removeSpace(value));
+                  //     this.setTestState('name',{state:result,msg:'请输入姓名'});
+                  // }}
               />
               <div className={this.state.testState.name.state?css.hideMsg:css.errorMsg}>
                   {this.state.testState.name.msg}
@@ -201,13 +204,16 @@ class PassengerAdd extends Component{
                             this.setData('nation',val);
                             this.setTestState('nation',{state:true,msg:'请输入国籍'});
                         }
+                        if(!val){
+                            this.setTestState('nation',{state:false,msg:'请输入国籍'});
+                        }
                     }}
-                    onBlur={(e)=>{
-                        let value = e.target.value;
-                        let result = !(!value||value.trim()=='');
-                        this.setData('nation',removeSpace(value));
-                        this.setTestState('nation',{state:result,msg:'请输入国籍'});
-                    }}
+                    // onBlur={(e)=>{
+                    //     let value = e.target.value;
+                    //     let result = !(!value||value.trim()=='');
+                    //     this.setData('nation',removeSpace(value));
+                    //     this.setTestState('nation',{state:result,msg:'请输入国籍'});
+                    // }}
                 />
                 <div className={this.state.testState.nation.state?css.hideMsg:css.errorMsg}>
                     {this.state.testState.nation.msg}
@@ -238,6 +244,12 @@ class PassengerAdd extends Component{
                         this.setData('birthday',dateString);
                         this.setTestState('birthday',{state:true,msg:'请输入出生年月'});
                     }}
+                    // onOpenChange={(status)=>{
+                    //     if(status){return;}
+                    //     if(!this.state.data.birthday){
+                    //         this.setTestState('birthday',{state:false,msg:'请输入出生年月'});
+                    //     }
+                    // }}
                 />
                 <div className={this.state.testState.birthday.state?css.hideMsg:css.errorMsg}>
                     {this.state.testState.birthday.msg}
@@ -289,6 +301,9 @@ class PassengerAdd extends Component{
                             this.setData('credNumber',value);
                             this.setTestState('credNumber',{state:true,msg:'请输入正确的证件号'});
                         }
+                        if(!value){
+                            this.setTestState('credNumber',{state:false,msg:'请输入证件号'});
+                        }
                     }}
                     onBlur={(e)=>{
                         let value = e.target.value;
@@ -300,7 +315,9 @@ class PassengerAdd extends Component{
                             //从身份证号中得到出生日期,并设置乘机人类型
                             this.setPassengerType(value);
                         }
-                        this.setTestState('credNumber',{state:regResult,msg:'请输入正确的证件号'});
+                        if(value){
+                            this.setTestState('credNumber',{state:regResult,msg:'请输入正确的证件号'});
+                        }
                     }}
                 />
                 <div className={this.state.testState.credNumber.state?css.hideMsg:css.errorMsg}>
@@ -326,6 +343,12 @@ class PassengerAdd extends Component{
                         this.setData('expireTime',dateString);
                         this.setTestState('expireTime',{state:true,msg:'请输入证件有效期'});
                     }}
+                    // onOpenChange={(status)=>{
+                    //     if(status){return;}
+                    //     if(!this.state.data.expireTime){
+                    //         this.setTestState('expireTime',{state:false,msg:'请输入证件有效期'});
+                    //     }
+                    // }}
                 />
                 <div className={this.state.testState.expireTime.state?css.hideMsg:css.errorMsg}>
                     {this.state.testState.expireTime.msg}
@@ -350,13 +373,16 @@ class PassengerAdd extends Component{
                             this.setData('issuePlace',val);
                             this.setTestState('issuePlace',{state:true,msg:'请输入签发地'});
                         }
+                        if(!val){
+                            this.setTestState('issuePlace',{state:false,msg:'请输入签发地'});
+                        }
                     }}
-                    onBlur={(e)=>{
-                        let value = e.target.value;
-                        let result = !(!value||value.trim()=='');
-                        this.setData('issuePlace',removeSpace(value));
-                        this.setTestState('issuePlace',{state:result,msg:'请输入签发地'});
-                    }}
+                    // onBlur={(e)=>{
+                    //     let value = e.target.value;
+                    //     let result = !(!value||value.trim()=='');
+                    //     this.setData('issuePlace',removeSpace(value));
+                    //     this.setTestState('issuePlace',{state:result,msg:'请输入签发地'});
+                    // }}
                 />
                 <div className={this.state.testState.issuePlace.state?css.hideMsg:css.errorMsg}>
                     {this.state.testState.issuePlace.msg}

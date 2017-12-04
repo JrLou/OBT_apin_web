@@ -2,12 +2,13 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-29 19:20:40
+ * @Last Modified time: 2017-12-04 17:44:00
  */
 
 import React, { Component } from 'react';
 import { Form, Input, Button, message, Checkbox } from 'antd';
 import md5 from 'md5';
+import placeholder from './placeholder';
 
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
 import CheckCode from './CheckCode';
@@ -72,7 +73,7 @@ class SignInForm extends Component {
                         }
                         ],
                     })(
-                        <Input prefixCls="my-ant-input" placeholder="请输入6-20位字母或数字" maxLength="20" />
+                        placeholder(<Input prefixCls="my-ant-input" placeholder="请输入6-20位字母或数字" maxLength="20" />)
                         )}
                 </FormItem>
                 <FormItem
@@ -96,7 +97,7 @@ class SignInForm extends Component {
                         }
                         ],
                     })(
-                        <Input prefixCls="my-ant-input" placeholder="请输入11位手机号" maxLength="11" />
+                        placeholder(<Input prefixCls="my-ant-input" placeholder="请输入11位手机号" maxLength="11" />)
                         )}
                 </FormItem>
                 {isShowPic && <FormItem
@@ -121,7 +122,7 @@ class SignInForm extends Component {
                             }
                         ],
                     })(
-                        <Input prefixCls="my-ant-input" placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
+                        placeholder(<Input prefixCls="my-ant-input" placeholder="请输入图形验证码" className={css.checkCodeImgInput} />)
                         )}
                     <img src={picCode} alt="" style={{ cursor: 'pointer' }} className={css.checkCodeImg} onClick={() => {
                         this.getCode(() => this.getCodeAction(true));
@@ -149,7 +150,9 @@ class SignInForm extends Component {
                     {getFieldDecorator('code', {
                         rules: [{ required: true, message: '请输入验证码' }],
                     })(
-                        <Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />
+                        placeholder(<Input prefixCls="my-ant-input" placeholder="请输入验证码" />,{
+                            width: 'calc(100% - 100px)'
+                        })
                         )}
                     <CheckCode ref="code" error={isShowPic && !getFieldValue('picCode') || getFieldError('mobile') || getFieldError('picCode')} getCode={() => this.getCode(this.getCodeAction)} />
                 </FormItem>
@@ -163,7 +166,7 @@ class SignInForm extends Component {
                         rules: [{ required: true, message: '请输入8-16位数字、字母' },
                         { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
-                        <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" autoComplete="new-password" maxLength="16" />
+                        placeholder(<Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" autoComplete="new-password" maxLength="16" />)
                         )}
                 </FormItem>
                 <FormItem
@@ -175,7 +178,7 @@ class SignInForm extends Component {
                     {getFieldDecorator('bdCharger', {
                         rules: [{ max: 30, message: '最多输入30位' }],
                     })(
-                        <Input prefixCls="my-ant-input" placeholder="请务必准确输入" maxLength="30" />
+                        placeholder(<Input prefixCls="my-ant-input" placeholder="请务必准确输入" maxLength="30" />)
                         )}
                 </FormItem>
                 <div className={css.tip}>请填写爱拼机的市场对接人信息，便于我们为您提供更好的服务（非必填）</div>
