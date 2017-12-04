@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-12-04 15:31:35 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-12-04 17:46:53
+ * @Last Modified time: 2017-12-04 18:37:07
  */
 
 import React, { Component } from 'react';
@@ -51,10 +51,9 @@ class InputPlaceholder extends Component {
 const placeholder = function (input, style) {
     var isPlaceholderSupported = (typeof document !== 'undefined')
         && 'placeholder' in document.createElement('input');
-    if (isPlaceholderSupported) return input;
+    if (isPlaceholderSupported) return <Input {...input.props} style={style} />;
     else
-    return <InputPlaceholder {...input.props} style={style}>
-    </InputPlaceholder>;
+        return <InputPlaceholder {...input.props} style={style}></InputPlaceholder>;
 
 };
 
