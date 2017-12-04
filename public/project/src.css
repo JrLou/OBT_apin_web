@@ -86,6 +86,23 @@
   margin-top: -10px;
   margin-bottom: 20px;
 }
+.src-main-body-component-SignView-sign---placeholderWrapper---3tkNN {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+.src-main-body-component-SignView-sign---placeholderWrapper---3tkNN .src-main-body-component-SignView-sign---placeholder---20uVB {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  padding-left: 10px;
+  font-size: 16px;
+  cursor: text;
+  line-height: 36px;
+}
 .src-main-body-component-Steps-step---steps---3BxuI {
   width: 100%;
   margin-top: 15px;
