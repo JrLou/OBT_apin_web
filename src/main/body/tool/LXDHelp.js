@@ -20,6 +20,9 @@ let LXDHelp = {
 
         let view = [];
         let length = list.length;
+        if(length<=0){
+            return (<div></div>);
+        }
         if(type == 1 || type ==2){
             //单程 或 往返
             view.push(

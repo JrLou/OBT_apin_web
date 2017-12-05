@@ -1,7 +1,7 @@
 var setting = require("./setting");
 var {router,setDomain} = require("../router.js");
 var serviceIP =  setting.ip;
-setDomain(setting.domain);
+setDomain(serviceIP);
 module.exports = {
     port: setting.port,
     browserSupport:9,
