@@ -19,7 +19,8 @@ import {hasKey,loadHelp} from '../../tool/LXDHelp.js';
 import PassengerAdd from './PassengerAdd.js';
 import {Table,Modal} from 'antd';
 import AlertView from '../../component/AlertView.js';
-import {Button,Checkbox,message,Spin,Upload} from 'antd';
+import {Button,message,Spin,Upload} from 'antd';
+import Checkbox from '../../component/Checkbox/index.js';
 
 class PassengerMsg extends Component{
     constructor(props){
@@ -309,13 +310,13 @@ class PassengerMsg extends Component{
                             (!this.state.isPassed)&&(this.state.dataSource.length>0)&&(hasKey(this.state.orderState,[3,5,12,14]))
                             ?   <div className={css.submitBox}>
                                     <Checkbox
-                                        onChange={(e)=>{
+                                        label={'确认乘机人信息无误'}
+                                        onChange={(value)=>{
                                             this.setState({
-                                                checkedMsg:e.target.checked
+                                                checkedMsg:value
                                             });
                                         }}
                                     >
-                                        确认乘机人信息无误
                                     </Checkbox>
                                     <Button
                                         disabled={!this.state.checkedMsg}
