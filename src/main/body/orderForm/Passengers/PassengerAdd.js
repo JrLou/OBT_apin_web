@@ -9,6 +9,7 @@ import APILXD from "../../../../api/APILXD.js";
 import {removeSpace} from '../../tool/LXDHelp.js';
 import moment from 'moment';
 import {Input,Radio,Modal,DatePicker,Select,Button,message,Spin} from 'antd';
+import placeholder from '../../component/SignView/placeholder.js';
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
 
@@ -112,7 +113,7 @@ class PassengerAdd extends Component{
         return(
           <div>
               {this.getItemTitle('姓名：')}
-              <Input
+              {placeholder(<Input
                   value={this.state.data.name}
                   className={css.inputStyle}
                   placeholder={'请与证件姓名保持一致'}
@@ -136,7 +137,7 @@ class PassengerAdd extends Component{
                   //     this.setData('name',removeSpace(value));
                   //     this.setTestState('name',{state:result,msg:'请输入姓名'});
                   // }}
-              />
+              />,{},{fontSize:'14',color:'#c4c4c4'})}
               <div className={this.state.testState.name.state?css.hideMsg:css.errorMsg}>
                   {this.state.testState.name.msg}
               </div>

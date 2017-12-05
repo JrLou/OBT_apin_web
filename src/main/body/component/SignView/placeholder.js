@@ -20,7 +20,7 @@ class InputPlaceholder extends Component {
     }
     render() {
         const { isFocus } = this.state;
-        const { value, placeholder, style, input } = this.props;
+        const { value, placeholder, style, input,placeStyle } = this.props;
         const props = Object.assign({},this.props,{
             ref: (input) => this.input = input,
             onBlur: this.handleBlur,
@@ -28,7 +28,11 @@ class InputPlaceholder extends Component {
         });
         return <div className={css.placeholderWrapper} style={style}>
             {
-                !isFocus && !value && <div className={css.placeholder} onClick={this.handleFocus}>
+                !isFocus && !value && <div
+                    className={css.placeholder}
+                    onClick={this.handleFocus}
+                    style={placeStyle}
+                >
                     {placeholder}
                 </div>
             }
@@ -50,12 +54,12 @@ class InputPlaceholder extends Component {
     }
 }
 
-const placeholder = function (input, style) {
+const placeholder = function (input, style, placeStyle) {
     var isPlaceholderSupported = (typeof document !== 'undefined')
         && 'placeholder' in document.createElement('input');
     if (isPlaceholderSupported) return React.cloneElement(input, { style });
     else
-        return <InputPlaceholder {...input.props} input={input} style={style}></InputPlaceholder>;
+        return <InputPlaceholder {...input.props} input={input} style={style} placeStyle={placeStyle}></InputPlaceholder>;
 
 };
 
