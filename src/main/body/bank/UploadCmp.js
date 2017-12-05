@@ -147,7 +147,7 @@ class UploadCmp extends Component {
          <div className="clearfix forUploadStyle">
             <Upload
                accept=".jpg,.png,.bmp"
-               action="/Upload"
+               action="/upload"
                listType="picture-card"
                fileList={fileList}
                beforeUpload={isIE9or8 ? null : this.beforeUpload.bind(this)}
