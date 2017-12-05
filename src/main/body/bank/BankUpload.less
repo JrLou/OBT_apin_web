@@ -76,6 +76,12 @@
                min-height: 238px;
                max-height: 454px;
                overflow: hidden;
+               input[type=file]{//fix Safari just doesn't open element if I hide it using css property display: none
+                  height: 0;
+                  position: absolute;
+                  width: 0;
+                  display: block !important;
+               }
                .ant-upload-list-item.ant-upload-list-item-undefined{
                   //display: none!important;//这个是上传的时候的第一个div
                }
@@ -165,6 +171,15 @@
 :global {
    div[role=document][style^="width: 813px"] .ant-modal-close span {
       font-size: 40px;
+   }
+   #dragContainerEle{
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: -1;
+      transition: all 0.5s;
    }
 }
 
