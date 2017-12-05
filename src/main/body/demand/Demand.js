@@ -273,7 +273,6 @@ class page extends Component {
                         <Button
                             className={css.buttonStyle}
                             type="primary"
-                            disabled={this.state.loading}
                             onClick={() => {
                                 this.searchOrderForm();
                             }}
@@ -301,7 +300,6 @@ class page extends Component {
                     <Button
                         className={css.buttonRelease}
                         type="primary"
-                        disabled={this.state.loading}
                         onClick={() => {
                             window.app_open(this, "/PublishMsg", {});
                         }}
