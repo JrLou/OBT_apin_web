@@ -326,7 +326,6 @@ class OrderFormList extends Component{
                         <Button
                             className={css.buttonStyle}
                             type="primary"
-                            disabled={this.state.loading}
                             onClick={()=>{this.searchOrderForm();}}
                         >
                             查询
