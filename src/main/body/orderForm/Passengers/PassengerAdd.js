@@ -10,6 +10,7 @@ import {removeSpace} from '../../tool/LXDHelp.js';
 import moment from 'moment';
 import {Input,Radio,Modal,DatePicker,Select,Button,message,Spin} from 'antd';
 import placeholder from '../../component/SignView/placeholder.js';
+import datePlaceholder from '../../component/SignView/datePlaceholder.js';
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
 
@@ -38,6 +39,8 @@ class PassengerAdd extends Component{
         };
 
         this.first = true; //是否是第一次创建
+
+        this.placeholderStyle = {fontSize:'14',color:'#c4c4c4'};
 
         //订单Id
         this.orderId = this.props.orderId?this.props.orderId:'';
@@ -137,7 +140,7 @@ class PassengerAdd extends Component{
                   //     this.setData('name',removeSpace(value));
                   //     this.setTestState('name',{state:result,msg:'请输入姓名'});
                   // }}
-              />,{},{fontSize:'14',color:'#c4c4c4'})}
+              />,{},this.placeholderStyle)}
               <div className={this.state.testState.name.state?css.hideMsg:css.errorMsg}>
                   {this.state.testState.name.msg}
               </div>
@@ -199,7 +202,7 @@ class PassengerAdd extends Component{
         return(
             <div>
                 {this.getItemTitle('国籍：')}
-                <Input
+                {placeholder(<Input
                     value={this.state.data.nation}
                     className={css.inputStyle}
                     placeholder={'请输入国籍'}
@@ -223,7 +226,7 @@ class PassengerAdd extends Component{
                     //     this.setData('nation',removeSpace(value));
                     //     this.setTestState('nation',{state:result,msg:'请输入国籍'});
                     // }}
-                />
+                />,{},this.placeholderStyle)}
                 <div className={this.state.testState.nation.state?css.hideMsg:css.errorMsg}>
                     {this.state.testState.nation.msg}
                 </div>
@@ -239,7 +242,7 @@ class PassengerAdd extends Component{
         return(
             <div>
                 {this.getItemTitle('出生日期：')}
-                <DatePicker
+                {datePlaceholder(<DatePicker
                     style={{width:'100%'}}
                     className={css.dateStyle}
                     placeholder={'例：1990-01-01'}
@@ -259,7 +262,7 @@ class PassengerAdd extends Component{
                     //         this.setTestState('birthday',{state:false,msg:'请输入出生年月'});
                     //     }
                     // }}
-                />
+                />,{},this.placeholderStyle)}
                 <div className={this.state.testState.birthday.state?css.hideMsg:css.errorMsg}>
                     {this.state.testState.birthday.msg}
                 </div>
@@ -297,7 +300,7 @@ class PassengerAdd extends Component{
         return(
             <div>
                 {this.getItemTitle('证件号码：')}
-                <Input
+                {placeholder(<Input
                     placeholder={'证件号码'}
                     value={this.state.data.credNumber}
                     className={css.inputStyle}
@@ -331,7 +334,7 @@ class PassengerAdd extends Component{
                             this.setTestState('credNumber',{state:regResult,msg:'请输入正确的证件号'});
                         }
                     }}
-                />
+                />,{},this.placeholderStyle)}
                 <div className={this.state.testState.credNumber.state?css.hideMsg:css.errorMsg}>
                     {this.state.testState.credNumber.msg}
                 </div>
@@ -344,7 +347,7 @@ class PassengerAdd extends Component{
         return(
             <div>
                 {this.getItemTitle('证件有效期：')}
-                <DatePicker
+                {datePlaceholder(<DatePicker
                     style={{width:'100%'}}
                     placeholder={'请输入证件有效期'}
                     className={css.dateStyle}
@@ -361,7 +364,7 @@ class PassengerAdd extends Component{
                     //         this.setTestState('expireTime',{state:false,msg:'请输入证件有效期'});
                     //     }
                     // }}
-                />
+                />,{},this.placeholderStyle)}
                 <div className={this.state.testState.expireTime.state?css.hideMsg:css.errorMsg}>
                     {this.state.testState.expireTime.msg}
                 </div>
@@ -374,7 +377,7 @@ class PassengerAdd extends Component{
         return(
             <div>
                 {this.getItemTitle('签发地：')}
-                <Input
+                {placeholder(<Input
                     value={this.state.data.issuePlace}
                     className={css.inputStyle}
                     placeholder={'请输入签发地'}
@@ -398,7 +401,7 @@ class PassengerAdd extends Component{
                     //     this.setData('issuePlace',removeSpace(value));
                     //     this.setTestState('issuePlace',{state:result,msg:'请输入签发地'});
                     // }}
-                />
+                />,{},this.placeholderStyle)}
                 <div className={this.state.testState.issuePlace.state?css.hideMsg:css.errorMsg}>
                     {this.state.testState.issuePlace.msg}
                 </div>
