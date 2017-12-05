@@ -15,7 +15,6 @@ import React, {Component} from 'react';
 import css from './Passengers.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APILXD from "../../../../api/APILXD.js";
-import WindowHelp from '../../tool/WindowHelp.js';
 import {hasKey,loadHelp} from '../../tool/LXDHelp.js';
 import PassengerAdd from './PassengerAdd.js';
 import {Table,Modal} from 'antd';
@@ -42,8 +41,6 @@ class PassengerMsg extends Component{
 
             loading:false,          //加载状态
         };
-
-        this.WindowHelp = new WindowHelp();
     }
 
     componentDidMount(){
