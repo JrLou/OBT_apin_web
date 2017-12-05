@@ -36,6 +36,8 @@ class PassengerAdd extends Component{
             }
         };
 
+        this.first = true; //是否是第一次创建
+
         //订单Id
         this.orderId = this.props.orderId?this.props.orderId:'';
 
@@ -121,9 +123,12 @@ class PassengerAdd extends Component{
                           this.setData('name',val);
                           this.setTestState('name',{state:true,msg:'请输入姓名'});
                       }
-                      if(!val){
+                      if(!val&&(!this.first)){
                           this.setTestState('name',{state:false,msg:'请输入姓名'});
                       }
+                  }}
+                  onFocus={()=>{
+                      this.first = false;
                   }}
                   // onBlur={(e)=>{
                   //     let value = e.target.value;
@@ -204,9 +209,12 @@ class PassengerAdd extends Component{
                             this.setData('nation',val);
                             this.setTestState('nation',{state:true,msg:'请输入国籍'});
                         }
-                        if(!val){
+                        if(!val&&(!this.first)){
                             this.setTestState('nation',{state:false,msg:'请输入国籍'});
                         }
+                    }}
+                    onFocus={()=>{
+                        this.first = false;
                     }}
                     // onBlur={(e)=>{
                     //     let value = e.target.value;
@@ -301,9 +309,12 @@ class PassengerAdd extends Component{
                             this.setData('credNumber',value);
                             this.setTestState('credNumber',{state:true,msg:'请输入正确的证件号'});
                         }
-                        if(!value){
+                        if(!value&&(!this.first)){
                             this.setTestState('credNumber',{state:false,msg:'请输入证件号'});
                         }
+                    }}
+                    onFocus={()=>{
+                        this.first = false;
                     }}
                     onBlur={(e)=>{
                         let value = e.target.value;
@@ -373,9 +384,12 @@ class PassengerAdd extends Component{
                             this.setData('issuePlace',val);
                             this.setTestState('issuePlace',{state:true,msg:'请输入签发地'});
                         }
-                        if(!val){
+                        if(!val&&(!this.first)){
                             this.setTestState('issuePlace',{state:false,msg:'请输入签发地'});
                         }
+                    }}
+                    onFocus={()=>{
+                        this.first = false;
                     }}
                     // onBlur={(e)=>{
                     //     let value = e.target.value;
