@@ -225,7 +225,7 @@ class PassengerMsg extends Component{
             },{
                 title:(this.state.isPassed?<div>票号</div>:<div>操作</div>),
                 dataIndex:'operation',
-                width:'200px',
+                width:'150px',
                 render:(text,record)=> {
                     return (this.getTicketCell(text,record));
                 },
