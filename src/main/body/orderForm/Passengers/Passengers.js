@@ -93,8 +93,8 @@ class PassengerMsg extends Component{
     //票号
     getTicketCell(text,record){
         if(this.state.isPassed){
-            // let ticketStr = record.ticket?record.ticket:'';
-            let ticketStr = 'CD-12334222,CD-12343234222,CD-1234324222,C34222,CD-123432222';   //测试数据
+            let ticketStr = record.ticket?record.ticket:'';
+            // let ticketStr = 'CD-12334222,C34222,CD-123432222';   //测试数据
             let ticketList = ticketStr.split(',');
             let listLength = ticketList.length;
             let ticketViews = [];
