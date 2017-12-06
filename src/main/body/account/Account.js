@@ -79,7 +79,37 @@ class AccountForm extends Component {
                 const { json, option } = res;
                 const { account, password, mobile } = json;
                 let { companyName, contactName, id, province, city, county, address } = option.option;// option返回是null，这样保错了，后面然后setState也不会运行了
-                this.getArea(0, 'options');
+                this.getArea(0, 'options', (res) => {
+                    if (province) {
+                        let options = this.state.options;
+                        options.map((item, index) => {
+                            if (item.name == province && city) {
+                                if(county){
+                                    options[index].children = [{
+                                        label: city,
+                                        value: city,
+                                        isLeaf: false,
+                                        children:[{
+                                            label: county,
+                                            value: county,
+                                            isLeaf: true,
+                                        }]
+                                    }];
+                                }else{
+                                    options[index].children = [{
+                                        label: city,
+                                        value: city,
+                                        isLeaf: true
+                                    }];
+                                }
+                                this.setState({
+                                    options
+                                });
+                            }
+                        });
+
+                    }
+                });
 
                 this.setState({
                     accountID: json.id,
@@ -221,6 +251,7 @@ class AccountForm extends Component {
                                 label="地址"
                             >
                                 {getFieldDecorator('zone', {
+                                    initialValue: Array.isArray(zone) && zone.length > 0 && zone
                                 })(
                                     <Cascader
                                         options={this.state.options}
@@ -228,7 +259,6 @@ class AccountForm extends Component {
                                         // onChange={this.onChange}
                                         changeOnSelect
                                         popupClassName={css.placement}
-                                        placeholder={Array.isArray(zone) && zone.length > 0 ? zone.join('/') : "请选择地区"}
                                     />
                                     )}
                             </FormItem>
