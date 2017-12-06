@@ -30,9 +30,8 @@ let LXDHelp = {
         if(type == 1||type==2){
             //单程 或 往返
             view.push(
-
-                <div style={{verticalAlign:'middle'}}>
-                    <span key={'cell'} style={{verticalAlign:'middle'}}>
+                <div key={'cell'} style={{verticalAlign:'middle'}}>
+                    <span style={{verticalAlign:'middle'}}>
                     {list[0].cityDep||list[0].cityNameDep}
                     </span>
                     <span
@@ -56,8 +55,8 @@ let LXDHelp = {
             //多程
             for(let key in list){
                 view.push(
-                    <div style={{verticalAlign:'middle'}}>
-                         <span key={`cell${key}`} style={{verticalAlign:'middle'}}>
+                    <div key={`cell${key}`} style={{verticalAlign:'middle'}}>
+                         <span style={{verticalAlign:'middle'}}>
                             {list[key].cityDep||list[key].cityNameDep}
                          </span>
                         <span
