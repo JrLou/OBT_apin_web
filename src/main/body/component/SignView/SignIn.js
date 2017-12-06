@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:35:46 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-12-04 17:44:00
+ * @Last Modified time: 2017-12-06 09:49:30
  */
 
 import React, { Component } from 'react';
@@ -151,7 +151,7 @@ class SignInForm extends Component {
                         rules: [{ required: true, message: '请输入验证码' }],
                     })(
                         placeholder(<Input prefixCls="my-ant-input" placeholder="请输入验证码" />,{
-                            width: 'calc(100% - 100px)'
+                            width: '206px'
                         })
                         )}
                     <CheckCode ref="code" error={isShowPic && !getFieldValue('picCode') || getFieldError('mobile') || getFieldError('picCode')} getCode={() => this.getCode(this.getCodeAction)} />
