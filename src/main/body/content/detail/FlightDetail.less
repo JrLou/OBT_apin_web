@@ -78,11 +78,15 @@
 .tableCell{
   composes: table;
   width: 100%;
+  background-color: #fff;
 }
 .left{
   composes: itemCenter;
   width: 80%;
   background: @c_bg_white;
+  border-color: @c_border_gray;
+  border-style: solid;
+  border-width: 0 1px 0 0;
 }
 
 //右边的样式
@@ -90,9 +94,6 @@
   composes: itemCenter;
   width: 20%;
   background: @c_bg_white;
-  border-color: @c_border_gray;
-  border-style: solid;
-  border-width: 0 0 0 1px;
   text-align: center;
 }
 .ruleDiv{
