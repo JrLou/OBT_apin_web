@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-12-04 15:31:35 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-12-06 10:14:54
+ * @Last Modified time: 2017-12-06 16:21:47
  */
 
 import React, { Component } from 'react';
@@ -58,7 +58,7 @@ class InputPlaceholder extends Component {
 const placeholder = function (input, style, placeStyle) {
     // var isPlaceholderSupported = (typeof document !== 'undefined')
     //     && 'placeholder' in document.createElement('input');
-    const isIE = navigator.appName == "Microsoft Internet Explorer";
+    const isIE = navigator.userAgent.indexOf("Trident") > -1 || navigator.userAgent.indexOf("Edge") > -1;
     if (!isIE)
         return React.cloneElement(input, { style });
     else

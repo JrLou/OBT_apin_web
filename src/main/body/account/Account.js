@@ -227,6 +227,7 @@ class AccountForm extends Component {
                                         loadData={this.loadData}
                                         // onChange={this.onChange}
                                         changeOnSelect
+                                        popupClassName={css.placement}
                                         placeholder={Array.isArray(zone) && zone.length > 0 ? zone.join('/') : "请选择地区"}
                                     />
                                     )}

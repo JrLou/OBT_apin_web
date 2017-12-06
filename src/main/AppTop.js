@@ -48,7 +48,9 @@ class page extends Component {
                 </Menu.Item>
             </Menu>
         );
-        const isIE9 = navigator.appName == "Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g, "") == "MSIE9.0";
+        const userAgent = navigator.userAgent.toLowerCase();
+        const isIE9 = navigator.appName == "Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g, "") == "MSIE9.0"
+            || userAgent.indexOf('safari') > -1 && userAgent.indexOf('chrome') == -1 && userAgent.indexOf('windows') > -1;
         return (
             <div className={less.head}>
                 <div className={less.headContent}>
