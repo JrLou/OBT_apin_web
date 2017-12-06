@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-12-04 15:31:35 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-12-05 13:34:17
+ * @Last Modified time: 2017-12-06 10:14:54
  */
 
 import React, { Component } from 'react';
@@ -20,12 +20,13 @@ class InputPlaceholder extends Component {
     }
     render() {
         const { isFocus } = this.state;
-        const { value, placeholder, style, input,placeStyle } = this.props;
-        const props = Object.assign({},this.props,{
+        const { value, placeholder, style, input, placeStyle } = this.props;
+        const props = Object.assign({}, this.props, {
             ref: (input) => this.input = input,
             onBlur: this.handleBlur,
             style: {}
         });
+        props.placeholder = "";
         return <div className={css.placeholderWrapper} style={style}>
             {
                 !isFocus && !value && <div
@@ -55,9 +56,11 @@ class InputPlaceholder extends Component {
 }
 
 const placeholder = function (input, style, placeStyle) {
-    var isPlaceholderSupported = (typeof document !== 'undefined')
-        && 'placeholder' in document.createElement('input');
-    if (isPlaceholderSupported) return React.cloneElement(input, { style });
+    // var isPlaceholderSupported = (typeof document !== 'undefined')
+    //     && 'placeholder' in document.createElement('input');
+    const isIE = navigator.appName == "Microsoft Internet Explorer";
+    if (!isIE)
+        return React.cloneElement(input, { style });
     else
         return <InputPlaceholder {...input.props} input={input} style={style} placeStyle={placeStyle}></InputPlaceholder>;
 
