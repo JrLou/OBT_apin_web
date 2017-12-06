@@ -176,7 +176,7 @@ class page extends Component {
                                         required: true,
                                         message: '请输入城市名称',
                                     },{
-                                        max:20,
+                                        max:30,
                                         message:'请输入正确城市名称',
                                     }
                                    ],
@@ -198,7 +198,7 @@ class page extends Component {
                                         required: true,
                                         message: '请输入城市名称',
                                     },{
-                                        max:20,
+                                        max:30,
                                         message:'请输入正确城市名称',
                                     }],
                                     trigger: "onChangeValue",
