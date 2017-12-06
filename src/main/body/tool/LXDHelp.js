@@ -18,29 +18,65 @@ let LXDHelp = {
         let flightType = type?type:1;
         let tipList = ['-','→','⇌','-'];
 
+        let dancheng = require('../../../images/dancheng.png');
+        let wangfan = require('../../../images/wangfan.png');
+        let duocheng = require('../../../images/duocheng.png');
+
         let view = [];
         let length = list.length;
         if(length<=0){
             return (<div></div>);
         }
-        if(type == 1 || type ==2){
+        if(type == 1||type==2){
             //单程 或 往返
             view.push(
-                <span key={'cell'}>
+
+                <div style={{verticalAlign:'middle'}}>
+                    <span key={'cell'} style={{verticalAlign:'middle'}}>
                     {list[0].cityDep||list[0].cityNameDep}
-                    {tipList[flightType]}
+                    </span>
+                    <span
+                        style={{
+                            display:'inline-block',
+                            width:'20px',
+                            height:'20px',
+                            backgroundImage:`url(${type==1?dancheng:wangfan})`,
+                            backgroundSize:'100% 100%',
+                            verticalAlign:'middle'
+                        }}
+                    >
+                    </span>
+                    <span style={{verticalAlign:'middle'}}>
                     {list[0].cityArr||list[0].cityNameArr}
-                </span>
+                    </span>
+                </div>
+
             );
         }else{
+            //多程
             for(let key in list){
                 view.push(
-                    <span key={`cell${key}`}>
-                    {list[key].cityDep||list[key].cityNameDep}
-                        {tipList[flightType]}
-                        {list[key].cityArr||list[key].cityNameArr}
-                        {key<length-1?'，':''}
-                </span>
+                    <div style={{verticalAlign:'middle'}}>
+                         <span key={`cell${key}`} style={{verticalAlign:'middle'}}>
+                            {list[key].cityDep||list[key].cityNameDep}
+                         </span>
+                        <span
+                            style={{
+                                display:'inline-block',
+                                width:'20px',
+                                height:'20px',
+                                backgroundImage:`url(${duocheng})`,
+                                backgroundSize:'100% 100%',
+                                verticalAlign:'middle'
+                            }}
+                        >
+                        </span>
+                        <span style={{verticalAlign:'middle'}}>
+                             {list[key].cityArr||list[key].cityNameArr}
+                             {key<length-1?'，':''}
+                        </span>
+                    </div>
+
                 );
             }
         }
