@@ -4,6 +4,7 @@ import { HttpTool ,CookieHelp} from "../../../../lib/utils/index.js";
 import AutoInput from "../component/InputAutoPublish";
 import TemplatePublist from "./TemplatePublist";
 import placeholder from './placeholder';
+import datePlaceholder from './../component/SignView/datePlaceholder';
 
 import less from './PublishMsg.less';
 import moment from 'moment';
@@ -230,9 +231,9 @@ class page extends Component {
                                     }],
                                     initialValue: fromDateTime
                                 })(
-                                    <DatePicker  getCalendarContainer={()=>{
+                                    datePlaceholder(<DatePicker placeholder={"请选择时间"} getCalendarContainer={()=>{
                                         return this.refs.test;
-                                    }}  style={{ borderRadius: "2px", minWidth: "200px", width:"230px" }} format='YYYY-MM-DD' disabledDate={(current) => {
+                                    }}  className={less.widthCss} format='YYYY-MM-DD' disabledDate={(current) => {
                                        let lineType =this.state.lineType;
                                        let lineNum= this.state.lineNum;
                                        //起始时间
@@ -278,7 +279,7 @@ class page extends Component {
                                         if(endTime==""){//结束时间为空，表示永远
                                             return changsVlaue <= startTime;
                                         }
-                                    }} />
+                                    }} />,{ borderRadius: "2px", minWidth: "200px", width:"230px" },{ borderRadius: "2px", minWidth: "200px", width:"230px" })
                                     )}
                             </FormItem>
                         </Col>
@@ -293,14 +294,14 @@ class page extends Component {
                                         initialValue: toDateTime
                                         //this.state.listData[i] == undefined ? "" :(this.state.listData[i].toDateTime==undefined || this.state.listData[i].toDateTime==""?"": moment(this.state.listData[i].toDateTime))
                                     })(
-                                        <DatePicker getCalendarContainer={()=>{
+                                        datePlaceholder(<DatePicker placeholder={"请选择时间" }  className={less.widthCss} getCalendarContainer={()=>{
                                             return this.refs.test;
-                                        }} style={{ borderRadius: "2px", minWidth: "200px",width:"230px" }} format='YYYY-MM-DD' disabledDate={(current) => {
+                                        }}  format='YYYY-MM-DD' disabledDate={(current) => {
                                             let value=this.vueValue(getFieldValue("fromDateTime0"))==""?"":getFieldValue("fromDateTime0");
                                          //   let startTime =value==""?Date.now() :value;
                                             let startTime = value =="" ?moment(Date.now()).subtract("1","d"):value;//2017-11-28，解开当前时间可选#
                                             return current && current.valueOf() <= startTime;
-                                        }} />
+                                        }} />,{ borderRadius: "2px", minWidth: "200px", width:"230px" },{ borderRadius: "2px", minWidth: "200px", width:"230px" })
                                         )}
                                 </FormItem>
                             </Col>
