@@ -71,6 +71,12 @@ class OrderFormDetail extends Component{
         setTimeout(()=>{this.listenScroll();},0);
     }
 
+    //再原来的基础上再滚动1像素，触发支付条排版
+    scrollOnePX(){
+        let scrollY = parseInt(window.pageYOffset)+1;
+        window.scroll(0,scrollY);
+    }
+
     listenScroll(){
         let scrollAction = ()=>{
             let payDiv = ReactDOM.findDOMNode(this.payBottom);
@@ -243,7 +249,7 @@ class OrderFormDetail extends Component{
         };
         let successCB = (code, msg, json, option)=>{
             //滚动页面，初始化支付条位置
-            window.scroll(0,1);
+            this.scrollOnePX();
             log('=========请求订单详情结果>>>>>>>>>>>>>>>');
             log(json);
             if(!json){
