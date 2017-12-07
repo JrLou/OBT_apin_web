@@ -293,7 +293,7 @@ class PassengerAdd extends Component{
                         this.setState({
                             credType:value,
                             testState:{
-                                name:{state:true,msg:`请输入姓名`},
+                                name:{state:true,msg:`请输入姓名dd`},
                                 nation:{state:true,msg:'请输入国籍'},
                                 birthday:{state:true,msg:'请选择出生日期'},
                                 credNumber:{state:true,msg:'请输入正确的证件号码'},
