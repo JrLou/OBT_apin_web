@@ -55,6 +55,9 @@ class PassengerAdd extends Component{
     }
 
     componentWillReceiveProps(nextProps){
+        if(this.state.visible){
+            return;
+        }
         this.propsChange(nextProps);
     }
 
@@ -141,8 +144,10 @@ class PassengerAdd extends Component{
                   //     this.setTestState('name',{state:result,msg:'请输入姓名'});
                   // }}
               />,{},this.placeholderStyle)}
-              <div className={this.state.testState.name.state?css.hideMsg:css.errorMsg}>
-                  {this.state.testState.name.msg}
+              <div className={this.state.testState.name.state?css.hideMsg:css.errorContainer}>
+                  <span className={css.errorMsg}>
+                      {this.state.testState.name.msg}
+                  </span>
               </div>
           </div>
         );
@@ -227,8 +232,10 @@ class PassengerAdd extends Component{
                     //     this.setTestState('nation',{state:result,msg:'请输入国籍'});
                     // }}
                 />,{},this.placeholderStyle)}
-                <div className={this.state.testState.nation.state?css.hideMsg:css.errorMsg}>
-                    {this.state.testState.nation.msg}
+                <div className={this.state.testState.nation.state?css.hideMsg:css.errorContainer}>
+                  <span className={css.errorMsg}>
+                      {this.state.testState.nation.msg}
+                  </span>
                 </div>
             </div>
         );
@@ -263,8 +270,10 @@ class PassengerAdd extends Component{
                     //     }
                     // }}
                 />,{},this.placeholderStyle)}
-                <div className={this.state.testState.birthday.state?css.hideMsg:css.errorMsg}>
-                    {this.state.testState.birthday.msg}
+                <div className={this.state.testState.birthday.state?css.hideMsg:css.errorContainer}>
+                  <span className={css.errorMsg}>
+                      {this.state.testState.birthday.msg}
+                  </span>
                 </div>
             </div>
         );
@@ -283,8 +292,15 @@ class PassengerAdd extends Component{
                     onChange={(value)=>{
                         this.setState({
                             credType:value,
-                        });
-                        this.setData('credType',value);
+                            testState:{
+                                name:{state:true,msg:`请输入姓名`},
+                                nation:{state:true,msg:'请输入国籍'},
+                                birthday:{state:true,msg:'请选择出生日期'},
+                                credNumber:{state:true,msg:'请输入正确的证件号码'},
+                                expireTime:{state:true,msg:'请选择证件有效期'},
+                                issuePlace:{state:true,msg:'请输入签发地'},
+                            }
+                        },this.setData('credType',value));
                     }}
                 >
                     <Option value="1" className={this.state.lineType==2?css.hiddenItem:''}>身份证</Option>
@@ -336,8 +352,10 @@ class PassengerAdd extends Component{
                         }
                     }}
                 />,{},this.placeholderStyle)}
-                <div className={this.state.testState.credNumber.state?css.hideMsg:css.errorMsg}>
-                    {this.state.testState.credNumber.msg}
+                <div className={this.state.testState.credNumber.state?css.hideMsg:css.errorContainer}>
+                  <span className={css.errorMsg}>
+                      {this.state.testState.credNumber.msg}
+                  </span>
                 </div>
             </div>
         );
@@ -366,8 +384,10 @@ class PassengerAdd extends Component{
                     //     }
                     // }}
                 />,{},this.placeholderStyle)}
-                <div className={this.state.testState.expireTime.state?css.hideMsg:css.errorMsg}>
-                    {this.state.testState.expireTime.msg}
+                <div className={this.state.testState.expireTime.state?css.hideMsg:css.errorContainer}>
+                  <span className={css.errorMsg}>
+                      {this.state.testState.expireTime.msg}
+                  </span>
                 </div>
             </div>
         );
@@ -403,8 +423,10 @@ class PassengerAdd extends Component{
                     //     this.setTestState('issuePlace',{state:result,msg:'请输入签发地'});
                     // }}
                 />,{},this.placeholderStyle)}
-                <div className={this.state.testState.issuePlace.state?css.hideMsg:css.errorMsg}>
-                    {this.state.testState.issuePlace.msg}
+                <div className={this.state.testState.issuePlace.state?css.hideMsg:css.errorContainer}>
+                  <span className={css.errorMsg}>
+                      {this.state.testState.issuePlace.msg}
+                  </span>
                 </div>
             </div>
         );
