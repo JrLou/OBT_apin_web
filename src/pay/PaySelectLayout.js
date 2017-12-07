@@ -41,7 +41,7 @@ class PaySelectLayout extends Component {
                 title: "银行转账",
                 getView: () => {
                     return (
-                       <div>
+                       <div style={{cursor:'pointer'}}>
                           <img src={require("./images/pay_bank.png")} alt={"银行图片"}/>
                            <div className={less.bankItme_msg}>
                                <p>银行转账</p>
@@ -91,6 +91,7 @@ class PaySelectLayout extends Component {
                               data.defaultIndex = index;
                            }
                            let itemCmp = <Item
+                              style={{cursor:'pointer'}}
                               key={index}
                               {...obj}
                               onClick={() => {
