@@ -276,6 +276,7 @@ class PassengerAdd extends Component{
             <div>
                 {this.getItemTitle('证件类型：')}
                 <Select
+                    prefixCls={'my-ant-select'}
                     style={{width:'100%'}}
                     value={''+this.state.data.credType}
                     className={css.selectStyle}

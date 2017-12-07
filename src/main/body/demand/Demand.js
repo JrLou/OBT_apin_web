@@ -250,6 +250,7 @@ class page extends Component {
                     <div className={css.searchItem01}>
                         <span>航程类型：</span>
                         <Select
+                            prefixCls={'my-ant-select'}
                             className={css.selectStyle}
                             placeholder={'请选择'}
                             onChange={(value) => {
@@ -265,6 +266,7 @@ class page extends Component {
                     <div className={css.searchItem01}>
                         <span>需求状态：</span>
                         <Select
+                            prefixCls={'my-ant-select'}
                             value={this.state.demandStatus}
                             className={css.selectStyle}
                             placeholder={'请选择'}
