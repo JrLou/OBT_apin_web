@@ -1,37 +1,31 @@
-/*
- * @Author: 钮宇豪 
- * @Date: 2017-12-04 15:31:35 
- * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-12-06 16:21:47
- */
-
 import React, { Component } from 'react';
-import { Input } from 'antd';
 import css from './sign.less';
 
-class InputPlaceholder extends Component {
+class DatePlaceholder extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isFocus: false
+            isFocus: false,
+            open:false,
         };
         this.handleFocus = this.handleFocus.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
     }
     render() {
         const { isFocus } = this.state;
-        const { value, placeholder, style, input, placeStyle } = this.props;
-        const props = Object.assign({}, this.props, {
+        const { value, placeholder, style, input,placeStyle } = this.props;
+        const props = Object.assign({},this.props,{
+            open:this.state.open,
+            onOpenChange:this.openChange.bind(this),
             ref: (input) => this.input = input,
             onBlur: this.handleBlur,
             style: {}
         });
-        props.placeholder = "";
         return <div className={css.placeholderWrapper} style={style}>
             {
                 !isFocus && !value && <div
                     className={css.placeholder}
-                    onClick={this.handleFocus}
+                    onClick={()=>{this.handleFocus(input);}}
                     style={placeStyle}
                 >
                     {placeholder}
@@ -43,26 +37,31 @@ class InputPlaceholder extends Component {
         </div>;
     }
     handleFocus() {
-        this.input.refs.input.focus();
         this.setState({
+            open:true,
             isFocus: true
         });
     }
     handleBlur() {
         this.setState({
+            open:false,
             isFocus: false
+        });
+    }
+    openChange(value){
+        this.setState({
+            open:value,
+            isFocus:value,
         });
     }
 }
 
 const placeholder = function (input, style, placeStyle) {
-    // var isPlaceholderSupported = (typeof document !== 'undefined')
-    //     && 'placeholder' in document.createElement('input');
-    const isIE = navigator.userAgent.indexOf("Trident") > -1 || navigator.userAgent.indexOf("Edge") > -1;
-    if (!isIE)
-        return React.cloneElement(input, { style });
+    var isPlaceholderSupported = (typeof document !== 'undefined')
+        && 'placeholder' in document.createElement('input');
+    if (isPlaceholderSupported) return React.cloneElement(input, { style });
     else
-        return <InputPlaceholder {...input.props} input={input} style={style} placeStyle={placeStyle}></InputPlaceholder>;
+        return <DatePlaceholder {...input.props} input={input} style={style} placeStyle={placeStyle}></DatePlaceholder>;
 
 };
 

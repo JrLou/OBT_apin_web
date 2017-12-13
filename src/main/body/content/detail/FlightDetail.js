@@ -458,7 +458,7 @@ class page extends Component {
                 </div>
 
                 <div className={css.right}>
-                    <div className={css.itemCenter} style={{width:"100%"}}>
+                    <div className={css.itemCenter}>
                         <div className={css.ruleDiv}>
                             <Tooltip placement="bottom" title={<div>
                                 {voyagesObj.freeBag?<div className={css.rule}>

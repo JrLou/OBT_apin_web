@@ -15,14 +15,41 @@
 }
 .contentItem{
   float:left;
-  min-height: 80px;
+  min-height: 85px;
   box-sizing: border-box;
   padding: 0 4%;
   width: 50%;
   overflow: hidden;
 }
+.errorContainer{
+  position: relative;
+  margin: 3px 0 1px 0;
+  &:before{
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
+    text-align: center;
+    line-height: 14px;
+    content: "\2715";
+    color: #fff;
+    background-color: #F94A32;
+    border-radius: 50%;
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8);
+  }
+}
 .errorMsg{
-  color: @error-color;
+  height: 22px;
+  line-height: 22px;
+  padding-left: 20px;
+  padding-right: 10px;
+  display: inline-block;
+  background-color: #FEE8E8;
+  color: #F94A32;
 }
 .hideMsg{
   visibility: hidden;
@@ -40,7 +67,7 @@
 .itemTitle{
   font-size: @font-size-base;
   color: @font-color;
-  margin-bottom: @d_spadding_cell;
+  margin-bottom: 2px;
 }
 .inputStyle{
   width: 100%;

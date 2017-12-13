@@ -3,6 +3,8 @@ import { Form, DatePicker, TimePicker, Button, Input, Row, Col, Radio, AutoCompl
 import { HttpTool ,CookieHelp} from "../../../../lib/utils/index.js";
 import AutoInput from "../component/InputAutoPublish";
 import TemplatePublist from "./TemplatePublist";
+import placeholder from './placeholder';
+import datePlaceholder from './../component/SignView/datePlaceholder';
 
 import less from './PublishMsg.less';
 import moment from 'moment';
@@ -175,7 +177,7 @@ class page extends Component {
                                         required: true,
                                         message: '请输入城市名称',
                                     },{
-                                        max:20,
+                                        max:30,
                                         message:'请输入正确城市名称',
                                     }
                                    ],
@@ -197,7 +199,7 @@ class page extends Component {
                                         required: true,
                                         message: '请输入城市名称',
                                     },{
-                                        max:20,
+                                        max:30,
                                         message:'请输入正确城市名称',
                                     }],
                                     trigger: "onChangeValue",
@@ -229,9 +231,9 @@ class page extends Component {
                                     }],
                                     initialValue: fromDateTime
                                 })(
-                                    <DatePicker  getCalendarContainer={()=>{
+                                    datePlaceholder(<DatePicker placeholder={"请选择时间"} getCalendarContainer={()=>{
                                         return this.refs.test;
-                                    }}  style={{ borderRadius: "2px", minWidth: "200px", width:"230px" }} format='YYYY-MM-DD' disabledDate={(current) => {
+                                    }}  className={less.widthCss} format='YYYY-MM-DD' disabledDate={(current) => {
                                        let lineType =this.state.lineType;
                                        let lineNum= this.state.lineNum;
                                        //起始时间
@@ -277,7 +279,7 @@ class page extends Component {
                                         if(endTime==""){//结束时间为空，表示永远
                                             return changsVlaue <= startTime;
                                         }
-                                    }} />
+                                    }} />,{ borderRadius: "2px", minWidth: "200px", width:"230px" },{ borderRadius: "2px", minWidth: "200px", width:"230px" })
                                     )}
                             </FormItem>
                         </Col>
@@ -292,14 +294,14 @@ class page extends Component {
                                         initialValue: toDateTime
                                         //this.state.listData[i] == undefined ? "" :(this.state.listData[i].toDateTime==undefined || this.state.listData[i].toDateTime==""?"": moment(this.state.listData[i].toDateTime))
                                     })(
-                                        <DatePicker getCalendarContainer={()=>{
+                                        datePlaceholder(<DatePicker placeholder={"请选择时间" }  className={less.widthCss} getCalendarContainer={()=>{
                                             return this.refs.test;
-                                        }} style={{ borderRadius: "2px", minWidth: "200px",width:"230px" }} format='YYYY-MM-DD' disabledDate={(current) => {
+                                        }}  format='YYYY-MM-DD' disabledDate={(current) => {
                                             let value=this.vueValue(getFieldValue("fromDateTime0"))==""?"":getFieldValue("fromDateTime0");
                                          //   let startTime =value==""?Date.now() :value;
                                             let startTime = value =="" ?moment(Date.now()).subtract("1","d"):value;//2017-11-28，解开当前时间可选#
                                             return current && current.valueOf() <= startTime;
-                                        }} />
+                                        }} />,{ borderRadius: "2px", minWidth: "200px", width:"230px" },{ borderRadius: "2px", minWidth: "200px", width:"230px" })
                                         )}
                                 </FormItem>
                             </Col>
@@ -314,7 +316,7 @@ class page extends Component {
                         <Row style={{ marginBottom: this.marginBottomRow, color: "#2FA9FF",fontSize:"16px" }}>
                             <Col span={4} offset={9} style={{ width: "76px" }}>
                                 <div style={{ position: "relative", cursor: "pointer" }} onClick={() => this.lineAdd()}>
-                                    <Icon type="plus-circle-o" />
+                                    <Icon type="plus-circle-o" style={{fontSize:"17px" }}/>
                                     <span style={{ float: "right",fontSize:"16px",marginLeft:10}}>加一程</span>
                                 </div>
                             </Col>
@@ -435,7 +437,7 @@ class page extends Component {
                                         message: '最少一位成人',
                                     }, {
                                         pattern: /^[1-9]{1}\d*$/,
-                                        message: '最少一位成人'
+                                        message: '请输入正确的人数,最少1人以上'
                                     }
                                 ],
                                     initialValue:this.vueValue(adultCount)!=""?this.vueValue(adultCount):this.state.adultCount,
@@ -444,7 +446,7 @@ class page extends Component {
                                     // <div style={{ position: "relative" }}>
                                     //     <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px",pointerEvents:"none"}}>成人</span>
                                    // <Input style={{ width: 207, height: 36, borderRadius: "2px" }} defaultValue={this.vueValue(adultCount)!=""?this.vueValue(adultCount):this.state.adultCount}   maxLength="4" onChange={(e) => this.handleConfirmNum("adultCount", e)}/>
-                                    <Input style={{ width: 230, height: 34}}  maxLength="4" onChange={(e) => this.handleConfirmNum("adultCount", e)} placeholder={'必填,1人以上'}/>
+                                   placeholder(<Input maxLength="4" onChange={(e) => this.handleConfirmNum("adultCount", e)} placeholder={'必填,1人以上'}/>,{ width: 230, height: 32})
                                     // </div>
                                     )}
                             </FormItem>
@@ -462,7 +464,7 @@ class page extends Component {
                                     //     <span style={{ position: "absolute", zIndex: 1, right: "20px", color: "#cacaca" ,marginTop:"3px", fontSize: "14px",pointerEvents:"none"}}>儿童(2～12周岁)</span>
                                     //     <Input id="male" style={{ width: 230, height: 36, borderRadius: "2px" }} defaultValue={this.vueValue(childCount)!=""?this.vueValue(childCount):this.state.childCount} maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)} />
                                      // </div>
-                                    <Input  style={{ width: 160, height: 34}}  maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)}  placeholder={'2～12周岁'}/>
+                                     placeholder(<Input  maxLength="4" onChange={(e) => this.handleConfirmNum("childCount", e)}  placeholder={'2～12周岁'}/>,{ width: 160, height: 32})
                                     )}
                             </FormItem>
                         </Col>
@@ -484,7 +486,7 @@ class page extends Component {
                                     }],
                                     initialValue: this.state.remark,
                                 })(
-                                    <Input type="textarea" maxLength="100" style={{ height: 180, resize: "none",fontSize:"14px" }} placeholder="如：价格、时间等" />
+                                    placeholder(<Input type="textarea" maxLength="100"  placeholder="如：价格、时间等" style={{ height: 180, resize: "none",fontSize:"14px" }}/>,{ height: 180, resize: "none",fontSize:"14px" })
                                     )}
                             </FormItem>
 
@@ -506,7 +508,7 @@ class page extends Component {
                                     }],
                                     initialValue:phoneCookie,
                                 })(
-                                        <Input style={{ width: 230, height: 34, fontSize:"14px" }}  placeholder="输入可联系的手机号码" maxLength="11"/>
+                                    placeholder(<Input  placeholder="输入可联系的手机号码" maxLength="11"/>,{ width: 230, height: 32, fontSize:"14px" })
                                     )}
                             </FormItem>
 

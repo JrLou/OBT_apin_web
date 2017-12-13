@@ -2,13 +2,14 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-29 19:20:41
+ * @Last Modified time: 2017-12-06 09:51:20
  */
 
 import React, { Component } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import md5 from 'md5';
 import CheckCode from './CheckCode';
+import placeholder from '../../component/SignView/placeholder';
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
 import { loginPromise, validateLoginPromise, appid } from './LoginAction';
 import API from '../../../../api/APINYH';
@@ -127,7 +128,9 @@ class ForgetForm extends Component {
                     {getFieldDecorator('option', {
                         rules: [{ required: true, message: '请输入验证码' }],
                     })(
-                        <Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />
+                        placeholder(<Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />,{
+                            width:'206px'
+                        })
                         )}
                     <CheckCode ref="code" error={isShowPic && !getFieldValue('picCode') || getFieldError('mobile') || getFieldError('picCode')} getCode={() => this.getCode(this.getCodeAction)} />
                 </FormItem>
