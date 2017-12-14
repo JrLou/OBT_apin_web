@@ -15,7 +15,6 @@ import CellNewFlight from "../cell/CellNewFlight.js";
 import PayBottom from "./detailComp/PayBottom.js";
 import MyModalRequire from "./detailComp/MyModalRequire.js";
 
-import MyInput from '../../component/MyInput.js';
 
 const FormItem = Form.Item;
 class page extends Component {
@@ -459,7 +458,7 @@ class page extends Component {
                 </div>
 
                 <div className={css.right}>
-                    <div className={css.itemCenter} style={{width:"100%"}}>
+                    <div className={css.itemCenter}>
                         <div className={css.ruleDiv}>
                             <Tooltip placement="bottom" title={<div>
                                 {voyagesObj.freeBag?<div className={css.rule}>

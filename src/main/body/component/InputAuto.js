@@ -219,7 +219,7 @@ class InputAuto extends Component {
                     onFocus={() => {
                         this.changeFirstState();
                     }}
-                    children={<Input maxLength={30} style={{zIndex:0}}/>}
+                    children={<Input maxLength="30" style={{zIndex:0}}/>}
                     onSearch={(value) => {
                         if(!this.keyWord){
                             this.setState({
@@ -265,8 +265,6 @@ class InputAuto extends Component {
 
                         this.tempTime = new Date().getTime();
                     }}
-                              maxLength={5}
-
                 >
                 </AutoComplete>
 

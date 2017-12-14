@@ -479,7 +479,7 @@ class page extends Component {
                                     url:data.url,
                                     price:this.data.pay.payPrice
 
-                                }: "/apin/pc/v1.0/alipay/pay/"+data.url);
+                                }: "/apin"+Api.alipaypay+data.url);
                             });
                         } else {
                             this.wh.closeWindow(apinPanel);
@@ -745,7 +745,7 @@ class page extends Component {
                 if (!data.pay) {
                     data.pay = {
                         defaultIndex: 0,
-                        defaultshowMore: false
+                        defaultshowMore: true
                     };
                 }
             }

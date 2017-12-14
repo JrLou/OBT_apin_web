@@ -15,12 +15,12 @@ import React, {Component} from 'react';
 import css from './Passengers.less';
 import { HttpTool } from '../../../../../lib/utils/index.js';
 import APILXD from "../../../../api/APILXD.js";
-import WindowHelp from '../../tool/WindowHelp.js';
 import {hasKey,loadHelp} from '../../tool/LXDHelp.js';
 import PassengerAdd from './PassengerAdd.js';
 import {Table,Modal} from 'antd';
 import AlertView from '../../component/AlertView.js';
-import {Button,Checkbox,message,Spin,Upload} from 'antd';
+import {Button,message,Spin,Upload} from 'antd';
+import Checkbox from '../../component/Checkbox/index.js';
 
 class PassengerMsg extends Component{
     constructor(props){
@@ -42,8 +42,6 @@ class PassengerMsg extends Component{
 
             loading:false,          //加载状态
         };
-
-        this.WindowHelp = new WindowHelp();
     }
 
     componentDidMount(){
@@ -90,6 +88,60 @@ class PassengerMsg extends Component{
             airlineSigns:nextProps.airlineSigns?nextProps.airlineSigns:1,
         });
         this.hasChanged = true;
+    }
+
+    //票号
+    getTicketCell(text,record){
+        if(this.state.isPassed){
+            let ticketStr = record.ticket?record.ticket:'';
+            // let ticketStr = 'CD-12334222,C34222,CD-123432222';   //测试数据
+            let ticketList = ticketStr.split(',');
+            let listLength = ticketList.length;
+            let ticketViews = [];
+            let cellStyle = {display:'inline-block',minWidth:'120px',textAlign:'left'};
+            for(let index = 0;index<listLength;index+=2){
+                ticketViews.push(
+                    <div
+                        key={`ticket${index}`}
+                        style={{textAlign:'center',minWidth:`${listLength>1?'240px':'120px'}`}}
+                    >
+                        <div style={cellStyle}>
+                            {ticketList[index]?`${ticketList[index]}`:''}
+                        </div>
+                        {
+                            ticketList[index+1]
+                            ?   <div style={cellStyle}>
+                                    {ticketList[index+1]}
+                                </div>
+                            :   <div></div>
+                        }
+                    </div>
+                );
+            }
+            return(<div className={css.waitTicket}>
+                {ticketStr ? ticketViews : '等待出票'}
+            </div>);
+        }else{
+            return(<div>
+                <div
+                    className={css.operationUpDate}
+                    onClick={() => {
+                        this.toUpDatePassenger(record);
+                    }}
+                >
+                    修改
+                </div>
+                <span>/</span>
+                <div
+                    className={css.operationDelete}
+                    onClick={() => {
+                        this.clickDeleteBtn(record);
+                    }}
+                >
+                    删除
+                </div>
+            </div>);
+        }
     }
 
     render(){
@@ -173,50 +225,9 @@ class PassengerMsg extends Component{
             },{
                 title:(this.state.isPassed?<div>票号</div>:<div>操作</div>),
                 dataIndex:'operation',
-                width:'200px',
+                width:'150px',
                 render:(text,record)=> {
-                    if(this.state.isPassed){
-                        let ticketStr = record.ticket?record.ticket:'';
-                        // let ticketStr = '1231231,12313123,12313123';   //测试数据
-                        let ticketList = ticketStr.split(',');
-                        let listLength = ticketList.length;
-                        let ticketViews = [];
-                        for(let index = 0;index<listLength;index+=2){
-                            ticketViews.push(
-                                <div key={`ticket${index}`} style={{textAlign:'left',minWidth:'240px'}}>
-                                    <div style={{float:'left',minWidth:'115px',marginRight:'5px'}}>
-                                        {ticketList[index]?`${ticketList[index]}`:''}
-                                    </div>
-                                    <div style={{float:'left',minWidth:'115px',marginRight:'5px'}}>
-                                        {ticketList[index+1]?ticketList[index+1]:''}
-                                    </div>
-                                </div>
-                            );
-                        }
-                        return(<div className={css.waitTicket}>
-                            {ticketStr ? ticketViews : '等待出票'}
-                        </div>);
-                    }else{
-                        return(<div>
-                            <div
-                                className={css.operationUpDate}
-                                onClick={() => {
-                                    this.toUpDatePassenger(record);
-                                }}
-                            >
-                                修改
-                            </div>
-                            <span>/</span>
-                            <div
-                                className={css.operationDelete}
-                                onClick={() => {
-                                    this.clickDeleteBtn(record);
-                                }}
-                            >
-                                删除
-                            </div>
-                        </div>);
-                    }
+                    return (this.getTicketCell(text,record));
                 },
             },
         ];
@@ -312,13 +323,13 @@ class PassengerMsg extends Component{
                             (!this.state.isPassed)&&(this.state.dataSource.length>0)&&(hasKey(this.state.orderState,[3,5,12,14]))
                             ?   <div className={css.submitBox}>
                                     <Checkbox
-                                        onChange={(e)=>{
+                                        label={'确认乘机人信息无误'}
+                                        onChange={(value)=>{
                                             this.setState({
-                                                checkedMsg:e.target.checked
+                                                checkedMsg:value
                                             });
                                         }}
                                     >
-                                        确认乘机人信息无误
                                     </Checkbox>
                                     <Button
                                         disabled={!this.state.checkedMsg}

@@ -1,0 +1,35 @@
+@import "../../../../theme.less";
+.checkboxContainer{
+  display: inline-block;
+  margin: 0 auto;
+  &:hover{
+    & .unCheckIcon{
+      background-image: url('../../../../images/orderForm/check_box_hover.png');
+    }
+  }
+}
+.checkIcon{
+  display: inline-block;
+  width: @font_size_big;
+  height: @font_size_big;
+  margin-right: @d_spadding_cell;
+  background-size: 100% 100%;
+  vertical-align: -30%;
+  background-image: url('../../../../images/orderForm/check_box_checked.png');
+}
+.unCheckIcon{
+  .checkIcon;
+  background-image: url('../../../../images/orderForm/check_box_uncheck.png');
+  &:hover{
+    background-image: url('../../../../images/orderForm/check_box_hover.png');
+  }
+}
+.labelStyle{
+  display: inline-block;
+  font-size: @font_size_small;
+  color:@font-light-color;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+}

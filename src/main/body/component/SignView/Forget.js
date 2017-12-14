@@ -2,15 +2,16 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:26:13 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-24 17:58:29
+ * @Last Modified time: 2017-12-06 09:51:20
  */
 
 import React, { Component } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import md5 from 'md5';
 import CheckCode from './CheckCode';
+import placeholder from '../../component/SignView/placeholder';
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
-import { loginPromise, getLoginCodePromise, defaultLoginPromise, validateLoginPromise } from './LoginAction';
+import { loginPromise, validateLoginPromise, appid } from './LoginAction';
 import API from '../../../../api/APINYH';
 
 import css from './sign.less';
@@ -127,7 +128,9 @@ class ForgetForm extends Component {
                     {getFieldDecorator('option', {
                         rules: [{ required: true, message: '请输入验证码' }],
                     })(
-                        <Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />
+                        placeholder(<Input prefixCls="my-ant-input" placeholder="请输入验证码" className={css.checkCodeInput} />,{
+                            width:'206px'
+                        })
                         )}
                     <CheckCode ref="code" error={isShowPic && !getFieldValue('picCode') || getFieldError('mobile') || getFieldError('picCode')} getCode={() => this.getCode(this.getCodeAction)} />
                 </FormItem>
@@ -152,7 +155,7 @@ class ForgetForm extends Component {
                         }
                         ],
                     })(
-                        <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母"  maxLength="16" />
+                        <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" maxLength="16" />
                         )}
                 </FormItem>
                 <FormItem
@@ -227,7 +230,8 @@ class ForgetForm extends Component {
                         account: mobile,
                         mobile,
                         option,
-                        password: md5(password)
+                        password: md5(password),
+                        applicationId: appid
                     });
             }
         });
@@ -261,13 +265,13 @@ class ForgetForm extends Component {
      * 获取初始token
      */
     getCode(callback) {
-        const user = CookieHelp.getUserInfo();
+        // const user = CookieHelp.getUserInfo();
 
-        if (user) {
+        // if (user) {
+        //     callback();
+        // }
+        if (callback && typeof (callback) == 'function') {
             callback();
-        } else {
-            defaultLoginPromise(0, callback, () => {
-            });
         }
     }
 }

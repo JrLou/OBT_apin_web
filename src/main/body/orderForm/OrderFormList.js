@@ -9,6 +9,7 @@ import {routeTranslate,getDateFormat} from '../tool/LXDHelp.js';
 import {transformForList} from './StateHelp.js';
 import {Table,DatePicker,Select,Button,message} from 'antd';
 import InputAuto from '../component/InputForList.js';
+import datePlaceholder from '../component/SignView/datePlaceholder.js';
 const Option = Select.Option;
 
 class OrderFormList extends Component{
@@ -43,6 +44,7 @@ class OrderFormList extends Component{
         };
 
         this.earliest = new Date(2015,0,1);
+        this.placeholderStyle = {fontSize:'14',color:'#c4c4c4'};
 
         //航程类型
         this.flightTypeList = [
@@ -268,7 +270,7 @@ class OrderFormList extends Component{
                     </div>
                     <div className={css.searchItem02}>
                         <span>出发日期：</span>
-                        <DatePicker
+                        {datePlaceholder(<DatePicker
                             value={this.state.startDate}
                             disabledDate={this.disabledStart.bind(this)}
                             placeholder={'请选择日期'}
@@ -280,9 +282,9 @@ class OrderFormList extends Component{
                                     this.changeState('dateRet',data);
                                 }
                             }}
-                        />
+                        />,{width:'34%'},this.placeholderStyle)}
                         <span>—</span>
-                        <DatePicker
+                        {datePlaceholder(<DatePicker
                             value={this.state.dateRet}
                             disabledDate={this.disabledEnd.bind(this)}
                             placeholder={'请选择日期'}
@@ -294,11 +296,12 @@ class OrderFormList extends Component{
                                     this.changeState('startDate',data);
                                 }
                             }}
-                        />
+                        />,{width:'34%'},this.placeholderStyle)}
                     </div>
                     <div className={css.searchItem01}>
                         <span>航程类型：</span>
                         <Select
+                            prefixCls={'my-ant-select'}
                             value={this.state.flightType}
                             className={css.selectStyle}
                             placeholder={'请选择'}
@@ -312,6 +315,7 @@ class OrderFormList extends Component{
                     <div className={css.searchItem01}>
                         <span>订单状态：</span>
                         <Select
+                            prefixCls={'my-ant-select'}
                             value={this.state.orderStatus}
                             className={css.selectStyle}
                             placeholder={'请选择'}
@@ -326,7 +330,6 @@ class OrderFormList extends Component{
                         <Button
                             className={css.buttonStyle}
                             type="primary"
-                            disabled={this.state.loading}
                             onClick={()=>{this.searchOrderForm();}}
                         >
                             查询

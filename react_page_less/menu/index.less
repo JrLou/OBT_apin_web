@@ -12,7 +12,7 @@
   list-style: none;
   z-index: @zindex-dropdown;
   box-shadow: @box-shadow-base;
-  color: @font-color;
+  color: #fff;
   background: @component-background;
   line-height: 72px;
   transition: background .3s, width .2s;
@@ -114,10 +114,6 @@
     > a:hover {
       color: @primary-color;
     }
-  }
-
-  &:not(&-horizontal) &-item-selected {
-    background-color: @item-active-bg;
   }
 
   &-horizontal,

@@ -33,3 +33,15 @@
 .dropdown {
     margin-right: 10px;
 }
+
+.placement {
+    :global(.ant-cascader-menu){
+        overflow-x: hidden;
+        max-width: 120px; 
+
+        :global(.ant-cascader-menu-item){
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}

@@ -2,15 +2,16 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-23 10:31:38
+ * @Last Modified time: 2017-12-06 09:56:30
  */
 
 import React, { Component } from 'react';
 
 import { Form, Input, Button, message } from 'antd';
+import placeholder from './placeholder';
 import md5 from 'md5';
 import CheckCode from './CheckCode';
-import { loginPromise, getLoginCodePromise, defaultLoginPromise } from './LoginAction';
+import { loginPromise, getLoginCodePromise } from './LoginAction';
 
 import { CookieHelp, HttpTool } from '../../../../../lib/utils/index.js';
 
@@ -65,7 +66,7 @@ class AccountLoginForm extends React.Component {
                         }
                         ],
                     })(
-                        <Input prefixCls='my-ant-input' placeholder="账号/手机号" maxLength="32" />
+                        placeholder(<Input prefixCls='my-ant-input' placeholder="账号/手机号" maxLength="32" />)
                         )}
                 </FormItem>
                 <FormItem
@@ -76,9 +77,9 @@ class AccountLoginForm extends React.Component {
                     {getFieldDecorator('password', {
                         rules: [{ required: true, message: '请输入密码' },
                         { pattern: /^[0-9A-Za-z]{1,32}$/, message: '请输入数字或字母' }
-                    ],
+                        ],
                     })(
-                        <Input prefixCls='my-ant-input' type="password" placeholder="请输入密码" autoComplete="new-password" maxLength="32" />
+                        placeholder(<Input prefixCls='my-ant-input' type="password" placeholder="请输入密码" autoComplete="new-password" maxLength="32" />)
                         )}
                 </FormItem>
                 <FormItem prefixCls="my-ant-form">
@@ -106,27 +107,27 @@ class AccountLoginForm extends React.Component {
                 let { account, password } = values;
                 getLoginCodePromise(account, 0).then((data) => {
                     return loginPromise(account, md5(password), data);
-                }
-                ).then((data) => {
-                    this.setState({ loading: false });
-                    // 获取注册验证码也会调登录接口 保存APIN_USER token
-                    // IS_LOGIN判断是否真的登录
-                    CookieHelp.saveCookieInfo('IS_LOGIN', true);
-                    this.props.setLogin();
-                    if (this.props.callback && typeof (this.props.callback) === 'function')
-                        this.props.callback(1);
-                    this.props.onOK();
-                }).catch((msg) => {
-                    setTimeout(() => {
-                        this.setState({
-                            loading: false
-                        });
-                    }, 1000);
-                    if(msg == '用户不存在'){
-                        msg = '当前账号未注册';
-                    }
-                    message.error(msg);
-                });
+                })
+                    .then((data) => {
+                        this.setState({ loading: false });
+                        // 获取注册验证码也会调登录接口 保存APIN_USER token
+                        // IS_LOGIN判断是否真的登录
+                        CookieHelp.saveCookieInfo('IS_LOGIN', true);
+                        this.props.setLogin();
+                        if (this.props.callback && typeof (this.props.callback) === 'function')
+                            this.props.callback(1);
+                        this.props.onOK();
+                    }).catch((msg) => {
+                        setTimeout(() => {
+                            this.setState({
+                                loading: false
+                            });
+                        }, 1000);
+                        if (msg == '用户不存在') {
+                            msg = '当前账号未注册';
+                        }
+                        message.error(msg);
+                    });
             }
         });
     }
@@ -178,7 +179,7 @@ class MsgLoginForm extends React.Component {
                         { pattern: /^(1)\d{10}$/, message: '手机格式不正确' }
                         ],
                     })(
-                        <Input prefixCls='my-ant-input' placeholder="请输入11位手机号" maxLength="11" />
+                        placeholder(<Input prefixCls='my-ant-input' placeholder="请输入11位手机号" maxLength="11" />)
                         )}
                 </FormItem>
                 {
@@ -190,7 +191,7 @@ class MsgLoginForm extends React.Component {
                         {getFieldDecorator('picCode', {
                             rules: [{ required: true, message: '请输入图形验证码' }],
                         })(
-                            <Input prefixCls='my-ant-input' placeholder="请输入图形验证码" className={css.checkCodeImgInput} />
+                            placeholder(<Input prefixCls='my-ant-input' placeholder="请输入图形验证码" className={css.checkCodeImgInput} />)
                             )}
                         <img src={picCode} alt="" className={css.checkCodeImg} />
                     </FormItem>
@@ -205,7 +206,9 @@ class MsgLoginForm extends React.Component {
                         rules: [{ required: true, message: '请输入验证码' },
                         { len: 4, message: '请输入4位验证码' }],
                     })(
-                        <Input prefixCls='my-ant-input' placeholder="请输入验证码" className={css.checkCodeInput} />
+                        placeholder(<Input prefixCls='my-ant-input' placeholder="请输入验证码" />, {
+                            width: '206px'
+                        }, {})
                         )}
                     <CheckCode ref="code" error={getFieldError('account')} getCode={() => this.getCode(this.getCodeAction)} />
                 </FormItem>
@@ -227,26 +230,26 @@ class MsgLoginForm extends React.Component {
      * 获取登录验证码
      */
     getCodeAction() {
-        //     const { getFieldValue } = this.props.form;
-        //     const mobile = getFieldValue('mobile');
-        //     const picCode = getFieldValue('picCode') || '';
-        //     HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
-        //         // 测试
-        //         if (json && json.length > 4) {
-        //             this.setState({
-        //                 isShowPic: true,
-        //                 picCode: 'data:image/jpg;base64,' + json
-        //             });
-        //         } else {
-        //             this.setState({
-        //                 isShowPic: false
-        //             });
-        //         }
-        //     }, (code, msg, json, option) => {
-        //         message.error(msg);
-        //     }, {
-        //             mobile, picCode, type: 1
-        //         });
+        const { getFieldValue } = this.props.form;
+        const mobile = getFieldValue('mobile');
+        const picCode = getFieldValue('picCode') || '';
+        HttpTool.request(HttpTool.typeEnum.POST, '/bm/memberapi/v1.1/getSmsCode', (code, message, json, option) => {
+            // 测试
+            if (json && json.length > 4) {
+                this.setState({
+                    isShowPic: true,
+                    picCode: 'data:image/jpg;base64,' + json
+                });
+            } else {
+                this.setState({
+                    isShowPic: false
+                });
+            }
+        }, (code, msg, json, option) => {
+            message.error(msg);
+        }, {
+                mobile, picCode, type: 1
+            });
     }
 
     // 获取登录码
@@ -267,7 +270,7 @@ class MsgLoginForm extends React.Component {
             this.data = data;
             this.refs.code.autoTime(60);
         }).catch((msg) => {
-            if(msg == '用户不存在'){
+            if (msg == '用户不存在') {
                 msg = '当前手机号未注册';
             }
             message.error(msg);
@@ -297,7 +300,7 @@ class MsgLoginForm extends React.Component {
                     if (msg == '密码错误') {
                         msg = '验证码错误';
                     }
-                    if(msg == '用户不存在'){
+                    if (msg == '用户不存在') {
                         msg = '当前手机号未注册';
                     }
                     setTimeout(() => {

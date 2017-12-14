@@ -1,6 +1,7 @@
 @import "../../../theme.less";
 .mainPage{
-  width: 1200px;
+  min-height: 100%;
+  max-width:1200px;
   height:auto;
   margin: 0 auto;
 }
@@ -33,11 +34,11 @@
   vertical-align: middle;
   height: 40px;
   box-sizing: border-box;
-  width: 250px;
+  width: 22%;
   margin: @d_spadding_base 0;
 }
 .searchItem02{
-  width:400px;
+  width:34%;
 }
 .inputStyle{
   width: 60%;
@@ -49,12 +50,16 @@
   }
 }
 .dateStyle{
-  width: 35%;
+  width: 100%;
   border-radius: 2px;
-
+  display: inline-block;
+  & div{
+    display: inline-block;
+  }
   & input{
     height: 36px;
     border-radius: 2px;
+    display: inline-block;
   }
 }
 .buttonStyle{
@@ -90,6 +95,10 @@
   color:@primary-color;
   cursor: pointer;
   padding-left: @d_spadding_center;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
 }
 .clearBtn:hover{
   font-weight: bold;

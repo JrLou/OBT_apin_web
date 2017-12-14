@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { history } from 'react-router';
 import { Button, Menu, Dropdown, Icon, message } from 'antd';
 import { CookieHelp } from '../../lib/utils/index.js';
-import { AccoutInfoPromise, defaultLoginPromise } from './body/component/SignView/LoginAction';
+import { AccoutInfoPromise } from './body/component/SignView/LoginAction';
 import Menus from './Menu';
 
 import Sign from './body/component/SignView';
@@ -48,6 +48,9 @@ class page extends Component {
                 </Menu.Item>
             </Menu>
         );
+        const userAgent = navigator.userAgent.toLowerCase();
+        const isIE9 = navigator.appName == "Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g, "") == "MSIE9.0"
+            || userAgent.indexOf('safari') > -1 && userAgent.indexOf('chrome') == -1 && userAgent.indexOf('windows') > -1;
         return (
             <div className={less.head}>
                 <div className={less.headContent}>
@@ -89,7 +92,7 @@ class page extends Component {
                                             <span>
                                                 <a className="ant-dropdown-link" href="#">
                                                     <span className={less.name}>{account}</span>
-                                                    <Icon type="up" className={`${visible ? less.active : ''} ${less.iconDown}`} />
+                                                    {isIE9 && visible ? <Icon type="down" /> : <Icon type="up" className={`${visible ? less.active : ''} ${less.iconDown}`} />}
                                                 </a>
                                             </span>
                                         </Dropdown>
@@ -123,7 +126,7 @@ class page extends Component {
                 .then((res) => {
                     const { name } = res.json;
                     this.setState({
-                        account:name
+                        account: name
                     });
 
                 })
@@ -145,18 +148,18 @@ class page extends Component {
         });
     }
 
-    checkTokenAction(isValid){
+    checkTokenAction(isValid) {
         const user = CookieHelp.getUserInfo();
         const isLogin = CookieHelp.getCookieInfo('IS_LOGIN');
         const pathname = window.location.pathname;
-        if(isValid){
+        if (isValid) {
             // 未登录并且不在首页，则跳转到首页
             if (!isLogin && pathname !== '/' && pathname !== '/Search') {
                 window.app_open(this, '/', null, "self");
-            }else {
+            } else {
                 window.location.reload();
             }
-        }else{
+        } else {
             // 未登录并且不在首页，则跳转到首页
             if (!isLogin && pathname !== '/' && pathname !== '/Search') {
                 window.app_open(this, '/', null, "self");
@@ -174,28 +177,10 @@ class page extends Component {
         if (user && isLogin) this.setLogin();
 
         const pathname = window.location.pathname;
-        // if (!isLogin && pathname !== '/' && pathname !== '/Search') {
-        //     window.app_open(this, '/', null, "self");
-        // }
-        if(isLogin) return;
-        
-        if(!user) { // token为空
-            defaultLoginPromise(0,()=>{
-                this.checkTokenAction(true);
-            });
-        }else {
-            defaultLoginPromise(0,()=>{ // token 存在
-                
-            },()=>{ // token 失效
-                defaultLoginPromise(0,()=>{
-
-                    this.checkTokenAction(true);
-                    
-                });
-    
-            },false);
+        if (!isLogin && pathname !== '/' && pathname !== '/Search') {
+            window.app_open(this, '/', null, "self");
         }
-        
+
     }
 
 }
