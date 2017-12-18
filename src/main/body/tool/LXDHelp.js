@@ -22,63 +22,77 @@ let LXDHelp = {
         let wangfan = require('../../../images/wangfan.png');
         let duocheng = require('../../../images/duocheng.png');
 
-        let view = [];
         let length = list.length;
         if(length<=0){
             return (<div></div>);
         }
-        if(type == 1||type==2){
-            //单程 或 往返
-            view.push(
-                <div key={'cell'} style={{verticalAlign:'middle'}}>
+
+        let getView = (isLine)=>{
+            let view = [];
+            if(type == 1||type==2){
+                //单程 或 往返
+                view.push(
+                    <div key={'cell'+isLine} style={{verticalAlign:'middle'}}>
                     <span style={{verticalAlign:'middle'}}>
                     {list[0].cityDep||list[0].cityNameDep}
                     </span>
-                    <span
-                        style={{
-                            display:'inline-block',
-                            width:'20px',
-                            height:'20px',
-                            backgroundImage:`url(${type==1?dancheng:wangfan})`,
-                            backgroundSize:'100% 100%',
-                            verticalAlign:'middle'
-                        }}
-                    >
-                    </span>
-                    <span style={{verticalAlign:'middle'}}>
-                    {list[0].cityArr||list[0].cityNameArr}
-                    </span>
-                </div>
-
-            );
-        }else{
-            //多程
-            for(let key in list){
-                view.push(
-                    <div key={`cell${key}`} style={{verticalAlign:'middle'}}>
-                         <span style={{verticalAlign:'middle'}}>
-                            {list[key].cityDep||list[key].cityNameDep}
-                         </span>
                         <span
                             style={{
                                 display:'inline-block',
                                 width:'20px',
                                 height:'20px',
-                                backgroundImage:`url(${duocheng})`,
+                                backgroundImage:`url(${type==1?dancheng:wangfan})`,
                                 backgroundSize:'100% 100%',
                                 verticalAlign:'middle'
                             }}
                         >
-                        </span>
+                    </span>
                         <span style={{verticalAlign:'middle'}}>
-                             {list[key].cityArr||list[key].cityNameArr}
-                             {key<length-1?'，':''}
-                        </span>
+                    {list[0].cityArr||list[0].cityNameArr}
+                    </span>
                     </div>
 
                 );
+            }else{
+                //多程
+                for(let key in list){
+                    view.push(
+                        <div key={`cell${key}`+isLine}
+                             style={{
+                                 verticalAlign:'middle',
+                                 display:`${isLine?'inline-block':'block'}`,
+                             }}
+                        >
+                         <span style={{verticalAlign:'middle'}}>
+                            {list[key].cityDep||list[key].cityNameDep}
+                         </span>
+                            <span
+                                style={{
+                                    display:'inline-block',
+                                    width:'20px',
+                                    height:'20px',
+                                    backgroundImage:`url(${duocheng})`,
+                                    backgroundSize:'100% 100%',
+                                    verticalAlign:'middle'
+                                }}
+                            >
+                        </span>
+                            <span style={{verticalAlign:'middle'}}>
+                             {list[key].cityArr||list[key].cityNameArr}
+                                {key<length-1?'，':''}
+                        </span>
+                        </div>
+
+                    );
+                }
             }
-        }
+
+            return view;
+        };
+
+        let tableView = getView(true);
+        let contentView = getView(false);
+
 
 
         //样式
@@ -93,9 +107,9 @@ let LXDHelp = {
                             verticalAlign:'middle',
                         };
         return(
-            <Popover content={view}>
+            <Popover content={contentView}>
                 <div style={divStyle}>
-                    {view}
+                    {tableView}
                 </div>
             </Popover>
 
