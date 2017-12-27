@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-10 16:51:38 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-11-28 09:49:49
+ * @Last Modified time: 2017-12-26 13:54:08
  */
 
 
@@ -12,6 +12,7 @@ import md5 from 'md5';
 import CheckCode from './CheckCode';
 import { HttpTool, CookieHelp } from '../../../../../lib/utils/index.js';
 import { loginPromise } from './LoginAction';
+import placeholder from '../../component/SignView/placeholder';
 
 import css from './sign.less';
 
@@ -53,7 +54,7 @@ class ResetForm extends Component {
                         rules: [{ required: true, message: '请输入密码' },
                         { pattern: /^[0-9A-Za-z]{8,16}$/, message: '请输入8-16位数字、字母' }],
                     })(
-                        <Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" maxLength="16" />
+                        placeholder(<Input prefixCls="my-ant-input" type="password" placeholder="请输入8-16位数字、字母" maxLength="16" />)
                         )}
                 </FormItem>
                 <FormItem
@@ -77,11 +78,11 @@ class ResetForm extends Component {
                         }
                         ],
                     })(
-                        <Input prefixCls="my-ant-input"
+                        placeholder(<Input prefixCls="my-ant-input"
                             type="password"
                             placeholder="请输入8-16位数字、字母"
                             maxLength="16"
-                        />
+                        />)
                         )}
                 </FormItem>
                 <FormItem
@@ -102,11 +103,11 @@ class ResetForm extends Component {
                             }
                         }],
                     })(
-                        <Input prefixCls="my-ant-input"
+                        placeholder(<Input prefixCls="my-ant-input"
                             type="password"
                             placeholder="请再次输入密码"
                             maxLength="16"
-                        />
+                        />)
                         )}
                 </FormItem>
                 <FormItem prefixCls="my-ant-form">

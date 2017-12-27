@@ -2,7 +2,7 @@
  * @Author: 钮宇豪 
  * @Date: 2017-11-03 15:43:09 
  * @Last Modified by: 钮宇豪
- * @Last Modified time: 2017-12-06 09:56:30
+ * @Last Modified time: 2017-12-25 15:47:27
  */
 
 import React, { Component } from 'react';
@@ -30,7 +30,7 @@ class AccountLoginForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: false
+            loading: false,init:false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -69,19 +69,34 @@ class AccountLoginForm extends React.Component {
                         placeholder(<Input prefixCls='my-ant-input' placeholder="账号/手机号" maxLength="32" />)
                         )}
                 </FormItem>
-                <FormItem
-                    prefixCls="my-ant-form"
-                    validateStatus={passwordError ? 'error' : ''}
-                    help={passwordError || ''}
-                >
-                    {getFieldDecorator('password', {
-                        rules: [{ required: true, message: '请输入密码' },
-                        { pattern: /^[0-9A-Za-z]{1,32}$/, message: '请输入数字或字母' }
-                        ],
-                    })(
-                        placeholder(<Input prefixCls='my-ant-input' type="password" placeholder="请输入密码" autoComplete="new-password" maxLength="32" />)
-                        )}
-                </FormItem>
+                {
+                    this.state.init ?
+                        <FormItem
+                            prefixCls="my-ant-form"
+                            validateStatus={passwordError ? 'error' : ''}
+                            help={passwordError || ''}
+                        >
+                            {getFieldDecorator('password', {
+                                rules: [{ required: true, message: '请输入密码' },
+                                { pattern: /^[0-9A-Za-z]{1,32}$/, message: '请输入数字或字母' }
+                                ],
+                            })(
+                                placeholder(<Input prefixCls='my-ant-input' type="password" placeholder="请输入密码" autoComplete="new-password" maxLength="32" />)
+                                )}
+                        </FormItem> :
+                        <FormItem
+                            prefixCls="my-ant-form"
+                        >
+
+                            {
+                                placeholder(<Input prefixCls='my-ant-input' type="text" placeholder="请输入密码" onFocus={() => {
+                                    this.setState({
+                                        init: true
+                                    });
+                                }} maxLength="32" />)
+                            }
+                        </FormItem>
+                }
                 <FormItem prefixCls="my-ant-form">
                     <Button
                         prefixCls="my-ant-btn"

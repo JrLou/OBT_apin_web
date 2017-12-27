@@ -3,7 +3,7 @@ import { Form, DatePicker, TimePicker, Button, Input, Row, Col, Radio, AutoCompl
 import { HttpTool ,CookieHelp} from "../../../../lib/utils/index.js";
 import AutoInput from "../component/InputAutoPublish";
 import TemplatePublist from "./TemplatePublist";
-import placeholder from './placeholder';
+import placeholder from '../component/SignView/placeholder';
 import datePlaceholder from './../component/SignView/datePlaceholder';
 
 import less from './PublishMsg.less';
@@ -486,7 +486,7 @@ class page extends Component {
                                     }],
                                     initialValue: this.state.remark,
                                 })(
-                                    placeholder(<Input type="textarea" maxLength="100"  placeholder="如：价格、时间等" style={{ height: 180, resize: "none",fontSize:"14px" }}/>,{ height: 180, resize: "none",fontSize:"14px" })
+                                    placeholder(<Input type="textarea" maxLength="100"  placeholder="如：价格、时间等" className={less.textarea}/>,{ height: 180, resize: "none",fontSize:"14px" })
                                     )}
                             </FormItem>
 
