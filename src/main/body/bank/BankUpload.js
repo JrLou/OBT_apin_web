@@ -254,8 +254,11 @@ class BankUpload extends Component {
 
    getErrorView() {
       return (
-         <div>
-            <h1 style={{ color: "red", textAlign: "center" }}>{this.state.errorMsg}</h1>
+         <div className={less.loading} style={{height:"600px"}}>
+            <div className={less.allCenter2}>
+               <img src={require("../../../../src/images/search_empty.png")} alt="空"/>
+               <div>{this.state.errorMsg}</div>
+            </div>
          </div>
       );
    }
