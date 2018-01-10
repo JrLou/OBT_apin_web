@@ -6,8 +6,8 @@
  */
 
 let API = {
-    tokens: "/uc/authapi/v1.1/tokens",
-    codes: "/uc/authapi/v1.1/tokens/codes",
+    tokens: "/uc/authapi/v2.0/tokens",
+    codes: "/uc/authapi/v2.0/tokens/codes",
     verifyInfo: "/bm/memberapi/v1.1/verifyInfo",
     memberInfo: "/bm/memberapi/v1.1/memberInfo",
     modifyMemberInfo: "/bm/memberapi/v1.1/modifyMemberInfo",
