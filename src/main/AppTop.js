@@ -56,9 +56,9 @@ class page extends Component {
                 {
                     isLogin?null:(
                         <div className={less.headContentTop}>
-                            <div className={less.headContentTopFont}>您好,请<span
+                            <div className={less.headContentTopFont}>您好，请<span
                                 onClick={() => window.modal.showModal(0)}
-                                className={less.headContentTopFontA}>登录</span>  免费<span onClick={() => this.modal.showModal(1)} className={less.headContentTopFontA}>注册</span>
+                                className={less.headContentTopFontA}>登录</span>&nbsp;&nbsp;&nbsp;&nbsp;免费<span onClick={() => this.modal.showModal(1)} className={less.headContentTopFontA}>注册</span>
                                 <a target="view_window" href="https://kc.apin.com" className={less.headContentTopFontA_B}>供应商入口 >></a>
                             </div>
                         </div>
