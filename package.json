@@ -12,6 +12,8 @@
     "test": "jest --watch --coverage"
   },
   "devDependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "fingerprintjs": "^0.5.3",
     "antd": "<=2.13.9",
     "babel-core": "^6.6.5",
     "babel-eslint": "^5.0.4",

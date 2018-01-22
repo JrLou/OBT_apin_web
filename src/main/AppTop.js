@@ -53,6 +53,17 @@ class page extends Component {
             || userAgent.indexOf('safari') > -1 && userAgent.indexOf('chrome') == -1 && userAgent.indexOf('windows') > -1;
         return (
             <div className={less.head}>
+                {
+                    isLogin?null:(
+                        <div className={less.headContentTop}>
+                            <div className={less.headContentTopFont}>您好,请<span
+                                onClick={() => window.modal.showModal(0)}
+                                className={less.headContentTopFontA}>登录</span>  免费<span onClick={() => this.modal.showModal(1)} className={less.headContentTopFontA}>注册</span>
+                                <a target="view_window" href="https://kc.apin.com" className={less.headContentTopFontA_B}>供应商入口 >></a>
+                            </div>
+                        </div>
+                    )
+                }
                 <div className={less.headContent}>
                     <img
                         onClick={() => {
@@ -70,17 +81,6 @@ class page extends Component {
                         :
                         <div className={less.right}>
                             <div className={less.rightItem} style={isLogin ? { marginRight: '44px' } : { marginRight: '30px' }}>
-                                {
-                                    !isLogin && <Button type="primary" className={less.login}
-                                        onClick={() => window.modal.showModal(0)}
-                                    >登录</Button>
-                                }
-                                {
-                                    !isLogin && <Button type="primary" className={less.register}
-                                        prefixCls='my-ant-btn'
-                                        onClick={() => this.modal.showModal(1)}
-                                    >注册</Button>
-                                }
                                 {
                                     isLogin && <div className={less.drop}>
                                         Hi,
